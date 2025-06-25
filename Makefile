@@ -12,8 +12,7 @@ e2e-test:
 	@cd tests/e2e; ls -R local-plugins; terraform init -plugin-dir ./local-plugins; terraform apply -auto-approve; terraform destroy -auto-approve
 
 unit-test:
-	@cd tests/resources
-	go test -v
+	@cd tests/unit; go test -v
 
 test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup

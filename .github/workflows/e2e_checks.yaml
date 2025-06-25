@@ -1,0 +1,22 @@
+name: e2e Tests
+on:
+  push:
+    branches: 
+      - 'master'
+
+jobs:
+  unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Run e2e Tests
+        run: | 
+          make e2e-test

@@ -1,0 +1,19 @@
+name: Test PR commit
+on:
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Run Unit Tests
+        run: | 
+          make unit-test
