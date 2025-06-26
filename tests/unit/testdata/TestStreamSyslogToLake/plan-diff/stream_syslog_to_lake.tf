@@ -1,0 +1,1 @@
+../../../../e2e/stream_syslog_to_lake.tf

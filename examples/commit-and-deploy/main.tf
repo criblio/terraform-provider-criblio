@@ -1,13 +1,13 @@
 
 data "criblio_config_version" "my_configversion" {
-  id = "syslog-workers"
+  id         = "syslog-workers"
   depends_on = [criblio_commit.my_commit]
 }
 
 resource "criblio_commit" "my_commit" {
   effective = true
-  group   = "syslog-workers"
-  message = "test"
+  group     = "syslog-workers"
+  message   = "test"
 }
 
 resource "criblio_deploy" "my_deploy" {

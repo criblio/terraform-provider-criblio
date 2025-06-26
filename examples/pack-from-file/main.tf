@@ -8,6 +8,7 @@ terraform {
 
 provider "criblio" {
   # Configuration options
+  #server_url ="https://app.cribl-playground.cloud/organizations/beautiful-nguyen-y8y4azd/workspaces/main/app/api/v1"
 }
 
 resource "criblio_pack" "my_pack" {
@@ -18,10 +19,10 @@ resource "criblio_pack" "my_pack" {
   display_name = "Pack from file"
   filename     = "cribl-palo-alto-networks-source-1.0.0.crbl"
   version      = "1.0.0"
-  
+
 }
 
 # Output the pack details to see the read-only attributes
 output "pack_details" {
   value = criblio_pack.my_pack
-} 
+}

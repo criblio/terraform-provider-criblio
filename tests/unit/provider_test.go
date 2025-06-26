@@ -9,10 +9,10 @@ import (
 
 var (
 	providerFactory = map[string]func() (tfprotov6.ProviderServer, error){
-		"konnect": providerserver.NewProtocol6WithError(provider.New("999.99.9")()),
+		"criblio": providerserver.NewProtocol6WithError(provider.New("999.99.9")()),
 	}
 
-	providerConfigUs = `provider "konnect" {
+	providerConfigUs = `provider "criblio" {
   server_url = "https://app.cribl-playground.cloud/organizations/beautiful-nguyen-y8y4azd/workspaces/tfprovider/app/api/v1"
 }
 `
