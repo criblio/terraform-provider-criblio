@@ -9,6 +9,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.1.7"
+
+      - name: Terraform fmt
+        run: | 
+          dir_check(){ for i in `ls`; do cd $i; terraform fmt -check; cd ..; done }
+
+          cd tests/e2e
+          terraform fmt -check
+          cd ../..
+
+          cd examples/resources
+          dir_check
+          cd ..
+
+          cd data-sources
+          dir_check
+
       - uses: actions/setup-go@v4.0.0
         with:
           go-version-file: 'go.mod'

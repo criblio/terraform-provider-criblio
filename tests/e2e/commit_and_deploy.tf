@@ -1,7 +1,7 @@
 resource "criblio_commit" "my_commit" {
   effective = true
-  group   = "syslog-workers"
-  message = "test"
+  group     = "syslog-workers"
+  message   = "test"
 }
 
 resource "criblio_deploy" "my_deploy" {
