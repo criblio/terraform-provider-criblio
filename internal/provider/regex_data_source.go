@@ -22,7 +22,6 @@ func NewRegexDataSource() datasource.DataSource {
 
 // RegexDataSource is the data source implementation.
 type RegexDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

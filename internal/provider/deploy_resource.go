@@ -27,7 +27,6 @@ func NewDeployResource() resource.Resource {
 
 // DeployResource defines the resource implementation.
 type DeployResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

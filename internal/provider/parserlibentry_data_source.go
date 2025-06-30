@@ -22,7 +22,6 @@ func NewParserLibEntryDataSource() datasource.DataSource {
 
 // ParserLibEntryDataSource is the data source implementation.
 type ParserLibEntryDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

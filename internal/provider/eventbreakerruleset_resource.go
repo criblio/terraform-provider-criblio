@@ -33,7 +33,6 @@ func NewEventBreakerRulesetResource() resource.Resource {
 
 // EventBreakerRulesetResource defines the resource implementation.
 type EventBreakerRulesetResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

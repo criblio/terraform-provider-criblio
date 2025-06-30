@@ -36,7 +36,6 @@ func NewPipelineResource() resource.Resource {
 
 // PipelineResource defines the resource implementation.
 type PipelineResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 
@@ -442,4 +441,5 @@ func (r *PipelineResource) ImportState(ctx context.Context, req resource.ImportS
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
+
 }

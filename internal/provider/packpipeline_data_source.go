@@ -23,7 +23,6 @@ func NewPackPipelineDataSource() datasource.DataSource {
 
 // PackPipelineDataSource is the data source implementation.
 type PackPipelineDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

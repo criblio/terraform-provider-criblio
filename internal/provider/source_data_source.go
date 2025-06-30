@@ -23,7 +23,6 @@ func NewSourceDataSource() datasource.DataSource {
 
 // SourceDataSource is the data source implementation.
 type SourceDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

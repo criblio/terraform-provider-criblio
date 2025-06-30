@@ -26,7 +26,6 @@ func NewProjectResource() resource.Resource {
 
 // ProjectResource defines the resource implementation.
 type ProjectResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 
@@ -336,4 +335,5 @@ func (r *ProjectResource) ImportState(ctx context.Context, req resource.ImportSt
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
+
 }

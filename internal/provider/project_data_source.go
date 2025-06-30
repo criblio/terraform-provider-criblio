@@ -23,7 +23,6 @@ func NewProjectDataSource() datasource.DataSource {
 
 // ProjectDataSource is the data source implementation.
 type ProjectDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

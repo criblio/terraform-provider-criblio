@@ -23,7 +23,6 @@ func NewGroupDataSource() datasource.DataSource {
 
 // GroupDataSource is the data source implementation.
 type GroupDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

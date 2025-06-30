@@ -23,7 +23,6 @@ func NewAppscopeConfigDataSource() datasource.DataSource {
 
 // AppscopeConfigDataSource is the data source implementation.
 type AppscopeConfigDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

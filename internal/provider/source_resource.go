@@ -44,7 +44,6 @@ func NewSourceResource() resource.Resource {
 
 // SourceResource defines the resource implementation.
 type SourceResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

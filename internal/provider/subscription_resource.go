@@ -28,7 +28,6 @@ func NewSubscriptionResource() resource.Resource {
 
 // SubscriptionResource defines the resource implementation.
 type SubscriptionResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

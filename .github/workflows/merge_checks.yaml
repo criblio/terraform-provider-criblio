@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@v4.2.2
 
       - name: Install Speakeasy
-        uses: mheap/setup-go-cli@fa9b01cdd4115eac636164f0de43bf7d51c82697 # v1
+        uses: mheap/setup-go-cli@v1
         with:
           owner: speakeasy-api
           repo: speakeasy

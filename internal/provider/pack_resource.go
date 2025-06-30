@@ -31,7 +31,6 @@ func NewPackResource() resource.Resource {
 
 // PackResource defines the resource implementation.
 type PackResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

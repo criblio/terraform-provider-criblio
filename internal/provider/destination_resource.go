@@ -44,7 +44,6 @@ func NewDestinationResource() resource.Resource {
 
 // DestinationResource defines the resource implementation.
 type DestinationResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

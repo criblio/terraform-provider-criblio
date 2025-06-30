@@ -22,7 +22,6 @@ func NewEventBreakerRulesetDataSource() datasource.DataSource {
 
 // EventBreakerRulesetDataSource is the data source implementation.
 type EventBreakerRulesetDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 

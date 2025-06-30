@@ -22,7 +22,6 @@ func NewSubscriptionDataSource() datasource.DataSource {
 
 // SubscriptionDataSource is the data source implementation.
 type SubscriptionDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 
