@@ -15,5 +15,7 @@ jobs:
           cache: true
 
       - name: Run Unit Tests
+        env:
+          CRIBL_BEARER_TOKEN: ${{ secrets.CRIBL_BEARER_TOKEN }}
         run: | 
           make unit-test
