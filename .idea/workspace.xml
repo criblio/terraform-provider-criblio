@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="be38bc78-a09e-4272-b8ed-89e77eb3b1ef" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/examples/cribl-bootstrap-token-module/main.tf" beforeDir="false" afterPath="$PROJECT_DIR$/examples/cribl-bootstrap-token-module/main.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/cribl-bootstrap-token-module/templates/get_bootstrap_token.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/examples/cribl-bootstrap-token-module/templates/get_bootstrap_token.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/data-sources/criblio_pack_pipeline/data-source.tf" beforeDir="false" afterPath="$PROJECT_DIR$/examples/data-sources/criblio_pack_pipeline/data-source.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/guides/awscloudhybridnode.tf" beforeDir="false" afterPath="$PROJECT_DIR$/examples/guides/awscloudhybridnode.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/guides/pipelines.tf" beforeDir="false" afterPath="$PROJECT_DIR$/examples/guides/pipelines.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/guides/variables.tf" beforeDir="false" afterPath="$PROJECT_DIR$/examples/guides/variables.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/guides/workergrouphybrid.tf" beforeDir="false" afterPath="$PROJECT_DIR$/examples/guides/workergrouphybrid.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/shared-provider-module/main.tf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/source-module/locals.tf" beforeDir="false" afterPath="$PROJECT_DIR$/module/source-module/locals.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/test/main.tf" beforeDir="false" afterPath="$PROJECT_DIR$/module/test/main.tf" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "zamorofthat"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:criblio/terraform-provider-criblio.git",
+    "accountId": "04574d1d-9ea7-4f15-a9d2-46e58ec37a47"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="316hjB6lrrCOc5MOhcRWICNCqk9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "INFRA-5244/enhance-examples",
+    "last_opened_file_path": "/Users/azamora/Projects/terraform-provider-criblio",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-WS-243.23654.120" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="be38bc78-a09e-4272-b8ed-89e77eb3b1ef" name="Changes" comment="" />
+      <created>1754850561570</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1754850561570</updated>
+      <workItem from="1754850562721" duration="1234000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

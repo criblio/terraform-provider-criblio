@@ -16,3 +16,9 @@ unit-test:
 
 test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
+
+build-speakeasy: 
+	speakeasy run --skip-versioning --output console --minimal
+
+test-speakeasy: 
+	speakeasy test
