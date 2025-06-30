@@ -1,5 +1,5 @@
 resource "criblio_pack" "my_file_pack" {
-  id = "pack-from-file"
+  id           = "pack-from-file"
   group_id     = "default"
   description  = "Pack from file"
   disabled     = true

@@ -17,16 +17,22 @@ jobs:
         run: | 
           dir_check(){ for i in `ls`; do cd $i; terraform fmt -check; cd ..; done }
 
+          echo "Checking path tests/e2e..."
           cd tests/e2e
           terraform fmt -check
           cd ../..
+          echo "Path tests/e2e passed!"
 
+          echo "Checking path examples/resources..."
           cd examples/resources
           dir_check
           cd ..
+          echo "Path examples/resources passed!"
 
+          echo "Checking path examples/data-sources..."
           cd data-sources
           dir_check
+          echo "Path examples/data-sources passed!"
 
       - uses: actions/setup-go@v4.0.0
         with:
