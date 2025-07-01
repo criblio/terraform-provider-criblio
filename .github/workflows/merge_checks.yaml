@@ -47,7 +47,7 @@ jobs:
         run: | 
           export CRIBL_BEARER_TOKEN
           export CRIBL_CLIENT_ID
-          exprot CRIBL_CLIENT_SECRET
+          export CRIBL_CLIENT_SECRET
           make unit-test
 
   speakeasy_test:
