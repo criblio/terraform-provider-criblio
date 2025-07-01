@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
-func TestPackFromFile(t *testing.T) {
+func TestRegex(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
@@ -17,35 +17,21 @@ func TestPackFromFile(t *testing.T) {
 					Config:          providerConfigUs,
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_file_pack", "id", "pack-from-file"),
+						resource.TestCheckResourceAttr("criblio_regex.my_regex", "description", "test"),
 					),
 				},
 				{
 					Config:          providerConfigUs,
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_file_pack", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_regex.my_regex", "group_id", "default"),
 					),
 				},
 				{
 					Config:          providerConfigUs,
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_file_pack", "description", "Pack from file"),
-					),
-				},
-				{
-					Config:          providerConfigUs,
-					ConfigDirectory: config.TestNameDirectory(),
-					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_file_pack", "display_name", "Pack from file"),
-					),
-				},
-				{
-					Config:          providerConfigUs,
-					ConfigDirectory: config.TestNameDirectory(),
-					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_file_pack", "version", "1.0.0"),
+						resource.TestCheckResourceAttr("criblio_regex.my_regex", "lib", "custom"),
 					),
 				},
 				{
