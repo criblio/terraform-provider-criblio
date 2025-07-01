@@ -45,6 +45,9 @@ jobs:
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET:  ${{ secrets.CRIBL_CLIENT_SECRET }}
         run: | 
+          export CRIBL_BEARER_TOKEN
+          export CRIBL_CLIENT_ID
+          exprot CRIBL_CLIENT_SECRET
           make unit-test
 
   speakeasy_test:
