@@ -41,10 +41,10 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
       }
       watch = [
         {
-          type       = "console"
-          enabled    = true
-          name       = "(stdout)|(stderr)"
-          value      = ".*"
+          type        = "console"
+          enabled     = true
+          name        = "(stdout)|(stderr)"
+          value       = ".*"
           allowbinary = true
         },
         {
@@ -80,7 +80,7 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
           name    = ".*"
           field   = ".*"
           value   = ".*"
-          headers = ["host","user-agent","x-forwarded-for","x-appscope"]
+          headers = ["host", "user-agent", "x-forwarded-for", "x-appscope"]
         },
         {
           type    = "metric"
@@ -100,9 +100,9 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
       }
     }
     libscope = {
-      configevent    = true
-      summaryperiod  = 10
-      commanddir     = "/tmp"
+      configevent   = true
+      summaryperiod = 10
+      commanddir    = "/tmp"
       log = {
         level = "warning"
         transport = {
