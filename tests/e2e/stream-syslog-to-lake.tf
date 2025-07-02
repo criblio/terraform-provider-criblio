@@ -4,14 +4,14 @@ resource "criblio_group" "syslog_worker_group" {
     provider = "aws"
     region   = "us-west-2"
   }
-  estimated_ingest_rate  = 1024
-  id                     = "syslog-workers"
-  is_fleet               = false
-  name                   = "syslog-workers"
-  on_prem                = false
-  product                = "stream"
-  provisioned            = true
-  worker_remote_access   = false
+  estimated_ingest_rate = 1024
+  id                    = "syslog-workers"
+  is_fleet              = false
+  name                  = "syslog-workers"
+  on_prem               = false
+  product               = "stream"
+  provisioned           = true
+  worker_remote_access  = false
 }
 
 # Syslog Source Configuration

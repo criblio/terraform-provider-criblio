@@ -13,7 +13,7 @@ func TestWorkerGroup(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-	Config: wgConfig,
+					Config: wgConfig,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_group.my_group", "id", "my-group"),
 						resource.TestCheckResourceAttr("criblio_group.my_group", "name", "my-group"),
