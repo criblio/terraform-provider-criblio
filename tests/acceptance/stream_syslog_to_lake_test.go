@@ -1,17 +1,62 @@
+package tests
+
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+)
+
+func TestStreamSyslogToLake(t *testing.T) {
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories: providerFactory,
+			Steps: []resource.TestStep{
+				{
+					Config: s3Config,
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "id", "syslog-workers"),
+						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "name", "syslog-workers"),
+						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "product", "stream"),
+						resource.TestCheckResourceAttr("criblio_source.syslog_source", "id", "syslog-input"),
+						resource.TestCheckResourceAttr("criblio_source.syslog_source", "group_id", "syslog-workers"),
+						resource.TestCheckResourceAttr("criblio_destination.cribl_lake", "id", "cribl-lake-2"),
+						resource.TestCheckResourceAttr("criblio_destination.cribl_lake", "group_id", "syslog-workers"),
+					),
+				},
+				{
+					Config: s3Config,
+					ConfigPlanChecks: resource.ConfigPlanChecks{
+						PreApply: []plancheck.PlanCheck{
+							plancheck.ExpectEmptyPlan(),
+						},
+					},
+				},
+			},
+		})
+	})
+}
+
+var s3Config = `
+
 # Worker Group Configuration
 resource "criblio_group" "syslog_worker_group" {
   cloud = {
     provider = "aws"
     region   = "us-west-2"
   }
-  estimated_ingest_rate  = 1024
-  id                     = "syslog-workers"
-  is_fleet               = false
-  name                   = "syslog-workers"
-  on_prem                = false
-  product                = "stream"
-  provisioned            = true
-  worker_remote_access   = false
+  estimated_ingest_rate = 1024
+  id                    = "syslog-workers"
+  is_fleet              = false
+  name                  = "syslog-workers"
+  on_prem               = false
+  product               = "stream"
+  provisioned           = true
+  streamtags = [
+    "syslog",
+    "network"
+  ]
+  worker_remote_access = false
 }
 
 # Syslog Source Configuration
@@ -126,6 +171,24 @@ resource "criblio_pack" "syslog_pack" {
   version      = "1.0.0"
 }
 
+# Commit and Deploy Configuration
+data "criblio_config_version" "my_configversion" {
+  id         = "syslog-workers"
+  depends_on = [criblio_commit.my_commit]
+}
+
+resource "criblio_commit" "my_commit" {
+  effective  = true
+  group      = "syslog-workers"
+  message    = "test"
+  depends_on = [criblio_source.syslog_source, criblio_destination.cribl_lake, criblio_pack.syslog_pack]
+}
+
+resource "criblio_deploy" "my_deploy" {
+  id      = "syslog-workers"
+  version = data.criblio_config_version.my_configversion.items[0]
+}
+
 # Outputs
 output "worker_group_details" {
   value = {
@@ -151,3 +214,9 @@ output "pack_details" {
     id = criblio_pack.syslog_pack.id
   }
 }
+
+provider "criblio" {
+  server_url = "https://app.cribl-playground.cloud/organizations/beautiful-nguyen-y8y4azd/workspaces/tfprovider/app/api/v1"
+}
+
+`
