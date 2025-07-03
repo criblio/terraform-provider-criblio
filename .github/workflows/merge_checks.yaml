@@ -79,6 +79,8 @@ jobs:
         run: | 
           export CRIBL_CLIENT_ID
           export CRIBL_CLIENT_SECRET
+          export CRIBL_ORGANIZATION_ID="beautiful-nguyen-y8y4azd"
+          export CRIBL_WORKSPACE_ID="tfprovider"
           make acceptance-test
 
 
