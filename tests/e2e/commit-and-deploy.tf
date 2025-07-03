@@ -1,20 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  # Configuration options
-}
-
-data "criblio_config_version" "my_configversion" {
-  id         = "syslog-workers"
-  depends_on = [criblio_commit.my_commit]
-}
-
 resource "criblio_commit" "my_commit" {
   effective = true
   group     = "syslog-workers"

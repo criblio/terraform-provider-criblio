@@ -1,15 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  
-}
-
 # Worker Group Configuration
 resource "criblio_group" "syslog_worker_group" {
   cloud = {
@@ -23,11 +11,7 @@ resource "criblio_group" "syslog_worker_group" {
   on_prem               = false
   product               = "stream"
   provisioned           = true
-  streamtags = [
-    "syslog",
-    "network"
-  ]
-  worker_remote_access = false
+  worker_remote_access  = false
 }
 
 # Syslog Source Configuration
@@ -142,24 +126,6 @@ resource "criblio_pack" "syslog_pack" {
   version      = "1.0.0"
 }
 
-# Commit and Deploy Configuration
-data "criblio_config_version" "my_configversion" {
-  id         = "syslog-workers"
-  depends_on = [criblio_commit.my_commit]
-}
-
-resource "criblio_commit" "my_commit" {
-  effective  = true
-  group      = "syslog-workers"
-  message    = "test"
-  depends_on = [criblio_source.syslog_source, criblio_destination.cribl_lake, criblio_pack.syslog_pack]
-}
-
-resource "criblio_deploy" "my_deploy" {
-  id      = "syslog-workers"
-  version = data.criblio_config_version.my_configversion.items[0]
-}
-
 # Outputs
 output "worker_group_details" {
   value = {
@@ -184,4 +150,4 @@ output "pack_details" {
   value = {
     id = criblio_pack.syslog_pack.id
   }
-} 
+}

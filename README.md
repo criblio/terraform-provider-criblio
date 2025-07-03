@@ -1,3 +1,6 @@
+![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/e2e_checks.yaml/badge.svg) ![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/tf_provider_release.yaml/badge.svg)
+
+
 # terraform-provider-criblio
 
 A Terraform provider for managing Cribl resources.
@@ -231,4 +234,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the terms of the license included in the repository.
-
