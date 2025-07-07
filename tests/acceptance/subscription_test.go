@@ -17,6 +17,8 @@ func TestSubscription(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "id", "my_subscription"),
 						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "description", "test subscription"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "filter", "test"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "group_id", "default"),
 					),
 				},
 				{

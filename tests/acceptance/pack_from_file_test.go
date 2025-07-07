@@ -20,6 +20,7 @@ func TestPackFromFile(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack from file"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "display_name", "Pack from file"),
+						resource.TestCheckResourceAttr("criblio_pack.my_pack", "filename", "cribl-palo-alto-networks-source-1.0.0.crbl"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "version", "1.0.0"),
 					),
 				},

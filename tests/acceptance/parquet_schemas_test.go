@@ -16,6 +16,7 @@ func TestParquetSchemas(t *testing.T) {
 					Config:             parquetConfig,
 					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr("criblio_parquet_schema.my_parquet_schema", "description", "test parquest"),
 						resource.TestCheckResourceAttr("criblio_parquet_schema.my_parquet_schema", "id", "my_parquet_schema"),
 						resource.TestCheckResourceAttr("criblio_parquet_schema.my_parquet_schema", "description", "test parquest"),
 					),

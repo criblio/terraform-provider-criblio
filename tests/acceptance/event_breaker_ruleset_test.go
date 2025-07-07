@@ -18,6 +18,9 @@ func TestEventBreakerRuleset(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "id", "test_eventbreakerruleset"),
 						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "description", "test"),
+						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "lib", "custom"),
+						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "tags", "test"),
 					),
 				},
 				{
@@ -41,7 +44,6 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   lib            = "custom"
   min_raw_length = 256
   rules = [
-  /*
     {
       condition = "PASS_THROUGH_SOURCE_TYPE"
       disabled  = false
@@ -61,7 +63,6 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
       timestamp_timezone     = "local"
       type                   = "regex"
     }
-    */
   ]
   tags = "test"
 }

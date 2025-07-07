@@ -18,6 +18,7 @@ func TestProject(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_project.my_project", "id", "my_project"),
 						resource.TestCheckResourceAttr("criblio_project.my_project", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_project.my_project", "description", "test project"),
 					),
 				},
 				{

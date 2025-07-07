@@ -18,6 +18,9 @@ func TestGlobalVar(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "id", "new"),
 						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "description", "test"),
+						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "lib", "cribl"),
+						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "tags", "cribl,sample"),
 					),
 				},
 			},
@@ -41,11 +44,9 @@ output "global_var" {
   value = criblio_global_var.my_globalvar
 }
 
-/*
 data "criblio_global_var" "my_globalvar" {
-  group_id = "unixtime"
+  group_id = "default"
 }
-*/
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"

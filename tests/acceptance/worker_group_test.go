@@ -17,6 +17,7 @@ func TestWorkerGroup(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_group.my_group", "id", "newgroup"),
 						resource.TestCheckResourceAttr("criblio_group.my_group", "name", "newgroup"),
+						resource.TestCheckResourceAttr("criblio_group.my_group", "product", "stream"),
 					),
 				},
 				{

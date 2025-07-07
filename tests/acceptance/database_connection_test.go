@@ -17,6 +17,11 @@ func TestDatabaseConnection(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "id", "my_databaseconnection"),
 						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "description", "MySQL database connection example"),
+						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "auth_type", "connectionString"),
+						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "database_type", "mysql"),
+						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "tags", "test"),
+						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "connection_string", "mysql://user:password@localhost:3306/mydb"),
 					),
 				},
 			},
