@@ -10,10 +10,10 @@ import (
 )
 
 type CriblConfig struct {
-	ClientID        string `json:"client_id"`
-	ClientSecret    string `json:"client_secret"`
-	OrganizationID  string `json:"organization_id"`
-	Workspace       string `json:"workspace"`
+	ClientID       string `json:"client_id"`
+	ClientSecret   string `json:"client_secret"`
+	OrganizationID string `json:"organization_id"`
+	Workspace      string `json:"workspace"`
 }
 
 type CriblConfigFile struct {
@@ -28,7 +28,7 @@ func GetCredentials() (*CriblConfig, error) {
 	organizationID := os.Getenv("CRIBL_ORGANIZATION_ID")
 	workspace := os.Getenv("CRIBL_WORKSPACE_ID")
 
-	log.Printf("[DEBUG] Environment variables - clientID=%s, orgID=%s, workspace=%s", 
+	log.Printf("[DEBUG] Environment variables - clientID=%s, orgID=%s, workspace=%s",
 		clientID, organizationID, workspace)
 
 	// If we have direct credentials in environment, use them
@@ -52,7 +52,7 @@ func GetCredentials() (*CriblConfig, error) {
 	// Check for credentials in ~/.cribl/credentials
 	configDir := filepath.Join(homeDir, ".cribl")
 	configPath := filepath.Join(configDir, "credentials")
-	
+
 	log.Printf("[DEBUG] Reading credentials from: %s", configPath)
 	file, err := os.ReadFile(configPath)
 	if err != nil {
@@ -74,7 +74,7 @@ func GetCredentials() (*CriblConfig, error) {
 	// Read the file line by line
 	lines := strings.Split(string(file), "\n")
 	currentProfile := "default"
-	
+
 	log.Printf("[DEBUG] Parsing credentials file, starting with profile: %s", currentProfile)
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
@@ -147,7 +147,7 @@ func GetCredentials() (*CriblConfig, error) {
 		}
 	}
 
-	log.Printf("[DEBUG] Selected profile values - clientID=%s, orgID=%s, workspace=%s", 
+	log.Printf("[DEBUG] Selected profile values - clientID=%s, orgID=%s, workspace=%s",
 		profile.ClientID, profile.OrganizationID, profile.Workspace)
 	return &profile, nil
-} 
+}

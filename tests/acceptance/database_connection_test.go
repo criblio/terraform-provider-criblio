@@ -11,6 +11,7 @@ func TestDatabaseConnection(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: dbConfig,
@@ -51,19 +52,19 @@ resource "criblio_database_connection" "my_databaseconnection" {
   user               = "test"
 }
 
-//output "database_connection" {
-//  value = criblio_database_connection.my_databaseconnection
-//}
+output "database_connection" {
+  value = criblio_database_connection.my_databaseconnection
+}
 
-//data "criblio_database_connection" "my_databaseconnection" {
-//  database_type = "...my_database_type..."
-//  group_id      = "...my_group_id..."
-//}
+data "criblio_database_connection" "my_databaseconnection" {
+  database_type = "default"
+  group_id      = "default"
+}
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 `

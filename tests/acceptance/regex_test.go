@@ -10,7 +10,8 @@ import (
 func TestRegex(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
-          		ProtoV6ProviderFactories: providerFactory,
+			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: regexConfig,
@@ -38,7 +39,7 @@ var regexConfig = `
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 
@@ -52,13 +53,11 @@ resource "criblio_regex" "my_regex" {
   tags        = "test"
 }
 
-/*
 output "regex" {
   value = criblio_regex.my_regex
 }
 
 data "criblio_regex" "my_regex" {
-  group_id = "...my_group_id..."
+  group_id = "default"
 }
-*/
 `

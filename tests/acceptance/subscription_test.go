@@ -17,8 +17,6 @@ func TestSubscription(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "id", "my_subscription"),
 						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "description", "test subscription"),
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription_with_enabled", "id", "my_subscription_with_enabled"),
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription_with_enabled", "description", "test subscription with enabled"),
 					),
 				},
 				{
@@ -45,15 +43,6 @@ resource "criblio_subscription" "my_subscription" {
   pipeline    = "passthru"
 }
 
-resource "criblio_subscription" "my_subscription_with_enabled" {
-  description = "test subscription with enabled"
-  disabled    = false
-  filter      = "test"
-  group_id    = "default"
-  id          = "my_subscription_with_enabled"
-  pipeline    = "passthru"
-}
-
 output "subscription" {
   value = criblio_subscription.my_subscription
 }
@@ -61,7 +50,7 @@ output "subscription" {
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 

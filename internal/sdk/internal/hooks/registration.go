@@ -11,7 +11,7 @@ package hooks
 func initHooks(h *Hooks) {
 	// Register combined Cribl Terraform hook for both authentication and URL routing
 	criblHook := NewCriblTerraformHook()
-	
+
 	// Clear existing hooks to ensure our hook is first
 	h.sdkInitHooks = []sdkInitHook{criblHook}
 	h.beforeRequestHook = []beforeRequestHook{criblHook}

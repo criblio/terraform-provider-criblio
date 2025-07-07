@@ -11,6 +11,7 @@ func TestStreamSyslogToLake(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: s3Config,
@@ -218,7 +219,7 @@ output "pack_details" {
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 `

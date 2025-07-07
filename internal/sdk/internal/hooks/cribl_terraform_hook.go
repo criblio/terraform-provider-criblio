@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 	"io"
 	"log"
 	"net/http"
@@ -12,7 +13,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
 type TokenInfo struct {
@@ -68,7 +68,7 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.Request) (*http.Request, error) {
 	// First try to get credentials from security context
 	var clientID, clientSecret, orgID, workspaceID string
-	
+
 	if ctx.SecuritySource != nil {
 		if security, err := ctx.SecuritySource(ctx.Context); err == nil {
 			if s, ok := security.(shared.Security); ok {
@@ -77,7 +77,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 					clientID = s.ClientOauth.ClientID
 					clientSecret = s.ClientOauth.ClientSecret
 				}
-				
+
 				// Get org and workspace IDs
 				if s.OrganizationID != nil {
 					orgID = *s.OrganizationID
@@ -129,7 +129,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 		// Get or create session
 		sessionKey := fmt.Sprintf("%s:%s", clientID, clientSecret)
 		var tokenInfo *TokenInfo
-		
+
 		if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
 			tokenInfo = cachedTokenInfo.(*TokenInfo)
 			if time.Until(tokenInfo.ExpiresAt) < 60*time.Minute {
@@ -183,13 +183,13 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 	} else {
 		return nil, fmt.Errorf("no base URL provided")
 	}
-	
+
 	// Create form data
 	formData := url.Values{}
 	formData.Set("grant_type", "client_credentials")
 	formData.Set("client_id", clientID)
 	formData.Set("client_secret", clientSecret)
-	
+
 	// Ensure audience is set
 	if audience == "" {
 		audience = strings.Replace(o.baseURL, "app.", "api.", 1)
@@ -257,7 +257,7 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 			// Get or create session
 			sessionKey := fmt.Sprintf("%s:%s", config.ClientID, config.ClientSecret)
 			var tokenInfo *TokenInfo
-			
+
 			if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
 				tokenInfo = cachedTokenInfo.(*TokenInfo)
 				if time.Until(tokenInfo.ExpiresAt) < 60*time.Minute {

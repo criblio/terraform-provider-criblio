@@ -11,6 +11,7 @@ func TestProject(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: projConfig,
@@ -51,14 +52,14 @@ output "project" {
 }
 
 data "criblio_project" "my_project" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "default"
+  id       = "degfault"
 }
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 `

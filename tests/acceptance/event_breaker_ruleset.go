@@ -11,6 +11,7 @@ func TestEventBreakerRuleset(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: ebConfig,
@@ -63,18 +64,18 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   tags = "test"
 }
 
-//output "event_breaker_ruleset" {
-//  value = criblio_event_breaker_ruleset.my_eventbreakerruleset
-//}
+output "event_breaker_ruleset" {
+  value = criblio_event_breaker_ruleset.my_eventbreakerruleset
+}
 
-//data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-//  group_id = "...my_group_id..."
-//}
+data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
+  group_id = "...my_group_id..."
+}
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 

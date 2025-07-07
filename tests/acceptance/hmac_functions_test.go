@@ -11,6 +11,7 @@ func TestHmacFunctions(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: hmacConfig,
@@ -48,18 +49,18 @@ const hmacConfig = `
 		  string_delim = "true"
 		}
 
-		//output "hmac_function" {
-		//  value = criblio_hmac_function.my_hmacfunction
-		//}
+		output "hmac_function" {
+		  value = criblio_hmac_function.my_hmacfunction
+		}
 
-		//data "criblio_hmac_function" "my_hmacfunction" {
-		//  group_id = "default"
-		//}
+		data "criblio_hmac_function" "my_hmacfunction" {
+		  group_id = "default"
+		}
 
 		provider "criblio" {
 		  server_url = "https://app.cribl-playground.cloud"
 		  organization_id = "beautiful-nguyen-y8y4azd"
-		  workspace_id = "tfprovider"
+		  workspace_id = "tfprovider2"
 		  version = "999.99.9"
 		}
 		`

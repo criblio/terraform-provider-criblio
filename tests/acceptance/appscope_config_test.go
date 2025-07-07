@@ -11,6 +11,7 @@ func TestAppscopeConfig(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: appConfig,
@@ -161,18 +162,18 @@ const appConfig = `resource "criblio_appscope_config" "my_appscopeconfig" {
   tags        = "cribl, test"
 }
 
-//output "appscope_config" {
-//  value = criblio_appscope_config.my_appscopeconfig
-//}
+output "appscope_config" {
+  value = criblio_appscope_config.my_appscopeconfig
+}
 
-//data "criblio_appscope_config" "my_appscopeconfig" {
-//  group_id = "default"
-//}
+data "criblio_appscope_config" "my_appscopeconfig" {
+  group_id = "default"
+}
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 `

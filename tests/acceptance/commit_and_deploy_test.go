@@ -11,6 +11,7 @@ func TestCommitAndDeploy(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: cydConfig,
@@ -34,10 +35,9 @@ func TestCommitAndDeploy(t *testing.T) {
 }
 
 var cydConfig = `
-/*
 resource "criblio_commit" "my_commit" {
   effective = true
-  group     = "syslog-workers"
+  group     = "default"
   message   = "test"
 }
 
@@ -47,7 +47,7 @@ resource "criblio_deploy" "my_deploy" {
 }
 
 data "criblio_config_version" "my_configversion" {
-  id         = "syslog-workers"
+  id         = "default"
   depends_on = [criblio_commit.my_commit]
 }
 
@@ -62,12 +62,11 @@ output "config_version" {
 output "commit" {
   value = criblio_commit.my_commit
 }
-*/
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 

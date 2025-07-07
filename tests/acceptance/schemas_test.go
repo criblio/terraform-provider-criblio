@@ -11,6 +11,7 @@ func TestSchemas(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
+			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
 					Config: schemaConfig,
@@ -64,20 +65,18 @@ resource "criblio_schema" "my_schema" {
 EOT
 }
 
-/*
 output "schema" {
   value = criblio_schema.my_schema
 }
 
 data "criblio_schema" "my_schema" {
-  group_id = "...my_group_id..."
+  group_id = "default"
 }
-*/
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
+  workspace_id = "tfprovider2"
   version = "999.99.9"
 }
 `
