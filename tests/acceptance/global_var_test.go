@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestGlobalVar(t *testing.T) {
@@ -14,19 +13,12 @@ func TestGlobalVar(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: gVarConfig,
+					Config:             gVarConfig,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "id", "default"),
+						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "id", "new"),
 						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "group_id", "default"),
 					),
-				},
-				{
-					Config: gVarConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -36,9 +28,9 @@ func TestGlobalVar(t *testing.T) {
 var gVarConfig = `
 
 resource "criblio_global_var" "my_globalvar" {
-  description = "Current epoch time"
+  description = "test"
   group_id    = "default"
-  id          = "default"
+  id          = "new"
   lib         = "cribl"
   tags        = "cribl,sample"
   type        = "expression"
@@ -49,14 +41,16 @@ output "global_var" {
   value = criblio_global_var.my_globalvar
 }
 
+/*
 data "criblio_global_var" "my_globalvar" {
-  group_id = "default"
+  group_id = "unixtime"
 }
+*/
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 

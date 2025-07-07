@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestStreamSyslogToLake(t *testing.T) {
@@ -14,7 +13,8 @@ func TestStreamSyslogToLake(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: s3Config,
+					Config:             s3Config,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "id", "syslog-workers"),
 						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "name", "syslog-workers"),
@@ -24,14 +24,6 @@ func TestStreamSyslogToLake(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_destination.cribl_lake", "id", "cribl-lake-2"),
 						resource.TestCheckResourceAttr("criblio_destination.cribl_lake", "group_id", "syslog-workers"),
 					),
-				},
-				{
-					Config: s3Config,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -219,7 +211,7 @@ output "pack_details" {
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 `

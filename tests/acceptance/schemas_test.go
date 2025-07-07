@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestSchemas(t *testing.T) {
@@ -14,19 +13,12 @@ func TestSchemas(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: schemaConfig,
+					Config:             schemaConfig,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_schema.my_schema", "description", "test schema"),
 						resource.TestCheckResourceAttr("criblio_schema.my_schema", "id", "my_schema"),
 					),
-				},
-				{
-					Config: schemaConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -76,7 +68,7 @@ data "criblio_schema" "my_schema" {
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 `

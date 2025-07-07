@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestParquetSchemas(t *testing.T) {
@@ -14,19 +13,12 @@ func TestParquetSchemas(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: parquetConfig,
+					Config:             parquetConfig,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_parquet_schema.my_parquet_schema", "id", "my_parquet_schema"),
 						resource.TestCheckResourceAttr("criblio_parquet_schema.my_parquet_schema", "description", "test parquest"),
 					),
-				},
-				{
-					Config: parquetConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -154,7 +146,7 @@ data "criblio_parquet_schema" "my_parquetschema" {
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 `

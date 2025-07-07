@@ -15,10 +15,10 @@ func TestCommitAndDeploy(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					Config: cydConfig,
-					Check:  resource.ComposeAggregateTestCheckFunc(
-					//resource.TestCheckResourceAttr("criblio_commit.my_commit", "message", "test"),
-					//resource.TestCheckResourceAttr("criblio_commit.my_commit", "group", "syslog-workers"),
-					//resource.TestCheckResourceAttr("criblio_commit.my_deploy", "id", "syslog-workers"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr("criblio_commit.my_commit", "message", "test"),
+						resource.TestCheckResourceAttr("criblio_commit.my_commit", "group", "default"),
+						resource.TestCheckResourceAttr("criblio_deploy.my_deploy", "id", "default"),
 					),
 				},
 				{
@@ -66,8 +66,7 @@ output "commit" {
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
-
 `

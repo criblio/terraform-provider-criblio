@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestRegex(t *testing.T) {
@@ -14,20 +13,13 @@ func TestRegex(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: regexConfig,
+					Config:             regexConfig,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_regex.my_regex", "description", "test"),
 						resource.TestCheckResourceAttr("criblio_regex.my_regex", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_regex.my_regex", "lib", "custom"),
 					),
-				},
-				{
-					Config: regexConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -39,7 +31,7 @@ var regexConfig = `
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 

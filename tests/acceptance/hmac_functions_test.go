@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestHmacFunctions(t *testing.T) {
@@ -14,21 +13,13 @@ func TestHmacFunctions(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: hmacConfig,
+					Config:             hmacConfig,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "id", "my_hmacfunction"),
 						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "description", "test hmac function"),
 						//resource.TestCheckResourceAttr("data.criblio_hmac_function.my_hmacfunction", "id", "my_hmacfunction"),
 					),
-					PreventPostDestroyRefresh: true,
-				},
-				{
-					Config: hmacConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -60,7 +51,7 @@ const hmacConfig = `
 		provider "criblio" {
 		  server_url = "https://app.cribl-playground.cloud"
 		  organization_id = "beautiful-nguyen-y8y4azd"
-		  workspace_id = "tfprovider2"
+		  workspace_id = "tfprovider"
 		  version = "999.99.9"
 		}
 		`

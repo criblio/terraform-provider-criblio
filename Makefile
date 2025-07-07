@@ -21,7 +21,7 @@ build-speakeasy:
 	speakeasy run --skip-versioning --output console --minimal
 
 unit-test: 
-	go test ./internal/sdk/internal/hooks
+	go test -v ./internal/sdk/internal/hooks
 
 test-speakeasy: 
 	speakeasy test

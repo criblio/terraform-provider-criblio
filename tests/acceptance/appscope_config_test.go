@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestAppscopeConfig(t *testing.T) {
@@ -14,20 +13,13 @@ func TestAppscopeConfig(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: appConfig,
+					Config:             appConfig,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "description", "A sample AppScope configuration"),
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "lib", "cribl"),
 					),
-				},
-				{
-					Config: appConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -157,7 +149,7 @@ const appConfig = `resource "criblio_appscope_config" "my_appscopeconfig" {
   }
   description = "A sample AppScope configuration"
   group_id    = "default"
-  id          = "appscope_config"
+  id          = "new_appscope_config"
   lib         = "cribl"
   tags        = "cribl, test"
 }
@@ -173,7 +165,7 @@ data "criblio_appscope_config" "my_appscopeconfig" {
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 `

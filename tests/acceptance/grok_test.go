@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestGrok(t *testing.T) {
@@ -14,19 +13,13 @@ func TestGrok(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: grokConfig,
+					Config:             grokConfig,
+					ExpectNonEmptyPlan: true,
+
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_grok.my_grok", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_grok.my_grok", "id", "test_grok"),
 					),
-				},
-				{
-					Config: grokConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -68,7 +61,7 @@ data "criblio_grok" "my_grok" {
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 

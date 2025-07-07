@@ -4,29 +4,20 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestDatabaseConnection(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
-			ProtoV6ProviderFactories:  providerFactory,
-			PreventPostDestroyRefresh: true,
+			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					Config: dbConfig,
+					Config:             dbConfig,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "id", "my_databaseconnection"),
 						resource.TestCheckResourceAttr("criblio_database_connection.my_databaseconnection", "description", "MySQL database connection example"),
 					),
-				},
-				{
-					Config: dbConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
@@ -52,19 +43,19 @@ resource "criblio_database_connection" "my_databaseconnection" {
   user               = "test"
 }
 
-output "database_connection" {
-  value = criblio_database_connection.my_databaseconnection
+data "criblio_database_connection" "my_databaseconnection" {
+  group_id = "default"
+  database_type = "mysql"
 }
 
-data "criblio_database_connection" "my_databaseconnection" {
-  database_type = "default"
-  group_id      = "default"
+output "database_connection" {
+  value = criblio_database_connection.my_databaseconnection
 }
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 `

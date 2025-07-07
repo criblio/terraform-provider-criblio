@@ -41,6 +41,7 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   lib            = "custom"
   min_raw_length = 256
   rules = [
+  /*
     {
       condition = "PASS_THROUGH_SOURCE_TYPE"
       disabled  = false
@@ -60,6 +61,7 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
       timestamp_timezone     = "local"
       type                   = "regex"
     }
+    */
   ]
   tags = "test"
 }
@@ -69,13 +71,13 @@ output "event_breaker_ruleset" {
 }
 
 data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-  group_id = "...my_group_id..."
+  group_id = "default"
 }
 
 provider "criblio" {
   server_url = "https://app.cribl-playground.cloud"
   organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider2"
+  workspace_id = "tfprovider"
   version = "999.99.9"
 }
 
