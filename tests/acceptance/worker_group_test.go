@@ -15,8 +15,8 @@ func TestWorkerGroup(t *testing.T) {
 				{
 					Config: wgConfig,
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_group.my_group", "id", "my-group"),
-						resource.TestCheckResourceAttr("criblio_group.my_group", "name", "my-group"),
+						resource.TestCheckResourceAttr("criblio_group.my_group", "id", "newgroup"),
+						resource.TestCheckResourceAttr("criblio_group.my_group", "name", "newgroup"),
 					),
 				},
 				{
@@ -39,9 +39,9 @@ resource "criblio_group" "my_group" {
     region   = "eastus"
   }
   estimated_ingest_rate = 1024
-  id                    = "my-group"
+  id                    = "newgroup"
   is_fleet              = false
-  name                  = "my-group"
+  name                  = "newgroup"
   on_prem               = false
   product               = "stream"
   provisioned           = false

@@ -45,9 +45,7 @@ jobs:
           go-version-file: 'go.mod'
           cache: true
 
-      - name: Run Unit Tests
-        env:
-          CRIBL_BEARER_TOKEN: ${{ secrets.CRIBL_BEARER_TOKEN }}
+      - name: Run Go Fmt Checks
         run: | 
           echo "Checking path tests/acceptance"
           cd tests/acceptance
@@ -81,7 +79,7 @@ jobs:
           go-version-file: 'go.mod'
           cache: true
 
-      - name: Run Unit Tests
+      - name: Run Acceptance Tests
         env:
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
@@ -111,3 +109,18 @@ jobs:
       - name: Run Speakeasy Tests
         run: | 
           make test-speakeasy
+
+
+  unit_test_internal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Run Unit Tests
+        run: | 
+          make unit-test

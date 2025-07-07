@@ -10,7 +10,7 @@ import (
 func TestSchemas(t *testing.T) {
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
-			ProtoV6ProviderFactories: providerFactory,
+			ProtoV6ProviderFactories:  providerFactory,
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
