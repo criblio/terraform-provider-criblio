@@ -60,7 +60,4 @@ resource "criblio_database_connection" "my_databaseconnection" {
 //  group_id      = "...my_group_id..."
 //}
 
- provider "criblio" {
-    server_url = "https://app.cribl-playground.cloud/organizations/beautiful-nguyen-y8y4azd/workspaces/tfprovider/app/api/v1"
- }
 `

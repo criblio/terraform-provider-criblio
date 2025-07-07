@@ -74,13 +74,9 @@ jobs:
 
       - name: Run Unit Tests
         env:
-          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
-          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
+          CRIBL_BEARER_TOKEN: ${{ secrets.CRIBL_BEARER_TOKEN }}
         run: | 
-          export CRIBL_CLIENT_ID
-          export CRIBL_CLIENT_SECRET
-          export CRIBL_ORGANIZATION_ID="beautiful-nguyen-y8y4azd"
-          export CRIBL_WORKSPACE_ID="tfprovider"
+          export CRIBL_BEARER_TOKEN
           make acceptance-test
 
 

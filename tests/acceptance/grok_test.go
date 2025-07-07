@@ -66,7 +66,4 @@ data "criblio_grok" "my_grok" {
 }
 */
 
- provider "criblio" {
-    server_url = "https://app.cribl-playground.cloud/organizations/beautiful-nguyen-y8y4azd/workspaces/tfprovider/app/api/v1"
- }
 `

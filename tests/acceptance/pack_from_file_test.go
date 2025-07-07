@@ -37,10 +37,6 @@ func TestPackFromFile(t *testing.T) {
 
 var pFileConfig = `
 
-provider "criblio" {
-    server_url = "https://app.cribl-playground.cloud/organizations/beautiful-nguyen-y8y4azd/workspaces/tfprovider/app/api/v1"
-}
-
 resource "criblio_pack" "my_pack" {
   id           = "pack-from-file"
   group_id     = "default"

@@ -1,6 +1,9 @@
 package tests
 
 import (
+	"os"
+	"fmt"
+	"testing"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/speakeasy/terraform-provider-criblio/internal/provider"
@@ -19,3 +22,10 @@ var (
 }
 `
 )
+
+func TestFoo (t *testing.T) {
+	fmt.Println("client_id = ", os.Getenv("CRIBL_CLIENT_ID"))
+	fmt.Println("client_secret = ", os.Getenv("CRIBL_CLIENT_SECRET"))
+	fmt.Println("bearer_token = ", os.Getenv("CRIBL_BEARER_TOKEN"))
+}
+
