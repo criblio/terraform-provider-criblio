@@ -53,4 +53,10 @@ resource "criblio_group" "my_edge_fleet" {
 //  value = criblio_group.my_edge_fleet
 //}
 
+provider "criblio" {
+  server_url = "https://app.cribl-playground.cloud"
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id = "tfprovider"
+  version = "999.99.9"
+}
 `

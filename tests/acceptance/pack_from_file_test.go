@@ -56,4 +56,12 @@ output "pack_details" {
 //data "criblio_pack" "my_pack" {
 //  group_id = "...my_group_id..."
 //}
+
+provider "criblio" {
+  server_url = "https://app.cribl-playground.cloud"
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id = "tfprovider"
+  version = "999.99.9"
+}
 `
+

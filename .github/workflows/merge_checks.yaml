@@ -49,13 +49,22 @@ jobs:
         env:
           CRIBL_BEARER_TOKEN: ${{ secrets.CRIBL_BEARER_TOKEN }}
         run: | 
+          echo "Checking path tests/acceptance"
           cd tests/acceptance
           if [[ `gofmt -l .` ]]; then 
             gofmt -l . && exit 1
           else
             echo "fmt check passed"
           fi
-            
+          cd ../..
+
+          echo "Checking path internal/sdk/internal/hooks"
+          cd internal/sdk/internal/hooks
+          if [[ `gofmt -l .` ]]; then 
+            gofmt -l . && exit 1
+          else
+            echo "fmt check passed"
+          fi
 
 
   acceptance_test:
@@ -74,9 +83,10 @@ jobs:
 
       - name: Run Unit Tests
         env:
-          CRIBL_BEARER_TOKEN: ${{ secrets.CRIBL_BEARER_TOKEN }}
+          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
+          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
         run: | 
-          export CRIBL_BEARER_TOKEN
+          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET
           make acceptance-test
 
 
