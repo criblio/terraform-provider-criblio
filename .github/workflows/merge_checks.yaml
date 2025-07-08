@@ -1,7 +1,7 @@
 name: Test PR commit
 on:
   pull_request:
-    types: [synchronize]
+    types: [opened, synchronize]
 
 jobs:
   terraform_fmt_checks:
