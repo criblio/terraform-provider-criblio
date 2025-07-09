@@ -9,16 +9,7 @@ import (
 
 // CreateSearchJobResponseBody - a list of SearchJob objects
 type CreateSearchJobResponseBody struct {
-	// number of items present in the items array
-	Count *int64             `json:"count,omitempty"`
 	Items []shared.SearchJob `json:"items,omitempty"`
-}
-
-func (o *CreateSearchJobResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSearchJobResponseBody) GetItems() []shared.SearchJob {

@@ -21,16 +21,7 @@ func (o *GetProtobufLibraryConfigByIDRequest) GetID() string {
 
 // GetProtobufLibraryConfigByIDResponseBody - a list of ProtobufLibraryConfig objects
 type GetProtobufLibraryConfigByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                         `json:"count,omitempty"`
 	Items []shared.ProtobufLibraryConfig `json:"items,omitempty"`
-}
-
-func (o *GetProtobufLibraryConfigByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetProtobufLibraryConfigByIDResponseBody) GetItems() []shared.ProtobufLibraryConfig {

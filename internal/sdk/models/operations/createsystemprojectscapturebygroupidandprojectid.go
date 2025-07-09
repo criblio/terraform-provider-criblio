@@ -39,16 +39,7 @@ func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest) GetCapturePara
 
 // CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody - A list of any objects
 type CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody struct {
-	// Number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {

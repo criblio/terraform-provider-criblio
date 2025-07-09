@@ -3,15 +3,13 @@
 package shared
 
 type RegexLibEntry struct {
-	ID  string  `json:"id"`
-	Lib *string `json:"lib,omitempty"`
-	// Brief description of this regex (optional)
+	ID          string  `json:"id"`
+	Lib         *string `json:"lib,omitempty"`
 	Description *string `json:"description,omitempty"`
 	Regex       string  `json:"regex"`
-	// Sample data for this regex (optional)
+	// Optionally, paste in sample data to match against this regex
 	SampleData *string `json:"sampleData,omitempty"`
-	// One or more tags related to this regex (optional)
-	Tags *string `json:"tags,omitempty"`
+	Tags       *string `json:"tags,omitempty"`
 }
 
 func (o *RegexLibEntry) GetID() string {

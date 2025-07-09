@@ -9,16 +9,7 @@ import (
 
 // CreateLicenseResponseBody - a list of License objects
 type CreateLicenseResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []shared.License `json:"items,omitempty"`
-}
-
-func (o *CreateLicenseResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateLicenseResponseBody) GetItems() []shared.License {

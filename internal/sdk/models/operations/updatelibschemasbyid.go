@@ -8,8 +8,9 @@ import (
 )
 
 type UpdateLibSchemasByIDRequest struct {
+	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to PATCH
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Schema object to be updated
 	SchemaLibEntry shared.SchemaLibEntry `request:"mediaType=application/json"`

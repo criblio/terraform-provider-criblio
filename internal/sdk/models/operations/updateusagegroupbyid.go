@@ -30,16 +30,7 @@ func (o *UpdateUsageGroupByIDRequest) GetUsageGroup() shared.UsageGroup {
 
 // UpdateUsageGroupByIDResponseBody - a list of UsageGroup objects
 type UpdateUsageGroupByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.UsageGroup `json:"items,omitempty"`
-}
-
-func (o *UpdateUsageGroupByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateUsageGroupByIDResponseBody) GetItems() []shared.UsageGroup {

@@ -8,6 +8,7 @@ import (
 )
 
 type CreateGrokFileRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New GrokFile object
 	GrokFile shared.GrokFile `request:"mediaType=application/json"`

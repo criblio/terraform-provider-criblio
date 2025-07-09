@@ -23,7 +23,7 @@ data "criblio_hmac_function" "my_hmacfunction" {
 
 ### Required
 
-- `group_id` (String) Group ID to GET
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 

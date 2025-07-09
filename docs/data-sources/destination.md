@@ -23,7 +23,7 @@ data "criblio_destination" "my_destination" {
 
 ### Required
 
-- `group_id` (String) Group Id
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
@@ -96,41 +96,42 @@ data "criblio_destination" "my_destination" {
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
-- `auth_type` (String) Enter connection string directly, or select a stored secret
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
+- `auth_type` (String)
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
+- `azure_cloud` (String) The Azure cloud to use. Defaults to Azure Public Cloud.
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
 - `certificate` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob--certificate))
 - `client_id` (String) The service principal's client ID
 - `client_text_secret` (String) Select or create a stored text secret
-- `compress` (String) Choose data compression format to apply before moving files to final destination
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered
 - `compression_level` (String) Compression level to apply before moving files to final destination
 - `connection_string` (String) Enter your Azure Storage account connection string. If left blank, Stream will fall back to env.AZURE_STORAGE_CONNECTION_STRING.
-- `container_name` (String) A container organizes a set of blobs, similar to a directory in a file system. Value can be a JavaScript expression enclosed in quotes or backticks. @{product} evaluates the expression at init time. The expression can evaluate to a constant value, and can reference Global Variables, e.g., `myContainer-${C.env["CRIBL_WORKER_ID"]}`
-- `create_container` (Boolean) Creates the configured container in Azure Blob Storage if it does not already exist.
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `container_name` (String) The Azure Blob Storage container name. Name can include only lowercase letters, numbers, and hyphens. For dynamic container names, enter a JavaScript expression within quotes or backtickss, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myContainer-${C.env["CRIBL_WORKER_ID"]}`.
+- `create_container` (Boolean) Create the configured container in Azure Blob Storage if it does not already exist
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
-- `dest_path` (String) Root directory prepended to path before uploading. Value can be a JavaScript expression enclosed in quotes or backticks. @{product} evaluates the expression at init time. The expression can evaluate to a constant value, and can reference Global Variables, e.g., `myBlobPrefix-${C.env["CRIBL_WORKER_ID"]}`
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
+- `dest_path` (String) Root directory prepended to path before uploading. Value can be a JavaScript expression enclosed in quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myBlobPrefix-${C.env["CRIBL_WORKER_ID"]}`.
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
-- `endpoint_suffix` (String) Endpoint suffix for the service URL. Defaults to core.windows.net.
+- `endpoint_suffix` (String) Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
 - `format` (String) Format of the output data
 - `header_line` (String) If set, this line will be written to the beginning of each output file
 - `id` (String) Unique ID for this output
-- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging, e.g., "key":"OCSF Event Class", "value":"9001". (see [below for nested schema](#nestedatt--output_azure_blob--key_value_metadata))
-- `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file.
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_azure_blob--key_value_metadata))
+- `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file
 - `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
 - `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
 - `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
 - `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
@@ -139,8 +140,7 @@ Read-Only:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob--status))
+- `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage.
 - `storage_account_name` (String) The name of your Azure storage account
 - `storage_class` (String)
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
@@ -167,88 +167,76 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--output_azure_blob--status"></a>
-### Nested Schema for `output_azure_blob.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--output_azure_data_explorer"></a>
 ### Nested Schema for `output_azure_data_explorer`
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
-- `additional_properties` (Attributes List) Optionally, enter additional configuration properties to send to the ingestion service. (see [below for nested schema](#nestedatt--output_azure_data_explorer--additional_properties))
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
+- `additional_properties` (Attributes List) Optionally, enter additional configuration properties to send to the ingestion service (see [below for nested schema](#nestedatt--output_azure_data_explorer--additional_properties))
 - `certificate` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--certificate))
-- `client_id` (String) client_id to pass in the OAuth request parameter.
-- `client_secret` (String) The client secret that you generated for your app in the Azure portal.
+- `client_id` (String) client_id to pass in the OAuth request parameter
+- `client_secret` (String) The client secret that you generated for your app in the Azure portal
 - `cluster_url` (String) The base URI for your cluster. Typically, `https://<cluster>.<region>.kusto.windows.net`.
-- `compress` (String) Choose data compression format to apply to HTTP content before it is delivered.
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
-- `database` (String) Name of the database containing the table where data will be ingested.
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `database` (String) Name of the database containing the table where data will be ingested
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extent_tags` (Attributes List) Strings or tags associated with the extent (ingested data shard). (see [below for nested schema](#nestedatt--output_azure_data_explorer--extent_tags))
+- `extent_tags` (Attributes List) Strings or tags associated with the extent (ingested data shard) (see [below for nested schema](#nestedatt--output_azure_data_explorer--extent_tags))
 - `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
-- `flush_immediately` (Boolean) Enable to bypass the data management service's aggregation mechanism.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_immediately` (Boolean) Bypass the data management service's aggregation mechanism
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `format` (String) Format of the output data
 - `id` (String) Unique ID for this output
-- `ingest_if_not_exists` (Attributes List) Prevents duplicate ingestion by checking if an extent with the specified ingest-by tag already exists. (see [below for nested schema](#nestedatt--output_azure_data_explorer--ingest_if_not_exists))
-- `ingest_mode` (String) Method to use for ingesting data.
+- `ingest_if_not_exists` (Attributes List) Prevents duplicate ingestion by verifying whether an extent with the specified ingest-by tag already exists (see [below for nested schema](#nestedatt--output_azure_data_explorer--ingest_if_not_exists))
+- `ingest_mode` (String)
 - `ingest_url` (String) The ingestion service URI for your cluster. Typically, `https://ingest-<cluster>.<region>.kusto.windows.net`.
-- `is_mapping_obj` (Boolean) Enable if you want to send a (JSON) mapping object instead of specifying an existing named data mapping.
-- `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request.
+- `is_mapping_obj` (Boolean) Send a JSON mapping object instead of specifying an existing named data mapping
+- `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `mapping_ref` (String) Enter the name of a data mapping associated with your target table. Or, if incoming event and target table fields match exactly, you can leave the field empty.
-- `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file.
+- `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file
 - `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
 - `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure.
-- `oauth_type` (String) The type of OAuth 2.0 client credentials grant flow to use.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure
+- `oauth_type` (String) The type of OAuth 2.0 client credentials grant flow to use
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `report_level` (String) Level of ingestion status reporting. Defaults to FailuresOnly.
 - `report_method` (String) Target of the ingestion status reporting. Defaults to Queue.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_azure_data_explorer--response_retry_settings))
-- `retain_blob_on_success` (Boolean) Enable to prevent blob deletion after ingestion is complete.
-- `scope` (String) Scope to pass in the OAuth request parameter.
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--status))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_azure_data_explorer--response_retry_settings))
+- `retain_blob_on_success` (Boolean) Prevent blob deletion after ingestion is complete
+- `scope` (String) Scope to pass in the OAuth request parameter
+- `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `table` (String) Name of the table to ingest data into.
-- `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory.
+- `table` (String) Name of the table to ingest data into
+- `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-- `validate_database_settings` (Boolean) When you save or start the Destination, validates database name and credentials; also validates table name except when creating a new table. Disable if your Azure app does not have both the Database Viewer and the Table Viewer role.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `validate_database_settings` (Boolean) When saving or starting the Destination, validate the database name and credentials; also validate table name, except when creating a new table. Disable if your Azure app does not have both the Database Viewer and the Table Viewer role.
 
 <a id="nestedatt--output_azure_data_explorer--additional_properties"></a>
 ### Nested Schema for `output_azure_data_explorer.additional_properties`
@@ -264,7 +252,7 @@ Read-Only:
 
 Read-Only:
 
-- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal.
+- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal
 
 
 <a id="nestedatt--output_azure_data_explorer--extent_tags"></a>
@@ -299,17 +287,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_azure_data_explorer--status"></a>
-### Nested Schema for `output_azure_data_explorer.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_azure_data_explorer--timeout_retry_settings"></a>
 ### Nested Schema for `output_azure_data_explorer.timeout_retry_settings`
 
@@ -318,7 +295,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -334,31 +311,30 @@ Read-Only:
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `flush_event_count` (Number) Maximum number of events in a batch before forcing a flush.
+- `flush_event_count` (Number) Maximum number of events in a batch before forcing a flush
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
-- `format` (String) Format to use to serialize events before writing to the Event Hubs Kafka brokers.
+- `format` (String) Format to use to serialize events before writing to the Event Hubs Kafka brokers
 - `id` (String) Unique ID for this output
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
 - `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
-- `max_record_size_kb` (Number) Maximum size (KB) of each record batch before compression. Setting should be < message.max.bytes settings in Event Hubs brokers.
+- `max_record_size_kb` (Number) Maximum size of each record batch before compression. Setting should be < message.max.bytes settings in Event Hubs brokers.
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire.
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--output_azure_eventhub--sasl))
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub--tls))
-- `topic` (String) The name of the Event Hub (a.k.a. Kafka Topic) to publish events. Can be overwritten using field __topicOut.
+- `topic` (String) The name of the Event Hub (Kafka Topic) to publish events. Can be overwritten using field __topicOut.
 - `type` (String)
 
 <a id="nestedatt--output_azure_eventhub--pq_controls"></a>
@@ -370,19 +346,8 @@ Read-Only:
 
 Read-Only:
 
-- `disabled` (Boolean) Enable authentication.
-- `mechanism` (String) SASL authentication mechanism to use
-
-
-<a id="nestedatt--output_azure_eventhub--status"></a>
-### Nested Schema for `output_azure_eventhub.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
+- `disabled` (Boolean)
+- `mechanism` (String)
 
 
 <a id="nestedatt--output_azure_eventhub--tls"></a>
@@ -391,7 +356,7 @@ Read-Only:
 Read-Only:
 
 - `disabled` (Boolean)
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another trusted CA (e.g., the system's CA).
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)
 
 
 
@@ -400,53 +365,52 @@ Read-Only:
 
 Read-Only:
 
-- `api_url` (String) Enter the DNS name of the Log API endpoint that sends log data to a Log Analytics workspace in Azure Monitor. Defaults to .ods.opinsights.azure.com. @{product} will add a prefix and suffix around this DNS name to construct a URI in this format: <https://<Workspace_ID><your_DNS_name>/api/logs?api-version=<API version>.
+- `api_url` (String) The DNS name of the Log API endpoint that sends log data to a Log Analytics workspace in Azure Monitor. Defaults to .ods.opinsights.azure.com. @{product} will add a prefix and suffix to construct a URI in this format: <https://<Workspace_ID><your_DNS_name>/api/logs?api-version=<API version>.
 - `auth_type` (String) Enter workspace ID and workspace key directly, or select a stored secret
 - `compress` (Boolean)
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_azure_logs--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_azure_logs--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `keypair_secret` (String) Select or create a stored secret that references your access key and secret key
 - `log_type` (String) The Log Type of events sent to this LogAnalytics workspace. Defaults to `Cribl`. Use only letters, numbers, and `_` characters, and can't exceed 100 characters. Can be overwritten by event field __logType.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_azure_logs--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `resource_id` (String) Optional Resource ID of the Azure resource to associate the data with. Can be overridden by the __resourceId event field. This ID populates the _ResourceId property, allowing the data to be included in resource-centric queries. If the ID is neither specified nor overridden, resource-centric queries will omit the data.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_azure_logs--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_azure_logs--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_azure_logs--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_logs--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-- `workspace_id` (String) Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.
-- `workspace_key` (String) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `workspace_id` (String) Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.
+- `workspace_key` (String) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
 
 <a id="nestedatt--output_azure_logs--extra_http_headers"></a>
 ### Nested Schema for `output_azure_logs.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_azure_logs--pq_controls"></a>
@@ -464,17 +428,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_azure_logs--status"></a>
-### Nested Schema for `output_azure_logs.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_azure_logs--timeout_retry_settings"></a>
 ### Nested Schema for `output_azure_logs.timeout_retry_settings`
 
@@ -483,7 +436,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -505,9 +458,9 @@ Read-Only:
 - `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `exclude_mapping_fields` (List of String) Fields to exclude from sending to ClickHouse
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_click_house--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_click_house--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `format` (String) Data format to use when sending data to ClickHouse. Defaults to JSON Compact.
 - `id` (String) Unique ID for this output
 - `login_url` (String) URL for OAuth
@@ -516,26 +469,25 @@ Read-Only:
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_click_house--oauth_headers))
 - `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_click_house--oauth_params))
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_click_house--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_click_house--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `sql_username` (String) Username for certificate authentication
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `table_name` (String) Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".
@@ -548,7 +500,7 @@ Read-Only:
 - `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `url` (String) URL of the ClickHouse instance. Example: http://localhost:8123/
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
 - `wait_for_async_inserts` (Boolean) Cribl will wait for confirmation that data has been fully inserted into the ClickHouse database before proceeding. Disabling this option can increase throughput, but Cribl won’t be able to verify data has been completely inserted.
 
@@ -567,8 +519,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_click_house--oauth_headers"></a>
@@ -604,17 +556,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_click_house--status"></a>
-### Nested Schema for `output_click_house.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_click_house--timeout_retry_settings"></a>
 ### Nested Schema for `output_click_house.timeout_retry_settings`
 
@@ -623,7 +564,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 <a id="nestedatt--output_click_house--tls"></a>
@@ -633,11 +574,11 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
@@ -665,36 +606,24 @@ Read-Only:
 - `log_stream_name` (String) Prefix for CloudWatch log stream name. This prefix will be used to generate a unique log stream name per cribl instance, for example: myStream_myHost_myOutputId
 - `max_queue_size` (Number) Maximum number of queued batches before blocking
 - `max_record_size_kb` (Number) Maximum size (KB) of each individual record before compression. For non compressible data 1MB is the max recommended size
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_cloudwatch--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `region` (String) Region where the CloudWatchLogs is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_cloudwatch--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
 
 <a id="nestedatt--output_cloudwatch--pq_controls"></a>
 ### Nested Schema for `output_cloudwatch.pq_controls`
-
-
-<a id="nestedatt--output_cloudwatch--status"></a>
-### Nested Schema for `output_cloudwatch.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -720,20 +649,19 @@ Read-Only:
 - `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
 - `max_record_size_kb` (Number) Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protobuf_library_id` (String) Select a set of Protobuf definitions for the events you want to send
-- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire.
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--output_confluent_cloud--sasl))
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--tls))
@@ -749,7 +677,7 @@ Read-Only:
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `default_key_schema_id` (Number) Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.
 - `default_value_schema_id` (Number) Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.
-- `disabled` (Boolean) Enable Schema Registry
+- `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -761,7 +689,7 @@ Read-Only:
 Read-Only:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Enable authentication
+- `disabled` (Boolean)
 
 
 <a id="nestedatt--output_confluent_cloud--kafka_schema_registry--tls"></a>
@@ -771,14 +699,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -792,19 +720,8 @@ Read-Only:
 
 Read-Only:
 
-- `disabled` (Boolean) Enable Authentication
-- `mechanism` (String) SASL authentication mechanism to use.
-
-
-<a id="nestedatt--output_confluent_cloud--status"></a>
-### Nested Schema for `output_confluent_cloud.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
+- `disabled` (Boolean)
+- `mechanism` (String)
 
 
 <a id="nestedatt--output_confluent_cloud--tls"></a>
@@ -814,14 +731,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -831,55 +748,54 @@ Read-Only:
 
 Read-Only:
 
-- `compression` (String) Codec to use to compress the data before sending.
+- `compression` (String) Codec to use to compress the data before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
-- `dns_resolve_period_sec` (Number) Re-resolve any hostnames every this many seconds and pick up destinations from A records.
+- `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. E.g.: `cribl_pipe`, `c*`. Wildcards supported.
-- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_cribl_http--extra_http_headers))
+- `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. Example: `cribl_pipe`, `c*`. Wildcards supported.
+- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_cribl_http--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes.
+- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `load_balanced` (Boolean) For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_cribl_http--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_cribl_http--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--tls))
-- `token_ttl_minutes` (Number) The number of minutes before the internally generated authentication token expires, valid values between 1 and 60.
+- `token_ttl_minutes` (Number) The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.
 - `type` (String)
-- `url` (String) URL of a Cribl Worker to send events to, e.g., http://localhost:10200
+- `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_http--urls))
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_cribl_http--extra_http_headers"></a>
 ### Nested Schema for `output_cribl_http.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_cribl_http--pq_controls"></a>
@@ -897,17 +813,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_cribl_http--status"></a>
-### Nested Schema for `output_cribl_http.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_cribl_http--timeout_retry_settings"></a>
 ### Nested Schema for `output_cribl_http.timeout_retry_settings`
 
@@ -916,7 +821,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 <a id="nestedatt--output_cribl_http--tls"></a>
@@ -926,14 +831,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -942,7 +847,7 @@ Read-Only:
 
 Read-Only:
 
-- `url` (String) URL of a Cribl Worker to send events to, e.g., http://localhost:10200
+- `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
@@ -952,20 +857,19 @@ Read-Only:
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
-- `additional_properties` (String) Parsed as JSON.
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression(e.g., `${C.env.SOME_SECRET}`).
+- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `myBucket-${C.vars.myVar}`.
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
 - `dest_path` (String) Lake dataset to send the data to.
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -981,35 +885,23 @@ Read-Only:
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Object ACL to assign to uploaded objects.
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `object_acl` (String) Object ACL to assign to uploaded objects
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Region where the S3 bucket is located.
+- `region` (String) Region where the S3 bucket is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
-- `server_side_encryption` (String) Server-side encryption for uploaded objects.
+- `server_side_encryption` (String)
 - `signature_version` (String) Signature version to use for signing S3 requests
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_lake--status))
-- `storage_class` (String) Storage class to select for uploaded objects.
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `storage_class` (String) Storage class to select for uploaded objects
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
-- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself.
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
-
-<a id="nestedatt--output_cribl_lake--status"></a>
-### Nested Schema for `output_cribl_lake.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
 
 
 <a id="nestedatt--output_cribl_tcp"></a>
@@ -1020,28 +912,27 @@ Read-Only:
 - `compression` (String) Codec to use to compress the data before sending
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `description` (String)
-- `dns_resolve_period_sec` (Number) Re-resolve any hostnames every this many seconds and pick up destinations from A records.
+- `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. E.g.: `cribl_pipe`, `c*`. Wildcards supported.
-- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames.
+- `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. Example: `cribl_pipe`, `c*`. Wildcards supported.
+- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
 - `host` (String) The hostname of the receiver
-- `hosts` (Attributes List) Set of hosts to load-balance data to. (see [below for nested schema](#nestedatt--output_cribl_tcp--hosts))
+- `hosts` (Attributes List) Set of hosts to load-balance data to (see [below for nested schema](#nestedatt--output_cribl_tcp--hosts))
 - `id` (String) Unique ID for this output
-- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes.
+- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `load_balanced` (Boolean) Use load-balanced destinations
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
-- `max_concurrent_senders` (Number) Maximum number of concurrent connections (per worker process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `max_concurrent_senders` (Number) Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `port` (Number) The port to connect to on the provided host
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_tcp--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_tcp--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
@@ -1055,26 +946,15 @@ Read-Only:
 
 Read-Only:
 
-- `host` (String) The hostname of the receiver.
-- `port` (Number) The port to connect to on the provided host.
-- `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (iff not an IP); otherwise, to the global TLS settings.
-- `tls` (String) Whether to inherit TLS configs from group setting or disable TLS.
+- `host` (String) The hostname of the receiver
+- `port` (Number) The port to connect to on the provided host
+- `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.
+- `tls` (String) Whether to inherit TLS configs from group setting or disable TLS
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
 <a id="nestedatt--output_cribl_tcp--pq_controls"></a>
 ### Nested Schema for `output_cribl_tcp.pq_controls`
-
-
-<a id="nestedatt--output_cribl_tcp--status"></a>
-### Nested Schema for `output_cribl_tcp.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--output_cribl_tcp--tls"></a>
@@ -1084,14 +964,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -1106,46 +986,46 @@ Read-Only:
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `format` (String) When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent.
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `token` (String) CrowdStrike Next-Gen SIEM authentication token
+- `token` (String)
 - `type` (String)
-- `url` (String) URL provided from a CrowdStrike data connector, e.g. https://<your-api-key>.ingest.<your-region>.crowdstrike.com/services/collector
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `url` (String) URL provided from a CrowdStrike data connector. 
+Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_crowdstrike_next_gen_siem--extra_http_headers"></a>
 ### Nested Schema for `output_crowdstrike_next_gen_siem.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_crowdstrike_next_gen_siem--pq_controls"></a>
@@ -1163,17 +1043,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_crowdstrike_next_gen_siem--status"></a>
-### Nested Schema for `output_crowdstrike_next_gen_siem.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_crowdstrike_next_gen_siem--timeout_retry_settings"></a>
 ### Nested Schema for `output_crowdstrike_next_gen_siem.timeout_retry_settings`
 
@@ -1182,7 +1051,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -1191,62 +1060,61 @@ Read-Only:
 
 Read-Only:
 
-- `allow_api_key_from_events` (Boolean) If enabled, the API key can be set from the event's '__agent_api_key' field.
+- `allow_api_key_from_events` (Boolean) Allow API key to be set from the event's '__agent_api_key' field
 - `api_key` (String) Organization's API key in Datadog
 - `auth_type` (String) Enter API key directly, or select a stored secret
-- `batch_by_tags` (Boolean) When enabled, batches events by API key and the ddtags field on the event. When disabled, batches events only by API key. If incoming events have high cardinality in the ddtags field, disabling this setting may improve Destination performance.
+- `batch_by_tags` (Boolean) Batch events by API key and the ddtags field on the event. When disabled, batches events only by API key. If incoming events have high cardinality in the ddtags field, disabling this setting may improve Destination performance.
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
-- `content_type` (String) The content type to use when sending logs.
+- `content_type` (String) The content type to use when sending logs
 - `custom_url` (String)
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_datadog--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_datadog--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `host` (String) Name of the host to send with logs. When you send logs as JSON objects, the event's 'host' field (if set) will override this value.
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_datadog--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_datadog--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_datadog--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `send_counters_as_count` (Boolean) If not enabled, Datadog will transform 'counter' metrics to 'gauge'. [Learn more about Datadog metrics types.](https://docs.datadoghq.com/metrics/types/?tab=count)
 - `service` (String) Name of the service to send with logs. When you send logs as JSON objects, the event's '__service' field (if set) will override this value.
 - `severity` (String) Default value for message severity. When you send logs as JSON objects, the event's '__severity' field (if set) will override this value.
 - `site` (String) Datadog site to which events should be sent
 - `source` (String) Name of the source to send with logs. When you send logs as JSON objects, the event's 'source' field (if set) will override this value.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_datadog--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `tags` (List of String) List of tags to send with logs (e.g., 'env:prod', 'env_staging:east').
+- `tags` (List of String) List of tags to send with logs, such as 'env:prod' and 'env_staging:east'
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_datadog--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_datadog--extra_http_headers"></a>
 ### Nested Schema for `output_datadog.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_datadog--pq_controls"></a>
@@ -1264,17 +1132,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_datadog--status"></a>
-### Nested Schema for `output_datadog.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_datadog--timeout_retry_settings"></a>
 ### Nested Schema for `output_datadog.timeout_retry_settings`
 
@@ -1283,7 +1140,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -1301,31 +1158,30 @@ Read-Only:
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `exclude_fields` (List of String) Fields to exclude from the event if the Message field is either unspecified or refers to an object. Ignored if the Message field is a string. If empty, we send all non-internal fields.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_dataset--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_dataset--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `message_field` (String) Name of the event field that contains the message or attributes to send. If not specified, all of the event's non-internal fields will be sent as attributes.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_dataset--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_dataset--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_dataset--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `server_host_field` (String) Name of the event field that contains the `serverHost` identifier. If not specified, defaults to `cribl_<outputId>`.
 - `site` (String) DataSet site to which events should be sent
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_dataset--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -1334,15 +1190,15 @@ Read-Only:
 - `timestamp_field` (String) Name of the event field that contains the timestamp. If not specified, defaults to `ts`, `_time`, or `Date.now()`, in that order.
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_dataset--extra_http_headers"></a>
 ### Nested Schema for `output_dataset.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_dataset--pq_controls"></a>
@@ -1360,17 +1216,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_dataset--status"></a>
-### Nested Schema for `output_dataset.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_dataset--timeout_retry_settings"></a>
 ### Nested Schema for `output_dataset.timeout_retry_settings`
 
@@ -1379,7 +1224,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -1392,21 +1237,9 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_default--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
-
-<a id="nestedatt--output_default--status"></a>
-### Nested Schema for `output_default.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
 
 
 <a id="nestedatt--output_devnull"></a>
@@ -1417,21 +1250,9 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_devnull--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
-
-<a id="nestedatt--output_devnull--status"></a>
-### Nested Schema for `output_devnull.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
 
 
 <a id="nestedatt--output_disk_spool"></a>
@@ -1447,22 +1268,10 @@ Read-Only:
 - `max_data_time` (String) Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized within the time-buckets. If blank, the event's __partition property is used and otherwise, events go directly into the time-bucket directory.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_disk_spool--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `time_window` (String) Time period for grouping spooled events. Default is 10m.
 - `type` (String)
-
-<a id="nestedatt--output_disk_spool--status"></a>
-### Nested Schema for `output_disk_spool.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
 
 
 <a id="nestedatt--output_dl_s3"></a>
@@ -1470,24 +1279,24 @@ Read-Only:
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
 - `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
-- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression(e.g., `${C.env.SOME_SECRET}`).
+- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `myBucket-${C.vars.myVar}`.
-- `compress` (String) Choose data compression format to apply before moving files to final destination
+- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered
 - `compression_level` (String) Compression level to apply before moving files to final destination
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
-- `dest_path` (String) Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`.
+- `dest_path` (String) Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
@@ -1498,7 +1307,7 @@ Read-Only:
 - `format` (String) Format of the output data
 - `header_line` (String) If set, this line will be written to the beginning of each output file
 - `id` (String) Unique ID for this output
-- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging, e.g., "key":"OCSF Event Class", "value":"9001". (see [below for nested schema](#nestedatt--output_dl_s3--key_value_metadata))
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_dl_s3--key_value_metadata))
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
 - `max_closing_files_to_backpressure` (Number) Maximum number of files that can be waiting for upload before backpressure is applied
 - `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.
@@ -1507,29 +1316,28 @@ Read-Only:
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Object ACL to assign to uploaded objects.
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `object_acl` (String) Object ACL to assign to uploaded objects
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
 - `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
 - `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
 - `parquet_version` (String) Determines which data types are supported and how they are represented
 - `partitioning_fields` (List of String) List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Region where the S3 bucket is located.
+- `region` (String) Region where the S3 bucket is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
-- `server_side_encryption` (String) Server-side encryption for uploaded objects.
+- `server_side_encryption` (String)
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing S3 requests
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_dl_s3--status))
-- `storage_class` (String) Storage class to select for uploaded objects.
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `storage_class` (String) Storage class to select for uploaded objects
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
-- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself.
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_dl_s3--key_value_metadata"></a>
@@ -1539,17 +1347,6 @@ Read-Only:
 
 - `key` (String)
 - `value` (String)
-
-
-<a id="nestedatt--output_dl_s3--status"></a>
-### Nested Schema for `output_dl_s3.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -1566,31 +1363,30 @@ Read-Only:
 - `endpoint` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `environment_id` (String) ID of the environment to send to
-- `extra_http_headers` (Attributes List) Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained [here](https://docs.cribl.io/stream/destinations-webhook/#internal-fields). (see [below for nested schema](#nestedatt--output_dynatrace_http--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields). (see [below for nested schema](#nestedatt--output_dynatrace_http--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `format` (String) How to format events before sending. Defaults to JSON. Plaintext is not currently supported.
 - `id` (String) Unique ID for this output
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `method` (String) The method to use when sending events. Defaults to POST.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `method` (String) The method to use when sending events
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_http--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_dynatrace_http--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_dynatrace_http--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_http--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `telemetry_type` (String)
@@ -1601,15 +1397,15 @@ Read-Only:
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
 - `url` (String) URL to send events to. Can be overwritten by an event's __url field.
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_dynatrace_http--extra_http_headers"></a>
 ### Nested Schema for `output_dynatrace_http.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_dynatrace_http--pq_controls"></a>
@@ -1627,17 +1423,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_dynatrace_http--status"></a>
-### Nested Schema for `output_dynatrace_http.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_dynatrace_http--timeout_retry_settings"></a>
 ### Nested Schema for `output_dynatrace_http.timeout_retry_settings`
 
@@ -1646,7 +1431,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -1663,9 +1448,9 @@ Read-Only:
 - `endpoint` (String) The endpoint where Dynatrace events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)
 - `endpoint_type` (String) Select the type of Dynatrace endpoint configured
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_dynatrace_otlp--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_dynatrace_otlp--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `http_compress` (String) Type of compression to apply to messages sent to the OpenTelemetry endpoint
 - `http_logs_endpoint_override` (String) If you want to send logs to the default `{endpoint}/v1/logs` endpoint, leave this field empty; otherwise, specify the desired endpoint
 - `http_metrics_endpoint_override` (String) If you want to send metrics to the default `{endpoint}/v1/metrics` endpoint, leave this field empty; otherwise, specify the desired endpoint
@@ -1675,39 +1460,38 @@ Read-Only:
 - `keep_alive_time` (Number) How often the sender should ping the peer to keep the connection open
 - `max_payload_size_kb` (Number) Maximum size (in KB) of the request body. The maximum payload size is 4 MB. If this limit is exceeded, the entire OTLP message is dropped
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_dynatrace_otlp--metadata))
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protocol` (String) Select a transport option for Dynatrace
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_dynatrace_otlp--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token_secret` (String) Select or create a stored text secret
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_dynatrace_otlp--extra_http_headers"></a>
 ### Nested Schema for `output_dynatrace_otlp.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_dynatrace_otlp--metadata"></a>
@@ -1734,17 +1518,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_dynatrace_otlp--status"></a>
-### Nested Schema for `output_dynatrace_otlp.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_dynatrace_otlp--timeout_retry_settings"></a>
 ### Nested Schema for `output_dynatrace_otlp.timeout_retry_settings`
 
@@ -1753,7 +1526,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -1766,40 +1539,39 @@ Read-Only:
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
-- `dns_resolve_period_sec` (Number) Re-resolve any hostnames every this many seconds and pick up destinations from A records.
-- `doc_type` (String) Document type to use for events. Can be overwritten by an event's __type field
+- `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
+- `doc_type` (String) Document type to use for events. Can be overwritten by an event's __type field.
 - `elastic_pipeline` (String) Optional Elasticsearch destination pipeline
 - `elastic_version` (String) Optional Elasticsearch version, used to format events. If not specified, will auto-discover version.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_elastic--extra_http_headers))
-- `extra_params` (Attributes List) Extra Parameters. (see [below for nested schema](#nestedatt--output_elastic--extra_params))
+- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_elastic--extra_http_headers))
+- `extra_params` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic--extra_params))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `include_doc_id` (Boolean) Toggle this off when sending events to an Elastic TSDS (time series data stream) or to allow Elastic to generate document IDs
+- `include_doc_id` (Boolean) Include the `document_id` field when sending events to an Elastic TSDS (time series data stream)
 - `index` (String) Index or data stream to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
-- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes.
+- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_elastic--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_elastic--response_retry_settings))
 - `retry_partial_errors` (Boolean) Retry failed events when a bulk request to Elastic is successful, but the response body returns an error for one or more events in the batch
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--timeout_retry_settings))
@@ -1807,7 +1579,7 @@ Read-Only:
 - `type` (String)
 - `url` (String) The Cloud ID or URL to an Elastic cluster to send events to. Example: http://elastic:9200/_bulk
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic--urls))
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `write_action` (String) Action to use when writing events. Must be set to `Create` when writing to a data stream.
 
 <a id="nestedatt--output_elastic--auth"></a>
@@ -1824,8 +1596,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_elastic--extra_params"></a>
@@ -1833,8 +1605,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_elastic--pq_controls"></a>
@@ -1852,17 +1624,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_elastic--status"></a>
-### Nested Schema for `output_elastic.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_elastic--timeout_retry_settings"></a>
 ### Nested Schema for `output_elastic.timeout_retry_settings`
 
@@ -1871,7 +1632,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 <a id="nestedatt--output_elastic--urls"></a>
@@ -1895,31 +1656,30 @@ Read-Only:
 - `description` (String)
 - `elastic_pipeline` (String) Optional Elastic Cloud Destination pipeline
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_elastic_cloud--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_elastic_cloud--extra_http_headers))
 - `extra_params` (Attributes List) Extra parameters to use in HTTP requests (see [below for nested schema](#nestedatt--output_elastic_cloud--extra_params))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `include_doc_id` (Boolean) Toggle to No when sending events to an Elastic TSDS (time series data stream)
-- `index` (String) Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field
+- `include_doc_id` (Boolean) Include the `document_id` field when sending events to an Elastic TSDS (time series data stream)
+- `index` (String) Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_elastic_cloud--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_elastic_cloud--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud--timeout_retry_settings))
@@ -1941,8 +1701,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_elastic_cloud--extra_params"></a>
@@ -1950,8 +1710,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_elastic_cloud--pq_controls"></a>
@@ -1969,17 +1729,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_elastic_cloud--status"></a>
-### Nested Schema for `output_elastic_cloud.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_elastic_cloud--timeout_retry_settings"></a>
 ### Nested Schema for `output_elastic_cloud.timeout_retry_settings`
 
@@ -1988,7 +1737,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -1997,17 +1746,17 @@ Read-Only:
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `aws_api_key` (String) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_secret_key` (String) HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
 - `bucket` (String) Name of the destination bucket. A constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a JavaScript Global Variable: `myBucket-${C.vars.myVar}`.
 - `collector_instance_id` (String) ID of the Exabeam Collector where data should be sent. Example: 11112222-3333-4444-5555-666677778888
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
-- `encoded_configuration` (String) Enter an encoded string containing Exabeam configurations.
-- `endpoint` (String) Google Cloud Storage service endpoint.
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
+- `encoded_configuration` (String) Enter an encoded string containing Exabeam configurations
+- `endpoint` (String) Google Cloud Storage service endpoint
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
@@ -2015,35 +1764,23 @@ Read-Only:
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Object ACL to assign to uploaded objects.
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `object_acl` (String) Object ACL to assign to uploaded objects
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `region` (String) Region where the bucket is located
-- `reject_unauthorized` (Boolean) Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
-- `reuse_connections` (Boolean) Whether to reuse connections between requests, which can improve performance.
-- `signature_version` (String) Signature version to use for signing Google Cloud Storage requests.
+- `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
+- `signature_version` (String) Signature version to use for signing Google Cloud Storage requests
 - `site_id` (String) Exabeam site ID. If left blank, @{product} will use the value of the Exabeam site name.
 - `site_name` (String) Constant or JavaScript expression to create an Exabeam site name. Values that aren't successfully evaluated will be treated as string constants.
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_exabeam--status))
-- `storage_class` (String) Storage class to select for uploaded objects.
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `storage_class` (String) Storage class to select for uploaded objects
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `timezone_offset` (String) Exabeam timezone offset.
+- `timezone_offset` (String)
 - `type` (String)
-
-<a id="nestedatt--output_exabeam--status"></a>
-### Nested Schema for `output_exabeam.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
 
 
 <a id="nestedatt--output_filesystem"></a>
@@ -2051,16 +1788,16 @@ Read-Only:
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `compress` (String) Choose data compression format to apply before moving files to final destination
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered
 - `compression_level` (String) Compression level to apply before moving files to final destination
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
 - `dest_path` (String) Final destination for the output files
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
@@ -2069,14 +1806,14 @@ Read-Only:
 - `format` (String) Format of the output data
 - `header_line` (String) If set, this line will be written to the beginning of each output file
 - `id` (String) Unique ID for this output
-- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging, e.g., "key":"OCSF Event Class", "value":"9001". (see [below for nested schema](#nestedatt--output_filesystem--key_value_metadata))
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_filesystem--key_value_metadata))
 - `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
 - `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
 - `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
 - `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
@@ -2086,7 +1823,6 @@ Read-Only:
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_filesystem--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
@@ -2101,17 +1837,6 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--output_filesystem--status"></a>
-### Nested Schema for `output_filesystem.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--output_google_chronicle"></a>
 ### Nested Schema for `output_google_chronicle`
@@ -2124,14 +1849,14 @@ Read-Only:
 - `authentication_method` (String)
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
-- `custom_labels` (Attributes List) Custom labels to be added to every batch. (see [below for nested schema](#nestedatt--output_google_chronicle--custom_labels))
+- `custom_labels` (Attributes List) Custom labels to be added to every batch (see [below for nested schema](#nestedatt--output_google_chronicle--custom_labels))
 - `customer_id` (String) Unique identifier (UUID) corresponding to a particular SecOps instance. Provided by your SecOps representative.
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_google_chronicle--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_google_chronicle--extra_http_headers))
 - `extra_log_types` (Attributes List) Custom log types. If the value "Custom" is selected in the setting "Default log type" above, the first custom log type in this table will be automatically selected as default log type. (see [below for nested schema](#nestedatt--output_google_chronicle--extra_log_types))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `log_format_type` (String)
 - `log_text_field` (String) Name of the event field that contains the log text to send. If not specified, Stream sends a JSON representation of the whole event.
@@ -2139,40 +1864,39 @@ Read-Only:
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `namespace` (String) User-configured environment namespace to identify the data domain the logs originated from. Use namespace as a tag to identify the appropriate data domain for indexing and enrichment functionality. Can be overwritten by event field __namespace.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `region` (String) Regional endpoint to send events to
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_google_chronicle--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_google_chronicle--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `service_account_credentials_secret` (String) Select or create a stored text secret
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.
 
 <a id="nestedatt--output_google_chronicle--custom_labels"></a>
 ### Nested Schema for `output_google_chronicle.custom_labels`
 
 Read-Only:
 
-- `key` (String) Label key
-- `value` (String) Label value
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_google_chronicle--extra_http_headers"></a>
@@ -2180,8 +1904,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_google_chronicle--extra_log_types"></a>
@@ -2189,8 +1913,8 @@ Read-Only:
 
 Read-Only:
 
-- `description` (String) Log type description
-- `log_type` (String) Log type
+- `description` (String)
+- `log_type` (String)
 
 
 <a id="nestedatt--output_google_chronicle--pq_controls"></a>
@@ -2208,17 +1932,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_google_chronicle--status"></a>
-### Nested Schema for `output_google_chronicle.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_google_chronicle--timeout_retry_settings"></a>
 ### Nested Schema for `output_google_chronicle.timeout_retry_settings`
 
@@ -2227,7 +1940,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -2248,7 +1961,7 @@ Read-Only:
 - `first_expression` (String) A JavaScript expression that evaluates to the log entry operation first flag as a boolean. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentryoperation) for details.
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
 - `function_expression` (String) A JavaScript expression that evaluates to the log entry source location function as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentrysourcelocation) for details.
-- `google_auth_method` (String) Google authentication method. Choose Auto to use Google Application Default Credentials.
+- `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
 - `id` (String) Unique ID for this output
 - `id_expression` (String) A JavaScript expression that evaluates to the log entry operation ID as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentryoperation) for details.
 - `index_expression` (String) A JavaScript expression that evaluates to the log entry log split index as a number. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logsplit) for details.
@@ -2262,16 +1975,16 @@ Read-Only:
 - `log_name_expression` (String) JavaScript expression to compute the value of the log name.
 - `max_payload_events` (Number) Max number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `payload_expression` (String) JavaScript expression to compute the value of the payload. Must evaluate to a JavaScript object value. If an invalid value is encountered it will result in the default value instead. Defaults to the entire event.
 - `payload_format` (String) Format to use when sending payload. Defaults to Text.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_logging--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `producer_expression` (String) A JavaScript expression that evaluates to the log entry operation producer as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentryoperation) for details.
 - `protocol_expression` (String) A JavaScript expression that evaluates to the HTTP request protocol as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.
@@ -2288,7 +2001,6 @@ Read-Only:
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `severity_expression` (String) JavaScript expression to compute the value of the severity field. Must evaluate to one of the severity values supported by Google Cloud Logging [here](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity) (case insensitive). Defaults to "DEFAULT".
 - `span_id_expression` (String) A JavaScript expression that evaluates to the ID of the cloud trace span associated with the current operation in which the log is being written as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_logging--status))
 - `status_expression` (String) A JavaScript expression that evaluates to the HTTP request method as a number. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -2324,56 +2036,45 @@ Read-Only:
 - `value_expression` (String) JavaScript expression to compute the label's value.
 
 
-<a id="nestedatt--output_google_cloud_logging--status"></a>
-### Nested Schema for `output_google_cloud_logging.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--output_google_cloud_storage"></a>
 ### Nested Schema for `output_google_cloud_storage`
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
-- `aws_api_key` (String) HMAC access key. This value can be a constant or a JavaScript expression (e.g., `${C.env.GCS_ACCESS_KEY}`).
+- `aws_api_key` (String) HMAC access key. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_authentication_method` (String)
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
-- `aws_secret_key` (String) HMAC secret. This value can be a constant or a JavaScript expression (e.g., `${C.env.GCS_SECRET}`).
+- `aws_secret_key` (String) HMAC secret. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
 - `bucket` (String) Name of the destination bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a Global Variable: `myBucket-${C.vars.myVar}`.
-- `compress` (String) Choose data compression format to apply before moving files to final destination
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered
 - `compression_level` (String) Compression level to apply before moving files to final destination
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
-- `dest_path` (String) Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`.
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
+- `dest_path` (String) Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
-- `endpoint` (String) Google Cloud Storage service endpoint.
+- `endpoint` (String) Google Cloud Storage service endpoint
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
 - `format` (String) Format of the output data
 - `header_line` (String) If set, this line will be written to the beginning of each output file
 - `id` (String) Unique ID for this output
-- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging, e.g., "key":"OCSF Event Class", "value":"9001". (see [below for nested schema](#nestedatt--output_google_cloud_storage--key_value_metadata))
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_google_cloud_storage--key_value_metadata))
 - `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
 - `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Object ACL to assign to uploaded objects.
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `object_acl` (String) Object ACL to assign to uploaded objects
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
 - `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
 - `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
@@ -2381,18 +2082,17 @@ Read-Only:
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `region` (String) Region where the bucket is located
-- `reject_unauthorized` (Boolean) Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
-- `reuse_connections` (Boolean) Whether to reuse connections between requests, which can improve performance.
+- `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
-- `signature_version` (String) Signature version to use for signing Google Cloud Storage requests.
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_storage--status))
-- `storage_class` (String) Storage class to select for uploaded objects.
+- `signature_version` (String) Signature version to use for signing Google Cloud Storage requests
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `storage_class` (String) Storage class to select for uploaded objects
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
-- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself.
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_google_cloud_storage--key_value_metadata"></a>
@@ -2402,17 +2102,6 @@ Read-Only:
 
 - `key` (String)
 - `value` (String)
-
-
-<a id="nestedatt--output_google_cloud_storage--status"></a>
-### Nested Schema for `output_google_cloud_storage.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -2426,26 +2115,25 @@ Read-Only:
 - `create_topic` (Boolean) If enabled, create topic if it does not exist.
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `flush_period_sec` (Number) Maximum time to wait before sending a batch (when batch size limit is not reached).
-- `google_auth_method` (String) Google authentication method. Choose Auto to use Google Application Default Credentials.
+- `flush_period_sec` (String) Maximum time to wait before sending a batch (when batch size limit is not reached). Parsed as JSON.
+- `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
 - `id` (String) Unique ID for this output
 - `max_in_progress` (Number) The maximum number of in-progress API requests before backpressure is applied.
 - `max_queue_size` (Number) Maximum number of queued batches before blocking.
 - `max_record_size_kb` (Number) Maximum size (KB) of batches to send.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `ordered_delivery` (Boolean) If enabled, send events in the order they were added to the queue. For this to work correctly, the process receiving events must have ordering enabled.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_google_pubsub--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `region` (String) Region to publish messages to. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.
 - `secret` (String) Select or create a stored text secret
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_google_pubsub--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `topic_name` (String) ID of the topic to send events to.
@@ -2453,17 +2141,6 @@ Read-Only:
 
 <a id="nestedatt--output_google_pubsub--pq_controls"></a>
 ### Nested Schema for `output_google_pubsub.pq_controls`
-
-
-<a id="nestedatt--output_google_pubsub--status"></a>
-### Nested Schema for `output_google_pubsub.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -2480,54 +2157,53 @@ Read-Only:
 
 Read-Only:
 
-- `compress` (Boolean) Whether to compress the payload body before sending. Applies only to Loki's JSON payloads, as both Prometheus' and Loki's Protobuf variant are snappy-compressed by default.
+- `compress` (Boolean) Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.
 - `concurrency` (Number) Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `id` (String) Unique ID for this output
-- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field (e.g.: '__labels: {host: "cribl.io", level: "error"}'). (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--labels))
+- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}' (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--labels))
 - `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--loki_auth))
-- `loki_url` (String) The endpoint to send logs to, e.g.: https://logs-prod-us-central1.grafana.net
+- `loki_url` (String) The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
-- `message_format` (String) Which format to use when sending logs to Loki (Protobuf or JSON).  Defaults to Protobuf.
-- `metric_rename_expr` (String) A JS expression that can be used to rename metrics. E.g.: name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name.  You can access event fields' values via __e.<fieldName>.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `message_format` (String) Format to use when sending logs to Loki (Protobuf or JSON)
+- `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--prometheus_auth))
-- `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, e.g.: https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
+- `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--extra_http_headers"></a>
 ### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--labels"></a>
@@ -2535,8 +2211,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Name of the label.
-- `value` (String) Value of the label.
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--loki_auth"></a>
@@ -2544,11 +2220,11 @@ Read-Only:
 
 Read-Only:
 
-- `auth_type` (String) The authentication method to use for the HTTP requests
+- `auth_type` (String)
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `password` (String) Password (a.k.a API key in Grafana Cloud domain) for authentication
+- `password` (String) Password (API key in Grafana Cloud domain) for authentication
 - `text_secret` (String) Select or create a stored text secret
-- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. E.g.: <your-username>:<your-api-key>.
+- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 - `username` (String) Username for authentication
 
 
@@ -2561,11 +2237,11 @@ Read-Only:
 
 Read-Only:
 
-- `auth_type` (String) The authentication method to use for the HTTP requests
+- `auth_type` (String)
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `password` (String) Password (a.k.a API key in Grafana Cloud domain) for authentication
+- `password` (String) Password (API key in Grafana Cloud domain) for authentication
 - `text_secret` (String) Select or create a stored text secret
-- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. E.g.: <your-username>:<your-api-key>.
+- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 - `username` (String) Username for authentication
 
 
@@ -2580,17 +2256,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--status"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--timeout_retry_settings"></a>
 ### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.timeout_retry_settings`
 
@@ -2599,7 +2264,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -2608,54 +2273,53 @@ Read-Only:
 
 Read-Only:
 
-- `compress` (Boolean) Whether to compress the payload body before sending. Applies only to Loki's JSON payloads, as both Prometheus' and Loki's Protobuf variant are snappy-compressed by default.
+- `compress` (Boolean) Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.
 - `concurrency` (Number) Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `id` (String) Unique ID for this output
-- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field (e.g.: '__labels: {host: "cribl.io", level: "error"}'). (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--labels))
+- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}' (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--labels))
 - `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--loki_auth))
-- `loki_url` (String) The endpoint to send logs to, e.g.: https://logs-prod-us-central1.grafana.net
+- `loki_url` (String) The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
-- `message_format` (String) Which format to use when sending logs to Loki (Protobuf or JSON).  Defaults to Protobuf.
-- `metric_rename_expr` (String) A JS expression that can be used to rename metrics. E.g.: name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name.  You can access event fields' values via __e.<fieldName>.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `message_format` (String) Format to use when sending logs to Loki (Protobuf or JSON)
+- `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--prometheus_auth))
-- `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, e.g.: https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
+- `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--extra_http_headers"></a>
 ### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--labels"></a>
@@ -2663,8 +2327,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Name of the label.
-- `value` (String) Value of the label.
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--loki_auth"></a>
@@ -2672,11 +2336,11 @@ Read-Only:
 
 Read-Only:
 
-- `auth_type` (String) The authentication method to use for the HTTP requests
+- `auth_type` (String)
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `password` (String) Password (a.k.a API key in Grafana Cloud domain) for authentication
+- `password` (String) Password (API key in Grafana Cloud domain) for authentication
 - `text_secret` (String) Select or create a stored text secret
-- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. E.g.: <your-username>:<your-api-key>.
+- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 - `username` (String) Username for authentication
 
 
@@ -2689,11 +2353,11 @@ Read-Only:
 
 Read-Only:
 
-- `auth_type` (String) The authentication method to use for the HTTP requests
+- `auth_type` (String)
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `password` (String) Password (a.k.a API key in Grafana Cloud domain) for authentication
+- `password` (String) Password (API key in Grafana Cloud domain) for authentication
 - `text_secret` (String) Select or create a stored text secret
-- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. E.g.: <your-username>:<your-api-key>.
+- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 - `username` (String) Username for authentication
 
 
@@ -2708,17 +2372,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--status"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--timeout_retry_settings"></a>
 ### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.timeout_retry_settings`
 
@@ -2727,7 +2380,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -2745,18 +2398,17 @@ Read-Only:
 - `host` (String) The hostname of the destination.
 - `id` (String) Unique ID for this output
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `port` (Number) Destination port.
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_graphite--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protocol` (String) Protocol to use when communicating with the destination.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_graphite--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
@@ -2765,17 +2417,6 @@ Read-Only:
 
 <a id="nestedatt--output_graphite--pq_controls"></a>
 ### Nested Schema for `output_graphite.pq_controls`
-
-
-<a id="nestedatt--output_graphite--status"></a>
-### Nested Schema for `output_graphite.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -2790,28 +2431,27 @@ Read-Only:
 - `dataset` (String) Name of the dataset to send events to – e.g., observability
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_honeycomb--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_honeycomb--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_honeycomb--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_honeycomb--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_honeycomb--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_honeycomb--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `team` (String) Team API key where the dataset belongs
@@ -2819,15 +2459,15 @@ Read-Only:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_honeycomb--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_honeycomb--extra_http_headers"></a>
 ### Nested Schema for `output_honeycomb.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_honeycomb--pq_controls"></a>
@@ -2845,17 +2485,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_honeycomb--status"></a>
-### Nested Schema for `output_honeycomb.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_honeycomb--timeout_retry_settings"></a>
 ### Nested Schema for `output_honeycomb.timeout_retry_settings`
 
@@ -2864,7 +2493,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -2878,29 +2507,28 @@ Read-Only:
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_humio_hec--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_humio_hec--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `format` (String) When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent.
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_humio_hec--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_humio_hec--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_humio_hec--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_humio_hec--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -2908,16 +2536,16 @@ Read-Only:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) CrowdStrike Falcon LogScale authentication token
 - `type` (String)
-- `url` (String) URL to a CrowdStrike Falcon LogScale endpoint to send events to, e.g., https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `url` (String) URL to a CrowdStrike Falcon LogScale endpoint to send events to. Examples: https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_humio_hec--extra_http_headers"></a>
 ### Nested Schema for `output_humio_hec.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_humio_hec--pq_controls"></a>
@@ -2935,17 +2563,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_humio_hec--status"></a>
-### Nested Schema for `output_humio_hec.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_humio_hec--timeout_retry_settings"></a>
 ### Nested Schema for `output_humio_hec.timeout_retry_settings`
 
@@ -2954,7 +2571,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -2973,35 +2590,34 @@ Read-Only:
 - `description` (String)
 - `dynamic_value_field_name` (Boolean) Enabling this will pull the value field from the metric name. E,g, 'db.query.user' will use 'db.query' as the measurement and 'user' as the value field.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_influxdb--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_influxdb--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `login_url` (String) URL for OAuth
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_influxdb--oauth_headers))
 - `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_influxdb--oauth_params))
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `org` (String) Organization ID for this bucket.
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_influxdb--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_influxdb--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_influxdb--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_influxdb--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -3013,7 +2629,7 @@ Read-Only:
 - `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `url` (String) URL of an InfluxDB cluster to send events to, e.g., http://localhost:8086/write
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `use_v2_api` (Boolean) The v2 API can be enabled with InfluxDB versions 1.8 and later.
 - `username` (String)
 - `value_field_name` (String) Name of the field in which to store the metric when sending to InfluxDB. If dynamic generation is enabled and fails, this will be used as a fallback.
@@ -3023,8 +2639,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_influxdb--oauth_headers"></a>
@@ -3060,17 +2676,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_influxdb--status"></a>
-### Nested Schema for `output_influxdb.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_influxdb--timeout_retry_settings"></a>
 ### Nested Schema for `output_influxdb.timeout_retry_settings`
 
@@ -3079,7 +2684,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -3105,20 +2710,19 @@ Read-Only:
 - `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
 - `max_record_size_kb` (Number) Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protobuf_library_id` (String) Select a set of Protobuf definitions for the events you want to send
-- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire.
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--output_kafka--sasl))
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--tls))
@@ -3134,7 +2738,7 @@ Read-Only:
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `default_key_schema_id` (Number) Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.
 - `default_value_schema_id` (Number) Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.
-- `disabled` (Boolean) Enable Schema Registry
+- `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -3146,7 +2750,7 @@ Read-Only:
 Read-Only:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Enable authentication
+- `disabled` (Boolean)
 
 
 <a id="nestedatt--output_kafka--kafka_schema_registry--tls"></a>
@@ -3156,14 +2760,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -3177,19 +2781,8 @@ Read-Only:
 
 Read-Only:
 
-- `disabled` (Boolean) Enable Authentication
-- `mechanism` (String) SASL authentication mechanism to use.
-
-
-<a id="nestedatt--output_kafka--status"></a>
-### Nested Schema for `output_kafka.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
+- `disabled` (Boolean)
+- `mechanism` (String)
 
 
 <a id="nestedatt--output_kafka--tls"></a>
@@ -3199,14 +2792,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -3233,20 +2826,19 @@ Read-Only:
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
 - `id` (String) Unique ID for this output
 - `max_record_size_kb` (Number) Maximum size (KB) of each individual record before compression. For uncompressed or non-compressible data 1MB is the max recommended size
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_kinesis--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `region` (String) Region where the Kinesis stream is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `signature_version` (String) Signature version to use for signing Kinesis stream requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_kinesis--status))
 - `stream_name` (String) Kinesis stream name to send events to.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -3257,65 +2849,53 @@ Read-Only:
 ### Nested Schema for `output_kinesis.pq_controls`
 
 
-<a id="nestedatt--output_kinesis--status"></a>
-### Nested Schema for `output_kinesis.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--output_loki"></a>
 ### Nested Schema for `output_loki`
 
 Read-Only:
 
-- `auth_type` (String) The authentication method to use for the HTTP requests
-- `compress` (Boolean) Whether to compress the payload body before sending.
+- `auth_type` (String)
+- `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki to complain about entries being delivered out of order.
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_loki--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_loki--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order.
 - `id` (String) Unique ID for this output
-- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field (e.g.: '__labels: {host: "cribl.io", level: "error"}'). (see [below for nested schema](#nestedatt--output_loki--labels))
+- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}' (see [below for nested schema](#nestedatt--output_loki--labels))
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Defaults to 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order.
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order.
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
-- `message_format` (String) Which format to use when sending logs to Loki (Protobuf or JSON).  Defaults to Protobuf.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
-- `password` (String) Password (a.k.a API key in Grafana Cloud domain) for authentication
+- `message_format` (String) Format to use when sending logs to Loki (Protobuf or JSON)
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `password` (String) Password (API key in Grafana Cloud domain) for authentication
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_loki--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_loki--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_loki--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_loki--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as labels to generated logs.
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_loki--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. E.g.: <your-username>:<your-api-key>.
+- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
-- `url` (String) The endpoint to send logs to.
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `url` (String) The endpoint to send logs to
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String) Username for authentication
 
 <a id="nestedatt--output_loki--extra_http_headers"></a>
@@ -3323,8 +2903,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_loki--labels"></a>
@@ -3332,8 +2912,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Name of the label.
-- `value` (String) Value of the label.
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_loki--pq_controls"></a>
@@ -3351,17 +2931,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_loki--status"></a>
-### Nested Schema for `output_loki.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_loki--timeout_retry_settings"></a>
 ### Nested Schema for `output_loki.timeout_retry_settings`
 
@@ -3370,7 +2939,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -3379,21 +2948,21 @@ Read-Only:
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
 - `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
-- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression(e.g., `${C.env.SOME_SECRET}`).
+- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression, such as `${C.env.SOME_SECRET}`).
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination MinIO bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. E.g. referencing a Global Variable: `myBucket-${C.vars.myVar}`.
-- `compress` (String) Choose data compression format to apply before moving files to final destination
+- `bucket` (String) Name of the destination MinIO bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered
 - `compression_level` (String) Compression level to apply before moving files to final destination
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
-- `dest_path` (String) Root directory to prepend to path before uploading. Enter a constant, or a JS expression enclosed in quotes or backticks.
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
+- `dest_path` (String) Root directory to prepend to path before uploading. Enter a constant, or a JavaScript expression enclosed in quotes or backticks.
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
@@ -3403,16 +2972,16 @@ Read-Only:
 - `format` (String) Format of the output data
 - `header_line` (String) If set, this line will be written to the beginning of each output file
 - `id` (String) Unique ID for this output
-- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging, e.g., "key":"OCSF Event Class", "value":"9001". (see [below for nested schema](#nestedatt--output_minio--key_value_metadata))
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_minio--key_value_metadata))
 - `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.
 - `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
 - `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Object ACL to assign to uploaded objects.
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `object_acl` (String) Object ACL to assign to uploaded objects
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
 - `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
 - `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
@@ -3420,19 +2989,18 @@ Read-Only:
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `region` (String) Region where the MinIO service/cluster is located
-- `reject_unauthorized` (Boolean) Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates)
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
-- `reuse_connections` (Boolean) Whether to reuse connections between requests, which can improve performance.
-- `server_side_encryption` (String) Server-side encryption for uploaded objects.
+- `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
+- `server_side_encryption` (String) Server-side encryption for uploaded objects
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
-- `signature_version` (String) Signature version to use for signing MinIO requests.
+- `signature_version` (String) Signature version to use for signing MinIO requests
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_minio--status))
-- `storage_class` (String) Storage class to select for uploaded objects.
+- `storage_class` (String) Storage class to select for uploaded objects
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
-- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself.
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_minio--key_value_metadata"></a>
@@ -3442,17 +3010,6 @@ Read-Only:
 
 - `key` (String)
 - `value` (String)
-
-
-<a id="nestedatt--output_minio--status"></a>
-### Nested Schema for `output_minio.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -3487,23 +3044,22 @@ Read-Only:
 - `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
 - `max_record_size_kb` (Number) Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_msk--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protobuf_library_id` (String) Select a set of Protobuf definitions for the events you want to send
-- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire.
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `region` (String) Region where the MSK cluster is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `signature_version` (String) Signature version to use for signing MSK cluster requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_msk--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_msk--tls))
@@ -3519,7 +3075,7 @@ Read-Only:
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `default_key_schema_id` (Number) Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.
 - `default_value_schema_id` (Number) Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.
-- `disabled` (Boolean) Enable Schema Registry
+- `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -3531,7 +3087,7 @@ Read-Only:
 Read-Only:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Enable authentication
+- `disabled` (Boolean)
 
 
 <a id="nestedatt--output_msk--kafka_schema_registry--tls"></a>
@@ -3541,31 +3097,20 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
 
 <a id="nestedatt--output_msk--pq_controls"></a>
 ### Nested Schema for `output_msk.pq_controls`
-
-
-<a id="nestedatt--output_msk--status"></a>
-### Nested Schema for `output_msk.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--output_msk--tls"></a>
@@ -3575,14 +3120,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -3598,7 +3143,6 @@ Read-Only:
 - `hosts` (Attributes List) One or more NetFlow destinations to forward events to (see [below for nested schema](#nestedatt--output_netflow--hosts))
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_netflow--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
@@ -3610,17 +3154,6 @@ Read-Only:
 
 - `host` (String) Destination host
 - `port` (Number) Destination port, default is 2055
-
-
-<a id="nestedatt--output_netflow--status"></a>
-### Nested Schema for `output_netflow.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -3636,32 +3169,31 @@ Read-Only:
 - `custom_url` (String)
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_newrelic--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_newrelic--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `log_type` (String) Name of the logtype to send with events, e.g.: observability, access_log. The event's 'sourcetype' field (if set) will override this value.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `message_field` (String) Name of field to send as log message value. If not present, event will be serialized and sent as JSON.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--output_newrelic--metadata))
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `region` (String) Which New Relic region endpoint to use.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_newrelic--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_newrelic--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -3669,15 +3201,15 @@ Read-Only:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_newrelic--extra_http_headers"></a>
 ### Nested Schema for `output_newrelic.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_newrelic--metadata"></a>
@@ -3704,17 +3236,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_newrelic--status"></a>
-### Nested Schema for `output_newrelic.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_newrelic--timeout_retry_settings"></a>
 ### Nested Schema for `output_newrelic.timeout_retry_settings`
 
@@ -3723,7 +3244,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -3741,44 +3262,43 @@ Read-Only:
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `event_type` (String) Default eventType to use when not present in an event. For more information, see [here](https://docs.newrelic.com/docs/telemetry-data-platform/custom-data/custom-events/data-requirements-limits-custom-event-data/#reserved-words).
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_newrelic_events--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_newrelic_events--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic_events--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `region` (String) Which New Relic region endpoint to use.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_newrelic_events--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_newrelic_events--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic_events--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic_events--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_newrelic_events--extra_http_headers"></a>
 ### Nested Schema for `output_newrelic_events.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_newrelic_events--pq_controls"></a>
@@ -3796,17 +3316,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_newrelic_events--status"></a>
-### Nested Schema for `output_newrelic_events.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_newrelic_events--timeout_retry_settings"></a>
 ### Nested Schema for `output_newrelic_events.timeout_retry_settings`
 
@@ -3815,7 +3324,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -3833,9 +3342,9 @@ Read-Only:
 - `description` (String)
 - `endpoint` (String) The endpoint where OTel events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets). Unspecified ports will default to 4317, unless the endpoint is an HTTPS-based URL or TLS is enabled, in which case 443 will be used.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_open_telemetry--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_open_telemetry--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `http_compress` (String) Type of compression to apply to messages sent to the OpenTelemetry endpoint
 - `http_logs_endpoint_override` (String) If you want to send logs to the default `{endpoint}/v1/logs` endpoint, leave this field empty; otherwise, specify the desired endpoint
 - `http_metrics_endpoint_override` (String) If you want to send metrics to the default `{endpoint}/v1/metrics` endpoint, leave this field empty; otherwise, specify the desired endpoint
@@ -3848,27 +3357,26 @@ Read-Only:
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_open_telemetry--metadata))
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_headers))
 - `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_params))
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_open_telemetry--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protocol` (String) Select a transport option for OpenTelemetry
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_open_telemetry--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_open_telemetry--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_open_telemetry--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -3879,7 +3387,7 @@ Read-Only:
 - `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
 - `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
 
 <a id="nestedatt--output_open_telemetry--extra_http_headers"></a>
@@ -3887,8 +3395,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_open_telemetry--metadata"></a>
@@ -3933,17 +3441,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_open_telemetry--status"></a>
-### Nested Schema for `output_open_telemetry.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_open_telemetry--timeout_retry_settings"></a>
 ### Nested Schema for `output_open_telemetry.timeout_retry_settings`
 
@@ -3952,7 +3449,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 <a id="nestedatt--output_open_telemetry--tls"></a>
@@ -3962,14 +3459,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 
 
 
@@ -3984,37 +3481,36 @@ Read-Only:
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_prometheus--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_prometheus--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `login_url` (String) URL for OAuth
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `metric_rename_expr` (String) A JS expression that can be used to rename metrics. E.g.: name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name.  You can access event fields' values via __e.<fieldName>.
-- `metrics_flush_period_sec` (Number) How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period (sec) set above.
+- `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
+- `metrics_flush_period_sec` (Number) How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_prometheus--oauth_headers))
 - `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_prometheus--oauth_params))
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_prometheus--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_prometheus--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_prometheus--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
-- `send_metadata` (Boolean) Whether to generate and send metadata (`type` and `metricFamilyName`) requests.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_prometheus--status))
+- `send_metadata` (Boolean) Generate and send metadata (`type` and `metricFamilyName`) requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.
 - `text_secret` (String) Select or create a stored text secret
@@ -4024,8 +3520,8 @@ Read-Only:
 - `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
 - `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
-- `url` (String) The endpoint to send metrics to.
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `url` (String) The endpoint to send metrics to
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
 
 <a id="nestedatt--output_prometheus--extra_http_headers"></a>
@@ -4033,8 +3529,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_prometheus--oauth_headers"></a>
@@ -4070,17 +3566,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_prometheus--status"></a>
-### Nested Schema for `output_prometheus.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_prometheus--timeout_retry_settings"></a>
 ### Nested Schema for `output_prometheus.timeout_retry_settings`
 
@@ -4089,7 +3574,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -4106,24 +3591,12 @@ Read-Only:
 - `id` (String) Unique ID for this output
 - `max_data_size` (String) Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.
 - `max_data_time` (String) Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `partition_expr` (String) JS expression to define how files are partitioned and organized. If left blank, Cribl Stream will fallback on event.__partition.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_ring--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
-
-<a id="nestedatt--output_ring--status"></a>
-### Nested Schema for `output_ring.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
 
 
 <a id="nestedatt--output_router"></a>
@@ -4136,7 +3609,6 @@ Read-Only:
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `rules` (Attributes List) Event routing rules (see [below for nested schema](#nestedatt--output_router--rules))
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_router--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
@@ -4152,41 +3624,30 @@ Read-Only:
 - `output` (String) Output to send matching events to
 
 
-<a id="nestedatt--output_router--status"></a>
-### Nested Schema for `output_router.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--output_s3"></a>
 ### Nested Schema for `output_s3`
 
 Read-Only:
 
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
 - `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
-- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression(e.g., `${C.env.SOME_SECRET}`).
+- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `myBucket-${C.vars.myVar}`.
-- `compress` (String) Choose data compression format to apply before moving files to final destination
+- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered
 - `compression_level` (String) Compression level to apply before moving files to final destination
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
-- `dest_path` (String) Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`.
+- `dest_path` (String) Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
@@ -4197,7 +3658,7 @@ Read-Only:
 - `format` (String) Format of the output data
 - `header_line` (String) If set, this line will be written to the beginning of each output file
 - `id` (String) Unique ID for this output
-- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging, e.g., "key":"OCSF Event Class", "value":"9001". (see [below for nested schema](#nestedatt--output_s3--key_value_metadata))
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_s3--key_value_metadata))
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
 - `max_closing_files_to_backpressure` (Number) Maximum number of files that can be waiting for upload before backpressure is applied
 - `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.
@@ -4206,29 +3667,28 @@ Read-Only:
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Object ACL to assign to uploaded objects.
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `object_acl` (String) Object ACL to assign to uploaded objects
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
 - `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
 - `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
 - `parquet_version` (String) Determines which data types are supported and how they are represented
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Region where the S3 bucket is located.
+- `region` (String) Region where the S3 bucket is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
-- `server_side_encryption` (String) Server-side encryption for uploaded objects.
+- `server_side_encryption` (String)
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing S3 requests
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_s3--status))
-- `storage_class` (String) Storage class to select for uploaded objects.
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `storage_class` (String) Storage class to select for uploaded objects
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
-- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself.
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_s3--key_value_metadata"></a>
@@ -4240,17 +3700,6 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--output_s3--status"></a>
-### Nested Schema for `output_s3.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--output_security_lake"></a>
 ### Nested Schema for `output_security_lake`
@@ -4258,7 +3707,7 @@ Read-Only:
 Read-Only:
 
 - `account_id` (String) ID of the AWS account whose data the Destination will write to Security Lake. This should have been configured when creating the Amazon Security Lake custom source.
-- `add_id_to_stage_path` (Boolean) Append output's ID to staging location
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
@@ -4267,13 +3716,13 @@ Read-Only:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `myBucket-${C.vars.myVar}`.
+- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
 - `custom_source` (String) Name of the custom source configured in Amazon Security Lake
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, dead-letter it to prevent further errors.
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories when 'Remove empty staging dirs' is enabled
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
@@ -4282,7 +3731,7 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `header_line` (String) If set, this line will be written to the beginning of each output file
 - `id` (String) Unique ID for this output
-- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging, e.g., "key":"OCSF Event Class", "value":"9001". (see [below for nested schema](#nestedatt--output_security_lake--key_value_metadata))
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_security_lake--key_value_metadata))
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
 - `max_closing_files_to_backpressure` (Number) Maximum number of files that can be waiting for upload before backpressure is applied
 - `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.
@@ -4291,9 +3740,9 @@ Read-Only:
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Object ACL to assign to uploaded objects.
-- `on_backpressure` (String) Whether to block or drop events when all receivers are exerting backpressure
-- `on_disk_full_backpressure` (String) Whether to block or drop events when disk space is below the global 'Min free disk space' limit
+- `object_acl` (String) Object ACL to assign to uploaded objects
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
 - `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
 - `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
@@ -4304,16 +3753,15 @@ Read-Only:
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
-- `server_side_encryption` (String) Server-side encryption for uploaded objects.
+- `server_side_encryption` (String)
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing Amazon Security Lake requests
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_security_lake--status))
-- `storage_class` (String) Storage class to select for uploaded objects.
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `storage_class` (String) Storage class to select for uploaded objects
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
 - `type` (String)
-- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself.
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_security_lake--key_value_metadata"></a>
@@ -4323,17 +3771,6 @@ Read-Only:
 
 - `key` (String)
 - `value` (String)
-
-
-<a id="nestedatt--output_security_lake--status"></a>
-### Nested Schema for `output_security_lake.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -4352,14 +3789,14 @@ Read-Only:
 - `custom_event_delimiter` (String) Delimiter string to insert between individual events. Defaults to newline character.
 - `custom_payload_expression` (String) Expression specifying how to format the payload for each batch. To reference the events to send, use the `${events}` variable. Example expression: `{ "items" : [${events}] }` would send the batch inside a JSON object.
 - `custom_source_expression` (String) Expression to evaluate on events to generate output. Example: `raw=${_raw}`. See [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook#custom-format) for other examples. If empty, the full event is sent as stringified JSON.
-- `dce_endpoint` (String) Data collection endpoint (DCE) URL. In the format: `https://<Endpoint-Name>-<Identifier>.<Region>.ingest.monitor.azure.com`.
-- `dcr_id` (String) Immutable ID for the Data collection rule (DCR).
+- `dce_endpoint` (String) Data collection endpoint (DCE) URL. In the format: `https://<Endpoint-Name>-<Identifier>.<Region>.ingest.monitor.azure.com`
+- `dcr_id` (String) Immutable ID for the Data Collection Rule (DCR)
 - `description` (String)
-- `endpoint_url_configuration` (String)
+- `endpoint_url_configuration` (String) Enter the data collection endpoint URL or the individual ID
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained [here](https://docs.cribl.io/stream/destinations-webhook/#internal-fields). (see [below for nested schema](#nestedatt--output_sentinel--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields). (see [below for nested schema](#nestedatt--output_sentinel--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `format` (String)
 - `format_event_code` (String) Custom JavaScript code to format incoming event data accessible through the __e variable. The formatted content is added to (__e['__eventOut']) if available. Otherwise, the original event is serialized as JSON. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.
 - `format_payload_code` (String) Optional JavaScript code to format the payload sent to the Destination. The payload, containing a batch of formatted events, is accessible through the __e['payload'] variable. The formatted payload is returned in the __e['__payloadOut'] variable. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.
@@ -4368,25 +3805,24 @@ Read-Only:
 - `login_url` (String) URL for OAuth
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size (KB) of the request body (defaults to the API's maximum limit of 1000 KB)
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_sentinel--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_sentinel--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `scope` (String) Scope to pass in the OAuth request
 - `secret` (String) Secret parameter value to pass in request body
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel--status))
-- `stream_name` (String) The name of the stream (Sentinel table) in which to store the events.
+- `stream_name` (String) The name of the stream (Sentinel table) in which to store the events
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel--timeout_retry_settings))
@@ -4394,15 +3830,15 @@ Read-Only:
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
 - `url` (String) URL to send events to. Can be overwritten by an event's __url field.
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_sentinel--extra_http_headers"></a>
 ### Nested Schema for `output_sentinel.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_sentinel--pq_controls"></a>
@@ -4420,17 +3856,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_sentinel--status"></a>
-### Nested Schema for `output_sentinel.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_sentinel--timeout_retry_settings"></a>
 ### Nested Schema for `output_sentinel.timeout_retry_settings`
 
@@ -4439,7 +3864,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -4455,9 +3880,9 @@ Read-Only:
 - `description` (String)
 - `endpoint` (String) The endpoint where ServiceNow events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_service_now--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_service_now--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `http_compress` (String) Type of compression to apply to messages sent to the OpenTelemetry endpoint
 - `http_logs_endpoint_override` (String) If you want to send logs to the default `{endpoint}/v1/logs` endpoint, leave this field empty; otherwise, specify the desired endpoint
 - `http_metrics_endpoint_override` (String) If you want to send metrics to the default `{endpoint}/v1/metrics` endpoint, leave this field empty; otherwise, specify the desired endpoint
@@ -4467,24 +3892,23 @@ Read-Only:
 - `keep_alive_time` (Number) How often the sender should ping the peer to keep the connection open
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_service_now--metadata))
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protocol` (String) Select a transport option for OpenTelemetry
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_service_now--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_service_now--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--timeout_retry_settings))
@@ -4492,15 +3916,15 @@ Read-Only:
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--tls))
 - `token_secret` (String) Select or create a stored text secret
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_service_now--extra_http_headers"></a>
 ### Nested Schema for `output_service_now.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_service_now--metadata"></a>
@@ -4527,17 +3951,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_service_now--status"></a>
-### Nested Schema for `output_service_now.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_service_now--timeout_retry_settings"></a>
 ### Nested Schema for `output_service_now.timeout_retry_settings`
 
@@ -4546,7 +3959,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 <a id="nestedatt--output_service_now--tls"></a>
@@ -4556,14 +3969,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 
 
 
@@ -4577,29 +3990,28 @@ Read-Only:
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_signalfx--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_signalfx--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_signalfx--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `realm` (String) SignalFx realm name, e.g. "us0". For a complete list of available SignalFx realm names, please check [here](https://docs.splunk.com/observability/en/get-started/service-description.html#sd-regions).
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_signalfx--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_signalfx--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_signalfx--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -4607,15 +4019,15 @@ Read-Only:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) SignalFx API access token (see [here](https://docs.signalfx.com/en/latest/admin-guide/tokens.html#working-with-access-tokens))
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_signalfx--extra_http_headers"></a>
 ### Nested Schema for `output_signalfx.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_signalfx--pq_controls"></a>
@@ -4633,17 +4045,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_signalfx--status"></a>
-### Nested Schema for `output_signalfx.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_signalfx--timeout_retry_settings"></a>
 ### Nested Schema for `output_signalfx.timeout_retry_settings`
 
@@ -4652,7 +4053,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -4667,7 +4068,6 @@ Read-Only:
 - `hosts` (Attributes List) One or more SNMP destinations to forward traps to (see [below for nested schema](#nestedatt--output_snmp--hosts))
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_snmp--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
@@ -4679,17 +4079,6 @@ Read-Only:
 
 - `host` (String) Destination host
 - `port` (Number) Destination port, default is 162
-
-
-<a id="nestedatt--output_snmp--status"></a>
-### Nested Schema for `output_snmp.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -4712,38 +4101,26 @@ Read-Only:
 - `id` (String) Unique ID for this output
 - `max_retries` (Number) Maximum number of retries before the output returns an error. Note that not all errors are retryable. The retries use an exponential backoff policy.
 - `message_group_id` (String) Messages in the same group are processed in a FIFO manner. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_sns--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `region` (String) Region where the SNS is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `signature_version` (String) Signature version to use for signing SNS requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_sns--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `topic_arn` (String) The ARN of the SNS topic to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. E.g., 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
+- `topic_arn` (String) The ARN of the SNS topic to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. E.g., 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`
 - `type` (String)
 
 <a id="nestedatt--output_sns--pq_controls"></a>
 ### Nested Schema for `output_sns.pq_controls`
-
-
-<a id="nestedatt--output_sns--status"></a>
-### Nested Schema for `output_sns.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -4766,17 +4143,16 @@ Read-Only:
 - `max_failed_health_checks` (Number) Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.
 - `max_s2_sversion` (String) The highest S2S protocol version to advertise during handshake
 - `nested_fields` (String) How to serialize nested fields into index-time fields
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `port` (Number) The port to connect to on the provided host
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_splunk--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -4789,17 +4165,6 @@ Read-Only:
 ### Nested Schema for `output_splunk.pq_controls`
 
 
-<a id="nestedatt--output_splunk--status"></a>
-### Nested Schema for `output_splunk.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_splunk--tls"></a>
 ### Nested Schema for `output_splunk.tls`
 
@@ -4807,14 +4172,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -4828,35 +4193,34 @@ Read-Only:
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
-- `dns_resolve_period_sec` (Number) Re-resolve any hostnames every this many seconds and pick up destinations from A records.
+- `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `enable_multi_metrics` (Boolean) Output metrics in multiple-metric format, supported in Splunk 8.0 and above to allow multiple metrics in a single event.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_splunk_hec--extra_http_headers))
+- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_splunk_hec--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes.
+- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `next_queue` (String) In the Splunk app, define which Splunk processing queue to send the events after HEC processing.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_splunk_hec--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_splunk_hec--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `tcp_routing` (String) In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.
@@ -4867,15 +4231,15 @@ Read-Only:
 - `type` (String)
 - `url` (String) URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_splunk_hec--urls))
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_splunk_hec--extra_http_headers"></a>
 ### Nested Schema for `output_splunk_hec.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_splunk_hec--pq_controls"></a>
@@ -4893,17 +4257,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_splunk_hec--status"></a>
-### Nested Schema for `output_splunk_hec.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_splunk_hec--timeout_retry_settings"></a>
 ### Nested Schema for `output_splunk_hec.timeout_retry_settings`
 
@@ -4912,7 +4265,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 <a id="nestedatt--output_splunk_hec--urls"></a>
@@ -4935,32 +4288,31 @@ Read-Only:
 - `compress` (String) Controls whether the sender should send compressed data to the server. Select 'Disabled' to reject compressed connections or 'Always' to ignore server's configuration and send compressed data.
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `description` (String)
-- `dns_resolve_period_sec` (Number) Re-resolve any hostnames every this many seconds and pick up destinations from A records.
+- `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `enable_ack` (Boolean) Check if indexer is shutting down and stop sending data. This helps minimize data loss during shutdown.
 - `enable_multi_metrics` (Boolean) Output metrics in multiple-metric format in a single event. Supported in Splunk 8.0 and above.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames.
+- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
 - `hosts` (Attributes List) Set of Splunk indexers to load-balance data to. (see [below for nested schema](#nestedatt--output_splunk_lb--hosts))
 - `id` (String) Unique ID for this output
 - `indexer_discovery` (Boolean) Automatically discover indexers in indexer clustering environment.
 - `indexer_discovery_configs` (Attributes) List of configurations to set up indexer discovery in Splunk Indexer clustering environment. (see [below for nested schema](#nestedatt--output_splunk_lb--indexer_discovery_configs))
-- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes.
+- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
-- `max_concurrent_senders` (Number) Maximum number of concurrent connections (per worker process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.
+- `max_concurrent_senders` (Number) Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.
 - `max_failed_health_checks` (Number) Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.
 - `max_s2_sversion` (String) The highest S2S protocol version to advertise during handshake
 - `nested_fields` (String) How to serialize nested fields into index-time fields
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_lb--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `sender_unhealthy_time_allowance` (Number) How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_lb--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -4974,10 +4326,10 @@ Read-Only:
 
 Read-Only:
 
-- `host` (String) The hostname of the receiver.
-- `port` (Number) The port to connect to on the provided host.
-- `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (iff not an IP); otherwise, to the global TLS settings.
-- `tls` (String) Whether to inherit TLS configs from group setting or disable TLS.
+- `host` (String) The hostname of the receiver
+- `port` (Number) The port to connect to on the provided host
+- `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.
+- `tls` (String) Whether to inherit TLS configs from group setting or disable TLS
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
@@ -5008,17 +4360,6 @@ Read-Only:
 ### Nested Schema for `output_splunk_lb.pq_controls`
 
 
-<a id="nestedatt--output_splunk_lb--status"></a>
-### Nested Schema for `output_splunk_lb.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_splunk_lb--tls"></a>
 ### Nested Schema for `output_splunk_lb.tls`
 
@@ -5026,14 +4367,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -5062,14 +4403,14 @@ Read-Only:
 - `max_queue_size` (Number) Maximum number of queued batches before blocking.
 - `max_record_size_kb` (Number) Maximum size (KB) of batches to send. Per the SQS spec, the max allowed value is 256 KB.
 - `message_group_id` (String) This parameter applies only to FIFO queues. The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner. Use event field __messageGroupId to override this value.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_sqs--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `queue_type` (String) The queue type used (or created). Defaults to Standard.
@@ -5077,24 +4418,12 @@ Read-Only:
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `signature_version` (String) Signature version to use for signing SQS requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_sqs--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `type` (String)
 
 <a id="nestedatt--output_sqs--pq_controls"></a>
 ### Nested Schema for `output_sqs.pq_controls`
-
-
-<a id="nestedatt--output_sqs--status"></a>
-### Nested Schema for `output_sqs.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -5111,18 +4440,17 @@ Read-Only:
 - `host` (String) The hostname of the destination.
 - `id` (String) Unique ID for this output
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `port` (Number) Destination port.
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_statsd--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protocol` (String) Protocol to use when communicating with the destination.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_statsd--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
@@ -5131,17 +4459,6 @@ Read-Only:
 
 <a id="nestedatt--output_statsd--pq_controls"></a>
 ### Nested Schema for `output_statsd.pq_controls`
-
-
-<a id="nestedatt--output_statsd--status"></a>
-### Nested Schema for `output_statsd.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -5158,18 +4475,17 @@ Read-Only:
 - `host` (String) The hostname of the destination.
 - `id` (String) Unique ID for this output
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `port` (Number) Destination port.
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_statsd_ext--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protocol` (String) Protocol to use when communicating with the destination.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_statsd_ext--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
@@ -5180,17 +4496,6 @@ Read-Only:
 ### Nested Schema for `output_statsd_ext.pq_controls`
 
 
-<a id="nestedatt--output_statsd_ext--status"></a>
-### Nested Schema for `output_statsd_ext.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--output_sumo_logic"></a>
 ### Nested Schema for `output_sumo_logic`
@@ -5199,49 +4504,48 @@ Read-Only:
 
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
-- `custom_category` (String) Optionally, override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.
-- `custom_source` (String) Optionally, override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.
+- `custom_category` (String) Override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.
+- `custom_source` (String) Override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_sumo_logic--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_sumo_logic--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
-- `format` (String) Optionally, preserve the raw event format instead of json-ifying it.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
+- `format` (String) Preserve the raw event format instead of JSONifying it
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_sumo_logic--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_sumo_logic--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_sumo_logic--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_sumo_logic--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sumo_logic--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
-- `url` (String) Sumo Logic HTTP collector URL to which events should be sent.
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `url` (String) Sumo Logic HTTP collector URL to which events should be sent
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_sumo_logic--extra_http_headers"></a>
 ### Nested Schema for `output_sumo_logic.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_sumo_logic--pq_controls"></a>
@@ -5259,17 +4563,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_sumo_logic--status"></a>
-### Nested Schema for `output_sumo_logic.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_sumo_logic--timeout_retry_settings"></a>
 ### Nested Schema for `output_sumo_logic.timeout_retry_settings`
 
@@ -5278,7 +4571,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -5298,20 +4591,19 @@ Read-Only:
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
 - `max_record_size` (Number) Maximum size of syslog messages. Make sure this value is less than or equal to the MTU to avoid UDP packet fragmentation.
 - `message_format` (String) The syslog message format depending on the receiver's support
-- `octet_count_framing` (Boolean) When enabled, messages will be prefixed with the byte count of the message. Otherwise, no prefix will be set, and the message will be appended with a \n.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `octet_count_framing` (Boolean) Prefix messages with the byte count of the message. If disabled, no prefix will be set, and the message will be appended with a \n.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `port` (Number) The port to connect to on the provided host
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_syslog--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `protocol` (String) The network protocol to use for sending out syslog messages
 - `severity` (Number) Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_syslog--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
@@ -5325,17 +4617,6 @@ Read-Only:
 ### Nested Schema for `output_syslog.pq_controls`
 
 
-<a id="nestedatt--output_syslog--status"></a>
-### Nested Schema for `output_syslog.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_syslog--tls"></a>
 ### Nested Schema for `output_syslog.tls`
 
@@ -5343,14 +4624,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -5365,28 +4646,27 @@ Read-Only:
 - `compression` (String) Codec to use to compress the data before sending
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `description` (String)
-- `dns_resolve_period_sec` (Number) Re-resolve any hostnames every this many seconds and pick up destinations from A records.
+- `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames.
+- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
 - `host` (String) The hostname of the receiver
-- `hosts` (Attributes List) Set of hosts to load-balance data to. (see [below for nested schema](#nestedatt--output_tcpjson--hosts))
+- `hosts` (Attributes List) Set of hosts to load-balance data to (see [below for nested schema](#nestedatt--output_tcpjson--hosts))
 - `id` (String) Unique ID for this output
-- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes.
+- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `load_balanced` (Boolean) Use load-balanced destinations
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
-- `max_concurrent_senders` (Number) Maximum number of concurrent connections (per worker process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `max_concurrent_senders` (Number) Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `port` (Number) The port to connect to on the provided host
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_tcpjson--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `send_header` (Boolean) Upon connection, send a header-like record containing the auth token and other metadata.This record will not contain an actual event – only subsequent records will.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_tcpjson--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -5401,26 +4681,15 @@ Read-Only:
 
 Read-Only:
 
-- `host` (String) The hostname of the receiver.
-- `port` (Number) The port to connect to on the provided host.
-- `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (iff not an IP); otherwise, to the global TLS settings.
-- `tls` (String) Whether to inherit TLS configs from group setting or disable TLS.
+- `host` (String) The hostname of the receiver
+- `port` (Number) The port to connect to on the provided host
+- `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.
+- `tls` (String) Whether to inherit TLS configs from group setting or disable TLS
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
 <a id="nestedatt--output_tcpjson--pq_controls"></a>
 ### Nested Schema for `output_tcpjson.pq_controls`
-
-
-<a id="nestedatt--output_tcpjson--status"></a>
-### Nested Schema for `output_tcpjson.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--output_tcpjson--tls"></a>
@@ -5430,14 +4699,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -5453,28 +4722,27 @@ Read-Only:
 - `description` (String)
 - `domain` (String) WaveFront domain name, e.g. "longboard"
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_wavefront--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_wavefront--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_wavefront--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_wavefront--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_wavefront--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_wavefront--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -5482,15 +4750,15 @@ Read-Only:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) WaveFront API authentication token (see [here](https://docs.wavefront.com/wavefront_api.html#generating-an-api-token))
 - `type` (String)
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_wavefront--extra_http_headers"></a>
 ### Nested Schema for `output_wavefront.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_wavefront--pq_controls"></a>
@@ -5508,17 +4776,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_wavefront--status"></a>
-### Nested Schema for `output_wavefront.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_wavefront--timeout_retry_settings"></a>
 ### Nested Schema for `output_wavefront.timeout_retry_settings`
 
@@ -5527,7 +4784,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 
@@ -5538,7 +4795,7 @@ Read-Only:
 
 - `advanced_content_type` (String) HTTP content-type header value
 - `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
-- `auth_type` (String) The authentication method to use for the HTTP request. Defaults to None.
+- `auth_type` (String) Authentication method to use for the HTTP request
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `credentials_secret` (String) Select or create a secret that references your credentials
@@ -5548,44 +4805,43 @@ Read-Only:
 - `custom_payload_expression` (String) Expression specifying how to format the payload for each batch. To reference the events to send, use the `${events}` variable. Example expression: `{ "items" : [${events}] }` would send the batch inside a JSON object.
 - `custom_source_expression` (String) Expression to evaluate on events to generate output. Example: `raw=${_raw}`. See [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook#custom-format) for other examples. If empty, the full event is sent as stringified JSON.
 - `description` (String)
-- `dns_resolve_period_sec` (Number) Re-resolve any hostnames every this many seconds and pick up destinations from A records.
+- `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames.
-- `extra_http_headers` (Attributes List) Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained [here](https://docs.cribl.io/stream/destinations-webhook/#internal-fields). (see [below for nested schema](#nestedatt--output_webhook--extra_http_headers))
+- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
+- `extra_http_headers` (Attributes List) Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields). (see [below for nested schema](#nestedatt--output_webhook--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
-- `format` (String) Specifies how to format events before sending out. Defaults to NDJSON.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
+- `format` (String) How to format events before sending out
 - `format_event_code` (String) Custom JavaScript code to format incoming event data accessible through the __e variable. The formatted content is added to (__e['__eventOut']) if available. Otherwise, the original event is serialized as JSON. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.
 - `format_payload_code` (String) Optional JavaScript code to format the payload sent to the Destination. The payload, containing a batch of formatted events, is accessible through the __e['payload'] variable. The formatted payload is returned in the __e['__payloadOut'] variable. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.
 - `id` (String) Unique ID for this output
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
-- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes.
+- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
 - `login_url` (String) URL for OAuth
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `method` (String) The method to use when sending events. Defaults to POST.
+- `method` (String) The method to use when sending events
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_webhook--oauth_headers))
 - `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_webhook--oauth_params))
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_webhook--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_webhook--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_webhook--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_webhook--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -5599,7 +4855,7 @@ Read-Only:
 - `type` (String)
 - `url` (String) URL of a webhook endpoint to send events to, such as http://localhost:10200
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_webhook--urls))
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
 
 <a id="nestedatt--output_webhook--extra_http_headers"></a>
@@ -5607,8 +4863,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_webhook--oauth_headers"></a>
@@ -5644,17 +4900,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_webhook--status"></a>
-### Nested Schema for `output_webhook.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_webhook--timeout_retry_settings"></a>
 ### Nested Schema for `output_webhook.timeout_retry_settings`
 
@@ -5663,7 +4908,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 <a id="nestedatt--output_webhook--tls"></a>
@@ -5673,11 +4918,11 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
@@ -5698,35 +4943,34 @@ Read-Only:
 Read-Only:
 
 - `auth_type` (String) Enter a token directly, or provide a secret referencing a token
-- `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
-- `dns_resolve_period_sec` (Number) Re-resolve any hostnames every this many seconds and pick up destinations from A records.
+- `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--output_xsiam--extra_http_headers))
+- `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_xsiam--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max body size.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes.
+- `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
-- `on_backpressure` (String) Whether to block, drop, or queue events when all receivers are exerting backpressure.
+- `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data.
+- `pq_compress` (String) Codec to use to compress the persisted data
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam--pq_controls))
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.).
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem only when it detects a non-retryable Destination error. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination or when there are non-retryable Destination errors. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Defaults to Yes. When this setting is also present in TLS Settings (Client Side), 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable). (see [below for nested schema](#nestedatt--output_xsiam--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_xsiam--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `status` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -5734,18 +4978,19 @@ Read-Only:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) XSIAM authentication token
+- `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `type` (String)
 - `url` (String) XSIAM endpoint URL to send events to, such as https://api-{tenant external URL}/logs/v1/event
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_xsiam--urls))
-- `use_round_robin_dns` (Boolean) Enables round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_xsiam--extra_http_headers"></a>
 ### Nested Schema for `output_xsiam.extra_http_headers`
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_xsiam--pq_controls"></a>
@@ -5763,17 +5008,6 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_xsiam--status"></a>
-### Nested Schema for `output_xsiam.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--output_xsiam--timeout_retry_settings"></a>
 ### Nested Schema for `output_xsiam.timeout_retry_settings`
 
@@ -5782,7 +5016,7 @@ Read-Only:
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Enable to retry on request timeout
+- `timeout_retry` (Boolean)
 
 
 <a id="nestedatt--output_xsiam--urls"></a>

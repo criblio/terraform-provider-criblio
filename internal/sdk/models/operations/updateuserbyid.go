@@ -30,16 +30,7 @@ func (o *UpdateUserByIDRequest) GetUserProfile() shared.UserProfile {
 
 // UpdateUserByIDResponseBody - a list of UserProfile objects
 type UpdateUserByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64               `json:"count,omitempty"`
 	Items []shared.UserProfile `json:"items,omitempty"`
-}
-
-func (o *UpdateUserByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateUserByIDResponseBody) GetItems() []shared.UserProfile {

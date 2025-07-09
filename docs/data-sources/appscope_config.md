@@ -23,7 +23,7 @@ data "criblio_appscope_config" "my_appscopeconfig" {
 
 ### Required
 
-- `group_id` (String)
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
@@ -192,7 +192,7 @@ Read-Only:
 - `allowbinary` (Boolean)
 - `enabled` (Boolean)
 - `field` (String)
-- `headers` (List of String)
+- `headers` (String)
 - `name` (String)
 - `type` (String)
 - `value` (String)
@@ -250,7 +250,7 @@ Read-Only:
 - `enable` (Boolean)
 - `format` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--format))
 - `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--transport))
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--metric--watch))
+- `watch` (List of String)
 
 <a id="nestedatt--config--custom--config--metric--format"></a>
 ### Nested Schema for `config.custom.config.metric.format`
@@ -284,10 +284,6 @@ Read-Only:
 - `enable` (Boolean)
 - `validateserver` (Boolean)
 
-
-
-<a id="nestedatt--config--custom--config--metric--watch"></a>
-### Nested Schema for `config.custom.config.metric.watch`
 
 
 
@@ -375,7 +371,7 @@ Read-Only:
 - `allowbinary` (Boolean)
 - `enabled` (Boolean)
 - `field` (String)
-- `headers` (List of String)
+- `headers` (String)
 - `name` (String)
 - `type` (String)
 - `value` (String)
@@ -433,7 +429,7 @@ Read-Only:
 - `enable` (Boolean)
 - `format` (Attributes) (see [below for nested schema](#nestedatt--config--metric--format))
 - `transport` (Attributes) (see [below for nested schema](#nestedatt--config--metric--transport))
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--metric--watch))
+- `watch` (List of String)
 
 <a id="nestedatt--config--metric--format"></a>
 ### Nested Schema for `config.metric.format`
@@ -467,10 +463,6 @@ Read-Only:
 - `enable` (Boolean)
 - `validateserver` (Boolean)
 
-
-
-<a id="nestedatt--config--metric--watch"></a>
-### Nested Schema for `config.metric.watch`
 
 
 

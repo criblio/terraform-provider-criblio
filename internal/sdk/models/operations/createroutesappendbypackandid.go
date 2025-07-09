@@ -39,16 +39,7 @@ func (o *CreateRoutesAppendByPackAndIDRequest) GetRequestBody() []shared.RouteCo
 
 // CreateRoutesAppendByPackAndIDResponseBody - a list of any objects
 type CreateRoutesAppendByPackAndIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *CreateRoutesAppendByPackAndIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateRoutesAppendByPackAndIDResponseBody) GetItems() []map[string]any {

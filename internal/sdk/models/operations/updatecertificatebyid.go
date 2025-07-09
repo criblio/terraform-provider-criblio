@@ -30,16 +30,7 @@ func (o *UpdateCertificateByIDRequest) GetCertificate() shared.Certificate {
 
 // UpdateCertificateByIDResponseBody - a list of Certificate objects
 type UpdateCertificateByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64               `json:"count,omitempty"`
 	Items []shared.Certificate `json:"items,omitempty"`
-}
-
-func (o *UpdateCertificateByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateCertificateByIDResponseBody) GetItems() []shared.Certificate {

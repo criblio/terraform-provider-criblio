@@ -9,16 +9,7 @@ import (
 
 // CreateProductsEdgeMapQueryResponseBody - a list of EdgeMapQueryResult objects
 type CreateProductsEdgeMapQueryResponseBody struct {
-	// number of items present in the items array
-	Count *int64                      `json:"count,omitempty"`
 	Items []shared.EdgeMapQueryResult `json:"items,omitempty"`
-}
-
-func (o *CreateProductsEdgeMapQueryResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateProductsEdgeMapQueryResponseBody) GetItems() []shared.EdgeMapQueryResult {

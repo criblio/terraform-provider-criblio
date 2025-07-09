@@ -9,16 +9,7 @@ import (
 
 // CreateSearchPreviewResponseBody - a list of PreviewResponseBody objects
 type CreateSearchPreviewResponseBody struct {
-	// number of items present in the items array
-	Count *int64                       `json:"count,omitempty"`
 	Items []shared.PreviewResponseBody `json:"items,omitempty"`
-}
-
-func (o *CreateSearchPreviewResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSearchPreviewResponseBody) GetItems() []shared.PreviewResponseBody {

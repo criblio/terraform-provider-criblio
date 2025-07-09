@@ -30,16 +30,7 @@ func (o *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
 
 // DeleteGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects
 type DeleteGlobalVariableLibVarsByPackAndIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64             `json:"count,omitempty"`
 	Items []shared.GlobalVar `json:"items,omitempty"`
-}
-
-func (o *DeleteGlobalVariableLibVarsByPackAndIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {

@@ -5,6 +5,7 @@ resource "criblio_destination" "my_destination" {
     add_id_to_stage_path = false
     auth_type            = "manual"
     automatic_schema     = true
+    azure_cloud          = "...my_azure_cloud..."
     base_file_name       = "...my_base_file_name..."
     certificate = {
       certificate_name = "...my_certificate_name..."
@@ -53,16 +54,8 @@ resource "criblio_destination" "my_destination" {
     remove_empty_dirs         = true
     should_log_invalid_rows   = true
     stage_path                = "...my_stage_path..."
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.85
-      use_status_from_lb = false
-    }
-    storage_account_name = "...my_storage_account_name..."
-    storage_class        = "Archive"
+    storage_account_name      = "...my_storage_account_name..."
+    storage_class             = "Archive"
     streamtags = [
       "..."
     ]
@@ -152,14 +145,6 @@ resource "criblio_destination" "my_destination" {
     retain_blob_on_success = false
     scope                  = "...my_scope..."
     stage_path             = "...my_stage_path..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.55
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -214,14 +199,6 @@ resource "criblio_destination" "my_destination" {
     sasl = {
       disabled  = true
       mechanism = "plain"
-    }
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.03
-      use_status_from_lb = true
     }
     streamtags = [
       "..."
@@ -281,14 +258,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.95
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -327,7 +296,6 @@ resource "criblio_destination" "my_destination" {
     dump_format_errors_to_disk = true
     environment                = "...my_environment..."
     exclude_mapping_fields = [
-      "..."
     ]
     extra_http_headers = [
       {
@@ -383,14 +351,6 @@ resource "criblio_destination" "my_destination" {
     secret            = "...my_secret..."
     secret_param_name = "...my_secret_param_name..."
     sql_username      = "...my_sql_username..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.23
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -458,14 +418,6 @@ resource "criblio_destination" "my_destination" {
     region              = "...my_region..."
     reject_unauthorized = false
     reuse_connections   = false
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.65
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -536,14 +488,6 @@ resource "criblio_destination" "my_destination" {
       disabled  = false
       mechanism = "scram-sha-256"
     }
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.57
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -612,14 +556,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.29
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -658,7 +594,6 @@ resource "criblio_destination" "my_destination" {
   }
   output_cribl_lake = {
     add_id_to_stage_path              = true
-    additional_properties             = "{ \"see\": \"documentation\" }"
     assume_role_arn                   = "...my_assume_role_arn..."
     assume_role_external_id           = "...my_assume_role_external_id..."
     aws_authentication_method         = "auto"
@@ -697,15 +632,7 @@ resource "criblio_destination" "my_destination" {
     server_side_encryption            = "aws:kms"
     signature_version                 = "v4"
     stage_path                        = "...my_stage_path..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 7.01
-      use_status_from_lb = true
-    }
-    storage_class = "STANDARD"
+    storage_class                     = "STANDARD"
     streamtags = [
       "..."
     ]
@@ -732,7 +659,7 @@ resource "criblio_destination" "my_destination" {
         host       = "...my_host..."
         port       = 48249.06
         servername = "...my_servername..."
-        tls        = "false"
+        tls        = "off"
         weight     = 3.03
       }
     ]
@@ -753,14 +680,6 @@ resource "criblio_destination" "my_destination" {
     pq_mode            = "always"
     pq_on_backpressure = "drop"
     pq_path            = "...my_pq_path..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.64
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -826,14 +745,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 7.7
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -906,14 +817,6 @@ resource "criblio_destination" "my_destination" {
     severity               = "error"
     site                   = "us"
     source                 = "...my_source..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 2.45
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -985,14 +888,6 @@ resource "criblio_destination" "my_destination" {
     ]
     server_host_field = "...my_server_host_field..."
     site              = "custom"
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.72
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1017,14 +912,6 @@ resource "criblio_destination" "my_destination" {
     environment = "...my_environment..."
     id          = "...my_id..."
     pipeline    = "...my_pipeline..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.05
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1037,14 +924,6 @@ resource "criblio_destination" "my_destination" {
     environment = "...my_environment..."
     id          = "...my_id..."
     pipeline    = "...my_pipeline..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.24
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1062,14 +941,6 @@ resource "criblio_destination" "my_destination" {
     max_data_time  = "...my_max_data_time..."
     partition_expr = "...my_partition_expr..."
     pipeline       = "...my_pipeline..."
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 7.84
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1141,15 +1012,7 @@ resource "criblio_destination" "my_destination" {
     should_log_invalid_rows = true
     signature_version       = "v4"
     stage_path              = "...my_stage_path..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.23
-      use_status_from_lb = true
-    }
-    storage_class = "GLACIER_IR"
+    storage_class           = "GLACIER_IR"
     streamtags = [
       "..."
     ]
@@ -1207,14 +1070,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 7.74
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1293,14 +1148,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.18
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1378,14 +1225,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.57
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1463,14 +1302,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.94
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1518,15 +1349,7 @@ resource "criblio_destination" "my_destination" {
     site_id                   = "...my_site_id..."
     site_name                 = "...my_site_name..."
     stage_path                = "...my_stage_path..."
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.15
-      use_status_from_lb = true
-    }
-    storage_class = "NEARLINE"
+    storage_class             = "NEARLINE"
     streamtags = [
       "..."
     ]
@@ -1577,14 +1400,6 @@ resource "criblio_destination" "my_destination" {
     remove_empty_dirs         = true
     should_log_invalid_rows   = false
     stage_path                = "...my_stage_path..."
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.17
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1658,14 +1473,6 @@ resource "criblio_destination" "my_destination" {
     ]
     service_account_credentials        = "...my_service_account_credentials..."
     service_account_credentials_secret = "...my_service_account_credentials_secret..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 2.75
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1748,15 +1555,7 @@ resource "criblio_destination" "my_destination" {
     service_account_credentials = "...my_service_account_credentials..."
     severity_expression         = "...my_severity_expression..."
     span_id_expression          = "...my_span_id_expression..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.44
-      use_status_from_lb = true
-    }
-    status_expression = "...my_status_expression..."
+    status_expression           = "...my_status_expression..."
     streamtags = [
       "..."
     ]
@@ -1825,15 +1624,7 @@ resource "criblio_destination" "my_destination" {
     should_log_invalid_rows   = true
     signature_version         = "v2"
     stage_path                = "...my_stage_path..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.94
-      use_status_from_lb = false
-    }
-    storage_class = "NEARLINE"
+    storage_class             = "NEARLINE"
     streamtags = [
       "..."
     ]
@@ -1850,7 +1641,7 @@ resource "criblio_destination" "my_destination" {
     create_topic       = false
     description        = "...my_description..."
     environment        = "...my_environment..."
-    flush_period_sec   = 6.68
+    flush_period_sec   = "{ \"see\": \"documentation\" }"
     google_auth_method = "secret"
     id                 = "...my_id..."
     max_in_progress    = 96.45
@@ -1871,14 +1662,6 @@ resource "criblio_destination" "my_destination" {
     region                      = "...my_region..."
     secret                      = "...my_secret..."
     service_account_credentials = "...my_service_account_credentials..."
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.44
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1956,14 +1739,6 @@ resource "criblio_destination" "my_destination" {
       safe_headers = [
         "..."
       ]
-      status = {
-        health = "Yellow"
-        metrics = {
-          key = jsonencode("value")
-        }
-        timestamp          = 5.33
-        use_status_from_lb = true
-      }
       streamtags = [
         "..."
       ]
@@ -2003,14 +1778,6 @@ resource "criblio_destination" "my_destination" {
     pq_on_backpressure = "block"
     pq_path            = "...my_pq_path..."
     protocol           = "tcp"
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.78
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2063,14 +1830,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.74
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2131,14 +1890,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 2.89
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2221,14 +1972,6 @@ resource "criblio_destination" "my_destination" {
     ]
     secret            = "...my_secret..."
     secret_param_name = "...my_secret_param_name..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.17
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2316,14 +2059,6 @@ resource "criblio_destination" "my_destination" {
       disabled  = true
       mechanism = "plain"
     }
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.48
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2378,15 +2113,7 @@ resource "criblio_destination" "my_destination" {
     reject_unauthorized = false
     reuse_connections   = true
     signature_version   = "v4"
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.43
-      use_status_from_lb = true
-    }
-    stream_name = "...my_stream_name..."
+    stream_name         = "...my_stream_name..."
     streamtags = [
       "..."
     ]
@@ -2447,14 +2174,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.48
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2530,15 +2249,7 @@ resource "criblio_destination" "my_destination" {
     should_log_invalid_rows   = false
     signature_version         = "v4"
     stage_path                = "...my_stage_path..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.98
-      use_status_from_lb = true
-    }
-    storage_class = "STANDARD"
+    storage_class             = "STANDARD"
     streamtags = [
       "..."
     ]
@@ -2620,14 +2331,6 @@ resource "criblio_destination" "my_destination" {
     request_timeout            = 2709174.61
     reuse_connections          = true
     signature_version          = "v2"
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.7
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2661,14 +2364,6 @@ resource "criblio_destination" "my_destination" {
     ]
     id       = "...my_id..."
     pipeline = "...my_pipeline..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.72
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2729,14 +2424,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.15
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2801,14 +2488,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.79
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2900,14 +2579,6 @@ resource "criblio_destination" "my_destination" {
     ]
     secret            = "...my_secret..."
     secret_param_name = "...my_secret_param_name..."
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.12
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3001,14 +2672,6 @@ resource "criblio_destination" "my_destination" {
     secret            = "...my_secret..."
     secret_param_name = "...my_secret_param_name..."
     send_metadata     = true
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.33
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3043,14 +2706,6 @@ resource "criblio_destination" "my_destination" {
     on_backpressure = "drop"
     partition_expr  = "...my_partition_expr..."
     pipeline        = "...my_pipeline..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.84
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3072,14 +2727,6 @@ resource "criblio_destination" "my_destination" {
         output      = "...my_output..."
       }
     ]
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 7.13
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3148,15 +2795,7 @@ resource "criblio_destination" "my_destination" {
     should_log_invalid_rows           = true
     signature_version                 = "v4"
     stage_path                        = "...my_stage_path..."
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.93
-      use_status_from_lb = true
-    }
-    storage_class = "STANDARD_IA"
+    storage_class                     = "STANDARD_IA"
     streamtags = [
       "..."
     ]
@@ -3224,15 +2863,7 @@ resource "criblio_destination" "my_destination" {
     should_log_invalid_rows           = false
     signature_version                 = "v2"
     stage_path                        = "...my_stage_path..."
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.57
-      use_status_from_lb = false
-    }
-    storage_class = "STANDARD_IA"
+    storage_class                     = "STANDARD_IA"
     streamtags = [
       "..."
     ]
@@ -3299,16 +2930,8 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    scope  = "...my_scope..."
-    secret = "...my_secret..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 7.21
-      use_status_from_lb = false
-    }
+    scope       = "...my_scope..."
+    secret      = "...my_secret..."
     stream_name = "...my_stream_name..."
     streamtags = [
       "..."
@@ -3384,14 +3007,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.37
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3462,14 +3077,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.92
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3500,14 +3107,6 @@ resource "criblio_destination" "my_destination" {
     ]
     id       = "...my_id..."
     pipeline = "...my_pipeline..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 2.9
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3546,14 +3145,6 @@ resource "criblio_destination" "my_destination" {
     reject_unauthorized = true
     reuse_connections   = false
     signature_version   = "v4"
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.5
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3590,14 +3181,6 @@ resource "criblio_destination" "my_destination" {
     pq_mode            = "always"
     pq_on_backpressure = "block"
     pq_path            = "...my_pq_path..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.73
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3668,14 +3251,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.41
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3718,7 +3293,7 @@ resource "criblio_destination" "my_destination" {
         host       = "...my_host..."
         port       = 39320.05
         servername = "...my_servername..."
-        tls        = "false"
+        tls        = "off"
         weight     = 0.71
       }
     ]
@@ -3756,14 +3331,6 @@ resource "criblio_destination" "my_destination" {
     pq_on_backpressure              = "block"
     pq_path                         = "...my_pq_path..."
     sender_unhealthy_time_allowance = 20354.85
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.55
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3824,14 +3391,6 @@ resource "criblio_destination" "my_destination" {
     reject_unauthorized = false
     reuse_connections   = true
     signature_version   = "v2"
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.11
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3862,14 +3421,6 @@ resource "criblio_destination" "my_destination" {
     pq_on_backpressure = "block"
     pq_path            = "...my_pq_path..."
     protocol           = "udp"
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.49
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3902,14 +3453,6 @@ resource "criblio_destination" "my_destination" {
     pq_on_backpressure = "block"
     pq_path            = "...my_pq_path..."
     protocol           = "tcp"
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.14
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3963,14 +3506,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.7
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -4016,14 +3551,6 @@ resource "criblio_destination" "my_destination" {
     pq_path            = "...my_pq_path..."
     protocol           = "tcp"
     severity           = 4
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.58
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -4085,14 +3612,6 @@ resource "criblio_destination" "my_destination" {
     pq_on_backpressure = "block"
     pq_path            = "...my_pq_path..."
     send_header        = true
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.05
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -4159,14 +3678,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.06
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -4259,14 +3770,6 @@ resource "criblio_destination" "my_destination" {
     ]
     secret            = "...my_secret..."
     secret_param_name = "...my_secret_param_name..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.14
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -4309,7 +3812,6 @@ resource "criblio_destination" "my_destination" {
   }
   output_xsiam = {
     auth_type              = "secret"
-    compress               = false
     concurrency            = 1.74
     description            = "...my_description..."
     dns_resolve_period_sec = 24588.01
@@ -4327,6 +3829,7 @@ resource "criblio_destination" "my_destination" {
     load_balance_stats_period_sec = 12.36
     load_balanced                 = true
     max_payload_events            = 7.97
+    max_payload_size_kb           = 2387.65
     on_backpressure               = "drop"
     pipeline                      = "...my_pipeline..."
     pq_compress                   = "none"
@@ -4351,14 +3854,6 @@ resource "criblio_destination" "my_destination" {
     safe_headers = [
       "..."
     ]
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.22
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -4373,10 +3868,11 @@ resource "criblio_destination" "my_destination" {
       max_backoff     = 85354.16
       timeout_retry   = true
     }
-    timeout_sec = 7621312263336938
-    token       = "...my_token..."
-    type        = "xsiam"
-    url         = "...my_url..."
+    timeout_sec           = 7621312263336938
+    token                 = "...my_token..."
+    total_memory_limit_kb = 4.19
+    type                  = "xsiam"
+    url                   = "...my_url..."
     urls = [
       {
         url    = "{ \"see\": \"documentation\" }"

@@ -81,9 +81,6 @@ func (o *CHOutConfigColumnMapping) GetColumnValueExpression() string {
 	return o.ColumnValueExpression
 }
 
-type CHOutConfigURL struct {
-}
-
 type CHOutConfig struct {
 	AsyncInserts                  bool                         `json:"asyncInserts"`
 	Auth                          *HTTPOutAuthConfig           `json:"auth,omitempty"`
@@ -121,7 +118,7 @@ type CHOutConfig struct {
 	Token                         *string                      `json:"token,omitempty"`
 	TotalMemoryLimitKB            *float64                     `json:"totalMemoryLimitKB,omitempty"`
 	URL                           string                       `json:"url"`
-	Urls                          []CHOutConfigURL             `json:"urls,omitempty"`
+	Urls                          []string                     `json:"urls,omitempty"`
 	UseRoundRobinDNS              *bool                        `json:"useRoundRobinDns,omitempty"`
 	Username                      *string                      `json:"username,omitempty"`
 	WaitForAsyncInserts           *bool                        `json:"waitForAsyncInserts,omitempty"`
@@ -379,7 +376,7 @@ func (o *CHOutConfig) GetURL() string {
 	return o.URL
 }
 
-func (o *CHOutConfig) GetUrls() []CHOutConfigURL {
+func (o *CHOutConfig) GetUrls() []string {
 	if o == nil {
 		return nil
 	}

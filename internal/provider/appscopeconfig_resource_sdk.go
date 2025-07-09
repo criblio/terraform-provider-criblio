@@ -296,7 +296,7 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 				Type:   typeVar2,
 			}
 			typeVar3 := shared.AppscopeConfigType(customItem.Config.Event.Type.ValueString())
-			watch := make([]shared.AppscopeConfigWatchNdjson, 0, len(customItem.Config.Event.Watch))
+			watch := make([]shared.AppscopeConfigWatch, 0, len(customItem.Config.Event.Watch))
 			for _, watchItem := range customItem.Config.Event.Watch {
 				allowbinary := new(bool)
 				if !watchItem.Allowbinary.IsUnknown() && !watchItem.Allowbinary.IsNull() {
@@ -316,9 +316,11 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 				} else {
 					field = nil
 				}
-				headers := make([]string, 0, len(watchItem.Headers))
-				for _, headersItem := range watchItem.Headers {
-					headers = append(headers, headersItem.ValueString())
+				headers := new(string)
+				if !watchItem.Headers.IsUnknown() && !watchItem.Headers.IsNull() {
+					*headers = watchItem.Headers.ValueString()
+				} else {
+					headers = nil
 				}
 				name := new(string)
 				if !watchItem.Name.IsUnknown() && !watchItem.Name.IsNull() {
@@ -335,7 +337,7 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 				} else {
 					value = nil
 				}
-				watch = append(watch, shared.AppscopeConfigWatchNdjson{
+				watch = append(watch, shared.AppscopeConfigWatch{
 					Allowbinary: allowbinary,
 					Enabled:     enabled,
 					Field:       field,
@@ -559,7 +561,10 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 				TLS:    tls4,
 				Type:   typeVar6,
 			}
-			watch1 := make([]shared.AppscopeConfigMetricWatch, len(customItem.Config.Metric.Watch))
+			watch1 := make([]string, 0, len(customItem.Config.Metric.Watch))
+			for _, watchItem1 := range customItem.Config.Metric.Watch {
+				watch1 = append(watch1, watchItem1.ValueString())
+			}
 			metric = &shared.AppscopeConfigMetric{
 				Enable:    enable7,
 				Format:    format1,
@@ -745,46 +750,48 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 			Type:   typeVar7,
 		}
 		typeVar8 := shared.AppscopeConfigWithCustomType(r.Config.Event.Type.ValueString())
-		watch2 := make([]shared.AppscopeConfigWithCustomWatchNdjson, 0, len(r.Config.Event.Watch))
-		for _, watchItem1 := range r.Config.Event.Watch {
+		watch2 := make([]shared.AppscopeConfigWithCustomWatch, 0, len(r.Config.Event.Watch))
+		for _, watchItem2 := range r.Config.Event.Watch {
 			allowbinary1 := new(bool)
-			if !watchItem1.Allowbinary.IsUnknown() && !watchItem1.Allowbinary.IsNull() {
-				*allowbinary1 = watchItem1.Allowbinary.ValueBool()
+			if !watchItem2.Allowbinary.IsUnknown() && !watchItem2.Allowbinary.IsNull() {
+				*allowbinary1 = watchItem2.Allowbinary.ValueBool()
 			} else {
 				allowbinary1 = nil
 			}
 			enabled1 := new(bool)
-			if !watchItem1.Enabled.IsUnknown() && !watchItem1.Enabled.IsNull() {
-				*enabled1 = watchItem1.Enabled.ValueBool()
+			if !watchItem2.Enabled.IsUnknown() && !watchItem2.Enabled.IsNull() {
+				*enabled1 = watchItem2.Enabled.ValueBool()
 			} else {
 				enabled1 = nil
 			}
 			field1 := new(string)
-			if !watchItem1.Field.IsUnknown() && !watchItem1.Field.IsNull() {
-				*field1 = watchItem1.Field.ValueString()
+			if !watchItem2.Field.IsUnknown() && !watchItem2.Field.IsNull() {
+				*field1 = watchItem2.Field.ValueString()
 			} else {
 				field1 = nil
 			}
-			headers1 := make([]string, 0, len(watchItem1.Headers))
-			for _, headersItem1 := range watchItem1.Headers {
-				headers1 = append(headers1, headersItem1.ValueString())
+			headers1 := new(string)
+			if !watchItem2.Headers.IsUnknown() && !watchItem2.Headers.IsNull() {
+				*headers1 = watchItem2.Headers.ValueString()
+			} else {
+				headers1 = nil
 			}
 			name2 := new(string)
-			if !watchItem1.Name.IsUnknown() && !watchItem1.Name.IsNull() {
-				*name2 = watchItem1.Name.ValueString()
+			if !watchItem2.Name.IsUnknown() && !watchItem2.Name.IsNull() {
+				*name2 = watchItem2.Name.ValueString()
 			} else {
 				name2 = nil
 			}
 			var type2 string
-			type2 = watchItem1.Type.ValueString()
+			type2 = watchItem2.Type.ValueString()
 
 			value2 := new(string)
-			if !watchItem1.Value.IsUnknown() && !watchItem1.Value.IsNull() {
-				*value2 = watchItem1.Value.ValueString()
+			if !watchItem2.Value.IsUnknown() && !watchItem2.Value.IsNull() {
+				*value2 = watchItem2.Value.ValueString()
 			} else {
 				value2 = nil
 			}
-			watch2 = append(watch2, shared.AppscopeConfigWithCustomWatchNdjson{
+			watch2 = append(watch2, shared.AppscopeConfigWithCustomWatch{
 				Allowbinary: allowbinary1,
 				Enabled:     enabled1,
 				Field:       field1,
@@ -1008,7 +1015,10 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 			TLS:    tls7,
 			Type:   typeVar11,
 		}
-		watch3 := make([]shared.AppscopeConfigWithCustomMetricWatch, len(r.Config.Metric.Watch))
+		watch3 := make([]string, 0, len(r.Config.Metric.Watch))
+		for _, watchItem3 := range r.Config.Metric.Watch {
+			watch3 = append(watch3, watchItem3.ValueString())
+		}
 		metric1 = &shared.AppscopeConfigWithCustomMetric{
 			Enable:    enable13,
 			Format:    format3,
@@ -1129,11 +1139,11 @@ func (r *AppscopeConfigResourceModel) ToOperationsCreateAppscopeLibEntryRequest(
 func (r *AppscopeConfigResourceModel) ToOperationsUpdateAppscopeLibEntryByIDRequest(ctx context.Context) (*operations.UpdateAppscopeLibEntryByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
 	var id string
 	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
 
 	appscopeLibEntry, appscopeLibEntryDiags := r.ToSharedAppscopeLibEntry(ctx)
 	diags.Append(appscopeLibEntryDiags...)
@@ -1143,8 +1153,8 @@ func (r *AppscopeConfigResourceModel) ToOperationsUpdateAppscopeLibEntryByIDRequ
 	}
 
 	out := operations.UpdateAppscopeLibEntryByIDRequest{
-		GroupID:          groupID,
 		ID:               id,
+		GroupID:          groupID,
 		AppscopeLibEntry: *appscopeLibEntry,
 	}
 
@@ -1167,15 +1177,15 @@ func (r *AppscopeConfigResourceModel) ToOperationsListAppscopeLibEntryRequest(ct
 func (r *AppscopeConfigResourceModel) ToOperationsDeleteAppscopeLibEntryByIDRequest(ctx context.Context) (*operations.DeleteAppscopeLibEntryByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
 	var id string
 	id = r.ID.ValueString()
 
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
 	out := operations.DeleteAppscopeLibEntryByIDRequest{
-		GroupID: groupID,
 		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -1277,16 +1287,13 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 			}
 			custom.Config.Event.Transport.Type = types.StringPointerValue(customItem.Config.Event.Transport.Type)
 			custom.Config.Event.Type = types.StringValue(string(customItem.Config.Event.Type))
-			custom.Config.Event.Watch = []tfTypes.AppscopeConfigWatchNdjson{}
+			custom.Config.Event.Watch = []tfTypes.AppscopeConfigWatch{}
 			for watchCount, watchItem := range customItem.Config.Event.Watch {
-				var watch tfTypes.AppscopeConfigWatchNdjson
+				var watch tfTypes.AppscopeConfigWatch
 				watch.Allowbinary = types.BoolPointerValue(watchItem.Allowbinary)
 				watch.Enabled = types.BoolPointerValue(watchItem.Enabled)
 				watch.Field = types.StringPointerValue(watchItem.Field)
-				watch.Headers = make([]types.String, 0, len(watchItem.Headers))
-				for _, v := range watchItem.Headers {
-					watch.Headers = append(watch.Headers, types.StringValue(v))
-				}
+				watch.Headers = types.StringPointerValue(watchItem.Headers)
 				watch.Name = types.StringPointerValue(watchItem.Name)
 				watch.Type = types.StringValue(watchItem.Type)
 				watch.Value = types.StringPointerValue(watchItem.Value)
@@ -1369,6 +1376,10 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 				custom.Config.Metric.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Metric.Transport.TLS.Validateserver)
 			}
 			custom.Config.Metric.Transport.Type = types.StringPointerValue(customItem.Config.Metric.Transport.Type)
+			custom.Config.Metric.Watch = make([]types.String, 0, len(customItem.Config.Metric.Watch))
+			for _, v := range customItem.Config.Metric.Watch {
+				custom.Config.Metric.Watch = append(custom.Config.Metric.Watch, types.StringValue(v))
+			}
 		}
 		if customItem.Config.Payload == nil {
 			custom.Config.Payload = nil
@@ -1450,19 +1461,16 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 		}
 		r.Config.Event.Transport.Type = types.StringPointerValue(resp.Config.Event.Transport.Type)
 		r.Config.Event.Type = types.StringValue(string(resp.Config.Event.Type))
-		r.Config.Event.Watch = []tfTypes.AppscopeConfigWithCustomWatchNdjson{}
+		r.Config.Event.Watch = []tfTypes.AppscopeConfigWithCustomWatch{}
 		if len(r.Config.Event.Watch) > len(resp.Config.Event.Watch) {
 			r.Config.Event.Watch = r.Config.Event.Watch[:len(resp.Config.Event.Watch)]
 		}
 		for watchCount1, watchItem1 := range resp.Config.Event.Watch {
-			var watch1 tfTypes.AppscopeConfigWithCustomWatchNdjson
+			var watch1 tfTypes.AppscopeConfigWithCustomWatch
 			watch1.Allowbinary = types.BoolPointerValue(watchItem1.Allowbinary)
 			watch1.Enabled = types.BoolPointerValue(watchItem1.Enabled)
 			watch1.Field = types.StringPointerValue(watchItem1.Field)
-			watch1.Headers = make([]types.String, 0, len(watchItem1.Headers))
-			for _, v := range watchItem1.Headers {
-				watch1.Headers = append(watch1.Headers, types.StringValue(v))
-			}
+			watch1.Headers = types.StringPointerValue(watchItem1.Headers)
 			watch1.Name = types.StringPointerValue(watchItem1.Name)
 			watch1.Type = types.StringValue(watchItem1.Type)
 			watch1.Value = types.StringPointerValue(watchItem1.Value)
@@ -1545,6 +1553,10 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 			r.Config.Metric.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Metric.Transport.TLS.Validateserver)
 		}
 		r.Config.Metric.Transport.Type = types.StringPointerValue(resp.Config.Metric.Transport.Type)
+		r.Config.Metric.Watch = make([]types.String, 0, len(resp.Config.Metric.Watch))
+		for _, v := range resp.Config.Metric.Watch {
+			r.Config.Metric.Watch = append(r.Config.Metric.Watch, types.StringValue(v))
+		}
 	}
 	if resp.Config.Payload == nil {
 		r.Config.Payload = nil

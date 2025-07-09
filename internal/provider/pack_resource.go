@@ -6,11 +6,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -36,15 +38,22 @@ type PackResource struct {
 
 // PackResourceModel describes the resource data model.
 type PackResourceModel struct {
-	Description types.String       `tfsdk:"description"`
-	Disabled    types.Bool         `tfsdk:"disabled"`
-	DisplayName types.String       `tfsdk:"display_name"`
-	Filename    types.String       `queryParam:"style=form,explode=true,name=filename" tfsdk:"filename"`
-	GroupID     types.String       `tfsdk:"group_id"`
-	ID          types.String       `tfsdk:"id"`
-	Items       []tfTypes.PackInfo `tfsdk:"items"`
-	Source      types.String       `tfsdk:"source"`
-	Version     types.String       `tfsdk:"version"`
+	AllowCustomFunctions types.Bool                   `tfsdk:"allow_custom_functions"`
+	Author               types.String                 `tfsdk:"author"`
+	Description          types.String                 `tfsdk:"description"`
+	DisplayName          types.String                 `tfsdk:"display_name"`
+	Exports              []types.String               `tfsdk:"exports"`
+	Force                types.Bool                   `tfsdk:"force"`
+	GroupID              types.String                 `tfsdk:"group_id"`
+	ID                   types.String                 `tfsdk:"id"`
+	Inputs               types.Float64                `tfsdk:"inputs"`
+	Items                []tfTypes.PackInfo           `tfsdk:"items"`
+	MinLogStreamVersion  types.String                 `tfsdk:"min_log_stream_version"`
+	Outputs              types.Float64                `tfsdk:"outputs"`
+	Source               types.String                 `tfsdk:"source"`
+	Spec                 types.String                 `tfsdk:"spec"`
+	Tags                 *tfTypes.PackRequestBodyTags `tfsdk:"tags"`
+	Version              types.String                 `tfsdk:"version"`
 }
 
 func (r *PackResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -55,17 +64,24 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Pack Resource",
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
+			"allow_custom_functions": schema.BoolAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
+			},
+			"author": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"disabled": schema.BoolAttribute{
+			"description": schema.StringAttribute{
 				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
 			},
@@ -76,20 +92,35 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"filename": schema.StringAttribute{
+			"exports": schema.ListAttribute{
 				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+				PlanModifiers: []planmodifier.List{
+					listplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `the file to upload. Requires replacement if changed.`,
+				ElementType: types.StringType,
+				Description: `Requires replacement if changed.`,
+			},
+			"force": schema.BoolAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group Id`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Pack name`,
+			},
+			"inputs": schema.Float64Attribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Float64{
+					float64planmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -111,10 +142,16 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"id": schema.StringAttribute{
 							Computed: true,
 						},
+						"inputs": schema.Float64Attribute{
+							Computed: true,
+						},
 						"is_disabled": schema.BoolAttribute{
 							Computed: true,
 						},
 						"min_log_stream_version": schema.StringAttribute{
+							Computed: true,
+						},
+						"outputs": schema.Float64Attribute{
 							Computed: true,
 						},
 						"settings": schema.MapAttribute{
@@ -164,14 +201,68 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					},
 				},
 			},
-			"source": schema.StringAttribute{
-				Optional:    true,
-				Description: `body string required Pack source`,
-				Validators: []validator.String{
-					stringvalidator.ExactlyOneOf(path.Expressions{
-						path.MatchRelative().AtParent().AtName("filename"),
-					}...),
+			"min_log_stream_version": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
+				Description: `Requires replacement if changed.`,
+			},
+			"outputs": schema.Float64Attribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Float64{
+					float64planmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
+			},
+			"source": schema.StringAttribute{
+				Required:    true,
+				Description: `body string required Pack source`,
+			},
+			"spec": schema.StringAttribute{
+				Optional:    true,
+				Description: `body string optional Specify a branch, tag or a semver spec`,
+			},
+			"tags": schema.SingleNestedAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Attributes: map[string]schema.Attribute{
+					"data_type": schema.ListAttribute{
+						Required: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+						},
+						ElementType: types.StringType,
+						Description: `Requires replacement if changed.`,
+					},
+					"domain": schema.ListAttribute{
+						Required: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+						},
+						ElementType: types.StringType,
+						Description: `Requires replacement if changed.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+						},
+						ElementType: types.StringType,
+						Description: `Requires replacement if changed.`,
+					},
+					"technology": schema.ListAttribute{
+						Required: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+						},
+						ElementType: types.StringType,
+						Description: `Requires replacement if changed.`,
+					},
+				},
+				Description: `Requires replacement if changed.`,
 			},
 			"version": schema.StringAttribute{
 				Optional: true,

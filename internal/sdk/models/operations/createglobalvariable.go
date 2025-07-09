@@ -8,9 +8,10 @@ import (
 )
 
 type CreateGlobalVariableRequest struct {
-	// Group ID to CREATE
-	GroupID   string            `pathParam:"style=simple,explode=false,name=groupId"`
-	GlobalVar *shared.GlobalVar `request:"mediaType=application/json"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// New Global Variable object
+	GlobalVar shared.GlobalVar `request:"mediaType=application/json"`
 }
 
 func (o *CreateGlobalVariableRequest) GetGroupID() string {
@@ -20,9 +21,9 @@ func (o *CreateGlobalVariableRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *CreateGlobalVariableRequest) GetGlobalVar() *shared.GlobalVar {
+func (o *CreateGlobalVariableRequest) GetGlobalVar() shared.GlobalVar {
 	if o == nil {
-		return nil
+		return shared.GlobalVar{}
 	}
 	return o.GlobalVar
 }

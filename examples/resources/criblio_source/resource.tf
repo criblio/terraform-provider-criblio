@@ -63,14 +63,6 @@ resource "criblio_source" "my_source" {
     socket_idle_timeout    = 1.69
     socket_max_lifespan    = 4.11
     stale_channel_flush_ms = 34410614.39
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.52
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -93,7 +85,8 @@ resource "criblio_source" "my_source" {
     unix_socket_perms = "...my_unix_socket_perms..."
   }
   input_azure_blob = {
-    auth_type = "manual"
+    auth_type   = "manual"
+    azure_cloud = "...my_azure_cloud..."
     breaker_rulesets = [
       "..."
     ]
@@ -141,15 +134,7 @@ resource "criblio_source" "my_source" {
     service_period_secs    = 8.37
     skip_on_error          = false
     stale_channel_flush_ms = 42632985.63
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.12
-      use_status_from_lb = true
-    }
-    storage_account_name = "...my_storage_account_name..."
+    storage_account_name   = "...my_storage_account_name..."
     streamtags = [
       "..."
     ]
@@ -198,14 +183,6 @@ resource "criblio_source" "my_source" {
     }
     send_to_routes         = false
     stale_channel_flush_ms = 15919396.49
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 7.81
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -289,14 +266,6 @@ resource "criblio_source" "my_source" {
     }
     send_to_routes  = false
     session_timeout = 865848.25
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.31
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -347,14 +316,6 @@ resource "criblio_source" "my_source" {
     }
     pq_enabled     = true
     send_to_routes = true
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.97
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -405,14 +366,6 @@ resource "criblio_source" "my_source" {
     request_timeout = 1.46
     send_to_routes  = true
     socket_timeout  = 0.8
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.15
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -430,6 +383,69 @@ resource "criblio_source" "my_source" {
       request_cert        = false
     }
     type = "cribl_http"
+  }
+  input_cribl_lake_http = {
+    activity_log_sample_rate = 3.4
+    auth_tokens = [
+      "..."
+    ]
+    capture_headers = true
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    description             = "...my_description..."
+    disabled                = false
+    enable_health_check     = true
+    enable_proxy_header     = true
+    environment             = "...my_environment..."
+    host                    = "...my_host..."
+    id                      = "...my_id..."
+    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
+    ip_denylist_regex       = "...my_ip_denylist_regex..."
+    keep_alive_timeout      = 51.28
+    max_active_req          = 2.72
+    max_requests_per_socket = 0
+    metadata = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    pipeline = "...my_pipeline..."
+    port     = 3239.03
+    pq = {
+      commit_frequency = 3.02
+      compress         = "gzip"
+      max_buffer_size  = 45.66
+      max_file_size    = "...my_max_file_size..."
+      max_size         = "...my_max_size..."
+      mode             = "smart"
+      path             = "...my_path..."
+    }
+    pq_enabled      = true
+    request_timeout = 7.38
+    send_to_routes  = false
+    socket_timeout  = 5.22
+    streamtags = [
+      "..."
+    ]
+    tls = {
+      ca_path             = "...my_ca_path..."
+      cert_path           = "...my_cert_path..."
+      certificate_name    = "...my_certificate_name..."
+      common_name_regex   = "{ \"see\": \"documentation\" }"
+      disabled            = true
+      max_version         = "TLSv1.1"
+      min_version         = "TLSv1.3"
+      passphrase          = "...my_passphrase..."
+      priv_key_path       = "...my_priv_key_path..."
+      reject_unauthorized = "{ \"see\": \"documentation\" }"
+      request_cert        = true
+    }
+    type = "cribl_lake_http"
   }
   input_criblmetrics = {
     connections = [
@@ -462,14 +478,6 @@ resource "criblio_source" "my_source" {
     pq_enabled     = false
     prefix         = "...my_prefix..."
     send_to_routes = false
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.63
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -512,14 +520,6 @@ resource "criblio_source" "my_source" {
     socket_ending_max_wait = 7.39
     socket_idle_timeout    = 2.54
     socket_max_lifespan    = 7.93
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.29
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -596,6 +596,8 @@ resource "criblio_source" "my_source" {
       command  = "...my_command..."
       disabled = true
     }
+    processed_tag_key      = "...my_processed_tag_key..."
+    processed_tag_value    = "...my_processed_tag_value..."
     queue_name             = "...my_queue_name..."
     region                 = "...my_region..."
     reject_unauthorized    = true
@@ -605,19 +607,12 @@ resource "criblio_source" "my_source" {
     skip_on_error          = true
     socket_timeout         = 39471.85
     stale_channel_flush_ms = 26602939.6
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.55
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
-    type               = "crowdstrike"
-    visibility_timeout = 38346.71
+    tag_after_processing = "false"
+    type                 = "crowdstrike"
+    visibility_timeout   = 38346.71
   }
   input_datadog_agent = {
     activity_log_sample_rate = 7.52
@@ -666,14 +661,6 @@ resource "criblio_source" "my_source" {
     request_timeout = 0.77
     send_to_routes  = true
     socket_timeout  = 5.24
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.57
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -727,14 +714,6 @@ resource "criblio_source" "my_source" {
       }
     ]
     send_to_routes = true
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.85
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -755,7 +734,6 @@ resource "criblio_source" "my_source" {
     credentials_secret = "...my_credentials_secret..."
     description        = "...my_description..."
     dimension_list = [
-      "..."
     ]
     disabled           = true
     discovery_type     = "k8s-pods"
@@ -813,20 +791,11 @@ resource "criblio_source" "my_source" {
       {
         name = "...my_name..."
         values = [
-          "..."
         ]
       }
     ]
     send_to_routes    = true
     signature_version = "v2"
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.85
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -873,7 +842,6 @@ resource "criblio_source" "my_source" {
     ]
     host                    = "...my_host..."
     id                      = "...my_id..."
-    ignore_standard_headers = true
     ip_allowlist_regex      = "...my_ip_allowlist_regex..."
     ip_denylist_regex       = "...my_ip_denylist_regex..."
     keep_alive_timeout      = 211.92
@@ -903,7 +871,6 @@ resource "criblio_source" "my_source" {
       enabled             = false
       reject_unauthorized = false
       remove_headers = [
-        "..."
       ]
       timeout_sec = 1740239672156922.5
       url         = "...my_url..."
@@ -911,14 +878,6 @@ resource "criblio_source" "my_source" {
     request_timeout = 9.56
     send_to_routes  = false
     socket_timeout  = 5.73
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.12
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -993,14 +952,6 @@ resource "criblio_source" "my_source" {
     }
     send_to_routes  = true
     session_timeout = 199043.15
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.97
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1051,14 +1002,6 @@ resource "criblio_source" "my_source" {
     schedule_type          = "interval"
     send_to_routes         = true
     stale_channel_flush_ms = 5570369.95
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.59
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1111,14 +1054,6 @@ resource "criblio_source" "my_source" {
     pq_enabled             = false
     send_to_routes         = false
     stale_channel_flush_ms = 38380929.61
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.25
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1171,14 +1106,6 @@ resource "criblio_source" "my_source" {
     request_timeout = 2.37
     send_to_routes  = true
     socket_timeout  = 1.73
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.41
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1236,14 +1163,6 @@ resource "criblio_source" "my_source" {
     secret                      = "...my_secret..."
     send_to_routes              = true
     service_account_credentials = "...my_service_account_credentials..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.81
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1315,14 +1234,6 @@ resource "criblio_source" "my_source" {
     socket_timeout  = 9.84
     splunk_hec_acks = false
     splunk_hec_api  = "...my_splunk_hec_api..."
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.67
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1408,14 +1319,6 @@ resource "criblio_source" "my_source" {
     send_to_routes         = false
     socket_timeout         = 3.94
     stale_channel_flush_ms = 17162456.39
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.18
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1476,14 +1379,6 @@ resource "criblio_source" "my_source" {
       }
     ]
     send_to_routes = true
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.04
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1566,14 +1461,6 @@ resource "criblio_source" "my_source" {
     }
     send_to_routes  = false
     session_timeout = 1308790.91
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.5
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1644,15 +1531,7 @@ resource "criblio_source" "my_source" {
     shard_expr          = "...my_shard_expr..."
     shard_iterator_type = "LATEST"
     signature_version   = "v2"
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.1
-      use_status_from_lb = false
-    }
-    stream_name = "...my_stream_name..."
+    stream_name         = "...my_stream_name..."
     streamtags = [
       "..."
     ]
@@ -1694,14 +1573,6 @@ resource "criblio_source" "my_source" {
       }
     ]
     send_to_routes = false
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.7
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1755,14 +1626,6 @@ resource "criblio_source" "my_source" {
     ]
     send_to_routes         = true
     stale_channel_flush_ms = 25164066.67
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.98
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1813,14 +1676,6 @@ resource "criblio_source" "my_source" {
       }
     ]
     send_to_routes = false
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.22
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -1888,14 +1743,6 @@ resource "criblio_source" "my_source" {
     secret_param_name = "...my_secret_param_name..."
     send_to_routes    = true
     socket_timeout    = 0.37
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.76
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -1952,14 +1799,6 @@ resource "criblio_source" "my_source" {
     }
     pq_enabled     = false
     send_to_routes = true
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 2.59
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2014,14 +1853,6 @@ resource "criblio_source" "my_source" {
     pq_enabled          = false
     send_to_routes      = false
     shutdown_timeout_ms = 8.84
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.11
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2125,14 +1956,6 @@ resource "criblio_source" "my_source" {
     send_to_routes             = true
     session_timeout            = 656767.91
     signature_version          = "v4"
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.69
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2188,14 +2011,6 @@ resource "criblio_source" "my_source" {
     }
     pq_enabled     = true
     send_to_routes = true
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.62
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2224,14 +2039,15 @@ resource "criblio_source" "my_source" {
         log_level    = "error"
       }
     ]
-    description            = "...my_description..."
-    disabled               = false
-    environment            = "...my_environment..."
-    id                     = "...my_id..."
-    ingestion_lag          = 3871.05
-    job_timeout            = "...my_job_timeout..."
-    keep_alive_time        = 14.09
-    max_missed_keep_alives = 10.26
+    description             = "...my_description..."
+    disabled                = false
+    environment             = "...my_environment..."
+    id                      = "...my_id..."
+    ignore_group_jobs_limit = true
+    ingestion_lag           = 3871.05
+    job_timeout             = "...my_job_timeout..."
+    keep_alive_time         = 14.09
+    max_missed_keep_alives  = 10.26
     metadata = [
       {
         name  = "...my_name..."
@@ -2264,14 +2080,6 @@ resource "criblio_source" "my_source" {
       type                  = "static"
     }
     send_to_routes = false
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.57
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2297,19 +2105,20 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret     = "...my_credentials_secret..."
-    description            = "...my_description..."
-    disable_time_filter    = false
-    disabled               = true
-    end_date               = "...my_end_date..."
-    environment            = "...my_environment..."
-    id                     = "...my_id..."
-    interval               = 32.97
-    job_timeout            = "...my_job_timeout..."
-    keep_alive_time        = 10.76
-    log_level              = "debug"
-    max_missed_keep_alives = 10.83
-    max_task_reschedule    = 3.22
+    credentials_secret      = "...my_credentials_secret..."
+    description             = "...my_description..."
+    disable_time_filter     = false
+    disabled                = true
+    end_date                = "...my_end_date..."
+    environment             = "...my_environment..."
+    id                      = "...my_id..."
+    ignore_group_jobs_limit = true
+    interval                = 32.97
+    job_timeout             = "...my_job_timeout..."
+    keep_alive_time         = 10.76
+    log_level               = "debug"
+    max_missed_keep_alives  = 10.83
+    max_task_reschedule     = 3.22
     metadata = [
       {
         name  = "...my_name..."
@@ -2345,14 +2154,6 @@ resource "criblio_source" "my_source" {
     }
     send_to_routes = true
     start_date     = "...my_start_date..."
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.36
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2383,13 +2184,14 @@ resource "criblio_source" "my_source" {
         log_level    = "warn"
       }
     ]
-    description            = "...my_description..."
-    disabled               = true
-    environment            = "...my_environment..."
-    id                     = "...my_id..."
-    job_timeout            = "...my_job_timeout..."
-    keep_alive_time        = 15.91
-    max_missed_keep_alives = 4.02
+    description             = "...my_description..."
+    disabled                = true
+    environment             = "...my_environment..."
+    id                      = "...my_id..."
+    ignore_group_jobs_limit = false
+    job_timeout             = "...my_job_timeout..."
+    keep_alive_time         = 15.91
+    max_missed_keep_alives  = 4.02
     metadata = [
       {
         name  = "...my_name..."
@@ -2421,14 +2223,6 @@ resource "criblio_source" "my_source" {
       type                  = "backoff"
     }
     send_to_routes = false
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.97
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2505,14 +2299,6 @@ resource "criblio_source" "my_source" {
     secret_param_name = "...my_secret_param_name..."
     send_to_routes    = true
     socket_timeout    = 1.89
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.94
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2551,20 +2337,20 @@ resource "criblio_source" "my_source" {
     credentials_secret = "...my_credentials_secret..."
     description        = "...my_description..."
     dimension_list = [
-      "..."
     ]
-    disabled               = false
-    discovery_type         = "ec2"
-    duration_seconds       = 4736.3
-    enable_assume_role     = true
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    id                     = "...my_id..."
-    interval               = 51.04
-    job_timeout            = "...my_job_timeout..."
-    keep_alive_time        = 17.36
-    log_level              = "debug"
-    max_missed_keep_alives = 4
+    disabled                = false
+    discovery_type          = "ec2"
+    duration_seconds        = 4736.3
+    enable_assume_role      = true
+    endpoint                = "...my_endpoint..."
+    environment             = "...my_environment..."
+    id                      = "...my_id..."
+    ignore_group_jobs_limit = true
+    interval                = 51.04
+    job_timeout             = "...my_job_timeout..."
+    keep_alive_time         = 17.36
+    log_level               = "debug"
+    max_missed_keep_alives  = 4
     metadata = [
       {
         name  = "...my_name..."
@@ -2597,20 +2383,11 @@ resource "criblio_source" "my_source" {
       {
         name = "...my_name..."
         values = [
-          "..."
         ]
       }
     ]
     send_to_routes    = false
     signature_version = "v2"
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.35
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -2684,14 +2461,6 @@ resource "criblio_source" "my_source" {
     secret_param_name = "...my_secret_param_name..."
     send_to_routes    = false
     socket_timeout    = 8.67
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 5.24
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2750,14 +2519,6 @@ resource "criblio_source" "my_source" {
     pq_enabled             = false
     send_to_routes         = false
     single_msg_udp_packets = false
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.1
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -2824,6 +2585,8 @@ resource "criblio_source" "my_source" {
       command  = "...my_command..."
       disabled = false
     }
+    processed_tag_key      = "...my_processed_tag_key..."
+    processed_tag_value    = "...my_processed_tag_value..."
     queue_name             = "...my_queue_name..."
     region                 = "...my_region..."
     reject_unauthorized    = false
@@ -2833,19 +2596,12 @@ resource "criblio_source" "my_source" {
     skip_on_error          = false
     socket_timeout         = 29705.33
     stale_channel_flush_ms = 18587902.44
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.73
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
-    type               = "s3"
-    visibility_timeout = 16414.35
+    tag_after_processing = true
+    type                 = "s3"
+    visibility_timeout   = 16414.35
   }
   input_s3_inventory = {
     assume_role_arn           = "...my_assume_role_arn..."
@@ -2908,6 +2664,8 @@ resource "criblio_source" "my_source" {
       command  = "...my_command..."
       disabled = false
     }
+    processed_tag_key      = "...my_processed_tag_key..."
+    processed_tag_value    = "...my_processed_tag_value..."
     queue_name             = "...my_queue_name..."
     region                 = "...my_region..."
     reject_unauthorized    = true
@@ -2917,17 +2675,10 @@ resource "criblio_source" "my_source" {
     skip_on_error          = false
     socket_timeout         = 9696.9
     stale_channel_flush_ms = 26256833.64
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 7.68
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
+    tag_after_processing     = "false"
     type                     = "s3_inventory"
     validate_inventory_files = false
     visibility_timeout       = 26709.77
@@ -2992,6 +2743,8 @@ resource "criblio_source" "my_source" {
       command  = "...my_command..."
       disabled = false
     }
+    processed_tag_key      = "...my_processed_tag_key..."
+    processed_tag_value    = "...my_processed_tag_value..."
     queue_name             = "...my_queue_name..."
     region                 = "...my_region..."
     reject_unauthorized    = false
@@ -3001,21 +2754,15 @@ resource "criblio_source" "my_source" {
     skip_on_error          = false
     socket_timeout         = 26799.94
     stale_channel_flush_ms = 29469341.99
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.02
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
-    type               = "security_lake"
-    visibility_timeout = 16801.61
+    tag_after_processing = "false"
+    type                 = "security_lake"
+    visibility_timeout   = 16801.61
   }
   input_snmp = {
+    best_effort_parsing = true
     connections = [
       {
         output   = "...my_output..."
@@ -3056,17 +2803,9 @@ resource "criblio_source" "my_source" {
           auth_key      = "{ \"see\": \"documentation\" }"
           auth_protocol = "sha224"
           name          = "...my_name..."
-          priv_protocol = "...my_priv_protocol..."
+          priv_protocol = "{ \"see\": \"documentation\" }"
         }
       ]
-    }
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.65
-      use_status_from_lb = true
     }
     streamtags = [
       "..."
@@ -3126,14 +2865,6 @@ resource "criblio_source" "my_source" {
     socket_idle_timeout    = 8.04
     socket_max_lifespan    = 9.33
     stale_channel_flush_ms = 24735904.72
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 8.09
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3155,19 +2886,15 @@ resource "criblio_source" "my_source" {
   }
   input_splunk_hec = {
     access_control_allow_headers = [
-      "..."
     ]
     access_control_allow_origin = [
-      "..."
     ]
     activity_log_sample_rate = 5.25
     allowed_indexes = [
-      "..."
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
-          "..."
         ]
         auth_type   = "manual"
         description = "...my_description..."
@@ -3231,14 +2958,6 @@ resource "criblio_source" "my_source" {
     splunk_hec_acks        = true
     splunk_hec_api         = "...my_splunk_hec_api..."
     stale_channel_flush_ms = 42109803.47
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.64
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3289,14 +3008,15 @@ resource "criblio_source" "my_source" {
         value = "...my_value..."
       }
     ]
-    environment            = "...my_environment..."
-    id                     = "...my_id..."
-    job_timeout            = "...my_job_timeout..."
-    keep_alive_time        = 13.53
-    latest                 = "...my_latest..."
-    log_level              = "debug"
-    login_url              = "...my_login_url..."
-    max_missed_keep_alives = 3.83
+    environment             = "...my_environment..."
+    id                      = "...my_id..."
+    ignore_group_jobs_limit = true
+    job_timeout             = "...my_job_timeout..."
+    keep_alive_time         = 13.53
+    latest                  = "...my_latest..."
+    log_level               = "debug"
+    login_url               = "...my_login_url..."
+    max_missed_keep_alives  = 3.83
     metadata = [
       {
         name  = "...my_name..."
@@ -3348,14 +3068,6 @@ resource "criblio_source" "my_source" {
     secret_param_name      = "...my_secret_param_name..."
     send_to_routes         = true
     stale_channel_flush_ms = 2870608.4
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 3.04
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3417,14 +3129,6 @@ resource "criblio_source" "my_source" {
     reuse_connections   = false
     send_to_routes      = false
     signature_version   = "v2"
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.07
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3440,17 +3144,17 @@ resource "criblio_source" "my_source" {
           pipeline = "...my_pipeline..."
         }
       ]
-      description           = "...my_description..."
-      disabled              = false
-      enable_load_balancing = true
-      enable_proxy_header   = true
-      environment           = "...my_environment..."
-      host                  = "...my_host..."
-      id                    = "...my_id..."
-      infer_framing         = true
-      ip_whitelist_regex    = "...my_ip_whitelist_regex..."
+      description                          = "...my_description..."
+      disabled                             = false
+      enable_enhanced_proxy_header_parsing = true
+      enable_load_balancing                = true
+      enable_proxy_header                  = true
+      environment                          = "...my_environment..."
+      host                                 = "...my_host..."
+      id                                   = "...my_id..."
+      infer_framing                        = true
+      ip_whitelist_regex                   = "...my_ip_whitelist_regex..."
       keep_fields_list = [
-        "..."
       ]
       max_active_cxn  = 7.64
       max_buffer_size = 3.56
@@ -3477,14 +3181,6 @@ resource "criblio_source" "my_source" {
       socket_ending_max_wait = 3.23
       socket_idle_timeout    = 2.03
       socket_max_lifespan    = 7.57
-      status = {
-        health = "Green"
-        metrics = {
-          key = jsonencode("value")
-        }
-        timestamp          = 2.3
-        use_status_from_lb = false
-      }
       streamtags = [
         "..."
       ]
@@ -3612,14 +3308,6 @@ resource "criblio_source" "my_source" {
       ]
     }
     send_to_routes = true
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 2.36
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3667,11 +3355,12 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description = "...my_description..."
-    disabled    = true
-    environment = "...my_environment..."
-    id          = "...my_id..."
-    interval    = 9.73
+    description           = "...my_description..."
+    disable_native_module = true
+    disabled              = true
+    environment           = "...my_environment..."
+    id                    = "...my_id..."
+    interval              = 9.73
     metadata = [
       {
         name  = "...my_name..."
@@ -3698,14 +3387,6 @@ resource "criblio_source" "my_source" {
     }
     pq_enabled     = false
     send_to_routes = false
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.12
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3761,14 +3442,6 @@ resource "criblio_source" "my_source" {
     socket_idle_timeout    = 0.36
     socket_max_lifespan    = 5.19
     stale_channel_flush_ms = 8063309.13
-    status = {
-      health = "Green"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 1.94
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -3827,14 +3500,6 @@ resource "criblio_source" "my_source" {
     socket_ending_max_wait = 5.57
     socket_idle_timeout    = 8.47
     socket_max_lifespan    = 3.88
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 4.87
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -3865,19 +3530,20 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
-    enable_health_check     = true
-    enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 375.33
-    keytab                  = "...my_keytab..."
-    max_active_req          = 7.34
-    max_requests_per_socket = 3
+    description              = "...my_description..."
+    disabled                 = true
+    enable_health_check      = true
+    enable_proxy_header      = false
+    environment              = "...my_environment..."
+    host                     = "...my_host..."
+    id                       = "...my_id..."
+    ip_allowlist_regex       = "...my_ip_allowlist_regex..."
+    ip_denylist_regex        = "...my_ip_denylist_regex..."
+    keep_alive_timeout       = 375.33
+    keytab                   = "...my_keytab..."
+    log_fingerprint_mismatch = true
+    max_active_req           = 7.34
+    max_requests_per_socket  = 3
     metadata = [
       {
         name  = "...my_name..."
@@ -3899,14 +3565,6 @@ resource "criblio_source" "my_source" {
     principal      = "...my_principal..."
     send_to_routes = false
     socket_timeout = 7.92
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 0.84
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -4034,14 +3692,6 @@ resource "criblio_source" "my_source" {
       ]
     }
     send_to_routes = false
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.34
-      use_status_from_lb = false
-    }
     streamtags = [
       "..."
     ]
@@ -4085,14 +3735,6 @@ resource "criblio_source" "my_source" {
     pq_enabled     = true
     read_mode      = "oldest"
     send_to_routes = false
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 9.03
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -4117,13 +3759,14 @@ resource "criblio_source" "my_source" {
         enabled             = true
       }
     ]
-    description            = "...my_description..."
-    disabled               = false
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    id                     = "...my_id..."
-    keep_alive_time        = 14
-    max_missed_keep_alives = 9.47
+    description             = "...my_description..."
+    disabled                = false
+    endpoint                = "...my_endpoint..."
+    environment             = "...my_environment..."
+    id                      = "...my_id..."
+    ignore_group_jobs_limit = true
+    keep_alive_time         = 14
+    max_missed_keep_alives  = 9.47
     metadata = [
       {
         name  = "...my_name..."
@@ -4155,14 +3798,6 @@ resource "criblio_source" "my_source" {
       type                  = "backoff"
     }
     send_to_routes = false
-    status = {
-      health = "Yellow"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.27
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]
@@ -4172,19 +3807,15 @@ resource "criblio_source" "my_source" {
   }
   input_zscaler_hec = {
     access_control_allow_headers = [
-      "..."
     ]
     access_control_allow_origin = [
-      "..."
     ]
     activity_log_sample_rate = 8.55
     allowed_indexes = [
-      "..."
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
-          "..."
         ]
         auth_type   = "manual"
         description = "...my_description..."
@@ -4242,14 +3873,6 @@ resource "criblio_source" "my_source" {
     request_timeout = 2.41
     send_to_routes  = false
     socket_timeout  = 5.66
-    status = {
-      health = "Red"
-      metrics = {
-        key = jsonencode("value")
-      }
-      timestamp          = 6.94
-      use_status_from_lb = true
-    }
     streamtags = [
       "..."
     ]

@@ -59,16 +59,7 @@ func (o *GetCluiRequest) GetContext() *Context {
 
 // GetCluiResponseBody - a list of CluiItem objects
 type GetCluiResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.CluiItem `json:"items,omitempty"`
-}
-
-func (o *GetCluiResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetCluiResponseBody) GetItems() []shared.CluiItem {

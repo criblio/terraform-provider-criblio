@@ -21,16 +21,7 @@ func (o *GetSummaryWorkersRequest) GetFilterExp() *string {
 
 // GetSummaryWorkersResponseBody - a list of number objects
 type GetSummaryWorkersResponseBody struct {
-	// number of items present in the items array
-	Count *int64    `json:"count,omitempty"`
 	Items []float64 `json:"items,omitempty"`
-}
-
-func (o *GetSummaryWorkersResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSummaryWorkersResponseBody) GetItems() []float64 {

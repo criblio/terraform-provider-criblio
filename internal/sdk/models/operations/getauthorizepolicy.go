@@ -9,16 +9,7 @@ import (
 
 // GetAuthorizePolicyResponseBody - a list of AuthPolicyEntry objects
 type GetAuthorizePolicyResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.AuthPolicyEntry `json:"items,omitempty"`
-}
-
-func (o *GetAuthorizePolicyResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetAuthorizePolicyResponseBody) GetItems() []shared.AuthPolicyEntry {

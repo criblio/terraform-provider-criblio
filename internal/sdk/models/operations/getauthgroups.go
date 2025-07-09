@@ -9,16 +9,7 @@ import (
 
 // GetAuthGroupsResponseBody - a list of CrudEntityBase objects
 type GetAuthGroupsResponseBody struct {
-	// number of items present in the items array
-	Count *int64                  `json:"count,omitempty"`
 	Items []shared.CrudEntityBase `json:"items,omitempty"`
-}
-
-func (o *GetAuthGroupsResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetAuthGroupsResponseBody) GetItems() []shared.CrudEntityBase {

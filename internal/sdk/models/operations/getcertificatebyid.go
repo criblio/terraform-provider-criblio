@@ -21,16 +21,7 @@ func (o *GetCertificateByIDRequest) GetID() string {
 
 // GetCertificateByIDResponseBody - a list of Certificate objects
 type GetCertificateByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64               `json:"count,omitempty"`
 	Items []shared.Certificate `json:"items,omitempty"`
-}
-
-func (o *GetCertificateByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetCertificateByIDResponseBody) GetItems() []shared.Certificate {

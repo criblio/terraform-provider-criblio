@@ -30,16 +30,7 @@ func (o *CreateSystemProjectsVersionCommitByProjectIDRequest) GetProjectGitCommi
 
 // CreateSystemProjectsVersionCommitByProjectIDResponseBody - a list of GitCommitSummary objects
 type CreateSystemProjectsVersionCommitByProjectIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                    `json:"count,omitempty"`
 	Items []shared.GitCommitSummary `json:"items,omitempty"`
-}
-
-func (o *CreateSystemProjectsVersionCommitByProjectIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemProjectsVersionCommitByProjectIDResponseBody) GetItems() []shared.GitCommitSummary {

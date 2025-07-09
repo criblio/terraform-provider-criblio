@@ -9,16 +9,7 @@ import (
 
 // GetChangelogViewedResponseBody - a list of ChangelogState objects
 type GetChangelogViewedResponseBody struct {
-	// number of items present in the items array
-	Count *int64                  `json:"count,omitempty"`
 	Items []shared.ChangelogState `json:"items,omitempty"`
-}
-
-func (o *GetChangelogViewedResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetChangelogViewedResponseBody) GetItems() []shared.ChangelogState {

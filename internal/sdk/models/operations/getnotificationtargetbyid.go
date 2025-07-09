@@ -21,16 +21,7 @@ func (o *GetNotificationTargetByIDRequest) GetID() string {
 
 // GetNotificationTargetByIDResponseBody - a list of NotificationTarget objects
 type GetNotificationTargetByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                      `json:"count,omitempty"`
 	Items []shared.NotificationTarget `json:"items,omitempty"`
-}
-
-func (o *GetNotificationTargetByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetNotificationTargetByIDResponseBody) GetItems() []shared.NotificationTarget {

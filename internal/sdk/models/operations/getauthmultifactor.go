@@ -9,16 +9,7 @@ import (
 
 // GetAuthMultiFactorResponseBody - a list of MultiFactorAuthSchema objects
 type GetAuthMultiFactorResponseBody struct {
-	// number of items present in the items array
-	Count *int64                         `json:"count,omitempty"`
 	Items []shared.MultiFactorAuthSchema `json:"items,omitempty"`
-}
-
-func (o *GetAuthMultiFactorResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetAuthMultiFactorResponseBody) GetItems() []shared.MultiFactorAuthSchema {

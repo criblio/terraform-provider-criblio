@@ -21,16 +21,7 @@ func (o *GetFunctionByPackRequest) GetPack() string {
 
 // GetFunctionByPackResponseBody - a list of Function objects
 type GetFunctionByPackResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.Function `json:"items,omitempty"`
-}
-
-func (o *GetFunctionByPackResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetFunctionByPackResponseBody) GetItems() []shared.Function {

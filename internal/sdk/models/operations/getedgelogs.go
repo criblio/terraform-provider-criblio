@@ -48,16 +48,7 @@ func (o *GetEdgeLogsRequest) GetDepth() *float64 {
 
 // GetEdgeLogsResponseBody - a list of EdgeFile objects
 type GetEdgeLogsResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.EdgeFile `json:"items,omitempty"`
-}
-
-func (o *GetEdgeLogsResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetEdgeLogsResponseBody) GetItems() []shared.EdgeFile {

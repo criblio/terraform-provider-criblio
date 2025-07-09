@@ -51,7 +51,7 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group ID to PATCH`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -81,13 +81,13 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"id": schema.StringAttribute{
 									Computed: true,
 									Validators: []validator.String{
-										stringvalidator.RegexMatches(regexp.MustCompile(`^\s*\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?\s*$`), "must match pattern "+regexp.MustCompile(`^\s*\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?\s*$`).String()),
+										stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
 									},
 								},
 								"mode": schema.StringAttribute{
 									Computed:    true,
 									Default:     stringdefault.StaticString(`memory`),
-									Description: `Operation mode for CSV-based lookups. Default: "memory"; must be one of ["memory", "disk"]`,
+									Description: `Default: "memory"; must be one of ["memory", "disk"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
 											"memory",
@@ -150,13 +150,13 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"id": schema.StringAttribute{
 									Computed: true,
 									Validators: []validator.String{
-										stringvalidator.RegexMatches(regexp.MustCompile(`^\s*\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?\s*$`), "must match pattern "+regexp.MustCompile(`^\s*\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?\s*$`).String()),
+										stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
 									},
 								},
 								"mode": schema.StringAttribute{
 									Computed:    true,
 									Default:     stringdefault.StaticString(`memory`),
-									Description: `Operation mode for CSV-based lookups. Default: "memory"; must be one of ["memory", "disk"]`,
+									Description: `Default: "memory"; must be one of ["memory", "disk"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
 											"memory",
@@ -229,14 +229,14 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"id": schema.StringAttribute{
 						Required: true,
 						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^\s*\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?\s*$`), "must match pattern "+regexp.MustCompile(`^\s*\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?\s*$`).String()),
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
 						},
 					},
 					"mode": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`memory`),
-						Description: `Operation mode for CSV-based lookups. Default: "memory"; must be one of ["memory", "disk"]`,
+						Description: `Default: "memory"; must be one of ["memory", "disk"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"memory",
@@ -272,14 +272,14 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"id": schema.StringAttribute{
 						Required: true,
 						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^\s*\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?\s*$`), "must match pattern "+regexp.MustCompile(`^\s*\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?\s*$`).String()),
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
 						},
 					},
 					"mode": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`memory`),
-						Description: `Operation mode for CSV-based lookups. Default: "memory"; must be one of ["memory", "disk"]`,
+						Description: `Default: "memory"; must be one of ["memory", "disk"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"memory",

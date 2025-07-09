@@ -8,18 +8,12 @@ import (
 )
 
 type UpdateGrokFileByIDRequest struct {
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// GrokFile object to be updated
 	GrokFile shared.GrokFile `request:"mediaType=application/json"`
-}
-
-func (o *UpdateGrokFileByIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
 }
 
 func (o *UpdateGrokFileByIDRequest) GetID() string {
@@ -27,6 +21,13 @@ func (o *UpdateGrokFileByIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *UpdateGrokFileByIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 func (o *UpdateGrokFileByIDRequest) GetGrokFile() shared.GrokFile {

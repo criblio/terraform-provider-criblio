@@ -21,16 +21,7 @@ func (o *GetDatasetACLByIDRequest) GetID() string {
 
 // GetDatasetACLByIDResponseBody - a list of UserAccessControlList objects
 type GetDatasetACLByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                         `json:"count,omitempty"`
 	Items []shared.UserAccessControlList `json:"items,omitempty"`
-}
-
-func (o *GetDatasetACLByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetDatasetACLByIDResponseBody) GetItems() []shared.UserAccessControlList {

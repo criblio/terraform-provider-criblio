@@ -8,8 +8,17 @@ import (
 )
 
 type GetPacksRequest struct {
-	// Group Id
+	// Comma separated list of entities, "outputs", "inputs"
+	With *string `queryParam:"style=form,explode=true,name=with"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+}
+
+func (o *GetPacksRequest) GetWith() *string {
+	if o == nil {
+		return nil
+	}
+	return o.With
 }
 
 func (o *GetPacksRequest) GetGroupID() string {

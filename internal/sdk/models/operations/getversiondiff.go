@@ -48,16 +48,7 @@ func (o *GetVersionDiffRequest) GetDiffLineLimit() *float64 {
 
 // GetVersionDiffResponseBody - a list of any objects
 type GetVersionDiffResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *GetVersionDiffResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetVersionDiffResponseBody) GetItems() []map[string]any {

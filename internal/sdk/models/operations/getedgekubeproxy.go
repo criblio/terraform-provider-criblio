@@ -21,16 +21,7 @@ func (o *GetEdgeKubeProxyRequest) GetPath() *string {
 
 // GetEdgeKubeProxyResponseBody - a list of object objects
 type GetEdgeKubeProxyResponseBody struct {
-	// number of items present in the items array
-	Count *int64   `json:"count,omitempty"`
 	Items []string `json:"items,omitempty"`
-}
-
-func (o *GetEdgeKubeProxyResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetEdgeKubeProxyResponseBody) GetItems() []string {

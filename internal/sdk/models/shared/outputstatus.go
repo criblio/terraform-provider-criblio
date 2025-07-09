@@ -2,9 +2,78 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type OutputStatusHealth string
+
+const (
+	OutputStatusHealthGreen  OutputStatusHealth = "Green"
+	OutputStatusHealthYellow OutputStatusHealth = "Yellow"
+	OutputStatusHealthRed    OutputStatusHealth = "Red"
+)
+
+func (e OutputStatusHealth) ToPointer() *OutputStatusHealth {
+	return &e
+}
+func (e *OutputStatusHealth) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "Green":
+		fallthrough
+	case "Yellow":
+		fallthrough
+	case "Red":
+		*e = OutputStatusHealth(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for OutputStatusHealth: %v", v)
+	}
+}
+
+type OutputStatusStatus struct {
+	Health          OutputStatusHealth `json:"health"`
+	Metrics         map[string]any     `json:"metrics"`
+	Timestamp       float64            `json:"timestamp"`
+	UseStatusFromLB *bool              `json:"useStatusFromLB,omitempty"`
+}
+
+func (o *OutputStatusStatus) GetHealth() OutputStatusHealth {
+	if o == nil {
+		return OutputStatusHealth("")
+	}
+	return o.Health
+}
+
+func (o *OutputStatusStatus) GetMetrics() map[string]any {
+	if o == nil {
+		return map[string]any{}
+	}
+	return o.Metrics
+}
+
+func (o *OutputStatusStatus) GetTimestamp() float64 {
+	if o == nil {
+		return 0.0
+	}
+	return o.Timestamp
+}
+
+func (o *OutputStatusStatus) GetUseStatusFromLB() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.UseStatusFromLB
+}
+
 type OutputStatus struct {
-	ID     string   `json:"id"`
-	Status TFStatus `json:"status"`
+	ID     string             `json:"id"`
+	Status OutputStatusStatus `json:"status"`
 }
 
 func (o *OutputStatus) GetID() string {
@@ -14,9 +83,9 @@ func (o *OutputStatus) GetID() string {
 	return o.ID
 }
 
-func (o *OutputStatus) GetStatus() TFStatus {
+func (o *OutputStatus) GetStatus() OutputStatusStatus {
 	if o == nil {
-		return TFStatus{}
+		return OutputStatusStatus{}
 	}
 	return o.Status
 }

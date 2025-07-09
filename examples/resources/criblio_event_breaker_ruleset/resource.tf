@@ -6,9 +6,8 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   min_raw_length = 75773.87
   rules = [
     {
-      condition           = "...my_condition..."
-      disabled            = false
-      event_breaker_regex = "...my_event_breaker_regex..."
+      condition = "...my_condition..."
+      disabled  = false
       fields = [
         {
           name  = "...my_name..."

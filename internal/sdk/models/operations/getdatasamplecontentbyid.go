@@ -21,16 +21,7 @@ func (o *GetDataSampleContentByIDRequest) GetID() string {
 
 // GetDataSampleContentByIDResponseBody - a list of SampleContent objects
 type GetDataSampleContentByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64             `json:"count,omitempty"`
 	Items [][]map[string]any `json:"items,omitempty"`
-}
-
-func (o *GetDataSampleContentByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetDataSampleContentByIDResponseBody) GetItems() [][]map[string]any {

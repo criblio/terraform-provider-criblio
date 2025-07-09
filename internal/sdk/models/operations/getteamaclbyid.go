@@ -71,16 +71,7 @@ func (o *GetTeamACLByIDRequest) GetType() *GetTeamACLByIDType {
 
 // GetTeamACLByIDResponseBody - a list of ResourcePolicy objects
 type GetTeamACLByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                  `json:"count,omitempty"`
 	Items []shared.ResourcePolicy `json:"items,omitempty"`
-}
-
-func (o *GetTeamACLByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetTeamACLByIDResponseBody) GetItems() []shared.ResourcePolicy {

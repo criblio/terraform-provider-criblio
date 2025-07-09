@@ -40,12 +40,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputAppscope.BreakerRulesets {
 			r.InputAppscope.BreakerRulesets = append(r.InputAppscope.BreakerRulesets, types.StringValue(v))
 		}
-		r.InputAppscope.Connections = []tfTypes.ConnectionAppscope{}
+		r.InputAppscope.Connections = []tfTypes.InputAppscopeConnection{}
 		if len(r.InputAppscope.Connections) > len(resp.InputAppscope.Connections) {
 			r.InputAppscope.Connections = r.InputAppscope.Connections[:len(resp.InputAppscope.Connections)]
 		}
 		for connectionsCount, connectionsItem := range resp.InputAppscope.Connections {
-			var connections tfTypes.ConnectionAppscope
+			var connections tfTypes.InputAppscopeConnection
 			connections.Output = types.StringValue(connectionsItem.Output)
 			connections.Pipeline = types.StringPointerValue(connectionsItem.Pipeline)
 			if connectionsCount+1 > len(r.InputAppscope.Connections) {
@@ -63,7 +63,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputAppscope.Filter == nil {
 			r.InputAppscope.Filter = nil
 		} else {
-			r.InputAppscope.Filter = &tfTypes.FilterAppscope{}
+			r.InputAppscope.Filter = &tfTypes.InputAppscopeFilter{}
 			r.InputAppscope.Filter.Allow = []tfTypes.Allow{}
 			if len(r.InputAppscope.Filter.Allow) > len(resp.InputAppscope.Filter.Allow) {
 				r.InputAppscope.Filter.Allow = r.InputAppscope.Filter.Allow[:len(resp.InputAppscope.Filter.Allow)]
@@ -87,12 +87,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputAppscope.ID = types.StringValue(resp.InputAppscope.ID)
 		r.InputAppscope.IPWhitelistRegex = types.StringPointerValue(resp.InputAppscope.IPWhitelistRegex)
 		r.InputAppscope.MaxActiveCxn = types.Float64PointerValue(resp.InputAppscope.MaxActiveCxn)
-		r.InputAppscope.Metadata = []tfTypes.MetadatumAppscope{}
+		r.InputAppscope.Metadata = []tfTypes.InputAppscopeMetadatum{}
 		if len(r.InputAppscope.Metadata) > len(resp.InputAppscope.Metadata) {
 			r.InputAppscope.Metadata = r.InputAppscope.Metadata[:len(resp.InputAppscope.Metadata)]
 		}
 		for metadataCount, metadataItem := range resp.InputAppscope.Metadata {
-			var metadata tfTypes.MetadatumAppscope
+			var metadata tfTypes.InputAppscopeMetadatum
 			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringValue(metadataItem.Value)
 			if metadataCount+1 > len(r.InputAppscope.Metadata) {
@@ -105,7 +105,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputAppscope.Persistence == nil {
 			r.InputAppscope.Persistence = nil
 		} else {
-			r.InputAppscope.Persistence = &tfTypes.PersistenceAppscope{}
+			r.InputAppscope.Persistence = &tfTypes.InputAppscopePersistence{}
 			if resp.InputAppscope.Persistence.Compress != nil {
 				r.InputAppscope.Persistence.Compress = types.StringValue(string(*resp.InputAppscope.Persistence.Compress))
 			} else {
@@ -122,7 +122,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputAppscope.Pq == nil {
 			r.InputAppscope.Pq = nil
 		} else {
-			r.InputAppscope.Pq = &tfTypes.PqAppscope{}
+			r.InputAppscope.Pq = &tfTypes.InputAppscopePq{}
 			r.InputAppscope.Pq.CommitFrequency = types.Float64PointerValue(resp.InputAppscope.Pq.CommitFrequency)
 			if resp.InputAppscope.Pq.Compress != nil {
 				r.InputAppscope.Pq.Compress = types.StringValue(string(*resp.InputAppscope.Pq.Compress))
@@ -145,21 +145,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputAppscope.SocketIdleTimeout = types.Float64PointerValue(resp.InputAppscope.SocketIdleTimeout)
 		r.InputAppscope.SocketMaxLifespan = types.Float64PointerValue(resp.InputAppscope.SocketMaxLifespan)
 		r.InputAppscope.StaleChannelFlushMs = types.Float64PointerValue(resp.InputAppscope.StaleChannelFlushMs)
-		if resp.InputAppscope.Status == nil {
-			r.InputAppscope.Status = nil
-		} else {
-			r.InputAppscope.Status = &tfTypes.TFStatus{}
-			r.InputAppscope.Status.Health = types.StringValue(string(resp.InputAppscope.Status.Health))
-			if len(resp.InputAppscope.Status.Metrics) > 0 {
-				r.InputAppscope.Status.Metrics = make(map[string]types.String, len(resp.InputAppscope.Status.Metrics))
-				for key, value := range resp.InputAppscope.Status.Metrics {
-					result, _ := json.Marshal(value)
-					r.InputAppscope.Status.Metrics[key] = types.StringValue(string(result))
-				}
-			}
-			r.InputAppscope.Status.Timestamp = types.Float64Value(resp.InputAppscope.Status.Timestamp)
-			r.InputAppscope.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputAppscope.Status.UseStatusFromLB)
-		}
 		r.InputAppscope.Streamtags = make([]types.String, 0, len(resp.InputAppscope.Streamtags))
 		for _, v := range resp.InputAppscope.Streamtags {
 			r.InputAppscope.Streamtags = append(r.InputAppscope.Streamtags, types.StringValue(v))
@@ -168,7 +153,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputAppscope.TLS == nil {
 			r.InputAppscope.TLS = nil
 		} else {
-			r.InputAppscope.TLS = &tfTypes.TLSSettingsServerSideAppscope{}
+			r.InputAppscope.TLS = &tfTypes.InputAppscopeTLSSettingsServerSide{}
 			r.InputAppscope.TLS.CaPath = types.StringPointerValue(resp.InputAppscope.TLS.CaPath)
 			r.InputAppscope.TLS.CertificateName = types.StringPointerValue(resp.InputAppscope.TLS.CertificateName)
 			r.InputAppscope.TLS.CertPath = types.StringPointerValue(resp.InputAppscope.TLS.CertPath)
@@ -210,6 +195,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputAzureBlob.AuthType = types.StringNull()
 		}
+		r.InputAzureBlob.AzureCloud = types.StringPointerValue(resp.InputAzureBlob.AzureCloud)
 		r.InputAzureBlob.BreakerRulesets = make([]types.String, 0, len(resp.InputAzureBlob.BreakerRulesets))
 		for _, v := range resp.InputAzureBlob.BreakerRulesets {
 			r.InputAzureBlob.BreakerRulesets = append(r.InputAzureBlob.BreakerRulesets, types.StringValue(v))
@@ -217,17 +203,17 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputAzureBlob.Certificate == nil {
 			r.InputAzureBlob.Certificate = nil
 		} else {
-			r.InputAzureBlob.Certificate = &tfTypes.InputCertificate{}
+			r.InputAzureBlob.Certificate = &tfTypes.InputAzureBlobCertificate{}
 			r.InputAzureBlob.Certificate.CertificateName = types.StringValue(resp.InputAzureBlob.Certificate.CertificateName)
 		}
 		r.InputAzureBlob.ClientID = types.StringPointerValue(resp.InputAzureBlob.ClientID)
 		r.InputAzureBlob.ClientTextSecret = types.StringPointerValue(resp.InputAzureBlob.ClientTextSecret)
-		r.InputAzureBlob.Connections = []tfTypes.ConnectionAzureBlob{}
+		r.InputAzureBlob.Connections = []tfTypes.InputAzureBlobConnection{}
 		if len(r.InputAzureBlob.Connections) > len(resp.InputAzureBlob.Connections) {
 			r.InputAzureBlob.Connections = r.InputAzureBlob.Connections[:len(resp.InputAzureBlob.Connections)]
 		}
 		for connectionsCount1, connectionsItem1 := range resp.InputAzureBlob.Connections {
-			var connections1 tfTypes.ConnectionAzureBlob
+			var connections1 tfTypes.InputAzureBlobConnection
 			connections1.Output = types.StringValue(connectionsItem1.Output)
 			connections1.Pipeline = types.StringPointerValue(connectionsItem1.Pipeline)
 			if connectionsCount1+1 > len(r.InputAzureBlob.Connections) {
@@ -245,12 +231,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputAzureBlob.FileFilter = types.StringPointerValue(resp.InputAzureBlob.FileFilter)
 		r.InputAzureBlob.ID = types.StringPointerValue(resp.InputAzureBlob.ID)
 		r.InputAzureBlob.MaxMessages = types.Float64PointerValue(resp.InputAzureBlob.MaxMessages)
-		r.InputAzureBlob.Metadata = []tfTypes.MetadatumAzureBlob{}
+		r.InputAzureBlob.Metadata = []tfTypes.InputAzureBlobMetadatum{}
 		if len(r.InputAzureBlob.Metadata) > len(resp.InputAzureBlob.Metadata) {
 			r.InputAzureBlob.Metadata = r.InputAzureBlob.Metadata[:len(resp.InputAzureBlob.Metadata)]
 		}
 		for metadataCount1, metadataItem1 := range resp.InputAzureBlob.Metadata {
-			var metadata1 tfTypes.MetadatumAzureBlob
+			var metadata1 tfTypes.InputAzureBlobMetadatum
 			metadata1.Name = types.StringValue(metadataItem1.Name)
 			metadata1.Value = types.StringValue(metadataItem1.Value)
 			if metadataCount1+1 > len(r.InputAzureBlob.Metadata) {
@@ -267,7 +253,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputAzureBlob.Pq == nil {
 			r.InputAzureBlob.Pq = nil
 		} else {
-			r.InputAzureBlob.Pq = &tfTypes.PqAzureBlob{}
+			r.InputAzureBlob.Pq = &tfTypes.InputAzureBlobPq{}
 			r.InputAzureBlob.Pq.CommitFrequency = types.Float64PointerValue(resp.InputAzureBlob.Pq.CommitFrequency)
 			if resp.InputAzureBlob.Pq.Compress != nil {
 				r.InputAzureBlob.Pq.Compress = types.StringValue(string(*resp.InputAzureBlob.Pq.Compress))
@@ -290,21 +276,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputAzureBlob.ServicePeriodSecs = types.Float64PointerValue(resp.InputAzureBlob.ServicePeriodSecs)
 		r.InputAzureBlob.SkipOnError = types.BoolPointerValue(resp.InputAzureBlob.SkipOnError)
 		r.InputAzureBlob.StaleChannelFlushMs = types.Float64PointerValue(resp.InputAzureBlob.StaleChannelFlushMs)
-		if resp.InputAzureBlob.Status == nil {
-			r.InputAzureBlob.Status = nil
-		} else {
-			r.InputAzureBlob.Status = &tfTypes.TFStatus{}
-			r.InputAzureBlob.Status.Health = types.StringValue(string(resp.InputAzureBlob.Status.Health))
-			if len(resp.InputAzureBlob.Status.Metrics) > 0 {
-				r.InputAzureBlob.Status.Metrics = make(map[string]types.String, len(resp.InputAzureBlob.Status.Metrics))
-				for key1, value1 := range resp.InputAzureBlob.Status.Metrics {
-					result1, _ := json.Marshal(value1)
-					r.InputAzureBlob.Status.Metrics[key1] = types.StringValue(string(result1))
-				}
-			}
-			r.InputAzureBlob.Status.Timestamp = types.Float64Value(resp.InputAzureBlob.Status.Timestamp)
-			r.InputAzureBlob.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputAzureBlob.Status.UseStatusFromLB)
-		}
 		r.InputAzureBlob.StorageAccountName = types.StringPointerValue(resp.InputAzureBlob.StorageAccountName)
 		r.InputAzureBlob.Streamtags = make([]types.String, 0, len(resp.InputAzureBlob.Streamtags))
 		for _, v := range resp.InputAzureBlob.Streamtags {
@@ -321,12 +292,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputCollection.BreakerRulesets {
 			r.InputCollection.BreakerRulesets = append(r.InputCollection.BreakerRulesets, types.StringValue(v))
 		}
-		r.InputCollection.Connections = []tfTypes.ConnectionCollection{}
+		r.InputCollection.Connections = []tfTypes.InputCollectionConnection{}
 		if len(r.InputCollection.Connections) > len(resp.InputCollection.Connections) {
 			r.InputCollection.Connections = r.InputCollection.Connections[:len(resp.InputCollection.Connections)]
 		}
 		for connectionsCount2, connectionsItem2 := range resp.InputCollection.Connections {
-			var connections2 tfTypes.ConnectionCollection
+			var connections2 tfTypes.InputCollectionConnection
 			connections2.Output = types.StringValue(connectionsItem2.Output)
 			connections2.Pipeline = types.StringPointerValue(connectionsItem2.Pipeline)
 			if connectionsCount2+1 > len(r.InputCollection.Connections) {
@@ -339,12 +310,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCollection.Disabled = types.BoolPointerValue(resp.InputCollection.Disabled)
 		r.InputCollection.Environment = types.StringPointerValue(resp.InputCollection.Environment)
 		r.InputCollection.ID = types.StringValue(resp.InputCollection.ID)
-		r.InputCollection.Metadata = []tfTypes.InputMetadatumCollection{}
+		r.InputCollection.Metadata = []tfTypes.InputCollectionMetadatum{}
 		if len(r.InputCollection.Metadata) > len(resp.InputCollection.Metadata) {
 			r.InputCollection.Metadata = r.InputCollection.Metadata[:len(resp.InputCollection.Metadata)]
 		}
 		for metadataCount2, metadataItem2 := range resp.InputCollection.Metadata {
-			var metadata2 tfTypes.InputMetadatumCollection
+			var metadata2 tfTypes.InputCollectionMetadatum
 			metadata2.Name = types.StringValue(metadataItem2.Name)
 			metadata2.Value = types.StringValue(metadataItem2.Value)
 			if metadataCount2+1 > len(r.InputCollection.Metadata) {
@@ -359,7 +330,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCollection.Pq == nil {
 			r.InputCollection.Pq = nil
 		} else {
-			r.InputCollection.Pq = &tfTypes.PqCollection{}
+			r.InputCollection.Pq = &tfTypes.InputCollectionPq{}
 			r.InputCollection.Pq.CommitFrequency = types.Float64PointerValue(resp.InputCollection.Pq.CommitFrequency)
 			if resp.InputCollection.Pq.Compress != nil {
 				r.InputCollection.Pq.Compress = types.StringValue(string(*resp.InputCollection.Pq.Compress))
@@ -380,7 +351,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCollection.Preprocess == nil {
 			r.InputCollection.Preprocess = nil
 		} else {
-			r.InputCollection.Preprocess = &tfTypes.InputPreprocessCollection{}
+			r.InputCollection.Preprocess = &tfTypes.InputCollectionPreprocess{}
 			r.InputCollection.Preprocess.Args = make([]types.String, 0, len(resp.InputCollection.Preprocess.Args))
 			for _, v := range resp.InputCollection.Preprocess.Args {
 				r.InputCollection.Preprocess.Args = append(r.InputCollection.Preprocess.Args, types.StringValue(v))
@@ -390,21 +361,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputCollection.SendToRoutes = types.BoolPointerValue(resp.InputCollection.SendToRoutes)
 		r.InputCollection.StaleChannelFlushMs = types.Float64PointerValue(resp.InputCollection.StaleChannelFlushMs)
-		if resp.InputCollection.Status == nil {
-			r.InputCollection.Status = nil
-		} else {
-			r.InputCollection.Status = &tfTypes.TFStatus{}
-			r.InputCollection.Status.Health = types.StringValue(string(resp.InputCollection.Status.Health))
-			if len(resp.InputCollection.Status.Metrics) > 0 {
-				r.InputCollection.Status.Metrics = make(map[string]types.String, len(resp.InputCollection.Status.Metrics))
-				for key2, value2 := range resp.InputCollection.Status.Metrics {
-					result2, _ := json.Marshal(value2)
-					r.InputCollection.Status.Metrics[key2] = types.StringValue(string(result2))
-				}
-			}
-			r.InputCollection.Status.Timestamp = types.Float64Value(resp.InputCollection.Status.Timestamp)
-			r.InputCollection.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputCollection.Status.UseStatusFromLB)
-		}
 		r.InputCollection.Streamtags = make([]types.String, 0, len(resp.InputCollection.Streamtags))
 		for _, v := range resp.InputCollection.Streamtags {
 			r.InputCollection.Streamtags = append(r.InputCollection.Streamtags, types.StringValue(v))
@@ -426,12 +382,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputConfluentCloud.Brokers {
 			r.InputConfluentCloud.Brokers = append(r.InputConfluentCloud.Brokers, types.StringValue(v))
 		}
-		r.InputConfluentCloud.Connections = []tfTypes.ConnectionConfluentCloud{}
+		r.InputConfluentCloud.Connections = []tfTypes.InputConfluentCloudConnection{}
 		if len(r.InputConfluentCloud.Connections) > len(resp.InputConfluentCloud.Connections) {
 			r.InputConfluentCloud.Connections = r.InputConfluentCloud.Connections[:len(resp.InputConfluentCloud.Connections)]
 		}
 		for connectionsCount3, connectionsItem3 := range resp.InputConfluentCloud.Connections {
-			var connections3 tfTypes.ConnectionConfluentCloud
+			var connections3 tfTypes.InputConfluentCloudConnection
 			connections3.Output = types.StringValue(connectionsItem3.Output)
 			connections3.Pipeline = types.StringPointerValue(connectionsItem3.Pipeline)
 			if connectionsCount3+1 > len(r.InputConfluentCloud.Connections) {
@@ -453,11 +409,11 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputConfluentCloud.KafkaSchemaRegistry == nil {
 			r.InputConfluentCloud.KafkaSchemaRegistry = nil
 		} else {
-			r.InputConfluentCloud.KafkaSchemaRegistry = &tfTypes.InputKafkaSchemaRegistryAuthenticationConfluentCloud{}
+			r.InputConfluentCloud.KafkaSchemaRegistry = &tfTypes.InputConfluentCloudKafkaSchemaRegistryAuthentication{}
 			if resp.InputConfluentCloud.KafkaSchemaRegistry.Auth == nil {
 				r.InputConfluentCloud.KafkaSchemaRegistry.Auth = nil
 			} else {
-				r.InputConfluentCloud.KafkaSchemaRegistry.Auth = &tfTypes.InputAuthConfluentCloud{}
+				r.InputConfluentCloud.KafkaSchemaRegistry.Auth = &tfTypes.InputConfluentCloudAuth{}
 				r.InputConfluentCloud.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(resp.InputConfluentCloud.KafkaSchemaRegistry.Auth.CredentialsSecret)
 				r.InputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(resp.InputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled)
 			}
@@ -469,7 +425,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputConfluentCloud.KafkaSchemaRegistry.TLS == nil {
 				r.InputConfluentCloud.KafkaSchemaRegistry.TLS = nil
 			} else {
-				r.InputConfluentCloud.KafkaSchemaRegistry.TLS = &tfTypes.InputKafkaSchemaRegistryTLSSettingsClientSideConfluentCloud{}
+				r.InputConfluentCloud.KafkaSchemaRegistry.TLS = &tfTypes.InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide{}
 				r.InputConfluentCloud.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(resp.InputConfluentCloud.KafkaSchemaRegistry.TLS.CaPath)
 				r.InputConfluentCloud.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(resp.InputConfluentCloud.KafkaSchemaRegistry.TLS.CertificateName)
 				r.InputConfluentCloud.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(resp.InputConfluentCloud.KafkaSchemaRegistry.TLS.CertPath)
@@ -495,12 +451,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputConfluentCloud.MaxBytesPerPartition = types.Float64PointerValue(resp.InputConfluentCloud.MaxBytesPerPartition)
 		r.InputConfluentCloud.MaxRetries = types.Float64PointerValue(resp.InputConfluentCloud.MaxRetries)
 		r.InputConfluentCloud.MaxSocketErrors = types.Float64PointerValue(resp.InputConfluentCloud.MaxSocketErrors)
-		r.InputConfluentCloud.Metadata = []tfTypes.MetadatumConfluentCloud{}
+		r.InputConfluentCloud.Metadata = []tfTypes.InputConfluentCloudMetadatum{}
 		if len(r.InputConfluentCloud.Metadata) > len(resp.InputConfluentCloud.Metadata) {
 			r.InputConfluentCloud.Metadata = r.InputConfluentCloud.Metadata[:len(resp.InputConfluentCloud.Metadata)]
 		}
 		for metadataCount3, metadataItem3 := range resp.InputConfluentCloud.Metadata {
-			var metadata3 tfTypes.MetadatumConfluentCloud
+			var metadata3 tfTypes.InputConfluentCloudMetadatum
 			metadata3.Name = types.StringValue(metadataItem3.Name)
 			metadata3.Value = types.StringValue(metadataItem3.Value)
 			if metadataCount3+1 > len(r.InputConfluentCloud.Metadata) {
@@ -514,7 +470,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputConfluentCloud.Pq == nil {
 			r.InputConfluentCloud.Pq = nil
 		} else {
-			r.InputConfluentCloud.Pq = &tfTypes.PqConfluentCloud{}
+			r.InputConfluentCloud.Pq = &tfTypes.InputConfluentCloudPq{}
 			r.InputConfluentCloud.Pq.CommitFrequency = types.Float64PointerValue(resp.InputConfluentCloud.Pq.CommitFrequency)
 			if resp.InputConfluentCloud.Pq.Compress != nil {
 				r.InputConfluentCloud.Pq.Compress = types.StringValue(string(*resp.InputConfluentCloud.Pq.Compress))
@@ -538,7 +494,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputConfluentCloud.Sasl == nil {
 			r.InputConfluentCloud.Sasl = nil
 		} else {
-			r.InputConfluentCloud.Sasl = &tfTypes.InputAuthenticationConfluentCloud{}
+			r.InputConfluentCloud.Sasl = &tfTypes.InputConfluentCloudAuthentication{}
 			r.InputConfluentCloud.Sasl.Disabled = types.BoolPointerValue(resp.InputConfluentCloud.Sasl.Disabled)
 			if resp.InputConfluentCloud.Sasl.Mechanism != nil {
 				r.InputConfluentCloud.Sasl.Mechanism = types.StringValue(string(*resp.InputConfluentCloud.Sasl.Mechanism))
@@ -548,21 +504,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputConfluentCloud.SendToRoutes = types.BoolPointerValue(resp.InputConfluentCloud.SendToRoutes)
 		r.InputConfluentCloud.SessionTimeout = types.Float64PointerValue(resp.InputConfluentCloud.SessionTimeout)
-		if resp.InputConfluentCloud.Status == nil {
-			r.InputConfluentCloud.Status = nil
-		} else {
-			r.InputConfluentCloud.Status = &tfTypes.TFStatus{}
-			r.InputConfluentCloud.Status.Health = types.StringValue(string(resp.InputConfluentCloud.Status.Health))
-			if len(resp.InputConfluentCloud.Status.Metrics) > 0 {
-				r.InputConfluentCloud.Status.Metrics = make(map[string]types.String, len(resp.InputConfluentCloud.Status.Metrics))
-				for key3, value3 := range resp.InputConfluentCloud.Status.Metrics {
-					result3, _ := json.Marshal(value3)
-					r.InputConfluentCloud.Status.Metrics[key3] = types.StringValue(string(result3))
-				}
-			}
-			r.InputConfluentCloud.Status.Timestamp = types.Float64Value(resp.InputConfluentCloud.Status.Timestamp)
-			r.InputConfluentCloud.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputConfluentCloud.Status.UseStatusFromLB)
-		}
 		r.InputConfluentCloud.Streamtags = make([]types.String, 0, len(resp.InputConfluentCloud.Streamtags))
 		for _, v := range resp.InputConfluentCloud.Streamtags {
 			r.InputConfluentCloud.Streamtags = append(r.InputConfluentCloud.Streamtags, types.StringValue(v))
@@ -570,7 +511,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputConfluentCloud.TLS == nil {
 			r.InputConfluentCloud.TLS = nil
 		} else {
-			r.InputConfluentCloud.TLS = &tfTypes.InputTLSSettingsClientSideConfluentCloud{}
+			r.InputConfluentCloud.TLS = &tfTypes.InputConfluentCloudTLSSettingsClientSide{}
 			r.InputConfluentCloud.TLS.CaPath = types.StringPointerValue(resp.InputConfluentCloud.TLS.CaPath)
 			r.InputConfluentCloud.TLS.CertificateName = types.StringPointerValue(resp.InputConfluentCloud.TLS.CertificateName)
 			r.InputConfluentCloud.TLS.CertPath = types.StringPointerValue(resp.InputConfluentCloud.TLS.CertPath)
@@ -602,12 +543,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputCribl != nil {
 		r.InputCribl = &tfTypes.InputCribl{}
-		r.InputCribl.Connections = []tfTypes.ConnectionCribl{}
+		r.InputCribl.Connections = []tfTypes.InputCriblConnection{}
 		if len(r.InputCribl.Connections) > len(resp.InputCribl.Connections) {
 			r.InputCribl.Connections = r.InputCribl.Connections[:len(resp.InputCribl.Connections)]
 		}
 		for connectionsCount4, connectionsItem4 := range resp.InputCribl.Connections {
-			var connections4 tfTypes.ConnectionCribl
+			var connections4 tfTypes.InputCriblConnection
 			connections4.Output = types.StringValue(connectionsItem4.Output)
 			connections4.Pipeline = types.StringPointerValue(connectionsItem4.Pipeline)
 			if connectionsCount4+1 > len(r.InputCribl.Connections) {
@@ -622,12 +563,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCribl.Environment = types.StringPointerValue(resp.InputCribl.Environment)
 		r.InputCribl.Filter = types.StringPointerValue(resp.InputCribl.Filter)
 		r.InputCribl.ID = types.StringValue(resp.InputCribl.ID)
-		r.InputCribl.Metadata = []tfTypes.MetadatumCribl{}
+		r.InputCribl.Metadata = []tfTypes.InputCriblMetadatum{}
 		if len(r.InputCribl.Metadata) > len(resp.InputCribl.Metadata) {
 			r.InputCribl.Metadata = r.InputCribl.Metadata[:len(resp.InputCribl.Metadata)]
 		}
 		for metadataCount4, metadataItem4 := range resp.InputCribl.Metadata {
-			var metadata4 tfTypes.MetadatumCribl
+			var metadata4 tfTypes.InputCriblMetadatum
 			metadata4.Name = types.StringValue(metadataItem4.Name)
 			metadata4.Value = types.StringValue(metadataItem4.Value)
 			if metadataCount4+1 > len(r.InputCribl.Metadata) {
@@ -641,7 +582,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCribl.Pq == nil {
 			r.InputCribl.Pq = nil
 		} else {
-			r.InputCribl.Pq = &tfTypes.PqCribl{}
+			r.InputCribl.Pq = &tfTypes.InputCriblPq{}
 			r.InputCribl.Pq.CommitFrequency = types.Float64PointerValue(resp.InputCribl.Pq.CommitFrequency)
 			if resp.InputCribl.Pq.Compress != nil {
 				r.InputCribl.Pq.Compress = types.StringValue(string(*resp.InputCribl.Pq.Compress))
@@ -660,21 +601,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputCribl.PqEnabled = types.BoolPointerValue(resp.InputCribl.PqEnabled)
 		r.InputCribl.SendToRoutes = types.BoolPointerValue(resp.InputCribl.SendToRoutes)
-		if resp.InputCribl.Status == nil {
-			r.InputCribl.Status = nil
-		} else {
-			r.InputCribl.Status = &tfTypes.TFStatus{}
-			r.InputCribl.Status.Health = types.StringValue(string(resp.InputCribl.Status.Health))
-			if len(resp.InputCribl.Status.Metrics) > 0 {
-				r.InputCribl.Status.Metrics = make(map[string]types.String, len(resp.InputCribl.Status.Metrics))
-				for key4, value4 := range resp.InputCribl.Status.Metrics {
-					result4, _ := json.Marshal(value4)
-					r.InputCribl.Status.Metrics[key4] = types.StringValue(string(result4))
-				}
-			}
-			r.InputCribl.Status.Timestamp = types.Float64Value(resp.InputCribl.Status.Timestamp)
-			r.InputCribl.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputCribl.Status.UseStatusFromLB)
-		}
 		r.InputCribl.Streamtags = make([]types.String, 0, len(resp.InputCribl.Streamtags))
 		for _, v := range resp.InputCribl.Streamtags {
 			r.InputCribl.Streamtags = append(r.InputCribl.Streamtags, types.StringValue(v))
@@ -689,12 +615,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputCriblHTTP.AuthTokens = append(r.InputCriblHTTP.AuthTokens, types.StringValue(v))
 		}
 		r.InputCriblHTTP.CaptureHeaders = types.BoolPointerValue(resp.InputCriblHTTP.CaptureHeaders)
-		r.InputCriblHTTP.Connections = []tfTypes.ConnectionCriblHTTP{}
+		r.InputCriblHTTP.Connections = []tfTypes.InputCriblHTTPConnection{}
 		if len(r.InputCriblHTTP.Connections) > len(resp.InputCriblHTTP.Connections) {
 			r.InputCriblHTTP.Connections = r.InputCriblHTTP.Connections[:len(resp.InputCriblHTTP.Connections)]
 		}
 		for connectionsCount5, connectionsItem5 := range resp.InputCriblHTTP.Connections {
-			var connections5 tfTypes.ConnectionCriblHTTP
+			var connections5 tfTypes.InputCriblHTTPConnection
 			connections5.Output = types.StringValue(connectionsItem5.Output)
 			connections5.Pipeline = types.StringPointerValue(connectionsItem5.Pipeline)
 			if connectionsCount5+1 > len(r.InputCriblHTTP.Connections) {
@@ -716,12 +642,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCriblHTTP.KeepAliveTimeout = types.Float64PointerValue(resp.InputCriblHTTP.KeepAliveTimeout)
 		r.InputCriblHTTP.MaxActiveReq = types.Float64PointerValue(resp.InputCriblHTTP.MaxActiveReq)
 		r.InputCriblHTTP.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputCriblHTTP.MaxRequestsPerSocket)
-		r.InputCriblHTTP.Metadata = []tfTypes.MetadatumCriblHTTP{}
+		r.InputCriblHTTP.Metadata = []tfTypes.InputCriblHTTPMetadatum{}
 		if len(r.InputCriblHTTP.Metadata) > len(resp.InputCriblHTTP.Metadata) {
 			r.InputCriblHTTP.Metadata = r.InputCriblHTTP.Metadata[:len(resp.InputCriblHTTP.Metadata)]
 		}
 		for metadataCount5, metadataItem5 := range resp.InputCriblHTTP.Metadata {
-			var metadata5 tfTypes.MetadatumCriblHTTP
+			var metadata5 tfTypes.InputCriblHTTPMetadatum
 			metadata5.Name = types.StringValue(metadataItem5.Name)
 			metadata5.Value = types.StringValue(metadataItem5.Value)
 			if metadataCount5+1 > len(r.InputCriblHTTP.Metadata) {
@@ -736,7 +662,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCriblHTTP.Pq == nil {
 			r.InputCriblHTTP.Pq = nil
 		} else {
-			r.InputCriblHTTP.Pq = &tfTypes.PqCriblHTTP{}
+			r.InputCriblHTTP.Pq = &tfTypes.InputCriblHTTPPq{}
 			r.InputCriblHTTP.Pq.CommitFrequency = types.Float64PointerValue(resp.InputCriblHTTP.Pq.CommitFrequency)
 			if resp.InputCriblHTTP.Pq.Compress != nil {
 				r.InputCriblHTTP.Pq.Compress = types.StringValue(string(*resp.InputCriblHTTP.Pq.Compress))
@@ -757,21 +683,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCriblHTTP.RequestTimeout = types.Float64PointerValue(resp.InputCriblHTTP.RequestTimeout)
 		r.InputCriblHTTP.SendToRoutes = types.BoolPointerValue(resp.InputCriblHTTP.SendToRoutes)
 		r.InputCriblHTTP.SocketTimeout = types.Float64PointerValue(resp.InputCriblHTTP.SocketTimeout)
-		if resp.InputCriblHTTP.Status == nil {
-			r.InputCriblHTTP.Status = nil
-		} else {
-			r.InputCriblHTTP.Status = &tfTypes.TFStatus{}
-			r.InputCriblHTTP.Status.Health = types.StringValue(string(resp.InputCriblHTTP.Status.Health))
-			if len(resp.InputCriblHTTP.Status.Metrics) > 0 {
-				r.InputCriblHTTP.Status.Metrics = make(map[string]types.String, len(resp.InputCriblHTTP.Status.Metrics))
-				for key5, value5 := range resp.InputCriblHTTP.Status.Metrics {
-					result5, _ := json.Marshal(value5)
-					r.InputCriblHTTP.Status.Metrics[key5] = types.StringValue(string(result5))
-				}
-			}
-			r.InputCriblHTTP.Status.Timestamp = types.Float64Value(resp.InputCriblHTTP.Status.Timestamp)
-			r.InputCriblHTTP.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputCriblHTTP.Status.UseStatusFromLB)
-		}
 		r.InputCriblHTTP.Streamtags = make([]types.String, 0, len(resp.InputCriblHTTP.Streamtags))
 		for _, v := range resp.InputCriblHTTP.Streamtags {
 			r.InputCriblHTTP.Streamtags = append(r.InputCriblHTTP.Streamtags, types.StringValue(v))
@@ -779,7 +690,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCriblHTTP.TLS == nil {
 			r.InputCriblHTTP.TLS = nil
 		} else {
-			r.InputCriblHTTP.TLS = &tfTypes.TLSSettingsServerSideCriblHTTP{}
+			r.InputCriblHTTP.TLS = &tfTypes.InputCriblHTTPTLSSettingsServerSide{}
 			r.InputCriblHTTP.TLS.CaPath = types.StringPointerValue(resp.InputCriblHTTP.TLS.CaPath)
 			r.InputCriblHTTP.TLS.CertificateName = types.StringPointerValue(resp.InputCriblHTTP.TLS.CertificateName)
 			r.InputCriblHTTP.TLS.CertPath = types.StringPointerValue(resp.InputCriblHTTP.TLS.CertPath)
@@ -816,21 +727,141 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputCriblHTTP.Type = types.StringNull()
 		}
 	}
+	if resp.InputCriblLakeHTTP != nil {
+		r.InputCriblLakeHTTP = &tfTypes.InputCriblLakeHTTP{}
+		r.InputCriblLakeHTTP.ActivityLogSampleRate = types.Float64PointerValue(resp.InputCriblLakeHTTP.ActivityLogSampleRate)
+		r.InputCriblLakeHTTP.AuthTokens = make([]types.String, 0, len(resp.InputCriblLakeHTTP.AuthTokens))
+		for _, v := range resp.InputCriblLakeHTTP.AuthTokens {
+			r.InputCriblLakeHTTP.AuthTokens = append(r.InputCriblLakeHTTP.AuthTokens, types.StringValue(v))
+		}
+		r.InputCriblLakeHTTP.CaptureHeaders = types.BoolPointerValue(resp.InputCriblLakeHTTP.CaptureHeaders)
+		r.InputCriblLakeHTTP.Connections = []tfTypes.InputCriblLakeHTTPConnection{}
+		if len(r.InputCriblLakeHTTP.Connections) > len(resp.InputCriblLakeHTTP.Connections) {
+			r.InputCriblLakeHTTP.Connections = r.InputCriblLakeHTTP.Connections[:len(resp.InputCriblLakeHTTP.Connections)]
+		}
+		for connectionsCount6, connectionsItem6 := range resp.InputCriblLakeHTTP.Connections {
+			var connections6 tfTypes.InputCriblLakeHTTPConnection
+			connections6.Output = types.StringValue(connectionsItem6.Output)
+			connections6.Pipeline = types.StringPointerValue(connectionsItem6.Pipeline)
+			if connectionsCount6+1 > len(r.InputCriblLakeHTTP.Connections) {
+				r.InputCriblLakeHTTP.Connections = append(r.InputCriblLakeHTTP.Connections, connections6)
+			} else {
+				r.InputCriblLakeHTTP.Connections[connectionsCount6].Output = connections6.Output
+				r.InputCriblLakeHTTP.Connections[connectionsCount6].Pipeline = connections6.Pipeline
+			}
+		}
+		r.InputCriblLakeHTTP.Description = types.StringPointerValue(resp.InputCriblLakeHTTP.Description)
+		r.InputCriblLakeHTTP.Disabled = types.BoolPointerValue(resp.InputCriblLakeHTTP.Disabled)
+		r.InputCriblLakeHTTP.EnableHealthCheck = types.BoolPointerValue(resp.InputCriblLakeHTTP.EnableHealthCheck)
+		r.InputCriblLakeHTTP.EnableProxyHeader = types.BoolPointerValue(resp.InputCriblLakeHTTP.EnableProxyHeader)
+		r.InputCriblLakeHTTP.Environment = types.StringPointerValue(resp.InputCriblLakeHTTP.Environment)
+		r.InputCriblLakeHTTP.Host = types.StringPointerValue(resp.InputCriblLakeHTTP.Host)
+		r.InputCriblLakeHTTP.ID = types.StringPointerValue(resp.InputCriblLakeHTTP.ID)
+		r.InputCriblLakeHTTP.IPAllowlistRegex = types.StringPointerValue(resp.InputCriblLakeHTTP.IPAllowlistRegex)
+		r.InputCriblLakeHTTP.IPDenylistRegex = types.StringPointerValue(resp.InputCriblLakeHTTP.IPDenylistRegex)
+		r.InputCriblLakeHTTP.KeepAliveTimeout = types.Float64PointerValue(resp.InputCriblLakeHTTP.KeepAliveTimeout)
+		r.InputCriblLakeHTTP.MaxActiveReq = types.Float64PointerValue(resp.InputCriblLakeHTTP.MaxActiveReq)
+		r.InputCriblLakeHTTP.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputCriblLakeHTTP.MaxRequestsPerSocket)
+		r.InputCriblLakeHTTP.Metadata = []tfTypes.InputCriblLakeHTTPMetadatum{}
+		if len(r.InputCriblLakeHTTP.Metadata) > len(resp.InputCriblLakeHTTP.Metadata) {
+			r.InputCriblLakeHTTP.Metadata = r.InputCriblLakeHTTP.Metadata[:len(resp.InputCriblLakeHTTP.Metadata)]
+		}
+		for metadataCount6, metadataItem6 := range resp.InputCriblLakeHTTP.Metadata {
+			var metadata6 tfTypes.InputCriblLakeHTTPMetadatum
+			metadata6.Name = types.StringValue(metadataItem6.Name)
+			metadata6.Value = types.StringValue(metadataItem6.Value)
+			if metadataCount6+1 > len(r.InputCriblLakeHTTP.Metadata) {
+				r.InputCriblLakeHTTP.Metadata = append(r.InputCriblLakeHTTP.Metadata, metadata6)
+			} else {
+				r.InputCriblLakeHTTP.Metadata[metadataCount6].Name = metadata6.Name
+				r.InputCriblLakeHTTP.Metadata[metadataCount6].Value = metadata6.Value
+			}
+		}
+		r.InputCriblLakeHTTP.Pipeline = types.StringPointerValue(resp.InputCriblLakeHTTP.Pipeline)
+		r.InputCriblLakeHTTP.Port = types.Float64Value(resp.InputCriblLakeHTTP.Port)
+		if resp.InputCriblLakeHTTP.Pq == nil {
+			r.InputCriblLakeHTTP.Pq = nil
+		} else {
+			r.InputCriblLakeHTTP.Pq = &tfTypes.InputCriblLakeHTTPPq{}
+			r.InputCriblLakeHTTP.Pq.CommitFrequency = types.Float64PointerValue(resp.InputCriblLakeHTTP.Pq.CommitFrequency)
+			if resp.InputCriblLakeHTTP.Pq.Compress != nil {
+				r.InputCriblLakeHTTP.Pq.Compress = types.StringValue(string(*resp.InputCriblLakeHTTP.Pq.Compress))
+			} else {
+				r.InputCriblLakeHTTP.Pq.Compress = types.StringNull()
+			}
+			r.InputCriblLakeHTTP.Pq.MaxBufferSize = types.Float64PointerValue(resp.InputCriblLakeHTTP.Pq.MaxBufferSize)
+			r.InputCriblLakeHTTP.Pq.MaxFileSize = types.StringPointerValue(resp.InputCriblLakeHTTP.Pq.MaxFileSize)
+			r.InputCriblLakeHTTP.Pq.MaxSize = types.StringPointerValue(resp.InputCriblLakeHTTP.Pq.MaxSize)
+			if resp.InputCriblLakeHTTP.Pq.Mode != nil {
+				r.InputCriblLakeHTTP.Pq.Mode = types.StringValue(string(*resp.InputCriblLakeHTTP.Pq.Mode))
+			} else {
+				r.InputCriblLakeHTTP.Pq.Mode = types.StringNull()
+			}
+			r.InputCriblLakeHTTP.Pq.Path = types.StringPointerValue(resp.InputCriblLakeHTTP.Pq.Path)
+		}
+		r.InputCriblLakeHTTP.PqEnabled = types.BoolPointerValue(resp.InputCriblLakeHTTP.PqEnabled)
+		r.InputCriblLakeHTTP.RequestTimeout = types.Float64PointerValue(resp.InputCriblLakeHTTP.RequestTimeout)
+		r.InputCriblLakeHTTP.SendToRoutes = types.BoolPointerValue(resp.InputCriblLakeHTTP.SendToRoutes)
+		r.InputCriblLakeHTTP.SocketTimeout = types.Float64PointerValue(resp.InputCriblLakeHTTP.SocketTimeout)
+		r.InputCriblLakeHTTP.Streamtags = make([]types.String, 0, len(resp.InputCriblLakeHTTP.Streamtags))
+		for _, v := range resp.InputCriblLakeHTTP.Streamtags {
+			r.InputCriblLakeHTTP.Streamtags = append(r.InputCriblLakeHTTP.Streamtags, types.StringValue(v))
+		}
+		if resp.InputCriblLakeHTTP.TLS == nil {
+			r.InputCriblLakeHTTP.TLS = nil
+		} else {
+			r.InputCriblLakeHTTP.TLS = &tfTypes.InputCriblLakeHTTPTLSSettingsServerSide{}
+			r.InputCriblLakeHTTP.TLS.CaPath = types.StringPointerValue(resp.InputCriblLakeHTTP.TLS.CaPath)
+			r.InputCriblLakeHTTP.TLS.CertificateName = types.StringPointerValue(resp.InputCriblLakeHTTP.TLS.CertificateName)
+			r.InputCriblLakeHTTP.TLS.CertPath = types.StringPointerValue(resp.InputCriblLakeHTTP.TLS.CertPath)
+			if resp.InputCriblLakeHTTP.TLS.CommonNameRegex == nil {
+				r.InputCriblLakeHTTP.TLS.CommonNameRegex = types.StringNull()
+			} else {
+				commonNameRegexResult2, _ := json.Marshal(resp.InputCriblLakeHTTP.TLS.CommonNameRegex)
+				r.InputCriblLakeHTTP.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult2))
+			}
+			r.InputCriblLakeHTTP.TLS.Disabled = types.BoolPointerValue(resp.InputCriblLakeHTTP.TLS.Disabled)
+			if resp.InputCriblLakeHTTP.TLS.MaxVersion != nil {
+				r.InputCriblLakeHTTP.TLS.MaxVersion = types.StringValue(string(*resp.InputCriblLakeHTTP.TLS.MaxVersion))
+			} else {
+				r.InputCriblLakeHTTP.TLS.MaxVersion = types.StringNull()
+			}
+			if resp.InputCriblLakeHTTP.TLS.MinVersion != nil {
+				r.InputCriblLakeHTTP.TLS.MinVersion = types.StringValue(string(*resp.InputCriblLakeHTTP.TLS.MinVersion))
+			} else {
+				r.InputCriblLakeHTTP.TLS.MinVersion = types.StringNull()
+			}
+			r.InputCriblLakeHTTP.TLS.Passphrase = types.StringPointerValue(resp.InputCriblLakeHTTP.TLS.Passphrase)
+			r.InputCriblLakeHTTP.TLS.PrivKeyPath = types.StringPointerValue(resp.InputCriblLakeHTTP.TLS.PrivKeyPath)
+			if resp.InputCriblLakeHTTP.TLS.RejectUnauthorized == nil {
+				r.InputCriblLakeHTTP.TLS.RejectUnauthorized = types.StringNull()
+			} else {
+				rejectUnauthorizedResult2, _ := json.Marshal(resp.InputCriblLakeHTTP.TLS.RejectUnauthorized)
+				r.InputCriblLakeHTTP.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult2))
+			}
+			r.InputCriblLakeHTTP.TLS.RequestCert = types.BoolPointerValue(resp.InputCriblLakeHTTP.TLS.RequestCert)
+		}
+		if resp.InputCriblLakeHTTP.Type != nil {
+			r.InputCriblLakeHTTP.Type = types.StringValue(string(*resp.InputCriblLakeHTTP.Type))
+		} else {
+			r.InputCriblLakeHTTP.Type = types.StringNull()
+		}
+	}
 	if resp.InputCriblmetrics != nil {
 		r.InputCriblmetrics = &tfTypes.InputCriblmetrics{}
-		r.InputCriblmetrics.Connections = []tfTypes.ConnectionCriblmetrics{}
+		r.InputCriblmetrics.Connections = []tfTypes.InputCriblmetricsConnection{}
 		if len(r.InputCriblmetrics.Connections) > len(resp.InputCriblmetrics.Connections) {
 			r.InputCriblmetrics.Connections = r.InputCriblmetrics.Connections[:len(resp.InputCriblmetrics.Connections)]
 		}
-		for connectionsCount6, connectionsItem6 := range resp.InputCriblmetrics.Connections {
-			var connections6 tfTypes.ConnectionCriblmetrics
-			connections6.Output = types.StringValue(connectionsItem6.Output)
-			connections6.Pipeline = types.StringPointerValue(connectionsItem6.Pipeline)
-			if connectionsCount6+1 > len(r.InputCriblmetrics.Connections) {
-				r.InputCriblmetrics.Connections = append(r.InputCriblmetrics.Connections, connections6)
+		for connectionsCount7, connectionsItem7 := range resp.InputCriblmetrics.Connections {
+			var connections7 tfTypes.InputCriblmetricsConnection
+			connections7.Output = types.StringValue(connectionsItem7.Output)
+			connections7.Pipeline = types.StringPointerValue(connectionsItem7.Pipeline)
+			if connectionsCount7+1 > len(r.InputCriblmetrics.Connections) {
+				r.InputCriblmetrics.Connections = append(r.InputCriblmetrics.Connections, connections7)
 			} else {
-				r.InputCriblmetrics.Connections[connectionsCount6].Output = connections6.Output
-				r.InputCriblmetrics.Connections[connectionsCount6].Pipeline = connections6.Pipeline
+				r.InputCriblmetrics.Connections[connectionsCount7].Output = connections7.Output
+				r.InputCriblmetrics.Connections[connectionsCount7].Pipeline = connections7.Pipeline
 			}
 		}
 		r.InputCriblmetrics.Description = types.StringPointerValue(resp.InputCriblmetrics.Description)
@@ -838,26 +869,26 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCriblmetrics.Environment = types.StringPointerValue(resp.InputCriblmetrics.Environment)
 		r.InputCriblmetrics.FullFidelity = types.BoolPointerValue(resp.InputCriblmetrics.FullFidelity)
 		r.InputCriblmetrics.ID = types.StringValue(resp.InputCriblmetrics.ID)
-		r.InputCriblmetrics.Metadata = []tfTypes.MetadatumCriblmetrics{}
+		r.InputCriblmetrics.Metadata = []tfTypes.InputCriblmetricsMetadatum{}
 		if len(r.InputCriblmetrics.Metadata) > len(resp.InputCriblmetrics.Metadata) {
 			r.InputCriblmetrics.Metadata = r.InputCriblmetrics.Metadata[:len(resp.InputCriblmetrics.Metadata)]
 		}
-		for metadataCount6, metadataItem6 := range resp.InputCriblmetrics.Metadata {
-			var metadata6 tfTypes.MetadatumCriblmetrics
-			metadata6.Name = types.StringValue(metadataItem6.Name)
-			metadata6.Value = types.StringValue(metadataItem6.Value)
-			if metadataCount6+1 > len(r.InputCriblmetrics.Metadata) {
-				r.InputCriblmetrics.Metadata = append(r.InputCriblmetrics.Metadata, metadata6)
+		for metadataCount7, metadataItem7 := range resp.InputCriblmetrics.Metadata {
+			var metadata7 tfTypes.InputCriblmetricsMetadatum
+			metadata7.Name = types.StringValue(metadataItem7.Name)
+			metadata7.Value = types.StringValue(metadataItem7.Value)
+			if metadataCount7+1 > len(r.InputCriblmetrics.Metadata) {
+				r.InputCriblmetrics.Metadata = append(r.InputCriblmetrics.Metadata, metadata7)
 			} else {
-				r.InputCriblmetrics.Metadata[metadataCount6].Name = metadata6.Name
-				r.InputCriblmetrics.Metadata[metadataCount6].Value = metadata6.Value
+				r.InputCriblmetrics.Metadata[metadataCount7].Name = metadata7.Name
+				r.InputCriblmetrics.Metadata[metadataCount7].Value = metadata7.Value
 			}
 		}
 		r.InputCriblmetrics.Pipeline = types.StringPointerValue(resp.InputCriblmetrics.Pipeline)
 		if resp.InputCriblmetrics.Pq == nil {
 			r.InputCriblmetrics.Pq = nil
 		} else {
-			r.InputCriblmetrics.Pq = &tfTypes.PqCriblmetrics{}
+			r.InputCriblmetrics.Pq = &tfTypes.InputCriblmetricsPq{}
 			r.InputCriblmetrics.Pq.CommitFrequency = types.Float64PointerValue(resp.InputCriblmetrics.Pq.CommitFrequency)
 			if resp.InputCriblmetrics.Pq.Compress != nil {
 				r.InputCriblmetrics.Pq.Compress = types.StringValue(string(*resp.InputCriblmetrics.Pq.Compress))
@@ -877,21 +908,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCriblmetrics.PqEnabled = types.BoolPointerValue(resp.InputCriblmetrics.PqEnabled)
 		r.InputCriblmetrics.Prefix = types.StringPointerValue(resp.InputCriblmetrics.Prefix)
 		r.InputCriblmetrics.SendToRoutes = types.BoolPointerValue(resp.InputCriblmetrics.SendToRoutes)
-		if resp.InputCriblmetrics.Status == nil {
-			r.InputCriblmetrics.Status = nil
-		} else {
-			r.InputCriblmetrics.Status = &tfTypes.TFStatus{}
-			r.InputCriblmetrics.Status.Health = types.StringValue(string(resp.InputCriblmetrics.Status.Health))
-			if len(resp.InputCriblmetrics.Status.Metrics) > 0 {
-				r.InputCriblmetrics.Status.Metrics = make(map[string]types.String, len(resp.InputCriblmetrics.Status.Metrics))
-				for key6, value6 := range resp.InputCriblmetrics.Status.Metrics {
-					result6, _ := json.Marshal(value6)
-					r.InputCriblmetrics.Status.Metrics[key6] = types.StringValue(string(result6))
-				}
-			}
-			r.InputCriblmetrics.Status.Timestamp = types.Float64Value(resp.InputCriblmetrics.Status.Timestamp)
-			r.InputCriblmetrics.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputCriblmetrics.Status.UseStatusFromLB)
-		}
 		r.InputCriblmetrics.Streamtags = make([]types.String, 0, len(resp.InputCriblmetrics.Streamtags))
 		for _, v := range resp.InputCriblmetrics.Streamtags {
 			r.InputCriblmetrics.Streamtags = append(r.InputCriblmetrics.Streamtags, types.StringValue(v))
@@ -900,19 +916,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputCriblTCP != nil {
 		r.InputCriblTCP = &tfTypes.InputCriblTCP{}
-		r.InputCriblTCP.Connections = []tfTypes.ConnectionCriblTCP{}
+		r.InputCriblTCP.Connections = []tfTypes.InputCriblTCPConnection{}
 		if len(r.InputCriblTCP.Connections) > len(resp.InputCriblTCP.Connections) {
 			r.InputCriblTCP.Connections = r.InputCriblTCP.Connections[:len(resp.InputCriblTCP.Connections)]
 		}
-		for connectionsCount7, connectionsItem7 := range resp.InputCriblTCP.Connections {
-			var connections7 tfTypes.ConnectionCriblTCP
-			connections7.Output = types.StringValue(connectionsItem7.Output)
-			connections7.Pipeline = types.StringPointerValue(connectionsItem7.Pipeline)
-			if connectionsCount7+1 > len(r.InputCriblTCP.Connections) {
-				r.InputCriblTCP.Connections = append(r.InputCriblTCP.Connections, connections7)
+		for connectionsCount8, connectionsItem8 := range resp.InputCriblTCP.Connections {
+			var connections8 tfTypes.InputCriblTCPConnection
+			connections8.Output = types.StringValue(connectionsItem8.Output)
+			connections8.Pipeline = types.StringPointerValue(connectionsItem8.Pipeline)
+			if connectionsCount8+1 > len(r.InputCriblTCP.Connections) {
+				r.InputCriblTCP.Connections = append(r.InputCriblTCP.Connections, connections8)
 			} else {
-				r.InputCriblTCP.Connections[connectionsCount7].Output = connections7.Output
-				r.InputCriblTCP.Connections[connectionsCount7].Pipeline = connections7.Pipeline
+				r.InputCriblTCP.Connections[connectionsCount8].Output = connections8.Output
+				r.InputCriblTCP.Connections[connectionsCount8].Pipeline = connections8.Pipeline
 			}
 		}
 		r.InputCriblTCP.Description = types.StringPointerValue(resp.InputCriblTCP.Description)
@@ -923,19 +939,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCriblTCP.Host = types.StringPointerValue(resp.InputCriblTCP.Host)
 		r.InputCriblTCP.ID = types.StringPointerValue(resp.InputCriblTCP.ID)
 		r.InputCriblTCP.MaxActiveCxn = types.Float64PointerValue(resp.InputCriblTCP.MaxActiveCxn)
-		r.InputCriblTCP.Metadata = []tfTypes.MetadatumCriblTCP{}
+		r.InputCriblTCP.Metadata = []tfTypes.InputCriblTCPMetadatum{}
 		if len(r.InputCriblTCP.Metadata) > len(resp.InputCriblTCP.Metadata) {
 			r.InputCriblTCP.Metadata = r.InputCriblTCP.Metadata[:len(resp.InputCriblTCP.Metadata)]
 		}
-		for metadataCount7, metadataItem7 := range resp.InputCriblTCP.Metadata {
-			var metadata7 tfTypes.MetadatumCriblTCP
-			metadata7.Name = types.StringValue(metadataItem7.Name)
-			metadata7.Value = types.StringValue(metadataItem7.Value)
-			if metadataCount7+1 > len(r.InputCriblTCP.Metadata) {
-				r.InputCriblTCP.Metadata = append(r.InputCriblTCP.Metadata, metadata7)
+		for metadataCount8, metadataItem8 := range resp.InputCriblTCP.Metadata {
+			var metadata8 tfTypes.InputCriblTCPMetadatum
+			metadata8.Name = types.StringValue(metadataItem8.Name)
+			metadata8.Value = types.StringValue(metadataItem8.Value)
+			if metadataCount8+1 > len(r.InputCriblTCP.Metadata) {
+				r.InputCriblTCP.Metadata = append(r.InputCriblTCP.Metadata, metadata8)
 			} else {
-				r.InputCriblTCP.Metadata[metadataCount7].Name = metadata7.Name
-				r.InputCriblTCP.Metadata[metadataCount7].Value = metadata7.Value
+				r.InputCriblTCP.Metadata[metadataCount8].Name = metadata8.Name
+				r.InputCriblTCP.Metadata[metadataCount8].Value = metadata8.Value
 			}
 		}
 		r.InputCriblTCP.Pipeline = types.StringPointerValue(resp.InputCriblTCP.Pipeline)
@@ -943,7 +959,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCriblTCP.Pq == nil {
 			r.InputCriblTCP.Pq = nil
 		} else {
-			r.InputCriblTCP.Pq = &tfTypes.PqCriblTCP{}
+			r.InputCriblTCP.Pq = &tfTypes.InputCriblTCPPq{}
 			r.InputCriblTCP.Pq.CommitFrequency = types.Float64PointerValue(resp.InputCriblTCP.Pq.CommitFrequency)
 			if resp.InputCriblTCP.Pq.Compress != nil {
 				r.InputCriblTCP.Pq.Compress = types.StringValue(string(*resp.InputCriblTCP.Pq.Compress))
@@ -965,21 +981,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCriblTCP.SocketEndingMaxWait = types.Float64PointerValue(resp.InputCriblTCP.SocketEndingMaxWait)
 		r.InputCriblTCP.SocketIdleTimeout = types.Float64PointerValue(resp.InputCriblTCP.SocketIdleTimeout)
 		r.InputCriblTCP.SocketMaxLifespan = types.Float64PointerValue(resp.InputCriblTCP.SocketMaxLifespan)
-		if resp.InputCriblTCP.Status == nil {
-			r.InputCriblTCP.Status = nil
-		} else {
-			r.InputCriblTCP.Status = &tfTypes.TFStatus{}
-			r.InputCriblTCP.Status.Health = types.StringValue(string(resp.InputCriblTCP.Status.Health))
-			if len(resp.InputCriblTCP.Status.Metrics) > 0 {
-				r.InputCriblTCP.Status.Metrics = make(map[string]types.String, len(resp.InputCriblTCP.Status.Metrics))
-				for key7, value7 := range resp.InputCriblTCP.Status.Metrics {
-					result7, _ := json.Marshal(value7)
-					r.InputCriblTCP.Status.Metrics[key7] = types.StringValue(string(result7))
-				}
-			}
-			r.InputCriblTCP.Status.Timestamp = types.Float64Value(resp.InputCriblTCP.Status.Timestamp)
-			r.InputCriblTCP.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputCriblTCP.Status.UseStatusFromLB)
-		}
 		r.InputCriblTCP.Streamtags = make([]types.String, 0, len(resp.InputCriblTCP.Streamtags))
 		for _, v := range resp.InputCriblTCP.Streamtags {
 			r.InputCriblTCP.Streamtags = append(r.InputCriblTCP.Streamtags, types.StringValue(v))
@@ -987,15 +988,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCriblTCP.TLS == nil {
 			r.InputCriblTCP.TLS = nil
 		} else {
-			r.InputCriblTCP.TLS = &tfTypes.TLSSettingsServerSideCriblTCP{}
+			r.InputCriblTCP.TLS = &tfTypes.InputCriblTCPTLSSettingsServerSide{}
 			r.InputCriblTCP.TLS.CaPath = types.StringPointerValue(resp.InputCriblTCP.TLS.CaPath)
 			r.InputCriblTCP.TLS.CertificateName = types.StringPointerValue(resp.InputCriblTCP.TLS.CertificateName)
 			r.InputCriblTCP.TLS.CertPath = types.StringPointerValue(resp.InputCriblTCP.TLS.CertPath)
 			if resp.InputCriblTCP.TLS.CommonNameRegex == nil {
 				r.InputCriblTCP.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult2, _ := json.Marshal(resp.InputCriblTCP.TLS.CommonNameRegex)
-				r.InputCriblTCP.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult2))
+				commonNameRegexResult3, _ := json.Marshal(resp.InputCriblTCP.TLS.CommonNameRegex)
+				r.InputCriblTCP.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult3))
 			}
 			r.InputCriblTCP.TLS.Disabled = types.BoolPointerValue(resp.InputCriblTCP.TLS.Disabled)
 			if resp.InputCriblTCP.TLS.MaxVersion != nil {
@@ -1013,8 +1014,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputCriblTCP.TLS.RejectUnauthorized == nil {
 				r.InputCriblTCP.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult2, _ := json.Marshal(resp.InputCriblTCP.TLS.RejectUnauthorized)
-				r.InputCriblTCP.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult2))
+				rejectUnauthorizedResult3, _ := json.Marshal(resp.InputCriblTCP.TLS.RejectUnauthorized)
+				r.InputCriblTCP.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult3))
 			}
 			r.InputCriblTCP.TLS.RequestCert = types.BoolPointerValue(resp.InputCriblTCP.TLS.RequestCert)
 		}
@@ -1044,23 +1045,23 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCrowdstrike.Checkpointing == nil {
 			r.InputCrowdstrike.Checkpointing = nil
 		} else {
-			r.InputCrowdstrike.Checkpointing = &tfTypes.CheckpointingCrowdstrike{}
+			r.InputCrowdstrike.Checkpointing = &tfTypes.InputCrowdstrikeCheckpointing{}
 			r.InputCrowdstrike.Checkpointing.Enabled = types.BoolPointerValue(resp.InputCrowdstrike.Checkpointing.Enabled)
 			r.InputCrowdstrike.Checkpointing.Retries = types.Float64PointerValue(resp.InputCrowdstrike.Checkpointing.Retries)
 		}
-		r.InputCrowdstrike.Connections = []tfTypes.ConnectionCrowdstrike{}
+		r.InputCrowdstrike.Connections = []tfTypes.InputCrowdstrikeConnection{}
 		if len(r.InputCrowdstrike.Connections) > len(resp.InputCrowdstrike.Connections) {
 			r.InputCrowdstrike.Connections = r.InputCrowdstrike.Connections[:len(resp.InputCrowdstrike.Connections)]
 		}
-		for connectionsCount8, connectionsItem8 := range resp.InputCrowdstrike.Connections {
-			var connections8 tfTypes.ConnectionCrowdstrike
-			connections8.Output = types.StringValue(connectionsItem8.Output)
-			connections8.Pipeline = types.StringPointerValue(connectionsItem8.Pipeline)
-			if connectionsCount8+1 > len(r.InputCrowdstrike.Connections) {
-				r.InputCrowdstrike.Connections = append(r.InputCrowdstrike.Connections, connections8)
+		for connectionsCount9, connectionsItem9 := range resp.InputCrowdstrike.Connections {
+			var connections9 tfTypes.InputCrowdstrikeConnection
+			connections9.Output = types.StringValue(connectionsItem9.Output)
+			connections9.Pipeline = types.StringPointerValue(connectionsItem9.Pipeline)
+			if connectionsCount9+1 > len(r.InputCrowdstrike.Connections) {
+				r.InputCrowdstrike.Connections = append(r.InputCrowdstrike.Connections, connections9)
 			} else {
-				r.InputCrowdstrike.Connections[connectionsCount8].Output = connections8.Output
-				r.InputCrowdstrike.Connections[connectionsCount8].Pipeline = connections8.Pipeline
+				r.InputCrowdstrike.Connections[connectionsCount9].Output = connections9.Output
+				r.InputCrowdstrike.Connections[connectionsCount9].Pipeline = connections9.Pipeline
 			}
 		}
 		r.InputCrowdstrike.Description = types.StringPointerValue(resp.InputCrowdstrike.Description)
@@ -1074,19 +1075,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCrowdstrike.FileFilter = types.StringPointerValue(resp.InputCrowdstrike.FileFilter)
 		r.InputCrowdstrike.ID = types.StringPointerValue(resp.InputCrowdstrike.ID)
 		r.InputCrowdstrike.MaxMessages = types.Float64PointerValue(resp.InputCrowdstrike.MaxMessages)
-		r.InputCrowdstrike.Metadata = []tfTypes.MetadatumCrowdstrike{}
+		r.InputCrowdstrike.Metadata = []tfTypes.InputCrowdstrikeMetadatum{}
 		if len(r.InputCrowdstrike.Metadata) > len(resp.InputCrowdstrike.Metadata) {
 			r.InputCrowdstrike.Metadata = r.InputCrowdstrike.Metadata[:len(resp.InputCrowdstrike.Metadata)]
 		}
-		for metadataCount8, metadataItem8 := range resp.InputCrowdstrike.Metadata {
-			var metadata8 tfTypes.MetadatumCrowdstrike
-			metadata8.Name = types.StringValue(metadataItem8.Name)
-			metadata8.Value = types.StringValue(metadataItem8.Value)
-			if metadataCount8+1 > len(r.InputCrowdstrike.Metadata) {
-				r.InputCrowdstrike.Metadata = append(r.InputCrowdstrike.Metadata, metadata8)
+		for metadataCount9, metadataItem9 := range resp.InputCrowdstrike.Metadata {
+			var metadata9 tfTypes.InputCrowdstrikeMetadatum
+			metadata9.Name = types.StringValue(metadataItem9.Name)
+			metadata9.Value = types.StringValue(metadataItem9.Value)
+			if metadataCount9+1 > len(r.InputCrowdstrike.Metadata) {
+				r.InputCrowdstrike.Metadata = append(r.InputCrowdstrike.Metadata, metadata9)
 			} else {
-				r.InputCrowdstrike.Metadata[metadataCount8].Name = metadata8.Name
-				r.InputCrowdstrike.Metadata[metadataCount8].Value = metadata8.Value
+				r.InputCrowdstrike.Metadata[metadataCount9].Name = metadata9.Name
+				r.InputCrowdstrike.Metadata[metadataCount9].Value = metadata9.Value
 			}
 		}
 		r.InputCrowdstrike.NumReceivers = types.Float64PointerValue(resp.InputCrowdstrike.NumReceivers)
@@ -1095,7 +1096,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCrowdstrike.Pq == nil {
 			r.InputCrowdstrike.Pq = nil
 		} else {
-			r.InputCrowdstrike.Pq = &tfTypes.PqCrowdstrike{}
+			r.InputCrowdstrike.Pq = &tfTypes.InputCrowdstrikePq{}
 			r.InputCrowdstrike.Pq.CommitFrequency = types.Float64PointerValue(resp.InputCrowdstrike.Pq.CommitFrequency)
 			if resp.InputCrowdstrike.Pq.Compress != nil {
 				r.InputCrowdstrike.Pq.Compress = types.StringValue(string(*resp.InputCrowdstrike.Pq.Compress))
@@ -1116,7 +1117,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputCrowdstrike.Preprocess == nil {
 			r.InputCrowdstrike.Preprocess = nil
 		} else {
-			r.InputCrowdstrike.Preprocess = &tfTypes.PreprocessCrowdstrike{}
+			r.InputCrowdstrike.Preprocess = &tfTypes.InputCrowdstrikePreprocess{}
 			r.InputCrowdstrike.Preprocess.Args = make([]types.String, 0, len(resp.InputCrowdstrike.Preprocess.Args))
 			for _, v := range resp.InputCrowdstrike.Preprocess.Args {
 				r.InputCrowdstrike.Preprocess.Args = append(r.InputCrowdstrike.Preprocess.Args, types.StringValue(v))
@@ -1124,6 +1125,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputCrowdstrike.Preprocess.Command = types.StringPointerValue(resp.InputCrowdstrike.Preprocess.Command)
 			r.InputCrowdstrike.Preprocess.Disabled = types.BoolPointerValue(resp.InputCrowdstrike.Preprocess.Disabled)
 		}
+		r.InputCrowdstrike.ProcessedTagKey = types.StringPointerValue(resp.InputCrowdstrike.ProcessedTagKey)
+		r.InputCrowdstrike.ProcessedTagValue = types.StringPointerValue(resp.InputCrowdstrike.ProcessedTagValue)
 		r.InputCrowdstrike.QueueName = types.StringValue(resp.InputCrowdstrike.QueueName)
 		r.InputCrowdstrike.Region = types.StringPointerValue(resp.InputCrowdstrike.Region)
 		r.InputCrowdstrike.RejectUnauthorized = types.BoolPointerValue(resp.InputCrowdstrike.RejectUnauthorized)
@@ -1137,24 +1140,14 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputCrowdstrike.SkipOnError = types.BoolPointerValue(resp.InputCrowdstrike.SkipOnError)
 		r.InputCrowdstrike.SocketTimeout = types.Float64PointerValue(resp.InputCrowdstrike.SocketTimeout)
 		r.InputCrowdstrike.StaleChannelFlushMs = types.Float64PointerValue(resp.InputCrowdstrike.StaleChannelFlushMs)
-		if resp.InputCrowdstrike.Status == nil {
-			r.InputCrowdstrike.Status = nil
-		} else {
-			r.InputCrowdstrike.Status = &tfTypes.TFStatus{}
-			r.InputCrowdstrike.Status.Health = types.StringValue(string(resp.InputCrowdstrike.Status.Health))
-			if len(resp.InputCrowdstrike.Status.Metrics) > 0 {
-				r.InputCrowdstrike.Status.Metrics = make(map[string]types.String, len(resp.InputCrowdstrike.Status.Metrics))
-				for key8, value8 := range resp.InputCrowdstrike.Status.Metrics {
-					result8, _ := json.Marshal(value8)
-					r.InputCrowdstrike.Status.Metrics[key8] = types.StringValue(string(result8))
-				}
-			}
-			r.InputCrowdstrike.Status.Timestamp = types.Float64Value(resp.InputCrowdstrike.Status.Timestamp)
-			r.InputCrowdstrike.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputCrowdstrike.Status.UseStatusFromLB)
-		}
 		r.InputCrowdstrike.Streamtags = make([]types.String, 0, len(resp.InputCrowdstrike.Streamtags))
 		for _, v := range resp.InputCrowdstrike.Streamtags {
 			r.InputCrowdstrike.Streamtags = append(r.InputCrowdstrike.Streamtags, types.StringValue(v))
+		}
+		if resp.InputCrowdstrike.TagAfterProcessing != nil {
+			r.InputCrowdstrike.TagAfterProcessing = types.StringValue(string(*resp.InputCrowdstrike.TagAfterProcessing))
+		} else {
+			r.InputCrowdstrike.TagAfterProcessing = types.StringNull()
 		}
 		r.InputCrowdstrike.Type = types.StringValue(string(resp.InputCrowdstrike.Type))
 		r.InputCrowdstrike.VisibilityTimeout = types.Float64PointerValue(resp.InputCrowdstrike.VisibilityTimeout)
@@ -1163,19 +1156,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputDatadogAgent = &tfTypes.InputDatadogAgent{}
 		r.InputDatadogAgent.ActivityLogSampleRate = types.Float64PointerValue(resp.InputDatadogAgent.ActivityLogSampleRate)
 		r.InputDatadogAgent.CaptureHeaders = types.BoolPointerValue(resp.InputDatadogAgent.CaptureHeaders)
-		r.InputDatadogAgent.Connections = []tfTypes.ConnectionDatadogAgent{}
+		r.InputDatadogAgent.Connections = []tfTypes.InputDatadogAgentConnection{}
 		if len(r.InputDatadogAgent.Connections) > len(resp.InputDatadogAgent.Connections) {
 			r.InputDatadogAgent.Connections = r.InputDatadogAgent.Connections[:len(resp.InputDatadogAgent.Connections)]
 		}
-		for connectionsCount9, connectionsItem9 := range resp.InputDatadogAgent.Connections {
-			var connections9 tfTypes.ConnectionDatadogAgent
-			connections9.Output = types.StringValue(connectionsItem9.Output)
-			connections9.Pipeline = types.StringPointerValue(connectionsItem9.Pipeline)
-			if connectionsCount9+1 > len(r.InputDatadogAgent.Connections) {
-				r.InputDatadogAgent.Connections = append(r.InputDatadogAgent.Connections, connections9)
+		for connectionsCount10, connectionsItem10 := range resp.InputDatadogAgent.Connections {
+			var connections10 tfTypes.InputDatadogAgentConnection
+			connections10.Output = types.StringValue(connectionsItem10.Output)
+			connections10.Pipeline = types.StringPointerValue(connectionsItem10.Pipeline)
+			if connectionsCount10+1 > len(r.InputDatadogAgent.Connections) {
+				r.InputDatadogAgent.Connections = append(r.InputDatadogAgent.Connections, connections10)
 			} else {
-				r.InputDatadogAgent.Connections[connectionsCount9].Output = connections9.Output
-				r.InputDatadogAgent.Connections[connectionsCount9].Pipeline = connections9.Pipeline
+				r.InputDatadogAgent.Connections[connectionsCount10].Output = connections10.Output
+				r.InputDatadogAgent.Connections[connectionsCount10].Pipeline = connections10.Pipeline
 			}
 		}
 		r.InputDatadogAgent.Description = types.StringPointerValue(resp.InputDatadogAgent.Description)
@@ -1191,19 +1184,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputDatadogAgent.KeepAliveTimeout = types.Float64PointerValue(resp.InputDatadogAgent.KeepAliveTimeout)
 		r.InputDatadogAgent.MaxActiveReq = types.Float64PointerValue(resp.InputDatadogAgent.MaxActiveReq)
 		r.InputDatadogAgent.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputDatadogAgent.MaxRequestsPerSocket)
-		r.InputDatadogAgent.Metadata = []tfTypes.MetadatumDatadogAgent{}
+		r.InputDatadogAgent.Metadata = []tfTypes.InputDatadogAgentMetadatum{}
 		if len(r.InputDatadogAgent.Metadata) > len(resp.InputDatadogAgent.Metadata) {
 			r.InputDatadogAgent.Metadata = r.InputDatadogAgent.Metadata[:len(resp.InputDatadogAgent.Metadata)]
 		}
-		for metadataCount9, metadataItem9 := range resp.InputDatadogAgent.Metadata {
-			var metadata9 tfTypes.MetadatumDatadogAgent
-			metadata9.Name = types.StringValue(metadataItem9.Name)
-			metadata9.Value = types.StringValue(metadataItem9.Value)
-			if metadataCount9+1 > len(r.InputDatadogAgent.Metadata) {
-				r.InputDatadogAgent.Metadata = append(r.InputDatadogAgent.Metadata, metadata9)
+		for metadataCount10, metadataItem10 := range resp.InputDatadogAgent.Metadata {
+			var metadata10 tfTypes.InputDatadogAgentMetadatum
+			metadata10.Name = types.StringValue(metadataItem10.Name)
+			metadata10.Value = types.StringValue(metadataItem10.Value)
+			if metadataCount10+1 > len(r.InputDatadogAgent.Metadata) {
+				r.InputDatadogAgent.Metadata = append(r.InputDatadogAgent.Metadata, metadata10)
 			} else {
-				r.InputDatadogAgent.Metadata[metadataCount9].Name = metadata9.Name
-				r.InputDatadogAgent.Metadata[metadataCount9].Value = metadata9.Value
+				r.InputDatadogAgent.Metadata[metadataCount10].Name = metadata10.Name
+				r.InputDatadogAgent.Metadata[metadataCount10].Value = metadata10.Value
 			}
 		}
 		r.InputDatadogAgent.Pipeline = types.StringPointerValue(resp.InputDatadogAgent.Pipeline)
@@ -1211,7 +1204,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputDatadogAgent.Pq == nil {
 			r.InputDatadogAgent.Pq = nil
 		} else {
-			r.InputDatadogAgent.Pq = &tfTypes.PqDatadogAgent{}
+			r.InputDatadogAgent.Pq = &tfTypes.InputDatadogAgentPq{}
 			r.InputDatadogAgent.Pq.CommitFrequency = types.Float64PointerValue(resp.InputDatadogAgent.Pq.CommitFrequency)
 			if resp.InputDatadogAgent.Pq.Compress != nil {
 				r.InputDatadogAgent.Pq.Compress = types.StringValue(string(*resp.InputDatadogAgent.Pq.Compress))
@@ -1232,28 +1225,13 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputDatadogAgent.ProxyMode == nil {
 			r.InputDatadogAgent.ProxyMode = nil
 		} else {
-			r.InputDatadogAgent.ProxyMode = &tfTypes.ProxyModeDatadogAgent{}
+			r.InputDatadogAgent.ProxyMode = &tfTypes.InputDatadogAgentProxyMode{}
 			r.InputDatadogAgent.ProxyMode.Enabled = types.BoolPointerValue(resp.InputDatadogAgent.ProxyMode.Enabled)
 			r.InputDatadogAgent.ProxyMode.RejectUnauthorized = types.BoolPointerValue(resp.InputDatadogAgent.ProxyMode.RejectUnauthorized)
 		}
 		r.InputDatadogAgent.RequestTimeout = types.Float64PointerValue(resp.InputDatadogAgent.RequestTimeout)
 		r.InputDatadogAgent.SendToRoutes = types.BoolPointerValue(resp.InputDatadogAgent.SendToRoutes)
 		r.InputDatadogAgent.SocketTimeout = types.Float64PointerValue(resp.InputDatadogAgent.SocketTimeout)
-		if resp.InputDatadogAgent.Status == nil {
-			r.InputDatadogAgent.Status = nil
-		} else {
-			r.InputDatadogAgent.Status = &tfTypes.TFStatus{}
-			r.InputDatadogAgent.Status.Health = types.StringValue(string(resp.InputDatadogAgent.Status.Health))
-			if len(resp.InputDatadogAgent.Status.Metrics) > 0 {
-				r.InputDatadogAgent.Status.Metrics = make(map[string]types.String, len(resp.InputDatadogAgent.Status.Metrics))
-				for key9, value9 := range resp.InputDatadogAgent.Status.Metrics {
-					result9, _ := json.Marshal(value9)
-					r.InputDatadogAgent.Status.Metrics[key9] = types.StringValue(string(result9))
-				}
-			}
-			r.InputDatadogAgent.Status.Timestamp = types.Float64Value(resp.InputDatadogAgent.Status.Timestamp)
-			r.InputDatadogAgent.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputDatadogAgent.Status.UseStatusFromLB)
-		}
 		r.InputDatadogAgent.Streamtags = make([]types.String, 0, len(resp.InputDatadogAgent.Streamtags))
 		for _, v := range resp.InputDatadogAgent.Streamtags {
 			r.InputDatadogAgent.Streamtags = append(r.InputDatadogAgent.Streamtags, types.StringValue(v))
@@ -1261,15 +1239,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputDatadogAgent.TLS == nil {
 			r.InputDatadogAgent.TLS = nil
 		} else {
-			r.InputDatadogAgent.TLS = &tfTypes.TLSSettingsServerSideDatadogAgent{}
+			r.InputDatadogAgent.TLS = &tfTypes.InputDatadogAgentTLSSettingsServerSide{}
 			r.InputDatadogAgent.TLS.CaPath = types.StringPointerValue(resp.InputDatadogAgent.TLS.CaPath)
 			r.InputDatadogAgent.TLS.CertificateName = types.StringPointerValue(resp.InputDatadogAgent.TLS.CertificateName)
 			r.InputDatadogAgent.TLS.CertPath = types.StringPointerValue(resp.InputDatadogAgent.TLS.CertPath)
 			if resp.InputDatadogAgent.TLS.CommonNameRegex == nil {
 				r.InputDatadogAgent.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult3, _ := json.Marshal(resp.InputDatadogAgent.TLS.CommonNameRegex)
-				r.InputDatadogAgent.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult3))
+				commonNameRegexResult4, _ := json.Marshal(resp.InputDatadogAgent.TLS.CommonNameRegex)
+				r.InputDatadogAgent.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult4))
 			}
 			r.InputDatadogAgent.TLS.Disabled = types.BoolPointerValue(resp.InputDatadogAgent.TLS.Disabled)
 			if resp.InputDatadogAgent.TLS.MaxVersion != nil {
@@ -1287,8 +1265,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputDatadogAgent.TLS.RejectUnauthorized == nil {
 				r.InputDatadogAgent.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult3, _ := json.Marshal(resp.InputDatadogAgent.TLS.RejectUnauthorized)
-				r.InputDatadogAgent.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult3))
+				rejectUnauthorizedResult4, _ := json.Marshal(resp.InputDatadogAgent.TLS.RejectUnauthorized)
+				r.InputDatadogAgent.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult4))
 			}
 			r.InputDatadogAgent.TLS.RequestCert = types.BoolPointerValue(resp.InputDatadogAgent.TLS.RequestCert)
 		}
@@ -1300,45 +1278,45 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputDatagen != nil {
 		r.InputDatagen = &tfTypes.InputDatagen{}
-		r.InputDatagen.Connections = []tfTypes.ConnectionDatagen{}
+		r.InputDatagen.Connections = []tfTypes.InputDatagenConnection{}
 		if len(r.InputDatagen.Connections) > len(resp.InputDatagen.Connections) {
 			r.InputDatagen.Connections = r.InputDatagen.Connections[:len(resp.InputDatagen.Connections)]
 		}
-		for connectionsCount10, connectionsItem10 := range resp.InputDatagen.Connections {
-			var connections10 tfTypes.ConnectionDatagen
-			connections10.Output = types.StringValue(connectionsItem10.Output)
-			connections10.Pipeline = types.StringPointerValue(connectionsItem10.Pipeline)
-			if connectionsCount10+1 > len(r.InputDatagen.Connections) {
-				r.InputDatagen.Connections = append(r.InputDatagen.Connections, connections10)
+		for connectionsCount11, connectionsItem11 := range resp.InputDatagen.Connections {
+			var connections11 tfTypes.InputDatagenConnection
+			connections11.Output = types.StringValue(connectionsItem11.Output)
+			connections11.Pipeline = types.StringPointerValue(connectionsItem11.Pipeline)
+			if connectionsCount11+1 > len(r.InputDatagen.Connections) {
+				r.InputDatagen.Connections = append(r.InputDatagen.Connections, connections11)
 			} else {
-				r.InputDatagen.Connections[connectionsCount10].Output = connections10.Output
-				r.InputDatagen.Connections[connectionsCount10].Pipeline = connections10.Pipeline
+				r.InputDatagen.Connections[connectionsCount11].Output = connections11.Output
+				r.InputDatagen.Connections[connectionsCount11].Pipeline = connections11.Pipeline
 			}
 		}
 		r.InputDatagen.Description = types.StringPointerValue(resp.InputDatagen.Description)
 		r.InputDatagen.Disabled = types.BoolPointerValue(resp.InputDatagen.Disabled)
 		r.InputDatagen.Environment = types.StringPointerValue(resp.InputDatagen.Environment)
 		r.InputDatagen.ID = types.StringPointerValue(resp.InputDatagen.ID)
-		r.InputDatagen.Metadata = []tfTypes.MetadatumDatagen{}
+		r.InputDatagen.Metadata = []tfTypes.InputDatagenMetadatum{}
 		if len(r.InputDatagen.Metadata) > len(resp.InputDatagen.Metadata) {
 			r.InputDatagen.Metadata = r.InputDatagen.Metadata[:len(resp.InputDatagen.Metadata)]
 		}
-		for metadataCount10, metadataItem10 := range resp.InputDatagen.Metadata {
-			var metadata10 tfTypes.MetadatumDatagen
-			metadata10.Name = types.StringValue(metadataItem10.Name)
-			metadata10.Value = types.StringValue(metadataItem10.Value)
-			if metadataCount10+1 > len(r.InputDatagen.Metadata) {
-				r.InputDatagen.Metadata = append(r.InputDatagen.Metadata, metadata10)
+		for metadataCount11, metadataItem11 := range resp.InputDatagen.Metadata {
+			var metadata11 tfTypes.InputDatagenMetadatum
+			metadata11.Name = types.StringValue(metadataItem11.Name)
+			metadata11.Value = types.StringValue(metadataItem11.Value)
+			if metadataCount11+1 > len(r.InputDatagen.Metadata) {
+				r.InputDatagen.Metadata = append(r.InputDatagen.Metadata, metadata11)
 			} else {
-				r.InputDatagen.Metadata[metadataCount10].Name = metadata10.Name
-				r.InputDatagen.Metadata[metadataCount10].Value = metadata10.Value
+				r.InputDatagen.Metadata[metadataCount11].Name = metadata11.Name
+				r.InputDatagen.Metadata[metadataCount11].Value = metadata11.Value
 			}
 		}
 		r.InputDatagen.Pipeline = types.StringPointerValue(resp.InputDatagen.Pipeline)
 		if resp.InputDatagen.Pq == nil {
 			r.InputDatagen.Pq = nil
 		} else {
-			r.InputDatagen.Pq = &tfTypes.PqDatagen{}
+			r.InputDatagen.Pq = &tfTypes.InputDatagenPq{}
 			r.InputDatagen.Pq.CommitFrequency = types.Float64PointerValue(resp.InputDatagen.Pq.CommitFrequency)
 			if resp.InputDatagen.Pq.Compress != nil {
 				r.InputDatagen.Pq.Compress = types.StringValue(string(*resp.InputDatagen.Pq.Compress))
@@ -1372,21 +1350,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputDatagen.SendToRoutes = types.BoolPointerValue(resp.InputDatagen.SendToRoutes)
-		if resp.InputDatagen.Status == nil {
-			r.InputDatagen.Status = nil
-		} else {
-			r.InputDatagen.Status = &tfTypes.TFStatus{}
-			r.InputDatagen.Status.Health = types.StringValue(string(resp.InputDatagen.Status.Health))
-			if len(resp.InputDatagen.Status.Metrics) > 0 {
-				r.InputDatagen.Status.Metrics = make(map[string]types.String, len(resp.InputDatagen.Status.Metrics))
-				for key10, value10 := range resp.InputDatagen.Status.Metrics {
-					result10, _ := json.Marshal(value10)
-					r.InputDatagen.Status.Metrics[key10] = types.StringValue(string(result10))
-				}
-			}
-			r.InputDatagen.Status.Timestamp = types.Float64Value(resp.InputDatagen.Status.Timestamp)
-			r.InputDatagen.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputDatagen.Status.UseStatusFromLB)
-		}
 		r.InputDatagen.Streamtags = make([]types.String, 0, len(resp.InputDatagen.Streamtags))
 		for _, v := range resp.InputDatagen.Streamtags {
 			r.InputDatagen.Streamtags = append(r.InputDatagen.Streamtags, types.StringValue(v))
@@ -1408,19 +1371,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputEdgePrometheus.AwsAuthenticationMethod = types.StringNull()
 		}
 		r.InputEdgePrometheus.AwsSecretKey = types.StringPointerValue(resp.InputEdgePrometheus.AwsSecretKey)
-		r.InputEdgePrometheus.Connections = []tfTypes.ConnectionEdgePrometheus{}
+		r.InputEdgePrometheus.Connections = []tfTypes.InputEdgePrometheusConnection{}
 		if len(r.InputEdgePrometheus.Connections) > len(resp.InputEdgePrometheus.Connections) {
 			r.InputEdgePrometheus.Connections = r.InputEdgePrometheus.Connections[:len(resp.InputEdgePrometheus.Connections)]
 		}
-		for connectionsCount11, connectionsItem11 := range resp.InputEdgePrometheus.Connections {
-			var connections11 tfTypes.ConnectionEdgePrometheus
-			connections11.Output = types.StringValue(connectionsItem11.Output)
-			connections11.Pipeline = types.StringPointerValue(connectionsItem11.Pipeline)
-			if connectionsCount11+1 > len(r.InputEdgePrometheus.Connections) {
-				r.InputEdgePrometheus.Connections = append(r.InputEdgePrometheus.Connections, connections11)
+		for connectionsCount12, connectionsItem12 := range resp.InputEdgePrometheus.Connections {
+			var connections12 tfTypes.InputEdgePrometheusConnection
+			connections12.Output = types.StringValue(connectionsItem12.Output)
+			connections12.Pipeline = types.StringPointerValue(connectionsItem12.Pipeline)
+			if connectionsCount12+1 > len(r.InputEdgePrometheus.Connections) {
+				r.InputEdgePrometheus.Connections = append(r.InputEdgePrometheus.Connections, connections12)
 			} else {
-				r.InputEdgePrometheus.Connections[connectionsCount11].Output = connections11.Output
-				r.InputEdgePrometheus.Connections[connectionsCount11].Pipeline = connections11.Pipeline
+				r.InputEdgePrometheus.Connections[connectionsCount12].Output = connections12.Output
+				r.InputEdgePrometheus.Connections[connectionsCount12].Pipeline = connections12.Pipeline
 			}
 		}
 		r.InputEdgePrometheus.CredentialsSecret = types.StringPointerValue(resp.InputEdgePrometheus.CredentialsSecret)
@@ -1441,19 +1404,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputEdgePrometheus.Environment = types.StringPointerValue(resp.InputEdgePrometheus.Environment)
 		r.InputEdgePrometheus.ID = types.StringPointerValue(resp.InputEdgePrometheus.ID)
 		r.InputEdgePrometheus.Interval = types.Float64PointerValue(resp.InputEdgePrometheus.Interval)
-		r.InputEdgePrometheus.Metadata = []tfTypes.MetadatumEdgePrometheus{}
+		r.InputEdgePrometheus.Metadata = []tfTypes.InputEdgePrometheusMetadatum{}
 		if len(r.InputEdgePrometheus.Metadata) > len(resp.InputEdgePrometheus.Metadata) {
 			r.InputEdgePrometheus.Metadata = r.InputEdgePrometheus.Metadata[:len(resp.InputEdgePrometheus.Metadata)]
 		}
-		for metadataCount11, metadataItem11 := range resp.InputEdgePrometheus.Metadata {
-			var metadata11 tfTypes.MetadatumEdgePrometheus
-			metadata11.Name = types.StringValue(metadataItem11.Name)
-			metadata11.Value = types.StringValue(metadataItem11.Value)
-			if metadataCount11+1 > len(r.InputEdgePrometheus.Metadata) {
-				r.InputEdgePrometheus.Metadata = append(r.InputEdgePrometheus.Metadata, metadata11)
+		for metadataCount12, metadataItem12 := range resp.InputEdgePrometheus.Metadata {
+			var metadata12 tfTypes.InputEdgePrometheusMetadatum
+			metadata12.Name = types.StringValue(metadataItem12.Name)
+			metadata12.Value = types.StringValue(metadataItem12.Value)
+			if metadataCount12+1 > len(r.InputEdgePrometheus.Metadata) {
+				r.InputEdgePrometheus.Metadata = append(r.InputEdgePrometheus.Metadata, metadata12)
 			} else {
-				r.InputEdgePrometheus.Metadata[metadataCount11].Name = metadata11.Name
-				r.InputEdgePrometheus.Metadata[metadataCount11].Value = metadata11.Value
+				r.InputEdgePrometheus.Metadata[metadataCount12].Name = metadata12.Name
+				r.InputEdgePrometheus.Metadata[metadataCount12].Value = metadata12.Value
 			}
 		}
 		r.InputEdgePrometheus.NameList = make([]types.String, 0, len(resp.InputEdgePrometheus.NameList))
@@ -1464,7 +1427,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputEdgePrometheus.Persistence == nil {
 			r.InputEdgePrometheus.Persistence = nil
 		} else {
-			r.InputEdgePrometheus.Persistence = &tfTypes.DiskSpoolingEdgePrometheus{}
+			r.InputEdgePrometheus.Persistence = &tfTypes.InputEdgePrometheusDiskSpooling{}
 			if resp.InputEdgePrometheus.Persistence.Compress != nil {
 				r.InputEdgePrometheus.Persistence.Compress = types.StringValue(string(*resp.InputEdgePrometheus.Persistence.Compress))
 			} else {
@@ -1494,7 +1457,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputEdgePrometheus.Pq == nil {
 			r.InputEdgePrometheus.Pq = nil
 		} else {
-			r.InputEdgePrometheus.Pq = &tfTypes.PqEdgePrometheus{}
+			r.InputEdgePrometheus.Pq = &tfTypes.InputEdgePrometheusPq{}
 			r.InputEdgePrometheus.Pq.CommitFrequency = types.Float64PointerValue(resp.InputEdgePrometheus.Pq.CommitFrequency)
 			if resp.InputEdgePrometheus.Pq.Compress != nil {
 				r.InputEdgePrometheus.Pq.Compress = types.StringValue(string(*resp.InputEdgePrometheus.Pq.Compress))
@@ -1530,12 +1493,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputEdgePrometheus.ScrapeProtocol = types.StringNull()
 		}
 		r.InputEdgePrometheus.ScrapeProtocolExpr = types.StringPointerValue(resp.InputEdgePrometheus.ScrapeProtocolExpr)
-		r.InputEdgePrometheus.SearchFilter = []tfTypes.SearchFilterEdgePrometheus{}
+		r.InputEdgePrometheus.SearchFilter = []tfTypes.InputEdgePrometheusSearchFilter{}
 		if len(r.InputEdgePrometheus.SearchFilter) > len(resp.InputEdgePrometheus.SearchFilter) {
 			r.InputEdgePrometheus.SearchFilter = r.InputEdgePrometheus.SearchFilter[:len(resp.InputEdgePrometheus.SearchFilter)]
 		}
 		for searchFilterCount, searchFilterItem := range resp.InputEdgePrometheus.SearchFilter {
-			var searchFilter tfTypes.SearchFilterEdgePrometheus
+			var searchFilter tfTypes.InputEdgePrometheusSearchFilter
 			searchFilter.Name = types.StringValue(searchFilterItem.Name)
 			searchFilter.Values = make([]types.String, 0, len(searchFilterItem.Values))
 			for _, v := range searchFilterItem.Values {
@@ -1553,21 +1516,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputEdgePrometheus.SignatureVersion = types.StringValue(string(*resp.InputEdgePrometheus.SignatureVersion))
 		} else {
 			r.InputEdgePrometheus.SignatureVersion = types.StringNull()
-		}
-		if resp.InputEdgePrometheus.Status == nil {
-			r.InputEdgePrometheus.Status = nil
-		} else {
-			r.InputEdgePrometheus.Status = &tfTypes.TFStatus{}
-			r.InputEdgePrometheus.Status.Health = types.StringValue(string(resp.InputEdgePrometheus.Status.Health))
-			if len(resp.InputEdgePrometheus.Status.Metrics) > 0 {
-				r.InputEdgePrometheus.Status.Metrics = make(map[string]types.String, len(resp.InputEdgePrometheus.Status.Metrics))
-				for key11, value11 := range resp.InputEdgePrometheus.Status.Metrics {
-					result11, _ := json.Marshal(value11)
-					r.InputEdgePrometheus.Status.Metrics[key11] = types.StringValue(string(result11))
-				}
-			}
-			r.InputEdgePrometheus.Status.Timestamp = types.Float64Value(resp.InputEdgePrometheus.Status.Timestamp)
-			r.InputEdgePrometheus.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputEdgePrometheus.Status.UseStatusFromLB)
 		}
 		r.InputEdgePrometheus.Streamtags = make([]types.String, 0, len(resp.InputEdgePrometheus.Streamtags))
 		for _, v := range resp.InputEdgePrometheus.Streamtags {
@@ -1623,19 +1571,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputElastic.AuthType = types.StringNull()
 		}
 		r.InputElastic.CaptureHeaders = types.BoolPointerValue(resp.InputElastic.CaptureHeaders)
-		r.InputElastic.Connections = []tfTypes.ConnectionElastic{}
+		r.InputElastic.Connections = []tfTypes.InputElasticConnection{}
 		if len(r.InputElastic.Connections) > len(resp.InputElastic.Connections) {
 			r.InputElastic.Connections = r.InputElastic.Connections[:len(resp.InputElastic.Connections)]
 		}
-		for connectionsCount12, connectionsItem12 := range resp.InputElastic.Connections {
-			var connections12 tfTypes.ConnectionElastic
-			connections12.Output = types.StringValue(connectionsItem12.Output)
-			connections12.Pipeline = types.StringPointerValue(connectionsItem12.Pipeline)
-			if connectionsCount12+1 > len(r.InputElastic.Connections) {
-				r.InputElastic.Connections = append(r.InputElastic.Connections, connections12)
+		for connectionsCount13, connectionsItem13 := range resp.InputElastic.Connections {
+			var connections13 tfTypes.InputElasticConnection
+			connections13.Output = types.StringValue(connectionsItem13.Output)
+			connections13.Pipeline = types.StringPointerValue(connectionsItem13.Pipeline)
+			if connectionsCount13+1 > len(r.InputElastic.Connections) {
+				r.InputElastic.Connections = append(r.InputElastic.Connections, connections13)
 			} else {
-				r.InputElastic.Connections[connectionsCount12].Output = connections12.Output
-				r.InputElastic.Connections[connectionsCount12].Pipeline = connections12.Pipeline
+				r.InputElastic.Connections[connectionsCount13].Output = connections13.Output
+				r.InputElastic.Connections[connectionsCount13].Pipeline = connections13.Pipeline
 			}
 		}
 		r.InputElastic.CredentialsSecret = types.StringPointerValue(resp.InputElastic.CredentialsSecret)
@@ -1646,12 +1594,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputElastic.EnableHealthCheck = types.BoolPointerValue(resp.InputElastic.EnableHealthCheck)
 		r.InputElastic.EnableProxyHeader = types.BoolPointerValue(resp.InputElastic.EnableProxyHeader)
 		r.InputElastic.Environment = types.StringPointerValue(resp.InputElastic.Environment)
-		r.InputElastic.ExtraHTTPHeaders = []tfTypes.InputExtraHTTPHeader{}
+		r.InputElastic.ExtraHTTPHeaders = []tfTypes.InputElasticExtraHTTPHeader{}
 		if len(r.InputElastic.ExtraHTTPHeaders) > len(resp.InputElastic.ExtraHTTPHeaders) {
 			r.InputElastic.ExtraHTTPHeaders = r.InputElastic.ExtraHTTPHeaders[:len(resp.InputElastic.ExtraHTTPHeaders)]
 		}
 		for extraHTTPHeadersCount, extraHTTPHeadersItem := range resp.InputElastic.ExtraHTTPHeaders {
-			var extraHTTPHeaders tfTypes.InputExtraHTTPHeader
+			var extraHTTPHeaders tfTypes.InputElasticExtraHTTPHeader
 			extraHTTPHeaders.Name = types.StringPointerValue(extraHTTPHeadersItem.Name)
 			extraHTTPHeaders.Value = types.StringValue(extraHTTPHeadersItem.Value)
 			if extraHTTPHeadersCount+1 > len(r.InputElastic.ExtraHTTPHeaders) {
@@ -1663,25 +1611,24 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputElastic.Host = types.StringPointerValue(resp.InputElastic.Host)
 		r.InputElastic.ID = types.StringPointerValue(resp.InputElastic.ID)
-		r.InputElastic.IgnoreStandardHeaders = types.BoolPointerValue(resp.InputElastic.IgnoreStandardHeaders)
 		r.InputElastic.IPAllowlistRegex = types.StringPointerValue(resp.InputElastic.IPAllowlistRegex)
 		r.InputElastic.IPDenylistRegex = types.StringPointerValue(resp.InputElastic.IPDenylistRegex)
 		r.InputElastic.KeepAliveTimeout = types.Float64PointerValue(resp.InputElastic.KeepAliveTimeout)
 		r.InputElastic.MaxActiveReq = types.Float64PointerValue(resp.InputElastic.MaxActiveReq)
 		r.InputElastic.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputElastic.MaxRequestsPerSocket)
-		r.InputElastic.Metadata = []tfTypes.MetadatumElastic{}
+		r.InputElastic.Metadata = []tfTypes.InputElasticMetadatum{}
 		if len(r.InputElastic.Metadata) > len(resp.InputElastic.Metadata) {
 			r.InputElastic.Metadata = r.InputElastic.Metadata[:len(resp.InputElastic.Metadata)]
 		}
-		for metadataCount12, metadataItem12 := range resp.InputElastic.Metadata {
-			var metadata12 tfTypes.MetadatumElastic
-			metadata12.Name = types.StringValue(metadataItem12.Name)
-			metadata12.Value = types.StringValue(metadataItem12.Value)
-			if metadataCount12+1 > len(r.InputElastic.Metadata) {
-				r.InputElastic.Metadata = append(r.InputElastic.Metadata, metadata12)
+		for metadataCount13, metadataItem13 := range resp.InputElastic.Metadata {
+			var metadata13 tfTypes.InputElasticMetadatum
+			metadata13.Name = types.StringValue(metadataItem13.Name)
+			metadata13.Value = types.StringValue(metadataItem13.Value)
+			if metadataCount13+1 > len(r.InputElastic.Metadata) {
+				r.InputElastic.Metadata = append(r.InputElastic.Metadata, metadata13)
 			} else {
-				r.InputElastic.Metadata[metadataCount12].Name = metadata12.Name
-				r.InputElastic.Metadata[metadataCount12].Value = metadata12.Value
+				r.InputElastic.Metadata[metadataCount13].Name = metadata13.Name
+				r.InputElastic.Metadata[metadataCount13].Value = metadata13.Value
 			}
 		}
 		r.InputElastic.Password = types.StringPointerValue(resp.InputElastic.Password)
@@ -1690,7 +1637,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputElastic.Pq == nil {
 			r.InputElastic.Pq = nil
 		} else {
-			r.InputElastic.Pq = &tfTypes.PqElastic{}
+			r.InputElastic.Pq = &tfTypes.InputElasticPq{}
 			r.InputElastic.Pq.CommitFrequency = types.Float64PointerValue(resp.InputElastic.Pq.CommitFrequency)
 			if resp.InputElastic.Pq.Compress != nil {
 				r.InputElastic.Pq.Compress = types.StringValue(string(*resp.InputElastic.Pq.Compress))
@@ -1711,7 +1658,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputElastic.ProxyMode == nil {
 			r.InputElastic.ProxyMode = nil
 		} else {
-			r.InputElastic.ProxyMode = &tfTypes.ProxyModeElastic{}
+			r.InputElastic.ProxyMode = &tfTypes.InputElasticProxyMode{}
 			if resp.InputElastic.ProxyMode.AuthType != nil {
 				r.InputElastic.ProxyMode.AuthType = types.StringValue(string(*resp.InputElastic.ProxyMode.AuthType))
 			} else {
@@ -1729,21 +1676,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputElastic.RequestTimeout = types.Float64PointerValue(resp.InputElastic.RequestTimeout)
 		r.InputElastic.SendToRoutes = types.BoolPointerValue(resp.InputElastic.SendToRoutes)
 		r.InputElastic.SocketTimeout = types.Float64PointerValue(resp.InputElastic.SocketTimeout)
-		if resp.InputElastic.Status == nil {
-			r.InputElastic.Status = nil
-		} else {
-			r.InputElastic.Status = &tfTypes.TFStatus{}
-			r.InputElastic.Status.Health = types.StringValue(string(resp.InputElastic.Status.Health))
-			if len(resp.InputElastic.Status.Metrics) > 0 {
-				r.InputElastic.Status.Metrics = make(map[string]types.String, len(resp.InputElastic.Status.Metrics))
-				for key12, value12 := range resp.InputElastic.Status.Metrics {
-					result12, _ := json.Marshal(value12)
-					r.InputElastic.Status.Metrics[key12] = types.StringValue(string(result12))
-				}
-			}
-			r.InputElastic.Status.Timestamp = types.Float64Value(resp.InputElastic.Status.Timestamp)
-			r.InputElastic.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputElastic.Status.UseStatusFromLB)
-		}
 		r.InputElastic.Streamtags = make([]types.String, 0, len(resp.InputElastic.Streamtags))
 		for _, v := range resp.InputElastic.Streamtags {
 			r.InputElastic.Streamtags = append(r.InputElastic.Streamtags, types.StringValue(v))
@@ -1751,15 +1683,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputElastic.TLS == nil {
 			r.InputElastic.TLS = nil
 		} else {
-			r.InputElastic.TLS = &tfTypes.TLSSettingsServerSideElastic{}
+			r.InputElastic.TLS = &tfTypes.InputElasticTLSSettingsServerSide{}
 			r.InputElastic.TLS.CaPath = types.StringPointerValue(resp.InputElastic.TLS.CaPath)
 			r.InputElastic.TLS.CertificateName = types.StringPointerValue(resp.InputElastic.TLS.CertificateName)
 			r.InputElastic.TLS.CertPath = types.StringPointerValue(resp.InputElastic.TLS.CertPath)
 			if resp.InputElastic.TLS.CommonNameRegex == nil {
 				r.InputElastic.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult4, _ := json.Marshal(resp.InputElastic.TLS.CommonNameRegex)
-				r.InputElastic.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult4))
+				commonNameRegexResult5, _ := json.Marshal(resp.InputElastic.TLS.CommonNameRegex)
+				r.InputElastic.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult5))
 			}
 			r.InputElastic.TLS.Disabled = types.BoolPointerValue(resp.InputElastic.TLS.Disabled)
 			if resp.InputElastic.TLS.MaxVersion != nil {
@@ -1777,8 +1709,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputElastic.TLS.RejectUnauthorized == nil {
 				r.InputElastic.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult4, _ := json.Marshal(resp.InputElastic.TLS.RejectUnauthorized)
-				r.InputElastic.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult4))
+				rejectUnauthorizedResult5, _ := json.Marshal(resp.InputElastic.TLS.RejectUnauthorized)
+				r.InputElastic.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult5))
 			}
 			r.InputElastic.TLS.RequestCert = types.BoolPointerValue(resp.InputElastic.TLS.RequestCert)
 		}
@@ -1799,19 +1731,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputEventhub.Brokers {
 			r.InputEventhub.Brokers = append(r.InputEventhub.Brokers, types.StringValue(v))
 		}
-		r.InputEventhub.Connections = []tfTypes.ConnectionEventhub{}
+		r.InputEventhub.Connections = []tfTypes.InputEventhubConnection{}
 		if len(r.InputEventhub.Connections) > len(resp.InputEventhub.Connections) {
 			r.InputEventhub.Connections = r.InputEventhub.Connections[:len(resp.InputEventhub.Connections)]
 		}
-		for connectionsCount13, connectionsItem13 := range resp.InputEventhub.Connections {
-			var connections13 tfTypes.ConnectionEventhub
-			connections13.Output = types.StringValue(connectionsItem13.Output)
-			connections13.Pipeline = types.StringPointerValue(connectionsItem13.Pipeline)
-			if connectionsCount13+1 > len(r.InputEventhub.Connections) {
-				r.InputEventhub.Connections = append(r.InputEventhub.Connections, connections13)
+		for connectionsCount14, connectionsItem14 := range resp.InputEventhub.Connections {
+			var connections14 tfTypes.InputEventhubConnection
+			connections14.Output = types.StringValue(connectionsItem14.Output)
+			connections14.Pipeline = types.StringPointerValue(connectionsItem14.Pipeline)
+			if connectionsCount14+1 > len(r.InputEventhub.Connections) {
+				r.InputEventhub.Connections = append(r.InputEventhub.Connections, connections14)
 			} else {
-				r.InputEventhub.Connections[connectionsCount13].Output = connections13.Output
-				r.InputEventhub.Connections[connectionsCount13].Pipeline = connections13.Pipeline
+				r.InputEventhub.Connections[connectionsCount14].Output = connections14.Output
+				r.InputEventhub.Connections[connectionsCount14].Pipeline = connections14.Pipeline
 			}
 		}
 		r.InputEventhub.ConnectionTimeout = types.Float64PointerValue(resp.InputEventhub.ConnectionTimeout)
@@ -1828,19 +1760,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputEventhub.MaxBytesPerPartition = types.Float64PointerValue(resp.InputEventhub.MaxBytesPerPartition)
 		r.InputEventhub.MaxRetries = types.Float64PointerValue(resp.InputEventhub.MaxRetries)
 		r.InputEventhub.MaxSocketErrors = types.Float64PointerValue(resp.InputEventhub.MaxSocketErrors)
-		r.InputEventhub.Metadata = []tfTypes.MetadatumEventhub{}
+		r.InputEventhub.Metadata = []tfTypes.InputEventhubMetadatum{}
 		if len(r.InputEventhub.Metadata) > len(resp.InputEventhub.Metadata) {
 			r.InputEventhub.Metadata = r.InputEventhub.Metadata[:len(resp.InputEventhub.Metadata)]
 		}
-		for metadataCount13, metadataItem13 := range resp.InputEventhub.Metadata {
-			var metadata13 tfTypes.MetadatumEventhub
-			metadata13.Name = types.StringValue(metadataItem13.Name)
-			metadata13.Value = types.StringValue(metadataItem13.Value)
-			if metadataCount13+1 > len(r.InputEventhub.Metadata) {
-				r.InputEventhub.Metadata = append(r.InputEventhub.Metadata, metadata13)
+		for metadataCount14, metadataItem14 := range resp.InputEventhub.Metadata {
+			var metadata14 tfTypes.InputEventhubMetadatum
+			metadata14.Name = types.StringValue(metadataItem14.Name)
+			metadata14.Value = types.StringValue(metadataItem14.Value)
+			if metadataCount14+1 > len(r.InputEventhub.Metadata) {
+				r.InputEventhub.Metadata = append(r.InputEventhub.Metadata, metadata14)
 			} else {
-				r.InputEventhub.Metadata[metadataCount13].Name = metadata13.Name
-				r.InputEventhub.Metadata[metadataCount13].Value = metadata13.Value
+				r.InputEventhub.Metadata[metadataCount14].Name = metadata14.Name
+				r.InputEventhub.Metadata[metadataCount14].Value = metadata14.Value
 			}
 		}
 		r.InputEventhub.MinimizeDuplicates = types.BoolPointerValue(resp.InputEventhub.MinimizeDuplicates)
@@ -1848,7 +1780,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputEventhub.Pq == nil {
 			r.InputEventhub.Pq = nil
 		} else {
-			r.InputEventhub.Pq = &tfTypes.PqEventhub{}
+			r.InputEventhub.Pq = &tfTypes.InputEventhubPq{}
 			r.InputEventhub.Pq.CommitFrequency = types.Float64PointerValue(resp.InputEventhub.Pq.CommitFrequency)
 			if resp.InputEventhub.Pq.Compress != nil {
 				r.InputEventhub.Pq.Compress = types.StringValue(string(*resp.InputEventhub.Pq.Compress))
@@ -1872,7 +1804,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputEventhub.Sasl == nil {
 			r.InputEventhub.Sasl = nil
 		} else {
-			r.InputEventhub.Sasl = &tfTypes.AuthenticationEventhub{}
+			r.InputEventhub.Sasl = &tfTypes.InputEventhubAuthentication{}
 			r.InputEventhub.Sasl.Disabled = types.BoolPointerValue(resp.InputEventhub.Sasl.Disabled)
 			if resp.InputEventhub.Sasl.Mechanism != nil {
 				r.InputEventhub.Sasl.Mechanism = types.StringValue(string(*resp.InputEventhub.Sasl.Mechanism))
@@ -1882,21 +1814,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputEventhub.SendToRoutes = types.BoolPointerValue(resp.InputEventhub.SendToRoutes)
 		r.InputEventhub.SessionTimeout = types.Float64PointerValue(resp.InputEventhub.SessionTimeout)
-		if resp.InputEventhub.Status == nil {
-			r.InputEventhub.Status = nil
-		} else {
-			r.InputEventhub.Status = &tfTypes.TFStatus{}
-			r.InputEventhub.Status.Health = types.StringValue(string(resp.InputEventhub.Status.Health))
-			if len(resp.InputEventhub.Status.Metrics) > 0 {
-				r.InputEventhub.Status.Metrics = make(map[string]types.String, len(resp.InputEventhub.Status.Metrics))
-				for key13, value13 := range resp.InputEventhub.Status.Metrics {
-					result13, _ := json.Marshal(value13)
-					r.InputEventhub.Status.Metrics[key13] = types.StringValue(string(result13))
-				}
-			}
-			r.InputEventhub.Status.Timestamp = types.Float64Value(resp.InputEventhub.Status.Timestamp)
-			r.InputEventhub.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputEventhub.Status.UseStatusFromLB)
-		}
 		r.InputEventhub.Streamtags = make([]types.String, 0, len(resp.InputEventhub.Streamtags))
 		for _, v := range resp.InputEventhub.Streamtags {
 			r.InputEventhub.Streamtags = append(r.InputEventhub.Streamtags, types.StringValue(v))
@@ -1904,7 +1821,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputEventhub.TLS == nil {
 			r.InputEventhub.TLS = nil
 		} else {
-			r.InputEventhub.TLS = &tfTypes.TLSSettingsClientSideEventhub{}
+			r.InputEventhub.TLS = &tfTypes.InputEventhubTLSSettingsClientSide{}
 			r.InputEventhub.TLS.Disabled = types.BoolPointerValue(resp.InputEventhub.TLS.Disabled)
 			r.InputEventhub.TLS.RejectUnauthorized = types.BoolPointerValue(resp.InputEventhub.TLS.RejectUnauthorized)
 		}
@@ -1929,15 +1846,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if len(r.InputExec.Connections) > len(resp.InputExec.Connections) {
 			r.InputExec.Connections = r.InputExec.Connections[:len(resp.InputExec.Connections)]
 		}
-		for connectionsCount14, connectionsItem14 := range resp.InputExec.Connections {
-			var connections14 tfTypes.InputExecConnection
-			connections14.Output = types.StringValue(connectionsItem14.Output)
-			connections14.Pipeline = types.StringPointerValue(connectionsItem14.Pipeline)
-			if connectionsCount14+1 > len(r.InputExec.Connections) {
-				r.InputExec.Connections = append(r.InputExec.Connections, connections14)
+		for connectionsCount15, connectionsItem15 := range resp.InputExec.Connections {
+			var connections15 tfTypes.InputExecConnection
+			connections15.Output = types.StringValue(connectionsItem15.Output)
+			connections15.Pipeline = types.StringPointerValue(connectionsItem15.Pipeline)
+			if connectionsCount15+1 > len(r.InputExec.Connections) {
+				r.InputExec.Connections = append(r.InputExec.Connections, connections15)
 			} else {
-				r.InputExec.Connections[connectionsCount14].Output = connections14.Output
-				r.InputExec.Connections[connectionsCount14].Pipeline = connections14.Pipeline
+				r.InputExec.Connections[connectionsCount15].Output = connections15.Output
+				r.InputExec.Connections[connectionsCount15].Pipeline = connections15.Pipeline
 			}
 		}
 		r.InputExec.CronSchedule = types.StringPointerValue(resp.InputExec.CronSchedule)
@@ -1950,15 +1867,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if len(r.InputExec.Metadata) > len(resp.InputExec.Metadata) {
 			r.InputExec.Metadata = r.InputExec.Metadata[:len(resp.InputExec.Metadata)]
 		}
-		for metadataCount14, metadataItem14 := range resp.InputExec.Metadata {
-			var metadata14 tfTypes.InputExecMetadatum
-			metadata14.Name = types.StringValue(metadataItem14.Name)
-			metadata14.Value = types.StringValue(metadataItem14.Value)
-			if metadataCount14+1 > len(r.InputExec.Metadata) {
-				r.InputExec.Metadata = append(r.InputExec.Metadata, metadata14)
+		for metadataCount15, metadataItem15 := range resp.InputExec.Metadata {
+			var metadata15 tfTypes.InputExecMetadatum
+			metadata15.Name = types.StringValue(metadataItem15.Name)
+			metadata15.Value = types.StringValue(metadataItem15.Value)
+			if metadataCount15+1 > len(r.InputExec.Metadata) {
+				r.InputExec.Metadata = append(r.InputExec.Metadata, metadata15)
 			} else {
-				r.InputExec.Metadata[metadataCount14].Name = metadata14.Name
-				r.InputExec.Metadata[metadataCount14].Value = metadata14.Value
+				r.InputExec.Metadata[metadataCount15].Name = metadata15.Name
+				r.InputExec.Metadata[metadataCount15].Value = metadata15.Value
 			}
 		}
 		r.InputExec.Pipeline = types.StringPointerValue(resp.InputExec.Pipeline)
@@ -1991,21 +1908,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputExec.SendToRoutes = types.BoolPointerValue(resp.InputExec.SendToRoutes)
 		r.InputExec.StaleChannelFlushMs = types.Float64PointerValue(resp.InputExec.StaleChannelFlushMs)
-		if resp.InputExec.Status == nil {
-			r.InputExec.Status = nil
-		} else {
-			r.InputExec.Status = &tfTypes.TFStatus{}
-			r.InputExec.Status.Health = types.StringValue(string(resp.InputExec.Status.Health))
-			if len(resp.InputExec.Status.Metrics) > 0 {
-				r.InputExec.Status.Metrics = make(map[string]types.String, len(resp.InputExec.Status.Metrics))
-				for key14, value14 := range resp.InputExec.Status.Metrics {
-					result14, _ := json.Marshal(value14)
-					r.InputExec.Status.Metrics[key14] = types.StringValue(string(result14))
-				}
-			}
-			r.InputExec.Status.Timestamp = types.Float64Value(resp.InputExec.Status.Timestamp)
-			r.InputExec.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputExec.Status.UseStatusFromLB)
-		}
 		r.InputExec.Streamtags = make([]types.String, 0, len(resp.InputExec.Streamtags))
 		for _, v := range resp.InputExec.Streamtags {
 			r.InputExec.Streamtags = append(r.InputExec.Streamtags, types.StringValue(v))
@@ -2023,15 +1925,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if len(r.InputFile.Connections) > len(resp.InputFile.Connections) {
 			r.InputFile.Connections = r.InputFile.Connections[:len(resp.InputFile.Connections)]
 		}
-		for connectionsCount15, connectionsItem15 := range resp.InputFile.Connections {
-			var connections15 tfTypes.InputFileConnection
-			connections15.Output = types.StringValue(connectionsItem15.Output)
-			connections15.Pipeline = types.StringPointerValue(connectionsItem15.Pipeline)
-			if connectionsCount15+1 > len(r.InputFile.Connections) {
-				r.InputFile.Connections = append(r.InputFile.Connections, connections15)
+		for connectionsCount16, connectionsItem16 := range resp.InputFile.Connections {
+			var connections16 tfTypes.InputFileConnection
+			connections16.Output = types.StringValue(connectionsItem16.Output)
+			connections16.Pipeline = types.StringPointerValue(connectionsItem16.Pipeline)
+			if connectionsCount16+1 > len(r.InputFile.Connections) {
+				r.InputFile.Connections = append(r.InputFile.Connections, connections16)
 			} else {
-				r.InputFile.Connections[connectionsCount15].Output = connections15.Output
-				r.InputFile.Connections[connectionsCount15].Pipeline = connections15.Pipeline
+				r.InputFile.Connections[connectionsCount16].Output = connections16.Output
+				r.InputFile.Connections[connectionsCount16].Pipeline = connections16.Pipeline
 			}
 		}
 		r.InputFile.DeleteFiles = types.BoolPointerValue(resp.InputFile.DeleteFiles)
@@ -2054,15 +1956,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if len(r.InputFile.Metadata) > len(resp.InputFile.Metadata) {
 			r.InputFile.Metadata = r.InputFile.Metadata[:len(resp.InputFile.Metadata)]
 		}
-		for metadataCount15, metadataItem15 := range resp.InputFile.Metadata {
-			var metadata15 tfTypes.InputFileMetadatum
-			metadata15.Name = types.StringValue(metadataItem15.Name)
-			metadata15.Value = types.StringValue(metadataItem15.Value)
-			if metadataCount15+1 > len(r.InputFile.Metadata) {
-				r.InputFile.Metadata = append(r.InputFile.Metadata, metadata15)
+		for metadataCount16, metadataItem16 := range resp.InputFile.Metadata {
+			var metadata16 tfTypes.InputFileMetadatum
+			metadata16.Name = types.StringValue(metadataItem16.Name)
+			metadata16.Value = types.StringValue(metadataItem16.Value)
+			if metadataCount16+1 > len(r.InputFile.Metadata) {
+				r.InputFile.Metadata = append(r.InputFile.Metadata, metadata16)
 			} else {
-				r.InputFile.Metadata[metadataCount15].Name = metadata15.Name
-				r.InputFile.Metadata[metadataCount15].Value = metadata15.Value
+				r.InputFile.Metadata[metadataCount16].Name = metadata16.Name
+				r.InputFile.Metadata[metadataCount16].Value = metadata16.Value
 			}
 		}
 		if resp.InputFile.Mode != nil {
@@ -2095,21 +1997,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputFile.PqEnabled = types.BoolPointerValue(resp.InputFile.PqEnabled)
 		r.InputFile.SendToRoutes = types.BoolPointerValue(resp.InputFile.SendToRoutes)
 		r.InputFile.StaleChannelFlushMs = types.Float64PointerValue(resp.InputFile.StaleChannelFlushMs)
-		if resp.InputFile.Status == nil {
-			r.InputFile.Status = nil
-		} else {
-			r.InputFile.Status = &tfTypes.TFStatus{}
-			r.InputFile.Status.Health = types.StringValue(string(resp.InputFile.Status.Health))
-			if len(resp.InputFile.Status.Metrics) > 0 {
-				r.InputFile.Status.Metrics = make(map[string]types.String, len(resp.InputFile.Status.Metrics))
-				for key15, value15 := range resp.InputFile.Status.Metrics {
-					result15, _ := json.Marshal(value15)
-					r.InputFile.Status.Metrics[key15] = types.StringValue(string(result15))
-				}
-			}
-			r.InputFile.Status.Timestamp = types.Float64Value(resp.InputFile.Status.Timestamp)
-			r.InputFile.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputFile.Status.UseStatusFromLB)
-		}
 		r.InputFile.Streamtags = make([]types.String, 0, len(resp.InputFile.Streamtags))
 		for _, v := range resp.InputFile.Streamtags {
 			r.InputFile.Streamtags = append(r.InputFile.Streamtags, types.StringValue(v))
@@ -2126,19 +2013,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputFirehose.AuthTokens = append(r.InputFirehose.AuthTokens, types.StringValue(v))
 		}
 		r.InputFirehose.CaptureHeaders = types.BoolPointerValue(resp.InputFirehose.CaptureHeaders)
-		r.InputFirehose.Connections = []tfTypes.ConnectionFirehose{}
+		r.InputFirehose.Connections = []tfTypes.InputFirehoseConnection{}
 		if len(r.InputFirehose.Connections) > len(resp.InputFirehose.Connections) {
 			r.InputFirehose.Connections = r.InputFirehose.Connections[:len(resp.InputFirehose.Connections)]
 		}
-		for connectionsCount16, connectionsItem16 := range resp.InputFirehose.Connections {
-			var connections16 tfTypes.ConnectionFirehose
-			connections16.Output = types.StringValue(connectionsItem16.Output)
-			connections16.Pipeline = types.StringPointerValue(connectionsItem16.Pipeline)
-			if connectionsCount16+1 > len(r.InputFirehose.Connections) {
-				r.InputFirehose.Connections = append(r.InputFirehose.Connections, connections16)
+		for connectionsCount17, connectionsItem17 := range resp.InputFirehose.Connections {
+			var connections17 tfTypes.InputFirehoseConnection
+			connections17.Output = types.StringValue(connectionsItem17.Output)
+			connections17.Pipeline = types.StringPointerValue(connectionsItem17.Pipeline)
+			if connectionsCount17+1 > len(r.InputFirehose.Connections) {
+				r.InputFirehose.Connections = append(r.InputFirehose.Connections, connections17)
 			} else {
-				r.InputFirehose.Connections[connectionsCount16].Output = connections16.Output
-				r.InputFirehose.Connections[connectionsCount16].Pipeline = connections16.Pipeline
+				r.InputFirehose.Connections[connectionsCount17].Output = connections17.Output
+				r.InputFirehose.Connections[connectionsCount17].Pipeline = connections17.Pipeline
 			}
 		}
 		r.InputFirehose.Description = types.StringPointerValue(resp.InputFirehose.Description)
@@ -2153,19 +2040,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputFirehose.KeepAliveTimeout = types.Float64PointerValue(resp.InputFirehose.KeepAliveTimeout)
 		r.InputFirehose.MaxActiveReq = types.Float64PointerValue(resp.InputFirehose.MaxActiveReq)
 		r.InputFirehose.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputFirehose.MaxRequestsPerSocket)
-		r.InputFirehose.Metadata = []tfTypes.MetadatumFirehose{}
+		r.InputFirehose.Metadata = []tfTypes.InputFirehoseMetadatum{}
 		if len(r.InputFirehose.Metadata) > len(resp.InputFirehose.Metadata) {
 			r.InputFirehose.Metadata = r.InputFirehose.Metadata[:len(resp.InputFirehose.Metadata)]
 		}
-		for metadataCount16, metadataItem16 := range resp.InputFirehose.Metadata {
-			var metadata16 tfTypes.MetadatumFirehose
-			metadata16.Name = types.StringValue(metadataItem16.Name)
-			metadata16.Value = types.StringValue(metadataItem16.Value)
-			if metadataCount16+1 > len(r.InputFirehose.Metadata) {
-				r.InputFirehose.Metadata = append(r.InputFirehose.Metadata, metadata16)
+		for metadataCount17, metadataItem17 := range resp.InputFirehose.Metadata {
+			var metadata17 tfTypes.InputFirehoseMetadatum
+			metadata17.Name = types.StringValue(metadataItem17.Name)
+			metadata17.Value = types.StringValue(metadataItem17.Value)
+			if metadataCount17+1 > len(r.InputFirehose.Metadata) {
+				r.InputFirehose.Metadata = append(r.InputFirehose.Metadata, metadata17)
 			} else {
-				r.InputFirehose.Metadata[metadataCount16].Name = metadata16.Name
-				r.InputFirehose.Metadata[metadataCount16].Value = metadata16.Value
+				r.InputFirehose.Metadata[metadataCount17].Name = metadata17.Name
+				r.InputFirehose.Metadata[metadataCount17].Value = metadata17.Value
 			}
 		}
 		r.InputFirehose.Pipeline = types.StringPointerValue(resp.InputFirehose.Pipeline)
@@ -2173,7 +2060,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputFirehose.Pq == nil {
 			r.InputFirehose.Pq = nil
 		} else {
-			r.InputFirehose.Pq = &tfTypes.PqFirehose{}
+			r.InputFirehose.Pq = &tfTypes.InputFirehosePq{}
 			r.InputFirehose.Pq.CommitFrequency = types.Float64PointerValue(resp.InputFirehose.Pq.CommitFrequency)
 			if resp.InputFirehose.Pq.Compress != nil {
 				r.InputFirehose.Pq.Compress = types.StringValue(string(*resp.InputFirehose.Pq.Compress))
@@ -2194,21 +2081,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputFirehose.RequestTimeout = types.Float64PointerValue(resp.InputFirehose.RequestTimeout)
 		r.InputFirehose.SendToRoutes = types.BoolPointerValue(resp.InputFirehose.SendToRoutes)
 		r.InputFirehose.SocketTimeout = types.Float64PointerValue(resp.InputFirehose.SocketTimeout)
-		if resp.InputFirehose.Status == nil {
-			r.InputFirehose.Status = nil
-		} else {
-			r.InputFirehose.Status = &tfTypes.TFStatus{}
-			r.InputFirehose.Status.Health = types.StringValue(string(resp.InputFirehose.Status.Health))
-			if len(resp.InputFirehose.Status.Metrics) > 0 {
-				r.InputFirehose.Status.Metrics = make(map[string]types.String, len(resp.InputFirehose.Status.Metrics))
-				for key16, value16 := range resp.InputFirehose.Status.Metrics {
-					result16, _ := json.Marshal(value16)
-					r.InputFirehose.Status.Metrics[key16] = types.StringValue(string(result16))
-				}
-			}
-			r.InputFirehose.Status.Timestamp = types.Float64Value(resp.InputFirehose.Status.Timestamp)
-			r.InputFirehose.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputFirehose.Status.UseStatusFromLB)
-		}
 		r.InputFirehose.Streamtags = make([]types.String, 0, len(resp.InputFirehose.Streamtags))
 		for _, v := range resp.InputFirehose.Streamtags {
 			r.InputFirehose.Streamtags = append(r.InputFirehose.Streamtags, types.StringValue(v))
@@ -2216,15 +2088,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputFirehose.TLS == nil {
 			r.InputFirehose.TLS = nil
 		} else {
-			r.InputFirehose.TLS = &tfTypes.TLSSettingsServerSideFirehose{}
+			r.InputFirehose.TLS = &tfTypes.InputFirehoseTLSSettingsServerSide{}
 			r.InputFirehose.TLS.CaPath = types.StringPointerValue(resp.InputFirehose.TLS.CaPath)
 			r.InputFirehose.TLS.CertificateName = types.StringPointerValue(resp.InputFirehose.TLS.CertificateName)
 			r.InputFirehose.TLS.CertPath = types.StringPointerValue(resp.InputFirehose.TLS.CertPath)
 			if resp.InputFirehose.TLS.CommonNameRegex == nil {
 				r.InputFirehose.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult5, _ := json.Marshal(resp.InputFirehose.TLS.CommonNameRegex)
-				r.InputFirehose.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult5))
+				commonNameRegexResult6, _ := json.Marshal(resp.InputFirehose.TLS.CommonNameRegex)
+				r.InputFirehose.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult6))
 			}
 			r.InputFirehose.TLS.Disabled = types.BoolPointerValue(resp.InputFirehose.TLS.Disabled)
 			if resp.InputFirehose.TLS.MaxVersion != nil {
@@ -2242,8 +2114,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputFirehose.TLS.RejectUnauthorized == nil {
 				r.InputFirehose.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult5, _ := json.Marshal(resp.InputFirehose.TLS.RejectUnauthorized)
-				r.InputFirehose.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult5))
+				rejectUnauthorizedResult6, _ := json.Marshal(resp.InputFirehose.TLS.RejectUnauthorized)
+				r.InputFirehose.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult6))
 			}
 			r.InputFirehose.TLS.RequestCert = types.BoolPointerValue(resp.InputFirehose.TLS.RequestCert)
 		}
@@ -2256,19 +2128,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	if resp.InputGooglePubsub != nil {
 		r.InputGooglePubsub = &tfTypes.InputGooglePubsub{}
 		r.InputGooglePubsub.Concurrency = types.Float64PointerValue(resp.InputGooglePubsub.Concurrency)
-		r.InputGooglePubsub.Connections = []tfTypes.ConnectionGooglePubsub{}
+		r.InputGooglePubsub.Connections = []tfTypes.InputGooglePubsubConnection{}
 		if len(r.InputGooglePubsub.Connections) > len(resp.InputGooglePubsub.Connections) {
 			r.InputGooglePubsub.Connections = r.InputGooglePubsub.Connections[:len(resp.InputGooglePubsub.Connections)]
 		}
-		for connectionsCount17, connectionsItem17 := range resp.InputGooglePubsub.Connections {
-			var connections17 tfTypes.ConnectionGooglePubsub
-			connections17.Output = types.StringValue(connectionsItem17.Output)
-			connections17.Pipeline = types.StringPointerValue(connectionsItem17.Pipeline)
-			if connectionsCount17+1 > len(r.InputGooglePubsub.Connections) {
-				r.InputGooglePubsub.Connections = append(r.InputGooglePubsub.Connections, connections17)
+		for connectionsCount18, connectionsItem18 := range resp.InputGooglePubsub.Connections {
+			var connections18 tfTypes.InputGooglePubsubConnection
+			connections18.Output = types.StringValue(connectionsItem18.Output)
+			connections18.Pipeline = types.StringPointerValue(connectionsItem18.Pipeline)
+			if connectionsCount18+1 > len(r.InputGooglePubsub.Connections) {
+				r.InputGooglePubsub.Connections = append(r.InputGooglePubsub.Connections, connections18)
 			} else {
-				r.InputGooglePubsub.Connections[connectionsCount17].Output = connections17.Output
-				r.InputGooglePubsub.Connections[connectionsCount17].Pipeline = connections17.Pipeline
+				r.InputGooglePubsub.Connections[connectionsCount18].Output = connections18.Output
+				r.InputGooglePubsub.Connections[connectionsCount18].Pipeline = connections18.Pipeline
 			}
 		}
 		r.InputGooglePubsub.CreateSubscription = types.BoolPointerValue(resp.InputGooglePubsub.CreateSubscription)
@@ -2283,19 +2155,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputGooglePubsub.ID = types.StringPointerValue(resp.InputGooglePubsub.ID)
 		r.InputGooglePubsub.MaxBacklog = types.Float64PointerValue(resp.InputGooglePubsub.MaxBacklog)
-		r.InputGooglePubsub.Metadata = []tfTypes.MetadatumGooglePubsub{}
+		r.InputGooglePubsub.Metadata = []tfTypes.InputGooglePubsubMetadatum{}
 		if len(r.InputGooglePubsub.Metadata) > len(resp.InputGooglePubsub.Metadata) {
 			r.InputGooglePubsub.Metadata = r.InputGooglePubsub.Metadata[:len(resp.InputGooglePubsub.Metadata)]
 		}
-		for metadataCount17, metadataItem17 := range resp.InputGooglePubsub.Metadata {
-			var metadata17 tfTypes.MetadatumGooglePubsub
-			metadata17.Name = types.StringValue(metadataItem17.Name)
-			metadata17.Value = types.StringValue(metadataItem17.Value)
-			if metadataCount17+1 > len(r.InputGooglePubsub.Metadata) {
-				r.InputGooglePubsub.Metadata = append(r.InputGooglePubsub.Metadata, metadata17)
+		for metadataCount18, metadataItem18 := range resp.InputGooglePubsub.Metadata {
+			var metadata18 tfTypes.InputGooglePubsubMetadatum
+			metadata18.Name = types.StringValue(metadataItem18.Name)
+			metadata18.Value = types.StringValue(metadataItem18.Value)
+			if metadataCount18+1 > len(r.InputGooglePubsub.Metadata) {
+				r.InputGooglePubsub.Metadata = append(r.InputGooglePubsub.Metadata, metadata18)
 			} else {
-				r.InputGooglePubsub.Metadata[metadataCount17].Name = metadata17.Name
-				r.InputGooglePubsub.Metadata[metadataCount17].Value = metadata17.Value
+				r.InputGooglePubsub.Metadata[metadataCount18].Name = metadata18.Name
+				r.InputGooglePubsub.Metadata[metadataCount18].Value = metadata18.Value
 			}
 		}
 		r.InputGooglePubsub.OrderedDelivery = types.BoolPointerValue(resp.InputGooglePubsub.OrderedDelivery)
@@ -2303,7 +2175,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputGooglePubsub.Pq == nil {
 			r.InputGooglePubsub.Pq = nil
 		} else {
-			r.InputGooglePubsub.Pq = &tfTypes.PqGooglePubsub{}
+			r.InputGooglePubsub.Pq = &tfTypes.InputGooglePubsubPq{}
 			r.InputGooglePubsub.Pq.CommitFrequency = types.Float64PointerValue(resp.InputGooglePubsub.Pq.CommitFrequency)
 			if resp.InputGooglePubsub.Pq.Compress != nil {
 				r.InputGooglePubsub.Pq.Compress = types.StringValue(string(*resp.InputGooglePubsub.Pq.Compress))
@@ -2326,21 +2198,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputGooglePubsub.Secret = types.StringPointerValue(resp.InputGooglePubsub.Secret)
 		r.InputGooglePubsub.SendToRoutes = types.BoolPointerValue(resp.InputGooglePubsub.SendToRoutes)
 		r.InputGooglePubsub.ServiceAccountCredentials = types.StringPointerValue(resp.InputGooglePubsub.ServiceAccountCredentials)
-		if resp.InputGooglePubsub.Status == nil {
-			r.InputGooglePubsub.Status = nil
-		} else {
-			r.InputGooglePubsub.Status = &tfTypes.TFStatus{}
-			r.InputGooglePubsub.Status.Health = types.StringValue(string(resp.InputGooglePubsub.Status.Health))
-			if len(resp.InputGooglePubsub.Status.Metrics) > 0 {
-				r.InputGooglePubsub.Status.Metrics = make(map[string]types.String, len(resp.InputGooglePubsub.Status.Metrics))
-				for key17, value17 := range resp.InputGooglePubsub.Status.Metrics {
-					result17, _ := json.Marshal(value17)
-					r.InputGooglePubsub.Status.Metrics[key17] = types.StringValue(string(result17))
-				}
-			}
-			r.InputGooglePubsub.Status.Timestamp = types.Float64Value(resp.InputGooglePubsub.Status.Timestamp)
-			r.InputGooglePubsub.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputGooglePubsub.Status.UseStatusFromLB)
-		}
 		r.InputGooglePubsub.Streamtags = make([]types.String, 0, len(resp.InputGooglePubsub.Streamtags))
 		for _, v := range resp.InputGooglePubsub.Streamtags {
 			r.InputGooglePubsub.Streamtags = append(r.InputGooglePubsub.Streamtags, types.StringValue(v))
@@ -2363,15 +2220,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if len(r.InputGrafana.InputGrafanaGrafana1.Connections) > len(resp.InputGrafana.InputGrafanaGrafana1.Connections) {
 				r.InputGrafana.InputGrafanaGrafana1.Connections = r.InputGrafana.InputGrafanaGrafana1.Connections[:len(resp.InputGrafana.InputGrafanaGrafana1.Connections)]
 			}
-			for connectionsCount18, connectionsItem18 := range resp.InputGrafana.InputGrafanaGrafana1.Connections {
-				var connections18 tfTypes.InputGrafanaConnection1
-				connections18.Output = types.StringValue(connectionsItem18.Output)
-				connections18.Pipeline = types.StringPointerValue(connectionsItem18.Pipeline)
-				if connectionsCount18+1 > len(r.InputGrafana.InputGrafanaGrafana1.Connections) {
-					r.InputGrafana.InputGrafanaGrafana1.Connections = append(r.InputGrafana.InputGrafanaGrafana1.Connections, connections18)
+			for connectionsCount19, connectionsItem19 := range resp.InputGrafana.InputGrafanaGrafana1.Connections {
+				var connections19 tfTypes.InputGrafanaConnection1
+				connections19.Output = types.StringValue(connectionsItem19.Output)
+				connections19.Pipeline = types.StringPointerValue(connectionsItem19.Pipeline)
+				if connectionsCount19+1 > len(r.InputGrafana.InputGrafanaGrafana1.Connections) {
+					r.InputGrafana.InputGrafanaGrafana1.Connections = append(r.InputGrafana.InputGrafanaGrafana1.Connections, connections19)
 				} else {
-					r.InputGrafana.InputGrafanaGrafana1.Connections[connectionsCount18].Output = connections18.Output
-					r.InputGrafana.InputGrafanaGrafana1.Connections[connectionsCount18].Pipeline = connections18.Pipeline
+					r.InputGrafana.InputGrafanaGrafana1.Connections[connectionsCount19].Output = connections19.Output
+					r.InputGrafana.InputGrafanaGrafana1.Connections[connectionsCount19].Pipeline = connections19.Pipeline
 				}
 			}
 			r.InputGrafana.InputGrafanaGrafana1.Description = types.StringPointerValue(resp.InputGrafana.InputGrafanaGrafana1.Description)
@@ -2388,7 +2245,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputGrafana.InputGrafanaGrafana1.LokiAuth == nil {
 				r.InputGrafana.InputGrafanaGrafana1.LokiAuth = nil
 			} else {
-				r.InputGrafana.InputGrafanaGrafana1.LokiAuth = &tfTypes.InputLokiAuth1{}
+				r.InputGrafana.InputGrafanaGrafana1.LokiAuth = &tfTypes.InputGrafanaLokiAuth1{}
 				r.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr = types.StringPointerValue(resp.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr)
 				if resp.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType != nil {
 					r.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType = types.StringValue(string(*resp.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType))
@@ -2442,15 +2299,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if len(r.InputGrafana.InputGrafanaGrafana1.Metadata) > len(resp.InputGrafana.InputGrafanaGrafana1.Metadata) {
 				r.InputGrafana.InputGrafanaGrafana1.Metadata = r.InputGrafana.InputGrafanaGrafana1.Metadata[:len(resp.InputGrafana.InputGrafanaGrafana1.Metadata)]
 			}
-			for metadataCount18, metadataItem18 := range resp.InputGrafana.InputGrafanaGrafana1.Metadata {
-				var metadata18 tfTypes.InputGrafanaMetadatum1
-				metadata18.Name = types.StringValue(metadataItem18.Name)
-				metadata18.Value = types.StringValue(metadataItem18.Value)
-				if metadataCount18+1 > len(r.InputGrafana.InputGrafanaGrafana1.Metadata) {
-					r.InputGrafana.InputGrafanaGrafana1.Metadata = append(r.InputGrafana.InputGrafanaGrafana1.Metadata, metadata18)
+			for metadataCount19, metadataItem19 := range resp.InputGrafana.InputGrafanaGrafana1.Metadata {
+				var metadata19 tfTypes.InputGrafanaMetadatum1
+				metadata19.Name = types.StringValue(metadataItem19.Name)
+				metadata19.Value = types.StringValue(metadataItem19.Value)
+				if metadataCount19+1 > len(r.InputGrafana.InputGrafanaGrafana1.Metadata) {
+					r.InputGrafana.InputGrafanaGrafana1.Metadata = append(r.InputGrafana.InputGrafanaGrafana1.Metadata, metadata19)
 				} else {
-					r.InputGrafana.InputGrafanaGrafana1.Metadata[metadataCount18].Name = metadata18.Name
-					r.InputGrafana.InputGrafanaGrafana1.Metadata[metadataCount18].Value = metadata18.Value
+					r.InputGrafana.InputGrafanaGrafana1.Metadata[metadataCount19].Name = metadata19.Name
+					r.InputGrafana.InputGrafanaGrafana1.Metadata[metadataCount19].Value = metadata19.Value
 				}
 			}
 			r.InputGrafana.InputGrafanaGrafana1.Pipeline = types.StringPointerValue(resp.InputGrafana.InputGrafanaGrafana1.Pipeline)
@@ -2480,7 +2337,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputGrafana.InputGrafanaGrafana1.PrometheusAuth == nil {
 				r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth = nil
 			} else {
-				r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth = &tfTypes.InputPrometheusAuth1{}
+				r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth = &tfTypes.InputGrafanaPrometheusAuth1{}
 				r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr = types.StringPointerValue(resp.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr)
 				if resp.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType != nil {
 					r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType = types.StringValue(string(*resp.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType))
@@ -2531,21 +2388,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputGrafana.InputGrafanaGrafana1.RequestTimeout = types.Float64PointerValue(resp.InputGrafana.InputGrafanaGrafana1.RequestTimeout)
 			r.InputGrafana.InputGrafanaGrafana1.SendToRoutes = types.BoolPointerValue(resp.InputGrafana.InputGrafanaGrafana1.SendToRoutes)
 			r.InputGrafana.InputGrafanaGrafana1.SocketTimeout = types.Float64PointerValue(resp.InputGrafana.InputGrafanaGrafana1.SocketTimeout)
-			if resp.InputGrafana.InputGrafanaGrafana1.Status == nil {
-				r.InputGrafana.InputGrafanaGrafana1.Status = nil
-			} else {
-				r.InputGrafana.InputGrafanaGrafana1.Status = &tfTypes.TFStatus{}
-				r.InputGrafana.InputGrafanaGrafana1.Status.Health = types.StringValue(string(resp.InputGrafana.InputGrafanaGrafana1.Status.Health))
-				if len(resp.InputGrafana.InputGrafanaGrafana1.Status.Metrics) > 0 {
-					r.InputGrafana.InputGrafanaGrafana1.Status.Metrics = make(map[string]types.String, len(resp.InputGrafana.InputGrafanaGrafana1.Status.Metrics))
-					for key18, value18 := range resp.InputGrafana.InputGrafanaGrafana1.Status.Metrics {
-						result18, _ := json.Marshal(value18)
-						r.InputGrafana.InputGrafanaGrafana1.Status.Metrics[key18] = types.StringValue(string(result18))
-					}
-				}
-				r.InputGrafana.InputGrafanaGrafana1.Status.Timestamp = types.Float64Value(resp.InputGrafana.InputGrafanaGrafana1.Status.Timestamp)
-				r.InputGrafana.InputGrafanaGrafana1.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputGrafana.InputGrafanaGrafana1.Status.UseStatusFromLB)
-			}
 			r.InputGrafana.InputGrafanaGrafana1.Streamtags = make([]types.String, 0, len(resp.InputGrafana.InputGrafanaGrafana1.Streamtags))
 			for _, v := range resp.InputGrafana.InputGrafanaGrafana1.Streamtags {
 				r.InputGrafana.InputGrafanaGrafana1.Streamtags = append(r.InputGrafana.InputGrafanaGrafana1.Streamtags, types.StringValue(v))
@@ -2560,8 +2402,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex == nil {
 					r.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex = types.StringNull()
 				} else {
-					commonNameRegexResult6, _ := json.Marshal(resp.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex)
-					r.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult6))
+					commonNameRegexResult7, _ := json.Marshal(resp.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex)
+					r.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult7))
 				}
 				r.InputGrafana.InputGrafanaGrafana1.TLS.Disabled = types.BoolPointerValue(resp.InputGrafana.InputGrafanaGrafana1.TLS.Disabled)
 				if resp.InputGrafana.InputGrafanaGrafana1.TLS.MaxVersion != nil {
@@ -2579,8 +2421,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized == nil {
 					r.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized = types.StringNull()
 				} else {
-					rejectUnauthorizedResult6, _ := json.Marshal(resp.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized)
-					r.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult6))
+					rejectUnauthorizedResult7, _ := json.Marshal(resp.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized)
+					r.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult7))
 				}
 				r.InputGrafana.InputGrafanaGrafana1.TLS.RequestCert = types.BoolPointerValue(resp.InputGrafana.InputGrafanaGrafana1.TLS.RequestCert)
 			}
@@ -2598,15 +2440,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if len(r.InputGrafana.InputGrafanaGrafana2.Connections) > len(resp.InputGrafana.InputGrafanaGrafana2.Connections) {
 				r.InputGrafana.InputGrafanaGrafana2.Connections = r.InputGrafana.InputGrafanaGrafana2.Connections[:len(resp.InputGrafana.InputGrafanaGrafana2.Connections)]
 			}
-			for connectionsCount19, connectionsItem19 := range resp.InputGrafana.InputGrafanaGrafana2.Connections {
-				var connections19 tfTypes.InputGrafanaConnection2
-				connections19.Output = types.StringValue(connectionsItem19.Output)
-				connections19.Pipeline = types.StringPointerValue(connectionsItem19.Pipeline)
-				if connectionsCount19+1 > len(r.InputGrafana.InputGrafanaGrafana2.Connections) {
-					r.InputGrafana.InputGrafanaGrafana2.Connections = append(r.InputGrafana.InputGrafanaGrafana2.Connections, connections19)
+			for connectionsCount20, connectionsItem20 := range resp.InputGrafana.InputGrafanaGrafana2.Connections {
+				var connections20 tfTypes.InputGrafanaConnection2
+				connections20.Output = types.StringValue(connectionsItem20.Output)
+				connections20.Pipeline = types.StringPointerValue(connectionsItem20.Pipeline)
+				if connectionsCount20+1 > len(r.InputGrafana.InputGrafanaGrafana2.Connections) {
+					r.InputGrafana.InputGrafanaGrafana2.Connections = append(r.InputGrafana.InputGrafanaGrafana2.Connections, connections20)
 				} else {
-					r.InputGrafana.InputGrafanaGrafana2.Connections[connectionsCount19].Output = connections19.Output
-					r.InputGrafana.InputGrafanaGrafana2.Connections[connectionsCount19].Pipeline = connections19.Pipeline
+					r.InputGrafana.InputGrafanaGrafana2.Connections[connectionsCount20].Output = connections20.Output
+					r.InputGrafana.InputGrafanaGrafana2.Connections[connectionsCount20].Pipeline = connections20.Pipeline
 				}
 			}
 			r.InputGrafana.InputGrafanaGrafana2.Description = types.StringPointerValue(resp.InputGrafana.InputGrafanaGrafana2.Description)
@@ -2623,7 +2465,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputGrafana.InputGrafanaGrafana2.LokiAuth == nil {
 				r.InputGrafana.InputGrafanaGrafana2.LokiAuth = nil
 			} else {
-				r.InputGrafana.InputGrafanaGrafana2.LokiAuth = &tfTypes.InputLokiAuth2{}
+				r.InputGrafana.InputGrafanaGrafana2.LokiAuth = &tfTypes.InputGrafanaLokiAuth2{}
 				r.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr = types.StringPointerValue(resp.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr)
 				if resp.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType != nil {
 					r.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType = types.StringValue(string(*resp.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType))
@@ -2677,15 +2519,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if len(r.InputGrafana.InputGrafanaGrafana2.Metadata) > len(resp.InputGrafana.InputGrafanaGrafana2.Metadata) {
 				r.InputGrafana.InputGrafanaGrafana2.Metadata = r.InputGrafana.InputGrafanaGrafana2.Metadata[:len(resp.InputGrafana.InputGrafanaGrafana2.Metadata)]
 			}
-			for metadataCount19, metadataItem19 := range resp.InputGrafana.InputGrafanaGrafana2.Metadata {
-				var metadata19 tfTypes.InputGrafanaMetadatum2
-				metadata19.Name = types.StringValue(metadataItem19.Name)
-				metadata19.Value = types.StringValue(metadataItem19.Value)
-				if metadataCount19+1 > len(r.InputGrafana.InputGrafanaGrafana2.Metadata) {
-					r.InputGrafana.InputGrafanaGrafana2.Metadata = append(r.InputGrafana.InputGrafanaGrafana2.Metadata, metadata19)
+			for metadataCount20, metadataItem20 := range resp.InputGrafana.InputGrafanaGrafana2.Metadata {
+				var metadata20 tfTypes.InputGrafanaMetadatum2
+				metadata20.Name = types.StringValue(metadataItem20.Name)
+				metadata20.Value = types.StringValue(metadataItem20.Value)
+				if metadataCount20+1 > len(r.InputGrafana.InputGrafanaGrafana2.Metadata) {
+					r.InputGrafana.InputGrafanaGrafana2.Metadata = append(r.InputGrafana.InputGrafanaGrafana2.Metadata, metadata20)
 				} else {
-					r.InputGrafana.InputGrafanaGrafana2.Metadata[metadataCount19].Name = metadata19.Name
-					r.InputGrafana.InputGrafanaGrafana2.Metadata[metadataCount19].Value = metadata19.Value
+					r.InputGrafana.InputGrafanaGrafana2.Metadata[metadataCount20].Name = metadata20.Name
+					r.InputGrafana.InputGrafanaGrafana2.Metadata[metadataCount20].Value = metadata20.Value
 				}
 			}
 			r.InputGrafana.InputGrafanaGrafana2.Pipeline = types.StringPointerValue(resp.InputGrafana.InputGrafanaGrafana2.Pipeline)
@@ -2715,7 +2557,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputGrafana.InputGrafanaGrafana2.PrometheusAuth == nil {
 				r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth = nil
 			} else {
-				r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth = &tfTypes.InputPrometheusAuth2{}
+				r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth = &tfTypes.InputGrafanaPrometheusAuth2{}
 				r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr = types.StringPointerValue(resp.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr)
 				if resp.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType != nil {
 					r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType = types.StringValue(string(*resp.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType))
@@ -2766,21 +2608,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputGrafana.InputGrafanaGrafana2.RequestTimeout = types.Float64PointerValue(resp.InputGrafana.InputGrafanaGrafana2.RequestTimeout)
 			r.InputGrafana.InputGrafanaGrafana2.SendToRoutes = types.BoolPointerValue(resp.InputGrafana.InputGrafanaGrafana2.SendToRoutes)
 			r.InputGrafana.InputGrafanaGrafana2.SocketTimeout = types.Float64PointerValue(resp.InputGrafana.InputGrafanaGrafana2.SocketTimeout)
-			if resp.InputGrafana.InputGrafanaGrafana2.Status == nil {
-				r.InputGrafana.InputGrafanaGrafana2.Status = nil
-			} else {
-				r.InputGrafana.InputGrafanaGrafana2.Status = &tfTypes.TFStatus{}
-				r.InputGrafana.InputGrafanaGrafana2.Status.Health = types.StringValue(string(resp.InputGrafana.InputGrafanaGrafana2.Status.Health))
-				if len(resp.InputGrafana.InputGrafanaGrafana2.Status.Metrics) > 0 {
-					r.InputGrafana.InputGrafanaGrafana2.Status.Metrics = make(map[string]types.String, len(resp.InputGrafana.InputGrafanaGrafana2.Status.Metrics))
-					for key19, value19 := range resp.InputGrafana.InputGrafanaGrafana2.Status.Metrics {
-						result19, _ := json.Marshal(value19)
-						r.InputGrafana.InputGrafanaGrafana2.Status.Metrics[key19] = types.StringValue(string(result19))
-					}
-				}
-				r.InputGrafana.InputGrafanaGrafana2.Status.Timestamp = types.Float64Value(resp.InputGrafana.InputGrafanaGrafana2.Status.Timestamp)
-				r.InputGrafana.InputGrafanaGrafana2.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputGrafana.InputGrafanaGrafana2.Status.UseStatusFromLB)
-			}
 			r.InputGrafana.InputGrafanaGrafana2.Streamtags = make([]types.String, 0, len(resp.InputGrafana.InputGrafanaGrafana2.Streamtags))
 			for _, v := range resp.InputGrafana.InputGrafanaGrafana2.Streamtags {
 				r.InputGrafana.InputGrafanaGrafana2.Streamtags = append(r.InputGrafana.InputGrafanaGrafana2.Streamtags, types.StringValue(v))
@@ -2795,8 +2622,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex == nil {
 					r.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex = types.StringNull()
 				} else {
-					commonNameRegexResult7, _ := json.Marshal(resp.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex)
-					r.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult7))
+					commonNameRegexResult8, _ := json.Marshal(resp.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex)
+					r.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult8))
 				}
 				r.InputGrafana.InputGrafanaGrafana2.TLS.Disabled = types.BoolPointerValue(resp.InputGrafana.InputGrafanaGrafana2.TLS.Disabled)
 				if resp.InputGrafana.InputGrafanaGrafana2.TLS.MaxVersion != nil {
@@ -2814,8 +2641,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized == nil {
 					r.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized = types.StringNull()
 				} else {
-					rejectUnauthorizedResult7, _ := json.Marshal(resp.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized)
-					r.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult7))
+					rejectUnauthorizedResult8, _ := json.Marshal(resp.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized)
+					r.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult8))
 				}
 				r.InputGrafana.InputGrafanaGrafana2.TLS.RequestCert = types.BoolPointerValue(resp.InputGrafana.InputGrafanaGrafana2.TLS.RequestCert)
 			}
@@ -2833,23 +2660,23 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputHTTP.AuthTokens {
 			r.InputHTTP.AuthTokens = append(r.InputHTTP.AuthTokens, types.StringValue(v))
 		}
-		r.InputHTTP.AuthTokensExt = []tfTypes.AuthTokensExtHTTP{}
+		r.InputHTTP.AuthTokensExt = []tfTypes.InputHTTPAuthTokensExt{}
 		if len(r.InputHTTP.AuthTokensExt) > len(resp.InputHTTP.AuthTokensExt) {
 			r.InputHTTP.AuthTokensExt = r.InputHTTP.AuthTokensExt[:len(resp.InputHTTP.AuthTokensExt)]
 		}
 		for authTokensExtCount, authTokensExtItem := range resp.InputHTTP.AuthTokensExt {
-			var authTokensExt tfTypes.AuthTokensExtHTTP
+			var authTokensExt tfTypes.InputHTTPAuthTokensExt
 			authTokensExt.Description = types.StringPointerValue(authTokensExtItem.Description)
-			authTokensExt.Metadata = []tfTypes.AuthTokensExtMetadatumHTTP{}
-			for metadataCount20, metadataItem20 := range authTokensExtItem.Metadata {
-				var metadata20 tfTypes.AuthTokensExtMetadatumHTTP
-				metadata20.Name = types.StringValue(metadataItem20.Name)
-				metadata20.Value = types.StringValue(metadataItem20.Value)
-				if metadataCount20+1 > len(authTokensExt.Metadata) {
-					authTokensExt.Metadata = append(authTokensExt.Metadata, metadata20)
+			authTokensExt.Metadata = []tfTypes.InputHTTPAuthTokensExtMetadatum{}
+			for metadataCount21, metadataItem21 := range authTokensExtItem.Metadata {
+				var metadata21 tfTypes.InputHTTPAuthTokensExtMetadatum
+				metadata21.Name = types.StringValue(metadataItem21.Name)
+				metadata21.Value = types.StringValue(metadataItem21.Value)
+				if metadataCount21+1 > len(authTokensExt.Metadata) {
+					authTokensExt.Metadata = append(authTokensExt.Metadata, metadata21)
 				} else {
-					authTokensExt.Metadata[metadataCount20].Name = metadata20.Name
-					authTokensExt.Metadata[metadataCount20].Value = metadata20.Value
+					authTokensExt.Metadata[metadataCount21].Name = metadata21.Name
+					authTokensExt.Metadata[metadataCount21].Value = metadata21.Value
 				}
 			}
 			authTokensExt.Token = types.StringValue(authTokensExtItem.Token)
@@ -2862,19 +2689,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputHTTP.CaptureHeaders = types.BoolPointerValue(resp.InputHTTP.CaptureHeaders)
-		r.InputHTTP.Connections = []tfTypes.ConnectionHTTP{}
+		r.InputHTTP.Connections = []tfTypes.InputHTTPConnection{}
 		if len(r.InputHTTP.Connections) > len(resp.InputHTTP.Connections) {
 			r.InputHTTP.Connections = r.InputHTTP.Connections[:len(resp.InputHTTP.Connections)]
 		}
-		for connectionsCount20, connectionsItem20 := range resp.InputHTTP.Connections {
-			var connections20 tfTypes.ConnectionHTTP
-			connections20.Output = types.StringValue(connectionsItem20.Output)
-			connections20.Pipeline = types.StringPointerValue(connectionsItem20.Pipeline)
-			if connectionsCount20+1 > len(r.InputHTTP.Connections) {
-				r.InputHTTP.Connections = append(r.InputHTTP.Connections, connections20)
+		for connectionsCount21, connectionsItem21 := range resp.InputHTTP.Connections {
+			var connections21 tfTypes.InputHTTPConnection
+			connections21.Output = types.StringValue(connectionsItem21.Output)
+			connections21.Pipeline = types.StringPointerValue(connectionsItem21.Pipeline)
+			if connectionsCount21+1 > len(r.InputHTTP.Connections) {
+				r.InputHTTP.Connections = append(r.InputHTTP.Connections, connections21)
 			} else {
-				r.InputHTTP.Connections[connectionsCount20].Output = connections20.Output
-				r.InputHTTP.Connections[connectionsCount20].Pipeline = connections20.Pipeline
+				r.InputHTTP.Connections[connectionsCount21].Output = connections21.Output
+				r.InputHTTP.Connections[connectionsCount21].Pipeline = connections21.Pipeline
 			}
 		}
 		r.InputHTTP.CriblAPI = types.StringPointerValue(resp.InputHTTP.CriblAPI)
@@ -2891,19 +2718,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputHTTP.KeepAliveTimeout = types.Float64PointerValue(resp.InputHTTP.KeepAliveTimeout)
 		r.InputHTTP.MaxActiveReq = types.Float64PointerValue(resp.InputHTTP.MaxActiveReq)
 		r.InputHTTP.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputHTTP.MaxRequestsPerSocket)
-		r.InputHTTP.Metadata = []tfTypes.InputMetadatumHTTP{}
+		r.InputHTTP.Metadata = []tfTypes.InputHTTPMetadatum{}
 		if len(r.InputHTTP.Metadata) > len(resp.InputHTTP.Metadata) {
 			r.InputHTTP.Metadata = r.InputHTTP.Metadata[:len(resp.InputHTTP.Metadata)]
 		}
-		for metadataCount21, metadataItem21 := range resp.InputHTTP.Metadata {
-			var metadata21 tfTypes.InputMetadatumHTTP
-			metadata21.Name = types.StringValue(metadataItem21.Name)
-			metadata21.Value = types.StringValue(metadataItem21.Value)
-			if metadataCount21+1 > len(r.InputHTTP.Metadata) {
-				r.InputHTTP.Metadata = append(r.InputHTTP.Metadata, metadata21)
+		for metadataCount22, metadataItem22 := range resp.InputHTTP.Metadata {
+			var metadata22 tfTypes.InputHTTPMetadatum
+			metadata22.Name = types.StringValue(metadataItem22.Name)
+			metadata22.Value = types.StringValue(metadataItem22.Value)
+			if metadataCount22+1 > len(r.InputHTTP.Metadata) {
+				r.InputHTTP.Metadata = append(r.InputHTTP.Metadata, metadata22)
 			} else {
-				r.InputHTTP.Metadata[metadataCount21].Name = metadata21.Name
-				r.InputHTTP.Metadata[metadataCount21].Value = metadata21.Value
+				r.InputHTTP.Metadata[metadataCount22].Name = metadata22.Name
+				r.InputHTTP.Metadata[metadataCount22].Value = metadata22.Value
 			}
 		}
 		r.InputHTTP.Pipeline = types.StringPointerValue(resp.InputHTTP.Pipeline)
@@ -2911,7 +2738,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputHTTP.Pq == nil {
 			r.InputHTTP.Pq = nil
 		} else {
-			r.InputHTTP.Pq = &tfTypes.PqHTTP{}
+			r.InputHTTP.Pq = &tfTypes.InputHTTPPq{}
 			r.InputHTTP.Pq.CommitFrequency = types.Float64PointerValue(resp.InputHTTP.Pq.CommitFrequency)
 			if resp.InputHTTP.Pq.Compress != nil {
 				r.InputHTTP.Pq.Compress = types.StringValue(string(*resp.InputHTTP.Pq.Compress))
@@ -2934,21 +2761,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputHTTP.SocketTimeout = types.Float64PointerValue(resp.InputHTTP.SocketTimeout)
 		r.InputHTTP.SplunkHecAcks = types.BoolPointerValue(resp.InputHTTP.SplunkHecAcks)
 		r.InputHTTP.SplunkHecAPI = types.StringPointerValue(resp.InputHTTP.SplunkHecAPI)
-		if resp.InputHTTP.Status == nil {
-			r.InputHTTP.Status = nil
-		} else {
-			r.InputHTTP.Status = &tfTypes.TFStatus{}
-			r.InputHTTP.Status.Health = types.StringValue(string(resp.InputHTTP.Status.Health))
-			if len(resp.InputHTTP.Status.Metrics) > 0 {
-				r.InputHTTP.Status.Metrics = make(map[string]types.String, len(resp.InputHTTP.Status.Metrics))
-				for key20, value20 := range resp.InputHTTP.Status.Metrics {
-					result20, _ := json.Marshal(value20)
-					r.InputHTTP.Status.Metrics[key20] = types.StringValue(string(result20))
-				}
-			}
-			r.InputHTTP.Status.Timestamp = types.Float64Value(resp.InputHTTP.Status.Timestamp)
-			r.InputHTTP.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputHTTP.Status.UseStatusFromLB)
-		}
 		r.InputHTTP.Streamtags = make([]types.String, 0, len(resp.InputHTTP.Streamtags))
 		for _, v := range resp.InputHTTP.Streamtags {
 			r.InputHTTP.Streamtags = append(r.InputHTTP.Streamtags, types.StringValue(v))
@@ -2956,15 +2768,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputHTTP.TLS == nil {
 			r.InputHTTP.TLS = nil
 		} else {
-			r.InputHTTP.TLS = &tfTypes.TLSSettingsServerSideHTTP{}
+			r.InputHTTP.TLS = &tfTypes.InputHTTPTLSSettingsServerSide{}
 			r.InputHTTP.TLS.CaPath = types.StringPointerValue(resp.InputHTTP.TLS.CaPath)
 			r.InputHTTP.TLS.CertificateName = types.StringPointerValue(resp.InputHTTP.TLS.CertificateName)
 			r.InputHTTP.TLS.CertPath = types.StringPointerValue(resp.InputHTTP.TLS.CertPath)
 			if resp.InputHTTP.TLS.CommonNameRegex == nil {
 				r.InputHTTP.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult8, _ := json.Marshal(resp.InputHTTP.TLS.CommonNameRegex)
-				r.InputHTTP.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult8))
+				commonNameRegexResult9, _ := json.Marshal(resp.InputHTTP.TLS.CommonNameRegex)
+				r.InputHTTP.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult9))
 			}
 			r.InputHTTP.TLS.Disabled = types.BoolPointerValue(resp.InputHTTP.TLS.Disabled)
 			if resp.InputHTTP.TLS.MaxVersion != nil {
@@ -2982,8 +2794,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputHTTP.TLS.RejectUnauthorized == nil {
 				r.InputHTTP.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult8, _ := json.Marshal(resp.InputHTTP.TLS.RejectUnauthorized)
-				r.InputHTTP.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult8))
+				rejectUnauthorizedResult9, _ := json.Marshal(resp.InputHTTP.TLS.RejectUnauthorized)
+				r.InputHTTP.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult9))
 			}
 			r.InputHTTP.TLS.RequestCert = types.BoolPointerValue(resp.InputHTTP.TLS.RequestCert)
 		}
@@ -3008,23 +2820,23 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputHTTPRaw.AuthTokens {
 			r.InputHTTPRaw.AuthTokens = append(r.InputHTTPRaw.AuthTokens, types.StringValue(v))
 		}
-		r.InputHTTPRaw.AuthTokensExt = []tfTypes.AuthTokensExtHTTPRaw{}
+		r.InputHTTPRaw.AuthTokensExt = []tfTypes.InputHTTPRawAuthTokensExt{}
 		if len(r.InputHTTPRaw.AuthTokensExt) > len(resp.InputHTTPRaw.AuthTokensExt) {
 			r.InputHTTPRaw.AuthTokensExt = r.InputHTTPRaw.AuthTokensExt[:len(resp.InputHTTPRaw.AuthTokensExt)]
 		}
 		for authTokensExtCount1, authTokensExtItem1 := range resp.InputHTTPRaw.AuthTokensExt {
-			var authTokensExt1 tfTypes.AuthTokensExtHTTPRaw
+			var authTokensExt1 tfTypes.InputHTTPRawAuthTokensExt
 			authTokensExt1.Description = types.StringPointerValue(authTokensExtItem1.Description)
-			authTokensExt1.Metadata = []tfTypes.AuthTokensExtMetadatumHTTPRaw{}
-			for metadataCount22, metadataItem22 := range authTokensExtItem1.Metadata {
-				var metadata22 tfTypes.AuthTokensExtMetadatumHTTPRaw
-				metadata22.Name = types.StringValue(metadataItem22.Name)
-				metadata22.Value = types.StringValue(metadataItem22.Value)
-				if metadataCount22+1 > len(authTokensExt1.Metadata) {
-					authTokensExt1.Metadata = append(authTokensExt1.Metadata, metadata22)
+			authTokensExt1.Metadata = []tfTypes.InputHTTPRawAuthTokensExtMetadatum{}
+			for metadataCount23, metadataItem23 := range authTokensExtItem1.Metadata {
+				var metadata23 tfTypes.InputHTTPRawAuthTokensExtMetadatum
+				metadata23.Name = types.StringValue(metadataItem23.Name)
+				metadata23.Value = types.StringValue(metadataItem23.Value)
+				if metadataCount23+1 > len(authTokensExt1.Metadata) {
+					authTokensExt1.Metadata = append(authTokensExt1.Metadata, metadata23)
 				} else {
-					authTokensExt1.Metadata[metadataCount22].Name = metadata22.Name
-					authTokensExt1.Metadata[metadataCount22].Value = metadata22.Value
+					authTokensExt1.Metadata[metadataCount23].Name = metadata23.Name
+					authTokensExt1.Metadata[metadataCount23].Value = metadata23.Value
 				}
 			}
 			authTokensExt1.Token = types.StringValue(authTokensExtItem1.Token)
@@ -3041,19 +2853,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputHTTPRaw.BreakerRulesets = append(r.InputHTTPRaw.BreakerRulesets, types.StringValue(v))
 		}
 		r.InputHTTPRaw.CaptureHeaders = types.BoolPointerValue(resp.InputHTTPRaw.CaptureHeaders)
-		r.InputHTTPRaw.Connections = []tfTypes.ConnectionHTTPRaw{}
+		r.InputHTTPRaw.Connections = []tfTypes.InputHTTPRawConnection{}
 		if len(r.InputHTTPRaw.Connections) > len(resp.InputHTTPRaw.Connections) {
 			r.InputHTTPRaw.Connections = r.InputHTTPRaw.Connections[:len(resp.InputHTTPRaw.Connections)]
 		}
-		for connectionsCount21, connectionsItem21 := range resp.InputHTTPRaw.Connections {
-			var connections21 tfTypes.ConnectionHTTPRaw
-			connections21.Output = types.StringValue(connectionsItem21.Output)
-			connections21.Pipeline = types.StringPointerValue(connectionsItem21.Pipeline)
-			if connectionsCount21+1 > len(r.InputHTTPRaw.Connections) {
-				r.InputHTTPRaw.Connections = append(r.InputHTTPRaw.Connections, connections21)
+		for connectionsCount22, connectionsItem22 := range resp.InputHTTPRaw.Connections {
+			var connections22 tfTypes.InputHTTPRawConnection
+			connections22.Output = types.StringValue(connectionsItem22.Output)
+			connections22.Pipeline = types.StringPointerValue(connectionsItem22.Pipeline)
+			if connectionsCount22+1 > len(r.InputHTTPRaw.Connections) {
+				r.InputHTTPRaw.Connections = append(r.InputHTTPRaw.Connections, connections22)
 			} else {
-				r.InputHTTPRaw.Connections[connectionsCount21].Output = connections21.Output
-				r.InputHTTPRaw.Connections[connectionsCount21].Pipeline = connections21.Pipeline
+				r.InputHTTPRaw.Connections[connectionsCount22].Output = connections22.Output
+				r.InputHTTPRaw.Connections[connectionsCount22].Pipeline = connections22.Pipeline
 			}
 		}
 		r.InputHTTPRaw.Description = types.StringPointerValue(resp.InputHTTPRaw.Description)
@@ -3068,19 +2880,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputHTTPRaw.KeepAliveTimeout = types.Float64PointerValue(resp.InputHTTPRaw.KeepAliveTimeout)
 		r.InputHTTPRaw.MaxActiveReq = types.Float64PointerValue(resp.InputHTTPRaw.MaxActiveReq)
 		r.InputHTTPRaw.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputHTTPRaw.MaxRequestsPerSocket)
-		r.InputHTTPRaw.Metadata = []tfTypes.MetadatumHTTPRaw{}
+		r.InputHTTPRaw.Metadata = []tfTypes.InputHTTPRawMetadatum{}
 		if len(r.InputHTTPRaw.Metadata) > len(resp.InputHTTPRaw.Metadata) {
 			r.InputHTTPRaw.Metadata = r.InputHTTPRaw.Metadata[:len(resp.InputHTTPRaw.Metadata)]
 		}
-		for metadataCount23, metadataItem23 := range resp.InputHTTPRaw.Metadata {
-			var metadata23 tfTypes.MetadatumHTTPRaw
-			metadata23.Name = types.StringValue(metadataItem23.Name)
-			metadata23.Value = types.StringValue(metadataItem23.Value)
-			if metadataCount23+1 > len(r.InputHTTPRaw.Metadata) {
-				r.InputHTTPRaw.Metadata = append(r.InputHTTPRaw.Metadata, metadata23)
+		for metadataCount24, metadataItem24 := range resp.InputHTTPRaw.Metadata {
+			var metadata24 tfTypes.InputHTTPRawMetadatum
+			metadata24.Name = types.StringValue(metadataItem24.Name)
+			metadata24.Value = types.StringValue(metadataItem24.Value)
+			if metadataCount24+1 > len(r.InputHTTPRaw.Metadata) {
+				r.InputHTTPRaw.Metadata = append(r.InputHTTPRaw.Metadata, metadata24)
 			} else {
-				r.InputHTTPRaw.Metadata[metadataCount23].Name = metadata23.Name
-				r.InputHTTPRaw.Metadata[metadataCount23].Value = metadata23.Value
+				r.InputHTTPRaw.Metadata[metadataCount24].Name = metadata24.Name
+				r.InputHTTPRaw.Metadata[metadataCount24].Value = metadata24.Value
 			}
 		}
 		r.InputHTTPRaw.Pipeline = types.StringPointerValue(resp.InputHTTPRaw.Pipeline)
@@ -3088,7 +2900,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputHTTPRaw.Pq == nil {
 			r.InputHTTPRaw.Pq = nil
 		} else {
-			r.InputHTTPRaw.Pq = &tfTypes.PqHTTPRaw{}
+			r.InputHTTPRaw.Pq = &tfTypes.InputHTTPRawPq{}
 			r.InputHTTPRaw.Pq.CommitFrequency = types.Float64PointerValue(resp.InputHTTPRaw.Pq.CommitFrequency)
 			if resp.InputHTTPRaw.Pq.Compress != nil {
 				r.InputHTTPRaw.Pq.Compress = types.StringValue(string(*resp.InputHTTPRaw.Pq.Compress))
@@ -3110,21 +2922,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputHTTPRaw.SendToRoutes = types.BoolPointerValue(resp.InputHTTPRaw.SendToRoutes)
 		r.InputHTTPRaw.SocketTimeout = types.Float64PointerValue(resp.InputHTTPRaw.SocketTimeout)
 		r.InputHTTPRaw.StaleChannelFlushMs = types.Float64PointerValue(resp.InputHTTPRaw.StaleChannelFlushMs)
-		if resp.InputHTTPRaw.Status == nil {
-			r.InputHTTPRaw.Status = nil
-		} else {
-			r.InputHTTPRaw.Status = &tfTypes.TFStatus{}
-			r.InputHTTPRaw.Status.Health = types.StringValue(string(resp.InputHTTPRaw.Status.Health))
-			if len(resp.InputHTTPRaw.Status.Metrics) > 0 {
-				r.InputHTTPRaw.Status.Metrics = make(map[string]types.String, len(resp.InputHTTPRaw.Status.Metrics))
-				for key21, value21 := range resp.InputHTTPRaw.Status.Metrics {
-					result21, _ := json.Marshal(value21)
-					r.InputHTTPRaw.Status.Metrics[key21] = types.StringValue(string(result21))
-				}
-			}
-			r.InputHTTPRaw.Status.Timestamp = types.Float64Value(resp.InputHTTPRaw.Status.Timestamp)
-			r.InputHTTPRaw.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputHTTPRaw.Status.UseStatusFromLB)
-		}
 		r.InputHTTPRaw.Streamtags = make([]types.String, 0, len(resp.InputHTTPRaw.Streamtags))
 		for _, v := range resp.InputHTTPRaw.Streamtags {
 			r.InputHTTPRaw.Streamtags = append(r.InputHTTPRaw.Streamtags, types.StringValue(v))
@@ -3132,15 +2929,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputHTTPRaw.TLS == nil {
 			r.InputHTTPRaw.TLS = nil
 		} else {
-			r.InputHTTPRaw.TLS = &tfTypes.TLSSettingsServerSideHTTPRaw{}
+			r.InputHTTPRaw.TLS = &tfTypes.InputHTTPRawTLSSettingsServerSide{}
 			r.InputHTTPRaw.TLS.CaPath = types.StringPointerValue(resp.InputHTTPRaw.TLS.CaPath)
 			r.InputHTTPRaw.TLS.CertificateName = types.StringPointerValue(resp.InputHTTPRaw.TLS.CertificateName)
 			r.InputHTTPRaw.TLS.CertPath = types.StringPointerValue(resp.InputHTTPRaw.TLS.CertPath)
 			if resp.InputHTTPRaw.TLS.CommonNameRegex == nil {
 				r.InputHTTPRaw.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult9, _ := json.Marshal(resp.InputHTTPRaw.TLS.CommonNameRegex)
-				r.InputHTTPRaw.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult9))
+				commonNameRegexResult10, _ := json.Marshal(resp.InputHTTPRaw.TLS.CommonNameRegex)
+				r.InputHTTPRaw.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult10))
 			}
 			r.InputHTTPRaw.TLS.Disabled = types.BoolPointerValue(resp.InputHTTPRaw.TLS.Disabled)
 			if resp.InputHTTPRaw.TLS.MaxVersion != nil {
@@ -3158,8 +2955,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputHTTPRaw.TLS.RejectUnauthorized == nil {
 				r.InputHTTPRaw.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult9, _ := json.Marshal(resp.InputHTTPRaw.TLS.RejectUnauthorized)
-				r.InputHTTPRaw.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult9))
+				rejectUnauthorizedResult10, _ := json.Marshal(resp.InputHTTPRaw.TLS.RejectUnauthorized)
+				r.InputHTTPRaw.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult10))
 			}
 			r.InputHTTPRaw.TLS.RequestCert = types.BoolPointerValue(resp.InputHTTPRaw.TLS.RequestCert)
 		}
@@ -3175,15 +2972,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if len(r.InputJournalFiles.Connections) > len(resp.InputJournalFiles.Connections) {
 			r.InputJournalFiles.Connections = r.InputJournalFiles.Connections[:len(resp.InputJournalFiles.Connections)]
 		}
-		for connectionsCount22, connectionsItem22 := range resp.InputJournalFiles.Connections {
-			var connections22 tfTypes.InputJournalFilesConnection
-			connections22.Output = types.StringValue(connectionsItem22.Output)
-			connections22.Pipeline = types.StringPointerValue(connectionsItem22.Pipeline)
-			if connectionsCount22+1 > len(r.InputJournalFiles.Connections) {
-				r.InputJournalFiles.Connections = append(r.InputJournalFiles.Connections, connections22)
+		for connectionsCount23, connectionsItem23 := range resp.InputJournalFiles.Connections {
+			var connections23 tfTypes.InputJournalFilesConnection
+			connections23.Output = types.StringValue(connectionsItem23.Output)
+			connections23.Pipeline = types.StringPointerValue(connectionsItem23.Pipeline)
+			if connectionsCount23+1 > len(r.InputJournalFiles.Connections) {
+				r.InputJournalFiles.Connections = append(r.InputJournalFiles.Connections, connections23)
 			} else {
-				r.InputJournalFiles.Connections[connectionsCount22].Output = connections22.Output
-				r.InputJournalFiles.Connections[connectionsCount22].Pipeline = connections22.Pipeline
+				r.InputJournalFiles.Connections[connectionsCount23].Output = connections23.Output
+				r.InputJournalFiles.Connections[connectionsCount23].Pipeline = connections23.Pipeline
 			}
 		}
 		r.InputJournalFiles.CurrentBoot = types.BoolPointerValue(resp.InputJournalFiles.CurrentBoot)
@@ -3201,15 +2998,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if len(r.InputJournalFiles.Metadata) > len(resp.InputJournalFiles.Metadata) {
 			r.InputJournalFiles.Metadata = r.InputJournalFiles.Metadata[:len(resp.InputJournalFiles.Metadata)]
 		}
-		for metadataCount24, metadataItem24 := range resp.InputJournalFiles.Metadata {
-			var metadata24 tfTypes.InputJournalFilesMetadatum
-			metadata24.Name = types.StringValue(metadataItem24.Name)
-			metadata24.Value = types.StringValue(metadataItem24.Value)
-			if metadataCount24+1 > len(r.InputJournalFiles.Metadata) {
-				r.InputJournalFiles.Metadata = append(r.InputJournalFiles.Metadata, metadata24)
+		for metadataCount25, metadataItem25 := range resp.InputJournalFiles.Metadata {
+			var metadata25 tfTypes.InputJournalFilesMetadatum
+			metadata25.Name = types.StringValue(metadataItem25.Name)
+			metadata25.Value = types.StringValue(metadataItem25.Value)
+			if metadataCount25+1 > len(r.InputJournalFiles.Metadata) {
+				r.InputJournalFiles.Metadata = append(r.InputJournalFiles.Metadata, metadata25)
 			} else {
-				r.InputJournalFiles.Metadata[metadataCount24].Name = metadata24.Name
-				r.InputJournalFiles.Metadata[metadataCount24].Value = metadata24.Value
+				r.InputJournalFiles.Metadata[metadataCount25].Name = metadata25.Name
+				r.InputJournalFiles.Metadata[metadataCount25].Value = metadata25.Value
 			}
 		}
 		r.InputJournalFiles.Path = types.StringValue(resp.InputJournalFiles.Path)
@@ -3251,21 +3048,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputJournalFiles.SendToRoutes = types.BoolPointerValue(resp.InputJournalFiles.SendToRoutes)
-		if resp.InputJournalFiles.Status == nil {
-			r.InputJournalFiles.Status = nil
-		} else {
-			r.InputJournalFiles.Status = &tfTypes.TFStatus{}
-			r.InputJournalFiles.Status.Health = types.StringValue(string(resp.InputJournalFiles.Status.Health))
-			if len(resp.InputJournalFiles.Status.Metrics) > 0 {
-				r.InputJournalFiles.Status.Metrics = make(map[string]types.String, len(resp.InputJournalFiles.Status.Metrics))
-				for key22, value22 := range resp.InputJournalFiles.Status.Metrics {
-					result22, _ := json.Marshal(value22)
-					r.InputJournalFiles.Status.Metrics[key22] = types.StringValue(string(result22))
-				}
-			}
-			r.InputJournalFiles.Status.Timestamp = types.Float64Value(resp.InputJournalFiles.Status.Timestamp)
-			r.InputJournalFiles.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputJournalFiles.Status.UseStatusFromLB)
-		}
 		r.InputJournalFiles.Streamtags = make([]types.String, 0, len(resp.InputJournalFiles.Streamtags))
 		for _, v := range resp.InputJournalFiles.Streamtags {
 			r.InputJournalFiles.Streamtags = append(r.InputJournalFiles.Streamtags, types.StringValue(v))
@@ -3286,19 +3068,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputKafka.Brokers {
 			r.InputKafka.Brokers = append(r.InputKafka.Brokers, types.StringValue(v))
 		}
-		r.InputKafka.Connections = []tfTypes.ConnectionKafka{}
+		r.InputKafka.Connections = []tfTypes.InputKafkaConnection{}
 		if len(r.InputKafka.Connections) > len(resp.InputKafka.Connections) {
 			r.InputKafka.Connections = r.InputKafka.Connections[:len(resp.InputKafka.Connections)]
 		}
-		for connectionsCount23, connectionsItem23 := range resp.InputKafka.Connections {
-			var connections23 tfTypes.ConnectionKafka
-			connections23.Output = types.StringValue(connectionsItem23.Output)
-			connections23.Pipeline = types.StringPointerValue(connectionsItem23.Pipeline)
-			if connectionsCount23+1 > len(r.InputKafka.Connections) {
-				r.InputKafka.Connections = append(r.InputKafka.Connections, connections23)
+		for connectionsCount24, connectionsItem24 := range resp.InputKafka.Connections {
+			var connections24 tfTypes.InputKafkaConnection
+			connections24.Output = types.StringValue(connectionsItem24.Output)
+			connections24.Pipeline = types.StringPointerValue(connectionsItem24.Pipeline)
+			if connectionsCount24+1 > len(r.InputKafka.Connections) {
+				r.InputKafka.Connections = append(r.InputKafka.Connections, connections24)
 			} else {
-				r.InputKafka.Connections[connectionsCount23].Output = connections23.Output
-				r.InputKafka.Connections[connectionsCount23].Pipeline = connections23.Pipeline
+				r.InputKafka.Connections[connectionsCount24].Output = connections24.Output
+				r.InputKafka.Connections[connectionsCount24].Pipeline = connections24.Pipeline
 			}
 		}
 		r.InputKafka.ConnectionTimeout = types.Float64PointerValue(resp.InputKafka.ConnectionTimeout)
@@ -3313,11 +3095,11 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputKafka.KafkaSchemaRegistry == nil {
 			r.InputKafka.KafkaSchemaRegistry = nil
 		} else {
-			r.InputKafka.KafkaSchemaRegistry = &tfTypes.InputKafkaSchemaRegistryAuthenticationKafka{}
+			r.InputKafka.KafkaSchemaRegistry = &tfTypes.InputKafkaKafkaSchemaRegistryAuthentication{}
 			if resp.InputKafka.KafkaSchemaRegistry.Auth == nil {
 				r.InputKafka.KafkaSchemaRegistry.Auth = nil
 			} else {
-				r.InputKafka.KafkaSchemaRegistry.Auth = &tfTypes.InputAuthKafka{}
+				r.InputKafka.KafkaSchemaRegistry.Auth = &tfTypes.InputKafkaAuth{}
 				r.InputKafka.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(resp.InputKafka.KafkaSchemaRegistry.Auth.CredentialsSecret)
 				r.InputKafka.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(resp.InputKafka.KafkaSchemaRegistry.Auth.Disabled)
 			}
@@ -3329,7 +3111,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputKafka.KafkaSchemaRegistry.TLS == nil {
 				r.InputKafka.KafkaSchemaRegistry.TLS = nil
 			} else {
-				r.InputKafka.KafkaSchemaRegistry.TLS = &tfTypes.InputKafkaSchemaRegistryTLSSettingsClientSideKafka{}
+				r.InputKafka.KafkaSchemaRegistry.TLS = &tfTypes.InputKafkaKafkaSchemaRegistryTLSSettingsClientSide{}
 				r.InputKafka.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(resp.InputKafka.KafkaSchemaRegistry.TLS.CaPath)
 				r.InputKafka.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(resp.InputKafka.KafkaSchemaRegistry.TLS.CertificateName)
 				r.InputKafka.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(resp.InputKafka.KafkaSchemaRegistry.TLS.CertPath)
@@ -3355,26 +3137,26 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputKafka.MaxBytesPerPartition = types.Float64PointerValue(resp.InputKafka.MaxBytesPerPartition)
 		r.InputKafka.MaxRetries = types.Float64PointerValue(resp.InputKafka.MaxRetries)
 		r.InputKafka.MaxSocketErrors = types.Float64PointerValue(resp.InputKafka.MaxSocketErrors)
-		r.InputKafka.Metadata = []tfTypes.MetadatumKafka{}
+		r.InputKafka.Metadata = []tfTypes.InputKafkaMetadatum{}
 		if len(r.InputKafka.Metadata) > len(resp.InputKafka.Metadata) {
 			r.InputKafka.Metadata = r.InputKafka.Metadata[:len(resp.InputKafka.Metadata)]
 		}
-		for metadataCount25, metadataItem25 := range resp.InputKafka.Metadata {
-			var metadata25 tfTypes.MetadatumKafka
-			metadata25.Name = types.StringValue(metadataItem25.Name)
-			metadata25.Value = types.StringValue(metadataItem25.Value)
-			if metadataCount25+1 > len(r.InputKafka.Metadata) {
-				r.InputKafka.Metadata = append(r.InputKafka.Metadata, metadata25)
+		for metadataCount26, metadataItem26 := range resp.InputKafka.Metadata {
+			var metadata26 tfTypes.InputKafkaMetadatum
+			metadata26.Name = types.StringValue(metadataItem26.Name)
+			metadata26.Value = types.StringValue(metadataItem26.Value)
+			if metadataCount26+1 > len(r.InputKafka.Metadata) {
+				r.InputKafka.Metadata = append(r.InputKafka.Metadata, metadata26)
 			} else {
-				r.InputKafka.Metadata[metadataCount25].Name = metadata25.Name
-				r.InputKafka.Metadata[metadataCount25].Value = metadata25.Value
+				r.InputKafka.Metadata[metadataCount26].Name = metadata26.Name
+				r.InputKafka.Metadata[metadataCount26].Value = metadata26.Value
 			}
 		}
 		r.InputKafka.Pipeline = types.StringPointerValue(resp.InputKafka.Pipeline)
 		if resp.InputKafka.Pq == nil {
 			r.InputKafka.Pq = nil
 		} else {
-			r.InputKafka.Pq = &tfTypes.PqKafka{}
+			r.InputKafka.Pq = &tfTypes.InputKafkaPq{}
 			r.InputKafka.Pq.CommitFrequency = types.Float64PointerValue(resp.InputKafka.Pq.CommitFrequency)
 			if resp.InputKafka.Pq.Compress != nil {
 				r.InputKafka.Pq.Compress = types.StringValue(string(*resp.InputKafka.Pq.Compress))
@@ -3398,7 +3180,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputKafka.Sasl == nil {
 			r.InputKafka.Sasl = nil
 		} else {
-			r.InputKafka.Sasl = &tfTypes.InputAuthenticationKafka{}
+			r.InputKafka.Sasl = &tfTypes.InputKafkaAuthentication{}
 			r.InputKafka.Sasl.Disabled = types.BoolPointerValue(resp.InputKafka.Sasl.Disabled)
 			if resp.InputKafka.Sasl.Mechanism != nil {
 				r.InputKafka.Sasl.Mechanism = types.StringValue(string(*resp.InputKafka.Sasl.Mechanism))
@@ -3408,21 +3190,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputKafka.SendToRoutes = types.BoolPointerValue(resp.InputKafka.SendToRoutes)
 		r.InputKafka.SessionTimeout = types.Float64PointerValue(resp.InputKafka.SessionTimeout)
-		if resp.InputKafka.Status == nil {
-			r.InputKafka.Status = nil
-		} else {
-			r.InputKafka.Status = &tfTypes.TFStatus{}
-			r.InputKafka.Status.Health = types.StringValue(string(resp.InputKafka.Status.Health))
-			if len(resp.InputKafka.Status.Metrics) > 0 {
-				r.InputKafka.Status.Metrics = make(map[string]types.String, len(resp.InputKafka.Status.Metrics))
-				for key23, value23 := range resp.InputKafka.Status.Metrics {
-					result23, _ := json.Marshal(value23)
-					r.InputKafka.Status.Metrics[key23] = types.StringValue(string(result23))
-				}
-			}
-			r.InputKafka.Status.Timestamp = types.Float64Value(resp.InputKafka.Status.Timestamp)
-			r.InputKafka.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputKafka.Status.UseStatusFromLB)
-		}
 		r.InputKafka.Streamtags = make([]types.String, 0, len(resp.InputKafka.Streamtags))
 		for _, v := range resp.InputKafka.Streamtags {
 			r.InputKafka.Streamtags = append(r.InputKafka.Streamtags, types.StringValue(v))
@@ -3430,7 +3197,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputKafka.TLS == nil {
 			r.InputKafka.TLS = nil
 		} else {
-			r.InputKafka.TLS = &tfTypes.InputTLSSettingsClientSideKafka{}
+			r.InputKafka.TLS = &tfTypes.InputKafkaTLSSettingsClientSide{}
 			r.InputKafka.TLS.CaPath = types.StringPointerValue(resp.InputKafka.TLS.CaPath)
 			r.InputKafka.TLS.CertificateName = types.StringPointerValue(resp.InputKafka.TLS.CertificateName)
 			r.InputKafka.TLS.CertPath = types.StringPointerValue(resp.InputKafka.TLS.CertPath)
@@ -3473,19 +3240,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputKinesis.AwsSecret = types.StringPointerValue(resp.InputKinesis.AwsSecret)
 		r.InputKinesis.AwsSecretKey = types.StringPointerValue(resp.InputKinesis.AwsSecretKey)
-		r.InputKinesis.Connections = []tfTypes.ConnectionKinesis{}
+		r.InputKinesis.Connections = []tfTypes.InputKinesisConnection{}
 		if len(r.InputKinesis.Connections) > len(resp.InputKinesis.Connections) {
 			r.InputKinesis.Connections = r.InputKinesis.Connections[:len(resp.InputKinesis.Connections)]
 		}
-		for connectionsCount24, connectionsItem24 := range resp.InputKinesis.Connections {
-			var connections24 tfTypes.ConnectionKinesis
-			connections24.Output = types.StringValue(connectionsItem24.Output)
-			connections24.Pipeline = types.StringPointerValue(connectionsItem24.Pipeline)
-			if connectionsCount24+1 > len(r.InputKinesis.Connections) {
-				r.InputKinesis.Connections = append(r.InputKinesis.Connections, connections24)
+		for connectionsCount25, connectionsItem25 := range resp.InputKinesis.Connections {
+			var connections25 tfTypes.InputKinesisConnection
+			connections25.Output = types.StringValue(connectionsItem25.Output)
+			connections25.Pipeline = types.StringPointerValue(connectionsItem25.Pipeline)
+			if connectionsCount25+1 > len(r.InputKinesis.Connections) {
+				r.InputKinesis.Connections = append(r.InputKinesis.Connections, connections25)
 			} else {
-				r.InputKinesis.Connections[connectionsCount24].Output = connections24.Output
-				r.InputKinesis.Connections[connectionsCount24].Pipeline = connections24.Pipeline
+				r.InputKinesis.Connections[connectionsCount25].Output = connections25.Output
+				r.InputKinesis.Connections[connectionsCount25].Pipeline = connections25.Pipeline
 			}
 		}
 		r.InputKinesis.Description = types.StringPointerValue(resp.InputKinesis.Description)
@@ -3502,19 +3269,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputKinesis.LoadBalancingAlgorithm = types.StringNull()
 		}
-		r.InputKinesis.Metadata = []tfTypes.MetadatumKinesis{}
+		r.InputKinesis.Metadata = []tfTypes.InputKinesisMetadatum{}
 		if len(r.InputKinesis.Metadata) > len(resp.InputKinesis.Metadata) {
 			r.InputKinesis.Metadata = r.InputKinesis.Metadata[:len(resp.InputKinesis.Metadata)]
 		}
-		for metadataCount26, metadataItem26 := range resp.InputKinesis.Metadata {
-			var metadata26 tfTypes.MetadatumKinesis
-			metadata26.Name = types.StringValue(metadataItem26.Name)
-			metadata26.Value = types.StringValue(metadataItem26.Value)
-			if metadataCount26+1 > len(r.InputKinesis.Metadata) {
-				r.InputKinesis.Metadata = append(r.InputKinesis.Metadata, metadata26)
+		for metadataCount27, metadataItem27 := range resp.InputKinesis.Metadata {
+			var metadata27 tfTypes.InputKinesisMetadatum
+			metadata27.Name = types.StringValue(metadataItem27.Name)
+			metadata27.Value = types.StringValue(metadataItem27.Value)
+			if metadataCount27+1 > len(r.InputKinesis.Metadata) {
+				r.InputKinesis.Metadata = append(r.InputKinesis.Metadata, metadata27)
 			} else {
-				r.InputKinesis.Metadata[metadataCount26].Name = metadata26.Name
-				r.InputKinesis.Metadata[metadataCount26].Value = metadata26.Value
+				r.InputKinesis.Metadata[metadataCount27].Name = metadata27.Name
+				r.InputKinesis.Metadata[metadataCount27].Value = metadata27.Value
 			}
 		}
 		if resp.InputKinesis.PayloadFormat != nil {
@@ -3526,7 +3293,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputKinesis.Pq == nil {
 			r.InputKinesis.Pq = nil
 		} else {
-			r.InputKinesis.Pq = &tfTypes.PqKinesis{}
+			r.InputKinesis.Pq = &tfTypes.InputKinesisPq{}
 			r.InputKinesis.Pq.CommitFrequency = types.Float64PointerValue(resp.InputKinesis.Pq.CommitFrequency)
 			if resp.InputKinesis.Pq.Compress != nil {
 				r.InputKinesis.Pq.Compress = types.StringValue(string(*resp.InputKinesis.Pq.Compress))
@@ -3560,21 +3327,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputKinesis.SignatureVersion = types.StringNull()
 		}
-		if resp.InputKinesis.Status == nil {
-			r.InputKinesis.Status = nil
-		} else {
-			r.InputKinesis.Status = &tfTypes.TFStatus{}
-			r.InputKinesis.Status.Health = types.StringValue(string(resp.InputKinesis.Status.Health))
-			if len(resp.InputKinesis.Status.Metrics) > 0 {
-				r.InputKinesis.Status.Metrics = make(map[string]types.String, len(resp.InputKinesis.Status.Metrics))
-				for key24, value24 := range resp.InputKinesis.Status.Metrics {
-					result24, _ := json.Marshal(value24)
-					r.InputKinesis.Status.Metrics[key24] = types.StringValue(string(result24))
-				}
-			}
-			r.InputKinesis.Status.Timestamp = types.Float64Value(resp.InputKinesis.Status.Timestamp)
-			r.InputKinesis.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputKinesis.Status.UseStatusFromLB)
-		}
 		r.InputKinesis.StreamName = types.StringValue(resp.InputKinesis.StreamName)
 		r.InputKinesis.Streamtags = make([]types.String, 0, len(resp.InputKinesis.Streamtags))
 		for _, v := range resp.InputKinesis.Streamtags {
@@ -3589,45 +3341,45 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputKubeEvents != nil {
 		r.InputKubeEvents = &tfTypes.InputKubeEvents{}
-		r.InputKubeEvents.Connections = []tfTypes.ConnectionKubeEvents{}
+		r.InputKubeEvents.Connections = []tfTypes.InputKubeEventsConnection{}
 		if len(r.InputKubeEvents.Connections) > len(resp.InputKubeEvents.Connections) {
 			r.InputKubeEvents.Connections = r.InputKubeEvents.Connections[:len(resp.InputKubeEvents.Connections)]
 		}
-		for connectionsCount25, connectionsItem25 := range resp.InputKubeEvents.Connections {
-			var connections25 tfTypes.ConnectionKubeEvents
-			connections25.Output = types.StringValue(connectionsItem25.Output)
-			connections25.Pipeline = types.StringPointerValue(connectionsItem25.Pipeline)
-			if connectionsCount25+1 > len(r.InputKubeEvents.Connections) {
-				r.InputKubeEvents.Connections = append(r.InputKubeEvents.Connections, connections25)
+		for connectionsCount26, connectionsItem26 := range resp.InputKubeEvents.Connections {
+			var connections26 tfTypes.InputKubeEventsConnection
+			connections26.Output = types.StringValue(connectionsItem26.Output)
+			connections26.Pipeline = types.StringPointerValue(connectionsItem26.Pipeline)
+			if connectionsCount26+1 > len(r.InputKubeEvents.Connections) {
+				r.InputKubeEvents.Connections = append(r.InputKubeEvents.Connections, connections26)
 			} else {
-				r.InputKubeEvents.Connections[connectionsCount25].Output = connections25.Output
-				r.InputKubeEvents.Connections[connectionsCount25].Pipeline = connections25.Pipeline
+				r.InputKubeEvents.Connections[connectionsCount26].Output = connections26.Output
+				r.InputKubeEvents.Connections[connectionsCount26].Pipeline = connections26.Pipeline
 			}
 		}
 		r.InputKubeEvents.Description = types.StringPointerValue(resp.InputKubeEvents.Description)
 		r.InputKubeEvents.Disabled = types.BoolPointerValue(resp.InputKubeEvents.Disabled)
 		r.InputKubeEvents.Environment = types.StringPointerValue(resp.InputKubeEvents.Environment)
 		r.InputKubeEvents.ID = types.StringValue(resp.InputKubeEvents.ID)
-		r.InputKubeEvents.Metadata = []tfTypes.MetadatumKubeEvents{}
+		r.InputKubeEvents.Metadata = []tfTypes.InputKubeEventsMetadatum{}
 		if len(r.InputKubeEvents.Metadata) > len(resp.InputKubeEvents.Metadata) {
 			r.InputKubeEvents.Metadata = r.InputKubeEvents.Metadata[:len(resp.InputKubeEvents.Metadata)]
 		}
-		for metadataCount27, metadataItem27 := range resp.InputKubeEvents.Metadata {
-			var metadata27 tfTypes.MetadatumKubeEvents
-			metadata27.Name = types.StringValue(metadataItem27.Name)
-			metadata27.Value = types.StringValue(metadataItem27.Value)
-			if metadataCount27+1 > len(r.InputKubeEvents.Metadata) {
-				r.InputKubeEvents.Metadata = append(r.InputKubeEvents.Metadata, metadata27)
+		for metadataCount28, metadataItem28 := range resp.InputKubeEvents.Metadata {
+			var metadata28 tfTypes.InputKubeEventsMetadatum
+			metadata28.Name = types.StringValue(metadataItem28.Name)
+			metadata28.Value = types.StringValue(metadataItem28.Value)
+			if metadataCount28+1 > len(r.InputKubeEvents.Metadata) {
+				r.InputKubeEvents.Metadata = append(r.InputKubeEvents.Metadata, metadata28)
 			} else {
-				r.InputKubeEvents.Metadata[metadataCount27].Name = metadata27.Name
-				r.InputKubeEvents.Metadata[metadataCount27].Value = metadata27.Value
+				r.InputKubeEvents.Metadata[metadataCount28].Name = metadata28.Name
+				r.InputKubeEvents.Metadata[metadataCount28].Value = metadata28.Value
 			}
 		}
 		r.InputKubeEvents.Pipeline = types.StringPointerValue(resp.InputKubeEvents.Pipeline)
 		if resp.InputKubeEvents.Pq == nil {
 			r.InputKubeEvents.Pq = nil
 		} else {
-			r.InputKubeEvents.Pq = &tfTypes.PqKubeEvents{}
+			r.InputKubeEvents.Pq = &tfTypes.InputKubeEventsPq{}
 			r.InputKubeEvents.Pq.CommitFrequency = types.Float64PointerValue(resp.InputKubeEvents.Pq.CommitFrequency)
 			if resp.InputKubeEvents.Pq.Compress != nil {
 				r.InputKubeEvents.Pq.Compress = types.StringValue(string(*resp.InputKubeEvents.Pq.Compress))
@@ -3645,12 +3397,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputKubeEvents.Pq.Path = types.StringPointerValue(resp.InputKubeEvents.Pq.Path)
 		}
 		r.InputKubeEvents.PqEnabled = types.BoolPointerValue(resp.InputKubeEvents.PqEnabled)
-		r.InputKubeEvents.Rules = []tfTypes.RuleKubeEvents{}
+		r.InputKubeEvents.Rules = []tfTypes.InputKubeEventsRule{}
 		if len(r.InputKubeEvents.Rules) > len(resp.InputKubeEvents.Rules) {
 			r.InputKubeEvents.Rules = r.InputKubeEvents.Rules[:len(resp.InputKubeEvents.Rules)]
 		}
 		for rulesCount1, rulesItem1 := range resp.InputKubeEvents.Rules {
-			var rules1 tfTypes.RuleKubeEvents
+			var rules1 tfTypes.InputKubeEventsRule
 			rules1.Description = types.StringPointerValue(rulesItem1.Description)
 			rules1.Filter = types.StringValue(rulesItem1.Filter)
 			if rulesCount1+1 > len(r.InputKubeEvents.Rules) {
@@ -3661,21 +3413,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputKubeEvents.SendToRoutes = types.BoolPointerValue(resp.InputKubeEvents.SendToRoutes)
-		if resp.InputKubeEvents.Status == nil {
-			r.InputKubeEvents.Status = nil
-		} else {
-			r.InputKubeEvents.Status = &tfTypes.TFStatus{}
-			r.InputKubeEvents.Status.Health = types.StringValue(string(resp.InputKubeEvents.Status.Health))
-			if len(resp.InputKubeEvents.Status.Metrics) > 0 {
-				r.InputKubeEvents.Status.Metrics = make(map[string]types.String, len(resp.InputKubeEvents.Status.Metrics))
-				for key25, value25 := range resp.InputKubeEvents.Status.Metrics {
-					result25, _ := json.Marshal(value25)
-					r.InputKubeEvents.Status.Metrics[key25] = types.StringValue(string(result25))
-				}
-			}
-			r.InputKubeEvents.Status.Timestamp = types.Float64Value(resp.InputKubeEvents.Status.Timestamp)
-			r.InputKubeEvents.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputKubeEvents.Status.UseStatusFromLB)
-		}
 		r.InputKubeEvents.Streamtags = make([]types.String, 0, len(resp.InputKubeEvents.Streamtags))
 		for _, v := range resp.InputKubeEvents.Streamtags {
 			r.InputKubeEvents.Streamtags = append(r.InputKubeEvents.Streamtags, types.StringValue(v))
@@ -3688,19 +3425,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputKubeLogs.BreakerRulesets {
 			r.InputKubeLogs.BreakerRulesets = append(r.InputKubeLogs.BreakerRulesets, types.StringValue(v))
 		}
-		r.InputKubeLogs.Connections = []tfTypes.ConnectionKubeLogs{}
+		r.InputKubeLogs.Connections = []tfTypes.InputKubeLogsConnection{}
 		if len(r.InputKubeLogs.Connections) > len(resp.InputKubeLogs.Connections) {
 			r.InputKubeLogs.Connections = r.InputKubeLogs.Connections[:len(resp.InputKubeLogs.Connections)]
 		}
-		for connectionsCount26, connectionsItem26 := range resp.InputKubeLogs.Connections {
-			var connections26 tfTypes.ConnectionKubeLogs
-			connections26.Output = types.StringValue(connectionsItem26.Output)
-			connections26.Pipeline = types.StringPointerValue(connectionsItem26.Pipeline)
-			if connectionsCount26+1 > len(r.InputKubeLogs.Connections) {
-				r.InputKubeLogs.Connections = append(r.InputKubeLogs.Connections, connections26)
+		for connectionsCount27, connectionsItem27 := range resp.InputKubeLogs.Connections {
+			var connections27 tfTypes.InputKubeLogsConnection
+			connections27.Output = types.StringValue(connectionsItem27.Output)
+			connections27.Pipeline = types.StringPointerValue(connectionsItem27.Pipeline)
+			if connectionsCount27+1 > len(r.InputKubeLogs.Connections) {
+				r.InputKubeLogs.Connections = append(r.InputKubeLogs.Connections, connections27)
 			} else {
-				r.InputKubeLogs.Connections[connectionsCount26].Output = connections26.Output
-				r.InputKubeLogs.Connections[connectionsCount26].Pipeline = connections26.Pipeline
+				r.InputKubeLogs.Connections[connectionsCount27].Output = connections27.Output
+				r.InputKubeLogs.Connections[connectionsCount27].Pipeline = connections27.Pipeline
 			}
 		}
 		r.InputKubeLogs.Description = types.StringPointerValue(resp.InputKubeLogs.Description)
@@ -3709,25 +3446,25 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputKubeLogs.Environment = types.StringPointerValue(resp.InputKubeLogs.Environment)
 		r.InputKubeLogs.ID = types.StringValue(resp.InputKubeLogs.ID)
 		r.InputKubeLogs.Interval = types.Float64PointerValue(resp.InputKubeLogs.Interval)
-		r.InputKubeLogs.Metadata = []tfTypes.MetadatumKubeLogs{}
+		r.InputKubeLogs.Metadata = []tfTypes.InputKubeLogsMetadatum{}
 		if len(r.InputKubeLogs.Metadata) > len(resp.InputKubeLogs.Metadata) {
 			r.InputKubeLogs.Metadata = r.InputKubeLogs.Metadata[:len(resp.InputKubeLogs.Metadata)]
 		}
-		for metadataCount28, metadataItem28 := range resp.InputKubeLogs.Metadata {
-			var metadata28 tfTypes.MetadatumKubeLogs
-			metadata28.Name = types.StringValue(metadataItem28.Name)
-			metadata28.Value = types.StringValue(metadataItem28.Value)
-			if metadataCount28+1 > len(r.InputKubeLogs.Metadata) {
-				r.InputKubeLogs.Metadata = append(r.InputKubeLogs.Metadata, metadata28)
+		for metadataCount29, metadataItem29 := range resp.InputKubeLogs.Metadata {
+			var metadata29 tfTypes.InputKubeLogsMetadatum
+			metadata29.Name = types.StringValue(metadataItem29.Name)
+			metadata29.Value = types.StringValue(metadataItem29.Value)
+			if metadataCount29+1 > len(r.InputKubeLogs.Metadata) {
+				r.InputKubeLogs.Metadata = append(r.InputKubeLogs.Metadata, metadata29)
 			} else {
-				r.InputKubeLogs.Metadata[metadataCount28].Name = metadata28.Name
-				r.InputKubeLogs.Metadata[metadataCount28].Value = metadata28.Value
+				r.InputKubeLogs.Metadata[metadataCount29].Name = metadata29.Name
+				r.InputKubeLogs.Metadata[metadataCount29].Value = metadata29.Value
 			}
 		}
 		if resp.InputKubeLogs.Persistence == nil {
 			r.InputKubeLogs.Persistence = nil
 		} else {
-			r.InputKubeLogs.Persistence = &tfTypes.DiskSpoolingKubeLogs{}
+			r.InputKubeLogs.Persistence = &tfTypes.InputKubeLogsDiskSpooling{}
 			if resp.InputKubeLogs.Persistence.Compress != nil {
 				r.InputKubeLogs.Persistence.Compress = types.StringValue(string(*resp.InputKubeLogs.Persistence.Compress))
 			} else {
@@ -3742,7 +3479,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputKubeLogs.Pq == nil {
 			r.InputKubeLogs.Pq = nil
 		} else {
-			r.InputKubeLogs.Pq = &tfTypes.PqKubeLogs{}
+			r.InputKubeLogs.Pq = &tfTypes.InputKubeLogsPq{}
 			r.InputKubeLogs.Pq.CommitFrequency = types.Float64PointerValue(resp.InputKubeLogs.Pq.CommitFrequency)
 			if resp.InputKubeLogs.Pq.Compress != nil {
 				r.InputKubeLogs.Pq.Compress = types.StringValue(string(*resp.InputKubeLogs.Pq.Compress))
@@ -3760,12 +3497,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputKubeLogs.Pq.Path = types.StringPointerValue(resp.InputKubeLogs.Pq.Path)
 		}
 		r.InputKubeLogs.PqEnabled = types.BoolPointerValue(resp.InputKubeLogs.PqEnabled)
-		r.InputKubeLogs.Rules = []tfTypes.RuleKubeLogs{}
+		r.InputKubeLogs.Rules = []tfTypes.InputKubeLogsRule{}
 		if len(r.InputKubeLogs.Rules) > len(resp.InputKubeLogs.Rules) {
 			r.InputKubeLogs.Rules = r.InputKubeLogs.Rules[:len(resp.InputKubeLogs.Rules)]
 		}
 		for rulesCount2, rulesItem2 := range resp.InputKubeLogs.Rules {
-			var rules2 tfTypes.RuleKubeLogs
+			var rules2 tfTypes.InputKubeLogsRule
 			rules2.Description = types.StringPointerValue(rulesItem2.Description)
 			rules2.Filter = types.StringValue(rulesItem2.Filter)
 			if rulesCount2+1 > len(r.InputKubeLogs.Rules) {
@@ -3777,21 +3514,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputKubeLogs.SendToRoutes = types.BoolPointerValue(resp.InputKubeLogs.SendToRoutes)
 		r.InputKubeLogs.StaleChannelFlushMs = types.Float64PointerValue(resp.InputKubeLogs.StaleChannelFlushMs)
-		if resp.InputKubeLogs.Status == nil {
-			r.InputKubeLogs.Status = nil
-		} else {
-			r.InputKubeLogs.Status = &tfTypes.TFStatus{}
-			r.InputKubeLogs.Status.Health = types.StringValue(string(resp.InputKubeLogs.Status.Health))
-			if len(resp.InputKubeLogs.Status.Metrics) > 0 {
-				r.InputKubeLogs.Status.Metrics = make(map[string]types.String, len(resp.InputKubeLogs.Status.Metrics))
-				for key26, value26 := range resp.InputKubeLogs.Status.Metrics {
-					result26, _ := json.Marshal(value26)
-					r.InputKubeLogs.Status.Metrics[key26] = types.StringValue(string(result26))
-				}
-			}
-			r.InputKubeLogs.Status.Timestamp = types.Float64Value(resp.InputKubeLogs.Status.Timestamp)
-			r.InputKubeLogs.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputKubeLogs.Status.UseStatusFromLB)
-		}
 		r.InputKubeLogs.Streamtags = make([]types.String, 0, len(resp.InputKubeLogs.Streamtags))
 		for _, v := range resp.InputKubeLogs.Streamtags {
 			r.InputKubeLogs.Streamtags = append(r.InputKubeLogs.Streamtags, types.StringValue(v))
@@ -3801,19 +3523,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputKubeMetrics != nil {
 		r.InputKubeMetrics = &tfTypes.InputKubeMetrics{}
-		r.InputKubeMetrics.Connections = []tfTypes.ConnectionKubeMetrics{}
+		r.InputKubeMetrics.Connections = []tfTypes.InputKubeMetricsConnection{}
 		if len(r.InputKubeMetrics.Connections) > len(resp.InputKubeMetrics.Connections) {
 			r.InputKubeMetrics.Connections = r.InputKubeMetrics.Connections[:len(resp.InputKubeMetrics.Connections)]
 		}
-		for connectionsCount27, connectionsItem27 := range resp.InputKubeMetrics.Connections {
-			var connections27 tfTypes.ConnectionKubeMetrics
-			connections27.Output = types.StringValue(connectionsItem27.Output)
-			connections27.Pipeline = types.StringPointerValue(connectionsItem27.Pipeline)
-			if connectionsCount27+1 > len(r.InputKubeMetrics.Connections) {
-				r.InputKubeMetrics.Connections = append(r.InputKubeMetrics.Connections, connections27)
+		for connectionsCount28, connectionsItem28 := range resp.InputKubeMetrics.Connections {
+			var connections28 tfTypes.InputKubeMetricsConnection
+			connections28.Output = types.StringValue(connectionsItem28.Output)
+			connections28.Pipeline = types.StringPointerValue(connectionsItem28.Pipeline)
+			if connectionsCount28+1 > len(r.InputKubeMetrics.Connections) {
+				r.InputKubeMetrics.Connections = append(r.InputKubeMetrics.Connections, connections28)
 			} else {
-				r.InputKubeMetrics.Connections[connectionsCount27].Output = connections27.Output
-				r.InputKubeMetrics.Connections[connectionsCount27].Pipeline = connections27.Pipeline
+				r.InputKubeMetrics.Connections[connectionsCount28].Output = connections28.Output
+				r.InputKubeMetrics.Connections[connectionsCount28].Pipeline = connections28.Pipeline
 			}
 		}
 		r.InputKubeMetrics.Description = types.StringPointerValue(resp.InputKubeMetrics.Description)
@@ -3821,25 +3543,25 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputKubeMetrics.Environment = types.StringPointerValue(resp.InputKubeMetrics.Environment)
 		r.InputKubeMetrics.ID = types.StringValue(resp.InputKubeMetrics.ID)
 		r.InputKubeMetrics.Interval = types.Float64PointerValue(resp.InputKubeMetrics.Interval)
-		r.InputKubeMetrics.Metadata = []tfTypes.MetadatumKubeMetrics{}
+		r.InputKubeMetrics.Metadata = []tfTypes.InputKubeMetricsMetadatum{}
 		if len(r.InputKubeMetrics.Metadata) > len(resp.InputKubeMetrics.Metadata) {
 			r.InputKubeMetrics.Metadata = r.InputKubeMetrics.Metadata[:len(resp.InputKubeMetrics.Metadata)]
 		}
-		for metadataCount29, metadataItem29 := range resp.InputKubeMetrics.Metadata {
-			var metadata29 tfTypes.MetadatumKubeMetrics
-			metadata29.Name = types.StringValue(metadataItem29.Name)
-			metadata29.Value = types.StringValue(metadataItem29.Value)
-			if metadataCount29+1 > len(r.InputKubeMetrics.Metadata) {
-				r.InputKubeMetrics.Metadata = append(r.InputKubeMetrics.Metadata, metadata29)
+		for metadataCount30, metadataItem30 := range resp.InputKubeMetrics.Metadata {
+			var metadata30 tfTypes.InputKubeMetricsMetadatum
+			metadata30.Name = types.StringValue(metadataItem30.Name)
+			metadata30.Value = types.StringValue(metadataItem30.Value)
+			if metadataCount30+1 > len(r.InputKubeMetrics.Metadata) {
+				r.InputKubeMetrics.Metadata = append(r.InputKubeMetrics.Metadata, metadata30)
 			} else {
-				r.InputKubeMetrics.Metadata[metadataCount29].Name = metadata29.Name
-				r.InputKubeMetrics.Metadata[metadataCount29].Value = metadata29.Value
+				r.InputKubeMetrics.Metadata[metadataCount30].Name = metadata30.Name
+				r.InputKubeMetrics.Metadata[metadataCount30].Value = metadata30.Value
 			}
 		}
 		if resp.InputKubeMetrics.Persistence == nil {
 			r.InputKubeMetrics.Persistence = nil
 		} else {
-			r.InputKubeMetrics.Persistence = &tfTypes.PersistenceKubeMetrics{}
+			r.InputKubeMetrics.Persistence = &tfTypes.InputKubeMetricsPersistence{}
 			if resp.InputKubeMetrics.Persistence.Compress != nil {
 				r.InputKubeMetrics.Persistence.Compress = types.StringValue(string(*resp.InputKubeMetrics.Persistence.Compress))
 			} else {
@@ -3855,7 +3577,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputKubeMetrics.Pq == nil {
 			r.InputKubeMetrics.Pq = nil
 		} else {
-			r.InputKubeMetrics.Pq = &tfTypes.PqKubeMetrics{}
+			r.InputKubeMetrics.Pq = &tfTypes.InputKubeMetricsPq{}
 			r.InputKubeMetrics.Pq.CommitFrequency = types.Float64PointerValue(resp.InputKubeMetrics.Pq.CommitFrequency)
 			if resp.InputKubeMetrics.Pq.Compress != nil {
 				r.InputKubeMetrics.Pq.Compress = types.StringValue(string(*resp.InputKubeMetrics.Pq.Compress))
@@ -3873,12 +3595,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputKubeMetrics.Pq.Path = types.StringPointerValue(resp.InputKubeMetrics.Pq.Path)
 		}
 		r.InputKubeMetrics.PqEnabled = types.BoolPointerValue(resp.InputKubeMetrics.PqEnabled)
-		r.InputKubeMetrics.Rules = []tfTypes.RuleKubeMetrics{}
+		r.InputKubeMetrics.Rules = []tfTypes.InputKubeMetricsRule{}
 		if len(r.InputKubeMetrics.Rules) > len(resp.InputKubeMetrics.Rules) {
 			r.InputKubeMetrics.Rules = r.InputKubeMetrics.Rules[:len(resp.InputKubeMetrics.Rules)]
 		}
 		for rulesCount3, rulesItem3 := range resp.InputKubeMetrics.Rules {
-			var rules3 tfTypes.RuleKubeMetrics
+			var rules3 tfTypes.InputKubeMetricsRule
 			rules3.Description = types.StringPointerValue(rulesItem3.Description)
 			rules3.Filter = types.StringValue(rulesItem3.Filter)
 			if rulesCount3+1 > len(r.InputKubeMetrics.Rules) {
@@ -3889,21 +3611,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputKubeMetrics.SendToRoutes = types.BoolPointerValue(resp.InputKubeMetrics.SendToRoutes)
-		if resp.InputKubeMetrics.Status == nil {
-			r.InputKubeMetrics.Status = nil
-		} else {
-			r.InputKubeMetrics.Status = &tfTypes.TFStatus{}
-			r.InputKubeMetrics.Status.Health = types.StringValue(string(resp.InputKubeMetrics.Status.Health))
-			if len(resp.InputKubeMetrics.Status.Metrics) > 0 {
-				r.InputKubeMetrics.Status.Metrics = make(map[string]types.String, len(resp.InputKubeMetrics.Status.Metrics))
-				for key27, value27 := range resp.InputKubeMetrics.Status.Metrics {
-					result27, _ := json.Marshal(value27)
-					r.InputKubeMetrics.Status.Metrics[key27] = types.StringValue(string(result27))
-				}
-			}
-			r.InputKubeMetrics.Status.Timestamp = types.Float64Value(resp.InputKubeMetrics.Status.Timestamp)
-			r.InputKubeMetrics.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputKubeMetrics.Status.UseStatusFromLB)
-		}
 		r.InputKubeMetrics.Streamtags = make([]types.String, 0, len(resp.InputKubeMetrics.Streamtags))
 		for _, v := range resp.InputKubeMetrics.Streamtags {
 			r.InputKubeMetrics.Streamtags = append(r.InputKubeMetrics.Streamtags, types.StringValue(v))
@@ -3920,19 +3627,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputLoki.AuthType = types.StringNull()
 		}
 		r.InputLoki.CaptureHeaders = types.BoolPointerValue(resp.InputLoki.CaptureHeaders)
-		r.InputLoki.Connections = []tfTypes.ConnectionLoki{}
+		r.InputLoki.Connections = []tfTypes.InputLokiConnection{}
 		if len(r.InputLoki.Connections) > len(resp.InputLoki.Connections) {
 			r.InputLoki.Connections = r.InputLoki.Connections[:len(resp.InputLoki.Connections)]
 		}
-		for connectionsCount28, connectionsItem28 := range resp.InputLoki.Connections {
-			var connections28 tfTypes.ConnectionLoki
-			connections28.Output = types.StringValue(connectionsItem28.Output)
-			connections28.Pipeline = types.StringPointerValue(connectionsItem28.Pipeline)
-			if connectionsCount28+1 > len(r.InputLoki.Connections) {
-				r.InputLoki.Connections = append(r.InputLoki.Connections, connections28)
+		for connectionsCount29, connectionsItem29 := range resp.InputLoki.Connections {
+			var connections29 tfTypes.InputLokiConnection
+			connections29.Output = types.StringValue(connectionsItem29.Output)
+			connections29.Pipeline = types.StringPointerValue(connectionsItem29.Pipeline)
+			if connectionsCount29+1 > len(r.InputLoki.Connections) {
+				r.InputLoki.Connections = append(r.InputLoki.Connections, connections29)
 			} else {
-				r.InputLoki.Connections[connectionsCount28].Output = connections28.Output
-				r.InputLoki.Connections[connectionsCount28].Pipeline = connections28.Pipeline
+				r.InputLoki.Connections[connectionsCount29].Output = connections29.Output
+				r.InputLoki.Connections[connectionsCount29].Pipeline = connections29.Pipeline
 			}
 		}
 		r.InputLoki.CredentialsSecret = types.StringPointerValue(resp.InputLoki.CredentialsSecret)
@@ -3950,27 +3657,27 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputLoki.LokiAPI = types.StringPointerValue(resp.InputLoki.LokiAPI)
 		r.InputLoki.MaxActiveReq = types.Float64PointerValue(resp.InputLoki.MaxActiveReq)
 		r.InputLoki.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputLoki.MaxRequestsPerSocket)
-		r.InputLoki.Metadata = []tfTypes.MetadatumLoki{}
+		r.InputLoki.Metadata = []tfTypes.InputLokiMetadatum{}
 		if len(r.InputLoki.Metadata) > len(resp.InputLoki.Metadata) {
 			r.InputLoki.Metadata = r.InputLoki.Metadata[:len(resp.InputLoki.Metadata)]
 		}
-		for metadataCount30, metadataItem30 := range resp.InputLoki.Metadata {
-			var metadata30 tfTypes.MetadatumLoki
-			metadata30.Name = types.StringValue(metadataItem30.Name)
-			metadata30.Value = types.StringValue(metadataItem30.Value)
-			if metadataCount30+1 > len(r.InputLoki.Metadata) {
-				r.InputLoki.Metadata = append(r.InputLoki.Metadata, metadata30)
+		for metadataCount31, metadataItem31 := range resp.InputLoki.Metadata {
+			var metadata31 tfTypes.InputLokiMetadatum
+			metadata31.Name = types.StringValue(metadataItem31.Name)
+			metadata31.Value = types.StringValue(metadataItem31.Value)
+			if metadataCount31+1 > len(r.InputLoki.Metadata) {
+				r.InputLoki.Metadata = append(r.InputLoki.Metadata, metadata31)
 			} else {
-				r.InputLoki.Metadata[metadataCount30].Name = metadata30.Name
-				r.InputLoki.Metadata[metadataCount30].Value = metadata30.Value
+				r.InputLoki.Metadata[metadataCount31].Name = metadata31.Name
+				r.InputLoki.Metadata[metadataCount31].Value = metadata31.Value
 			}
 		}
-		r.InputLoki.OauthHeaders = []tfTypes.OauthHeaderLoki{}
+		r.InputLoki.OauthHeaders = []tfTypes.InputLokiOauthHeader{}
 		if len(r.InputLoki.OauthHeaders) > len(resp.InputLoki.OauthHeaders) {
 			r.InputLoki.OauthHeaders = r.InputLoki.OauthHeaders[:len(resp.InputLoki.OauthHeaders)]
 		}
 		for oauthHeadersCount4, oauthHeadersItem4 := range resp.InputLoki.OauthHeaders {
-			var oauthHeaders4 tfTypes.OauthHeaderLoki
+			var oauthHeaders4 tfTypes.InputLokiOauthHeader
 			oauthHeaders4.Name = types.StringValue(oauthHeadersItem4.Name)
 			oauthHeaders4.Value = types.StringValue(oauthHeadersItem4.Value)
 			if oauthHeadersCount4+1 > len(r.InputLoki.OauthHeaders) {
@@ -3980,12 +3687,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				r.InputLoki.OauthHeaders[oauthHeadersCount4].Value = oauthHeaders4.Value
 			}
 		}
-		r.InputLoki.OauthParams = []tfTypes.OauthParamLoki{}
+		r.InputLoki.OauthParams = []tfTypes.InputLokiOauthParam{}
 		if len(r.InputLoki.OauthParams) > len(resp.InputLoki.OauthParams) {
 			r.InputLoki.OauthParams = r.InputLoki.OauthParams[:len(resp.InputLoki.OauthParams)]
 		}
 		for oauthParamsCount4, oauthParamsItem4 := range resp.InputLoki.OauthParams {
-			var oauthParams4 tfTypes.OauthParamLoki
+			var oauthParams4 tfTypes.InputLokiOauthParam
 			oauthParams4.Name = types.StringValue(oauthParamsItem4.Name)
 			oauthParams4.Value = types.StringValue(oauthParamsItem4.Value)
 			if oauthParamsCount4+1 > len(r.InputLoki.OauthParams) {
@@ -4001,7 +3708,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputLoki.Pq == nil {
 			r.InputLoki.Pq = nil
 		} else {
-			r.InputLoki.Pq = &tfTypes.PqLoki{}
+			r.InputLoki.Pq = &tfTypes.InputLokiPq{}
 			r.InputLoki.Pq.CommitFrequency = types.Float64PointerValue(resp.InputLoki.Pq.CommitFrequency)
 			if resp.InputLoki.Pq.Compress != nil {
 				r.InputLoki.Pq.Compress = types.StringValue(string(*resp.InputLoki.Pq.Compress))
@@ -4024,21 +3731,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputLoki.SecretParamName = types.StringPointerValue(resp.InputLoki.SecretParamName)
 		r.InputLoki.SendToRoutes = types.BoolPointerValue(resp.InputLoki.SendToRoutes)
 		r.InputLoki.SocketTimeout = types.Float64PointerValue(resp.InputLoki.SocketTimeout)
-		if resp.InputLoki.Status == nil {
-			r.InputLoki.Status = nil
-		} else {
-			r.InputLoki.Status = &tfTypes.TFStatus{}
-			r.InputLoki.Status.Health = types.StringValue(string(resp.InputLoki.Status.Health))
-			if len(resp.InputLoki.Status.Metrics) > 0 {
-				r.InputLoki.Status.Metrics = make(map[string]types.String, len(resp.InputLoki.Status.Metrics))
-				for key28, value28 := range resp.InputLoki.Status.Metrics {
-					result28, _ := json.Marshal(value28)
-					r.InputLoki.Status.Metrics[key28] = types.StringValue(string(result28))
-				}
-			}
-			r.InputLoki.Status.Timestamp = types.Float64Value(resp.InputLoki.Status.Timestamp)
-			r.InputLoki.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputLoki.Status.UseStatusFromLB)
-		}
 		r.InputLoki.Streamtags = make([]types.String, 0, len(resp.InputLoki.Streamtags))
 		for _, v := range resp.InputLoki.Streamtags {
 			r.InputLoki.Streamtags = append(r.InputLoki.Streamtags, types.StringValue(v))
@@ -4047,15 +3739,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputLoki.TLS == nil {
 			r.InputLoki.TLS = nil
 		} else {
-			r.InputLoki.TLS = &tfTypes.TLSSettingsServerSideLoki{}
+			r.InputLoki.TLS = &tfTypes.InputLokiTLSSettingsServerSide{}
 			r.InputLoki.TLS.CaPath = types.StringPointerValue(resp.InputLoki.TLS.CaPath)
 			r.InputLoki.TLS.CertificateName = types.StringPointerValue(resp.InputLoki.TLS.CertificateName)
 			r.InputLoki.TLS.CertPath = types.StringPointerValue(resp.InputLoki.TLS.CertPath)
 			if resp.InputLoki.TLS.CommonNameRegex == nil {
 				r.InputLoki.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult10, _ := json.Marshal(resp.InputLoki.TLS.CommonNameRegex)
-				r.InputLoki.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult10))
+				commonNameRegexResult11, _ := json.Marshal(resp.InputLoki.TLS.CommonNameRegex)
+				r.InputLoki.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult11))
 			}
 			r.InputLoki.TLS.Disabled = types.BoolPointerValue(resp.InputLoki.TLS.Disabled)
 			if resp.InputLoki.TLS.MaxVersion != nil {
@@ -4073,8 +3765,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputLoki.TLS.RejectUnauthorized == nil {
 				r.InputLoki.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult10, _ := json.Marshal(resp.InputLoki.TLS.RejectUnauthorized)
-				r.InputLoki.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult10))
+				rejectUnauthorizedResult11, _ := json.Marshal(resp.InputLoki.TLS.RejectUnauthorized)
+				r.InputLoki.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult11))
 			}
 			r.InputLoki.TLS.RequestCert = types.BoolPointerValue(resp.InputLoki.TLS.RequestCert)
 		}
@@ -4090,19 +3782,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputMetrics != nil {
 		r.InputMetrics = &tfTypes.InputMetrics{}
-		r.InputMetrics.Connections = []tfTypes.ConnectionMetrics{}
+		r.InputMetrics.Connections = []tfTypes.InputMetricsConnection{}
 		if len(r.InputMetrics.Connections) > len(resp.InputMetrics.Connections) {
 			r.InputMetrics.Connections = r.InputMetrics.Connections[:len(resp.InputMetrics.Connections)]
 		}
-		for connectionsCount29, connectionsItem29 := range resp.InputMetrics.Connections {
-			var connections29 tfTypes.ConnectionMetrics
-			connections29.Output = types.StringValue(connectionsItem29.Output)
-			connections29.Pipeline = types.StringPointerValue(connectionsItem29.Pipeline)
-			if connectionsCount29+1 > len(r.InputMetrics.Connections) {
-				r.InputMetrics.Connections = append(r.InputMetrics.Connections, connections29)
+		for connectionsCount30, connectionsItem30 := range resp.InputMetrics.Connections {
+			var connections30 tfTypes.InputMetricsConnection
+			connections30.Output = types.StringValue(connectionsItem30.Output)
+			connections30.Pipeline = types.StringPointerValue(connectionsItem30.Pipeline)
+			if connectionsCount30+1 > len(r.InputMetrics.Connections) {
+				r.InputMetrics.Connections = append(r.InputMetrics.Connections, connections30)
 			} else {
-				r.InputMetrics.Connections[connectionsCount29].Output = connections29.Output
-				r.InputMetrics.Connections[connectionsCount29].Pipeline = connections29.Pipeline
+				r.InputMetrics.Connections[connectionsCount30].Output = connections30.Output
+				r.InputMetrics.Connections[connectionsCount30].Pipeline = connections30.Pipeline
 			}
 		}
 		r.InputMetrics.Description = types.StringPointerValue(resp.InputMetrics.Description)
@@ -4113,26 +3805,26 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputMetrics.ID = types.StringPointerValue(resp.InputMetrics.ID)
 		r.InputMetrics.IPWhitelistRegex = types.StringPointerValue(resp.InputMetrics.IPWhitelistRegex)
 		r.InputMetrics.MaxBufferSize = types.Float64PointerValue(resp.InputMetrics.MaxBufferSize)
-		r.InputMetrics.Metadata = []tfTypes.MetadatumMetrics{}
+		r.InputMetrics.Metadata = []tfTypes.InputMetricsMetadatum{}
 		if len(r.InputMetrics.Metadata) > len(resp.InputMetrics.Metadata) {
 			r.InputMetrics.Metadata = r.InputMetrics.Metadata[:len(resp.InputMetrics.Metadata)]
 		}
-		for metadataCount31, metadataItem31 := range resp.InputMetrics.Metadata {
-			var metadata31 tfTypes.MetadatumMetrics
-			metadata31.Name = types.StringValue(metadataItem31.Name)
-			metadata31.Value = types.StringValue(metadataItem31.Value)
-			if metadataCount31+1 > len(r.InputMetrics.Metadata) {
-				r.InputMetrics.Metadata = append(r.InputMetrics.Metadata, metadata31)
+		for metadataCount32, metadataItem32 := range resp.InputMetrics.Metadata {
+			var metadata32 tfTypes.InputMetricsMetadatum
+			metadata32.Name = types.StringValue(metadataItem32.Name)
+			metadata32.Value = types.StringValue(metadataItem32.Value)
+			if metadataCount32+1 > len(r.InputMetrics.Metadata) {
+				r.InputMetrics.Metadata = append(r.InputMetrics.Metadata, metadata32)
 			} else {
-				r.InputMetrics.Metadata[metadataCount31].Name = metadata31.Name
-				r.InputMetrics.Metadata[metadataCount31].Value = metadata31.Value
+				r.InputMetrics.Metadata[metadataCount32].Name = metadata32.Name
+				r.InputMetrics.Metadata[metadataCount32].Value = metadata32.Value
 			}
 		}
 		r.InputMetrics.Pipeline = types.StringPointerValue(resp.InputMetrics.Pipeline)
 		if resp.InputMetrics.Pq == nil {
 			r.InputMetrics.Pq = nil
 		} else {
-			r.InputMetrics.Pq = &tfTypes.PqMetrics{}
+			r.InputMetrics.Pq = &tfTypes.InputMetricsPq{}
 			r.InputMetrics.Pq.CommitFrequency = types.Float64PointerValue(resp.InputMetrics.Pq.CommitFrequency)
 			if resp.InputMetrics.Pq.Compress != nil {
 				r.InputMetrics.Pq.Compress = types.StringValue(string(*resp.InputMetrics.Pq.Compress))
@@ -4151,21 +3843,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputMetrics.PqEnabled = types.BoolPointerValue(resp.InputMetrics.PqEnabled)
 		r.InputMetrics.SendToRoutes = types.BoolPointerValue(resp.InputMetrics.SendToRoutes)
-		if resp.InputMetrics.Status == nil {
-			r.InputMetrics.Status = nil
-		} else {
-			r.InputMetrics.Status = &tfTypes.TFStatus{}
-			r.InputMetrics.Status.Health = types.StringValue(string(resp.InputMetrics.Status.Health))
-			if len(resp.InputMetrics.Status.Metrics) > 0 {
-				r.InputMetrics.Status.Metrics = make(map[string]types.String, len(resp.InputMetrics.Status.Metrics))
-				for key29, value29 := range resp.InputMetrics.Status.Metrics {
-					result29, _ := json.Marshal(value29)
-					r.InputMetrics.Status.Metrics[key29] = types.StringValue(string(result29))
-				}
-			}
-			r.InputMetrics.Status.Timestamp = types.Float64Value(resp.InputMetrics.Status.Timestamp)
-			r.InputMetrics.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputMetrics.Status.UseStatusFromLB)
-		}
 		r.InputMetrics.Streamtags = make([]types.String, 0, len(resp.InputMetrics.Streamtags))
 		for _, v := range resp.InputMetrics.Streamtags {
 			r.InputMetrics.Streamtags = append(r.InputMetrics.Streamtags, types.StringValue(v))
@@ -4174,15 +3851,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputMetrics.TLS == nil {
 			r.InputMetrics.TLS = nil
 		} else {
-			r.InputMetrics.TLS = &tfTypes.TLSSettingsServerSideMetrics{}
+			r.InputMetrics.TLS = &tfTypes.InputMetricsTLSSettingsServerSide{}
 			r.InputMetrics.TLS.CaPath = types.StringPointerValue(resp.InputMetrics.TLS.CaPath)
 			r.InputMetrics.TLS.CertificateName = types.StringPointerValue(resp.InputMetrics.TLS.CertificateName)
 			r.InputMetrics.TLS.CertPath = types.StringPointerValue(resp.InputMetrics.TLS.CertPath)
 			if resp.InputMetrics.TLS.CommonNameRegex == nil {
 				r.InputMetrics.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult11, _ := json.Marshal(resp.InputMetrics.TLS.CommonNameRegex)
-				r.InputMetrics.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult11))
+				commonNameRegexResult12, _ := json.Marshal(resp.InputMetrics.TLS.CommonNameRegex)
+				r.InputMetrics.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult12))
 			}
 			r.InputMetrics.TLS.Disabled = types.BoolPointerValue(resp.InputMetrics.TLS.Disabled)
 			if resp.InputMetrics.TLS.MaxVersion != nil {
@@ -4200,8 +3877,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputMetrics.TLS.RejectUnauthorized == nil {
 				r.InputMetrics.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult11, _ := json.Marshal(resp.InputMetrics.TLS.RejectUnauthorized)
-				r.InputMetrics.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult11))
+				rejectUnauthorizedResult12, _ := json.Marshal(resp.InputMetrics.TLS.RejectUnauthorized)
+				r.InputMetrics.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult12))
 			}
 			r.InputMetrics.TLS.RequestCert = types.BoolPointerValue(resp.InputMetrics.TLS.RequestCert)
 		}
@@ -4211,19 +3888,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputModelDrivenTelemetry != nil {
 		r.InputModelDrivenTelemetry = &tfTypes.InputModelDrivenTelemetry{}
-		r.InputModelDrivenTelemetry.Connections = []tfTypes.ConnectionModelDrivenTelemetry{}
+		r.InputModelDrivenTelemetry.Connections = []tfTypes.InputModelDrivenTelemetryConnection{}
 		if len(r.InputModelDrivenTelemetry.Connections) > len(resp.InputModelDrivenTelemetry.Connections) {
 			r.InputModelDrivenTelemetry.Connections = r.InputModelDrivenTelemetry.Connections[:len(resp.InputModelDrivenTelemetry.Connections)]
 		}
-		for connectionsCount30, connectionsItem30 := range resp.InputModelDrivenTelemetry.Connections {
-			var connections30 tfTypes.ConnectionModelDrivenTelemetry
-			connections30.Output = types.StringValue(connectionsItem30.Output)
-			connections30.Pipeline = types.StringPointerValue(connectionsItem30.Pipeline)
-			if connectionsCount30+1 > len(r.InputModelDrivenTelemetry.Connections) {
-				r.InputModelDrivenTelemetry.Connections = append(r.InputModelDrivenTelemetry.Connections, connections30)
+		for connectionsCount31, connectionsItem31 := range resp.InputModelDrivenTelemetry.Connections {
+			var connections31 tfTypes.InputModelDrivenTelemetryConnection
+			connections31.Output = types.StringValue(connectionsItem31.Output)
+			connections31.Pipeline = types.StringPointerValue(connectionsItem31.Pipeline)
+			if connectionsCount31+1 > len(r.InputModelDrivenTelemetry.Connections) {
+				r.InputModelDrivenTelemetry.Connections = append(r.InputModelDrivenTelemetry.Connections, connections31)
 			} else {
-				r.InputModelDrivenTelemetry.Connections[connectionsCount30].Output = connections30.Output
-				r.InputModelDrivenTelemetry.Connections[connectionsCount30].Pipeline = connections30.Pipeline
+				r.InputModelDrivenTelemetry.Connections[connectionsCount31].Output = connections31.Output
+				r.InputModelDrivenTelemetry.Connections[connectionsCount31].Pipeline = connections31.Pipeline
 			}
 		}
 		r.InputModelDrivenTelemetry.Description = types.StringPointerValue(resp.InputModelDrivenTelemetry.Description)
@@ -4232,19 +3909,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputModelDrivenTelemetry.Host = types.StringPointerValue(resp.InputModelDrivenTelemetry.Host)
 		r.InputModelDrivenTelemetry.ID = types.StringPointerValue(resp.InputModelDrivenTelemetry.ID)
 		r.InputModelDrivenTelemetry.MaxActiveCxn = types.Float64PointerValue(resp.InputModelDrivenTelemetry.MaxActiveCxn)
-		r.InputModelDrivenTelemetry.Metadata = []tfTypes.MetadatumModelDrivenTelemetry{}
+		r.InputModelDrivenTelemetry.Metadata = []tfTypes.InputModelDrivenTelemetryMetadatum{}
 		if len(r.InputModelDrivenTelemetry.Metadata) > len(resp.InputModelDrivenTelemetry.Metadata) {
 			r.InputModelDrivenTelemetry.Metadata = r.InputModelDrivenTelemetry.Metadata[:len(resp.InputModelDrivenTelemetry.Metadata)]
 		}
-		for metadataCount32, metadataItem32 := range resp.InputModelDrivenTelemetry.Metadata {
-			var metadata32 tfTypes.MetadatumModelDrivenTelemetry
-			metadata32.Name = types.StringValue(metadataItem32.Name)
-			metadata32.Value = types.StringValue(metadataItem32.Value)
-			if metadataCount32+1 > len(r.InputModelDrivenTelemetry.Metadata) {
-				r.InputModelDrivenTelemetry.Metadata = append(r.InputModelDrivenTelemetry.Metadata, metadata32)
+		for metadataCount33, metadataItem33 := range resp.InputModelDrivenTelemetry.Metadata {
+			var metadata33 tfTypes.InputModelDrivenTelemetryMetadatum
+			metadata33.Name = types.StringValue(metadataItem33.Name)
+			metadata33.Value = types.StringValue(metadataItem33.Value)
+			if metadataCount33+1 > len(r.InputModelDrivenTelemetry.Metadata) {
+				r.InputModelDrivenTelemetry.Metadata = append(r.InputModelDrivenTelemetry.Metadata, metadata33)
 			} else {
-				r.InputModelDrivenTelemetry.Metadata[metadataCount32].Name = metadata32.Name
-				r.InputModelDrivenTelemetry.Metadata[metadataCount32].Value = metadata32.Value
+				r.InputModelDrivenTelemetry.Metadata[metadataCount33].Name = metadata33.Name
+				r.InputModelDrivenTelemetry.Metadata[metadataCount33].Value = metadata33.Value
 			}
 		}
 		r.InputModelDrivenTelemetry.Pipeline = types.StringPointerValue(resp.InputModelDrivenTelemetry.Pipeline)
@@ -4252,7 +3929,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputModelDrivenTelemetry.Pq == nil {
 			r.InputModelDrivenTelemetry.Pq = nil
 		} else {
-			r.InputModelDrivenTelemetry.Pq = &tfTypes.PqModelDrivenTelemetry{}
+			r.InputModelDrivenTelemetry.Pq = &tfTypes.InputModelDrivenTelemetryPq{}
 			r.InputModelDrivenTelemetry.Pq.CommitFrequency = types.Float64PointerValue(resp.InputModelDrivenTelemetry.Pq.CommitFrequency)
 			if resp.InputModelDrivenTelemetry.Pq.Compress != nil {
 				r.InputModelDrivenTelemetry.Pq.Compress = types.StringValue(string(*resp.InputModelDrivenTelemetry.Pq.Compress))
@@ -4272,21 +3949,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputModelDrivenTelemetry.PqEnabled = types.BoolPointerValue(resp.InputModelDrivenTelemetry.PqEnabled)
 		r.InputModelDrivenTelemetry.SendToRoutes = types.BoolPointerValue(resp.InputModelDrivenTelemetry.SendToRoutes)
 		r.InputModelDrivenTelemetry.ShutdownTimeoutMs = types.Float64PointerValue(resp.InputModelDrivenTelemetry.ShutdownTimeoutMs)
-		if resp.InputModelDrivenTelemetry.Status == nil {
-			r.InputModelDrivenTelemetry.Status = nil
-		} else {
-			r.InputModelDrivenTelemetry.Status = &tfTypes.TFStatus{}
-			r.InputModelDrivenTelemetry.Status.Health = types.StringValue(string(resp.InputModelDrivenTelemetry.Status.Health))
-			if len(resp.InputModelDrivenTelemetry.Status.Metrics) > 0 {
-				r.InputModelDrivenTelemetry.Status.Metrics = make(map[string]types.String, len(resp.InputModelDrivenTelemetry.Status.Metrics))
-				for key30, value30 := range resp.InputModelDrivenTelemetry.Status.Metrics {
-					result30, _ := json.Marshal(value30)
-					r.InputModelDrivenTelemetry.Status.Metrics[key30] = types.StringValue(string(result30))
-				}
-			}
-			r.InputModelDrivenTelemetry.Status.Timestamp = types.Float64Value(resp.InputModelDrivenTelemetry.Status.Timestamp)
-			r.InputModelDrivenTelemetry.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputModelDrivenTelemetry.Status.UseStatusFromLB)
-		}
 		r.InputModelDrivenTelemetry.Streamtags = make([]types.String, 0, len(resp.InputModelDrivenTelemetry.Streamtags))
 		for _, v := range resp.InputModelDrivenTelemetry.Streamtags {
 			r.InputModelDrivenTelemetry.Streamtags = append(r.InputModelDrivenTelemetry.Streamtags, types.StringValue(v))
@@ -4294,15 +3956,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputModelDrivenTelemetry.TLS == nil {
 			r.InputModelDrivenTelemetry.TLS = nil
 		} else {
-			r.InputModelDrivenTelemetry.TLS = &tfTypes.TLSSettingsServerSideModelDrivenTelemetry{}
+			r.InputModelDrivenTelemetry.TLS = &tfTypes.InputModelDrivenTelemetryTLSSettingsServerSide{}
 			r.InputModelDrivenTelemetry.TLS.CaPath = types.StringPointerValue(resp.InputModelDrivenTelemetry.TLS.CaPath)
 			r.InputModelDrivenTelemetry.TLS.CertificateName = types.StringPointerValue(resp.InputModelDrivenTelemetry.TLS.CertificateName)
 			r.InputModelDrivenTelemetry.TLS.CertPath = types.StringPointerValue(resp.InputModelDrivenTelemetry.TLS.CertPath)
 			if resp.InputModelDrivenTelemetry.TLS.CommonNameRegex == nil {
 				r.InputModelDrivenTelemetry.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult12, _ := json.Marshal(resp.InputModelDrivenTelemetry.TLS.CommonNameRegex)
-				r.InputModelDrivenTelemetry.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult12))
+				commonNameRegexResult13, _ := json.Marshal(resp.InputModelDrivenTelemetry.TLS.CommonNameRegex)
+				r.InputModelDrivenTelemetry.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult13))
 			}
 			r.InputModelDrivenTelemetry.TLS.Disabled = types.BoolPointerValue(resp.InputModelDrivenTelemetry.TLS.Disabled)
 			if resp.InputModelDrivenTelemetry.TLS.MaxVersion != nil {
@@ -4319,8 +3981,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputModelDrivenTelemetry.TLS.RejectUnauthorized == nil {
 				r.InputModelDrivenTelemetry.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult12, _ := json.Marshal(resp.InputModelDrivenTelemetry.TLS.RejectUnauthorized)
-				r.InputModelDrivenTelemetry.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult12))
+				rejectUnauthorizedResult13, _ := json.Marshal(resp.InputModelDrivenTelemetry.TLS.RejectUnauthorized)
+				r.InputModelDrivenTelemetry.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult13))
 			}
 			r.InputModelDrivenTelemetry.TLS.RequestCert = types.BoolPointerValue(resp.InputModelDrivenTelemetry.TLS.RequestCert)
 		}
@@ -4350,19 +4012,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputMsk.Brokers {
 			r.InputMsk.Brokers = append(r.InputMsk.Brokers, types.StringValue(v))
 		}
-		r.InputMsk.Connections = []tfTypes.ConnectionMsk{}
+		r.InputMsk.Connections = []tfTypes.InputMskConnection{}
 		if len(r.InputMsk.Connections) > len(resp.InputMsk.Connections) {
 			r.InputMsk.Connections = r.InputMsk.Connections[:len(resp.InputMsk.Connections)]
 		}
-		for connectionsCount31, connectionsItem31 := range resp.InputMsk.Connections {
-			var connections31 tfTypes.ConnectionMsk
-			connections31.Output = types.StringValue(connectionsItem31.Output)
-			connections31.Pipeline = types.StringPointerValue(connectionsItem31.Pipeline)
-			if connectionsCount31+1 > len(r.InputMsk.Connections) {
-				r.InputMsk.Connections = append(r.InputMsk.Connections, connections31)
+		for connectionsCount32, connectionsItem32 := range resp.InputMsk.Connections {
+			var connections32 tfTypes.InputMskConnection
+			connections32.Output = types.StringValue(connectionsItem32.Output)
+			connections32.Pipeline = types.StringPointerValue(connectionsItem32.Pipeline)
+			if connectionsCount32+1 > len(r.InputMsk.Connections) {
+				r.InputMsk.Connections = append(r.InputMsk.Connections, connections32)
 			} else {
-				r.InputMsk.Connections[connectionsCount31].Output = connections31.Output
-				r.InputMsk.Connections[connectionsCount31].Pipeline = connections31.Pipeline
+				r.InputMsk.Connections[connectionsCount32].Output = connections32.Output
+				r.InputMsk.Connections[connectionsCount32].Pipeline = connections32.Pipeline
 			}
 		}
 		r.InputMsk.ConnectionTimeout = types.Float64PointerValue(resp.InputMsk.ConnectionTimeout)
@@ -4380,11 +4042,11 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputMsk.KafkaSchemaRegistry == nil {
 			r.InputMsk.KafkaSchemaRegistry = nil
 		} else {
-			r.InputMsk.KafkaSchemaRegistry = &tfTypes.InputKafkaSchemaRegistryAuthenticationMsk{}
+			r.InputMsk.KafkaSchemaRegistry = &tfTypes.InputMskKafkaSchemaRegistryAuthentication{}
 			if resp.InputMsk.KafkaSchemaRegistry.Auth == nil {
 				r.InputMsk.KafkaSchemaRegistry.Auth = nil
 			} else {
-				r.InputMsk.KafkaSchemaRegistry.Auth = &tfTypes.InputAuthMsk{}
+				r.InputMsk.KafkaSchemaRegistry.Auth = &tfTypes.InputMskAuth{}
 				r.InputMsk.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(resp.InputMsk.KafkaSchemaRegistry.Auth.CredentialsSecret)
 				r.InputMsk.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(resp.InputMsk.KafkaSchemaRegistry.Auth.Disabled)
 			}
@@ -4396,7 +4058,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputMsk.KafkaSchemaRegistry.TLS == nil {
 				r.InputMsk.KafkaSchemaRegistry.TLS = nil
 			} else {
-				r.InputMsk.KafkaSchemaRegistry.TLS = &tfTypes.InputKafkaSchemaRegistryTLSSettingsClientSideMsk{}
+				r.InputMsk.KafkaSchemaRegistry.TLS = &tfTypes.InputMskKafkaSchemaRegistryTLSSettingsClientSide{}
 				r.InputMsk.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(resp.InputMsk.KafkaSchemaRegistry.TLS.CaPath)
 				r.InputMsk.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(resp.InputMsk.KafkaSchemaRegistry.TLS.CertificateName)
 				r.InputMsk.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(resp.InputMsk.KafkaSchemaRegistry.TLS.CertPath)
@@ -4422,26 +4084,26 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputMsk.MaxBytesPerPartition = types.Float64PointerValue(resp.InputMsk.MaxBytesPerPartition)
 		r.InputMsk.MaxRetries = types.Float64PointerValue(resp.InputMsk.MaxRetries)
 		r.InputMsk.MaxSocketErrors = types.Float64PointerValue(resp.InputMsk.MaxSocketErrors)
-		r.InputMsk.Metadata = []tfTypes.MetadatumMsk{}
+		r.InputMsk.Metadata = []tfTypes.InputMskMetadatum{}
 		if len(r.InputMsk.Metadata) > len(resp.InputMsk.Metadata) {
 			r.InputMsk.Metadata = r.InputMsk.Metadata[:len(resp.InputMsk.Metadata)]
 		}
-		for metadataCount33, metadataItem33 := range resp.InputMsk.Metadata {
-			var metadata33 tfTypes.MetadatumMsk
-			metadata33.Name = types.StringValue(metadataItem33.Name)
-			metadata33.Value = types.StringValue(metadataItem33.Value)
-			if metadataCount33+1 > len(r.InputMsk.Metadata) {
-				r.InputMsk.Metadata = append(r.InputMsk.Metadata, metadata33)
+		for metadataCount34, metadataItem34 := range resp.InputMsk.Metadata {
+			var metadata34 tfTypes.InputMskMetadatum
+			metadata34.Name = types.StringValue(metadataItem34.Name)
+			metadata34.Value = types.StringValue(metadataItem34.Value)
+			if metadataCount34+1 > len(r.InputMsk.Metadata) {
+				r.InputMsk.Metadata = append(r.InputMsk.Metadata, metadata34)
 			} else {
-				r.InputMsk.Metadata[metadataCount33].Name = metadata33.Name
-				r.InputMsk.Metadata[metadataCount33].Value = metadata33.Value
+				r.InputMsk.Metadata[metadataCount34].Name = metadata34.Name
+				r.InputMsk.Metadata[metadataCount34].Value = metadata34.Value
 			}
 		}
 		r.InputMsk.Pipeline = types.StringPointerValue(resp.InputMsk.Pipeline)
 		if resp.InputMsk.Pq == nil {
 			r.InputMsk.Pq = nil
 		} else {
-			r.InputMsk.Pq = &tfTypes.PqMsk{}
+			r.InputMsk.Pq = &tfTypes.InputMskPq{}
 			r.InputMsk.Pq.CommitFrequency = types.Float64PointerValue(resp.InputMsk.Pq.CommitFrequency)
 			if resp.InputMsk.Pq.Compress != nil {
 				r.InputMsk.Pq.Compress = types.StringValue(string(*resp.InputMsk.Pq.Compress))
@@ -4472,21 +4134,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputMsk.SignatureVersion = types.StringNull()
 		}
-		if resp.InputMsk.Status == nil {
-			r.InputMsk.Status = nil
-		} else {
-			r.InputMsk.Status = &tfTypes.TFStatus{}
-			r.InputMsk.Status.Health = types.StringValue(string(resp.InputMsk.Status.Health))
-			if len(resp.InputMsk.Status.Metrics) > 0 {
-				r.InputMsk.Status.Metrics = make(map[string]types.String, len(resp.InputMsk.Status.Metrics))
-				for key31, value31 := range resp.InputMsk.Status.Metrics {
-					result31, _ := json.Marshal(value31)
-					r.InputMsk.Status.Metrics[key31] = types.StringValue(string(result31))
-				}
-			}
-			r.InputMsk.Status.Timestamp = types.Float64Value(resp.InputMsk.Status.Timestamp)
-			r.InputMsk.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputMsk.Status.UseStatusFromLB)
-		}
 		r.InputMsk.Streamtags = make([]types.String, 0, len(resp.InputMsk.Streamtags))
 		for _, v := range resp.InputMsk.Streamtags {
 			r.InputMsk.Streamtags = append(r.InputMsk.Streamtags, types.StringValue(v))
@@ -4494,7 +4141,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputMsk.TLS == nil {
 			r.InputMsk.TLS = nil
 		} else {
-			r.InputMsk.TLS = &tfTypes.InputTLSSettingsClientSideMsk{}
+			r.InputMsk.TLS = &tfTypes.InputMskTLSSettingsClientSide{}
 			r.InputMsk.TLS.CaPath = types.StringPointerValue(resp.InputMsk.TLS.CaPath)
 			r.InputMsk.TLS.CertificateName = types.StringPointerValue(resp.InputMsk.TLS.CertificateName)
 			r.InputMsk.TLS.CertPath = types.StringPointerValue(resp.InputMsk.TLS.CertPath)
@@ -4526,19 +4173,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputNetflow != nil {
 		r.InputNetflow = &tfTypes.InputNetflow{}
-		r.InputNetflow.Connections = []tfTypes.ConnectionNetflow{}
+		r.InputNetflow.Connections = []tfTypes.InputNetflowConnection{}
 		if len(r.InputNetflow.Connections) > len(resp.InputNetflow.Connections) {
 			r.InputNetflow.Connections = r.InputNetflow.Connections[:len(resp.InputNetflow.Connections)]
 		}
-		for connectionsCount32, connectionsItem32 := range resp.InputNetflow.Connections {
-			var connections32 tfTypes.ConnectionNetflow
-			connections32.Output = types.StringValue(connectionsItem32.Output)
-			connections32.Pipeline = types.StringPointerValue(connectionsItem32.Pipeline)
-			if connectionsCount32+1 > len(r.InputNetflow.Connections) {
-				r.InputNetflow.Connections = append(r.InputNetflow.Connections, connections32)
+		for connectionsCount33, connectionsItem33 := range resp.InputNetflow.Connections {
+			var connections33 tfTypes.InputNetflowConnection
+			connections33.Output = types.StringValue(connectionsItem33.Output)
+			connections33.Pipeline = types.StringPointerValue(connectionsItem33.Pipeline)
+			if connectionsCount33+1 > len(r.InputNetflow.Connections) {
+				r.InputNetflow.Connections = append(r.InputNetflow.Connections, connections33)
 			} else {
-				r.InputNetflow.Connections[connectionsCount32].Output = connections32.Output
-				r.InputNetflow.Connections[connectionsCount32].Pipeline = connections32.Pipeline
+				r.InputNetflow.Connections[connectionsCount33].Output = connections33.Output
+				r.InputNetflow.Connections[connectionsCount33].Pipeline = connections33.Pipeline
 			}
 		}
 		r.InputNetflow.Description = types.StringPointerValue(resp.InputNetflow.Description)
@@ -4550,19 +4197,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputNetflow.IPAllowlistRegex = types.StringPointerValue(resp.InputNetflow.IPAllowlistRegex)
 		r.InputNetflow.IPDenylistRegex = types.StringPointerValue(resp.InputNetflow.IPDenylistRegex)
 		r.InputNetflow.IpfixEnabled = types.BoolPointerValue(resp.InputNetflow.IpfixEnabled)
-		r.InputNetflow.Metadata = []tfTypes.MetadatumNetflow{}
+		r.InputNetflow.Metadata = []tfTypes.InputNetflowMetadatum{}
 		if len(r.InputNetflow.Metadata) > len(resp.InputNetflow.Metadata) {
 			r.InputNetflow.Metadata = r.InputNetflow.Metadata[:len(resp.InputNetflow.Metadata)]
 		}
-		for metadataCount34, metadataItem34 := range resp.InputNetflow.Metadata {
-			var metadata34 tfTypes.MetadatumNetflow
-			metadata34.Name = types.StringValue(metadataItem34.Name)
-			metadata34.Value = types.StringValue(metadataItem34.Value)
-			if metadataCount34+1 > len(r.InputNetflow.Metadata) {
-				r.InputNetflow.Metadata = append(r.InputNetflow.Metadata, metadata34)
+		for metadataCount35, metadataItem35 := range resp.InputNetflow.Metadata {
+			var metadata35 tfTypes.InputNetflowMetadatum
+			metadata35.Name = types.StringValue(metadataItem35.Name)
+			metadata35.Value = types.StringValue(metadataItem35.Value)
+			if metadataCount35+1 > len(r.InputNetflow.Metadata) {
+				r.InputNetflow.Metadata = append(r.InputNetflow.Metadata, metadata35)
 			} else {
-				r.InputNetflow.Metadata[metadataCount34].Name = metadata34.Name
-				r.InputNetflow.Metadata[metadataCount34].Value = metadata34.Value
+				r.InputNetflow.Metadata[metadataCount35].Name = metadata35.Name
+				r.InputNetflow.Metadata[metadataCount35].Value = metadata35.Value
 			}
 		}
 		r.InputNetflow.Pipeline = types.StringPointerValue(resp.InputNetflow.Pipeline)
@@ -4570,7 +4217,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputNetflow.Pq == nil {
 			r.InputNetflow.Pq = nil
 		} else {
-			r.InputNetflow.Pq = &tfTypes.PqNetflow{}
+			r.InputNetflow.Pq = &tfTypes.InputNetflowPq{}
 			r.InputNetflow.Pq.CommitFrequency = types.Float64PointerValue(resp.InputNetflow.Pq.CommitFrequency)
 			if resp.InputNetflow.Pq.Compress != nil {
 				r.InputNetflow.Pq.Compress = types.StringValue(string(*resp.InputNetflow.Pq.Compress))
@@ -4589,21 +4236,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputNetflow.PqEnabled = types.BoolPointerValue(resp.InputNetflow.PqEnabled)
 		r.InputNetflow.SendToRoutes = types.BoolPointerValue(resp.InputNetflow.SendToRoutes)
-		if resp.InputNetflow.Status == nil {
-			r.InputNetflow.Status = nil
-		} else {
-			r.InputNetflow.Status = &tfTypes.TFStatus{}
-			r.InputNetflow.Status.Health = types.StringValue(string(resp.InputNetflow.Status.Health))
-			if len(resp.InputNetflow.Status.Metrics) > 0 {
-				r.InputNetflow.Status.Metrics = make(map[string]types.String, len(resp.InputNetflow.Status.Metrics))
-				for key32, value32 := range resp.InputNetflow.Status.Metrics {
-					result32, _ := json.Marshal(value32)
-					r.InputNetflow.Status.Metrics[key32] = types.StringValue(string(result32))
-				}
-			}
-			r.InputNetflow.Status.Timestamp = types.Float64Value(resp.InputNetflow.Status.Timestamp)
-			r.InputNetflow.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputNetflow.Status.UseStatusFromLB)
-		}
 		r.InputNetflow.Streamtags = make([]types.String, 0, len(resp.InputNetflow.Streamtags))
 		for _, v := range resp.InputNetflow.Streamtags {
 			r.InputNetflow.Streamtags = append(r.InputNetflow.Streamtags, types.StringValue(v))
@@ -4627,27 +4259,27 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputOffice365Mgmt.AuthType = types.StringNull()
 		}
 		r.InputOffice365Mgmt.ClientSecret = types.StringPointerValue(resp.InputOffice365Mgmt.ClientSecret)
-		r.InputOffice365Mgmt.Connections = []tfTypes.ConnectionOffice365Mgmt{}
+		r.InputOffice365Mgmt.Connections = []tfTypes.InputOffice365MgmtConnection{}
 		if len(r.InputOffice365Mgmt.Connections) > len(resp.InputOffice365Mgmt.Connections) {
 			r.InputOffice365Mgmt.Connections = r.InputOffice365Mgmt.Connections[:len(resp.InputOffice365Mgmt.Connections)]
 		}
-		for connectionsCount33, connectionsItem33 := range resp.InputOffice365Mgmt.Connections {
-			var connections33 tfTypes.ConnectionOffice365Mgmt
-			connections33.Output = types.StringValue(connectionsItem33.Output)
-			connections33.Pipeline = types.StringPointerValue(connectionsItem33.Pipeline)
-			if connectionsCount33+1 > len(r.InputOffice365Mgmt.Connections) {
-				r.InputOffice365Mgmt.Connections = append(r.InputOffice365Mgmt.Connections, connections33)
+		for connectionsCount34, connectionsItem34 := range resp.InputOffice365Mgmt.Connections {
+			var connections34 tfTypes.InputOffice365MgmtConnection
+			connections34.Output = types.StringValue(connectionsItem34.Output)
+			connections34.Pipeline = types.StringPointerValue(connectionsItem34.Pipeline)
+			if connectionsCount34+1 > len(r.InputOffice365Mgmt.Connections) {
+				r.InputOffice365Mgmt.Connections = append(r.InputOffice365Mgmt.Connections, connections34)
 			} else {
-				r.InputOffice365Mgmt.Connections[connectionsCount33].Output = connections33.Output
-				r.InputOffice365Mgmt.Connections[connectionsCount33].Pipeline = connections33.Pipeline
+				r.InputOffice365Mgmt.Connections[connectionsCount34].Output = connections34.Output
+				r.InputOffice365Mgmt.Connections[connectionsCount34].Pipeline = connections34.Pipeline
 			}
 		}
-		r.InputOffice365Mgmt.ContentConfig = []tfTypes.ContentConfigOffice365Mgmt{}
+		r.InputOffice365Mgmt.ContentConfig = []tfTypes.InputOffice365MgmtContentConfig{}
 		if len(r.InputOffice365Mgmt.ContentConfig) > len(resp.InputOffice365Mgmt.ContentConfig) {
 			r.InputOffice365Mgmt.ContentConfig = r.InputOffice365Mgmt.ContentConfig[:len(resp.InputOffice365Mgmt.ContentConfig)]
 		}
 		for contentConfigCount, contentConfigItem := range resp.InputOffice365Mgmt.ContentConfig {
-			var contentConfig tfTypes.ContentConfigOffice365Mgmt
+			var contentConfig tfTypes.InputOffice365MgmtContentConfig
 			contentConfig.ContentType = types.StringPointerValue(contentConfigItem.ContentType)
 			contentConfig.Description = types.StringPointerValue(contentConfigItem.Description)
 			contentConfig.Enabled = types.BoolPointerValue(contentConfigItem.Enabled)
@@ -4671,23 +4303,24 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputOffice365Mgmt.Disabled = types.BoolPointerValue(resp.InputOffice365Mgmt.Disabled)
 		r.InputOffice365Mgmt.Environment = types.StringPointerValue(resp.InputOffice365Mgmt.Environment)
 		r.InputOffice365Mgmt.ID = types.StringPointerValue(resp.InputOffice365Mgmt.ID)
+		r.InputOffice365Mgmt.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputOffice365Mgmt.IgnoreGroupJobsLimit)
 		r.InputOffice365Mgmt.IngestionLag = types.Float64PointerValue(resp.InputOffice365Mgmt.IngestionLag)
 		r.InputOffice365Mgmt.JobTimeout = types.StringPointerValue(resp.InputOffice365Mgmt.JobTimeout)
 		r.InputOffice365Mgmt.KeepAliveTime = types.Float64PointerValue(resp.InputOffice365Mgmt.KeepAliveTime)
 		r.InputOffice365Mgmt.MaxMissedKeepAlives = types.Float64PointerValue(resp.InputOffice365Mgmt.MaxMissedKeepAlives)
-		r.InputOffice365Mgmt.Metadata = []tfTypes.MetadatumOffice365Mgmt{}
+		r.InputOffice365Mgmt.Metadata = []tfTypes.InputOffice365MgmtMetadatum{}
 		if len(r.InputOffice365Mgmt.Metadata) > len(resp.InputOffice365Mgmt.Metadata) {
 			r.InputOffice365Mgmt.Metadata = r.InputOffice365Mgmt.Metadata[:len(resp.InputOffice365Mgmt.Metadata)]
 		}
-		for metadataCount35, metadataItem35 := range resp.InputOffice365Mgmt.Metadata {
-			var metadata35 tfTypes.MetadatumOffice365Mgmt
-			metadata35.Name = types.StringValue(metadataItem35.Name)
-			metadata35.Value = types.StringValue(metadataItem35.Value)
-			if metadataCount35+1 > len(r.InputOffice365Mgmt.Metadata) {
-				r.InputOffice365Mgmt.Metadata = append(r.InputOffice365Mgmt.Metadata, metadata35)
+		for metadataCount36, metadataItem36 := range resp.InputOffice365Mgmt.Metadata {
+			var metadata36 tfTypes.InputOffice365MgmtMetadatum
+			metadata36.Name = types.StringValue(metadataItem36.Name)
+			metadata36.Value = types.StringValue(metadataItem36.Value)
+			if metadataCount36+1 > len(r.InputOffice365Mgmt.Metadata) {
+				r.InputOffice365Mgmt.Metadata = append(r.InputOffice365Mgmt.Metadata, metadata36)
 			} else {
-				r.InputOffice365Mgmt.Metadata[metadataCount35].Name = metadata35.Name
-				r.InputOffice365Mgmt.Metadata[metadataCount35].Value = metadata35.Value
+				r.InputOffice365Mgmt.Metadata[metadataCount36].Name = metadata36.Name
+				r.InputOffice365Mgmt.Metadata[metadataCount36].Value = metadata36.Value
 			}
 		}
 		r.InputOffice365Mgmt.Pipeline = types.StringPointerValue(resp.InputOffice365Mgmt.Pipeline)
@@ -4699,7 +4332,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputOffice365Mgmt.Pq == nil {
 			r.InputOffice365Mgmt.Pq = nil
 		} else {
-			r.InputOffice365Mgmt.Pq = &tfTypes.PqOffice365Mgmt{}
+			r.InputOffice365Mgmt.Pq = &tfTypes.InputOffice365MgmtPq{}
 			r.InputOffice365Mgmt.Pq.CommitFrequency = types.Float64PointerValue(resp.InputOffice365Mgmt.Pq.CommitFrequency)
 			if resp.InputOffice365Mgmt.Pq.Compress != nil {
 				r.InputOffice365Mgmt.Pq.Compress = types.StringValue(string(*resp.InputOffice365Mgmt.Pq.Compress))
@@ -4721,7 +4354,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputOffice365Mgmt.RetryRules == nil {
 			r.InputOffice365Mgmt.RetryRules = nil
 		} else {
-			r.InputOffice365Mgmt.RetryRules = &tfTypes.RetryRulesOffice365Mgmt{}
+			r.InputOffice365Mgmt.RetryRules = &tfTypes.InputOffice365MgmtRetryRules{}
 			r.InputOffice365Mgmt.RetryRules.Codes = make([]types.Float64, 0, len(resp.InputOffice365Mgmt.RetryRules.Codes))
 			for _, v := range resp.InputOffice365Mgmt.RetryRules.Codes {
 				r.InputOffice365Mgmt.RetryRules.Codes = append(r.InputOffice365Mgmt.RetryRules.Codes, types.Float64Value(v))
@@ -4739,21 +4372,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputOffice365Mgmt.SendToRoutes = types.BoolPointerValue(resp.InputOffice365Mgmt.SendToRoutes)
-		if resp.InputOffice365Mgmt.Status == nil {
-			r.InputOffice365Mgmt.Status = nil
-		} else {
-			r.InputOffice365Mgmt.Status = &tfTypes.TFStatus{}
-			r.InputOffice365Mgmt.Status.Health = types.StringValue(string(resp.InputOffice365Mgmt.Status.Health))
-			if len(resp.InputOffice365Mgmt.Status.Metrics) > 0 {
-				r.InputOffice365Mgmt.Status.Metrics = make(map[string]types.String, len(resp.InputOffice365Mgmt.Status.Metrics))
-				for key33, value33 := range resp.InputOffice365Mgmt.Status.Metrics {
-					result33, _ := json.Marshal(value33)
-					r.InputOffice365Mgmt.Status.Metrics[key33] = types.StringValue(string(result33))
-				}
-			}
-			r.InputOffice365Mgmt.Status.Timestamp = types.Float64Value(resp.InputOffice365Mgmt.Status.Timestamp)
-			r.InputOffice365Mgmt.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputOffice365Mgmt.Status.UseStatusFromLB)
-		}
 		r.InputOffice365Mgmt.Streamtags = make([]types.String, 0, len(resp.InputOffice365Mgmt.Streamtags))
 		for _, v := range resp.InputOffice365Mgmt.Streamtags {
 			r.InputOffice365Mgmt.Streamtags = append(r.InputOffice365Mgmt.Streamtags, types.StringValue(v))
@@ -4786,19 +4404,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputOffice365MsgTrace.ClientID = types.StringPointerValue(resp.InputOffice365MsgTrace.ClientID)
 		r.InputOffice365MsgTrace.ClientSecret = types.StringPointerValue(resp.InputOffice365MsgTrace.ClientSecret)
-		r.InputOffice365MsgTrace.Connections = []tfTypes.ConnectionOffice365MsgTrace{}
+		r.InputOffice365MsgTrace.Connections = []tfTypes.InputOffice365MsgTraceConnection{}
 		if len(r.InputOffice365MsgTrace.Connections) > len(resp.InputOffice365MsgTrace.Connections) {
 			r.InputOffice365MsgTrace.Connections = r.InputOffice365MsgTrace.Connections[:len(resp.InputOffice365MsgTrace.Connections)]
 		}
-		for connectionsCount34, connectionsItem34 := range resp.InputOffice365MsgTrace.Connections {
-			var connections34 tfTypes.ConnectionOffice365MsgTrace
-			connections34.Output = types.StringValue(connectionsItem34.Output)
-			connections34.Pipeline = types.StringPointerValue(connectionsItem34.Pipeline)
-			if connectionsCount34+1 > len(r.InputOffice365MsgTrace.Connections) {
-				r.InputOffice365MsgTrace.Connections = append(r.InputOffice365MsgTrace.Connections, connections34)
+		for connectionsCount35, connectionsItem35 := range resp.InputOffice365MsgTrace.Connections {
+			var connections35 tfTypes.InputOffice365MsgTraceConnection
+			connections35.Output = types.StringValue(connectionsItem35.Output)
+			connections35.Pipeline = types.StringPointerValue(connectionsItem35.Pipeline)
+			if connectionsCount35+1 > len(r.InputOffice365MsgTrace.Connections) {
+				r.InputOffice365MsgTrace.Connections = append(r.InputOffice365MsgTrace.Connections, connections35)
 			} else {
-				r.InputOffice365MsgTrace.Connections[connectionsCount34].Output = connections34.Output
-				r.InputOffice365MsgTrace.Connections[connectionsCount34].Pipeline = connections34.Pipeline
+				r.InputOffice365MsgTrace.Connections[connectionsCount35].Output = connections35.Output
+				r.InputOffice365MsgTrace.Connections[connectionsCount35].Pipeline = connections35.Pipeline
 			}
 		}
 		r.InputOffice365MsgTrace.CredentialsSecret = types.StringPointerValue(resp.InputOffice365MsgTrace.CredentialsSecret)
@@ -4808,6 +4426,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputOffice365MsgTrace.EndDate = types.StringPointerValue(resp.InputOffice365MsgTrace.EndDate)
 		r.InputOffice365MsgTrace.Environment = types.StringPointerValue(resp.InputOffice365MsgTrace.Environment)
 		r.InputOffice365MsgTrace.ID = types.StringPointerValue(resp.InputOffice365MsgTrace.ID)
+		r.InputOffice365MsgTrace.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputOffice365MsgTrace.IgnoreGroupJobsLimit)
 		r.InputOffice365MsgTrace.Interval = types.Float64PointerValue(resp.InputOffice365MsgTrace.Interval)
 		r.InputOffice365MsgTrace.JobTimeout = types.StringPointerValue(resp.InputOffice365MsgTrace.JobTimeout)
 		r.InputOffice365MsgTrace.KeepAliveTime = types.Float64PointerValue(resp.InputOffice365MsgTrace.KeepAliveTime)
@@ -4818,19 +4437,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputOffice365MsgTrace.MaxMissedKeepAlives = types.Float64PointerValue(resp.InputOffice365MsgTrace.MaxMissedKeepAlives)
 		r.InputOffice365MsgTrace.MaxTaskReschedule = types.Float64PointerValue(resp.InputOffice365MsgTrace.MaxTaskReschedule)
-		r.InputOffice365MsgTrace.Metadata = []tfTypes.MetadatumOffice365MsgTrace{}
+		r.InputOffice365MsgTrace.Metadata = []tfTypes.InputOffice365MsgTraceMetadatum{}
 		if len(r.InputOffice365MsgTrace.Metadata) > len(resp.InputOffice365MsgTrace.Metadata) {
 			r.InputOffice365MsgTrace.Metadata = r.InputOffice365MsgTrace.Metadata[:len(resp.InputOffice365MsgTrace.Metadata)]
 		}
-		for metadataCount36, metadataItem36 := range resp.InputOffice365MsgTrace.Metadata {
-			var metadata36 tfTypes.MetadatumOffice365MsgTrace
-			metadata36.Name = types.StringValue(metadataItem36.Name)
-			metadata36.Value = types.StringValue(metadataItem36.Value)
-			if metadataCount36+1 > len(r.InputOffice365MsgTrace.Metadata) {
-				r.InputOffice365MsgTrace.Metadata = append(r.InputOffice365MsgTrace.Metadata, metadata36)
+		for metadataCount37, metadataItem37 := range resp.InputOffice365MsgTrace.Metadata {
+			var metadata37 tfTypes.InputOffice365MsgTraceMetadatum
+			metadata37.Name = types.StringValue(metadataItem37.Name)
+			metadata37.Value = types.StringValue(metadataItem37.Value)
+			if metadataCount37+1 > len(r.InputOffice365MsgTrace.Metadata) {
+				r.InputOffice365MsgTrace.Metadata = append(r.InputOffice365MsgTrace.Metadata, metadata37)
 			} else {
-				r.InputOffice365MsgTrace.Metadata[metadataCount36].Name = metadata36.Name
-				r.InputOffice365MsgTrace.Metadata[metadataCount36].Value = metadata36.Value
+				r.InputOffice365MsgTrace.Metadata[metadataCount37].Name = metadata37.Name
+				r.InputOffice365MsgTrace.Metadata[metadataCount37].Value = metadata37.Value
 			}
 		}
 		r.InputOffice365MsgTrace.Password = types.StringPointerValue(resp.InputOffice365MsgTrace.Password)
@@ -4843,7 +4462,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputOffice365MsgTrace.Pq == nil {
 			r.InputOffice365MsgTrace.Pq = nil
 		} else {
-			r.InputOffice365MsgTrace.Pq = &tfTypes.PqOffice365MsgTrace{}
+			r.InputOffice365MsgTrace.Pq = &tfTypes.InputOffice365MsgTracePq{}
 			r.InputOffice365MsgTrace.Pq.CommitFrequency = types.Float64PointerValue(resp.InputOffice365MsgTrace.Pq.CommitFrequency)
 			if resp.InputOffice365MsgTrace.Pq.Compress != nil {
 				r.InputOffice365MsgTrace.Pq.Compress = types.StringValue(string(*resp.InputOffice365MsgTrace.Pq.Compress))
@@ -4866,7 +4485,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputOffice365MsgTrace.RetryRules == nil {
 			r.InputOffice365MsgTrace.RetryRules = nil
 		} else {
-			r.InputOffice365MsgTrace.RetryRules = &tfTypes.RetryRulesOffice365MsgTrace{}
+			r.InputOffice365MsgTrace.RetryRules = &tfTypes.InputOffice365MsgTraceRetryRules{}
 			r.InputOffice365MsgTrace.RetryRules.Codes = make([]types.Float64, 0, len(resp.InputOffice365MsgTrace.RetryRules.Codes))
 			for _, v := range resp.InputOffice365MsgTrace.RetryRules.Codes {
 				r.InputOffice365MsgTrace.RetryRules.Codes = append(r.InputOffice365MsgTrace.RetryRules.Codes, types.Float64Value(v))
@@ -4885,21 +4504,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputOffice365MsgTrace.SendToRoutes = types.BoolPointerValue(resp.InputOffice365MsgTrace.SendToRoutes)
 		r.InputOffice365MsgTrace.StartDate = types.StringPointerValue(resp.InputOffice365MsgTrace.StartDate)
-		if resp.InputOffice365MsgTrace.Status == nil {
-			r.InputOffice365MsgTrace.Status = nil
-		} else {
-			r.InputOffice365MsgTrace.Status = &tfTypes.TFStatus{}
-			r.InputOffice365MsgTrace.Status.Health = types.StringValue(string(resp.InputOffice365MsgTrace.Status.Health))
-			if len(resp.InputOffice365MsgTrace.Status.Metrics) > 0 {
-				r.InputOffice365MsgTrace.Status.Metrics = make(map[string]types.String, len(resp.InputOffice365MsgTrace.Status.Metrics))
-				for key34, value34 := range resp.InputOffice365MsgTrace.Status.Metrics {
-					result34, _ := json.Marshal(value34)
-					r.InputOffice365MsgTrace.Status.Metrics[key34] = types.StringValue(string(result34))
-				}
-			}
-			r.InputOffice365MsgTrace.Status.Timestamp = types.Float64Value(resp.InputOffice365MsgTrace.Status.Timestamp)
-			r.InputOffice365MsgTrace.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputOffice365MsgTrace.Status.UseStatusFromLB)
-		}
 		r.InputOffice365MsgTrace.Streamtags = make([]types.String, 0, len(resp.InputOffice365MsgTrace.Streamtags))
 		for _, v := range resp.InputOffice365MsgTrace.Streamtags {
 			r.InputOffice365MsgTrace.Streamtags = append(r.InputOffice365MsgTrace.Streamtags, types.StringValue(v))
@@ -4925,27 +4529,27 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputOffice365Service.AuthType = types.StringNull()
 		}
 		r.InputOffice365Service.ClientSecret = types.StringPointerValue(resp.InputOffice365Service.ClientSecret)
-		r.InputOffice365Service.Connections = []tfTypes.ConnectionOffice365Service{}
+		r.InputOffice365Service.Connections = []tfTypes.InputOffice365ServiceConnection{}
 		if len(r.InputOffice365Service.Connections) > len(resp.InputOffice365Service.Connections) {
 			r.InputOffice365Service.Connections = r.InputOffice365Service.Connections[:len(resp.InputOffice365Service.Connections)]
 		}
-		for connectionsCount35, connectionsItem35 := range resp.InputOffice365Service.Connections {
-			var connections35 tfTypes.ConnectionOffice365Service
-			connections35.Output = types.StringValue(connectionsItem35.Output)
-			connections35.Pipeline = types.StringPointerValue(connectionsItem35.Pipeline)
-			if connectionsCount35+1 > len(r.InputOffice365Service.Connections) {
-				r.InputOffice365Service.Connections = append(r.InputOffice365Service.Connections, connections35)
+		for connectionsCount36, connectionsItem36 := range resp.InputOffice365Service.Connections {
+			var connections36 tfTypes.InputOffice365ServiceConnection
+			connections36.Output = types.StringValue(connectionsItem36.Output)
+			connections36.Pipeline = types.StringPointerValue(connectionsItem36.Pipeline)
+			if connectionsCount36+1 > len(r.InputOffice365Service.Connections) {
+				r.InputOffice365Service.Connections = append(r.InputOffice365Service.Connections, connections36)
 			} else {
-				r.InputOffice365Service.Connections[connectionsCount35].Output = connections35.Output
-				r.InputOffice365Service.Connections[connectionsCount35].Pipeline = connections35.Pipeline
+				r.InputOffice365Service.Connections[connectionsCount36].Output = connections36.Output
+				r.InputOffice365Service.Connections[connectionsCount36].Pipeline = connections36.Pipeline
 			}
 		}
-		r.InputOffice365Service.ContentConfig = []tfTypes.ContentConfigOffice365Service{}
+		r.InputOffice365Service.ContentConfig = []tfTypes.InputOffice365ServiceContentConfig{}
 		if len(r.InputOffice365Service.ContentConfig) > len(resp.InputOffice365Service.ContentConfig) {
 			r.InputOffice365Service.ContentConfig = r.InputOffice365Service.ContentConfig[:len(resp.InputOffice365Service.ContentConfig)]
 		}
 		for contentConfigCount1, contentConfigItem1 := range resp.InputOffice365Service.ContentConfig {
-			var contentConfig1 tfTypes.ContentConfigOffice365Service
+			var contentConfig1 tfTypes.InputOffice365ServiceContentConfig
 			contentConfig1.ContentType = types.StringPointerValue(contentConfigItem1.ContentType)
 			contentConfig1.Description = types.StringPointerValue(contentConfigItem1.Description)
 			contentConfig1.Enabled = types.BoolPointerValue(contentConfigItem1.Enabled)
@@ -4969,22 +4573,23 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputOffice365Service.Disabled = types.BoolPointerValue(resp.InputOffice365Service.Disabled)
 		r.InputOffice365Service.Environment = types.StringPointerValue(resp.InputOffice365Service.Environment)
 		r.InputOffice365Service.ID = types.StringPointerValue(resp.InputOffice365Service.ID)
+		r.InputOffice365Service.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputOffice365Service.IgnoreGroupJobsLimit)
 		r.InputOffice365Service.JobTimeout = types.StringPointerValue(resp.InputOffice365Service.JobTimeout)
 		r.InputOffice365Service.KeepAliveTime = types.Float64PointerValue(resp.InputOffice365Service.KeepAliveTime)
 		r.InputOffice365Service.MaxMissedKeepAlives = types.Float64PointerValue(resp.InputOffice365Service.MaxMissedKeepAlives)
-		r.InputOffice365Service.Metadata = []tfTypes.MetadatumOffice365Service{}
+		r.InputOffice365Service.Metadata = []tfTypes.InputOffice365ServiceMetadatum{}
 		if len(r.InputOffice365Service.Metadata) > len(resp.InputOffice365Service.Metadata) {
 			r.InputOffice365Service.Metadata = r.InputOffice365Service.Metadata[:len(resp.InputOffice365Service.Metadata)]
 		}
-		for metadataCount37, metadataItem37 := range resp.InputOffice365Service.Metadata {
-			var metadata37 tfTypes.MetadatumOffice365Service
-			metadata37.Name = types.StringValue(metadataItem37.Name)
-			metadata37.Value = types.StringValue(metadataItem37.Value)
-			if metadataCount37+1 > len(r.InputOffice365Service.Metadata) {
-				r.InputOffice365Service.Metadata = append(r.InputOffice365Service.Metadata, metadata37)
+		for metadataCount38, metadataItem38 := range resp.InputOffice365Service.Metadata {
+			var metadata38 tfTypes.InputOffice365ServiceMetadatum
+			metadata38.Name = types.StringValue(metadataItem38.Name)
+			metadata38.Value = types.StringValue(metadataItem38.Value)
+			if metadataCount38+1 > len(r.InputOffice365Service.Metadata) {
+				r.InputOffice365Service.Metadata = append(r.InputOffice365Service.Metadata, metadata38)
 			} else {
-				r.InputOffice365Service.Metadata[metadataCount37].Name = metadata37.Name
-				r.InputOffice365Service.Metadata[metadataCount37].Value = metadata37.Value
+				r.InputOffice365Service.Metadata[metadataCount38].Name = metadata38.Name
+				r.InputOffice365Service.Metadata[metadataCount38].Value = metadata38.Value
 			}
 		}
 		r.InputOffice365Service.Pipeline = types.StringPointerValue(resp.InputOffice365Service.Pipeline)
@@ -4996,7 +4601,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputOffice365Service.Pq == nil {
 			r.InputOffice365Service.Pq = nil
 		} else {
-			r.InputOffice365Service.Pq = &tfTypes.PqOffice365Service{}
+			r.InputOffice365Service.Pq = &tfTypes.InputOffice365ServicePq{}
 			r.InputOffice365Service.Pq.CommitFrequency = types.Float64PointerValue(resp.InputOffice365Service.Pq.CommitFrequency)
 			if resp.InputOffice365Service.Pq.Compress != nil {
 				r.InputOffice365Service.Pq.Compress = types.StringValue(string(*resp.InputOffice365Service.Pq.Compress))
@@ -5017,7 +4622,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputOffice365Service.RetryRules == nil {
 			r.InputOffice365Service.RetryRules = nil
 		} else {
-			r.InputOffice365Service.RetryRules = &tfTypes.RetryRulesOffice365Service{}
+			r.InputOffice365Service.RetryRules = &tfTypes.InputOffice365ServiceRetryRules{}
 			r.InputOffice365Service.RetryRules.Codes = make([]types.Float64, 0, len(resp.InputOffice365Service.RetryRules.Codes))
 			for _, v := range resp.InputOffice365Service.RetryRules.Codes {
 				r.InputOffice365Service.RetryRules.Codes = append(r.InputOffice365Service.RetryRules.Codes, types.Float64Value(v))
@@ -5035,21 +4640,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputOffice365Service.SendToRoutes = types.BoolPointerValue(resp.InputOffice365Service.SendToRoutes)
-		if resp.InputOffice365Service.Status == nil {
-			r.InputOffice365Service.Status = nil
-		} else {
-			r.InputOffice365Service.Status = &tfTypes.TFStatus{}
-			r.InputOffice365Service.Status.Health = types.StringValue(string(resp.InputOffice365Service.Status.Health))
-			if len(resp.InputOffice365Service.Status.Metrics) > 0 {
-				r.InputOffice365Service.Status.Metrics = make(map[string]types.String, len(resp.InputOffice365Service.Status.Metrics))
-				for key35, value35 := range resp.InputOffice365Service.Status.Metrics {
-					result35, _ := json.Marshal(value35)
-					r.InputOffice365Service.Status.Metrics[key35] = types.StringValue(string(result35))
-				}
-			}
-			r.InputOffice365Service.Status.Timestamp = types.Float64Value(resp.InputOffice365Service.Status.Timestamp)
-			r.InputOffice365Service.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputOffice365Service.Status.UseStatusFromLB)
-		}
 		r.InputOffice365Service.Streamtags = make([]types.String, 0, len(resp.InputOffice365Service.Streamtags))
 		for _, v := range resp.InputOffice365Service.Streamtags {
 			r.InputOffice365Service.Streamtags = append(r.InputOffice365Service.Streamtags, types.StringValue(v))
@@ -5084,19 +4674,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			captureHeadersResult, _ := json.Marshal(resp.InputOpenTelemetry.CaptureHeaders)
 			r.InputOpenTelemetry.CaptureHeaders = types.StringValue(string(captureHeadersResult))
 		}
-		r.InputOpenTelemetry.Connections = []tfTypes.ConnectionOpenTelemetry{}
+		r.InputOpenTelemetry.Connections = []tfTypes.InputOpenTelemetryConnection{}
 		if len(r.InputOpenTelemetry.Connections) > len(resp.InputOpenTelemetry.Connections) {
 			r.InputOpenTelemetry.Connections = r.InputOpenTelemetry.Connections[:len(resp.InputOpenTelemetry.Connections)]
 		}
-		for connectionsCount36, connectionsItem36 := range resp.InputOpenTelemetry.Connections {
-			var connections36 tfTypes.ConnectionOpenTelemetry
-			connections36.Output = types.StringValue(connectionsItem36.Output)
-			connections36.Pipeline = types.StringPointerValue(connectionsItem36.Pipeline)
-			if connectionsCount36+1 > len(r.InputOpenTelemetry.Connections) {
-				r.InputOpenTelemetry.Connections = append(r.InputOpenTelemetry.Connections, connections36)
+		for connectionsCount37, connectionsItem37 := range resp.InputOpenTelemetry.Connections {
+			var connections37 tfTypes.InputOpenTelemetryConnection
+			connections37.Output = types.StringValue(connectionsItem37.Output)
+			connections37.Pipeline = types.StringPointerValue(connectionsItem37.Pipeline)
+			if connectionsCount37+1 > len(r.InputOpenTelemetry.Connections) {
+				r.InputOpenTelemetry.Connections = append(r.InputOpenTelemetry.Connections, connections37)
 			} else {
-				r.InputOpenTelemetry.Connections[connectionsCount36].Output = connections36.Output
-				r.InputOpenTelemetry.Connections[connectionsCount36].Pipeline = connections36.Pipeline
+				r.InputOpenTelemetry.Connections[connectionsCount37].Output = connections37.Output
+				r.InputOpenTelemetry.Connections[connectionsCount37].Pipeline = connections37.Pipeline
 			}
 		}
 		r.InputOpenTelemetry.CredentialsSecret = types.StringPointerValue(resp.InputOpenTelemetry.CredentialsSecret)
@@ -5122,27 +4712,27 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputOpenTelemetry.MaxActiveCxn = types.Float64PointerValue(resp.InputOpenTelemetry.MaxActiveCxn)
 		r.InputOpenTelemetry.MaxActiveReq = types.Float64PointerValue(resp.InputOpenTelemetry.MaxActiveReq)
 		r.InputOpenTelemetry.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputOpenTelemetry.MaxRequestsPerSocket)
-		r.InputOpenTelemetry.Metadata = []tfTypes.InputMetadatumOpenTelemetry{}
+		r.InputOpenTelemetry.Metadata = []tfTypes.InputOpenTelemetryMetadatum{}
 		if len(r.InputOpenTelemetry.Metadata) > len(resp.InputOpenTelemetry.Metadata) {
 			r.InputOpenTelemetry.Metadata = r.InputOpenTelemetry.Metadata[:len(resp.InputOpenTelemetry.Metadata)]
 		}
-		for metadataCount38, metadataItem38 := range resp.InputOpenTelemetry.Metadata {
-			var metadata38 tfTypes.InputMetadatumOpenTelemetry
-			metadata38.Name = types.StringValue(metadataItem38.Name)
-			metadata38.Value = types.StringValue(metadataItem38.Value)
-			if metadataCount38+1 > len(r.InputOpenTelemetry.Metadata) {
-				r.InputOpenTelemetry.Metadata = append(r.InputOpenTelemetry.Metadata, metadata38)
+		for metadataCount39, metadataItem39 := range resp.InputOpenTelemetry.Metadata {
+			var metadata39 tfTypes.InputOpenTelemetryMetadatum
+			metadata39.Name = types.StringValue(metadataItem39.Name)
+			metadata39.Value = types.StringValue(metadataItem39.Value)
+			if metadataCount39+1 > len(r.InputOpenTelemetry.Metadata) {
+				r.InputOpenTelemetry.Metadata = append(r.InputOpenTelemetry.Metadata, metadata39)
 			} else {
-				r.InputOpenTelemetry.Metadata[metadataCount38].Name = metadata38.Name
-				r.InputOpenTelemetry.Metadata[metadataCount38].Value = metadata38.Value
+				r.InputOpenTelemetry.Metadata[metadataCount39].Name = metadata39.Name
+				r.InputOpenTelemetry.Metadata[metadataCount39].Value = metadata39.Value
 			}
 		}
-		r.InputOpenTelemetry.OauthHeaders = []tfTypes.InputOauthHeaderOpenTelemetry{}
+		r.InputOpenTelemetry.OauthHeaders = []tfTypes.InputOpenTelemetryOauthHeader{}
 		if len(r.InputOpenTelemetry.OauthHeaders) > len(resp.InputOpenTelemetry.OauthHeaders) {
 			r.InputOpenTelemetry.OauthHeaders = r.InputOpenTelemetry.OauthHeaders[:len(resp.InputOpenTelemetry.OauthHeaders)]
 		}
 		for oauthHeadersCount5, oauthHeadersItem5 := range resp.InputOpenTelemetry.OauthHeaders {
-			var oauthHeaders5 tfTypes.InputOauthHeaderOpenTelemetry
+			var oauthHeaders5 tfTypes.InputOpenTelemetryOauthHeader
 			oauthHeaders5.Name = types.StringValue(oauthHeadersItem5.Name)
 			oauthHeaders5.Value = types.StringValue(oauthHeadersItem5.Value)
 			if oauthHeadersCount5+1 > len(r.InputOpenTelemetry.OauthHeaders) {
@@ -5152,12 +4742,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				r.InputOpenTelemetry.OauthHeaders[oauthHeadersCount5].Value = oauthHeaders5.Value
 			}
 		}
-		r.InputOpenTelemetry.OauthParams = []tfTypes.InputOauthParamOpenTelemetry{}
+		r.InputOpenTelemetry.OauthParams = []tfTypes.InputOpenTelemetryOauthParam{}
 		if len(r.InputOpenTelemetry.OauthParams) > len(resp.InputOpenTelemetry.OauthParams) {
 			r.InputOpenTelemetry.OauthParams = r.InputOpenTelemetry.OauthParams[:len(resp.InputOpenTelemetry.OauthParams)]
 		}
 		for oauthParamsCount5, oauthParamsItem5 := range resp.InputOpenTelemetry.OauthParams {
-			var oauthParams5 tfTypes.InputOauthParamOpenTelemetry
+			var oauthParams5 tfTypes.InputOpenTelemetryOauthParam
 			oauthParams5.Name = types.StringValue(oauthParamsItem5.Name)
 			oauthParams5.Value = types.StringValue(oauthParamsItem5.Value)
 			if oauthParamsCount5+1 > len(r.InputOpenTelemetry.OauthParams) {
@@ -5178,7 +4768,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputOpenTelemetry.Pq == nil {
 			r.InputOpenTelemetry.Pq = nil
 		} else {
-			r.InputOpenTelemetry.Pq = &tfTypes.PqOpenTelemetry{}
+			r.InputOpenTelemetry.Pq = &tfTypes.InputOpenTelemetryPq{}
 			r.InputOpenTelemetry.Pq.CommitFrequency = types.Float64PointerValue(resp.InputOpenTelemetry.Pq.CommitFrequency)
 			if resp.InputOpenTelemetry.Pq.Compress != nil {
 				r.InputOpenTelemetry.Pq.Compress = types.StringValue(string(*resp.InputOpenTelemetry.Pq.Compress))
@@ -5206,21 +4796,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputOpenTelemetry.SecretParamName = types.StringPointerValue(resp.InputOpenTelemetry.SecretParamName)
 		r.InputOpenTelemetry.SendToRoutes = types.BoolPointerValue(resp.InputOpenTelemetry.SendToRoutes)
 		r.InputOpenTelemetry.SocketTimeout = types.Float64PointerValue(resp.InputOpenTelemetry.SocketTimeout)
-		if resp.InputOpenTelemetry.Status == nil {
-			r.InputOpenTelemetry.Status = nil
-		} else {
-			r.InputOpenTelemetry.Status = &tfTypes.TFStatus{}
-			r.InputOpenTelemetry.Status.Health = types.StringValue(string(resp.InputOpenTelemetry.Status.Health))
-			if len(resp.InputOpenTelemetry.Status.Metrics) > 0 {
-				r.InputOpenTelemetry.Status.Metrics = make(map[string]types.String, len(resp.InputOpenTelemetry.Status.Metrics))
-				for key36, value36 := range resp.InputOpenTelemetry.Status.Metrics {
-					result36, _ := json.Marshal(value36)
-					r.InputOpenTelemetry.Status.Metrics[key36] = types.StringValue(string(result36))
-				}
-			}
-			r.InputOpenTelemetry.Status.Timestamp = types.Float64Value(resp.InputOpenTelemetry.Status.Timestamp)
-			r.InputOpenTelemetry.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputOpenTelemetry.Status.UseStatusFromLB)
-		}
 		r.InputOpenTelemetry.Streamtags = make([]types.String, 0, len(resp.InputOpenTelemetry.Streamtags))
 		for _, v := range resp.InputOpenTelemetry.Streamtags {
 			r.InputOpenTelemetry.Streamtags = append(r.InputOpenTelemetry.Streamtags, types.StringValue(v))
@@ -5229,15 +4804,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputOpenTelemetry.TLS == nil {
 			r.InputOpenTelemetry.TLS = nil
 		} else {
-			r.InputOpenTelemetry.TLS = &tfTypes.TLSSettingsServerSideOpenTelemetry{}
+			r.InputOpenTelemetry.TLS = &tfTypes.InputOpenTelemetryTLSSettingsServerSide{}
 			r.InputOpenTelemetry.TLS.CaPath = types.StringPointerValue(resp.InputOpenTelemetry.TLS.CaPath)
 			r.InputOpenTelemetry.TLS.CertificateName = types.StringPointerValue(resp.InputOpenTelemetry.TLS.CertificateName)
 			r.InputOpenTelemetry.TLS.CertPath = types.StringPointerValue(resp.InputOpenTelemetry.TLS.CertPath)
 			if resp.InputOpenTelemetry.TLS.CommonNameRegex == nil {
 				r.InputOpenTelemetry.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult13, _ := json.Marshal(resp.InputOpenTelemetry.TLS.CommonNameRegex)
-				r.InputOpenTelemetry.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult13))
+				commonNameRegexResult14, _ := json.Marshal(resp.InputOpenTelemetry.TLS.CommonNameRegex)
+				r.InputOpenTelemetry.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult14))
 			}
 			r.InputOpenTelemetry.TLS.Disabled = types.BoolPointerValue(resp.InputOpenTelemetry.TLS.Disabled)
 			if resp.InputOpenTelemetry.TLS.MaxVersion != nil {
@@ -5255,8 +4830,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputOpenTelemetry.TLS.RejectUnauthorized == nil {
 				r.InputOpenTelemetry.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult13, _ := json.Marshal(resp.InputOpenTelemetry.TLS.RejectUnauthorized)
-				r.InputOpenTelemetry.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult13))
+				rejectUnauthorizedResult14, _ := json.Marshal(resp.InputOpenTelemetry.TLS.RejectUnauthorized)
+				r.InputOpenTelemetry.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult14))
 			}
 			r.InputOpenTelemetry.TLS.RequestCert = types.BoolPointerValue(resp.InputOpenTelemetry.TLS.RequestCert)
 		}
@@ -5285,19 +4860,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputPrometheus.AwsAuthenticationMethod = types.StringNull()
 		}
 		r.InputPrometheus.AwsSecretKey = types.StringPointerValue(resp.InputPrometheus.AwsSecretKey)
-		r.InputPrometheus.Connections = []tfTypes.ConnectionPrometheus{}
+		r.InputPrometheus.Connections = []tfTypes.InputPrometheusConnection{}
 		if len(r.InputPrometheus.Connections) > len(resp.InputPrometheus.Connections) {
 			r.InputPrometheus.Connections = r.InputPrometheus.Connections[:len(resp.InputPrometheus.Connections)]
 		}
-		for connectionsCount37, connectionsItem37 := range resp.InputPrometheus.Connections {
-			var connections37 tfTypes.ConnectionPrometheus
-			connections37.Output = types.StringValue(connectionsItem37.Output)
-			connections37.Pipeline = types.StringPointerValue(connectionsItem37.Pipeline)
-			if connectionsCount37+1 > len(r.InputPrometheus.Connections) {
-				r.InputPrometheus.Connections = append(r.InputPrometheus.Connections, connections37)
+		for connectionsCount38, connectionsItem38 := range resp.InputPrometheus.Connections {
+			var connections38 tfTypes.InputPrometheusConnection
+			connections38.Output = types.StringValue(connectionsItem38.Output)
+			connections38.Pipeline = types.StringPointerValue(connectionsItem38.Pipeline)
+			if connectionsCount38+1 > len(r.InputPrometheus.Connections) {
+				r.InputPrometheus.Connections = append(r.InputPrometheus.Connections, connections38)
 			} else {
-				r.InputPrometheus.Connections[connectionsCount37].Output = connections37.Output
-				r.InputPrometheus.Connections[connectionsCount37].Pipeline = connections37.Pipeline
+				r.InputPrometheus.Connections[connectionsCount38].Output = connections38.Output
+				r.InputPrometheus.Connections[connectionsCount38].Pipeline = connections38.Pipeline
 			}
 		}
 		r.InputPrometheus.CredentialsSecret = types.StringPointerValue(resp.InputPrometheus.CredentialsSecret)
@@ -5317,6 +4892,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputPrometheus.Endpoint = types.StringPointerValue(resp.InputPrometheus.Endpoint)
 		r.InputPrometheus.Environment = types.StringPointerValue(resp.InputPrometheus.Environment)
 		r.InputPrometheus.ID = types.StringPointerValue(resp.InputPrometheus.ID)
+		r.InputPrometheus.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputPrometheus.IgnoreGroupJobsLimit)
 		r.InputPrometheus.Interval = types.Float64PointerValue(resp.InputPrometheus.Interval)
 		r.InputPrometheus.JobTimeout = types.StringPointerValue(resp.InputPrometheus.JobTimeout)
 		r.InputPrometheus.KeepAliveTime = types.Float64PointerValue(resp.InputPrometheus.KeepAliveTime)
@@ -5326,19 +4902,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputPrometheus.LogLevel = types.StringNull()
 		}
 		r.InputPrometheus.MaxMissedKeepAlives = types.Float64PointerValue(resp.InputPrometheus.MaxMissedKeepAlives)
-		r.InputPrometheus.Metadata = []tfTypes.MetadatumPrometheus{}
+		r.InputPrometheus.Metadata = []tfTypes.InputPrometheusMetadatum{}
 		if len(r.InputPrometheus.Metadata) > len(resp.InputPrometheus.Metadata) {
 			r.InputPrometheus.Metadata = r.InputPrometheus.Metadata[:len(resp.InputPrometheus.Metadata)]
 		}
-		for metadataCount39, metadataItem39 := range resp.InputPrometheus.Metadata {
-			var metadata39 tfTypes.MetadatumPrometheus
-			metadata39.Name = types.StringValue(metadataItem39.Name)
-			metadata39.Value = types.StringValue(metadataItem39.Value)
-			if metadataCount39+1 > len(r.InputPrometheus.Metadata) {
-				r.InputPrometheus.Metadata = append(r.InputPrometheus.Metadata, metadata39)
+		for metadataCount40, metadataItem40 := range resp.InputPrometheus.Metadata {
+			var metadata40 tfTypes.InputPrometheusMetadatum
+			metadata40.Name = types.StringValue(metadataItem40.Name)
+			metadata40.Value = types.StringValue(metadataItem40.Value)
+			if metadataCount40+1 > len(r.InputPrometheus.Metadata) {
+				r.InputPrometheus.Metadata = append(r.InputPrometheus.Metadata, metadata40)
 			} else {
-				r.InputPrometheus.Metadata[metadataCount39].Name = metadata39.Name
-				r.InputPrometheus.Metadata[metadataCount39].Value = metadata39.Value
+				r.InputPrometheus.Metadata[metadataCount40].Name = metadata40.Name
+				r.InputPrometheus.Metadata[metadataCount40].Value = metadata40.Value
 			}
 		}
 		r.InputPrometheus.NameList = make([]types.String, 0, len(resp.InputPrometheus.NameList))
@@ -5350,7 +4926,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputPrometheus.Pq == nil {
 			r.InputPrometheus.Pq = nil
 		} else {
-			r.InputPrometheus.Pq = &tfTypes.PqPrometheus{}
+			r.InputPrometheus.Pq = &tfTypes.InputPrometheusPq{}
 			r.InputPrometheus.Pq.CommitFrequency = types.Float64PointerValue(resp.InputPrometheus.Pq.CommitFrequency)
 			if resp.InputPrometheus.Pq.Compress != nil {
 				r.InputPrometheus.Pq.Compress = types.StringValue(string(*resp.InputPrometheus.Pq.Compress))
@@ -5383,12 +4959,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputPrometheus.ScrapeProtocol = types.StringNull()
 		}
-		r.InputPrometheus.SearchFilter = []tfTypes.SearchFilterPrometheus{}
+		r.InputPrometheus.SearchFilter = []tfTypes.InputPrometheusSearchFilter{}
 		if len(r.InputPrometheus.SearchFilter) > len(resp.InputPrometheus.SearchFilter) {
 			r.InputPrometheus.SearchFilter = r.InputPrometheus.SearchFilter[:len(resp.InputPrometheus.SearchFilter)]
 		}
 		for searchFilterCount1, searchFilterItem1 := range resp.InputPrometheus.SearchFilter {
-			var searchFilter1 tfTypes.SearchFilterPrometheus
+			var searchFilter1 tfTypes.InputPrometheusSearchFilter
 			searchFilter1.Name = types.StringValue(searchFilterItem1.Name)
 			searchFilter1.Values = make([]types.String, 0, len(searchFilterItem1.Values))
 			for _, v := range searchFilterItem1.Values {
@@ -5406,21 +4982,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputPrometheus.SignatureVersion = types.StringValue(string(*resp.InputPrometheus.SignatureVersion))
 		} else {
 			r.InputPrometheus.SignatureVersion = types.StringNull()
-		}
-		if resp.InputPrometheus.Status == nil {
-			r.InputPrometheus.Status = nil
-		} else {
-			r.InputPrometheus.Status = &tfTypes.TFStatus{}
-			r.InputPrometheus.Status.Health = types.StringValue(string(resp.InputPrometheus.Status.Health))
-			if len(resp.InputPrometheus.Status.Metrics) > 0 {
-				r.InputPrometheus.Status.Metrics = make(map[string]types.String, len(resp.InputPrometheus.Status.Metrics))
-				for key37, value37 := range resp.InputPrometheus.Status.Metrics {
-					result37, _ := json.Marshal(value37)
-					r.InputPrometheus.Status.Metrics[key37] = types.StringValue(string(result37))
-				}
-			}
-			r.InputPrometheus.Status.Timestamp = types.Float64Value(resp.InputPrometheus.Status.Timestamp)
-			r.InputPrometheus.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputPrometheus.Status.UseStatusFromLB)
 		}
 		r.InputPrometheus.Streamtags = make([]types.String, 0, len(resp.InputPrometheus.Streamtags))
 		for _, v := range resp.InputPrometheus.Streamtags {
@@ -5449,19 +5010,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputPrometheusRw.AuthType = types.StringNull()
 		}
 		r.InputPrometheusRw.CaptureHeaders = types.BoolPointerValue(resp.InputPrometheusRw.CaptureHeaders)
-		r.InputPrometheusRw.Connections = []tfTypes.ConnectionPrometheusRw{}
+		r.InputPrometheusRw.Connections = []tfTypes.InputPrometheusRwConnection{}
 		if len(r.InputPrometheusRw.Connections) > len(resp.InputPrometheusRw.Connections) {
 			r.InputPrometheusRw.Connections = r.InputPrometheusRw.Connections[:len(resp.InputPrometheusRw.Connections)]
 		}
-		for connectionsCount38, connectionsItem38 := range resp.InputPrometheusRw.Connections {
-			var connections38 tfTypes.ConnectionPrometheusRw
-			connections38.Output = types.StringValue(connectionsItem38.Output)
-			connections38.Pipeline = types.StringPointerValue(connectionsItem38.Pipeline)
-			if connectionsCount38+1 > len(r.InputPrometheusRw.Connections) {
-				r.InputPrometheusRw.Connections = append(r.InputPrometheusRw.Connections, connections38)
+		for connectionsCount39, connectionsItem39 := range resp.InputPrometheusRw.Connections {
+			var connections39 tfTypes.InputPrometheusRwConnection
+			connections39.Output = types.StringValue(connectionsItem39.Output)
+			connections39.Pipeline = types.StringPointerValue(connectionsItem39.Pipeline)
+			if connectionsCount39+1 > len(r.InputPrometheusRw.Connections) {
+				r.InputPrometheusRw.Connections = append(r.InputPrometheusRw.Connections, connections39)
 			} else {
-				r.InputPrometheusRw.Connections[connectionsCount38].Output = connections38.Output
-				r.InputPrometheusRw.Connections[connectionsCount38].Pipeline = connections38.Pipeline
+				r.InputPrometheusRw.Connections[connectionsCount39].Output = connections39.Output
+				r.InputPrometheusRw.Connections[connectionsCount39].Pipeline = connections39.Pipeline
 			}
 		}
 		r.InputPrometheusRw.CredentialsSecret = types.StringPointerValue(resp.InputPrometheusRw.CredentialsSecret)
@@ -5478,27 +5039,27 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputPrometheusRw.LoginURL = types.StringPointerValue(resp.InputPrometheusRw.LoginURL)
 		r.InputPrometheusRw.MaxActiveReq = types.Float64PointerValue(resp.InputPrometheusRw.MaxActiveReq)
 		r.InputPrometheusRw.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputPrometheusRw.MaxRequestsPerSocket)
-		r.InputPrometheusRw.Metadata = []tfTypes.MetadatumPrometheusRw{}
+		r.InputPrometheusRw.Metadata = []tfTypes.InputPrometheusRwMetadatum{}
 		if len(r.InputPrometheusRw.Metadata) > len(resp.InputPrometheusRw.Metadata) {
 			r.InputPrometheusRw.Metadata = r.InputPrometheusRw.Metadata[:len(resp.InputPrometheusRw.Metadata)]
 		}
-		for metadataCount40, metadataItem40 := range resp.InputPrometheusRw.Metadata {
-			var metadata40 tfTypes.MetadatumPrometheusRw
-			metadata40.Name = types.StringValue(metadataItem40.Name)
-			metadata40.Value = types.StringValue(metadataItem40.Value)
-			if metadataCount40+1 > len(r.InputPrometheusRw.Metadata) {
-				r.InputPrometheusRw.Metadata = append(r.InputPrometheusRw.Metadata, metadata40)
+		for metadataCount41, metadataItem41 := range resp.InputPrometheusRw.Metadata {
+			var metadata41 tfTypes.InputPrometheusRwMetadatum
+			metadata41.Name = types.StringValue(metadataItem41.Name)
+			metadata41.Value = types.StringValue(metadataItem41.Value)
+			if metadataCount41+1 > len(r.InputPrometheusRw.Metadata) {
+				r.InputPrometheusRw.Metadata = append(r.InputPrometheusRw.Metadata, metadata41)
 			} else {
-				r.InputPrometheusRw.Metadata[metadataCount40].Name = metadata40.Name
-				r.InputPrometheusRw.Metadata[metadataCount40].Value = metadata40.Value
+				r.InputPrometheusRw.Metadata[metadataCount41].Name = metadata41.Name
+				r.InputPrometheusRw.Metadata[metadataCount41].Value = metadata41.Value
 			}
 		}
-		r.InputPrometheusRw.OauthHeaders = []tfTypes.OauthHeaderPrometheusRw{}
+		r.InputPrometheusRw.OauthHeaders = []tfTypes.InputPrometheusRwOauthHeader{}
 		if len(r.InputPrometheusRw.OauthHeaders) > len(resp.InputPrometheusRw.OauthHeaders) {
 			r.InputPrometheusRw.OauthHeaders = r.InputPrometheusRw.OauthHeaders[:len(resp.InputPrometheusRw.OauthHeaders)]
 		}
 		for oauthHeadersCount6, oauthHeadersItem6 := range resp.InputPrometheusRw.OauthHeaders {
-			var oauthHeaders6 tfTypes.OauthHeaderPrometheusRw
+			var oauthHeaders6 tfTypes.InputPrometheusRwOauthHeader
 			oauthHeaders6.Name = types.StringValue(oauthHeadersItem6.Name)
 			oauthHeaders6.Value = types.StringValue(oauthHeadersItem6.Value)
 			if oauthHeadersCount6+1 > len(r.InputPrometheusRw.OauthHeaders) {
@@ -5508,12 +5069,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				r.InputPrometheusRw.OauthHeaders[oauthHeadersCount6].Value = oauthHeaders6.Value
 			}
 		}
-		r.InputPrometheusRw.OauthParams = []tfTypes.OauthParamPrometheusRw{}
+		r.InputPrometheusRw.OauthParams = []tfTypes.InputPrometheusRwOauthParam{}
 		if len(r.InputPrometheusRw.OauthParams) > len(resp.InputPrometheusRw.OauthParams) {
 			r.InputPrometheusRw.OauthParams = r.InputPrometheusRw.OauthParams[:len(resp.InputPrometheusRw.OauthParams)]
 		}
 		for oauthParamsCount6, oauthParamsItem6 := range resp.InputPrometheusRw.OauthParams {
-			var oauthParams6 tfTypes.OauthParamPrometheusRw
+			var oauthParams6 tfTypes.InputPrometheusRwOauthParam
 			oauthParams6.Name = types.StringValue(oauthParamsItem6.Name)
 			oauthParams6.Value = types.StringValue(oauthParamsItem6.Value)
 			if oauthParamsCount6+1 > len(r.InputPrometheusRw.OauthParams) {
@@ -5529,7 +5090,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputPrometheusRw.Pq == nil {
 			r.InputPrometheusRw.Pq = nil
 		} else {
-			r.InputPrometheusRw.Pq = &tfTypes.PqPrometheusRw{}
+			r.InputPrometheusRw.Pq = &tfTypes.InputPrometheusRwPq{}
 			r.InputPrometheusRw.Pq.CommitFrequency = types.Float64PointerValue(resp.InputPrometheusRw.Pq.CommitFrequency)
 			if resp.InputPrometheusRw.Pq.Compress != nil {
 				r.InputPrometheusRw.Pq.Compress = types.StringValue(string(*resp.InputPrometheusRw.Pq.Compress))
@@ -5553,21 +5114,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputPrometheusRw.SecretParamName = types.StringPointerValue(resp.InputPrometheusRw.SecretParamName)
 		r.InputPrometheusRw.SendToRoutes = types.BoolPointerValue(resp.InputPrometheusRw.SendToRoutes)
 		r.InputPrometheusRw.SocketTimeout = types.Float64PointerValue(resp.InputPrometheusRw.SocketTimeout)
-		if resp.InputPrometheusRw.Status == nil {
-			r.InputPrometheusRw.Status = nil
-		} else {
-			r.InputPrometheusRw.Status = &tfTypes.TFStatus{}
-			r.InputPrometheusRw.Status.Health = types.StringValue(string(resp.InputPrometheusRw.Status.Health))
-			if len(resp.InputPrometheusRw.Status.Metrics) > 0 {
-				r.InputPrometheusRw.Status.Metrics = make(map[string]types.String, len(resp.InputPrometheusRw.Status.Metrics))
-				for key38, value38 := range resp.InputPrometheusRw.Status.Metrics {
-					result38, _ := json.Marshal(value38)
-					r.InputPrometheusRw.Status.Metrics[key38] = types.StringValue(string(result38))
-				}
-			}
-			r.InputPrometheusRw.Status.Timestamp = types.Float64Value(resp.InputPrometheusRw.Status.Timestamp)
-			r.InputPrometheusRw.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputPrometheusRw.Status.UseStatusFromLB)
-		}
 		r.InputPrometheusRw.Streamtags = make([]types.String, 0, len(resp.InputPrometheusRw.Streamtags))
 		for _, v := range resp.InputPrometheusRw.Streamtags {
 			r.InputPrometheusRw.Streamtags = append(r.InputPrometheusRw.Streamtags, types.StringValue(v))
@@ -5576,15 +5122,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputPrometheusRw.TLS == nil {
 			r.InputPrometheusRw.TLS = nil
 		} else {
-			r.InputPrometheusRw.TLS = &tfTypes.TLSSettingsServerSidePrometheusRw{}
+			r.InputPrometheusRw.TLS = &tfTypes.InputPrometheusRwTLSSettingsServerSide{}
 			r.InputPrometheusRw.TLS.CaPath = types.StringPointerValue(resp.InputPrometheusRw.TLS.CaPath)
 			r.InputPrometheusRw.TLS.CertificateName = types.StringPointerValue(resp.InputPrometheusRw.TLS.CertificateName)
 			r.InputPrometheusRw.TLS.CertPath = types.StringPointerValue(resp.InputPrometheusRw.TLS.CertPath)
 			if resp.InputPrometheusRw.TLS.CommonNameRegex == nil {
 				r.InputPrometheusRw.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult14, _ := json.Marshal(resp.InputPrometheusRw.TLS.CommonNameRegex)
-				r.InputPrometheusRw.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult14))
+				commonNameRegexResult15, _ := json.Marshal(resp.InputPrometheusRw.TLS.CommonNameRegex)
+				r.InputPrometheusRw.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult15))
 			}
 			r.InputPrometheusRw.TLS.Disabled = types.BoolPointerValue(resp.InputPrometheusRw.TLS.Disabled)
 			if resp.InputPrometheusRw.TLS.MaxVersion != nil {
@@ -5602,8 +5148,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputPrometheusRw.TLS.RejectUnauthorized == nil {
 				r.InputPrometheusRw.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult14, _ := json.Marshal(resp.InputPrometheusRw.TLS.RejectUnauthorized)
-				r.InputPrometheusRw.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult14))
+				rejectUnauthorizedResult15, _ := json.Marshal(resp.InputPrometheusRw.TLS.RejectUnauthorized)
+				r.InputPrometheusRw.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult15))
 			}
 			r.InputPrometheusRw.TLS.RequestCert = types.BoolPointerValue(resp.InputPrometheusRw.TLS.RequestCert)
 		}
@@ -5619,19 +5165,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputRawUDP != nil {
 		r.InputRawUDP = &tfTypes.InputRawUDP{}
-		r.InputRawUDP.Connections = []tfTypes.ConnectionRawUDP{}
+		r.InputRawUDP.Connections = []tfTypes.InputRawUDPConnection{}
 		if len(r.InputRawUDP.Connections) > len(resp.InputRawUDP.Connections) {
 			r.InputRawUDP.Connections = r.InputRawUDP.Connections[:len(resp.InputRawUDP.Connections)]
 		}
-		for connectionsCount39, connectionsItem39 := range resp.InputRawUDP.Connections {
-			var connections39 tfTypes.ConnectionRawUDP
-			connections39.Output = types.StringValue(connectionsItem39.Output)
-			connections39.Pipeline = types.StringPointerValue(connectionsItem39.Pipeline)
-			if connectionsCount39+1 > len(r.InputRawUDP.Connections) {
-				r.InputRawUDP.Connections = append(r.InputRawUDP.Connections, connections39)
+		for connectionsCount40, connectionsItem40 := range resp.InputRawUDP.Connections {
+			var connections40 tfTypes.InputRawUDPConnection
+			connections40.Output = types.StringValue(connectionsItem40.Output)
+			connections40.Pipeline = types.StringPointerValue(connectionsItem40.Pipeline)
+			if connectionsCount40+1 > len(r.InputRawUDP.Connections) {
+				r.InputRawUDP.Connections = append(r.InputRawUDP.Connections, connections40)
 			} else {
-				r.InputRawUDP.Connections[connectionsCount39].Output = connections39.Output
-				r.InputRawUDP.Connections[connectionsCount39].Pipeline = connections39.Pipeline
+				r.InputRawUDP.Connections[connectionsCount40].Output = connections40.Output
+				r.InputRawUDP.Connections[connectionsCount40].Pipeline = connections40.Pipeline
 			}
 		}
 		r.InputRawUDP.Description = types.StringPointerValue(resp.InputRawUDP.Description)
@@ -5642,19 +5188,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputRawUDP.IngestRawBytes = types.BoolPointerValue(resp.InputRawUDP.IngestRawBytes)
 		r.InputRawUDP.IPWhitelistRegex = types.StringPointerValue(resp.InputRawUDP.IPWhitelistRegex)
 		r.InputRawUDP.MaxBufferSize = types.Float64PointerValue(resp.InputRawUDP.MaxBufferSize)
-		r.InputRawUDP.Metadata = []tfTypes.MetadatumRawUDP{}
+		r.InputRawUDP.Metadata = []tfTypes.InputRawUDPMetadatum{}
 		if len(r.InputRawUDP.Metadata) > len(resp.InputRawUDP.Metadata) {
 			r.InputRawUDP.Metadata = r.InputRawUDP.Metadata[:len(resp.InputRawUDP.Metadata)]
 		}
-		for metadataCount41, metadataItem41 := range resp.InputRawUDP.Metadata {
-			var metadata41 tfTypes.MetadatumRawUDP
-			metadata41.Name = types.StringValue(metadataItem41.Name)
-			metadata41.Value = types.StringValue(metadataItem41.Value)
-			if metadataCount41+1 > len(r.InputRawUDP.Metadata) {
-				r.InputRawUDP.Metadata = append(r.InputRawUDP.Metadata, metadata41)
+		for metadataCount42, metadataItem42 := range resp.InputRawUDP.Metadata {
+			var metadata42 tfTypes.InputRawUDPMetadatum
+			metadata42.Name = types.StringValue(metadataItem42.Name)
+			metadata42.Value = types.StringValue(metadataItem42.Value)
+			if metadataCount42+1 > len(r.InputRawUDP.Metadata) {
+				r.InputRawUDP.Metadata = append(r.InputRawUDP.Metadata, metadata42)
 			} else {
-				r.InputRawUDP.Metadata[metadataCount41].Name = metadata41.Name
-				r.InputRawUDP.Metadata[metadataCount41].Value = metadata41.Value
+				r.InputRawUDP.Metadata[metadataCount42].Name = metadata42.Name
+				r.InputRawUDP.Metadata[metadataCount42].Value = metadata42.Value
 			}
 		}
 		r.InputRawUDP.Pipeline = types.StringPointerValue(resp.InputRawUDP.Pipeline)
@@ -5662,7 +5208,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputRawUDP.Pq == nil {
 			r.InputRawUDP.Pq = nil
 		} else {
-			r.InputRawUDP.Pq = &tfTypes.PqRawUDP{}
+			r.InputRawUDP.Pq = &tfTypes.InputRawUDPPq{}
 			r.InputRawUDP.Pq.CommitFrequency = types.Float64PointerValue(resp.InputRawUDP.Pq.CommitFrequency)
 			if resp.InputRawUDP.Pq.Compress != nil {
 				r.InputRawUDP.Pq.Compress = types.StringValue(string(*resp.InputRawUDP.Pq.Compress))
@@ -5682,21 +5228,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputRawUDP.PqEnabled = types.BoolPointerValue(resp.InputRawUDP.PqEnabled)
 		r.InputRawUDP.SendToRoutes = types.BoolPointerValue(resp.InputRawUDP.SendToRoutes)
 		r.InputRawUDP.SingleMsgUDPPackets = types.BoolPointerValue(resp.InputRawUDP.SingleMsgUDPPackets)
-		if resp.InputRawUDP.Status == nil {
-			r.InputRawUDP.Status = nil
-		} else {
-			r.InputRawUDP.Status = &tfTypes.TFStatus{}
-			r.InputRawUDP.Status.Health = types.StringValue(string(resp.InputRawUDP.Status.Health))
-			if len(resp.InputRawUDP.Status.Metrics) > 0 {
-				r.InputRawUDP.Status.Metrics = make(map[string]types.String, len(resp.InputRawUDP.Status.Metrics))
-				for key39, value39 := range resp.InputRawUDP.Status.Metrics {
-					result39, _ := json.Marshal(value39)
-					r.InputRawUDP.Status.Metrics[key39] = types.StringValue(string(result39))
-				}
-			}
-			r.InputRawUDP.Status.Timestamp = types.Float64Value(resp.InputRawUDP.Status.Timestamp)
-			r.InputRawUDP.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputRawUDP.Status.UseStatusFromLB)
-		}
 		r.InputRawUDP.Streamtags = make([]types.String, 0, len(resp.InputRawUDP.Streamtags))
 		for _, v := range resp.InputRawUDP.Streamtags {
 			r.InputRawUDP.Streamtags = append(r.InputRawUDP.Streamtags, types.StringValue(v))
@@ -5728,23 +5259,23 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputS3.Checkpointing == nil {
 			r.InputS3.Checkpointing = nil
 		} else {
-			r.InputS3.Checkpointing = &tfTypes.CheckpointingS3{}
+			r.InputS3.Checkpointing = &tfTypes.InputS3Checkpointing{}
 			r.InputS3.Checkpointing.Enabled = types.BoolPointerValue(resp.InputS3.Checkpointing.Enabled)
 			r.InputS3.Checkpointing.Retries = types.Float64PointerValue(resp.InputS3.Checkpointing.Retries)
 		}
-		r.InputS3.Connections = []tfTypes.ConnectionS3{}
+		r.InputS3.Connections = []tfTypes.InputS3Connection{}
 		if len(r.InputS3.Connections) > len(resp.InputS3.Connections) {
 			r.InputS3.Connections = r.InputS3.Connections[:len(resp.InputS3.Connections)]
 		}
-		for connectionsCount40, connectionsItem40 := range resp.InputS3.Connections {
-			var connections40 tfTypes.ConnectionS3
-			connections40.Output = types.StringValue(connectionsItem40.Output)
-			connections40.Pipeline = types.StringPointerValue(connectionsItem40.Pipeline)
-			if connectionsCount40+1 > len(r.InputS3.Connections) {
-				r.InputS3.Connections = append(r.InputS3.Connections, connections40)
+		for connectionsCount41, connectionsItem41 := range resp.InputS3.Connections {
+			var connections41 tfTypes.InputS3Connection
+			connections41.Output = types.StringValue(connectionsItem41.Output)
+			connections41.Pipeline = types.StringPointerValue(connectionsItem41.Pipeline)
+			if connectionsCount41+1 > len(r.InputS3.Connections) {
+				r.InputS3.Connections = append(r.InputS3.Connections, connections41)
 			} else {
-				r.InputS3.Connections[connectionsCount40].Output = connections40.Output
-				r.InputS3.Connections[connectionsCount40].Pipeline = connections40.Pipeline
+				r.InputS3.Connections[connectionsCount41].Output = connections41.Output
+				r.InputS3.Connections[connectionsCount41].Pipeline = connections41.Pipeline
 			}
 		}
 		r.InputS3.Description = types.StringPointerValue(resp.InputS3.Description)
@@ -5758,19 +5289,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputS3.FileFilter = types.StringPointerValue(resp.InputS3.FileFilter)
 		r.InputS3.ID = types.StringPointerValue(resp.InputS3.ID)
 		r.InputS3.MaxMessages = types.Float64PointerValue(resp.InputS3.MaxMessages)
-		r.InputS3.Metadata = []tfTypes.MetadatumS3{}
+		r.InputS3.Metadata = []tfTypes.InputS3Metadatum{}
 		if len(r.InputS3.Metadata) > len(resp.InputS3.Metadata) {
 			r.InputS3.Metadata = r.InputS3.Metadata[:len(resp.InputS3.Metadata)]
 		}
-		for metadataCount42, metadataItem42 := range resp.InputS3.Metadata {
-			var metadata42 tfTypes.MetadatumS3
-			metadata42.Name = types.StringValue(metadataItem42.Name)
-			metadata42.Value = types.StringValue(metadataItem42.Value)
-			if metadataCount42+1 > len(r.InputS3.Metadata) {
-				r.InputS3.Metadata = append(r.InputS3.Metadata, metadata42)
+		for metadataCount43, metadataItem43 := range resp.InputS3.Metadata {
+			var metadata43 tfTypes.InputS3Metadatum
+			metadata43.Name = types.StringValue(metadataItem43.Name)
+			metadata43.Value = types.StringValue(metadataItem43.Value)
+			if metadataCount43+1 > len(r.InputS3.Metadata) {
+				r.InputS3.Metadata = append(r.InputS3.Metadata, metadata43)
 			} else {
-				r.InputS3.Metadata[metadataCount42].Name = metadata42.Name
-				r.InputS3.Metadata[metadataCount42].Value = metadata42.Value
+				r.InputS3.Metadata[metadataCount43].Name = metadata43.Name
+				r.InputS3.Metadata[metadataCount43].Value = metadata43.Value
 			}
 		}
 		r.InputS3.NumReceivers = types.Float64PointerValue(resp.InputS3.NumReceivers)
@@ -5781,7 +5312,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputS3.Pq == nil {
 			r.InputS3.Pq = nil
 		} else {
-			r.InputS3.Pq = &tfTypes.PqS3{}
+			r.InputS3.Pq = &tfTypes.InputS3Pq{}
 			r.InputS3.Pq.CommitFrequency = types.Float64PointerValue(resp.InputS3.Pq.CommitFrequency)
 			if resp.InputS3.Pq.Compress != nil {
 				r.InputS3.Pq.Compress = types.StringValue(string(*resp.InputS3.Pq.Compress))
@@ -5802,7 +5333,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputS3.Preprocess == nil {
 			r.InputS3.Preprocess = nil
 		} else {
-			r.InputS3.Preprocess = &tfTypes.PreprocessS3{}
+			r.InputS3.Preprocess = &tfTypes.InputS3Preprocess{}
 			r.InputS3.Preprocess.Args = make([]types.String, 0, len(resp.InputS3.Preprocess.Args))
 			for _, v := range resp.InputS3.Preprocess.Args {
 				r.InputS3.Preprocess.Args = append(r.InputS3.Preprocess.Args, types.StringValue(v))
@@ -5810,6 +5341,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputS3.Preprocess.Command = types.StringPointerValue(resp.InputS3.Preprocess.Command)
 			r.InputS3.Preprocess.Disabled = types.BoolPointerValue(resp.InputS3.Preprocess.Disabled)
 		}
+		r.InputS3.ProcessedTagKey = types.StringPointerValue(resp.InputS3.ProcessedTagKey)
+		r.InputS3.ProcessedTagValue = types.StringPointerValue(resp.InputS3.ProcessedTagValue)
 		r.InputS3.QueueName = types.StringValue(resp.InputS3.QueueName)
 		r.InputS3.Region = types.StringPointerValue(resp.InputS3.Region)
 		r.InputS3.RejectUnauthorized = types.BoolPointerValue(resp.InputS3.RejectUnauthorized)
@@ -5823,25 +5356,11 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputS3.SkipOnError = types.BoolPointerValue(resp.InputS3.SkipOnError)
 		r.InputS3.SocketTimeout = types.Float64PointerValue(resp.InputS3.SocketTimeout)
 		r.InputS3.StaleChannelFlushMs = types.Float64PointerValue(resp.InputS3.StaleChannelFlushMs)
-		if resp.InputS3.Status == nil {
-			r.InputS3.Status = nil
-		} else {
-			r.InputS3.Status = &tfTypes.TFStatus{}
-			r.InputS3.Status.Health = types.StringValue(string(resp.InputS3.Status.Health))
-			if len(resp.InputS3.Status.Metrics) > 0 {
-				r.InputS3.Status.Metrics = make(map[string]types.String, len(resp.InputS3.Status.Metrics))
-				for key40, value40 := range resp.InputS3.Status.Metrics {
-					result40, _ := json.Marshal(value40)
-					r.InputS3.Status.Metrics[key40] = types.StringValue(string(result40))
-				}
-			}
-			r.InputS3.Status.Timestamp = types.Float64Value(resp.InputS3.Status.Timestamp)
-			r.InputS3.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputS3.Status.UseStatusFromLB)
-		}
 		r.InputS3.Streamtags = make([]types.String, 0, len(resp.InputS3.Streamtags))
 		for _, v := range resp.InputS3.Streamtags {
 			r.InputS3.Streamtags = append(r.InputS3.Streamtags, types.StringValue(v))
 		}
+		r.InputS3.TagAfterProcessing = types.BoolPointerValue(resp.InputS3.TagAfterProcessing)
 		r.InputS3.Type = types.StringValue(string(resp.InputS3.Type))
 		r.InputS3.VisibilityTimeout = types.Float64PointerValue(resp.InputS3.VisibilityTimeout)
 	}
@@ -5865,24 +5384,24 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputS3Inventory.Checkpointing == nil {
 			r.InputS3Inventory.Checkpointing = nil
 		} else {
-			r.InputS3Inventory.Checkpointing = &tfTypes.CheckpointingS3Inventory{}
+			r.InputS3Inventory.Checkpointing = &tfTypes.InputS3InventoryCheckpointing{}
 			r.InputS3Inventory.Checkpointing.Enabled = types.BoolPointerValue(resp.InputS3Inventory.Checkpointing.Enabled)
 			r.InputS3Inventory.Checkpointing.Retries = types.Float64PointerValue(resp.InputS3Inventory.Checkpointing.Retries)
 		}
 		r.InputS3Inventory.ChecksumSuffix = types.StringPointerValue(resp.InputS3Inventory.ChecksumSuffix)
-		r.InputS3Inventory.Connections = []tfTypes.ConnectionS3Inventory{}
+		r.InputS3Inventory.Connections = []tfTypes.InputS3InventoryConnection{}
 		if len(r.InputS3Inventory.Connections) > len(resp.InputS3Inventory.Connections) {
 			r.InputS3Inventory.Connections = r.InputS3Inventory.Connections[:len(resp.InputS3Inventory.Connections)]
 		}
-		for connectionsCount41, connectionsItem41 := range resp.InputS3Inventory.Connections {
-			var connections41 tfTypes.ConnectionS3Inventory
-			connections41.Output = types.StringValue(connectionsItem41.Output)
-			connections41.Pipeline = types.StringPointerValue(connectionsItem41.Pipeline)
-			if connectionsCount41+1 > len(r.InputS3Inventory.Connections) {
-				r.InputS3Inventory.Connections = append(r.InputS3Inventory.Connections, connections41)
+		for connectionsCount42, connectionsItem42 := range resp.InputS3Inventory.Connections {
+			var connections42 tfTypes.InputS3InventoryConnection
+			connections42.Output = types.StringValue(connectionsItem42.Output)
+			connections42.Pipeline = types.StringPointerValue(connectionsItem42.Pipeline)
+			if connectionsCount42+1 > len(r.InputS3Inventory.Connections) {
+				r.InputS3Inventory.Connections = append(r.InputS3Inventory.Connections, connections42)
 			} else {
-				r.InputS3Inventory.Connections[connectionsCount41].Output = connections41.Output
-				r.InputS3Inventory.Connections[connectionsCount41].Pipeline = connections41.Pipeline
+				r.InputS3Inventory.Connections[connectionsCount42].Output = connections42.Output
+				r.InputS3Inventory.Connections[connectionsCount42].Pipeline = connections42.Pipeline
 			}
 		}
 		r.InputS3Inventory.Description = types.StringPointerValue(resp.InputS3Inventory.Description)
@@ -5896,19 +5415,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputS3Inventory.ID = types.StringPointerValue(resp.InputS3Inventory.ID)
 		r.InputS3Inventory.MaxManifestSizeKB = types.Int64PointerValue(resp.InputS3Inventory.MaxManifestSizeKB)
 		r.InputS3Inventory.MaxMessages = types.Float64PointerValue(resp.InputS3Inventory.MaxMessages)
-		r.InputS3Inventory.Metadata = []tfTypes.MetadatumS3Inventory{}
+		r.InputS3Inventory.Metadata = []tfTypes.InputS3InventoryMetadatum{}
 		if len(r.InputS3Inventory.Metadata) > len(resp.InputS3Inventory.Metadata) {
 			r.InputS3Inventory.Metadata = r.InputS3Inventory.Metadata[:len(resp.InputS3Inventory.Metadata)]
 		}
-		for metadataCount43, metadataItem43 := range resp.InputS3Inventory.Metadata {
-			var metadata43 tfTypes.MetadatumS3Inventory
-			metadata43.Name = types.StringValue(metadataItem43.Name)
-			metadata43.Value = types.StringValue(metadataItem43.Value)
-			if metadataCount43+1 > len(r.InputS3Inventory.Metadata) {
-				r.InputS3Inventory.Metadata = append(r.InputS3Inventory.Metadata, metadata43)
+		for metadataCount44, metadataItem44 := range resp.InputS3Inventory.Metadata {
+			var metadata44 tfTypes.InputS3InventoryMetadatum
+			metadata44.Name = types.StringValue(metadataItem44.Name)
+			metadata44.Value = types.StringValue(metadataItem44.Value)
+			if metadataCount44+1 > len(r.InputS3Inventory.Metadata) {
+				r.InputS3Inventory.Metadata = append(r.InputS3Inventory.Metadata, metadata44)
 			} else {
-				r.InputS3Inventory.Metadata[metadataCount43].Name = metadata43.Name
-				r.InputS3Inventory.Metadata[metadataCount43].Value = metadata43.Value
+				r.InputS3Inventory.Metadata[metadataCount44].Name = metadata44.Name
+				r.InputS3Inventory.Metadata[metadataCount44].Value = metadata44.Value
 			}
 		}
 		r.InputS3Inventory.NumReceivers = types.Float64PointerValue(resp.InputS3Inventory.NumReceivers)
@@ -5919,7 +5438,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputS3Inventory.Pq == nil {
 			r.InputS3Inventory.Pq = nil
 		} else {
-			r.InputS3Inventory.Pq = &tfTypes.PqS3Inventory{}
+			r.InputS3Inventory.Pq = &tfTypes.InputS3InventoryPq{}
 			r.InputS3Inventory.Pq.CommitFrequency = types.Float64PointerValue(resp.InputS3Inventory.Pq.CommitFrequency)
 			if resp.InputS3Inventory.Pq.Compress != nil {
 				r.InputS3Inventory.Pq.Compress = types.StringValue(string(*resp.InputS3Inventory.Pq.Compress))
@@ -5940,7 +5459,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputS3Inventory.Preprocess == nil {
 			r.InputS3Inventory.Preprocess = nil
 		} else {
-			r.InputS3Inventory.Preprocess = &tfTypes.PreprocessS3Inventory{}
+			r.InputS3Inventory.Preprocess = &tfTypes.InputS3InventoryPreprocess{}
 			r.InputS3Inventory.Preprocess.Args = make([]types.String, 0, len(resp.InputS3Inventory.Preprocess.Args))
 			for _, v := range resp.InputS3Inventory.Preprocess.Args {
 				r.InputS3Inventory.Preprocess.Args = append(r.InputS3Inventory.Preprocess.Args, types.StringValue(v))
@@ -5948,6 +5467,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputS3Inventory.Preprocess.Command = types.StringPointerValue(resp.InputS3Inventory.Preprocess.Command)
 			r.InputS3Inventory.Preprocess.Disabled = types.BoolPointerValue(resp.InputS3Inventory.Preprocess.Disabled)
 		}
+		r.InputS3Inventory.ProcessedTagKey = types.StringPointerValue(resp.InputS3Inventory.ProcessedTagKey)
+		r.InputS3Inventory.ProcessedTagValue = types.StringPointerValue(resp.InputS3Inventory.ProcessedTagValue)
 		r.InputS3Inventory.QueueName = types.StringValue(resp.InputS3Inventory.QueueName)
 		r.InputS3Inventory.Region = types.StringPointerValue(resp.InputS3Inventory.Region)
 		r.InputS3Inventory.RejectUnauthorized = types.BoolPointerValue(resp.InputS3Inventory.RejectUnauthorized)
@@ -5961,24 +5482,14 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputS3Inventory.SkipOnError = types.BoolPointerValue(resp.InputS3Inventory.SkipOnError)
 		r.InputS3Inventory.SocketTimeout = types.Float64PointerValue(resp.InputS3Inventory.SocketTimeout)
 		r.InputS3Inventory.StaleChannelFlushMs = types.Float64PointerValue(resp.InputS3Inventory.StaleChannelFlushMs)
-		if resp.InputS3Inventory.Status == nil {
-			r.InputS3Inventory.Status = nil
-		} else {
-			r.InputS3Inventory.Status = &tfTypes.TFStatus{}
-			r.InputS3Inventory.Status.Health = types.StringValue(string(resp.InputS3Inventory.Status.Health))
-			if len(resp.InputS3Inventory.Status.Metrics) > 0 {
-				r.InputS3Inventory.Status.Metrics = make(map[string]types.String, len(resp.InputS3Inventory.Status.Metrics))
-				for key41, value41 := range resp.InputS3Inventory.Status.Metrics {
-					result41, _ := json.Marshal(value41)
-					r.InputS3Inventory.Status.Metrics[key41] = types.StringValue(string(result41))
-				}
-			}
-			r.InputS3Inventory.Status.Timestamp = types.Float64Value(resp.InputS3Inventory.Status.Timestamp)
-			r.InputS3Inventory.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputS3Inventory.Status.UseStatusFromLB)
-		}
 		r.InputS3Inventory.Streamtags = make([]types.String, 0, len(resp.InputS3Inventory.Streamtags))
 		for _, v := range resp.InputS3Inventory.Streamtags {
 			r.InputS3Inventory.Streamtags = append(r.InputS3Inventory.Streamtags, types.StringValue(v))
+		}
+		if resp.InputS3Inventory.TagAfterProcessing != nil {
+			r.InputS3Inventory.TagAfterProcessing = types.StringValue(string(*resp.InputS3Inventory.TagAfterProcessing))
+		} else {
+			r.InputS3Inventory.TagAfterProcessing = types.StringNull()
 		}
 		r.InputS3Inventory.Type = types.StringValue(string(resp.InputS3Inventory.Type))
 		r.InputS3Inventory.ValidateInventoryFiles = types.BoolPointerValue(resp.InputS3Inventory.ValidateInventoryFiles)
@@ -6004,23 +5515,23 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSecurityLake.Checkpointing == nil {
 			r.InputSecurityLake.Checkpointing = nil
 		} else {
-			r.InputSecurityLake.Checkpointing = &tfTypes.CheckpointingSecurityLake{}
+			r.InputSecurityLake.Checkpointing = &tfTypes.InputSecurityLakeCheckpointing{}
 			r.InputSecurityLake.Checkpointing.Enabled = types.BoolPointerValue(resp.InputSecurityLake.Checkpointing.Enabled)
 			r.InputSecurityLake.Checkpointing.Retries = types.Float64PointerValue(resp.InputSecurityLake.Checkpointing.Retries)
 		}
-		r.InputSecurityLake.Connections = []tfTypes.ConnectionSecurityLake{}
+		r.InputSecurityLake.Connections = []tfTypes.InputSecurityLakeConnection{}
 		if len(r.InputSecurityLake.Connections) > len(resp.InputSecurityLake.Connections) {
 			r.InputSecurityLake.Connections = r.InputSecurityLake.Connections[:len(resp.InputSecurityLake.Connections)]
 		}
-		for connectionsCount42, connectionsItem42 := range resp.InputSecurityLake.Connections {
-			var connections42 tfTypes.ConnectionSecurityLake
-			connections42.Output = types.StringValue(connectionsItem42.Output)
-			connections42.Pipeline = types.StringPointerValue(connectionsItem42.Pipeline)
-			if connectionsCount42+1 > len(r.InputSecurityLake.Connections) {
-				r.InputSecurityLake.Connections = append(r.InputSecurityLake.Connections, connections42)
+		for connectionsCount43, connectionsItem43 := range resp.InputSecurityLake.Connections {
+			var connections43 tfTypes.InputSecurityLakeConnection
+			connections43.Output = types.StringValue(connectionsItem43.Output)
+			connections43.Pipeline = types.StringPointerValue(connectionsItem43.Pipeline)
+			if connectionsCount43+1 > len(r.InputSecurityLake.Connections) {
+				r.InputSecurityLake.Connections = append(r.InputSecurityLake.Connections, connections43)
 			} else {
-				r.InputSecurityLake.Connections[connectionsCount42].Output = connections42.Output
-				r.InputSecurityLake.Connections[connectionsCount42].Pipeline = connections42.Pipeline
+				r.InputSecurityLake.Connections[connectionsCount43].Output = connections43.Output
+				r.InputSecurityLake.Connections[connectionsCount43].Pipeline = connections43.Pipeline
 			}
 		}
 		r.InputSecurityLake.Description = types.StringPointerValue(resp.InputSecurityLake.Description)
@@ -6034,19 +5545,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputSecurityLake.FileFilter = types.StringPointerValue(resp.InputSecurityLake.FileFilter)
 		r.InputSecurityLake.ID = types.StringPointerValue(resp.InputSecurityLake.ID)
 		r.InputSecurityLake.MaxMessages = types.Float64PointerValue(resp.InputSecurityLake.MaxMessages)
-		r.InputSecurityLake.Metadata = []tfTypes.MetadatumSecurityLake{}
+		r.InputSecurityLake.Metadata = []tfTypes.InputSecurityLakeMetadatum{}
 		if len(r.InputSecurityLake.Metadata) > len(resp.InputSecurityLake.Metadata) {
 			r.InputSecurityLake.Metadata = r.InputSecurityLake.Metadata[:len(resp.InputSecurityLake.Metadata)]
 		}
-		for metadataCount44, metadataItem44 := range resp.InputSecurityLake.Metadata {
-			var metadata44 tfTypes.MetadatumSecurityLake
-			metadata44.Name = types.StringValue(metadataItem44.Name)
-			metadata44.Value = types.StringValue(metadataItem44.Value)
-			if metadataCount44+1 > len(r.InputSecurityLake.Metadata) {
-				r.InputSecurityLake.Metadata = append(r.InputSecurityLake.Metadata, metadata44)
+		for metadataCount45, metadataItem45 := range resp.InputSecurityLake.Metadata {
+			var metadata45 tfTypes.InputSecurityLakeMetadatum
+			metadata45.Name = types.StringValue(metadataItem45.Name)
+			metadata45.Value = types.StringValue(metadataItem45.Value)
+			if metadataCount45+1 > len(r.InputSecurityLake.Metadata) {
+				r.InputSecurityLake.Metadata = append(r.InputSecurityLake.Metadata, metadata45)
 			} else {
-				r.InputSecurityLake.Metadata[metadataCount44].Name = metadata44.Name
-				r.InputSecurityLake.Metadata[metadataCount44].Value = metadata44.Value
+				r.InputSecurityLake.Metadata[metadataCount45].Name = metadata45.Name
+				r.InputSecurityLake.Metadata[metadataCount45].Value = metadata45.Value
 			}
 		}
 		r.InputSecurityLake.NumReceivers = types.Float64PointerValue(resp.InputSecurityLake.NumReceivers)
@@ -6057,7 +5568,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSecurityLake.Pq == nil {
 			r.InputSecurityLake.Pq = nil
 		} else {
-			r.InputSecurityLake.Pq = &tfTypes.PqSecurityLake{}
+			r.InputSecurityLake.Pq = &tfTypes.InputSecurityLakePq{}
 			r.InputSecurityLake.Pq.CommitFrequency = types.Float64PointerValue(resp.InputSecurityLake.Pq.CommitFrequency)
 			if resp.InputSecurityLake.Pq.Compress != nil {
 				r.InputSecurityLake.Pq.Compress = types.StringValue(string(*resp.InputSecurityLake.Pq.Compress))
@@ -6078,7 +5589,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSecurityLake.Preprocess == nil {
 			r.InputSecurityLake.Preprocess = nil
 		} else {
-			r.InputSecurityLake.Preprocess = &tfTypes.PreprocessSecurityLake{}
+			r.InputSecurityLake.Preprocess = &tfTypes.InputSecurityLakePreprocess{}
 			r.InputSecurityLake.Preprocess.Args = make([]types.String, 0, len(resp.InputSecurityLake.Preprocess.Args))
 			for _, v := range resp.InputSecurityLake.Preprocess.Args {
 				r.InputSecurityLake.Preprocess.Args = append(r.InputSecurityLake.Preprocess.Args, types.StringValue(v))
@@ -6086,6 +5597,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputSecurityLake.Preprocess.Command = types.StringPointerValue(resp.InputSecurityLake.Preprocess.Command)
 			r.InputSecurityLake.Preprocess.Disabled = types.BoolPointerValue(resp.InputSecurityLake.Preprocess.Disabled)
 		}
+		r.InputSecurityLake.ProcessedTagKey = types.StringPointerValue(resp.InputSecurityLake.ProcessedTagKey)
+		r.InputSecurityLake.ProcessedTagValue = types.StringPointerValue(resp.InputSecurityLake.ProcessedTagValue)
 		r.InputSecurityLake.QueueName = types.StringValue(resp.InputSecurityLake.QueueName)
 		r.InputSecurityLake.Region = types.StringPointerValue(resp.InputSecurityLake.Region)
 		r.InputSecurityLake.RejectUnauthorized = types.BoolPointerValue(resp.InputSecurityLake.RejectUnauthorized)
@@ -6099,43 +5612,34 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputSecurityLake.SkipOnError = types.BoolPointerValue(resp.InputSecurityLake.SkipOnError)
 		r.InputSecurityLake.SocketTimeout = types.Float64PointerValue(resp.InputSecurityLake.SocketTimeout)
 		r.InputSecurityLake.StaleChannelFlushMs = types.Float64PointerValue(resp.InputSecurityLake.StaleChannelFlushMs)
-		if resp.InputSecurityLake.Status == nil {
-			r.InputSecurityLake.Status = nil
-		} else {
-			r.InputSecurityLake.Status = &tfTypes.TFStatus{}
-			r.InputSecurityLake.Status.Health = types.StringValue(string(resp.InputSecurityLake.Status.Health))
-			if len(resp.InputSecurityLake.Status.Metrics) > 0 {
-				r.InputSecurityLake.Status.Metrics = make(map[string]types.String, len(resp.InputSecurityLake.Status.Metrics))
-				for key42, value42 := range resp.InputSecurityLake.Status.Metrics {
-					result42, _ := json.Marshal(value42)
-					r.InputSecurityLake.Status.Metrics[key42] = types.StringValue(string(result42))
-				}
-			}
-			r.InputSecurityLake.Status.Timestamp = types.Float64Value(resp.InputSecurityLake.Status.Timestamp)
-			r.InputSecurityLake.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSecurityLake.Status.UseStatusFromLB)
-		}
 		r.InputSecurityLake.Streamtags = make([]types.String, 0, len(resp.InputSecurityLake.Streamtags))
 		for _, v := range resp.InputSecurityLake.Streamtags {
 			r.InputSecurityLake.Streamtags = append(r.InputSecurityLake.Streamtags, types.StringValue(v))
+		}
+		if resp.InputSecurityLake.TagAfterProcessing != nil {
+			r.InputSecurityLake.TagAfterProcessing = types.StringValue(string(*resp.InputSecurityLake.TagAfterProcessing))
+		} else {
+			r.InputSecurityLake.TagAfterProcessing = types.StringNull()
 		}
 		r.InputSecurityLake.Type = types.StringValue(string(resp.InputSecurityLake.Type))
 		r.InputSecurityLake.VisibilityTimeout = types.Float64PointerValue(resp.InputSecurityLake.VisibilityTimeout)
 	}
 	if resp.InputSnmp != nil {
 		r.InputSnmp = &tfTypes.InputSnmp{}
-		r.InputSnmp.Connections = []tfTypes.ConnectionSnmp{}
+		r.InputSnmp.BestEffortParsing = types.BoolPointerValue(resp.InputSnmp.BestEffortParsing)
+		r.InputSnmp.Connections = []tfTypes.InputSnmpConnection{}
 		if len(r.InputSnmp.Connections) > len(resp.InputSnmp.Connections) {
 			r.InputSnmp.Connections = r.InputSnmp.Connections[:len(resp.InputSnmp.Connections)]
 		}
-		for connectionsCount43, connectionsItem43 := range resp.InputSnmp.Connections {
-			var connections43 tfTypes.ConnectionSnmp
-			connections43.Output = types.StringValue(connectionsItem43.Output)
-			connections43.Pipeline = types.StringPointerValue(connectionsItem43.Pipeline)
-			if connectionsCount43+1 > len(r.InputSnmp.Connections) {
-				r.InputSnmp.Connections = append(r.InputSnmp.Connections, connections43)
+		for connectionsCount44, connectionsItem44 := range resp.InputSnmp.Connections {
+			var connections44 tfTypes.InputSnmpConnection
+			connections44.Output = types.StringValue(connectionsItem44.Output)
+			connections44.Pipeline = types.StringPointerValue(connectionsItem44.Pipeline)
+			if connectionsCount44+1 > len(r.InputSnmp.Connections) {
+				r.InputSnmp.Connections = append(r.InputSnmp.Connections, connections44)
 			} else {
-				r.InputSnmp.Connections[connectionsCount43].Output = connections43.Output
-				r.InputSnmp.Connections[connectionsCount43].Pipeline = connections43.Pipeline
+				r.InputSnmp.Connections[connectionsCount44].Output = connections44.Output
+				r.InputSnmp.Connections[connectionsCount44].Pipeline = connections44.Pipeline
 			}
 		}
 		r.InputSnmp.Description = types.StringPointerValue(resp.InputSnmp.Description)
@@ -6145,19 +5649,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputSnmp.ID = types.StringPointerValue(resp.InputSnmp.ID)
 		r.InputSnmp.IPWhitelistRegex = types.StringPointerValue(resp.InputSnmp.IPWhitelistRegex)
 		r.InputSnmp.MaxBufferSize = types.Float64PointerValue(resp.InputSnmp.MaxBufferSize)
-		r.InputSnmp.Metadata = []tfTypes.MetadatumSnmp{}
+		r.InputSnmp.Metadata = []tfTypes.InputSnmpMetadatum{}
 		if len(r.InputSnmp.Metadata) > len(resp.InputSnmp.Metadata) {
 			r.InputSnmp.Metadata = r.InputSnmp.Metadata[:len(resp.InputSnmp.Metadata)]
 		}
-		for metadataCount45, metadataItem45 := range resp.InputSnmp.Metadata {
-			var metadata45 tfTypes.MetadatumSnmp
-			metadata45.Name = types.StringValue(metadataItem45.Name)
-			metadata45.Value = types.StringValue(metadataItem45.Value)
-			if metadataCount45+1 > len(r.InputSnmp.Metadata) {
-				r.InputSnmp.Metadata = append(r.InputSnmp.Metadata, metadata45)
+		for metadataCount46, metadataItem46 := range resp.InputSnmp.Metadata {
+			var metadata46 tfTypes.InputSnmpMetadatum
+			metadata46.Name = types.StringValue(metadataItem46.Name)
+			metadata46.Value = types.StringValue(metadataItem46.Value)
+			if metadataCount46+1 > len(r.InputSnmp.Metadata) {
+				r.InputSnmp.Metadata = append(r.InputSnmp.Metadata, metadata46)
 			} else {
-				r.InputSnmp.Metadata[metadataCount45].Name = metadata45.Name
-				r.InputSnmp.Metadata[metadataCount45].Value = metadata45.Value
+				r.InputSnmp.Metadata[metadataCount46].Name = metadata46.Name
+				r.InputSnmp.Metadata[metadataCount46].Value = metadata46.Value
 			}
 		}
 		r.InputSnmp.Pipeline = types.StringPointerValue(resp.InputSnmp.Pipeline)
@@ -6165,7 +5669,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSnmp.Pq == nil {
 			r.InputSnmp.Pq = nil
 		} else {
-			r.InputSnmp.Pq = &tfTypes.PqSnmp{}
+			r.InputSnmp.Pq = &tfTypes.InputSnmpPq{}
 			r.InputSnmp.Pq.CommitFrequency = types.Float64PointerValue(resp.InputSnmp.Pq.CommitFrequency)
 			if resp.InputSnmp.Pq.Compress != nil {
 				r.InputSnmp.Pq.Compress = types.StringValue(string(*resp.InputSnmp.Pq.Compress))
@@ -6208,7 +5712,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 					v3Users.AuthProtocol = types.StringNull()
 				}
 				v3Users.Name = types.StringValue(v3UsersItem.Name)
-				v3Users.PrivProtocol = types.StringPointerValue(v3UsersItem.PrivProtocol)
+				if v3UsersItem.PrivProtocol == nil {
+					v3Users.PrivProtocol = types.StringNull()
+				} else {
+					privProtocolResult, _ := json.Marshal(v3UsersItem.PrivProtocol)
+					v3Users.PrivProtocol = types.StringValue(string(privProtocolResult))
+				}
 				if v3UsersCount+1 > len(r.InputSnmp.SnmpV3Auth.V3Users) {
 					r.InputSnmp.SnmpV3Auth.V3Users = append(r.InputSnmp.SnmpV3Auth.V3Users, v3Users)
 				} else {
@@ -6218,21 +5727,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 					r.InputSnmp.SnmpV3Auth.V3Users[v3UsersCount].PrivProtocol = v3Users.PrivProtocol
 				}
 			}
-		}
-		if resp.InputSnmp.Status == nil {
-			r.InputSnmp.Status = nil
-		} else {
-			r.InputSnmp.Status = &tfTypes.TFStatus{}
-			r.InputSnmp.Status.Health = types.StringValue(string(resp.InputSnmp.Status.Health))
-			if len(resp.InputSnmp.Status.Metrics) > 0 {
-				r.InputSnmp.Status.Metrics = make(map[string]types.String, len(resp.InputSnmp.Status.Metrics))
-				for key43, value43 := range resp.InputSnmp.Status.Metrics {
-					result43, _ := json.Marshal(value43)
-					r.InputSnmp.Status.Metrics[key43] = types.StringValue(string(result43))
-				}
-			}
-			r.InputSnmp.Status.Timestamp = types.Float64Value(resp.InputSnmp.Status.Timestamp)
-			r.InputSnmp.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSnmp.Status.UseStatusFromLB)
 		}
 		r.InputSnmp.Streamtags = make([]types.String, 0, len(resp.InputSnmp.Streamtags))
 		for _, v := range resp.InputSnmp.Streamtags {
@@ -6248,12 +5742,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputSplunk != nil {
 		r.InputSplunk = &tfTypes.InputSplunk{}
-		r.InputSplunk.AuthTokens = []tfTypes.AuthTokenSplunk{}
+		r.InputSplunk.AuthTokens = []tfTypes.InputSplunkAuthToken{}
 		if len(r.InputSplunk.AuthTokens) > len(resp.InputSplunk.AuthTokens) {
 			r.InputSplunk.AuthTokens = r.InputSplunk.AuthTokens[:len(resp.InputSplunk.AuthTokens)]
 		}
 		for authTokensCount, authTokensItem := range resp.InputSplunk.AuthTokens {
-			var authTokens tfTypes.AuthTokenSplunk
+			var authTokens tfTypes.InputSplunkAuthToken
 			authTokens.Description = types.StringPointerValue(authTokensItem.Description)
 			authTokens.Token = types.StringValue(authTokensItem.Token)
 			if authTokensCount+1 > len(r.InputSplunk.AuthTokens) {
@@ -6272,19 +5766,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputSplunk.Compress = types.StringNull()
 		}
-		r.InputSplunk.Connections = []tfTypes.ConnectionSplunk{}
+		r.InputSplunk.Connections = []tfTypes.InputSplunkConnection{}
 		if len(r.InputSplunk.Connections) > len(resp.InputSplunk.Connections) {
 			r.InputSplunk.Connections = r.InputSplunk.Connections[:len(resp.InputSplunk.Connections)]
 		}
-		for connectionsCount44, connectionsItem44 := range resp.InputSplunk.Connections {
-			var connections44 tfTypes.ConnectionSplunk
-			connections44.Output = types.StringValue(connectionsItem44.Output)
-			connections44.Pipeline = types.StringPointerValue(connectionsItem44.Pipeline)
-			if connectionsCount44+1 > len(r.InputSplunk.Connections) {
-				r.InputSplunk.Connections = append(r.InputSplunk.Connections, connections44)
+		for connectionsCount45, connectionsItem45 := range resp.InputSplunk.Connections {
+			var connections45 tfTypes.InputSplunkConnection
+			connections45.Output = types.StringValue(connectionsItem45.Output)
+			connections45.Pipeline = types.StringPointerValue(connectionsItem45.Pipeline)
+			if connectionsCount45+1 > len(r.InputSplunk.Connections) {
+				r.InputSplunk.Connections = append(r.InputSplunk.Connections, connections45)
 			} else {
-				r.InputSplunk.Connections[connectionsCount44].Output = connections44.Output
-				r.InputSplunk.Connections[connectionsCount44].Pipeline = connections44.Pipeline
+				r.InputSplunk.Connections[connectionsCount45].Output = connections45.Output
+				r.InputSplunk.Connections[connectionsCount45].Pipeline = connections45.Pipeline
 			}
 		}
 		r.InputSplunk.Description = types.StringPointerValue(resp.InputSplunk.Description)
@@ -6302,19 +5796,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputSplunk.MaxS2Sversion = types.StringNull()
 		}
-		r.InputSplunk.Metadata = []tfTypes.MetadatumSplunk{}
+		r.InputSplunk.Metadata = []tfTypes.InputSplunkMetadatum{}
 		if len(r.InputSplunk.Metadata) > len(resp.InputSplunk.Metadata) {
 			r.InputSplunk.Metadata = r.InputSplunk.Metadata[:len(resp.InputSplunk.Metadata)]
 		}
-		for metadataCount46, metadataItem46 := range resp.InputSplunk.Metadata {
-			var metadata46 tfTypes.MetadatumSplunk
-			metadata46.Name = types.StringValue(metadataItem46.Name)
-			metadata46.Value = types.StringValue(metadataItem46.Value)
-			if metadataCount46+1 > len(r.InputSplunk.Metadata) {
-				r.InputSplunk.Metadata = append(r.InputSplunk.Metadata, metadata46)
+		for metadataCount47, metadataItem47 := range resp.InputSplunk.Metadata {
+			var metadata47 tfTypes.InputSplunkMetadatum
+			metadata47.Name = types.StringValue(metadataItem47.Name)
+			metadata47.Value = types.StringValue(metadataItem47.Value)
+			if metadataCount47+1 > len(r.InputSplunk.Metadata) {
+				r.InputSplunk.Metadata = append(r.InputSplunk.Metadata, metadata47)
 			} else {
-				r.InputSplunk.Metadata[metadataCount46].Name = metadata46.Name
-				r.InputSplunk.Metadata[metadataCount46].Value = metadata46.Value
+				r.InputSplunk.Metadata[metadataCount47].Name = metadata47.Name
+				r.InputSplunk.Metadata[metadataCount47].Value = metadata47.Value
 			}
 		}
 		r.InputSplunk.Pipeline = types.StringPointerValue(resp.InputSplunk.Pipeline)
@@ -6322,7 +5816,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSplunk.Pq == nil {
 			r.InputSplunk.Pq = nil
 		} else {
-			r.InputSplunk.Pq = &tfTypes.PqSplunk{}
+			r.InputSplunk.Pq = &tfTypes.InputSplunkPq{}
 			r.InputSplunk.Pq.CommitFrequency = types.Float64PointerValue(resp.InputSplunk.Pq.CommitFrequency)
 			if resp.InputSplunk.Pq.Compress != nil {
 				r.InputSplunk.Pq.Compress = types.StringValue(string(*resp.InputSplunk.Pq.Compress))
@@ -6345,21 +5839,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputSplunk.SocketIdleTimeout = types.Float64PointerValue(resp.InputSplunk.SocketIdleTimeout)
 		r.InputSplunk.SocketMaxLifespan = types.Float64PointerValue(resp.InputSplunk.SocketMaxLifespan)
 		r.InputSplunk.StaleChannelFlushMs = types.Float64PointerValue(resp.InputSplunk.StaleChannelFlushMs)
-		if resp.InputSplunk.Status == nil {
-			r.InputSplunk.Status = nil
-		} else {
-			r.InputSplunk.Status = &tfTypes.TFStatus{}
-			r.InputSplunk.Status.Health = types.StringValue(string(resp.InputSplunk.Status.Health))
-			if len(resp.InputSplunk.Status.Metrics) > 0 {
-				r.InputSplunk.Status.Metrics = make(map[string]types.String, len(resp.InputSplunk.Status.Metrics))
-				for key44, value44 := range resp.InputSplunk.Status.Metrics {
-					result44, _ := json.Marshal(value44)
-					r.InputSplunk.Status.Metrics[key44] = types.StringValue(string(result44))
-				}
-			}
-			r.InputSplunk.Status.Timestamp = types.Float64Value(resp.InputSplunk.Status.Timestamp)
-			r.InputSplunk.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSplunk.Status.UseStatusFromLB)
-		}
 		r.InputSplunk.Streamtags = make([]types.String, 0, len(resp.InputSplunk.Streamtags))
 		for _, v := range resp.InputSplunk.Streamtags {
 			r.InputSplunk.Streamtags = append(r.InputSplunk.Streamtags, types.StringValue(v))
@@ -6367,15 +5846,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSplunk.TLS == nil {
 			r.InputSplunk.TLS = nil
 		} else {
-			r.InputSplunk.TLS = &tfTypes.TLSSettingsServerSideSplunk{}
+			r.InputSplunk.TLS = &tfTypes.InputSplunkTLSSettingsServerSide{}
 			r.InputSplunk.TLS.CaPath = types.StringPointerValue(resp.InputSplunk.TLS.CaPath)
 			r.InputSplunk.TLS.CertificateName = types.StringPointerValue(resp.InputSplunk.TLS.CertificateName)
 			r.InputSplunk.TLS.CertPath = types.StringPointerValue(resp.InputSplunk.TLS.CertPath)
 			if resp.InputSplunk.TLS.CommonNameRegex == nil {
 				r.InputSplunk.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult15, _ := json.Marshal(resp.InputSplunk.TLS.CommonNameRegex)
-				r.InputSplunk.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult15))
+				commonNameRegexResult16, _ := json.Marshal(resp.InputSplunk.TLS.CommonNameRegex)
+				r.InputSplunk.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult16))
 			}
 			r.InputSplunk.TLS.Disabled = types.BoolPointerValue(resp.InputSplunk.TLS.Disabled)
 			if resp.InputSplunk.TLS.MaxVersion != nil {
@@ -6393,8 +5872,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputSplunk.TLS.RejectUnauthorized == nil {
 				r.InputSplunk.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult15, _ := json.Marshal(resp.InputSplunk.TLS.RejectUnauthorized)
-				r.InputSplunk.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult15))
+				rejectUnauthorizedResult16, _ := json.Marshal(resp.InputSplunk.TLS.RejectUnauthorized)
+				r.InputSplunk.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult16))
 			}
 			r.InputSplunk.TLS.RequestCert = types.BoolPointerValue(resp.InputSplunk.TLS.RequestCert)
 		}
@@ -6420,12 +5899,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputSplunkHec.AllowedIndexes {
 			r.InputSplunkHec.AllowedIndexes = append(r.InputSplunkHec.AllowedIndexes, types.StringValue(v))
 		}
-		r.InputSplunkHec.AuthTokens = []tfTypes.AuthTokenSplunkHec{}
+		r.InputSplunkHec.AuthTokens = []tfTypes.InputSplunkHecAuthToken{}
 		if len(r.InputSplunkHec.AuthTokens) > len(resp.InputSplunkHec.AuthTokens) {
 			r.InputSplunkHec.AuthTokens = r.InputSplunkHec.AuthTokens[:len(resp.InputSplunkHec.AuthTokens)]
 		}
 		for authTokensCount1, authTokensItem1 := range resp.InputSplunkHec.AuthTokens {
-			var authTokens1 tfTypes.AuthTokenSplunkHec
+			var authTokens1 tfTypes.InputSplunkHecAuthToken
 			authTokens1.AllowedIndexesAtToken = make([]types.String, 0, len(authTokensItem1.AllowedIndexesAtToken))
 			for _, v := range authTokensItem1.AllowedIndexesAtToken {
 				authTokens1.AllowedIndexesAtToken = append(authTokens1.AllowedIndexesAtToken, types.StringValue(v))
@@ -6437,16 +5916,16 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 			authTokens1.Description = types.StringPointerValue(authTokensItem1.Description)
 			authTokens1.Enabled = types.BoolPointerValue(authTokensItem1.Enabled)
-			authTokens1.Metadata = []tfTypes.AuthTokenMetadatumSplunkHec{}
-			for metadataCount47, metadataItem47 := range authTokensItem1.Metadata {
-				var metadata47 tfTypes.AuthTokenMetadatumSplunkHec
-				metadata47.Name = types.StringValue(metadataItem47.Name)
-				metadata47.Value = types.StringValue(metadataItem47.Value)
-				if metadataCount47+1 > len(authTokens1.Metadata) {
-					authTokens1.Metadata = append(authTokens1.Metadata, metadata47)
+			authTokens1.Metadata = []tfTypes.InputSplunkHecAuthTokenMetadatum{}
+			for metadataCount48, metadataItem48 := range authTokensItem1.Metadata {
+				var metadata48 tfTypes.InputSplunkHecAuthTokenMetadatum
+				metadata48.Name = types.StringValue(metadataItem48.Name)
+				metadata48.Value = types.StringValue(metadataItem48.Value)
+				if metadataCount48+1 > len(authTokens1.Metadata) {
+					authTokens1.Metadata = append(authTokens1.Metadata, metadata48)
 				} else {
-					authTokens1.Metadata[metadataCount47].Name = metadata47.Name
-					authTokens1.Metadata[metadataCount47].Value = metadata47.Value
+					authTokens1.Metadata[metadataCount48].Name = metadata48.Name
+					authTokens1.Metadata[metadataCount48].Value = metadata48.Value
 				}
 			}
 			tokenResult, _ := json.Marshal(authTokensItem1.Token)
@@ -6474,19 +5953,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputSplunkHec.BreakerRulesets = append(r.InputSplunkHec.BreakerRulesets, types.StringValue(v))
 		}
 		r.InputSplunkHec.CaptureHeaders = types.BoolPointerValue(resp.InputSplunkHec.CaptureHeaders)
-		r.InputSplunkHec.Connections = []tfTypes.ConnectionSplunkHec{}
+		r.InputSplunkHec.Connections = []tfTypes.InputSplunkHecConnection{}
 		if len(r.InputSplunkHec.Connections) > len(resp.InputSplunkHec.Connections) {
 			r.InputSplunkHec.Connections = r.InputSplunkHec.Connections[:len(resp.InputSplunkHec.Connections)]
 		}
-		for connectionsCount45, connectionsItem45 := range resp.InputSplunkHec.Connections {
-			var connections45 tfTypes.ConnectionSplunkHec
-			connections45.Output = types.StringValue(connectionsItem45.Output)
-			connections45.Pipeline = types.StringPointerValue(connectionsItem45.Pipeline)
-			if connectionsCount45+1 > len(r.InputSplunkHec.Connections) {
-				r.InputSplunkHec.Connections = append(r.InputSplunkHec.Connections, connections45)
+		for connectionsCount46, connectionsItem46 := range resp.InputSplunkHec.Connections {
+			var connections46 tfTypes.InputSplunkHecConnection
+			connections46.Output = types.StringValue(connectionsItem46.Output)
+			connections46.Pipeline = types.StringPointerValue(connectionsItem46.Pipeline)
+			if connectionsCount46+1 > len(r.InputSplunkHec.Connections) {
+				r.InputSplunkHec.Connections = append(r.InputSplunkHec.Connections, connections46)
 			} else {
-				r.InputSplunkHec.Connections[connectionsCount45].Output = connections45.Output
-				r.InputSplunkHec.Connections[connectionsCount45].Pipeline = connections45.Pipeline
+				r.InputSplunkHec.Connections[connectionsCount46].Output = connections46.Output
+				r.InputSplunkHec.Connections[connectionsCount46].Pipeline = connections46.Pipeline
 			}
 		}
 		r.InputSplunkHec.Description = types.StringPointerValue(resp.InputSplunkHec.Description)
@@ -6509,19 +5988,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputSplunkHec.KeepAliveTimeout = types.Float64PointerValue(resp.InputSplunkHec.KeepAliveTimeout)
 		r.InputSplunkHec.MaxActiveReq = types.Float64PointerValue(resp.InputSplunkHec.MaxActiveReq)
 		r.InputSplunkHec.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputSplunkHec.MaxRequestsPerSocket)
-		r.InputSplunkHec.Metadata = []tfTypes.MetadatumSplunkHec{}
+		r.InputSplunkHec.Metadata = []tfTypes.InputSplunkHecMetadatum{}
 		if len(r.InputSplunkHec.Metadata) > len(resp.InputSplunkHec.Metadata) {
 			r.InputSplunkHec.Metadata = r.InputSplunkHec.Metadata[:len(resp.InputSplunkHec.Metadata)]
 		}
-		for metadataCount48, metadataItem48 := range resp.InputSplunkHec.Metadata {
-			var metadata48 tfTypes.MetadatumSplunkHec
-			metadata48.Name = types.StringValue(metadataItem48.Name)
-			metadata48.Value = types.StringValue(metadataItem48.Value)
-			if metadataCount48+1 > len(r.InputSplunkHec.Metadata) {
-				r.InputSplunkHec.Metadata = append(r.InputSplunkHec.Metadata, metadata48)
+		for metadataCount49, metadataItem49 := range resp.InputSplunkHec.Metadata {
+			var metadata49 tfTypes.InputSplunkHecMetadatum
+			metadata49.Name = types.StringValue(metadataItem49.Name)
+			metadata49.Value = types.StringValue(metadataItem49.Value)
+			if metadataCount49+1 > len(r.InputSplunkHec.Metadata) {
+				r.InputSplunkHec.Metadata = append(r.InputSplunkHec.Metadata, metadata49)
 			} else {
-				r.InputSplunkHec.Metadata[metadataCount48].Name = metadata48.Name
-				r.InputSplunkHec.Metadata[metadataCount48].Value = metadata48.Value
+				r.InputSplunkHec.Metadata[metadataCount49].Name = metadata49.Name
+				r.InputSplunkHec.Metadata[metadataCount49].Value = metadata49.Value
 			}
 		}
 		r.InputSplunkHec.Pipeline = types.StringPointerValue(resp.InputSplunkHec.Pipeline)
@@ -6529,7 +6008,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSplunkHec.Pq == nil {
 			r.InputSplunkHec.Pq = nil
 		} else {
-			r.InputSplunkHec.Pq = &tfTypes.PqSplunkHec{}
+			r.InputSplunkHec.Pq = &tfTypes.InputSplunkHecPq{}
 			r.InputSplunkHec.Pq.CommitFrequency = types.Float64PointerValue(resp.InputSplunkHec.Pq.CommitFrequency)
 			if resp.InputSplunkHec.Pq.Compress != nil {
 				r.InputSplunkHec.Pq.Compress = types.StringValue(string(*resp.InputSplunkHec.Pq.Compress))
@@ -6553,21 +6032,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputSplunkHec.SplunkHecAcks = types.BoolPointerValue(resp.InputSplunkHec.SplunkHecAcks)
 		r.InputSplunkHec.SplunkHecAPI = types.StringPointerValue(resp.InputSplunkHec.SplunkHecAPI)
 		r.InputSplunkHec.StaleChannelFlushMs = types.Float64PointerValue(resp.InputSplunkHec.StaleChannelFlushMs)
-		if resp.InputSplunkHec.Status == nil {
-			r.InputSplunkHec.Status = nil
-		} else {
-			r.InputSplunkHec.Status = &tfTypes.TFStatus{}
-			r.InputSplunkHec.Status.Health = types.StringValue(string(resp.InputSplunkHec.Status.Health))
-			if len(resp.InputSplunkHec.Status.Metrics) > 0 {
-				r.InputSplunkHec.Status.Metrics = make(map[string]types.String, len(resp.InputSplunkHec.Status.Metrics))
-				for key45, value45 := range resp.InputSplunkHec.Status.Metrics {
-					result45, _ := json.Marshal(value45)
-					r.InputSplunkHec.Status.Metrics[key45] = types.StringValue(string(result45))
-				}
-			}
-			r.InputSplunkHec.Status.Timestamp = types.Float64Value(resp.InputSplunkHec.Status.Timestamp)
-			r.InputSplunkHec.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSplunkHec.Status.UseStatusFromLB)
-		}
 		r.InputSplunkHec.Streamtags = make([]types.String, 0, len(resp.InputSplunkHec.Streamtags))
 		for _, v := range resp.InputSplunkHec.Streamtags {
 			r.InputSplunkHec.Streamtags = append(r.InputSplunkHec.Streamtags, types.StringValue(v))
@@ -6575,15 +6039,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSplunkHec.TLS == nil {
 			r.InputSplunkHec.TLS = nil
 		} else {
-			r.InputSplunkHec.TLS = &tfTypes.TLSSettingsServerSideSplunkHec{}
+			r.InputSplunkHec.TLS = &tfTypes.InputSplunkHecTLSSettingsServerSide{}
 			r.InputSplunkHec.TLS.CaPath = types.StringPointerValue(resp.InputSplunkHec.TLS.CaPath)
 			r.InputSplunkHec.TLS.CertificateName = types.StringPointerValue(resp.InputSplunkHec.TLS.CertificateName)
 			r.InputSplunkHec.TLS.CertPath = types.StringPointerValue(resp.InputSplunkHec.TLS.CertPath)
 			if resp.InputSplunkHec.TLS.CommonNameRegex == nil {
 				r.InputSplunkHec.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult16, _ := json.Marshal(resp.InputSplunkHec.TLS.CommonNameRegex)
-				r.InputSplunkHec.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult16))
+				commonNameRegexResult17, _ := json.Marshal(resp.InputSplunkHec.TLS.CommonNameRegex)
+				r.InputSplunkHec.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult17))
 			}
 			r.InputSplunkHec.TLS.Disabled = types.BoolPointerValue(resp.InputSplunkHec.TLS.Disabled)
 			if resp.InputSplunkHec.TLS.MaxVersion != nil {
@@ -6601,8 +6065,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputSplunkHec.TLS.RejectUnauthorized == nil {
 				r.InputSplunkHec.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult16, _ := json.Marshal(resp.InputSplunkHec.TLS.RejectUnauthorized)
-				r.InputSplunkHec.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult16))
+				rejectUnauthorizedResult17, _ := json.Marshal(resp.InputSplunkHec.TLS.RejectUnauthorized)
+				r.InputSplunkHec.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult17))
 			}
 			r.InputSplunkHec.TLS.RequestCert = types.BoolPointerValue(resp.InputSplunkHec.TLS.RequestCert)
 		}
@@ -6625,19 +6089,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputSplunkSearch.BreakerRulesets {
 			r.InputSplunkSearch.BreakerRulesets = append(r.InputSplunkSearch.BreakerRulesets, types.StringValue(v))
 		}
-		r.InputSplunkSearch.Connections = []tfTypes.ConnectionSplunkSearch{}
+		r.InputSplunkSearch.Connections = []tfTypes.InputSplunkSearchConnection{}
 		if len(r.InputSplunkSearch.Connections) > len(resp.InputSplunkSearch.Connections) {
 			r.InputSplunkSearch.Connections = r.InputSplunkSearch.Connections[:len(resp.InputSplunkSearch.Connections)]
 		}
-		for connectionsCount46, connectionsItem46 := range resp.InputSplunkSearch.Connections {
-			var connections46 tfTypes.ConnectionSplunkSearch
-			connections46.Output = types.StringValue(connectionsItem46.Output)
-			connections46.Pipeline = types.StringPointerValue(connectionsItem46.Pipeline)
-			if connectionsCount46+1 > len(r.InputSplunkSearch.Connections) {
-				r.InputSplunkSearch.Connections = append(r.InputSplunkSearch.Connections, connections46)
+		for connectionsCount47, connectionsItem47 := range resp.InputSplunkSearch.Connections {
+			var connections47 tfTypes.InputSplunkSearchConnection
+			connections47.Output = types.StringValue(connectionsItem47.Output)
+			connections47.Pipeline = types.StringPointerValue(connectionsItem47.Pipeline)
+			if connectionsCount47+1 > len(r.InputSplunkSearch.Connections) {
+				r.InputSplunkSearch.Connections = append(r.InputSplunkSearch.Connections, connections47)
 			} else {
-				r.InputSplunkSearch.Connections[connectionsCount46].Output = connections46.Output
-				r.InputSplunkSearch.Connections[connectionsCount46].Pipeline = connections46.Pipeline
+				r.InputSplunkSearch.Connections[connectionsCount47].Output = connections47.Output
+				r.InputSplunkSearch.Connections[connectionsCount47].Pipeline = connections47.Pipeline
 			}
 		}
 		r.InputSplunkSearch.CredentialsSecret = types.StringPointerValue(resp.InputSplunkSearch.CredentialsSecret)
@@ -6679,6 +6143,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputSplunkSearch.Environment = types.StringPointerValue(resp.InputSplunkSearch.Environment)
 		r.InputSplunkSearch.ID = types.StringPointerValue(resp.InputSplunkSearch.ID)
+		r.InputSplunkSearch.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputSplunkSearch.IgnoreGroupJobsLimit)
 		r.InputSplunkSearch.JobTimeout = types.StringPointerValue(resp.InputSplunkSearch.JobTimeout)
 		r.InputSplunkSearch.KeepAliveTime = types.Float64PointerValue(resp.InputSplunkSearch.KeepAliveTime)
 		r.InputSplunkSearch.Latest = types.StringPointerValue(resp.InputSplunkSearch.Latest)
@@ -6689,27 +6154,27 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputSplunkSearch.LogLevel = types.StringNull()
 		}
 		r.InputSplunkSearch.MaxMissedKeepAlives = types.Float64PointerValue(resp.InputSplunkSearch.MaxMissedKeepAlives)
-		r.InputSplunkSearch.Metadata = []tfTypes.MetadatumSplunkSearch{}
+		r.InputSplunkSearch.Metadata = []tfTypes.InputSplunkSearchMetadatum{}
 		if len(r.InputSplunkSearch.Metadata) > len(resp.InputSplunkSearch.Metadata) {
 			r.InputSplunkSearch.Metadata = r.InputSplunkSearch.Metadata[:len(resp.InputSplunkSearch.Metadata)]
 		}
-		for metadataCount49, metadataItem49 := range resp.InputSplunkSearch.Metadata {
-			var metadata49 tfTypes.MetadatumSplunkSearch
-			metadata49.Name = types.StringValue(metadataItem49.Name)
-			metadata49.Value = types.StringValue(metadataItem49.Value)
-			if metadataCount49+1 > len(r.InputSplunkSearch.Metadata) {
-				r.InputSplunkSearch.Metadata = append(r.InputSplunkSearch.Metadata, metadata49)
+		for metadataCount50, metadataItem50 := range resp.InputSplunkSearch.Metadata {
+			var metadata50 tfTypes.InputSplunkSearchMetadatum
+			metadata50.Name = types.StringValue(metadataItem50.Name)
+			metadata50.Value = types.StringValue(metadataItem50.Value)
+			if metadataCount50+1 > len(r.InputSplunkSearch.Metadata) {
+				r.InputSplunkSearch.Metadata = append(r.InputSplunkSearch.Metadata, metadata50)
 			} else {
-				r.InputSplunkSearch.Metadata[metadataCount49].Name = metadata49.Name
-				r.InputSplunkSearch.Metadata[metadataCount49].Value = metadata49.Value
+				r.InputSplunkSearch.Metadata[metadataCount50].Name = metadata50.Name
+				r.InputSplunkSearch.Metadata[metadataCount50].Value = metadata50.Value
 			}
 		}
-		r.InputSplunkSearch.OauthHeaders = []tfTypes.OauthHeaderSplunkSearch{}
+		r.InputSplunkSearch.OauthHeaders = []tfTypes.InputSplunkSearchOauthHeader{}
 		if len(r.InputSplunkSearch.OauthHeaders) > len(resp.InputSplunkSearch.OauthHeaders) {
 			r.InputSplunkSearch.OauthHeaders = r.InputSplunkSearch.OauthHeaders[:len(resp.InputSplunkSearch.OauthHeaders)]
 		}
 		for oauthHeadersCount7, oauthHeadersItem7 := range resp.InputSplunkSearch.OauthHeaders {
-			var oauthHeaders7 tfTypes.OauthHeaderSplunkSearch
+			var oauthHeaders7 tfTypes.InputSplunkSearchOauthHeader
 			oauthHeaders7.Name = types.StringValue(oauthHeadersItem7.Name)
 			oauthHeaders7.Value = types.StringValue(oauthHeadersItem7.Value)
 			if oauthHeadersCount7+1 > len(r.InputSplunkSearch.OauthHeaders) {
@@ -6719,12 +6184,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				r.InputSplunkSearch.OauthHeaders[oauthHeadersCount7].Value = oauthHeaders7.Value
 			}
 		}
-		r.InputSplunkSearch.OauthParams = []tfTypes.OauthParamSplunkSearch{}
+		r.InputSplunkSearch.OauthParams = []tfTypes.InputSplunkSearchOauthParam{}
 		if len(r.InputSplunkSearch.OauthParams) > len(resp.InputSplunkSearch.OauthParams) {
 			r.InputSplunkSearch.OauthParams = r.InputSplunkSearch.OauthParams[:len(resp.InputSplunkSearch.OauthParams)]
 		}
 		for oauthParamsCount7, oauthParamsItem7 := range resp.InputSplunkSearch.OauthParams {
-			var oauthParams7 tfTypes.OauthParamSplunkSearch
+			var oauthParams7 tfTypes.InputSplunkSearchOauthParam
 			oauthParams7.Name = types.StringValue(oauthParamsItem7.Name)
 			oauthParams7.Value = types.StringValue(oauthParamsItem7.Value)
 			if oauthParamsCount7+1 > len(r.InputSplunkSearch.OauthParams) {
@@ -6744,7 +6209,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSplunkSearch.Pq == nil {
 			r.InputSplunkSearch.Pq = nil
 		} else {
-			r.InputSplunkSearch.Pq = &tfTypes.PqSplunkSearch{}
+			r.InputSplunkSearch.Pq = &tfTypes.InputSplunkSearchPq{}
 			r.InputSplunkSearch.Pq.CommitFrequency = types.Float64PointerValue(resp.InputSplunkSearch.Pq.CommitFrequency)
 			if resp.InputSplunkSearch.Pq.Compress != nil {
 				r.InputSplunkSearch.Pq.Compress = types.StringValue(string(*resp.InputSplunkSearch.Pq.Compress))
@@ -6767,7 +6232,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSplunkSearch.RetryRules == nil {
 			r.InputSplunkSearch.RetryRules = nil
 		} else {
-			r.InputSplunkSearch.RetryRules = &tfTypes.RetryRulesSplunkSearch{}
+			r.InputSplunkSearch.RetryRules = &tfTypes.InputSplunkSearchRetryRules{}
 			r.InputSplunkSearch.RetryRules.Codes = make([]types.Float64, 0, len(resp.InputSplunkSearch.RetryRules.Codes))
 			for _, v := range resp.InputSplunkSearch.RetryRules.Codes {
 				r.InputSplunkSearch.RetryRules.Codes = append(r.InputSplunkSearch.RetryRules.Codes, types.Float64Value(v))
@@ -6790,21 +6255,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputSplunkSearch.SecretParamName = types.StringPointerValue(resp.InputSplunkSearch.SecretParamName)
 		r.InputSplunkSearch.SendToRoutes = types.BoolPointerValue(resp.InputSplunkSearch.SendToRoutes)
 		r.InputSplunkSearch.StaleChannelFlushMs = types.Float64PointerValue(resp.InputSplunkSearch.StaleChannelFlushMs)
-		if resp.InputSplunkSearch.Status == nil {
-			r.InputSplunkSearch.Status = nil
-		} else {
-			r.InputSplunkSearch.Status = &tfTypes.TFStatus{}
-			r.InputSplunkSearch.Status.Health = types.StringValue(string(resp.InputSplunkSearch.Status.Health))
-			if len(resp.InputSplunkSearch.Status.Metrics) > 0 {
-				r.InputSplunkSearch.Status.Metrics = make(map[string]types.String, len(resp.InputSplunkSearch.Status.Metrics))
-				for key46, value46 := range resp.InputSplunkSearch.Status.Metrics {
-					result46, _ := json.Marshal(value46)
-					r.InputSplunkSearch.Status.Metrics[key46] = types.StringValue(string(result46))
-				}
-			}
-			r.InputSplunkSearch.Status.Timestamp = types.Float64Value(resp.InputSplunkSearch.Status.Timestamp)
-			r.InputSplunkSearch.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSplunkSearch.Status.UseStatusFromLB)
-		}
 		r.InputSplunkSearch.Streamtags = make([]types.String, 0, len(resp.InputSplunkSearch.Streamtags))
 		for _, v := range resp.InputSplunkSearch.Streamtags {
 			r.InputSplunkSearch.Streamtags = append(r.InputSplunkSearch.Streamtags, types.StringValue(v))
@@ -6835,19 +6285,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputSqs.AwsSecret = types.StringPointerValue(resp.InputSqs.AwsSecret)
 		r.InputSqs.AwsSecretKey = types.StringPointerValue(resp.InputSqs.AwsSecretKey)
-		r.InputSqs.Connections = []tfTypes.ConnectionSqs{}
+		r.InputSqs.Connections = []tfTypes.InputSqsConnection{}
 		if len(r.InputSqs.Connections) > len(resp.InputSqs.Connections) {
 			r.InputSqs.Connections = r.InputSqs.Connections[:len(resp.InputSqs.Connections)]
 		}
-		for connectionsCount47, connectionsItem47 := range resp.InputSqs.Connections {
-			var connections47 tfTypes.ConnectionSqs
-			connections47.Output = types.StringValue(connectionsItem47.Output)
-			connections47.Pipeline = types.StringPointerValue(connectionsItem47.Pipeline)
-			if connectionsCount47+1 > len(r.InputSqs.Connections) {
-				r.InputSqs.Connections = append(r.InputSqs.Connections, connections47)
+		for connectionsCount48, connectionsItem48 := range resp.InputSqs.Connections {
+			var connections48 tfTypes.InputSqsConnection
+			connections48.Output = types.StringValue(connectionsItem48.Output)
+			connections48.Pipeline = types.StringPointerValue(connectionsItem48.Pipeline)
+			if connectionsCount48+1 > len(r.InputSqs.Connections) {
+				r.InputSqs.Connections = append(r.InputSqs.Connections, connections48)
 			} else {
-				r.InputSqs.Connections[connectionsCount47].Output = connections47.Output
-				r.InputSqs.Connections[connectionsCount47].Pipeline = connections47.Pipeline
+				r.InputSqs.Connections[connectionsCount48].Output = connections48.Output
+				r.InputSqs.Connections[connectionsCount48].Pipeline = connections48.Pipeline
 			}
 		}
 		r.InputSqs.CreateQueue = types.BoolPointerValue(resp.InputSqs.CreateQueue)
@@ -6859,19 +6309,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputSqs.Environment = types.StringPointerValue(resp.InputSqs.Environment)
 		r.InputSqs.ID = types.StringPointerValue(resp.InputSqs.ID)
 		r.InputSqs.MaxMessages = types.Float64PointerValue(resp.InputSqs.MaxMessages)
-		r.InputSqs.Metadata = []tfTypes.MetadatumSqs{}
+		r.InputSqs.Metadata = []tfTypes.InputSqsMetadatum{}
 		if len(r.InputSqs.Metadata) > len(resp.InputSqs.Metadata) {
 			r.InputSqs.Metadata = r.InputSqs.Metadata[:len(resp.InputSqs.Metadata)]
 		}
-		for metadataCount50, metadataItem50 := range resp.InputSqs.Metadata {
-			var metadata50 tfTypes.MetadatumSqs
-			metadata50.Name = types.StringValue(metadataItem50.Name)
-			metadata50.Value = types.StringValue(metadataItem50.Value)
-			if metadataCount50+1 > len(r.InputSqs.Metadata) {
-				r.InputSqs.Metadata = append(r.InputSqs.Metadata, metadata50)
+		for metadataCount51, metadataItem51 := range resp.InputSqs.Metadata {
+			var metadata51 tfTypes.InputSqsMetadatum
+			metadata51.Name = types.StringValue(metadataItem51.Name)
+			metadata51.Value = types.StringValue(metadataItem51.Value)
+			if metadataCount51+1 > len(r.InputSqs.Metadata) {
+				r.InputSqs.Metadata = append(r.InputSqs.Metadata, metadata51)
 			} else {
-				r.InputSqs.Metadata[metadataCount50].Name = metadata50.Name
-				r.InputSqs.Metadata[metadataCount50].Value = metadata50.Value
+				r.InputSqs.Metadata[metadataCount51].Name = metadata51.Name
+				r.InputSqs.Metadata[metadataCount51].Value = metadata51.Value
 			}
 		}
 		r.InputSqs.NumReceivers = types.Float64PointerValue(resp.InputSqs.NumReceivers)
@@ -6880,7 +6330,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSqs.Pq == nil {
 			r.InputSqs.Pq = nil
 		} else {
-			r.InputSqs.Pq = &tfTypes.PqSqs{}
+			r.InputSqs.Pq = &tfTypes.InputSqsPq{}
 			r.InputSqs.Pq.CommitFrequency = types.Float64PointerValue(resp.InputSqs.Pq.CommitFrequency)
 			if resp.InputSqs.Pq.Compress != nil {
 				r.InputSqs.Pq.Compress = types.StringValue(string(*resp.InputSqs.Pq.Compress))
@@ -6913,21 +6363,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputSqs.SignatureVersion = types.StringNull()
 		}
-		if resp.InputSqs.Status == nil {
-			r.InputSqs.Status = nil
-		} else {
-			r.InputSqs.Status = &tfTypes.TFStatus{}
-			r.InputSqs.Status.Health = types.StringValue(string(resp.InputSqs.Status.Health))
-			if len(resp.InputSqs.Status.Metrics) > 0 {
-				r.InputSqs.Status.Metrics = make(map[string]types.String, len(resp.InputSqs.Status.Metrics))
-				for key47, value47 := range resp.InputSqs.Status.Metrics {
-					result47, _ := json.Marshal(value47)
-					r.InputSqs.Status.Metrics[key47] = types.StringValue(string(result47))
-				}
-			}
-			r.InputSqs.Status.Timestamp = types.Float64Value(resp.InputSqs.Status.Timestamp)
-			r.InputSqs.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSqs.Status.UseStatusFromLB)
-		}
 		r.InputSqs.Streamtags = make([]types.String, 0, len(resp.InputSqs.Streamtags))
 		for _, v := range resp.InputSqs.Streamtags {
 			r.InputSqs.Streamtags = append(r.InputSqs.Streamtags, types.StringValue(v))
@@ -6948,19 +6383,20 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if len(r.InputSyslog.InputSyslogSyslog1.Connections) > len(resp.InputSyslog.InputSyslogSyslog1.Connections) {
 				r.InputSyslog.InputSyslogSyslog1.Connections = r.InputSyslog.InputSyslogSyslog1.Connections[:len(resp.InputSyslog.InputSyslogSyslog1.Connections)]
 			}
-			for connectionsCount48, connectionsItem48 := range resp.InputSyslog.InputSyslogSyslog1.Connections {
-				var connections48 tfTypes.InputSyslogConnection1
-				connections48.Output = types.StringValue(connectionsItem48.Output)
-				connections48.Pipeline = types.StringPointerValue(connectionsItem48.Pipeline)
-				if connectionsCount48+1 > len(r.InputSyslog.InputSyslogSyslog1.Connections) {
-					r.InputSyslog.InputSyslogSyslog1.Connections = append(r.InputSyslog.InputSyslogSyslog1.Connections, connections48)
+			for connectionsCount49, connectionsItem49 := range resp.InputSyslog.InputSyslogSyslog1.Connections {
+				var connections49 tfTypes.InputSyslogConnection1
+				connections49.Output = types.StringValue(connectionsItem49.Output)
+				connections49.Pipeline = types.StringPointerValue(connectionsItem49.Pipeline)
+				if connectionsCount49+1 > len(r.InputSyslog.InputSyslogSyslog1.Connections) {
+					r.InputSyslog.InputSyslogSyslog1.Connections = append(r.InputSyslog.InputSyslogSyslog1.Connections, connections49)
 				} else {
-					r.InputSyslog.InputSyslogSyslog1.Connections[connectionsCount48].Output = connections48.Output
-					r.InputSyslog.InputSyslogSyslog1.Connections[connectionsCount48].Pipeline = connections48.Pipeline
+					r.InputSyslog.InputSyslogSyslog1.Connections[connectionsCount49].Output = connections49.Output
+					r.InputSyslog.InputSyslogSyslog1.Connections[connectionsCount49].Pipeline = connections49.Pipeline
 				}
 			}
 			r.InputSyslog.InputSyslogSyslog1.Description = types.StringPointerValue(resp.InputSyslog.InputSyslogSyslog1.Description)
 			r.InputSyslog.InputSyslogSyslog1.Disabled = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog1.Disabled)
+			r.InputSyslog.InputSyslogSyslog1.EnableEnhancedProxyHeaderParsing = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog1.EnableEnhancedProxyHeaderParsing)
 			r.InputSyslog.InputSyslogSyslog1.EnableLoadBalancing = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog1.EnableLoadBalancing)
 			r.InputSyslog.InputSyslogSyslog1.EnableProxyHeader = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog1.EnableProxyHeader)
 			r.InputSyslog.InputSyslogSyslog1.Environment = types.StringPointerValue(resp.InputSyslog.InputSyslogSyslog1.Environment)
@@ -6978,15 +6414,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if len(r.InputSyslog.InputSyslogSyslog1.Metadata) > len(resp.InputSyslog.InputSyslogSyslog1.Metadata) {
 				r.InputSyslog.InputSyslogSyslog1.Metadata = r.InputSyslog.InputSyslogSyslog1.Metadata[:len(resp.InputSyslog.InputSyslogSyslog1.Metadata)]
 			}
-			for metadataCount51, metadataItem51 := range resp.InputSyslog.InputSyslogSyslog1.Metadata {
-				var metadata51 tfTypes.InputSyslogMetadatum1
-				metadata51.Name = types.StringValue(metadataItem51.Name)
-				metadata51.Value = types.StringValue(metadataItem51.Value)
-				if metadataCount51+1 > len(r.InputSyslog.InputSyslogSyslog1.Metadata) {
-					r.InputSyslog.InputSyslogSyslog1.Metadata = append(r.InputSyslog.InputSyslogSyslog1.Metadata, metadata51)
+			for metadataCount52, metadataItem52 := range resp.InputSyslog.InputSyslogSyslog1.Metadata {
+				var metadata52 tfTypes.InputSyslogMetadatum1
+				metadata52.Name = types.StringValue(metadataItem52.Name)
+				metadata52.Value = types.StringValue(metadataItem52.Value)
+				if metadataCount52+1 > len(r.InputSyslog.InputSyslogSyslog1.Metadata) {
+					r.InputSyslog.InputSyslogSyslog1.Metadata = append(r.InputSyslog.InputSyslogSyslog1.Metadata, metadata52)
 				} else {
-					r.InputSyslog.InputSyslogSyslog1.Metadata[metadataCount51].Name = metadata51.Name
-					r.InputSyslog.InputSyslogSyslog1.Metadata[metadataCount51].Value = metadata51.Value
+					r.InputSyslog.InputSyslogSyslog1.Metadata[metadataCount52].Name = metadata52.Name
+					r.InputSyslog.InputSyslogSyslog1.Metadata[metadataCount52].Value = metadata52.Value
 				}
 			}
 			r.InputSyslog.InputSyslogSyslog1.OctetCounting = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog1.OctetCounting)
@@ -7017,21 +6453,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputSyslog.InputSyslogSyslog1.SocketEndingMaxWait = types.Float64PointerValue(resp.InputSyslog.InputSyslogSyslog1.SocketEndingMaxWait)
 			r.InputSyslog.InputSyslogSyslog1.SocketIdleTimeout = types.Float64PointerValue(resp.InputSyslog.InputSyslogSyslog1.SocketIdleTimeout)
 			r.InputSyslog.InputSyslogSyslog1.SocketMaxLifespan = types.Float64PointerValue(resp.InputSyslog.InputSyslogSyslog1.SocketMaxLifespan)
-			if resp.InputSyslog.InputSyslogSyslog1.Status == nil {
-				r.InputSyslog.InputSyslogSyslog1.Status = nil
-			} else {
-				r.InputSyslog.InputSyslogSyslog1.Status = &tfTypes.TFStatus{}
-				r.InputSyslog.InputSyslogSyslog1.Status.Health = types.StringValue(string(resp.InputSyslog.InputSyslogSyslog1.Status.Health))
-				if len(resp.InputSyslog.InputSyslogSyslog1.Status.Metrics) > 0 {
-					r.InputSyslog.InputSyslogSyslog1.Status.Metrics = make(map[string]types.String, len(resp.InputSyslog.InputSyslogSyslog1.Status.Metrics))
-					for key48, value48 := range resp.InputSyslog.InputSyslogSyslog1.Status.Metrics {
-						result48, _ := json.Marshal(value48)
-						r.InputSyslog.InputSyslogSyslog1.Status.Metrics[key48] = types.StringValue(string(result48))
-					}
-				}
-				r.InputSyslog.InputSyslogSyslog1.Status.Timestamp = types.Float64Value(resp.InputSyslog.InputSyslogSyslog1.Status.Timestamp)
-				r.InputSyslog.InputSyslogSyslog1.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog1.Status.UseStatusFromLB)
-			}
 			r.InputSyslog.InputSyslogSyslog1.Streamtags = make([]types.String, 0, len(resp.InputSyslog.InputSyslogSyslog1.Streamtags))
 			for _, v := range resp.InputSyslog.InputSyslogSyslog1.Streamtags {
 				r.InputSyslog.InputSyslogSyslog1.Streamtags = append(r.InputSyslog.InputSyslogSyslog1.Streamtags, types.StringValue(v))
@@ -7049,8 +6470,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex == nil {
 					r.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex = types.StringNull()
 				} else {
-					commonNameRegexResult17, _ := json.Marshal(resp.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex)
-					r.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult17))
+					commonNameRegexResult18, _ := json.Marshal(resp.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex)
+					r.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult18))
 				}
 				r.InputSyslog.InputSyslogSyslog1.TLS.Disabled = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog1.TLS.Disabled)
 				if resp.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion != nil {
@@ -7068,8 +6489,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized == nil {
 					r.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized = types.StringNull()
 				} else {
-					rejectUnauthorizedResult17, _ := json.Marshal(resp.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized)
-					r.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult17))
+					rejectUnauthorizedResult18, _ := json.Marshal(resp.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized)
+					r.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult18))
 				}
 				r.InputSyslog.InputSyslogSyslog1.TLS.RequestCert = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog1.TLS.RequestCert)
 			}
@@ -7084,19 +6505,20 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if len(r.InputSyslog.InputSyslogSyslog2.Connections) > len(resp.InputSyslog.InputSyslogSyslog2.Connections) {
 				r.InputSyslog.InputSyslogSyslog2.Connections = r.InputSyslog.InputSyslogSyslog2.Connections[:len(resp.InputSyslog.InputSyslogSyslog2.Connections)]
 			}
-			for connectionsCount49, connectionsItem49 := range resp.InputSyslog.InputSyslogSyslog2.Connections {
-				var connections49 tfTypes.InputSyslogConnection2
-				connections49.Output = types.StringValue(connectionsItem49.Output)
-				connections49.Pipeline = types.StringPointerValue(connectionsItem49.Pipeline)
-				if connectionsCount49+1 > len(r.InputSyslog.InputSyslogSyslog2.Connections) {
-					r.InputSyslog.InputSyslogSyslog2.Connections = append(r.InputSyslog.InputSyslogSyslog2.Connections, connections49)
+			for connectionsCount50, connectionsItem50 := range resp.InputSyslog.InputSyslogSyslog2.Connections {
+				var connections50 tfTypes.InputSyslogConnection2
+				connections50.Output = types.StringValue(connectionsItem50.Output)
+				connections50.Pipeline = types.StringPointerValue(connectionsItem50.Pipeline)
+				if connectionsCount50+1 > len(r.InputSyslog.InputSyslogSyslog2.Connections) {
+					r.InputSyslog.InputSyslogSyslog2.Connections = append(r.InputSyslog.InputSyslogSyslog2.Connections, connections50)
 				} else {
-					r.InputSyslog.InputSyslogSyslog2.Connections[connectionsCount49].Output = connections49.Output
-					r.InputSyslog.InputSyslogSyslog2.Connections[connectionsCount49].Pipeline = connections49.Pipeline
+					r.InputSyslog.InputSyslogSyslog2.Connections[connectionsCount50].Output = connections50.Output
+					r.InputSyslog.InputSyslogSyslog2.Connections[connectionsCount50].Pipeline = connections50.Pipeline
 				}
 			}
 			r.InputSyslog.InputSyslogSyslog2.Description = types.StringPointerValue(resp.InputSyslog.InputSyslogSyslog2.Description)
 			r.InputSyslog.InputSyslogSyslog2.Disabled = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog2.Disabled)
+			r.InputSyslog.InputSyslogSyslog2.EnableEnhancedProxyHeaderParsing = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog2.EnableEnhancedProxyHeaderParsing)
 			r.InputSyslog.InputSyslogSyslog2.EnableLoadBalancing = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog2.EnableLoadBalancing)
 			r.InputSyslog.InputSyslogSyslog2.EnableProxyHeader = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog2.EnableProxyHeader)
 			r.InputSyslog.InputSyslogSyslog2.Environment = types.StringPointerValue(resp.InputSyslog.InputSyslogSyslog2.Environment)
@@ -7114,15 +6536,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if len(r.InputSyslog.InputSyslogSyslog2.Metadata) > len(resp.InputSyslog.InputSyslogSyslog2.Metadata) {
 				r.InputSyslog.InputSyslogSyslog2.Metadata = r.InputSyslog.InputSyslogSyslog2.Metadata[:len(resp.InputSyslog.InputSyslogSyslog2.Metadata)]
 			}
-			for metadataCount52, metadataItem52 := range resp.InputSyslog.InputSyslogSyslog2.Metadata {
-				var metadata52 tfTypes.InputSyslogMetadatum2
-				metadata52.Name = types.StringValue(metadataItem52.Name)
-				metadata52.Value = types.StringValue(metadataItem52.Value)
-				if metadataCount52+1 > len(r.InputSyslog.InputSyslogSyslog2.Metadata) {
-					r.InputSyslog.InputSyslogSyslog2.Metadata = append(r.InputSyslog.InputSyslogSyslog2.Metadata, metadata52)
+			for metadataCount53, metadataItem53 := range resp.InputSyslog.InputSyslogSyslog2.Metadata {
+				var metadata53 tfTypes.InputSyslogMetadatum2
+				metadata53.Name = types.StringValue(metadataItem53.Name)
+				metadata53.Value = types.StringValue(metadataItem53.Value)
+				if metadataCount53+1 > len(r.InputSyslog.InputSyslogSyslog2.Metadata) {
+					r.InputSyslog.InputSyslogSyslog2.Metadata = append(r.InputSyslog.InputSyslogSyslog2.Metadata, metadata53)
 				} else {
-					r.InputSyslog.InputSyslogSyslog2.Metadata[metadataCount52].Name = metadata52.Name
-					r.InputSyslog.InputSyslogSyslog2.Metadata[metadataCount52].Value = metadata52.Value
+					r.InputSyslog.InputSyslogSyslog2.Metadata[metadataCount53].Name = metadata53.Name
+					r.InputSyslog.InputSyslogSyslog2.Metadata[metadataCount53].Value = metadata53.Value
 				}
 			}
 			r.InputSyslog.InputSyslogSyslog2.OctetCounting = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog2.OctetCounting)
@@ -7153,21 +6575,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputSyslog.InputSyslogSyslog2.SocketEndingMaxWait = types.Float64PointerValue(resp.InputSyslog.InputSyslogSyslog2.SocketEndingMaxWait)
 			r.InputSyslog.InputSyslogSyslog2.SocketIdleTimeout = types.Float64PointerValue(resp.InputSyslog.InputSyslogSyslog2.SocketIdleTimeout)
 			r.InputSyslog.InputSyslogSyslog2.SocketMaxLifespan = types.Float64PointerValue(resp.InputSyslog.InputSyslogSyslog2.SocketMaxLifespan)
-			if resp.InputSyslog.InputSyslogSyslog2.Status == nil {
-				r.InputSyslog.InputSyslogSyslog2.Status = nil
-			} else {
-				r.InputSyslog.InputSyslogSyslog2.Status = &tfTypes.TFStatus{}
-				r.InputSyslog.InputSyslogSyslog2.Status.Health = types.StringValue(string(resp.InputSyslog.InputSyslogSyslog2.Status.Health))
-				if len(resp.InputSyslog.InputSyslogSyslog2.Status.Metrics) > 0 {
-					r.InputSyslog.InputSyslogSyslog2.Status.Metrics = make(map[string]types.String, len(resp.InputSyslog.InputSyslogSyslog2.Status.Metrics))
-					for key49, value49 := range resp.InputSyslog.InputSyslogSyslog2.Status.Metrics {
-						result49, _ := json.Marshal(value49)
-						r.InputSyslog.InputSyslogSyslog2.Status.Metrics[key49] = types.StringValue(string(result49))
-					}
-				}
-				r.InputSyslog.InputSyslogSyslog2.Status.Timestamp = types.Float64Value(resp.InputSyslog.InputSyslogSyslog2.Status.Timestamp)
-				r.InputSyslog.InputSyslogSyslog2.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog2.Status.UseStatusFromLB)
-			}
 			r.InputSyslog.InputSyslogSyslog2.Streamtags = make([]types.String, 0, len(resp.InputSyslog.InputSyslogSyslog2.Streamtags))
 			for _, v := range resp.InputSyslog.InputSyslogSyslog2.Streamtags {
 				r.InputSyslog.InputSyslogSyslog2.Streamtags = append(r.InputSyslog.InputSyslogSyslog2.Streamtags, types.StringValue(v))
@@ -7185,8 +6592,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex == nil {
 					r.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex = types.StringNull()
 				} else {
-					commonNameRegexResult18, _ := json.Marshal(resp.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex)
-					r.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult18))
+					commonNameRegexResult19, _ := json.Marshal(resp.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex)
+					r.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult19))
 				}
 				r.InputSyslog.InputSyslogSyslog2.TLS.Disabled = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog2.TLS.Disabled)
 				if resp.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion != nil {
@@ -7204,8 +6611,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized == nil {
 					r.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized = types.StringNull()
 				} else {
-					rejectUnauthorizedResult18, _ := json.Marshal(resp.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized)
-					r.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult18))
+					rejectUnauthorizedResult19, _ := json.Marshal(resp.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized)
+					r.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult19))
 				}
 				r.InputSyslog.InputSyslogSyslog2.TLS.RequestCert = types.BoolPointerValue(resp.InputSyslog.InputSyslogSyslog2.TLS.RequestCert)
 			}
@@ -7216,25 +6623,25 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputSystemMetrics != nil {
 		r.InputSystemMetrics = &tfTypes.InputSystemMetrics{}
-		r.InputSystemMetrics.Connections = []tfTypes.ConnectionSystemMetrics{}
+		r.InputSystemMetrics.Connections = []tfTypes.InputSystemMetricsConnection{}
 		if len(r.InputSystemMetrics.Connections) > len(resp.InputSystemMetrics.Connections) {
 			r.InputSystemMetrics.Connections = r.InputSystemMetrics.Connections[:len(resp.InputSystemMetrics.Connections)]
 		}
-		for connectionsCount50, connectionsItem50 := range resp.InputSystemMetrics.Connections {
-			var connections50 tfTypes.ConnectionSystemMetrics
-			connections50.Output = types.StringValue(connectionsItem50.Output)
-			connections50.Pipeline = types.StringPointerValue(connectionsItem50.Pipeline)
-			if connectionsCount50+1 > len(r.InputSystemMetrics.Connections) {
-				r.InputSystemMetrics.Connections = append(r.InputSystemMetrics.Connections, connections50)
+		for connectionsCount51, connectionsItem51 := range resp.InputSystemMetrics.Connections {
+			var connections51 tfTypes.InputSystemMetricsConnection
+			connections51.Output = types.StringValue(connectionsItem51.Output)
+			connections51.Pipeline = types.StringPointerValue(connectionsItem51.Pipeline)
+			if connectionsCount51+1 > len(r.InputSystemMetrics.Connections) {
+				r.InputSystemMetrics.Connections = append(r.InputSystemMetrics.Connections, connections51)
 			} else {
-				r.InputSystemMetrics.Connections[connectionsCount50].Output = connections50.Output
-				r.InputSystemMetrics.Connections[connectionsCount50].Pipeline = connections50.Pipeline
+				r.InputSystemMetrics.Connections[connectionsCount51].Output = connections51.Output
+				r.InputSystemMetrics.Connections[connectionsCount51].Pipeline = connections51.Pipeline
 			}
 		}
 		if resp.InputSystemMetrics.Container == nil {
 			r.InputSystemMetrics.Container = nil
 		} else {
-			r.InputSystemMetrics.Container = &tfTypes.InputContainer{}
+			r.InputSystemMetrics.Container = &tfTypes.InputSystemMetricsContainer{}
 			r.InputSystemMetrics.Container.AllContainers = types.BoolPointerValue(resp.InputSystemMetrics.Container.AllContainers)
 			r.InputSystemMetrics.Container.Detail = types.BoolPointerValue(resp.InputSystemMetrics.Container.Detail)
 			r.InputSystemMetrics.Container.DockerSocket = make([]types.String, 0, len(resp.InputSystemMetrics.Container.DockerSocket))
@@ -7242,12 +6649,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				r.InputSystemMetrics.Container.DockerSocket = append(r.InputSystemMetrics.Container.DockerSocket, types.StringValue(v))
 			}
 			r.InputSystemMetrics.Container.DockerTimeout = types.Float64PointerValue(resp.InputSystemMetrics.Container.DockerTimeout)
-			r.InputSystemMetrics.Container.Filters = []tfTypes.ContainerFilter{}
+			r.InputSystemMetrics.Container.Filters = []tfTypes.InputSystemMetricsFilter{}
 			if len(r.InputSystemMetrics.Container.Filters) > len(resp.InputSystemMetrics.Container.Filters) {
 				r.InputSystemMetrics.Container.Filters = r.InputSystemMetrics.Container.Filters[:len(resp.InputSystemMetrics.Container.Filters)]
 			}
 			for filtersCount, filtersItem := range resp.InputSystemMetrics.Container.Filters {
-				var filters tfTypes.ContainerFilter
+				var filters tfTypes.InputSystemMetricsFilter
 				filters.Expr = types.StringValue(filtersItem.Expr)
 				if filtersCount+1 > len(r.InputSystemMetrics.Container.Filters) {
 					r.InputSystemMetrics.Container.Filters = append(r.InputSystemMetrics.Container.Filters, filters)
@@ -7268,15 +6675,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSystemMetrics.Host == nil {
 			r.InputSystemMetrics.Host = nil
 		} else {
-			r.InputSystemMetrics.Host = &tfTypes.HostSystemMetrics{}
+			r.InputSystemMetrics.Host = &tfTypes.InputSystemMetricsHost{}
 			if resp.InputSystemMetrics.Host.Custom == nil {
 				r.InputSystemMetrics.Host.Custom = nil
 			} else {
-				r.InputSystemMetrics.Host.Custom = &tfTypes.CustomSystemMetrics{}
+				r.InputSystemMetrics.Host.Custom = &tfTypes.InputSystemMetricsCustom{}
 				if resp.InputSystemMetrics.Host.Custom.CPU == nil {
 					r.InputSystemMetrics.Host.Custom.CPU = nil
 				} else {
-					r.InputSystemMetrics.Host.Custom.CPU = &tfTypes.CPUSystemMetrics{}
+					r.InputSystemMetrics.Host.Custom.CPU = &tfTypes.InputSystemMetricsCPU{}
 					r.InputSystemMetrics.Host.Custom.CPU.Detail = types.BoolPointerValue(resp.InputSystemMetrics.Host.Custom.CPU.Detail)
 					if resp.InputSystemMetrics.Host.Custom.CPU.Mode != nil {
 						r.InputSystemMetrics.Host.Custom.CPU.Mode = types.StringValue(string(*resp.InputSystemMetrics.Host.Custom.CPU.Mode))
@@ -7289,7 +6696,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputSystemMetrics.Host.Custom.Disk == nil {
 					r.InputSystemMetrics.Host.Custom.Disk = nil
 				} else {
-					r.InputSystemMetrics.Host.Custom.Disk = &tfTypes.DiskSystemMetrics{}
+					r.InputSystemMetrics.Host.Custom.Disk = &tfTypes.InputSystemMetricsDisk{}
 					r.InputSystemMetrics.Host.Custom.Disk.Detail = types.BoolPointerValue(resp.InputSystemMetrics.Host.Custom.Disk.Detail)
 					r.InputSystemMetrics.Host.Custom.Disk.Devices = make([]types.String, 0, len(resp.InputSystemMetrics.Host.Custom.Disk.Devices))
 					for _, v := range resp.InputSystemMetrics.Host.Custom.Disk.Devices {
@@ -7313,7 +6720,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputSystemMetrics.Host.Custom.Memory == nil {
 					r.InputSystemMetrics.Host.Custom.Memory = nil
 				} else {
-					r.InputSystemMetrics.Host.Custom.Memory = &tfTypes.MemorySystemMetrics{}
+					r.InputSystemMetrics.Host.Custom.Memory = &tfTypes.InputSystemMetricsMemory{}
 					r.InputSystemMetrics.Host.Custom.Memory.Detail = types.BoolPointerValue(resp.InputSystemMetrics.Host.Custom.Memory.Detail)
 					if resp.InputSystemMetrics.Host.Custom.Memory.Mode != nil {
 						r.InputSystemMetrics.Host.Custom.Memory.Mode = types.StringValue(string(*resp.InputSystemMetrics.Host.Custom.Memory.Mode))
@@ -7324,7 +6731,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputSystemMetrics.Host.Custom.Network == nil {
 					r.InputSystemMetrics.Host.Custom.Network = nil
 				} else {
-					r.InputSystemMetrics.Host.Custom.Network = &tfTypes.NetworkSystemMetrics{}
+					r.InputSystemMetrics.Host.Custom.Network = &tfTypes.InputSystemMetricsNetwork{}
 					r.InputSystemMetrics.Host.Custom.Network.Detail = types.BoolPointerValue(resp.InputSystemMetrics.Host.Custom.Network.Detail)
 					r.InputSystemMetrics.Host.Custom.Network.Devices = make([]types.String, 0, len(resp.InputSystemMetrics.Host.Custom.Network.Devices))
 					for _, v := range resp.InputSystemMetrics.Host.Custom.Network.Devices {
@@ -7340,7 +6747,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputSystemMetrics.Host.Custom.System == nil {
 					r.InputSystemMetrics.Host.Custom.System = nil
 				} else {
-					r.InputSystemMetrics.Host.Custom.System = &tfTypes.SystemSystemMetrics{}
+					r.InputSystemMetrics.Host.Custom.System = &tfTypes.InputSystemMetricsSystem{}
 					if resp.InputSystemMetrics.Host.Custom.System.Mode != nil {
 						r.InputSystemMetrics.Host.Custom.System.Mode = types.StringValue(string(*resp.InputSystemMetrics.Host.Custom.System.Mode))
 					} else {
@@ -7357,25 +6764,25 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputSystemMetrics.ID = types.StringValue(resp.InputSystemMetrics.ID)
 		r.InputSystemMetrics.Interval = types.Float64PointerValue(resp.InputSystemMetrics.Interval)
-		r.InputSystemMetrics.Metadata = []tfTypes.MetadatumSystemMetrics{}
+		r.InputSystemMetrics.Metadata = []tfTypes.InputSystemMetricsMetadatum{}
 		if len(r.InputSystemMetrics.Metadata) > len(resp.InputSystemMetrics.Metadata) {
 			r.InputSystemMetrics.Metadata = r.InputSystemMetrics.Metadata[:len(resp.InputSystemMetrics.Metadata)]
 		}
-		for metadataCount53, metadataItem53 := range resp.InputSystemMetrics.Metadata {
-			var metadata53 tfTypes.MetadatumSystemMetrics
-			metadata53.Name = types.StringValue(metadataItem53.Name)
-			metadata53.Value = types.StringValue(metadataItem53.Value)
-			if metadataCount53+1 > len(r.InputSystemMetrics.Metadata) {
-				r.InputSystemMetrics.Metadata = append(r.InputSystemMetrics.Metadata, metadata53)
+		for metadataCount54, metadataItem54 := range resp.InputSystemMetrics.Metadata {
+			var metadata54 tfTypes.InputSystemMetricsMetadatum
+			metadata54.Name = types.StringValue(metadataItem54.Name)
+			metadata54.Value = types.StringValue(metadataItem54.Value)
+			if metadataCount54+1 > len(r.InputSystemMetrics.Metadata) {
+				r.InputSystemMetrics.Metadata = append(r.InputSystemMetrics.Metadata, metadata54)
 			} else {
-				r.InputSystemMetrics.Metadata[metadataCount53].Name = metadata53.Name
-				r.InputSystemMetrics.Metadata[metadataCount53].Value = metadata53.Value
+				r.InputSystemMetrics.Metadata[metadataCount54].Name = metadata54.Name
+				r.InputSystemMetrics.Metadata[metadataCount54].Value = metadata54.Value
 			}
 		}
 		if resp.InputSystemMetrics.Persistence == nil {
 			r.InputSystemMetrics.Persistence = nil
 		} else {
-			r.InputSystemMetrics.Persistence = &tfTypes.PersistenceSystemMetrics{}
+			r.InputSystemMetrics.Persistence = &tfTypes.InputSystemMetricsPersistence{}
 			if resp.InputSystemMetrics.Persistence.Compress != nil {
 				r.InputSystemMetrics.Persistence.Compress = types.StringValue(string(*resp.InputSystemMetrics.Persistence.Compress))
 			} else {
@@ -7391,7 +6798,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSystemMetrics.Pq == nil {
 			r.InputSystemMetrics.Pq = nil
 		} else {
-			r.InputSystemMetrics.Pq = &tfTypes.PqSystemMetrics{}
+			r.InputSystemMetrics.Pq = &tfTypes.InputSystemMetricsPq{}
 			r.InputSystemMetrics.Pq.CommitFrequency = types.Float64PointerValue(resp.InputSystemMetrics.Pq.CommitFrequency)
 			if resp.InputSystemMetrics.Pq.Compress != nil {
 				r.InputSystemMetrics.Pq.Compress = types.StringValue(string(*resp.InputSystemMetrics.Pq.Compress))
@@ -7412,13 +6819,13 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSystemMetrics.Process == nil {
 			r.InputSystemMetrics.Process = nil
 		} else {
-			r.InputSystemMetrics.Process = &tfTypes.ProcessSystemMetrics{}
-			r.InputSystemMetrics.Process.Sets = []tfTypes.SetSystemMetrics{}
+			r.InputSystemMetrics.Process = &tfTypes.InputSystemMetricsProcess{}
+			r.InputSystemMetrics.Process.Sets = []tfTypes.InputSystemMetricsSet{}
 			if len(r.InputSystemMetrics.Process.Sets) > len(resp.InputSystemMetrics.Process.Sets) {
 				r.InputSystemMetrics.Process.Sets = r.InputSystemMetrics.Process.Sets[:len(resp.InputSystemMetrics.Process.Sets)]
 			}
 			for setsCount, setsItem := range resp.InputSystemMetrics.Process.Sets {
-				var sets tfTypes.SetSystemMetrics
+				var sets tfTypes.InputSystemMetricsSet
 				sets.Filter = types.StringValue(setsItem.Filter)
 				sets.IncludeChildren = types.BoolPointerValue(setsItem.IncludeChildren)
 				sets.Name = types.StringValue(setsItem.Name)
@@ -7432,21 +6839,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputSystemMetrics.SendToRoutes = types.BoolPointerValue(resp.InputSystemMetrics.SendToRoutes)
-		if resp.InputSystemMetrics.Status == nil {
-			r.InputSystemMetrics.Status = nil
-		} else {
-			r.InputSystemMetrics.Status = &tfTypes.TFStatus{}
-			r.InputSystemMetrics.Status.Health = types.StringValue(string(resp.InputSystemMetrics.Status.Health))
-			if len(resp.InputSystemMetrics.Status.Metrics) > 0 {
-				r.InputSystemMetrics.Status.Metrics = make(map[string]types.String, len(resp.InputSystemMetrics.Status.Metrics))
-				for key50, value50 := range resp.InputSystemMetrics.Status.Metrics {
-					result50, _ := json.Marshal(value50)
-					r.InputSystemMetrics.Status.Metrics[key50] = types.StringValue(string(result50))
-				}
-			}
-			r.InputSystemMetrics.Status.Timestamp = types.Float64Value(resp.InputSystemMetrics.Status.Timestamp)
-			r.InputSystemMetrics.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSystemMetrics.Status.UseStatusFromLB)
-		}
 		r.InputSystemMetrics.Streamtags = make([]types.String, 0, len(resp.InputSystemMetrics.Streamtags))
 		for _, v := range resp.InputSystemMetrics.Streamtags {
 			r.InputSystemMetrics.Streamtags = append(r.InputSystemMetrics.Streamtags, types.StringValue(v))
@@ -7510,7 +6902,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputSystemState.Collectors.Routes == nil {
 				r.InputSystemState.Collectors.Routes = nil
 			} else {
-				r.InputSystemState.Collectors.Routes = &tfTypes.InputRoutes{}
+				r.InputSystemState.Collectors.Routes = &tfTypes.InputSystemStateRoutes{}
 				r.InputSystemState.Collectors.Routes.Enable = types.BoolPointerValue(resp.InputSystemState.Collectors.Routes.Enable)
 			}
 			if resp.InputSystemState.Collectors.Services == nil {
@@ -7526,45 +6918,46 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				r.InputSystemState.Collectors.User.Enable = types.BoolPointerValue(resp.InputSystemState.Collectors.User.Enable)
 			}
 		}
-		r.InputSystemState.Connections = []tfTypes.ConnectionSystemState{}
+		r.InputSystemState.Connections = []tfTypes.InputSystemStateConnection{}
 		if len(r.InputSystemState.Connections) > len(resp.InputSystemState.Connections) {
 			r.InputSystemState.Connections = r.InputSystemState.Connections[:len(resp.InputSystemState.Connections)]
 		}
-		for connectionsCount51, connectionsItem51 := range resp.InputSystemState.Connections {
-			var connections51 tfTypes.ConnectionSystemState
-			connections51.Output = types.StringValue(connectionsItem51.Output)
-			connections51.Pipeline = types.StringPointerValue(connectionsItem51.Pipeline)
-			if connectionsCount51+1 > len(r.InputSystemState.Connections) {
-				r.InputSystemState.Connections = append(r.InputSystemState.Connections, connections51)
+		for connectionsCount52, connectionsItem52 := range resp.InputSystemState.Connections {
+			var connections52 tfTypes.InputSystemStateConnection
+			connections52.Output = types.StringValue(connectionsItem52.Output)
+			connections52.Pipeline = types.StringPointerValue(connectionsItem52.Pipeline)
+			if connectionsCount52+1 > len(r.InputSystemState.Connections) {
+				r.InputSystemState.Connections = append(r.InputSystemState.Connections, connections52)
 			} else {
-				r.InputSystemState.Connections[connectionsCount51].Output = connections51.Output
-				r.InputSystemState.Connections[connectionsCount51].Pipeline = connections51.Pipeline
+				r.InputSystemState.Connections[connectionsCount52].Output = connections52.Output
+				r.InputSystemState.Connections[connectionsCount52].Pipeline = connections52.Pipeline
 			}
 		}
 		r.InputSystemState.Description = types.StringPointerValue(resp.InputSystemState.Description)
 		r.InputSystemState.Disabled = types.BoolPointerValue(resp.InputSystemState.Disabled)
+		r.InputSystemState.DisableNativeModule = types.BoolPointerValue(resp.InputSystemState.DisableNativeModule)
 		r.InputSystemState.Environment = types.StringPointerValue(resp.InputSystemState.Environment)
 		r.InputSystemState.ID = types.StringValue(resp.InputSystemState.ID)
 		r.InputSystemState.Interval = types.Float64PointerValue(resp.InputSystemState.Interval)
-		r.InputSystemState.Metadata = []tfTypes.MetadatumSystemState{}
+		r.InputSystemState.Metadata = []tfTypes.InputSystemStateMetadatum{}
 		if len(r.InputSystemState.Metadata) > len(resp.InputSystemState.Metadata) {
 			r.InputSystemState.Metadata = r.InputSystemState.Metadata[:len(resp.InputSystemState.Metadata)]
 		}
-		for metadataCount54, metadataItem54 := range resp.InputSystemState.Metadata {
-			var metadata54 tfTypes.MetadatumSystemState
-			metadata54.Name = types.StringValue(metadataItem54.Name)
-			metadata54.Value = types.StringValue(metadataItem54.Value)
-			if metadataCount54+1 > len(r.InputSystemState.Metadata) {
-				r.InputSystemState.Metadata = append(r.InputSystemState.Metadata, metadata54)
+		for metadataCount55, metadataItem55 := range resp.InputSystemState.Metadata {
+			var metadata55 tfTypes.InputSystemStateMetadatum
+			metadata55.Name = types.StringValue(metadataItem55.Name)
+			metadata55.Value = types.StringValue(metadataItem55.Value)
+			if metadataCount55+1 > len(r.InputSystemState.Metadata) {
+				r.InputSystemState.Metadata = append(r.InputSystemState.Metadata, metadata55)
 			} else {
-				r.InputSystemState.Metadata[metadataCount54].Name = metadata54.Name
-				r.InputSystemState.Metadata[metadataCount54].Value = metadata54.Value
+				r.InputSystemState.Metadata[metadataCount55].Name = metadata55.Name
+				r.InputSystemState.Metadata[metadataCount55].Value = metadata55.Value
 			}
 		}
 		if resp.InputSystemState.Persistence == nil {
 			r.InputSystemState.Persistence = nil
 		} else {
-			r.InputSystemState.Persistence = &tfTypes.PersistenceSystemState{}
+			r.InputSystemState.Persistence = &tfTypes.InputSystemStatePersistence{}
 			if resp.InputSystemState.Persistence.Compress != nil {
 				r.InputSystemState.Persistence.Compress = types.StringValue(string(*resp.InputSystemState.Persistence.Compress))
 			} else {
@@ -7580,7 +6973,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputSystemState.Pq == nil {
 			r.InputSystemState.Pq = nil
 		} else {
-			r.InputSystemState.Pq = &tfTypes.PqSystemState{}
+			r.InputSystemState.Pq = &tfTypes.InputSystemStatePq{}
 			r.InputSystemState.Pq.CommitFrequency = types.Float64PointerValue(resp.InputSystemState.Pq.CommitFrequency)
 			if resp.InputSystemState.Pq.Compress != nil {
 				r.InputSystemState.Pq.Compress = types.StringValue(string(*resp.InputSystemState.Pq.Compress))
@@ -7599,21 +6992,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputSystemState.PqEnabled = types.BoolPointerValue(resp.InputSystemState.PqEnabled)
 		r.InputSystemState.SendToRoutes = types.BoolPointerValue(resp.InputSystemState.SendToRoutes)
-		if resp.InputSystemState.Status == nil {
-			r.InputSystemState.Status = nil
-		} else {
-			r.InputSystemState.Status = &tfTypes.TFStatus{}
-			r.InputSystemState.Status.Health = types.StringValue(string(resp.InputSystemState.Status.Health))
-			if len(resp.InputSystemState.Status.Metrics) > 0 {
-				r.InputSystemState.Status.Metrics = make(map[string]types.String, len(resp.InputSystemState.Status.Metrics))
-				for key51, value51 := range resp.InputSystemState.Status.Metrics {
-					result51, _ := json.Marshal(value51)
-					r.InputSystemState.Status.Metrics[key51] = types.StringValue(string(result51))
-				}
-			}
-			r.InputSystemState.Status.Timestamp = types.Float64Value(resp.InputSystemState.Status.Timestamp)
-			r.InputSystemState.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputSystemState.Status.UseStatusFromLB)
-		}
 		r.InputSystemState.Streamtags = make([]types.String, 0, len(resp.InputSystemState.Streamtags))
 		for _, v := range resp.InputSystemState.Streamtags {
 			r.InputSystemState.Streamtags = append(r.InputSystemState.Streamtags, types.StringValue(v))
@@ -7631,19 +7009,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputTCP.BreakerRulesets {
 			r.InputTCP.BreakerRulesets = append(r.InputTCP.BreakerRulesets, types.StringValue(v))
 		}
-		r.InputTCP.Connections = []tfTypes.ConnectionTCP{}
+		r.InputTCP.Connections = []tfTypes.InputTCPConnection{}
 		if len(r.InputTCP.Connections) > len(resp.InputTCP.Connections) {
 			r.InputTCP.Connections = r.InputTCP.Connections[:len(resp.InputTCP.Connections)]
 		}
-		for connectionsCount52, connectionsItem52 := range resp.InputTCP.Connections {
-			var connections52 tfTypes.ConnectionTCP
-			connections52.Output = types.StringValue(connectionsItem52.Output)
-			connections52.Pipeline = types.StringPointerValue(connectionsItem52.Pipeline)
-			if connectionsCount52+1 > len(r.InputTCP.Connections) {
-				r.InputTCP.Connections = append(r.InputTCP.Connections, connections52)
+		for connectionsCount53, connectionsItem53 := range resp.InputTCP.Connections {
+			var connections53 tfTypes.InputTCPConnection
+			connections53.Output = types.StringValue(connectionsItem53.Output)
+			connections53.Pipeline = types.StringPointerValue(connectionsItem53.Pipeline)
+			if connectionsCount53+1 > len(r.InputTCP.Connections) {
+				r.InputTCP.Connections = append(r.InputTCP.Connections, connections53)
 			} else {
-				r.InputTCP.Connections[connectionsCount52].Output = connections52.Output
-				r.InputTCP.Connections[connectionsCount52].Pipeline = connections52.Pipeline
+				r.InputTCP.Connections[connectionsCount53].Output = connections53.Output
+				r.InputTCP.Connections[connectionsCount53].Pipeline = connections53.Pipeline
 			}
 		}
 		r.InputTCP.Description = types.StringPointerValue(resp.InputTCP.Description)
@@ -7655,19 +7033,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputTCP.ID = types.StringPointerValue(resp.InputTCP.ID)
 		r.InputTCP.IPWhitelistRegex = types.StringPointerValue(resp.InputTCP.IPWhitelistRegex)
 		r.InputTCP.MaxActiveCxn = types.Float64PointerValue(resp.InputTCP.MaxActiveCxn)
-		r.InputTCP.Metadata = []tfTypes.MetadatumTCP{}
+		r.InputTCP.Metadata = []tfTypes.InputTCPMetadatum{}
 		if len(r.InputTCP.Metadata) > len(resp.InputTCP.Metadata) {
 			r.InputTCP.Metadata = r.InputTCP.Metadata[:len(resp.InputTCP.Metadata)]
 		}
-		for metadataCount55, metadataItem55 := range resp.InputTCP.Metadata {
-			var metadata55 tfTypes.MetadatumTCP
-			metadata55.Name = types.StringValue(metadataItem55.Name)
-			metadata55.Value = types.StringValue(metadataItem55.Value)
-			if metadataCount55+1 > len(r.InputTCP.Metadata) {
-				r.InputTCP.Metadata = append(r.InputTCP.Metadata, metadata55)
+		for metadataCount56, metadataItem56 := range resp.InputTCP.Metadata {
+			var metadata56 tfTypes.InputTCPMetadatum
+			metadata56.Name = types.StringValue(metadataItem56.Name)
+			metadata56.Value = types.StringValue(metadataItem56.Value)
+			if metadataCount56+1 > len(r.InputTCP.Metadata) {
+				r.InputTCP.Metadata = append(r.InputTCP.Metadata, metadata56)
 			} else {
-				r.InputTCP.Metadata[metadataCount55].Name = metadata55.Name
-				r.InputTCP.Metadata[metadataCount55].Value = metadata55.Value
+				r.InputTCP.Metadata[metadataCount56].Name = metadata56.Name
+				r.InputTCP.Metadata[metadataCount56].Value = metadata56.Value
 			}
 		}
 		r.InputTCP.Pipeline = types.StringPointerValue(resp.InputTCP.Pipeline)
@@ -7675,7 +7053,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputTCP.Pq == nil {
 			r.InputTCP.Pq = nil
 		} else {
-			r.InputTCP.Pq = &tfTypes.PqTCP{}
+			r.InputTCP.Pq = &tfTypes.InputTCPPq{}
 			r.InputTCP.Pq.CommitFrequency = types.Float64PointerValue(resp.InputTCP.Pq.CommitFrequency)
 			if resp.InputTCP.Pq.Compress != nil {
 				r.InputTCP.Pq.Compress = types.StringValue(string(*resp.InputTCP.Pq.Compress))
@@ -7696,7 +7074,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputTCP.Preprocess == nil {
 			r.InputTCP.Preprocess = nil
 		} else {
-			r.InputTCP.Preprocess = &tfTypes.PreprocessTCP{}
+			r.InputTCP.Preprocess = &tfTypes.InputTCPPreprocess{}
 			r.InputTCP.Preprocess.Args = make([]types.String, 0, len(resp.InputTCP.Preprocess.Args))
 			for _, v := range resp.InputTCP.Preprocess.Args {
 				r.InputTCP.Preprocess.Args = append(r.InputTCP.Preprocess.Args, types.StringValue(v))
@@ -7709,21 +7087,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputTCP.SocketIdleTimeout = types.Float64PointerValue(resp.InputTCP.SocketIdleTimeout)
 		r.InputTCP.SocketMaxLifespan = types.Float64PointerValue(resp.InputTCP.SocketMaxLifespan)
 		r.InputTCP.StaleChannelFlushMs = types.Float64PointerValue(resp.InputTCP.StaleChannelFlushMs)
-		if resp.InputTCP.Status == nil {
-			r.InputTCP.Status = nil
-		} else {
-			r.InputTCP.Status = &tfTypes.TFStatus{}
-			r.InputTCP.Status.Health = types.StringValue(string(resp.InputTCP.Status.Health))
-			if len(resp.InputTCP.Status.Metrics) > 0 {
-				r.InputTCP.Status.Metrics = make(map[string]types.String, len(resp.InputTCP.Status.Metrics))
-				for key52, value52 := range resp.InputTCP.Status.Metrics {
-					result52, _ := json.Marshal(value52)
-					r.InputTCP.Status.Metrics[key52] = types.StringValue(string(result52))
-				}
-			}
-			r.InputTCP.Status.Timestamp = types.Float64Value(resp.InputTCP.Status.Timestamp)
-			r.InputTCP.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputTCP.Status.UseStatusFromLB)
-		}
 		r.InputTCP.Streamtags = make([]types.String, 0, len(resp.InputTCP.Streamtags))
 		for _, v := range resp.InputTCP.Streamtags {
 			r.InputTCP.Streamtags = append(r.InputTCP.Streamtags, types.StringValue(v))
@@ -7731,15 +7094,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputTCP.TLS == nil {
 			r.InputTCP.TLS = nil
 		} else {
-			r.InputTCP.TLS = &tfTypes.TLSSettingsServerSideTCP{}
+			r.InputTCP.TLS = &tfTypes.InputTCPTLSSettingsServerSide{}
 			r.InputTCP.TLS.CaPath = types.StringPointerValue(resp.InputTCP.TLS.CaPath)
 			r.InputTCP.TLS.CertificateName = types.StringPointerValue(resp.InputTCP.TLS.CertificateName)
 			r.InputTCP.TLS.CertPath = types.StringPointerValue(resp.InputTCP.TLS.CertPath)
 			if resp.InputTCP.TLS.CommonNameRegex == nil {
 				r.InputTCP.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult19, _ := json.Marshal(resp.InputTCP.TLS.CommonNameRegex)
-				r.InputTCP.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult19))
+				commonNameRegexResult20, _ := json.Marshal(resp.InputTCP.TLS.CommonNameRegex)
+				r.InputTCP.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult20))
 			}
 			r.InputTCP.TLS.Disabled = types.BoolPointerValue(resp.InputTCP.TLS.Disabled)
 			if resp.InputTCP.TLS.MaxVersion != nil {
@@ -7757,8 +7120,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputTCP.TLS.RejectUnauthorized == nil {
 				r.InputTCP.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult19, _ := json.Marshal(resp.InputTCP.TLS.RejectUnauthorized)
-				r.InputTCP.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult19))
+				rejectUnauthorizedResult20, _ := json.Marshal(resp.InputTCP.TLS.RejectUnauthorized)
+				r.InputTCP.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult20))
 			}
 			r.InputTCP.TLS.RequestCert = types.BoolPointerValue(resp.InputTCP.TLS.RequestCert)
 		}
@@ -7776,19 +7139,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		} else {
 			r.InputTcpjson.AuthType = types.StringNull()
 		}
-		r.InputTcpjson.Connections = []tfTypes.ConnectionTcpjson{}
+		r.InputTcpjson.Connections = []tfTypes.InputTcpjsonConnection{}
 		if len(r.InputTcpjson.Connections) > len(resp.InputTcpjson.Connections) {
 			r.InputTcpjson.Connections = r.InputTcpjson.Connections[:len(resp.InputTcpjson.Connections)]
 		}
-		for connectionsCount53, connectionsItem53 := range resp.InputTcpjson.Connections {
-			var connections53 tfTypes.ConnectionTcpjson
-			connections53.Output = types.StringValue(connectionsItem53.Output)
-			connections53.Pipeline = types.StringPointerValue(connectionsItem53.Pipeline)
-			if connectionsCount53+1 > len(r.InputTcpjson.Connections) {
-				r.InputTcpjson.Connections = append(r.InputTcpjson.Connections, connections53)
+		for connectionsCount54, connectionsItem54 := range resp.InputTcpjson.Connections {
+			var connections54 tfTypes.InputTcpjsonConnection
+			connections54.Output = types.StringValue(connectionsItem54.Output)
+			connections54.Pipeline = types.StringPointerValue(connectionsItem54.Pipeline)
+			if connectionsCount54+1 > len(r.InputTcpjson.Connections) {
+				r.InputTcpjson.Connections = append(r.InputTcpjson.Connections, connections54)
 			} else {
-				r.InputTcpjson.Connections[connectionsCount53].Output = connections53.Output
-				r.InputTcpjson.Connections[connectionsCount53].Pipeline = connections53.Pipeline
+				r.InputTcpjson.Connections[connectionsCount54].Output = connections54.Output
+				r.InputTcpjson.Connections[connectionsCount54].Pipeline = connections54.Pipeline
 			}
 		}
 		r.InputTcpjson.Description = types.StringPointerValue(resp.InputTcpjson.Description)
@@ -7800,19 +7163,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputTcpjson.ID = types.StringPointerValue(resp.InputTcpjson.ID)
 		r.InputTcpjson.IPWhitelistRegex = types.StringPointerValue(resp.InputTcpjson.IPWhitelistRegex)
 		r.InputTcpjson.MaxActiveCxn = types.Float64PointerValue(resp.InputTcpjson.MaxActiveCxn)
-		r.InputTcpjson.Metadata = []tfTypes.MetadatumTcpjson{}
+		r.InputTcpjson.Metadata = []tfTypes.InputTcpjsonMetadatum{}
 		if len(r.InputTcpjson.Metadata) > len(resp.InputTcpjson.Metadata) {
 			r.InputTcpjson.Metadata = r.InputTcpjson.Metadata[:len(resp.InputTcpjson.Metadata)]
 		}
-		for metadataCount56, metadataItem56 := range resp.InputTcpjson.Metadata {
-			var metadata56 tfTypes.MetadatumTcpjson
-			metadata56.Name = types.StringValue(metadataItem56.Name)
-			metadata56.Value = types.StringValue(metadataItem56.Value)
-			if metadataCount56+1 > len(r.InputTcpjson.Metadata) {
-				r.InputTcpjson.Metadata = append(r.InputTcpjson.Metadata, metadata56)
+		for metadataCount57, metadataItem57 := range resp.InputTcpjson.Metadata {
+			var metadata57 tfTypes.InputTcpjsonMetadatum
+			metadata57.Name = types.StringValue(metadataItem57.Name)
+			metadata57.Value = types.StringValue(metadataItem57.Value)
+			if metadataCount57+1 > len(r.InputTcpjson.Metadata) {
+				r.InputTcpjson.Metadata = append(r.InputTcpjson.Metadata, metadata57)
 			} else {
-				r.InputTcpjson.Metadata[metadataCount56].Name = metadata56.Name
-				r.InputTcpjson.Metadata[metadataCount56].Value = metadata56.Value
+				r.InputTcpjson.Metadata[metadataCount57].Name = metadata57.Name
+				r.InputTcpjson.Metadata[metadataCount57].Value = metadata57.Value
 			}
 		}
 		r.InputTcpjson.Pipeline = types.StringPointerValue(resp.InputTcpjson.Pipeline)
@@ -7820,7 +7183,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputTcpjson.Pq == nil {
 			r.InputTcpjson.Pq = nil
 		} else {
-			r.InputTcpjson.Pq = &tfTypes.PqTcpjson{}
+			r.InputTcpjson.Pq = &tfTypes.InputTcpjsonPq{}
 			r.InputTcpjson.Pq.CommitFrequency = types.Float64PointerValue(resp.InputTcpjson.Pq.CommitFrequency)
 			if resp.InputTcpjson.Pq.Compress != nil {
 				r.InputTcpjson.Pq.Compress = types.StringValue(string(*resp.InputTcpjson.Pq.Compress))
@@ -7842,21 +7205,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputTcpjson.SocketEndingMaxWait = types.Float64PointerValue(resp.InputTcpjson.SocketEndingMaxWait)
 		r.InputTcpjson.SocketIdleTimeout = types.Float64PointerValue(resp.InputTcpjson.SocketIdleTimeout)
 		r.InputTcpjson.SocketMaxLifespan = types.Float64PointerValue(resp.InputTcpjson.SocketMaxLifespan)
-		if resp.InputTcpjson.Status == nil {
-			r.InputTcpjson.Status = nil
-		} else {
-			r.InputTcpjson.Status = &tfTypes.TFStatus{}
-			r.InputTcpjson.Status.Health = types.StringValue(string(resp.InputTcpjson.Status.Health))
-			if len(resp.InputTcpjson.Status.Metrics) > 0 {
-				r.InputTcpjson.Status.Metrics = make(map[string]types.String, len(resp.InputTcpjson.Status.Metrics))
-				for key53, value53 := range resp.InputTcpjson.Status.Metrics {
-					result53, _ := json.Marshal(value53)
-					r.InputTcpjson.Status.Metrics[key53] = types.StringValue(string(result53))
-				}
-			}
-			r.InputTcpjson.Status.Timestamp = types.Float64Value(resp.InputTcpjson.Status.Timestamp)
-			r.InputTcpjson.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputTcpjson.Status.UseStatusFromLB)
-		}
 		r.InputTcpjson.Streamtags = make([]types.String, 0, len(resp.InputTcpjson.Streamtags))
 		for _, v := range resp.InputTcpjson.Streamtags {
 			r.InputTcpjson.Streamtags = append(r.InputTcpjson.Streamtags, types.StringValue(v))
@@ -7865,15 +7213,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputTcpjson.TLS == nil {
 			r.InputTcpjson.TLS = nil
 		} else {
-			r.InputTcpjson.TLS = &tfTypes.TLSSettingsServerSideTcpjson{}
+			r.InputTcpjson.TLS = &tfTypes.InputTcpjsonTLSSettingsServerSide{}
 			r.InputTcpjson.TLS.CaPath = types.StringPointerValue(resp.InputTcpjson.TLS.CaPath)
 			r.InputTcpjson.TLS.CertificateName = types.StringPointerValue(resp.InputTcpjson.TLS.CertificateName)
 			r.InputTcpjson.TLS.CertPath = types.StringPointerValue(resp.InputTcpjson.TLS.CertPath)
 			if resp.InputTcpjson.TLS.CommonNameRegex == nil {
 				r.InputTcpjson.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult20, _ := json.Marshal(resp.InputTcpjson.TLS.CommonNameRegex)
-				r.InputTcpjson.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult20))
+				commonNameRegexResult21, _ := json.Marshal(resp.InputTcpjson.TLS.CommonNameRegex)
+				r.InputTcpjson.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult21))
 			}
 			r.InputTcpjson.TLS.Disabled = types.BoolPointerValue(resp.InputTcpjson.TLS.Disabled)
 			if resp.InputTcpjson.TLS.MaxVersion != nil {
@@ -7891,8 +7239,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputTcpjson.TLS.RejectUnauthorized == nil {
 				r.InputTcpjson.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult20, _ := json.Marshal(resp.InputTcpjson.TLS.RejectUnauthorized)
-				r.InputTcpjson.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult20))
+				rejectUnauthorizedResult21, _ := json.Marshal(resp.InputTcpjson.TLS.RejectUnauthorized)
+				r.InputTcpjson.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult21))
 			}
 			r.InputTcpjson.TLS.RequestCert = types.BoolPointerValue(resp.InputTcpjson.TLS.RequestCert)
 		}
@@ -7912,19 +7260,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputWef.CaFingerprint = types.StringPointerValue(resp.InputWef.CaFingerprint)
 		r.InputWef.CaptureHeaders = types.BoolPointerValue(resp.InputWef.CaptureHeaders)
-		r.InputWef.Connections = []tfTypes.ConnectionWef{}
+		r.InputWef.Connections = []tfTypes.InputWefConnection{}
 		if len(r.InputWef.Connections) > len(resp.InputWef.Connections) {
 			r.InputWef.Connections = r.InputWef.Connections[:len(resp.InputWef.Connections)]
 		}
-		for connectionsCount54, connectionsItem54 := range resp.InputWef.Connections {
-			var connections54 tfTypes.ConnectionWef
-			connections54.Output = types.StringValue(connectionsItem54.Output)
-			connections54.Pipeline = types.StringPointerValue(connectionsItem54.Pipeline)
-			if connectionsCount54+1 > len(r.InputWef.Connections) {
-				r.InputWef.Connections = append(r.InputWef.Connections, connections54)
+		for connectionsCount55, connectionsItem55 := range resp.InputWef.Connections {
+			var connections55 tfTypes.InputWefConnection
+			connections55.Output = types.StringValue(connectionsItem55.Output)
+			connections55.Pipeline = types.StringPointerValue(connectionsItem55.Pipeline)
+			if connectionsCount55+1 > len(r.InputWef.Connections) {
+				r.InputWef.Connections = append(r.InputWef.Connections, connections55)
 			} else {
-				r.InputWef.Connections[connectionsCount54].Output = connections54.Output
-				r.InputWef.Connections[connectionsCount54].Pipeline = connections54.Pipeline
+				r.InputWef.Connections[connectionsCount55].Output = connections55.Output
+				r.InputWef.Connections[connectionsCount55].Pipeline = connections55.Pipeline
 			}
 		}
 		r.InputWef.Description = types.StringPointerValue(resp.InputWef.Description)
@@ -7938,21 +7286,22 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputWef.IPDenylistRegex = types.StringPointerValue(resp.InputWef.IPDenylistRegex)
 		r.InputWef.KeepAliveTimeout = types.Float64PointerValue(resp.InputWef.KeepAliveTimeout)
 		r.InputWef.Keytab = types.StringPointerValue(resp.InputWef.Keytab)
+		r.InputWef.LogFingerprintMismatch = types.BoolPointerValue(resp.InputWef.LogFingerprintMismatch)
 		r.InputWef.MaxActiveReq = types.Float64PointerValue(resp.InputWef.MaxActiveReq)
 		r.InputWef.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputWef.MaxRequestsPerSocket)
-		r.InputWef.Metadata = []tfTypes.MetadatumWef{}
+		r.InputWef.Metadata = []tfTypes.InputWefMetadatum{}
 		if len(r.InputWef.Metadata) > len(resp.InputWef.Metadata) {
 			r.InputWef.Metadata = r.InputWef.Metadata[:len(resp.InputWef.Metadata)]
 		}
-		for metadataCount57, metadataItem57 := range resp.InputWef.Metadata {
-			var metadata57 tfTypes.MetadatumWef
-			metadata57.Name = types.StringValue(metadataItem57.Name)
-			metadata57.Value = types.StringValue(metadataItem57.Value)
-			if metadataCount57+1 > len(r.InputWef.Metadata) {
-				r.InputWef.Metadata = append(r.InputWef.Metadata, metadata57)
+		for metadataCount58, metadataItem58 := range resp.InputWef.Metadata {
+			var metadata58 tfTypes.InputWefMetadatum
+			metadata58.Name = types.StringValue(metadataItem58.Name)
+			metadata58.Value = types.StringValue(metadataItem58.Value)
+			if metadataCount58+1 > len(r.InputWef.Metadata) {
+				r.InputWef.Metadata = append(r.InputWef.Metadata, metadata58)
 			} else {
-				r.InputWef.Metadata[metadataCount57].Name = metadata57.Name
-				r.InputWef.Metadata[metadataCount57].Value = metadata57.Value
+				r.InputWef.Metadata[metadataCount58].Name = metadata58.Name
+				r.InputWef.Metadata[metadataCount58].Value = metadata58.Value
 			}
 		}
 		r.InputWef.Pipeline = types.StringPointerValue(resp.InputWef.Pipeline)
@@ -7960,7 +7309,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputWef.Pq == nil {
 			r.InputWef.Pq = nil
 		} else {
-			r.InputWef.Pq = &tfTypes.PqWef{}
+			r.InputWef.Pq = &tfTypes.InputWefPq{}
 			r.InputWef.Pq.CommitFrequency = types.Float64PointerValue(resp.InputWef.Pq.CommitFrequency)
 			if resp.InputWef.Pq.Compress != nil {
 				r.InputWef.Pq.Compress = types.StringValue(string(*resp.InputWef.Pq.Compress))
@@ -7981,31 +7330,16 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputWef.Principal = types.StringPointerValue(resp.InputWef.Principal)
 		r.InputWef.SendToRoutes = types.BoolPointerValue(resp.InputWef.SendToRoutes)
 		r.InputWef.SocketTimeout = types.Float64PointerValue(resp.InputWef.SocketTimeout)
-		if resp.InputWef.Status == nil {
-			r.InputWef.Status = nil
-		} else {
-			r.InputWef.Status = &tfTypes.TFStatus{}
-			r.InputWef.Status.Health = types.StringValue(string(resp.InputWef.Status.Health))
-			if len(resp.InputWef.Status.Metrics) > 0 {
-				r.InputWef.Status.Metrics = make(map[string]types.String, len(resp.InputWef.Status.Metrics))
-				for key54, value54 := range resp.InputWef.Status.Metrics {
-					result54, _ := json.Marshal(value54)
-					r.InputWef.Status.Metrics[key54] = types.StringValue(string(result54))
-				}
-			}
-			r.InputWef.Status.Timestamp = types.Float64Value(resp.InputWef.Status.Timestamp)
-			r.InputWef.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputWef.Status.UseStatusFromLB)
-		}
 		r.InputWef.Streamtags = make([]types.String, 0, len(resp.InputWef.Streamtags))
 		for _, v := range resp.InputWef.Streamtags {
 			r.InputWef.Streamtags = append(r.InputWef.Streamtags, types.StringValue(v))
 		}
-		r.InputWef.Subscriptions = []tfTypes.InputSubscription{}
+		r.InputWef.Subscriptions = []tfTypes.InputWefSubscription{}
 		if len(r.InputWef.Subscriptions) > len(resp.InputWef.Subscriptions) {
 			r.InputWef.Subscriptions = r.InputWef.Subscriptions[:len(resp.InputWef.Subscriptions)]
 		}
 		for subscriptionsCount, subscriptionsItem := range resp.InputWef.Subscriptions {
-			var subscriptions tfTypes.InputSubscription
+			var subscriptions tfTypes.InputWefSubscription
 			subscriptions.BatchTimeout = types.Float64PointerValue(subscriptionsItem.BatchTimeout)
 			subscriptions.Compress = types.BoolPointerValue(subscriptionsItem.Compress)
 			if subscriptionsItem.ContentFormat != nil {
@@ -8016,15 +7350,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			subscriptions.HeartbeatInterval = types.Float64PointerValue(subscriptionsItem.HeartbeatInterval)
 			subscriptions.Locale = types.StringPointerValue(subscriptionsItem.Locale)
 			subscriptions.Metadata = []tfTypes.SubscriptionMetadatum{}
-			for metadataCount58, metadataItem58 := range subscriptionsItem.Metadata {
-				var metadata58 tfTypes.SubscriptionMetadatum
-				metadata58.Name = types.StringValue(metadataItem58.Name)
-				metadata58.Value = types.StringValue(metadataItem58.Value)
-				if metadataCount58+1 > len(subscriptions.Metadata) {
-					subscriptions.Metadata = append(subscriptions.Metadata, metadata58)
+			for metadataCount59, metadataItem59 := range subscriptionsItem.Metadata {
+				var metadata59 tfTypes.SubscriptionMetadatum
+				metadata59.Name = types.StringValue(metadataItem59.Name)
+				metadata59.Value = types.StringValue(metadataItem59.Value)
+				if metadataCount59+1 > len(subscriptions.Metadata) {
+					subscriptions.Metadata = append(subscriptions.Metadata, metadata59)
 				} else {
-					subscriptions.Metadata[metadataCount58].Name = metadata58.Name
-					subscriptions.Metadata[metadataCount58].Value = metadata58.Value
+					subscriptions.Metadata[metadataCount59].Name = metadata59.Name
+					subscriptions.Metadata[metadataCount59].Value = metadata59.Value
 				}
 			}
 			if subscriptionsItem.QuerySelector != nil {
@@ -8103,19 +7437,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	}
 	if resp.InputWindowsMetrics != nil {
 		r.InputWindowsMetrics = &tfTypes.InputWindowsMetrics{}
-		r.InputWindowsMetrics.Connections = []tfTypes.ConnectionWindowsMetrics{}
+		r.InputWindowsMetrics.Connections = []tfTypes.InputWindowsMetricsConnection{}
 		if len(r.InputWindowsMetrics.Connections) > len(resp.InputWindowsMetrics.Connections) {
 			r.InputWindowsMetrics.Connections = r.InputWindowsMetrics.Connections[:len(resp.InputWindowsMetrics.Connections)]
 		}
-		for connectionsCount55, connectionsItem55 := range resp.InputWindowsMetrics.Connections {
-			var connections55 tfTypes.ConnectionWindowsMetrics
-			connections55.Output = types.StringValue(connectionsItem55.Output)
-			connections55.Pipeline = types.StringPointerValue(connectionsItem55.Pipeline)
-			if connectionsCount55+1 > len(r.InputWindowsMetrics.Connections) {
-				r.InputWindowsMetrics.Connections = append(r.InputWindowsMetrics.Connections, connections55)
+		for connectionsCount56, connectionsItem56 := range resp.InputWindowsMetrics.Connections {
+			var connections56 tfTypes.InputWindowsMetricsConnection
+			connections56.Output = types.StringValue(connectionsItem56.Output)
+			connections56.Pipeline = types.StringPointerValue(connectionsItem56.Pipeline)
+			if connectionsCount56+1 > len(r.InputWindowsMetrics.Connections) {
+				r.InputWindowsMetrics.Connections = append(r.InputWindowsMetrics.Connections, connections56)
 			} else {
-				r.InputWindowsMetrics.Connections[connectionsCount55].Output = connections55.Output
-				r.InputWindowsMetrics.Connections[connectionsCount55].Pipeline = connections55.Pipeline
+				r.InputWindowsMetrics.Connections[connectionsCount56].Output = connections56.Output
+				r.InputWindowsMetrics.Connections[connectionsCount56].Pipeline = connections56.Pipeline
 			}
 		}
 		r.InputWindowsMetrics.Description = types.StringPointerValue(resp.InputWindowsMetrics.Description)
@@ -8125,15 +7459,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputWindowsMetrics.Host == nil {
 			r.InputWindowsMetrics.Host = nil
 		} else {
-			r.InputWindowsMetrics.Host = &tfTypes.HostWindowsMetrics{}
+			r.InputWindowsMetrics.Host = &tfTypes.InputWindowsMetricsHost{}
 			if resp.InputWindowsMetrics.Host.Custom == nil {
 				r.InputWindowsMetrics.Host.Custom = nil
 			} else {
-				r.InputWindowsMetrics.Host.Custom = &tfTypes.CustomWindowsMetrics{}
+				r.InputWindowsMetrics.Host.Custom = &tfTypes.InputWindowsMetricsCustom{}
 				if resp.InputWindowsMetrics.Host.Custom.CPU == nil {
 					r.InputWindowsMetrics.Host.Custom.CPU = nil
 				} else {
-					r.InputWindowsMetrics.Host.Custom.CPU = &tfTypes.CPUWindowsMetrics{}
+					r.InputWindowsMetrics.Host.Custom.CPU = &tfTypes.InputWindowsMetricsCPU{}
 					r.InputWindowsMetrics.Host.Custom.CPU.Detail = types.BoolPointerValue(resp.InputWindowsMetrics.Host.Custom.CPU.Detail)
 					if resp.InputWindowsMetrics.Host.Custom.CPU.Mode != nil {
 						r.InputWindowsMetrics.Host.Custom.CPU.Mode = types.StringValue(string(*resp.InputWindowsMetrics.Host.Custom.CPU.Mode))
@@ -8146,7 +7480,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputWindowsMetrics.Host.Custom.Disk == nil {
 					r.InputWindowsMetrics.Host.Custom.Disk = nil
 				} else {
-					r.InputWindowsMetrics.Host.Custom.Disk = &tfTypes.DiskWindowsMetrics{}
+					r.InputWindowsMetrics.Host.Custom.Disk = &tfTypes.InputWindowsMetricsDisk{}
 					if resp.InputWindowsMetrics.Host.Custom.Disk.Mode != nil {
 						r.InputWindowsMetrics.Host.Custom.Disk.Mode = types.StringValue(string(*resp.InputWindowsMetrics.Host.Custom.Disk.Mode))
 					} else {
@@ -8161,7 +7495,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputWindowsMetrics.Host.Custom.Memory == nil {
 					r.InputWindowsMetrics.Host.Custom.Memory = nil
 				} else {
-					r.InputWindowsMetrics.Host.Custom.Memory = &tfTypes.MemoryWindowsMetrics{}
+					r.InputWindowsMetrics.Host.Custom.Memory = &tfTypes.InputWindowsMetricsMemory{}
 					r.InputWindowsMetrics.Host.Custom.Memory.Detail = types.BoolPointerValue(resp.InputWindowsMetrics.Host.Custom.Memory.Detail)
 					if resp.InputWindowsMetrics.Host.Custom.Memory.Mode != nil {
 						r.InputWindowsMetrics.Host.Custom.Memory.Mode = types.StringValue(string(*resp.InputWindowsMetrics.Host.Custom.Memory.Mode))
@@ -8172,7 +7506,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputWindowsMetrics.Host.Custom.Network == nil {
 					r.InputWindowsMetrics.Host.Custom.Network = nil
 				} else {
-					r.InputWindowsMetrics.Host.Custom.Network = &tfTypes.NetworkWindowsMetrics{}
+					r.InputWindowsMetrics.Host.Custom.Network = &tfTypes.InputWindowsMetricsNetwork{}
 					r.InputWindowsMetrics.Host.Custom.Network.Detail = types.BoolPointerValue(resp.InputWindowsMetrics.Host.Custom.Network.Detail)
 					r.InputWindowsMetrics.Host.Custom.Network.Devices = make([]types.String, 0, len(resp.InputWindowsMetrics.Host.Custom.Network.Devices))
 					for _, v := range resp.InputWindowsMetrics.Host.Custom.Network.Devices {
@@ -8188,7 +7522,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				if resp.InputWindowsMetrics.Host.Custom.System == nil {
 					r.InputWindowsMetrics.Host.Custom.System = nil
 				} else {
-					r.InputWindowsMetrics.Host.Custom.System = &tfTypes.SystemWindowsMetrics{}
+					r.InputWindowsMetrics.Host.Custom.System = &tfTypes.InputWindowsMetricsSystem{}
 					r.InputWindowsMetrics.Host.Custom.System.Detail = types.BoolPointerValue(resp.InputWindowsMetrics.Host.Custom.System.Detail)
 					if resp.InputWindowsMetrics.Host.Custom.System.Mode != nil {
 						r.InputWindowsMetrics.Host.Custom.System.Mode = types.StringValue(string(*resp.InputWindowsMetrics.Host.Custom.System.Mode))
@@ -8205,25 +7539,25 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		}
 		r.InputWindowsMetrics.ID = types.StringValue(resp.InputWindowsMetrics.ID)
 		r.InputWindowsMetrics.Interval = types.Float64PointerValue(resp.InputWindowsMetrics.Interval)
-		r.InputWindowsMetrics.Metadata = []tfTypes.MetadatumWindowsMetrics{}
+		r.InputWindowsMetrics.Metadata = []tfTypes.InputWindowsMetricsMetadatum{}
 		if len(r.InputWindowsMetrics.Metadata) > len(resp.InputWindowsMetrics.Metadata) {
 			r.InputWindowsMetrics.Metadata = r.InputWindowsMetrics.Metadata[:len(resp.InputWindowsMetrics.Metadata)]
 		}
-		for metadataCount59, metadataItem59 := range resp.InputWindowsMetrics.Metadata {
-			var metadata59 tfTypes.MetadatumWindowsMetrics
-			metadata59.Name = types.StringValue(metadataItem59.Name)
-			metadata59.Value = types.StringValue(metadataItem59.Value)
-			if metadataCount59+1 > len(r.InputWindowsMetrics.Metadata) {
-				r.InputWindowsMetrics.Metadata = append(r.InputWindowsMetrics.Metadata, metadata59)
+		for metadataCount60, metadataItem60 := range resp.InputWindowsMetrics.Metadata {
+			var metadata60 tfTypes.InputWindowsMetricsMetadatum
+			metadata60.Name = types.StringValue(metadataItem60.Name)
+			metadata60.Value = types.StringValue(metadataItem60.Value)
+			if metadataCount60+1 > len(r.InputWindowsMetrics.Metadata) {
+				r.InputWindowsMetrics.Metadata = append(r.InputWindowsMetrics.Metadata, metadata60)
 			} else {
-				r.InputWindowsMetrics.Metadata[metadataCount59].Name = metadata59.Name
-				r.InputWindowsMetrics.Metadata[metadataCount59].Value = metadata59.Value
+				r.InputWindowsMetrics.Metadata[metadataCount60].Name = metadata60.Name
+				r.InputWindowsMetrics.Metadata[metadataCount60].Value = metadata60.Value
 			}
 		}
 		if resp.InputWindowsMetrics.Persistence == nil {
 			r.InputWindowsMetrics.Persistence = nil
 		} else {
-			r.InputWindowsMetrics.Persistence = &tfTypes.PersistenceWindowsMetrics{}
+			r.InputWindowsMetrics.Persistence = &tfTypes.InputWindowsMetricsPersistence{}
 			if resp.InputWindowsMetrics.Persistence.Compress != nil {
 				r.InputWindowsMetrics.Persistence.Compress = types.StringValue(string(*resp.InputWindowsMetrics.Persistence.Compress))
 			} else {
@@ -8239,7 +7573,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputWindowsMetrics.Pq == nil {
 			r.InputWindowsMetrics.Pq = nil
 		} else {
-			r.InputWindowsMetrics.Pq = &tfTypes.PqWindowsMetrics{}
+			r.InputWindowsMetrics.Pq = &tfTypes.InputWindowsMetricsPq{}
 			r.InputWindowsMetrics.Pq.CommitFrequency = types.Float64PointerValue(resp.InputWindowsMetrics.Pq.CommitFrequency)
 			if resp.InputWindowsMetrics.Pq.Compress != nil {
 				r.InputWindowsMetrics.Pq.Compress = types.StringValue(string(*resp.InputWindowsMetrics.Pq.Compress))
@@ -8260,13 +7594,13 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputWindowsMetrics.Process == nil {
 			r.InputWindowsMetrics.Process = nil
 		} else {
-			r.InputWindowsMetrics.Process = &tfTypes.ProcessWindowsMetrics{}
-			r.InputWindowsMetrics.Process.Sets = []tfTypes.SetWindowsMetrics{}
+			r.InputWindowsMetrics.Process = &tfTypes.InputWindowsMetricsProcess{}
+			r.InputWindowsMetrics.Process.Sets = []tfTypes.InputWindowsMetricsSet{}
 			if len(r.InputWindowsMetrics.Process.Sets) > len(resp.InputWindowsMetrics.Process.Sets) {
 				r.InputWindowsMetrics.Process.Sets = r.InputWindowsMetrics.Process.Sets[:len(resp.InputWindowsMetrics.Process.Sets)]
 			}
 			for setsCount1, setsItem1 := range resp.InputWindowsMetrics.Process.Sets {
-				var sets1 tfTypes.SetWindowsMetrics
+				var sets1 tfTypes.InputWindowsMetricsSet
 				sets1.Filter = types.StringValue(setsItem1.Filter)
 				sets1.IncludeChildren = types.BoolPointerValue(setsItem1.IncludeChildren)
 				sets1.Name = types.StringValue(setsItem1.Name)
@@ -8280,21 +7614,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputWindowsMetrics.SendToRoutes = types.BoolPointerValue(resp.InputWindowsMetrics.SendToRoutes)
-		if resp.InputWindowsMetrics.Status == nil {
-			r.InputWindowsMetrics.Status = nil
-		} else {
-			r.InputWindowsMetrics.Status = &tfTypes.TFStatus{}
-			r.InputWindowsMetrics.Status.Health = types.StringValue(string(resp.InputWindowsMetrics.Status.Health))
-			if len(resp.InputWindowsMetrics.Status.Metrics) > 0 {
-				r.InputWindowsMetrics.Status.Metrics = make(map[string]types.String, len(resp.InputWindowsMetrics.Status.Metrics))
-				for key55, value55 := range resp.InputWindowsMetrics.Status.Metrics {
-					result55, _ := json.Marshal(value55)
-					r.InputWindowsMetrics.Status.Metrics[key55] = types.StringValue(string(result55))
-				}
-			}
-			r.InputWindowsMetrics.Status.Timestamp = types.Float64Value(resp.InputWindowsMetrics.Status.Timestamp)
-			r.InputWindowsMetrics.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputWindowsMetrics.Status.UseStatusFromLB)
-		}
 		r.InputWindowsMetrics.Streamtags = make([]types.String, 0, len(resp.InputWindowsMetrics.Streamtags))
 		for _, v := range resp.InputWindowsMetrics.Streamtags {
 			r.InputWindowsMetrics.Streamtags = append(r.InputWindowsMetrics.Streamtags, types.StringValue(v))
@@ -8304,19 +7623,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 	if resp.InputWinEventLogs != nil {
 		r.InputWinEventLogs = &tfTypes.InputWinEventLogs{}
 		r.InputWinEventLogs.BatchSize = types.Float64PointerValue(resp.InputWinEventLogs.BatchSize)
-		r.InputWinEventLogs.Connections = []tfTypes.ConnectionWinEventLogs{}
+		r.InputWinEventLogs.Connections = []tfTypes.InputWinEventLogsConnection{}
 		if len(r.InputWinEventLogs.Connections) > len(resp.InputWinEventLogs.Connections) {
 			r.InputWinEventLogs.Connections = r.InputWinEventLogs.Connections[:len(resp.InputWinEventLogs.Connections)]
 		}
-		for connectionsCount56, connectionsItem56 := range resp.InputWinEventLogs.Connections {
-			var connections56 tfTypes.ConnectionWinEventLogs
-			connections56.Output = types.StringValue(connectionsItem56.Output)
-			connections56.Pipeline = types.StringPointerValue(connectionsItem56.Pipeline)
-			if connectionsCount56+1 > len(r.InputWinEventLogs.Connections) {
-				r.InputWinEventLogs.Connections = append(r.InputWinEventLogs.Connections, connections56)
+		for connectionsCount57, connectionsItem57 := range resp.InputWinEventLogs.Connections {
+			var connections57 tfTypes.InputWinEventLogsConnection
+			connections57.Output = types.StringValue(connectionsItem57.Output)
+			connections57.Pipeline = types.StringPointerValue(connectionsItem57.Pipeline)
+			if connectionsCount57+1 > len(r.InputWinEventLogs.Connections) {
+				r.InputWinEventLogs.Connections = append(r.InputWinEventLogs.Connections, connections57)
 			} else {
-				r.InputWinEventLogs.Connections[connectionsCount56].Output = connections56.Output
-				r.InputWinEventLogs.Connections[connectionsCount56].Pipeline = connections56.Pipeline
+				r.InputWinEventLogs.Connections[connectionsCount57].Output = connections57.Output
+				r.InputWinEventLogs.Connections[connectionsCount57].Pipeline = connections57.Pipeline
 			}
 		}
 		r.InputWinEventLogs.Description = types.StringPointerValue(resp.InputWinEventLogs.Description)
@@ -8335,26 +7654,26 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputWinEventLogs.LogNames = append(r.InputWinEventLogs.LogNames, types.StringValue(v))
 		}
 		r.InputWinEventLogs.MaxEventBytes = types.Float64PointerValue(resp.InputWinEventLogs.MaxEventBytes)
-		r.InputWinEventLogs.Metadata = []tfTypes.MetadatumWinEventLogs{}
+		r.InputWinEventLogs.Metadata = []tfTypes.InputWinEventLogsMetadatum{}
 		if len(r.InputWinEventLogs.Metadata) > len(resp.InputWinEventLogs.Metadata) {
 			r.InputWinEventLogs.Metadata = r.InputWinEventLogs.Metadata[:len(resp.InputWinEventLogs.Metadata)]
 		}
-		for metadataCount60, metadataItem60 := range resp.InputWinEventLogs.Metadata {
-			var metadata60 tfTypes.MetadatumWinEventLogs
-			metadata60.Name = types.StringValue(metadataItem60.Name)
-			metadata60.Value = types.StringValue(metadataItem60.Value)
-			if metadataCount60+1 > len(r.InputWinEventLogs.Metadata) {
-				r.InputWinEventLogs.Metadata = append(r.InputWinEventLogs.Metadata, metadata60)
+		for metadataCount61, metadataItem61 := range resp.InputWinEventLogs.Metadata {
+			var metadata61 tfTypes.InputWinEventLogsMetadatum
+			metadata61.Name = types.StringValue(metadataItem61.Name)
+			metadata61.Value = types.StringValue(metadataItem61.Value)
+			if metadataCount61+1 > len(r.InputWinEventLogs.Metadata) {
+				r.InputWinEventLogs.Metadata = append(r.InputWinEventLogs.Metadata, metadata61)
 			} else {
-				r.InputWinEventLogs.Metadata[metadataCount60].Name = metadata60.Name
-				r.InputWinEventLogs.Metadata[metadataCount60].Value = metadata60.Value
+				r.InputWinEventLogs.Metadata[metadataCount61].Name = metadata61.Name
+				r.InputWinEventLogs.Metadata[metadataCount61].Value = metadata61.Value
 			}
 		}
 		r.InputWinEventLogs.Pipeline = types.StringPointerValue(resp.InputWinEventLogs.Pipeline)
 		if resp.InputWinEventLogs.Pq == nil {
 			r.InputWinEventLogs.Pq = nil
 		} else {
-			r.InputWinEventLogs.Pq = &tfTypes.PqWinEventLogs{}
+			r.InputWinEventLogs.Pq = &tfTypes.InputWinEventLogsPq{}
 			r.InputWinEventLogs.Pq.CommitFrequency = types.Float64PointerValue(resp.InputWinEventLogs.Pq.CommitFrequency)
 			if resp.InputWinEventLogs.Pq.Compress != nil {
 				r.InputWinEventLogs.Pq.Compress = types.StringValue(string(*resp.InputWinEventLogs.Pq.Compress))
@@ -8378,21 +7697,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			r.InputWinEventLogs.ReadMode = types.StringNull()
 		}
 		r.InputWinEventLogs.SendToRoutes = types.BoolPointerValue(resp.InputWinEventLogs.SendToRoutes)
-		if resp.InputWinEventLogs.Status == nil {
-			r.InputWinEventLogs.Status = nil
-		} else {
-			r.InputWinEventLogs.Status = &tfTypes.TFStatus{}
-			r.InputWinEventLogs.Status.Health = types.StringValue(string(resp.InputWinEventLogs.Status.Health))
-			if len(resp.InputWinEventLogs.Status.Metrics) > 0 {
-				r.InputWinEventLogs.Status.Metrics = make(map[string]types.String, len(resp.InputWinEventLogs.Status.Metrics))
-				for key56, value56 := range resp.InputWinEventLogs.Status.Metrics {
-					result56, _ := json.Marshal(value56)
-					r.InputWinEventLogs.Status.Metrics[key56] = types.StringValue(string(result56))
-				}
-			}
-			r.InputWinEventLogs.Status.Timestamp = types.Float64Value(resp.InputWinEventLogs.Status.Timestamp)
-			r.InputWinEventLogs.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputWinEventLogs.Status.UseStatusFromLB)
-		}
 		r.InputWinEventLogs.Streamtags = make([]types.String, 0, len(resp.InputWinEventLogs.Streamtags))
 		for _, v := range resp.InputWinEventLogs.Streamtags {
 			r.InputWinEventLogs.Streamtags = append(r.InputWinEventLogs.Streamtags, types.StringValue(v))
@@ -8410,27 +7714,27 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputWiz.AuthURL = types.StringValue(resp.InputWiz.AuthURL)
 		r.InputWiz.ClientID = types.StringValue(resp.InputWiz.ClientID)
 		r.InputWiz.ClientSecret = types.StringPointerValue(resp.InputWiz.ClientSecret)
-		r.InputWiz.Connections = []tfTypes.ConnectionWiz{}
+		r.InputWiz.Connections = []tfTypes.InputWizConnection{}
 		if len(r.InputWiz.Connections) > len(resp.InputWiz.Connections) {
 			r.InputWiz.Connections = r.InputWiz.Connections[:len(resp.InputWiz.Connections)]
 		}
-		for connectionsCount57, connectionsItem57 := range resp.InputWiz.Connections {
-			var connections57 tfTypes.ConnectionWiz
-			connections57.Output = types.StringValue(connectionsItem57.Output)
-			connections57.Pipeline = types.StringPointerValue(connectionsItem57.Pipeline)
-			if connectionsCount57+1 > len(r.InputWiz.Connections) {
-				r.InputWiz.Connections = append(r.InputWiz.Connections, connections57)
+		for connectionsCount58, connectionsItem58 := range resp.InputWiz.Connections {
+			var connections58 tfTypes.InputWizConnection
+			connections58.Output = types.StringValue(connectionsItem58.Output)
+			connections58.Pipeline = types.StringPointerValue(connectionsItem58.Pipeline)
+			if connectionsCount58+1 > len(r.InputWiz.Connections) {
+				r.InputWiz.Connections = append(r.InputWiz.Connections, connections58)
 			} else {
-				r.InputWiz.Connections[connectionsCount57].Output = connections57.Output
-				r.InputWiz.Connections[connectionsCount57].Pipeline = connections57.Pipeline
+				r.InputWiz.Connections[connectionsCount58].Output = connections58.Output
+				r.InputWiz.Connections[connectionsCount58].Pipeline = connections58.Pipeline
 			}
 		}
-		r.InputWiz.ContentConfig = []tfTypes.ContentConfigWiz{}
+		r.InputWiz.ContentConfig = []tfTypes.InputWizContentConfig{}
 		if len(r.InputWiz.ContentConfig) > len(resp.InputWiz.ContentConfig) {
 			r.InputWiz.ContentConfig = r.InputWiz.ContentConfig[:len(resp.InputWiz.ContentConfig)]
 		}
 		for contentConfigCount2, contentConfigItem2 := range resp.InputWiz.ContentConfig {
-			var contentConfig2 tfTypes.ContentConfigWiz
+			var contentConfig2 tfTypes.InputWizContentConfig
 			contentConfig2.ContentDescription = types.StringPointerValue(contentConfigItem2.ContentDescription)
 			contentConfig2.ContentType = types.StringValue(contentConfigItem2.ContentType)
 			contentConfig2.Enabled = types.BoolPointerValue(contentConfigItem2.Enabled)
@@ -8447,28 +7751,29 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputWiz.Endpoint = types.StringPointerValue(resp.InputWiz.Endpoint)
 		r.InputWiz.Environment = types.StringPointerValue(resp.InputWiz.Environment)
 		r.InputWiz.ID = types.StringPointerValue(resp.InputWiz.ID)
+		r.InputWiz.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputWiz.IgnoreGroupJobsLimit)
 		r.InputWiz.KeepAliveTime = types.Float64PointerValue(resp.InputWiz.KeepAliveTime)
 		r.InputWiz.MaxMissedKeepAlives = types.Float64PointerValue(resp.InputWiz.MaxMissedKeepAlives)
-		r.InputWiz.Metadata = []tfTypes.MetadatumWiz{}
+		r.InputWiz.Metadata = []tfTypes.InputWizMetadatum{}
 		if len(r.InputWiz.Metadata) > len(resp.InputWiz.Metadata) {
 			r.InputWiz.Metadata = r.InputWiz.Metadata[:len(resp.InputWiz.Metadata)]
 		}
-		for metadataCount61, metadataItem61 := range resp.InputWiz.Metadata {
-			var metadata61 tfTypes.MetadatumWiz
-			metadata61.Name = types.StringValue(metadataItem61.Name)
-			metadata61.Value = types.StringValue(metadataItem61.Value)
-			if metadataCount61+1 > len(r.InputWiz.Metadata) {
-				r.InputWiz.Metadata = append(r.InputWiz.Metadata, metadata61)
+		for metadataCount62, metadataItem62 := range resp.InputWiz.Metadata {
+			var metadata62 tfTypes.InputWizMetadatum
+			metadata62.Name = types.StringValue(metadataItem62.Name)
+			metadata62.Value = types.StringValue(metadataItem62.Value)
+			if metadataCount62+1 > len(r.InputWiz.Metadata) {
+				r.InputWiz.Metadata = append(r.InputWiz.Metadata, metadata62)
 			} else {
-				r.InputWiz.Metadata[metadataCount61].Name = metadata61.Name
-				r.InputWiz.Metadata[metadataCount61].Value = metadata61.Value
+				r.InputWiz.Metadata[metadataCount62].Name = metadata62.Name
+				r.InputWiz.Metadata[metadataCount62].Value = metadata62.Value
 			}
 		}
 		r.InputWiz.Pipeline = types.StringPointerValue(resp.InputWiz.Pipeline)
 		if resp.InputWiz.Pq == nil {
 			r.InputWiz.Pq = nil
 		} else {
-			r.InputWiz.Pq = &tfTypes.PqWiz{}
+			r.InputWiz.Pq = &tfTypes.InputWizPq{}
 			r.InputWiz.Pq.CommitFrequency = types.Float64PointerValue(resp.InputWiz.Pq.CommitFrequency)
 			if resp.InputWiz.Pq.Compress != nil {
 				r.InputWiz.Pq.Compress = types.StringValue(string(*resp.InputWiz.Pq.Compress))
@@ -8490,7 +7795,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputWiz.RetryRules == nil {
 			r.InputWiz.RetryRules = nil
 		} else {
-			r.InputWiz.RetryRules = &tfTypes.RetryRulesWiz{}
+			r.InputWiz.RetryRules = &tfTypes.InputWizRetryRules{}
 			r.InputWiz.RetryRules.Codes = make([]types.Float64, 0, len(resp.InputWiz.RetryRules.Codes))
 			for _, v := range resp.InputWiz.RetryRules.Codes {
 				r.InputWiz.RetryRules.Codes = append(r.InputWiz.RetryRules.Codes, types.Float64Value(v))
@@ -8508,21 +7813,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputWiz.SendToRoutes = types.BoolPointerValue(resp.InputWiz.SendToRoutes)
-		if resp.InputWiz.Status == nil {
-			r.InputWiz.Status = nil
-		} else {
-			r.InputWiz.Status = &tfTypes.TFStatus{}
-			r.InputWiz.Status.Health = types.StringValue(string(resp.InputWiz.Status.Health))
-			if len(resp.InputWiz.Status.Metrics) > 0 {
-				r.InputWiz.Status.Metrics = make(map[string]types.String, len(resp.InputWiz.Status.Metrics))
-				for key57, value57 := range resp.InputWiz.Status.Metrics {
-					result57, _ := json.Marshal(value57)
-					r.InputWiz.Status.Metrics[key57] = types.StringValue(string(result57))
-				}
-			}
-			r.InputWiz.Status.Timestamp = types.Float64Value(resp.InputWiz.Status.Timestamp)
-			r.InputWiz.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputWiz.Status.UseStatusFromLB)
-		}
 		r.InputWiz.Streamtags = make([]types.String, 0, len(resp.InputWiz.Streamtags))
 		for _, v := range resp.InputWiz.Streamtags {
 			r.InputWiz.Streamtags = append(r.InputWiz.Streamtags, types.StringValue(v))
@@ -8550,12 +7840,12 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		for _, v := range resp.InputZscalerHec.AllowedIndexes {
 			r.InputZscalerHec.AllowedIndexes = append(r.InputZscalerHec.AllowedIndexes, types.StringValue(v))
 		}
-		r.InputZscalerHec.AuthTokens = []tfTypes.AuthTokenZscalerHec{}
+		r.InputZscalerHec.AuthTokens = []tfTypes.InputZscalerHecAuthToken{}
 		if len(r.InputZscalerHec.AuthTokens) > len(resp.InputZscalerHec.AuthTokens) {
 			r.InputZscalerHec.AuthTokens = r.InputZscalerHec.AuthTokens[:len(resp.InputZscalerHec.AuthTokens)]
 		}
 		for authTokensCount2, authTokensItem2 := range resp.InputZscalerHec.AuthTokens {
-			var authTokens2 tfTypes.AuthTokenZscalerHec
+			var authTokens2 tfTypes.InputZscalerHecAuthToken
 			authTokens2.AllowedIndexesAtToken = make([]types.String, 0, len(authTokensItem2.AllowedIndexesAtToken))
 			for _, v := range authTokensItem2.AllowedIndexesAtToken {
 				authTokens2.AllowedIndexesAtToken = append(authTokens2.AllowedIndexesAtToken, types.StringValue(v))
@@ -8567,16 +7857,16 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 			authTokens2.Description = types.StringPointerValue(authTokensItem2.Description)
 			authTokens2.Enabled = types.BoolPointerValue(authTokensItem2.Enabled)
-			authTokens2.Metadata = []tfTypes.AuthTokenMetadatumZscalerHec{}
-			for metadataCount62, metadataItem62 := range authTokensItem2.Metadata {
-				var metadata62 tfTypes.AuthTokenMetadatumZscalerHec
-				metadata62.Name = types.StringValue(metadataItem62.Name)
-				metadata62.Value = types.StringValue(metadataItem62.Value)
-				if metadataCount62+1 > len(authTokens2.Metadata) {
-					authTokens2.Metadata = append(authTokens2.Metadata, metadata62)
+			authTokens2.Metadata = []tfTypes.InputZscalerHecAuthTokenMetadatum{}
+			for metadataCount63, metadataItem63 := range authTokensItem2.Metadata {
+				var metadata63 tfTypes.InputZscalerHecAuthTokenMetadatum
+				metadata63.Name = types.StringValue(metadataItem63.Name)
+				metadata63.Value = types.StringValue(metadataItem63.Value)
+				if metadataCount63+1 > len(authTokens2.Metadata) {
+					authTokens2.Metadata = append(authTokens2.Metadata, metadata63)
 				} else {
-					authTokens2.Metadata[metadataCount62].Name = metadata62.Name
-					authTokens2.Metadata[metadataCount62].Value = metadata62.Value
+					authTokens2.Metadata[metadataCount63].Name = metadata63.Name
+					authTokens2.Metadata[metadataCount63].Value = metadata63.Value
 				}
 			}
 			tokenResult1, _ := json.Marshal(authTokensItem2.Token)
@@ -8600,19 +7890,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			}
 		}
 		r.InputZscalerHec.CaptureHeaders = types.BoolPointerValue(resp.InputZscalerHec.CaptureHeaders)
-		r.InputZscalerHec.Connections = []tfTypes.ConnectionZscalerHec{}
+		r.InputZscalerHec.Connections = []tfTypes.InputZscalerHecConnection{}
 		if len(r.InputZscalerHec.Connections) > len(resp.InputZscalerHec.Connections) {
 			r.InputZscalerHec.Connections = r.InputZscalerHec.Connections[:len(resp.InputZscalerHec.Connections)]
 		}
-		for connectionsCount58, connectionsItem58 := range resp.InputZscalerHec.Connections {
-			var connections58 tfTypes.ConnectionZscalerHec
-			connections58.Output = types.StringValue(connectionsItem58.Output)
-			connections58.Pipeline = types.StringPointerValue(connectionsItem58.Pipeline)
-			if connectionsCount58+1 > len(r.InputZscalerHec.Connections) {
-				r.InputZscalerHec.Connections = append(r.InputZscalerHec.Connections, connections58)
+		for connectionsCount59, connectionsItem59 := range resp.InputZscalerHec.Connections {
+			var connections59 tfTypes.InputZscalerHecConnection
+			connections59.Output = types.StringValue(connectionsItem59.Output)
+			connections59.Pipeline = types.StringPointerValue(connectionsItem59.Pipeline)
+			if connectionsCount59+1 > len(r.InputZscalerHec.Connections) {
+				r.InputZscalerHec.Connections = append(r.InputZscalerHec.Connections, connections59)
 			} else {
-				r.InputZscalerHec.Connections[connectionsCount58].Output = connections58.Output
-				r.InputZscalerHec.Connections[connectionsCount58].Pipeline = connections58.Pipeline
+				r.InputZscalerHec.Connections[connectionsCount59].Output = connections59.Output
+				r.InputZscalerHec.Connections[connectionsCount59].Pipeline = connections59.Pipeline
 			}
 		}
 		r.InputZscalerHec.Description = types.StringPointerValue(resp.InputZscalerHec.Description)
@@ -8635,19 +7925,19 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputZscalerHec.KeepAliveTimeout = types.Float64PointerValue(resp.InputZscalerHec.KeepAliveTimeout)
 		r.InputZscalerHec.MaxActiveReq = types.Float64PointerValue(resp.InputZscalerHec.MaxActiveReq)
 		r.InputZscalerHec.MaxRequestsPerSocket = types.Int64PointerValue(resp.InputZscalerHec.MaxRequestsPerSocket)
-		r.InputZscalerHec.Metadata = []tfTypes.MetadatumZscalerHec{}
+		r.InputZscalerHec.Metadata = []tfTypes.InputZscalerHecMetadatum{}
 		if len(r.InputZscalerHec.Metadata) > len(resp.InputZscalerHec.Metadata) {
 			r.InputZscalerHec.Metadata = r.InputZscalerHec.Metadata[:len(resp.InputZscalerHec.Metadata)]
 		}
-		for metadataCount63, metadataItem63 := range resp.InputZscalerHec.Metadata {
-			var metadata63 tfTypes.MetadatumZscalerHec
-			metadata63.Name = types.StringValue(metadataItem63.Name)
-			metadata63.Value = types.StringValue(metadataItem63.Value)
-			if metadataCount63+1 > len(r.InputZscalerHec.Metadata) {
-				r.InputZscalerHec.Metadata = append(r.InputZscalerHec.Metadata, metadata63)
+		for metadataCount64, metadataItem64 := range resp.InputZscalerHec.Metadata {
+			var metadata64 tfTypes.InputZscalerHecMetadatum
+			metadata64.Name = types.StringValue(metadataItem64.Name)
+			metadata64.Value = types.StringValue(metadataItem64.Value)
+			if metadataCount64+1 > len(r.InputZscalerHec.Metadata) {
+				r.InputZscalerHec.Metadata = append(r.InputZscalerHec.Metadata, metadata64)
 			} else {
-				r.InputZscalerHec.Metadata[metadataCount63].Name = metadata63.Name
-				r.InputZscalerHec.Metadata[metadataCount63].Value = metadata63.Value
+				r.InputZscalerHec.Metadata[metadataCount64].Name = metadata64.Name
+				r.InputZscalerHec.Metadata[metadataCount64].Value = metadata64.Value
 			}
 		}
 		r.InputZscalerHec.Pipeline = types.StringPointerValue(resp.InputZscalerHec.Pipeline)
@@ -8655,7 +7945,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputZscalerHec.Pq == nil {
 			r.InputZscalerHec.Pq = nil
 		} else {
-			r.InputZscalerHec.Pq = &tfTypes.PqZscalerHec{}
+			r.InputZscalerHec.Pq = &tfTypes.InputZscalerHecPq{}
 			r.InputZscalerHec.Pq.CommitFrequency = types.Float64PointerValue(resp.InputZscalerHec.Pq.CommitFrequency)
 			if resp.InputZscalerHec.Pq.Compress != nil {
 				r.InputZscalerHec.Pq.Compress = types.StringValue(string(*resp.InputZscalerHec.Pq.Compress))
@@ -8676,21 +7966,6 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		r.InputZscalerHec.RequestTimeout = types.Float64PointerValue(resp.InputZscalerHec.RequestTimeout)
 		r.InputZscalerHec.SendToRoutes = types.BoolPointerValue(resp.InputZscalerHec.SendToRoutes)
 		r.InputZscalerHec.SocketTimeout = types.Float64PointerValue(resp.InputZscalerHec.SocketTimeout)
-		if resp.InputZscalerHec.Status == nil {
-			r.InputZscalerHec.Status = nil
-		} else {
-			r.InputZscalerHec.Status = &tfTypes.TFStatus{}
-			r.InputZscalerHec.Status.Health = types.StringValue(string(resp.InputZscalerHec.Status.Health))
-			if len(resp.InputZscalerHec.Status.Metrics) > 0 {
-				r.InputZscalerHec.Status.Metrics = make(map[string]types.String, len(resp.InputZscalerHec.Status.Metrics))
-				for key58, value58 := range resp.InputZscalerHec.Status.Metrics {
-					result58, _ := json.Marshal(value58)
-					r.InputZscalerHec.Status.Metrics[key58] = types.StringValue(string(result58))
-				}
-			}
-			r.InputZscalerHec.Status.Timestamp = types.Float64Value(resp.InputZscalerHec.Status.Timestamp)
-			r.InputZscalerHec.Status.UseStatusFromLB = types.BoolPointerValue(resp.InputZscalerHec.Status.UseStatusFromLB)
-		}
 		r.InputZscalerHec.Streamtags = make([]types.String, 0, len(resp.InputZscalerHec.Streamtags))
 		for _, v := range resp.InputZscalerHec.Streamtags {
 			r.InputZscalerHec.Streamtags = append(r.InputZscalerHec.Streamtags, types.StringValue(v))
@@ -8698,15 +7973,15 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 		if resp.InputZscalerHec.TLS == nil {
 			r.InputZscalerHec.TLS = nil
 		} else {
-			r.InputZscalerHec.TLS = &tfTypes.TLSSettingsServerSideZscalerHec{}
+			r.InputZscalerHec.TLS = &tfTypes.InputZscalerHecTLSSettingsServerSide{}
 			r.InputZscalerHec.TLS.CaPath = types.StringPointerValue(resp.InputZscalerHec.TLS.CaPath)
 			r.InputZscalerHec.TLS.CertificateName = types.StringPointerValue(resp.InputZscalerHec.TLS.CertificateName)
 			r.InputZscalerHec.TLS.CertPath = types.StringPointerValue(resp.InputZscalerHec.TLS.CertPath)
 			if resp.InputZscalerHec.TLS.CommonNameRegex == nil {
 				r.InputZscalerHec.TLS.CommonNameRegex = types.StringNull()
 			} else {
-				commonNameRegexResult21, _ := json.Marshal(resp.InputZscalerHec.TLS.CommonNameRegex)
-				r.InputZscalerHec.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult21))
+				commonNameRegexResult22, _ := json.Marshal(resp.InputZscalerHec.TLS.CommonNameRegex)
+				r.InputZscalerHec.TLS.CommonNameRegex = types.StringValue(string(commonNameRegexResult22))
 			}
 			r.InputZscalerHec.TLS.Disabled = types.BoolPointerValue(resp.InputZscalerHec.TLS.Disabled)
 			if resp.InputZscalerHec.TLS.MaxVersion != nil {
@@ -8724,8 +7999,8 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 			if resp.InputZscalerHec.TLS.RejectUnauthorized == nil {
 				r.InputZscalerHec.TLS.RejectUnauthorized = types.StringNull()
 			} else {
-				rejectUnauthorizedResult21, _ := json.Marshal(resp.InputZscalerHec.TLS.RejectUnauthorized)
-				r.InputZscalerHec.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult21))
+				rejectUnauthorizedResult22, _ := json.Marshal(resp.InputZscalerHec.TLS.RejectUnauthorized)
+				r.InputZscalerHec.TLS.RejectUnauthorized = types.StringValue(string(rejectUnauthorizedResult22))
 			}
 			r.InputZscalerHec.TLS.RequestCert = types.BoolPointerValue(resp.InputZscalerHec.TLS.RequestCert)
 		}

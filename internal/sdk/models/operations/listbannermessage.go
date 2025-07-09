@@ -9,16 +9,7 @@ import (
 
 // ListBannerMessageResponseBody - a list of BannerMessage objects
 type ListBannerMessageResponseBody struct {
-	// number of items present in the items array
-	Count *int64                 `json:"count,omitempty"`
 	Items []shared.BannerMessage `json:"items,omitempty"`
-}
-
-func (o *ListBannerMessageResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *ListBannerMessageResponseBody) GetItems() []shared.BannerMessage {

@@ -52,11 +52,11 @@ func (r *ParserLibEntryDataSource) Schema(ctx context.Context, req datasource.Sc
 				Description: `Parsed as JSON.`,
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
-				Description: `Brief description of this parser (optional)`,
+				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -66,7 +66,7 @@ func (r *ParserLibEntryDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"tags": schema.StringAttribute{
 				Computed:    true,
-				Description: `One or more tags related to this parser (optional)`,
+				Description: `Optionally, add tags that you can use for filtering`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,

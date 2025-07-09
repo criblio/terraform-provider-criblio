@@ -8,9 +8,19 @@ import (
 )
 
 type UpdateLookupFileRequest struct {
+	// query LookupFilenameSchema required Filename
+	Filename *string `queryParam:"style=form,explode=true,name=filename"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// CSV text
 	RequestBody string `request:"mediaType=text/csv"`
+}
+
+func (o *UpdateLookupFileRequest) GetFilename() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Filename
 }
 
 func (o *UpdateLookupFileRequest) GetGroupID() string {

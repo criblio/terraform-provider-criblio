@@ -37,7 +37,7 @@ resource "criblio_database_connection" "my_databaseconnection" {
 - `auth_type` (String)
 - `database_type` (String) must be one of ["mysql", "oracle", "postgres", "sqlserver"]
 - `description` (String)
-- `group_id` (String) Group ID to CREATE
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
 
 ### Optional

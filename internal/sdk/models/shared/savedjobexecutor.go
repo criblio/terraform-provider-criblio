@@ -37,29 +37,6 @@ func (e *SavedJobExecutorJobType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type SavedJobExecutorType string
-
-const (
-	SavedJobExecutorTypeCollection SavedJobExecutorType = "collection"
-)
-
-func (e SavedJobExecutorType) ToPointer() *SavedJobExecutorType {
-	return &e
-}
-func (e *SavedJobExecutorType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "collection":
-		*e = SavedJobExecutorType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SavedJobExecutorType: %v", v)
-	}
-}
-
 // SavedJobExecutorLogLevel - Level at which to set task logging
 type SavedJobExecutorLogLevel string
 
@@ -100,7 +77,6 @@ type SavedJobExecutorTimeWarning struct {
 }
 
 type SavedJobExecutorRunSettings struct {
-	Type *SavedJobExecutorType `json:"type,omitempty"`
 	// Reschedule tasks that failed with non-fatal errors
 	RescheduleDroppedTasks *bool `default:"true" json:"rescheduleDroppedTasks"`
 	// Maximum number of times a task can be rescheduled
@@ -121,19 +97,9 @@ type SavedJobExecutorRunSettings struct {
 	// A filter for tokens in the provided collect path and/or the events being collected
 	Expression *string `default:"true" json:"expression"`
 	// Limits the bundle size for small tasks. For example,
-	//
-	//
-	//
-	//
-	//
 	//         if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 	MinTaskSize *string `default:"1MB" json:"minTaskSize"`
 	// Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB,
-	//
-	//
-	//
-	//
-	//
 	//         you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
 	MaxTaskSize *string `default:"10MB" json:"maxTaskSize"`
 }
@@ -147,13 +113,6 @@ func (s *SavedJobExecutorRunSettings) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (o *SavedJobExecutorRunSettings) GetType() *SavedJobExecutorType {
-	if o == nil {
-		return nil
-	}
-	return o.Type
 }
 
 func (o *SavedJobExecutorRunSettings) GetRescheduleDroppedTasks() *bool {
@@ -364,6 +323,8 @@ type SavedJobExecutor struct {
 	Type        SavedJobExecutorJobType `json:"type"`
 	// Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 	TTL *string `default:"4h" json:"ttl"`
+	// When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+	IgnoreGroupJobsLimit *bool `default:"false" json:"ignoreGroupJobsLimit"`
 	// List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 	RemoveFields []string `json:"removeFields,omitempty"`
 	// Resume the ad hoc job if a failure condition causes Stream to restart during job execution
@@ -414,6 +375,13 @@ func (o *SavedJobExecutor) GetTTL() *string {
 		return nil
 	}
 	return o.TTL
+}
+
+func (o *SavedJobExecutor) GetIgnoreGroupJobsLimit() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IgnoreGroupJobsLimit
 }
 
 func (o *SavedJobExecutor) GetRemoveFields() []string {

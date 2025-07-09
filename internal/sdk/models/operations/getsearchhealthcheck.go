@@ -9,16 +9,7 @@ import (
 
 // GetSearchHealthcheckResponseBody - a list of SearchHealthCheckStatus objects
 type GetSearchHealthcheckResponseBody struct {
-	// number of items present in the items array
-	Count *int64                           `json:"count,omitempty"`
 	Items []shared.SearchHealthCheckStatus `json:"items,omitempty"`
-}
-
-func (o *GetSearchHealthcheckResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSearchHealthcheckResponseBody) GetItems() []shared.SearchHealthCheckStatus {

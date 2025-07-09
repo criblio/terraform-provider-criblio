@@ -64,12 +64,6 @@ func (r *EventBreakerRulesetResourceModel) ToSharedEventBreakerRuleset(ctx conte
 		} else {
 			timestampAnchorRegex = nil
 		}
-		eventBreakerRegex := new(string)
-		if !rulesItem.EventBreakerRegex.IsUnknown() && !rulesItem.EventBreakerRegex.IsNull() {
-			*eventBreakerRegex = rulesItem.EventBreakerRegex.ValueString()
-		} else {
-			eventBreakerRegex = nil
-		}
 		typeVar1 := new(shared.EventBreakerRulesetRuleTimestampTypeTimestampType)
 		if !rulesItem.Timestamp.Type.IsUnknown() && !rulesItem.Timestamp.Type.IsNull() {
 			*typeVar1 = shared.EventBreakerRulesetRuleTimestampTypeTimestampType(rulesItem.Timestamp.Type.ValueString())
@@ -156,7 +150,6 @@ func (r *EventBreakerRulesetResourceModel) ToSharedEventBreakerRuleset(ctx conte
 			Condition:            condition,
 			Type:                 typeVar,
 			TimestampAnchorRegex: timestampAnchorRegex,
-			EventBreakerRegex:    eventBreakerRegex,
 			Timestamp:            timestamp,
 			TimestampTimezone:    timestampTimezone,
 			TimestampEarliest:    timestampEarliest,
@@ -242,15 +235,15 @@ func (r *EventBreakerRulesetResourceModel) ToOperationsListEventBreakerRulesetRe
 func (r *EventBreakerRulesetResourceModel) ToOperationsDeleteEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.DeleteEventBreakerRulesetByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var id string
-	id = r.ID.ValueString()
-
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	out := operations.DeleteEventBreakerRulesetByIDRequest{
-		ID:      id,
 		GroupID: groupID,
+		ID:      id,
 	}
 
 	return &out, diags
@@ -275,7 +268,6 @@ func (r *EventBreakerRulesetResourceModel) RefreshFromSharedEventBreakerRuleset(
 		var rules tfTypes.EventBreakerRulesetRule
 		rules.Condition = types.StringPointerValue(rulesItem.Condition)
 		rules.Disabled = types.BoolPointerValue(rulesItem.Disabled)
-		rules.EventBreakerRegex = types.StringPointerValue(rulesItem.EventBreakerRegex)
 		rules.Fields = []tfTypes.Field{}
 		for fieldsCount, fieldsItem := range rulesItem.Fields {
 			var fields tfTypes.Field
@@ -313,7 +305,6 @@ func (r *EventBreakerRulesetResourceModel) RefreshFromSharedEventBreakerRuleset(
 		} else {
 			r.Rules[rulesCount].Condition = rules.Condition
 			r.Rules[rulesCount].Disabled = rules.Disabled
-			r.Rules[rulesCount].EventBreakerRegex = rules.EventBreakerRegex
 			r.Rules[rulesCount].Fields = rules.Fields
 			r.Rules[rulesCount].MaxEventBytes = rules.MaxEventBytes
 			r.Rules[rulesCount].Name = rules.Name
@@ -328,15 +319,6 @@ func (r *EventBreakerRulesetResourceModel) RefreshFromSharedEventBreakerRuleset(
 		}
 	}
 	r.Tags = types.StringPointerValue(resp.Tags)
-
-	return diags
-}
-
-func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.ListEventBreakerRulesetResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
 
 	return diags
 }

@@ -9,16 +9,7 @@ import (
 
 // CreateBulletinMessageResponseBody - a list of BulletinMessage objects
 type CreateBulletinMessageResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.BulletinMessage `json:"items,omitempty"`
-}
-
-func (o *CreateBulletinMessageResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateBulletinMessageResponseBody) GetItems() []shared.BulletinMessage {

@@ -21,16 +21,7 @@ func (o *DeleteSystemDiagRequest) GetPath() string {
 
 // DeleteSystemDiagResponseBody - a list of any objects
 type DeleteSystemDiagResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *DeleteSystemDiagResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteSystemDiagResponseBody) GetItems() []map[string]any {

@@ -8,7 +8,7 @@ import (
 )
 
 type CreatePacksCloneRequest struct {
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// PackClone object
 	PackClone shared.PackClone `request:"mediaType=application/json"`
@@ -30,16 +30,7 @@ func (o *CreatePacksCloneRequest) GetPackClone() shared.PackClone {
 
 // CreatePacksCloneResponseBody - a list of any objects
 type CreatePacksCloneResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *CreatePacksCloneResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreatePacksCloneResponseBody) GetItems() []map[string]any {

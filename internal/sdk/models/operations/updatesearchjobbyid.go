@@ -30,16 +30,7 @@ func (o *UpdateSearchJobByIDRequest) GetSearchJob() shared.SearchJob {
 
 // UpdateSearchJobByIDResponseBody - a list of SearchJob objects
 type UpdateSearchJobByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64             `json:"count,omitempty"`
 	Items []shared.SearchJob `json:"items,omitempty"`
-}
-
-func (o *UpdateSearchJobByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateSearchJobByIDResponseBody) GetItems() []shared.SearchJob {

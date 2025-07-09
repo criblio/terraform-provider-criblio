@@ -6,8 +6,8 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
 func (r *SubscriptionDataSourceModel) ToOperationsListSubscriptionRequest(ctx context.Context) (*operations.ListSubscriptionRequest, diag.Diagnostics) {
@@ -23,14 +23,52 @@ func (r *SubscriptionDataSourceModel) ToOperationsListSubscriptionRequest(ctx co
 	return &out, diags
 }
 
-func (r *SubscriptionDataSourceModel) RefreshFromSharedSubscription(ctx context.Context, resp *shared.Subscription) diag.Diagnostics {
+func (r *SubscriptionDataSourceModel) RefreshFromOperationsListSubscriptionResponseBody(ctx context.Context, resp *operations.ListSubscriptionResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Description = types.StringPointerValue(resp.Description)
-	r.Disabled = types.BoolPointerValue(resp.Disabled)
-	r.Filter = types.StringPointerValue(resp.Filter)
-	r.ID = types.StringValue(resp.ID)
-	r.Pipeline = types.StringValue(resp.Pipeline)
+	if resp != nil {
+		r.Items = []tfTypes.Subscription{}
+		if len(r.Items) > len(resp.Items) {
+			r.Items = r.Items[:len(resp.Items)]
+		}
+		for itemsCount, itemsItem := range resp.Items {
+			var items tfTypes.Subscription
+			if itemsItem.Consumer == nil {
+				items.Consumer = nil
+			} else {
+				items.Consumer = &tfTypes.SubscriptionConsumer{}
+				items.Consumer.Connections = []tfTypes.Connection{}
+				for connectionsCount, connectionsItem := range itemsItem.Consumer.Connections {
+					var connections tfTypes.Connection
+					connections.Output = types.StringValue(connectionsItem.Output)
+					connections.Pipeline = types.StringPointerValue(connectionsItem.Pipeline)
+					if connectionsCount+1 > len(items.Consumer.Connections) {
+						items.Consumer.Connections = append(items.Consumer.Connections, connections)
+					} else {
+						items.Consumer.Connections[connectionsCount].Output = connections.Output
+						items.Consumer.Connections[connectionsCount].Pipeline = connections.Pipeline
+					}
+				}
+				items.Consumer.Disabled = types.BoolPointerValue(itemsItem.Consumer.Disabled)
+				items.Consumer.Type = types.StringPointerValue(itemsItem.Consumer.Type)
+			}
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
+			items.Filter = types.StringPointerValue(itemsItem.Filter)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Pipeline = types.StringValue(itemsItem.Pipeline)
+			if itemsCount+1 > len(r.Items) {
+				r.Items = append(r.Items, items)
+			} else {
+				r.Items[itemsCount].Consumer = items.Consumer
+				r.Items[itemsCount].Description = items.Description
+				r.Items[itemsCount].Disabled = items.Disabled
+				r.Items[itemsCount].Filter = items.Filter
+				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].Pipeline = items.Pipeline
+			}
+		}
+	}
 
 	return diags
 }

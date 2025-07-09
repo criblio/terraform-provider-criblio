@@ -59,11 +59,10 @@ func (r *ProjectDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group ID to GET`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to GET`,
+				Computed: true,
 			},
 			"subscriptions": schema.ListAttribute{
 				Computed:    true,
@@ -111,13 +110,13 @@ func (r *ProjectDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetProjectByIDRequest(ctx)
+	request, requestDiags := data.ToOperationsListProjectRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Projects.GetProjectByID(ctx, *request)
+	res, err := r.client.Projects.ListProject(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

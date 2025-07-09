@@ -21,16 +21,7 @@ func (o *GetEdgeAppscopeProcessesByPidRequest) GetPid() string {
 
 // GetEdgeAppscopeProcessesByPidResponseBody - a list of AppScopeProcess objects
 type GetEdgeAppscopeProcessesByPidResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.AppScopeProcess `json:"items,omitempty"`
-}
-
-func (o *GetEdgeAppscopeProcessesByPidResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetEdgeAppscopeProcessesByPidResponseBody) GetItems() []shared.AppScopeProcess {

@@ -21,16 +21,7 @@ func (o *DeleteKeyMetadataEntityByIDRequest) GetID() string {
 
 // DeleteKeyMetadataEntityByIDResponseBody - a list of KeyMetadataEntity objects
 type DeleteKeyMetadataEntityByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                     `json:"count,omitempty"`
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`
-}
-
-func (o *DeleteKeyMetadataEntityByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteKeyMetadataEntityByIDResponseBody) GetItems() []shared.KeyMetadataEntity {

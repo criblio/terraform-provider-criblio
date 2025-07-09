@@ -39,16 +39,7 @@ func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDRequest) GetPipeline(
 
 // CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody - A list of Pipeline objects for specified Project
 type CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody struct {
-	// Number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.Pipeline `json:"items,omitempty"`
-}
-
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody) GetItems() []shared.Pipeline {

@@ -30,16 +30,7 @@ func (o *UpdateSavedQueryByIDRequest) GetSavedQuery() shared.SavedQuery {
 
 // UpdateSavedQueryByIDResponseBody - a list of SavedQuery objects
 type UpdateSavedQueryByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.SavedQuery `json:"items,omitempty"`
-}
-
-func (o *UpdateSavedQueryByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateSavedQueryByIDResponseBody) GetItems() []shared.SavedQuery {

@@ -10,7 +10,7 @@ import (
 type UpdateGlobalVariableByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to PATCH
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Global Variable object to be updated
 	GlobalVar shared.GlobalVar `request:"mediaType=application/json"`

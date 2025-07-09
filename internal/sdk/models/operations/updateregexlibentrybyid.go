@@ -10,7 +10,7 @@ import (
 type UpdateRegexLibEntryByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to PATCH
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// RegexLibEntry object to be updated
 	RegexLibEntry shared.RegexLibEntry `request:"mediaType=application/json"`
@@ -39,16 +39,7 @@ func (o *UpdateRegexLibEntryByIDRequest) GetRegexLibEntry() shared.RegexLibEntry
 
 // UpdateRegexLibEntryByIDResponseBody - a list of RegexLibEntry objects
 type UpdateRegexLibEntryByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                 `json:"count,omitempty"`
 	Items []shared.RegexLibEntry `json:"items,omitempty"`
-}
-
-func (o *UpdateRegexLibEntryByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateRegexLibEntryByIDResponseBody) GetItems() []shared.RegexLibEntry {

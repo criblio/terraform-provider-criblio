@@ -30,16 +30,7 @@ func (o *UpdateSearchDashboardByIDRequest) GetSearchDashboard() shared.SearchDas
 
 // UpdateSearchDashboardByIDResponseBody - a list of SearchDashboard objects
 type UpdateSearchDashboardByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.SearchDashboard `json:"items,omitempty"`
-}
-
-func (o *UpdateSearchDashboardByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateSearchDashboardByIDResponseBody) GetItems() []shared.SearchDashboard {

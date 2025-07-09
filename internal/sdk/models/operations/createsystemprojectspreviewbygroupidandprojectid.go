@@ -39,16 +39,7 @@ func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDRequest) GetPreviewData
 
 // CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody - A list of any objects
 type CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody struct {
-	// Number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {

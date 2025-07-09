@@ -23,10 +23,11 @@ data "criblio_parquet_schema" "my_parquetschema" {
 
 ### Required
 
-- `group_id` (String)
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
+- `additional_properties` (String) Parsed as JSON.
 - `description` (String)
 - `id` (String) The ID of this resource.
 - `schema` (String) JSON schema matching standards of draft version 2019-09

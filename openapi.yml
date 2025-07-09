@@ -15,6 +15,12 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    clientOauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.cribl.cloud/oauth/token
+          scopes: {}
   schemas:
     Pack:
       x-speakeasy-entity: Pack
@@ -48730,6 +48736,9 @@ components:
         - team
 security:
   - bearerAuth: []
+  - clientOauth: []
+  - organizationId: []
+  - workspaceId: []
 tags:
   - name: ai-settings
     description: Actions related to Ai Settings
@@ -48937,6 +48946,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -48983,6 +48993,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49030,6 +49041,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49082,6 +49094,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49128,6 +49141,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49183,6 +49197,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49245,6 +49260,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49301,6 +49317,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49353,6 +49370,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49403,6 +49421,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49447,6 +49466,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49503,6 +49523,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49552,6 +49573,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: Number of items present in the items array
                   items:
@@ -49603,6 +49625,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -49694,6 +49717,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -49784,6 +49808,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -49822,6 +49847,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -49854,6 +49880,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -49945,6 +49972,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50036,6 +50064,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50108,6 +50137,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50199,6 +50229,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50290,6 +50321,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50381,6 +50413,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50472,6 +50505,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50570,6 +50604,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50600,6 +50635,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50688,6 +50724,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50739,6 +50776,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50777,6 +50815,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50814,6 +50853,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50861,6 +50901,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50920,6 +50961,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -50978,6 +51020,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51023,6 +51066,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51067,6 +51111,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51105,6 +51150,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51148,6 +51194,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51191,6 +51238,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51243,6 +51291,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51334,6 +51383,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51425,6 +51475,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51516,6 +51567,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51607,6 +51659,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51693,6 +51746,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51803,6 +51857,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -51930,6 +51985,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52057,6 +52113,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52226,6 +52283,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52343,6 +52401,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52381,6 +52440,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52419,6 +52479,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52463,6 +52524,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52510,6 +52572,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52629,6 +52692,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52719,6 +52783,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52758,6 +52823,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52844,6 +52910,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -52946,6 +53013,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53037,6 +53105,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53128,6 +53197,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53220,6 +53290,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53259,6 +53330,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53298,6 +53370,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53357,6 +53430,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53454,6 +53528,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53501,6 +53576,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53622,6 +53698,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53683,6 +53760,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -53878,6 +53956,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54005,6 +54084,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54123,6 +54203,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54175,6 +54256,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54234,6 +54316,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54320,6 +54403,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54438,6 +54522,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54482,6 +54567,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54529,6 +54615,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54575,6 +54662,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54635,6 +54723,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54762,6 +54851,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -54998,6 +55088,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55089,6 +55180,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55157,6 +55249,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55287,6 +55380,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55489,6 +55583,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55580,6 +55675,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55626,6 +55722,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55672,6 +55769,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55710,6 +55808,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55742,6 +55841,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55780,6 +55880,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55818,6 +55919,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55857,6 +55959,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55889,6 +55992,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55963,6 +56067,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -55995,6 +56100,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56033,6 +56139,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56064,6 +56171,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56099,6 +56207,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56169,6 +56278,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56215,6 +56325,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56247,6 +56358,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56496,6 +56608,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56527,6 +56640,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56558,6 +56672,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56603,6 +56718,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56642,6 +56758,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56673,6 +56790,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56705,6 +56823,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56747,6 +56866,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56796,6 +56916,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56848,6 +56969,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56878,6 +57000,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56909,6 +57032,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56947,6 +57071,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -56995,6 +57120,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57034,6 +57160,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57103,6 +57230,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57163,6 +57291,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57204,6 +57333,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57243,6 +57373,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57288,6 +57419,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57333,6 +57465,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57372,6 +57505,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57404,6 +57538,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57496,6 +57631,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57534,6 +57670,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57653,6 +57790,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57691,6 +57829,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57729,6 +57868,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57773,6 +57913,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57811,6 +57952,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57849,6 +57991,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57900,6 +58043,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57945,6 +58089,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -57984,6 +58129,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58014,6 +58160,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58052,6 +58199,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58084,6 +58232,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58114,6 +58263,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58179,6 +58329,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58211,6 +58362,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58288,6 +58440,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58371,6 +58524,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58442,6 +58596,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58473,6 +58628,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58558,6 +58714,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58596,6 +58753,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58639,6 +58797,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58685,6 +58844,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58729,6 +58889,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58798,6 +58959,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58837,6 +58999,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58875,6 +59038,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58937,6 +59101,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -58976,6 +59141,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59015,6 +59181,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59046,6 +59213,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59108,6 +59276,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59157,6 +59326,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59203,6 +59373,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59250,6 +59421,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59297,6 +59469,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59356,6 +59529,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59402,6 +59576,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59449,6 +59624,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59522,6 +59698,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59553,6 +59730,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59583,6 +59761,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59622,6 +59801,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59661,6 +59841,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59699,6 +59880,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59769,6 +59951,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59830,6 +60013,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59860,6 +60044,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59891,6 +60076,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59921,6 +60107,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59960,6 +60147,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -59991,6 +60179,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60022,6 +60211,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60059,6 +60249,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60093,6 +60284,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60124,6 +60316,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60155,6 +60348,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60186,6 +60380,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60224,6 +60419,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60262,6 +60458,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60300,6 +60497,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60373,6 +60571,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60409,6 +60608,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60448,6 +60648,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60494,6 +60695,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60527,6 +60729,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60585,6 +60788,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60630,6 +60834,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60662,6 +60867,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60695,6 +60901,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60741,6 +60948,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60799,6 +61007,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60838,6 +61047,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60870,6 +61080,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60908,6 +61119,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60947,6 +61159,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -60978,6 +61191,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61012,6 +61226,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61045,6 +61260,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61077,6 +61293,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61115,6 +61332,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61199,6 +61417,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61236,6 +61455,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61428,6 +61648,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61467,6 +61688,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61498,6 +61720,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61556,6 +61779,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61595,6 +61819,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61627,6 +61852,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61707,6 +61933,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61753,6 +61980,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61807,6 +62035,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -61921,6 +62150,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62022,6 +62252,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62069,6 +62300,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62107,6 +62339,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62158,6 +62391,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62202,6 +62436,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62247,6 +62482,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62286,6 +62522,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62325,6 +62562,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62372,6 +62610,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62420,6 +62659,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62464,6 +62704,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:
@@ -62525,6 +62766,7 @@ paths:
                 type: object
                 properties:
                   count:
+                    x-speakeasy-ignore: true
                     type: integer
                     description: number of items present in the items array
                   items:

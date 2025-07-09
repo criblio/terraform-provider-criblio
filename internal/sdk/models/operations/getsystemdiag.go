@@ -9,16 +9,7 @@ import (
 
 // GetSystemDiagResponseBody - a list of Diag objects
 type GetSystemDiagResponseBody struct {
-	// number of items present in the items array
-	Count *int64        `json:"count,omitempty"`
 	Items []shared.Diag `json:"items,omitempty"`
-}
-
-func (o *GetSystemDiagResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSystemDiagResponseBody) GetItems() []shared.Diag {

@@ -9,16 +9,7 @@ import (
 
 // CreateUserResponseBody - a list of User objects
 type CreateUserResponseBody struct {
-	// number of items present in the items array
-	Count *int64        `json:"count,omitempty"`
 	Items []shared.User `json:"items,omitempty"`
-}
-
-func (o *CreateUserResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateUserResponseBody) GetItems() []shared.User {

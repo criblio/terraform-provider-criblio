@@ -30,16 +30,7 @@ func (o *UpdateLoggerConfigByIDRequest) GetLoggerConfig() shared.LoggerConfig {
 
 // UpdateLoggerConfigByIDResponseBody - a list of LoggerConfig objects
 type UpdateLoggerConfigByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                `json:"count,omitempty"`
 	Items []shared.LoggerConfig `json:"items,omitempty"`
-}
-
-func (o *UpdateLoggerConfigByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateLoggerConfigByIDResponseBody) GetItems() []shared.LoggerConfig {

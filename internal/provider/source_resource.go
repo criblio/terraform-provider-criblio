@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -28,7 +27,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/validators"
 	speakeasy_float64validators "github.com/speakeasy/terraform-provider-criblio/internal/validators/float64validators"
 	speakeasy_listvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/listvalidators"
-	speakeasy_mapvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/stringvalidators"
 	"regexp"
@@ -57,6 +55,7 @@ type SourceResourceModel struct {
 	InputConfluentCloud       *tfTypes.InputConfluentCloud       `queryParam:"inline" tfsdk:"input_confluent_cloud" tfPlanOnly:"true"`
 	InputCribl                *tfTypes.InputCribl                `queryParam:"inline" tfsdk:"input_cribl" tfPlanOnly:"true"`
 	InputCriblHTTP            *tfTypes.InputCriblHTTP            `queryParam:"inline" tfsdk:"input_cribl_http" tfPlanOnly:"true"`
+	InputCriblLakeHTTP        *tfTypes.InputCriblLakeHTTP        `queryParam:"inline" tfsdk:"input_cribl_lake_http" tfPlanOnly:"true"`
 	InputCriblmetrics         *tfTypes.InputCriblmetrics         `queryParam:"inline" tfsdk:"input_criblmetrics" tfPlanOnly:"true"`
 	InputCriblTCP             *tfTypes.InputCriblTCP             `queryParam:"inline" tfsdk:"input_cribl_tcp" tfPlanOnly:"true"`
 	InputCrowdstrike          *tfTypes.InputCrowdstrike          `queryParam:"inline" tfsdk:"input_crowdstrike" tfPlanOnly:"true"`
@@ -120,7 +119,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group Id`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -425,7 +424,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -480,47 +479,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -569,7 +527,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -582,7 +540,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -646,6 +604,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -708,7 +667,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`manual`),
-						Description: `Enter connection string directly, or select a stored secret. Default: "manual"; must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
+						Description: `Default: "manual"; must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"manual",
@@ -717,6 +676,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								"clientCert",
 							),
 						},
+					},
+					"azure_cloud": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The Azure cloud to use. Defaults to Azure Public Cloud.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -790,7 +754,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"endpoint_suffix": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Endpoint suffix for the service URL. Defaults to core.windows.net.`,
+						Description: `Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -933,7 +897,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -958,7 +922,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"queue_name": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: ` + "`" + `myQueue-${C.vars.myVar}` + "`" + `. Not Null`,
+						Description: `The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: ` + "`" + `myQueue-${C.vars.myVar}` + "`" + `. Not Null`,
 						Validators: []validator.String{
 							speakeasy_stringvalidators.NotNull(),
 						},
@@ -991,47 +955,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 						Validators: []validator.Float64{
 							float64validator.Between(10, 43200000),
-						},
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
 						},
 					},
 					"storage_account_name": schema.StringAttribute{
@@ -1084,6 +1007,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -1285,7 +1209,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -1345,47 +1269,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -1421,6 +1304,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -1575,21 +1459,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Leave toggled to 'Yes' if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message. Default: true`,
+						Description: `Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message. Default: true`,
 					},
 					"group_id": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`Cribl`),
-						Description: `Specifies the consumer group to which this instance belongs. Defaults to 'Cribl'. Default: "Cribl"`,
+						Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Default: "Cribl"`,
 					},
 					"heartbeat_interval": schema.Float64Attribute{
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(3000),
-						MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group management facilities.` + "\n" +
-							`      Value must be lower than sessionTimeout, and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms).` + "\n" +
+						MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.` + "\n" +
+							`      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.` + "\n" +
 							`Default: 3000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -1626,7 +1510,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed:    true,
 										Optional:    true,
 										Default:     booldefault.StaticBool(true),
-										Description: `Enable authentication. Default: true`,
+										Description: `Default: true`,
 									},
 								},
 								Description: `Credentials to use when authenticating with the schema registry using basic HTTP authentication`,
@@ -1644,7 +1528,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(true),
-								Description: `Enable Schema Registry. Default: true`,
+								Description: `Default: true`,
 							},
 							"max_retries": schema.Float64Attribute{
 								Computed:    true,
@@ -1687,7 +1571,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"certificate_name": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `The name of the predefined certificate.`,
+										Description: `The name of the predefined certificate`,
 									},
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -1698,7 +1582,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"max_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Maximum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -1711,7 +1595,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"min_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Minimum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -1724,7 +1608,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"passphrase": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Passphrase to use to decrypt private key.`,
+										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
 										Computed:    true,
@@ -1735,8 +1619,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed: true,
 										Optional: true,
 										Default:  booldefault.StaticBool(true),
-										MarkdownDescription: `Reject certs that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
-											`                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
+										MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+											`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 											`Default: true`,
 									},
 									"servername": schema.StringAttribute{
@@ -1788,7 +1672,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
-						Description: `Maximum number of network errors before the consumer recreates a socket. Default: 0`,
+						Description: `Maximum number of network errors before the consumer re-creates a socket. Default: 0`,
 						Validators: []validator.Float64{
 							float64validator.AtMost(100),
 						},
@@ -1882,7 +1766,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -1908,7 +1792,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(10000),
-						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire. Default: 10000`,
+						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 1800000),
 						},
@@ -1917,9 +1801,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(60000),
-						MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance has begun.` + "\n" +
+						MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance begins.` + "\n" +
 							`      If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms).` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.` + "\n" +
 							`Default: 60000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -1942,13 +1826,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(true),
-								Description: `Enable Authentication. Default: true`,
+								Description: `Default: true`,
 							},
 							"mechanism": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`plain`),
-								Description: `SASL authentication mechanism to use. Default: "plain"; must be one of ["plain", "scram-sha-256", "scram-sha-512", "kerberos"]`,
+								Description: `Default: "plain"; must be one of ["plain", "scram-sha-256", "scram-sha-512", "kerberos"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"plain",
@@ -1971,55 +1855,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(30000),
-						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group management facilities.` + "\n" +
-							`      If the client sends the broker no heartbeats before this timeout expires, ` + "\n" +
-							`      the broker will remove this client from the group, and will initiate a rebalance.` + "\n" +
+						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
+							`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
+							`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
 							`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms).` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.` + "\n" +
 							`Default: 30000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
-						},
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
 						},
 					},
 					"streamtags": schema.ListAttribute{
@@ -2046,7 +1889,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"certificate_name": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `The name of the predefined certificate.`,
+								Description: `The name of the predefined certificate`,
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -2057,7 +1900,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -2070,7 +1913,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -2083,7 +1926,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"passphrase": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Passphrase to use to decrypt private key.`,
+								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
 								Computed:    true,
@@ -2094,8 +1937,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certs that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
-									`                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
 							"servername": schema.StringAttribute{
@@ -2110,7 +1953,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to only a single topic.`,
+						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -2133,6 +1976,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -2331,7 +2175,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -2359,47 +2203,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -2424,6 +2227,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -2541,13 +2345,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -2581,7 +2385,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -2590,7 +2394,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -2696,7 +2500,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -2735,47 +2539,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -2820,7 +2583,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -2833,7 +2596,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -2887,6 +2650,430 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
+						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
+						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
+						path.MatchRelative().AtParent().AtName("input_datagen"),
+						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_elastic"),
+						path.MatchRelative().AtParent().AtName("input_eventhub"),
+						path.MatchRelative().AtParent().AtName("input_exec"),
+						path.MatchRelative().AtParent().AtName("input_file"),
+						path.MatchRelative().AtParent().AtName("input_firehose"),
+						path.MatchRelative().AtParent().AtName("input_google_pubsub"),
+						path.MatchRelative().AtParent().AtName("input_grafana"),
+						path.MatchRelative().AtParent().AtName("input_http"),
+						path.MatchRelative().AtParent().AtName("input_http_raw"),
+						path.MatchRelative().AtParent().AtName("input_journal_files"),
+						path.MatchRelative().AtParent().AtName("input_kafka"),
+						path.MatchRelative().AtParent().AtName("input_kinesis"),
+						path.MatchRelative().AtParent().AtName("input_kube_events"),
+						path.MatchRelative().AtParent().AtName("input_kube_logs"),
+						path.MatchRelative().AtParent().AtName("input_kube_metrics"),
+						path.MatchRelative().AtParent().AtName("input_loki"),
+						path.MatchRelative().AtParent().AtName("input_metrics"),
+						path.MatchRelative().AtParent().AtName("input_model_driven_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_msk"),
+						path.MatchRelative().AtParent().AtName("input_netflow"),
+						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
+						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
+						path.MatchRelative().AtParent().AtName("input_office365_service"),
+						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
+						path.MatchRelative().AtParent().AtName("input_raw_udp"),
+						path.MatchRelative().AtParent().AtName("input_s3"),
+						path.MatchRelative().AtParent().AtName("input_s3_inventory"),
+						path.MatchRelative().AtParent().AtName("input_security_lake"),
+						path.MatchRelative().AtParent().AtName("input_snmp"),
+						path.MatchRelative().AtParent().AtName("input_splunk"),
+						path.MatchRelative().AtParent().AtName("input_splunk_hec"),
+						path.MatchRelative().AtParent().AtName("input_splunk_search"),
+						path.MatchRelative().AtParent().AtName("input_sqs"),
+						path.MatchRelative().AtParent().AtName("input_syslog"),
+						path.MatchRelative().AtParent().AtName("input_system_metrics"),
+						path.MatchRelative().AtParent().AtName("input_system_state"),
+						path.MatchRelative().AtParent().AtName("input_tcp"),
+						path.MatchRelative().AtParent().AtName("input_tcpjson"),
+						path.MatchRelative().AtParent().AtName("input_wef"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
+						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
+					}...),
+				},
+			},
+			"input_cribl_lake_http": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"activity_log_sample_rate": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(100),
+						Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
+					},
+					"auth_tokens": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+					},
+					"capture_headers": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Add request headers to events, in the __headers field. Default: false`,
+					},
+					"connections": schema.ListNestedAttribute{
+						Computed: true,
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+								"pipeline": schema.StringAttribute{
+									Computed: true,
+									Optional: true,
+								},
+							},
+						},
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+					},
+					"description": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"enable_health_check": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
+					},
+					"environment": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"host": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`0.0.0.0`),
+						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Unique ID for this input`,
+					},
+					"ip_allowlist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/.*/`),
+						Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"`,
+					},
+					"ip_denylist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/^$/`),
+						Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist. Default: "/^$/"`,
+					},
+					"keep_alive_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(5),
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
+					},
+					"max_active_req": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(256),
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+					},
+					"max_requests_per_socket": schema.Int64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     int64default.StaticInt64(0),
+						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
+					},
+					"metadata": schema.ListNestedAttribute{
+						Computed: true,
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+							},
+						},
+						Description: `Fields to add to events from this input`,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"port": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Port to listen on. Not Null`,
+						Validators: []validator.Float64{
+							speakeasy_float64validators.NotNull(),
+							float64validator.AtMost(65535),
+						},
+					},
+					"pq": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"commit_frequency": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(42),
+								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"compress": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"gzip",
+									),
+								},
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1000),
+								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
+							},
+							"max_file_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`1 MB`),
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"max_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`5GB`),
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`always`),
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"smart",
+										"always",
+									),
+								},
+							},
+							"path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
+							},
+						},
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
+					},
+					"request_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
+					},
+					"socket_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"ca_path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+								Validators: []validator.String{
+									validators.IsValidJSON(),
+								},
+							},
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Default: true`,
+							},
+							"max_version": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"min_version": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"passphrase": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"reject_unauthorized": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+								Validators: []validator.String{
+									validators.IsValidJSON(),
+								},
+							},
+							"request_cert": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
+							},
+						},
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `must be "cribl_lake_http"`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"cribl_lake_http",
+							),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_appscope"),
+						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collection"),
+						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
+						path.MatchRelative().AtParent().AtName("input_cribl"),
+						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -2988,7 +3175,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Include granular metrics.  Disabling this will drop the following metrics events: ` + "`" + `cribl.logstream.host.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.index.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.source.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.sourcetype.(in_bytes,in_events,out_bytes,out_events)` + "`" + `. Default: true`,
+						Description: `Include granular metrics. Disabling this will drop the following metrics events: ` + "`" + `cribl.logstream.host.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.index.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.source.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.sourcetype.(in_bytes,in_events,out_bytes,out_events)` + "`" + `. Default: true`,
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -3087,7 +3274,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -3121,47 +3308,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -3189,6 +3335,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
@@ -3412,7 +3559,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -3458,47 +3605,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     float64default.StaticFloat64(0),
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -3542,7 +3648,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -3555,7 +3661,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -3610,6 +3716,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
@@ -3732,7 +3839,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(5),
-								Description: `If checkpointing is enabled, the number of times to retry processing when a processing error occurs. If skip file on error is enabled, this setting is ignored. Default: 5`,
+								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored. Default: 5`,
 								Validators: []validator.Float64{
 									float64validator.AtMost(100),
 								},
@@ -3786,13 +3893,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Use Assume Role credentials to access S3. Default: true`,
+						Description: `Use Assume Role credentials to access Amazon S3. Default: true`,
 					},
 					"enable_sqs_assume_role": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Use Assume Role credentials when accessing SQS. Default: false`,
+						Description: `Use Assume Role credentials when accessing Amazon SQS. Default: false`,
 					},
 					"encoding": schema.StringAttribute{
 						Computed:    true,
@@ -3936,7 +4043,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -3980,6 +4087,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 						},
+					},
+					"processed_tag_key": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
+					},
+					"processed_tag_value": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"queue_name": schema.StringAttribute{
 						Computed:    true,
@@ -4045,53 +4162,23 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
 						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"tag_after_processing": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `must be one of ["false", "true"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"false",
+								"true",
+							),
+						},
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -4122,6 +4209,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
@@ -4232,13 +4320,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -4278,7 +4366,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -4287,7 +4375,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -4393,7 +4481,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -4451,47 +4539,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -4535,7 +4582,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -4548,7 +4595,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -4603,6 +4650,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -4793,7 +4841,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -4827,7 +4875,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									Default:     float64default.StaticFloat64(10),
-									Description: `Maximum no. of events to generate per second per worker node. Defaults to 10. Default: 10`,
+									Description: `Maximum number of events to generate per second per Worker Node. Defaults to 10. Default: 10`,
 									Validators: []validator.Float64{
 										float64validator.AtLeast(1),
 									},
@@ -4835,14 +4883,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								"sample": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Name of the datagen file. Not Null`,
+									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
 								},
 							},
 						},
-						Description: `List of datagens. Not Null`,
+						Description: `Not Null`,
 						Validators: []validator.List{
 							speakeasy_listvalidators.NotNull(),
 							listvalidator.SizeAtLeast(1),
@@ -4853,47 +4901,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -4920,6 +4927,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -5299,7 +5307,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -5441,47 +5449,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							stringvalidator.OneOf("v2", "v4"),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -5580,6 +5547,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -5669,7 +5637,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`none`),
-						Description: `Elastic authentication type. Default: "none"; must be one of ["none", "basic", "credentialsSecret", "authTokens"]`,
+						Description: `Default: "none"; must be one of ["none", "basic", "credentialsSecret", "authTokens"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"none",
@@ -5749,7 +5717,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`/`),
-						Description: `Absolute path on which to listen for Elasticsearch API requests. Defaults to /. _bulk will be appended automatically, e.g., /myPath becomes /myPath/_bulk. Requests can then be made to either /myPath/_bulk or /myPath/<myIndexName>/_bulk. Other entries are faked as success. Default: "/"`,
+						Description: `Absolute path on which to listen for Elasticsearch API requests. Defaults to /. _bulk will be appended automatically. For example, /myPath becomes /myPath/_bulk. Requests can then be made to either /myPath/_bulk or /myPath/<myIndexName>/_bulk. Other entries are faked as success. Default: "/"`,
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern "+regexp.MustCompile(`^/`).String()),
 						},
@@ -5758,13 +5726,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -5780,21 +5748,20 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Field name`,
+									Computed: true,
+									Optional: true,
 								},
 								"value": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Field value. Not Null`,
+									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
 								},
 							},
 						},
-						Description: `Headers to add to all events.`,
+						Description: `Headers to add to all events`,
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -5806,12 +5773,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
-					},
-					"ignore_standard_headers": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Whether to ignore extra HTTP headers that don't start with X- or x-. Default: false`,
 					},
 					"ip_allowlist_regex": schema.StringAttribute{
 						Computed:    true,
@@ -5829,7 +5790,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -5838,7 +5799,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -5875,9 +5836,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Fields to add to events from this input`,
 					},
 					"password": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Password for Basic authentication`,
+						Computed: true,
+						Optional: true,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -5949,7 +5909,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -5992,13 +5952,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Enable proxying of non-bulk API requests to an external Elastic server. Enable this only if you understand the implications; see docs for more details. Default: false`,
+								Description: `Enable proxying of non-bulk API requests to an external Elastic server. Enable this only if you understand the implications. See [Cribl Docs](https://docs.cribl.io/stream/sources-elastic/#proxy-mode) for more details. Default: false`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates). Default: false`,
+								Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates). Default: false`,
 							},
 							"remove_headers": schema.ListAttribute{
 								Computed:    true,
@@ -6018,7 +5978,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"url": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `URL of the Elastic server to proxy non-bulk requests to, e.g., http://elastic:9200`,
+								Description: `URL of the Elastic server to proxy non-bulk requests to, such as http://elastic:9200`,
 							},
 						},
 					},
@@ -6039,47 +5999,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -6124,7 +6043,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -6137,7 +6056,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -6182,9 +6101,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"username": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Username for Basic authentication`,
+						Computed: true,
+						Optional: true,
 					},
 				},
 				Validators: []validator.Object{
@@ -6195,6 +6113,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -6290,7 +6209,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
-						Description: `List of Event Hubs Kafka brokers to connect to, e.g., yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies. Not Null`,
+						Description: `List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies. Not Null`,
 						Validators: []validator.List{
 							speakeasy_listvalidators.NotNull(),
 							listvalidator.SizeAtLeast(1),
@@ -6348,21 +6267,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Whether to start reading from earliest available data, relevant only during initial subscription. Default: true`,
+						Description: `Start reading from earliest available data; relevant only during initial subscription. Default: true`,
 					},
 					"group_id": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`Cribl`),
-						Description: `Specifies the consumer group this instance belongs to, default is 'Cribl'. Default: "Cribl"`,
+						Description: `The consumer group this instance belongs to. Default is 'Cribl'. Default: "Cribl"`,
 					},
 					"heartbeat_interval": schema.Float64Attribute{
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(3000),
-						MarkdownDescription: `Expected time (a.k.a heartbeat.interval.ms in Kafka domain) between heartbeats to the consumer coordinator when using Kafka's group management facilities.` + "\n" +
-							`      Value must be lower than sessionTimeout, and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
-							`      See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).` + "\n" +
+						MarkdownDescription: `Expected time (heartbeat.interval.ms in Kafka domain) between heartbeats to the consumer coordinator when using Kafka's group-management facilities.` + "\n" +
+							`      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
+							`      See [Recommended configurations](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).` + "\n" +
 							`Default: 3000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -6422,7 +6341,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
-						Description: `Maximum number of network errors before the consumer recreates a socket. Default: 0`,
+						Description: `Maximum number of network errors before the consumer re-creates a socket. Default: 0`,
 						Validators: []validator.Float64{
 							float64validator.AtMost(100),
 						},
@@ -6459,7 +6378,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable feature to minimize duplicate events by only starting one consumer for each topic partition. Default: false`,
+						Description: `Minimize duplicate events by starting only one consumer for each topic partition. Default: false`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -6522,7 +6441,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -6548,7 +6467,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(10000),
-						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire. Default: 10000`,
+						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 1800000),
 						},
@@ -6557,9 +6476,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(60000),
-						MarkdownDescription: `Maximum allowed time (a.k.a rebalance.timeout.ms in Kafka domain) for each worker to join the group after a rebalance has begun.` + "\n" +
+						MarkdownDescription: `Maximum allowed time (rebalance.timeout.ms in Kafka domain) for each worker to join the group after a rebalance begins.` + "\n" +
 							`      If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
-							`      See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).` + "\n" +
+							`      See [Recommended configurations](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).` + "\n" +
 							`Default: 60000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -6582,13 +6501,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Enable authentication. Default: false`,
+								Description: `Default: false`,
 							},
 							"mechanism": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`plain`),
-								Description: `SASL authentication mechanism to use. Default: "plain"; must be one of ["plain", "oauthbearer"]`,
+								Description: `Default: "plain"; must be one of ["plain", "oauthbearer"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"plain",
@@ -6609,54 +6528,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(30000),
-						MarkdownDescription: `Timeout (a.k.a session.timeout.ms in Kafka domain) used to detect client failures when using Kafka's group management facilities.` + "\n" +
-							`      If the client sends the broker no heartbeats before this timeout expires, the broker will remove this client from the group, and will initiate a rebalance.` + "\n" +
+						MarkdownDescription: `Timeout (session.timeout.ms in Kafka domain) used to detect client failures when using Kafka's group-management facilities.` + "\n" +
+							`      If the client sends no heartbeats to the broker before the timeout expires, the broker will remove the client from the group and initiate a rebalance.` + "\n" +
 							`      Value must be lower than rebalanceTimeout.` + "\n" +
 							`      See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).` + "\n" +
 							`Default: 30000`,
 						Validators: []validator.Float64{
 							float64validator.Between(6000, 300000),
-						},
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
 						},
 					},
 					"streamtags": schema.ListAttribute{
@@ -6680,7 +6558,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(true),
-								Description: `Reject certs that are not authorized by a CA in the CA certificate path, or by another trusted CA (e.g., the system's CA). Default: true`,
+								Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's). Default: true`,
 							},
 						},
 					},
@@ -6689,7 +6567,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `The name of the Event Hub (a.k.a. Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.`,
+						Description: `The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -6711,6 +6589,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -6930,7 +6809,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -6985,47 +6864,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -7051,6 +6889,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -7334,7 +7173,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -7369,47 +7208,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 						Validators: []validator.Float64{
 							float64validator.Between(10, 43200000),
-						},
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
 						},
 					},
 					"streamtags": schema.ListAttribute{
@@ -7449,6 +7247,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -7565,13 +7364,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -7605,7 +7404,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -7614,7 +7413,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -7720,7 +7519,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -7759,47 +7558,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -7844,7 +7602,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -7857,7 +7615,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -7910,6 +7668,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -8004,13 +7763,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `If enabled, create subscription if it does not exist. Default: true`,
+						Description: `Create subscription if it does not exist. Default: true`,
 					},
 					"create_topic": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `If enabled, create topic if it does not exist. Default: false`,
+						Description: `Create topic if it does not exist. Default: false`,
 					},
 					"description": schema.StringAttribute{
 						Computed: true,
@@ -8031,7 +7790,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`manual`),
-						Description: `Google authentication method. Choose Auto to use Google Application Default Credentials. Default: "manual"; must be one of ["auto", "manual", "secret"]`,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials. Default: "manual"; must be one of ["auto", "manual", "secret"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"auto",
@@ -8086,7 +7845,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `If enabled, receive events in the order they were added to the queue. For this to work correctly, the process sending events must have ordering enabled. Default: false`,
+						Description: `Receive events in the order they were added to the queue. The process sending events must have ordering enabled. Default: false`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -8149,7 +7908,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -8201,47 +7960,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -8284,6 +8002,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -8398,13 +8117,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+								Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 							},
 							"enable_proxy_header": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+								Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 							},
 							"environment": schema.StringAttribute{
 								Computed:    true,
@@ -8595,7 +8314,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(256),
-								Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+								Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 							},
 							"max_requests_per_socket": schema.Int64Attribute{
 								Computed:    true,
@@ -8701,7 +8420,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed:    true,
 										Optional:    true,
 										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"smart",
@@ -8889,47 +8608,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Default:     float64default.StaticFloat64(0),
 								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
 							},
-							"status": schema.SingleNestedAttribute{
-								Computed: true,
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"health": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.OneOf(
-												"Green",
-												"Yellow",
-												"Red",
-											),
-										},
-									},
-									"metrics": schema.MapAttribute{
-										Computed:    true,
-										Optional:    true,
-										ElementType: types.StringType,
-										Description: `Not Null`,
-										Validators: []validator.Map{
-											speakeasy_mapvalidators.NotNull(),
-											mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-										},
-									},
-									"timestamp": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null`,
-										Validators: []validator.Float64{
-											speakeasy_float64validators.NotNull(),
-										},
-									},
-									"use_status_from_lb": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-									},
-								},
-							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
@@ -8973,7 +8651,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"max_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -8986,7 +8664,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"min_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -9094,13 +8772,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+								Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 							},
 							"enable_proxy_header": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+								Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 							},
 							"environment": schema.StringAttribute{
 								Computed:    true,
@@ -9291,7 +8969,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(256),
-								Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+								Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 							},
 							"max_requests_per_socket": schema.Int64Attribute{
 								Computed:    true,
@@ -9397,7 +9075,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed:    true,
 										Optional:    true,
 										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"smart",
@@ -9585,47 +9263,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Default:     float64default.StaticFloat64(0),
 								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
 							},
-							"status": schema.SingleNestedAttribute{
-								Computed: true,
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"health": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.OneOf(
-												"Green",
-												"Yellow",
-												"Red",
-											),
-										},
-									},
-									"metrics": schema.MapAttribute{
-										Computed:    true,
-										Optional:    true,
-										ElementType: types.StringType,
-										Description: `Not Null`,
-										Validators: []validator.Map{
-											speakeasy_mapvalidators.NotNull(),
-											mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-										},
-									},
-									"timestamp": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null`,
-										Validators: []validator.Float64{
-											speakeasy_float64validators.NotNull(),
-										},
-									},
-									"use_status_from_lb": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-									},
-								},
-							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
@@ -9669,7 +9306,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"max_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -9682,7 +9319,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"min_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -9742,6 +9379,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -9900,7 +9538,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`/cribl`),
-						Description: `Absolute path on which to listen for the Cribl HTTP API requests. At the moment, only _bulk (default /cribl/_bulk) is available. Use empty string to disable. Default: "/cribl"`,
+						Description: `Absolute path on which to listen for the Cribl HTTP API requests. Only _bulk (default /cribl/_bulk) is available. Use empty string to disable. Default: "/cribl"`,
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern "+regexp.MustCompile(`^/|^$`).String()),
 						},
@@ -9928,13 +9566,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -9968,7 +9606,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -9977,7 +9615,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -10083,7 +9721,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -10138,47 +9776,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern "+regexp.MustCompile(`^/|^$`).String()),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -10222,7 +9819,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -10235,7 +9832,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -10288,6 +9885,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -10358,7 +9956,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
-						Description: `List of HTTP methods accepted by this input, wildcards are supported, e.g. P*, GET. Defaults to allow all.`,
+						Description: `List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.`,
 					},
 					"allowed_paths": schema.ListAttribute{
 						Computed:    true,
@@ -10474,13 +10072,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -10514,7 +10112,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -10523,7 +10121,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -10629,7 +10227,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -10678,47 +10276,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -10762,7 +10319,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -10775,7 +10332,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -10828,6 +10385,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -11052,7 +10610,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -11105,47 +10663,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -11172,6 +10689,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -11325,21 +10843,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Leave toggled to 'Yes' if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message. Default: true`,
+						Description: `Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message. Default: true`,
 					},
 					"group_id": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`Cribl`),
-						Description: `Specifies the consumer group to which this instance belongs. Defaults to 'Cribl'. Default: "Cribl"`,
+						Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Default: "Cribl"`,
 					},
 					"heartbeat_interval": schema.Float64Attribute{
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(3000),
-						MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group management facilities.` + "\n" +
-							`      Value must be lower than sessionTimeout, and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms).` + "\n" +
+						MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.` + "\n" +
+							`      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.` + "\n" +
 							`Default: 3000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -11376,7 +10894,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed:    true,
 										Optional:    true,
 										Default:     booldefault.StaticBool(true),
-										Description: `Enable authentication. Default: true`,
+										Description: `Default: true`,
 									},
 								},
 								Description: `Credentials to use when authenticating with the schema registry using basic HTTP authentication`,
@@ -11394,7 +10912,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(true),
-								Description: `Enable Schema Registry. Default: true`,
+								Description: `Default: true`,
 							},
 							"max_retries": schema.Float64Attribute{
 								Computed:    true,
@@ -11437,7 +10955,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"certificate_name": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `The name of the predefined certificate.`,
+										Description: `The name of the predefined certificate`,
 									},
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -11448,7 +10966,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"max_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Maximum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -11461,7 +10979,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"min_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Minimum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -11474,7 +10992,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"passphrase": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Passphrase to use to decrypt private key.`,
+										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
 										Computed:    true,
@@ -11485,8 +11003,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed: true,
 										Optional: true,
 										Default:  booldefault.StaticBool(true),
-										MarkdownDescription: `Reject certs that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
-											`                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
+										MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+											`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 											`Default: true`,
 									},
 									"servername": schema.StringAttribute{
@@ -11538,7 +11056,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
-						Description: `Maximum number of network errors before the consumer recreates a socket. Default: 0`,
+						Description: `Maximum number of network errors before the consumer re-creates a socket. Default: 0`,
 						Validators: []validator.Float64{
 							float64validator.AtMost(100),
 						},
@@ -11632,7 +11150,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -11658,7 +11176,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(10000),
-						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire. Default: 10000`,
+						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 1800000),
 						},
@@ -11667,9 +11185,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(60000),
-						MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance has begun.` + "\n" +
+						MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance begins.` + "\n" +
 							`      If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms).` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.` + "\n" +
 							`Default: 60000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -11692,13 +11210,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(true),
-								Description: `Enable Authentication. Default: true`,
+								Description: `Default: true`,
 							},
 							"mechanism": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`plain`),
-								Description: `SASL authentication mechanism to use. Default: "plain"; must be one of ["plain", "scram-sha-256", "scram-sha-512", "kerberos"]`,
+								Description: `Default: "plain"; must be one of ["plain", "scram-sha-256", "scram-sha-512", "kerberos"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"plain",
@@ -11721,55 +11239,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(30000),
-						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group management facilities.` + "\n" +
-							`      If the client sends the broker no heartbeats before this timeout expires, ` + "\n" +
-							`      the broker will remove this client from the group, and will initiate a rebalance.` + "\n" +
+						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
+							`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
+							`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
 							`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms).` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.` + "\n" +
 							`Default: 30000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
-						},
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
 						},
 					},
 					"streamtags": schema.ListAttribute{
@@ -11796,7 +11273,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"certificate_name": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `The name of the predefined certificate.`,
+								Description: `The name of the predefined certificate`,
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -11807,7 +11284,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -11820,7 +11297,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -11833,7 +11310,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"passphrase": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Passphrase to use to decrypt private key.`,
+								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
 								Computed:    true,
@@ -11844,8 +11321,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certs that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
-									`                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
 							"servername": schema.StringAttribute{
@@ -11860,7 +11337,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to only a single topic.`,
+						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -11882,6 +11359,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -11957,7 +11435,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Yes means: when resuming streaming from a stored state, Stream will read the next available record, rather than rereading the last-read record. Enabling this can cause data loss after a Worker Node's unexpected shutdown or restart. Default: false`,
+						Description: `When resuming streaming from a stored state, Stream will read the next available record, rather than rereading the last-read record. Enabling this setting can cause data loss after a Worker Node's unexpected shutdown or restart. Default: false`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Computed: true,
@@ -12182,7 +11660,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -12243,7 +11721,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`true`),
-						Description: `A JS expression to be called with each shardId for the stream, if the expression evalutates to a truthy value the shard will be processed. Default: "true"`,
+						Description: `A JavaScript expression to be called with each shardId for the stream. If the expression evaluates to a truthy value, the shard will be processed. Default: "true"`,
 					},
 					"shard_iterator_type": schema.StringAttribute{
 						Computed:    true,
@@ -12266,51 +11744,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							stringvalidator.OneOf("v2", "v4"),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"stream_name": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Kinesis stream name to read data from. Not Null`,
+						Description: `Kinesis Data Stream to read data from. Not Null`,
 						Validators: []validator.String{
 							speakeasy_stringvalidators.NotNull(),
 						},
@@ -12345,6 +11782,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -12538,7 +11976,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -12591,47 +12029,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -12659,6 +12056,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -12921,7 +12319,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -12983,47 +12381,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -13057,6 +12414,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -13313,7 +12671,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -13366,47 +12724,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -13434,6 +12751,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -13571,13 +12889,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -13611,7 +12929,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -13637,7 +12955,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -13803,7 +13121,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -13853,47 +13171,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -13942,7 +13219,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -13955,7 +13232,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -14031,6 +13308,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -14245,7 +13523,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -14272,47 +13550,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -14365,7 +13602,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -14378,7 +13615,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -14448,6 +13685,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -14659,7 +13897,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -14694,47 +13932,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000. Default: 5000`,
 						Validators: []validator.Float64{
 							float64validator.AtLeast(1),
-						},
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
 						},
 					},
 					"streamtags": schema.ListAttribute{
@@ -14780,7 +13977,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -14793,7 +13990,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -14843,6 +14040,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -15056,21 +14254,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Leave toggled to 'Yes' if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message. Default: true`,
+						Description: `Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message. Default: true`,
 					},
 					"group_id": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`Cribl`),
-						Description: `Specifies the consumer group to which this instance belongs. Defaults to 'Cribl'. Default: "Cribl"`,
+						Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Default: "Cribl"`,
 					},
 					"heartbeat_interval": schema.Float64Attribute{
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(3000),
-						MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group management facilities.` + "\n" +
-							`      Value must be lower than sessionTimeout, and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms).` + "\n" +
+						MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.` + "\n" +
+							`      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.` + "\n" +
 							`Default: 3000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -15107,7 +14305,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed:    true,
 										Optional:    true,
 										Default:     booldefault.StaticBool(true),
-										Description: `Enable authentication. Default: true`,
+										Description: `Default: true`,
 									},
 								},
 								Description: `Credentials to use when authenticating with the schema registry using basic HTTP authentication`,
@@ -15125,7 +14323,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(true),
-								Description: `Enable Schema Registry. Default: true`,
+								Description: `Default: true`,
 							},
 							"max_retries": schema.Float64Attribute{
 								Computed:    true,
@@ -15168,7 +14366,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"certificate_name": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `The name of the predefined certificate.`,
+										Description: `The name of the predefined certificate`,
 									},
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -15179,7 +14377,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"max_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Maximum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -15192,7 +14390,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"min_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Minimum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -15205,7 +14403,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"passphrase": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Passphrase to use to decrypt private key.`,
+										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
 										Computed:    true,
@@ -15216,8 +14414,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed: true,
 										Optional: true,
 										Default:  booldefault.StaticBool(true),
-										MarkdownDescription: `Reject certs that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
-											`                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
+										MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+											`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 											`Default: true`,
 									},
 									"servername": schema.StringAttribute{
@@ -15269,7 +14467,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
-						Description: `Maximum number of network errors before the consumer recreates a socket. Default: 0`,
+						Description: `Maximum number of network errors before the consumer re-creates a socket. Default: 0`,
 						Validators: []validator.Float64{
 							float64validator.AtMost(100),
 						},
@@ -15363,7 +14561,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -15389,7 +14587,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(10000),
-						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire. Default: 10000`,
+						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 1800000),
 						},
@@ -15398,9 +14596,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(60000),
-						MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance has begun.` + "\n" +
+						MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance begins.` + "\n" +
 							`      If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms).` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.` + "\n" +
 							`Default: 60000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -15445,11 +14643,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						Default:  float64default.StaticFloat64(30000),
-						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group management facilities.` + "\n" +
-							`      If the client sends the broker no heartbeats before this timeout expires, ` + "\n" +
-							`      the broker will remove this client from the group, and will initiate a rebalance.` + "\n" +
+						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
+							`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
+							`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
 							`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
-							`      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms).` + "\n" +
+							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.` + "\n" +
 							`Default: 30000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -15462,47 +14660,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Signature version to use for signing MSK cluster requests. Default: "v4"; must be one of ["v2", "v4"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("v2", "v4"),
-						},
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
 						},
 					},
 					"streamtags": schema.ListAttribute{
@@ -15529,7 +14686,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"certificate_name": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `The name of the predefined certificate.`,
+								Description: `The name of the predefined certificate`,
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -15540,7 +14697,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -15553,7 +14710,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to use when connecting. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -15566,7 +14723,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"passphrase": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Passphrase to use to decrypt private key.`,
+								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
 								Computed:    true,
@@ -15577,8 +14734,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certs that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
-									`                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
 							"servername": schema.StringAttribute{
@@ -15593,7 +14750,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to only a single topic.`,
+						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -15615,6 +14772,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -15844,7 +15002,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -15871,47 +15029,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -15966,6 +15083,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -16138,6 +15256,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live. Default: false`,
+					},
 					"ingestion_lag": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
@@ -16277,7 +15401,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -16383,47 +15507,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -16481,6 +15564,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -16655,6 +15739,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live. Default: false`,
+					},
 					"interval": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
@@ -16823,7 +15913,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -16941,47 +16031,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Backward offset for the search range's head. (E.g.: -3h@h) Message Trace data is delayed; this parameter (with Date range end) compensates for delay and gaps.`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -17047,6 +16096,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -17219,6 +16269,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live. Default: false`,
+					},
 					"job_timeout": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -17349,7 +16405,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -17450,47 +16506,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -17548,6 +16563,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -17769,7 +16785,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -17947,7 +16963,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -18009,47 +17025,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -18098,7 +17073,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -18111,7 +17086,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -18189,6 +17164,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -18377,6 +17353,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live. Default: false`,
+					},
 					"interval": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
@@ -18531,7 +17513,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -18655,47 +17637,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							stringvalidator.OneOf("v2", "v4"),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -18752,6 +17693,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -18889,13 +17831,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -18929,7 +17871,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -18946,7 +17888,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -19112,7 +18054,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -19171,47 +18113,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -19260,7 +18161,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -19273,7 +18174,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -19351,6 +18252,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -19574,7 +18476,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -19608,47 +18510,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(false),
 						Description: `If true, each UDP packet is assumed to contain a single message. If false, each UDP packet is assumed to contain multiple messages, separated by newlines. Default: false`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -19681,6 +18542,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -19803,7 +18665,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(5),
-								Description: `If checkpointing is enabled, the number of times to retry processing when a processing error occurs. If skip file on error is enabled, this setting is ignored. Default: 5`,
+								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored. Default: 5`,
 								Validators: []validator.Float64{
 									float64validator.AtMost(100),
 								},
@@ -19857,13 +18719,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Use Assume Role credentials to access S3. Default: true`,
+						Description: `Use Assume Role credentials to access Amazon S3. Default: true`,
 					},
 					"enable_sqs_assume_role": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Use Assume Role credentials when accessing SQS. Default: false`,
+						Description: `Use Assume Role credentials when accessing Amazon SQS. Default: false`,
 					},
 					"encoding": schema.StringAttribute{
 						Computed:    true,
@@ -20025,7 +18887,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -20069,6 +18931,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 						},
+					},
+					"processed_tag_key": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
+					},
+					"processed_tag_value": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"queue_name": schema.StringAttribute{
 						Computed:    true,
@@ -20134,53 +19006,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
 						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"tag_after_processing": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions. Default: false`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -20209,6 +19046,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -20331,7 +19169,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(5),
-								Description: `If checkpointing is enabled, the number of times to retry processing when a processing error occurs. If skip file on error is enabled, this setting is ignored. Default: 5`,
+								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored. Default: 5`,
 								Validators: []validator.Float64{
 									float64validator.AtMost(100),
 								},
@@ -20391,13 +19229,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Use Assume Role credentials to access S3. Default: true`,
+						Description: `Use Assume Role credentials to access Amazon S3. Default: true`,
 					},
 					"enable_sqs_assume_role": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Use Assume Role credentials when accessing SQS. Default: false`,
+						Description: `Use Assume Role credentials when accessing Amazon SQS. Default: false`,
 					},
 					"endpoint": schema.StringAttribute{
 						Computed:    true,
@@ -20563,7 +19401,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -20607,6 +19445,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 						},
+					},
+					"processed_tag_key": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
+					},
+					"processed_tag_value": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"queue_name": schema.StringAttribute{
 						Computed:    true,
@@ -20672,53 +19520,23 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
 						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"tag_after_processing": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `must be one of ["false", "true"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"false",
+								"true",
+							),
+						},
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -20755,6 +19573,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -20877,7 +19696,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(5),
-								Description: `If checkpointing is enabled, the number of times to retry processing when a processing error occurs. If skip file on error is enabled, this setting is ignored. Default: 5`,
+								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored. Default: 5`,
 								Validators: []validator.Float64{
 									float64validator.AtMost(100),
 								},
@@ -20931,13 +19750,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Use Assume Role credentials to access S3. Default: true`,
+						Description: `Use Assume Role credentials to access Amazon S3. Default: true`,
 					},
 					"enable_sqs_assume_role": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Use Assume Role credentials when accessing SQS. Default: false`,
+						Description: `Use Assume Role credentials when accessing Amazon SQS. Default: false`,
 					},
 					"encoding": schema.StringAttribute{
 						Computed:    true,
@@ -21099,7 +19918,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -21143,6 +19962,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 						},
+					},
+					"processed_tag_key": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
+					},
+					"processed_tag_value": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"queue_name": schema.StringAttribute{
 						Computed:    true,
@@ -21208,53 +20037,23 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
 						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"tag_after_processing": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `must be one of ["false", "true"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"false",
+								"true",
+							),
+						},
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -21285,6 +20084,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -21342,6 +20142,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
+					"best_effort_parsing": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, the parser will attempt to parse varbind octet strings as UTF-8, first, otherwise will fallback to other methods. Default: false`,
+					},
 					"connections": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -21502,7 +20308,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -21592,7 +20398,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											Computed:    true,
 											Optional:    true,
 											Default:     stringdefault.StaticString(`none`),
-											Description: `Default: "none"`,
+											Description: `Default: "none"; Parsed as JSON.`,
+											Validators: []validator.String{
+												validators.IsValidJSON(),
+											},
 										},
 									},
 								},
@@ -21603,47 +20412,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 						},
 						Description: `Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues.`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -21683,6 +20451,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -21755,14 +20524,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								"token": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. Not Null`,
+									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
 								},
 							},
 						},
-						Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
+						Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -21970,7 +20739,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -22025,47 +20794,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -22109,7 +20837,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -22122,7 +20850,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -22181,6 +20909,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -22421,7 +21150,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -22461,7 +21190,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -22470,7 +21199,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -22576,7 +21305,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -22640,47 +21369,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -22724,7 +21412,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -22737,7 +21425,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -22798,6 +21486,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -22964,7 +21653,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								"value": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings. Not Null`,
+									Description: `JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
@@ -22992,7 +21681,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								"value": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings. Not Null`,
+									Description: `JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
@@ -23010,6 +21699,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live. Default: false`,
 					},
 					"job_timeout": schema.StringAttribute{
 						Computed:    true,
@@ -23226,7 +21921,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -23375,47 +22070,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -23485,6 +22139,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -23773,7 +22428,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -23807,7 +22462,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`standard`),
-						Description: `The queue type used (or created). Defaults to Standard. Default: "standard"; must be one of ["standard", "fifo"]`,
+						Description: `The queue type used (or created). Default: "standard"; must be one of ["standard", "fifo"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"standard",
@@ -23847,47 +22502,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							stringvalidator.OneOf("v2", "v4"),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -23921,6 +22535,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -24021,6 +22636,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
 								Description: `Default: false`,
+							},
+							"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
 							},
 							"enable_load_balancing": schema.BoolAttribute{
 								Computed:    true,
@@ -24176,7 +22796,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed:    true,
 										Optional:    true,
 										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"smart",
@@ -24227,47 +22847,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
-							},
-							"status": schema.SingleNestedAttribute{
-								Computed: true,
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"health": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.OneOf(
-												"Green",
-												"Yellow",
-												"Red",
-											),
-										},
-									},
-									"metrics": schema.MapAttribute{
-										Computed:    true,
-										Optional:    true,
-										ElementType: types.StringType,
-										Description: `Not Null`,
-										Validators: []validator.Map{
-											speakeasy_mapvalidators.NotNull(),
-											mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-										},
-									},
-									"timestamp": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null`,
-										Validators: []validator.Float64{
-											speakeasy_float64validators.NotNull(),
-										},
-									},
-									"use_status_from_lb": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-									},
-								},
 							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
@@ -24332,7 +22911,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"max_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -24345,7 +22924,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"min_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -24458,6 +23037,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Default:     booldefault.StaticBool(false),
 								Description: `Default: false`,
 							},
+							"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
+							},
 							"enable_load_balancing": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
@@ -24612,7 +23196,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed:    true,
 										Optional:    true,
 										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"smart",
@@ -24663,47 +23247,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
-							},
-							"status": schema.SingleNestedAttribute{
-								Computed: true,
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"health": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.OneOf(
-												"Green",
-												"Yellow",
-												"Red",
-											),
-										},
-									},
-									"metrics": schema.MapAttribute{
-										Computed:    true,
-										Optional:    true,
-										ElementType: types.StringType,
-										Description: `Not Null`,
-										Validators: []validator.Map{
-											speakeasy_mapvalidators.NotNull(),
-											mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-										},
-									},
-									"timestamp": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null`,
-										Validators: []validator.Float64{
-											speakeasy_float64validators.NotNull(),
-										},
-									},
-									"use_status_from_lb": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-									},
-								},
 							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
@@ -24769,7 +23312,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"max_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -24782,7 +23325,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"min_version": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"TLSv1",
@@ -24859,6 +23402,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -25394,7 +23938,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -25462,47 +24006,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -25530,6 +24033,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -25764,6 +24268,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 					},
+					"disable_native_module": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Enable to use built-in tools (PowerShell) to collect events instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab). Default: false`,
+					},
 					"disabled": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -25935,7 +24445,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -25962,47 +24472,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -26031,6 +24500,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -26278,7 +24748,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -26356,47 +24826,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							float64validator.Between(10, 43200000),
 						},
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -26440,7 +24869,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -26453,7 +24882,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -26506,6 +24935,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -26753,7 +25183,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -26798,47 +25228,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -26888,7 +25277,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -26901,7 +25290,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -26954,6 +25343,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -27021,7 +25411,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`clientCert`),
-						Description: `Method by which to authenticate incoming client connections. Default: "clientCert"; must be one of ["clientCert", "kerberos"]`,
+						Description: `How to authenticate incoming client connections. Default: "clientCert"; must be one of ["clientCert", "kerberos"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"clientCert",
@@ -27078,13 +25468,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Preserve the client’s original IP address in the __srcIpPort field when connecting through an HTTP proxy that supports the X-Forwarded-For header. This does not apply to TCP-layer Proxy Protocol v1/v2. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -27118,7 +25508,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(90),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 90`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 90`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -27128,11 +25518,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Path to the keytab file containing the service principal credentials. @{product} will use ` + "`" + `/etc/krb5.keytab` + "`" + ` if not provided.`,
 					},
+					"log_fingerprint_mismatch": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Log a warning if the client certificate authority (CA) fingerprint does not match the expected value. A mismatch prevents Cribl from receiving events from the Windows Event Forwarder. Default: false`,
+					},
 					"max_active_req": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -27238,7 +25634,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -27263,7 +25659,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"principal": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Kerberos principal used for authentication, typically in the form HTTP/<hostname>@<REALM>.`,
+						Description: `Kerberos principal used for authentication, typically in the form HTTP/<hostname>@<REALM>`,
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -27276,47 +25672,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -27343,7 +25698,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									Default:     booldefault.StaticBool(true),
-									Description: `If toggled to Yes, Stream will receive compressed events from the source. Default: true`,
+									Description: `Receive compressed events from the source. Default: true`,
 								},
 								"content_format": schema.StringAttribute{
 									Computed:    true,
@@ -27404,7 +25759,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									Default:     stringdefault.StaticString(`simple`),
-									Description: `Select the query builder mode. Default: "simple"; must be one of ["simple", "xml"]`,
+									Description: `Default: "simple"; must be one of ["simple", "xml"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
 											"simple",
@@ -27416,18 +25771,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									Default:     booldefault.StaticBool(false),
-									Description: `Set to Yes if a newly-subscribed endpoint should send previously existing events. Set to No to only receive new events. Default: false`,
+									Description: `Newly subscribed endpoints will send previously existing events. Disable to receive new events only. Default: false`,
 								},
 								"send_bookmarks": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
 									Default:     booldefault.StaticBool(true),
-									Description: `If toggled to Yes, @{product} will keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events' -- see the documentation for details. Default: true`,
+									Description: `Keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events'. See [Cribl Docs](https://docs.cribl.io/stream/sources-wef/#subscriptions) for more details. Default: true`,
 								},
 								"subscription_name": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Friendly name for this subscription. Not Null`,
+									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
@@ -27436,7 +25791,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
-									Description: `Enter the DNS names of the endpoints that should forward these events. You may use wildcards, for example: *.mydomain.com`,
+									Description: `The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com`,
 								},
 								"version": schema.StringAttribute{
 									Computed:    true,
@@ -27473,7 +25828,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"certificate_name": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Name of the predefined certificate.`,
+								Description: `Name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
 								Computed:    true,
@@ -27498,7 +25853,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -27511,7 +25866,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -27536,7 +25891,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"passphrase": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Passphrase to use to decrypt private key.`,
+								Description: `Passphrase to use to decrypt private key`,
 							},
 							"principal": schema.StringAttribute{
 								Computed:    true,
@@ -27585,6 +25940,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -28033,7 +26389,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -28101,47 +26457,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -28169,6 +26484,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -28414,7 +26730,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -28454,47 +26770,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -28522,6 +26797,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -28699,6 +26975,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live. Default: false`,
+					},
 					"keep_alive_time": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
@@ -28806,7 +27088,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -28916,47 +27198,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(true),
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -28995,6 +27236,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
@@ -29222,7 +27464,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address. Default: false`,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Computed:    true,
@@ -29233,7 +27475,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Whether to enable zscaler HEC acknowledgements. Default: false`,
+						Description: `Whether to enable Zscaler HEC acknowledgements. Default: false`,
 					},
 					"hec_api": schema.StringAttribute{
 						Computed:    true,
@@ -29271,7 +27513,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(5),
-						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.). Default: 5`,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 600),
 						},
@@ -29280,7 +27522,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
-						Description: `Maximum number of active requests per Worker Process. Use 0 for unlimited. Default: 256`,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -29386,7 +27628,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -29425,47 +27667,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
-					},
-					"status": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"health": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["Green", "Yellow", "Red"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"Green",
-										"Yellow",
-										"Red",
-									),
-								},
-							},
-							"metrics": schema.MapAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.Map{
-									speakeasy_mapvalidators.NotNull(),
-									mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-								},
-							},
-							"timestamp": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
-								},
-							},
-							"use_status_from_lb": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -29510,7 +27711,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"max_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Maximum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -29523,7 +27724,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"min_version": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Minimum TLS version to accept from connections. must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"TLSv1",
@@ -29578,6 +27779,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),

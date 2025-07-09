@@ -9,16 +9,7 @@ import (
 
 // CreateUsageGroupResponseBody - a list of UsageGroup objects
 type CreateUsageGroupResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.UsageGroup `json:"items,omitempty"`
-}
-
-func (o *CreateUsageGroupResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateUsageGroupResponseBody) GetItems() []shared.UsageGroup {

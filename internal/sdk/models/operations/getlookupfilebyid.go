@@ -10,7 +10,7 @@ import (
 type GetLookupFileByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to GET
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,16 +30,7 @@ func (o *GetLookupFileByIDRequest) GetGroupID() string {
 
 // GetLookupFileByIDResponseBody - a list of LookupFile objects
 type GetLookupFileByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.LookupFileUnion `json:"items,omitempty"`
-}
-
-func (o *GetLookupFileByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetLookupFileByIDResponseBody) GetItems() []shared.LookupFileUnion {

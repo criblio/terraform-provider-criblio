@@ -107,16 +107,7 @@ func (o *GetProductsGroupsACLTeamsByProductAndIDRequest) GetType() *GetProductsG
 
 // GetProductsGroupsACLTeamsByProductAndIDResponseBody - a list of TeamAccessControlList objects
 type GetProductsGroupsACLTeamsByProductAndIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                         `json:"count,omitempty"`
 	Items []shared.TeamAccessControlList `json:"items,omitempty"`
-}
-
-func (o *GetProductsGroupsACLTeamsByProductAndIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetProductsGroupsACLTeamsByProductAndIDResponseBody) GetItems() []shared.TeamAccessControlList {

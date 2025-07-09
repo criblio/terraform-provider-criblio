@@ -21,16 +21,7 @@ func (o *GetProjectDestinationsByProjectIDRequest) GetProjectID() string {
 
 // GetProjectDestinationsByProjectIDResponseBody - a list of ProjectDestination objects
 type GetProjectDestinationsByProjectIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                      `json:"count,omitempty"`
 	Items []shared.ProjectDestination `json:"items,omitempty"`
-}
-
-func (o *GetProjectDestinationsByProjectIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetProjectDestinationsByProjectIDResponseBody) GetItems() []shared.ProjectDestination {

@@ -9,16 +9,7 @@ import (
 
 // GetSystemInfoResponseBody - a list of SystemInfo objects
 type GetSystemInfoResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.SystemInfo `json:"items,omitempty"`
-}
-
-func (o *GetSystemInfoResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSystemInfoResponseBody) GetItems() []shared.SystemInfo {

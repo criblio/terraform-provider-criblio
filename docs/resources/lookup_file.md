@@ -42,7 +42,7 @@ resource "criblio_lookup_file" "my_lookupfile" {
 
 ### Required
 
-- `group_id` (String) Group ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to DELETE
 
 ### Optional
@@ -65,7 +65,7 @@ Optional:
 
 - `description` (String)
 - `file_info` (Attributes) (see [below for nested schema](#nestedatt--lookup_file_input1--file_info))
-- `mode` (String) Operation mode for CSV-based lookups. Default: "memory"; must be one of ["memory", "disk"]
+- `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
 - `size` (Number) File size. Optional.
 - `tags` (String) One or more tags related to this lookup. Optional.
 
@@ -89,7 +89,7 @@ Optional:
 
 - `content` (String) File content.
 - `description` (String)
-- `mode` (String) Operation mode for CSV-based lookups. Default: "memory"; must be one of ["memory", "disk"]
+- `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
 - `size` (Number) File size. Optional.
 - `tags` (String) One or more tags related to this lookup. Optional.
 
@@ -110,7 +110,7 @@ Read-Only:
 - `description` (String)
 - `file_info` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file1--file_info))
 - `id` (String)
-- `mode` (String) Operation mode for CSV-based lookups. Default: "memory"; must be one of ["memory", "disk"]
+- `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
 - `pending_task` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file1--pending_task))
 - `size` (Number) File size. Optional.
 - `tags` (String) One or more tags related to this lookup. Optional.
@@ -143,7 +143,7 @@ Read-Only:
 - `content` (String) File content.
 - `description` (String)
 - `id` (String)
-- `mode` (String) Operation mode for CSV-based lookups. Default: "memory"; must be one of ["memory", "disk"]
+- `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
 - `pending_task` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file2--pending_task))
 - `size` (Number) File size. Optional.
 - `tags` (String) One or more tags related to this lookup. Optional.

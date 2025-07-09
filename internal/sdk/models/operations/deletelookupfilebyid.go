@@ -8,17 +8,10 @@ import (
 )
 
 type DeleteLookupFileByIDRequest struct {
-	// Group ID to DELETE
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-}
-
-func (o *DeleteLookupFileByIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *DeleteLookupFileByIDRequest) GetID() string {
@@ -26,6 +19,13 @@ func (o *DeleteLookupFileByIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *DeleteLookupFileByIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // DeleteLookupFileByIDResponseBody - a list of LookupFile objects

@@ -9,16 +9,7 @@ import (
 
 // ListRoleResponseBody - a list of Role objects
 type ListRoleResponseBody struct {
-	// number of items present in the items array
-	Count *int64        `json:"count,omitempty"`
 	Items []shared.Role `json:"items,omitempty"`
-}
-
-func (o *ListRoleResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *ListRoleResponseBody) GetItems() []shared.Role {

@@ -15,7 +15,6 @@ Project DataSource
 ```terraform
 data "criblio_project" "my_project" {
   group_id = "...my_group_id..."
-  id       = "...my_id..."
 }
 ```
 
@@ -24,14 +23,14 @@ data "criblio_project" "my_project" {
 
 ### Required
 
-- `group_id` (String) Group ID to GET
-- `id` (String) Unique ID to GET
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
 - `consumers` (Attributes) (see [below for nested schema](#nestedatt--consumers))
 - `description` (String)
 - `destinations` (List of String)
+- `id` (String) The ID of this resource.
 - `subscriptions` (List of String)
 
 <a id="nestedatt--consumers"></a>

@@ -30,16 +30,7 @@ func (o *CreateTeamUsersByIDRequest) GetMembershipSchema() shared.MembershipSche
 
 // CreateTeamUsersByIDResponseBody - a list of string objects
 type CreateTeamUsersByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64   `json:"count,omitempty"`
 	Items []string `json:"items,omitempty"`
-}
-
-func (o *CreateTeamUsersByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateTeamUsersByIDResponseBody) GetItems() []string {

@@ -48,16 +48,7 @@ func (o *CreateSystemProjectsSubscriptionsCaptureByGroupIDAndSubscriptionIDReque
 
 // CreateSystemProjectsSubscriptionsCaptureByGroupIDAndSubscriptionIDResponseBody - A list of any objects
 type CreateSystemProjectsSubscriptionsCaptureByGroupIDAndSubscriptionIDResponseBody struct {
-	// Number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *CreateSystemProjectsSubscriptionsCaptureByGroupIDAndSubscriptionIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemProjectsSubscriptionsCaptureByGroupIDAndSubscriptionIDResponseBody) GetItems() []map[string]any {

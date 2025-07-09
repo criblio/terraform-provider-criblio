@@ -30,16 +30,7 @@ func (o *GetSchemaLibByPackAndIDRequest) GetPack() string {
 
 // GetSchemaLibByPackAndIDResponseBody - a list of Schema objects
 type GetSchemaLibByPackAndIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                  `json:"count,omitempty"`
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
-}
-
-func (o *GetSchemaLibByPackAndIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSchemaLibByPackAndIDResponseBody) GetItems() []shared.SchemaLibEntry {

@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
@@ -69,12 +68,7 @@ func (r *PackPipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shar
 		} else {
 			final = nil
 		}
-		conf1 := make(map[string]interface{})
-		for confKey, confValue := range functionsItem.Conf {
-			var confInst interface{}
-			_ = json.Unmarshal([]byte(confValue.ValueString()), &confInst)
-			conf1[confKey] = confInst
-		}
+		conf1 := shared.FunctionSpecificConfigs{}
 		groupID := new(string)
 		if !functionsItem.GroupID.IsUnknown() && !functionsItem.GroupID.IsNull() {
 			*groupID = functionsItem.GroupID.ValueString()
@@ -156,7 +150,7 @@ func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx 
 	return &out, diags
 }
 
-func (r *PackPipelineResourceModel) ToOperationsGetPipelineByPackAndIDRequest(ctx context.Context) (*operations.GetPipelineByPackAndIDRequest, diag.Diagnostics) {
+func (r *PackPipelineResourceModel) ToOperationsUpdatePipelineByPackAndIDRequest(ctx context.Context) (*operations.UpdatePipelineByPackAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var id string
@@ -168,7 +162,53 @@ func (r *PackPipelineResourceModel) ToOperationsGetPipelineByPackAndIDRequest(ct
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetPipelineByPackAndIDRequest{
+	pipeline, pipelineDiags := r.ToSharedPipeline(ctx)
+	diags.Append(pipelineDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdatePipelineByPackAndIDRequest{
+		ID:       id,
+		Pack:     pack,
+		GroupID:  groupID,
+		Pipeline: *pipeline,
+	}
+
+	return &out, diags
+}
+
+func (r *PackPipelineResourceModel) ToOperationsGetPipelineByPackRequest(ctx context.Context) (*operations.GetPipelineByPackRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pack string
+	pack = r.Pack.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.GetPipelineByPackRequest{
+		Pack:    pack,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *PackPipelineResourceModel) ToOperationsDeletePipelineByPackAndIDRequest(ctx context.Context) (*operations.DeletePipelineByPackAndIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var pack string
+	pack = r.Pack.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeletePipelineByPackAndIDRequest{
 		ID:      id,
 		Pack:    pack,
 		GroupID: groupID,
@@ -188,13 +228,6 @@ func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Contex
 	}
 	for functionsCount, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
-		if len(functionsItem.Conf) > 0 {
-			functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
-			for key, value := range functionsItem.Conf {
-				result, _ := json.Marshal(value)
-				functions.Conf[key] = types.StringValue(string(result))
-			}
-		}
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)

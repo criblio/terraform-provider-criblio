@@ -21,16 +21,7 @@ func (o *DeleteRestSecretByIDRequest) GetID() string {
 
 // DeleteRestSecretByIDResponseBody - a list of RestSecret objects
 type DeleteRestSecretByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.RestSecret `json:"items,omitempty"`
-}
-
-func (o *DeleteRestSecretByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteRestSecretByIDResponseBody) GetItems() []shared.RestSecret {

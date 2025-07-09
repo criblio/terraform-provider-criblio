@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.0.0 and generator version 2.648.4
+// Generated from OpenAPI doc version 4.12.2-4b17c8d4-TFProvider-manual and generator version 2.648.4
 
 import (
 	"context"
@@ -19,7 +19,6 @@ import (
 const (
 	ServerCloud        string = "cloud"
 	ServerCloudGroup   string = "cloud-group"
-	ServerManaged      string = "managed"
 	ServerManagedGroup string = "managed-group"
 )
 
@@ -27,7 +26,6 @@ const (
 var ServerList = map[string]string{
 	ServerCloud:        "https://app.cribl.cloud",
 	ServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
-	ServerManaged:      "https://{hostname}:{port}/api/v1",
 	ServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
 }
 
@@ -57,12 +55,9 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
+// CriblIo - Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).
 type CriblIo struct {
 	SDKVersion string
-	V5         *V5
-	Billing    *Billing
-	Workspaces *Workspaces
-	Sandboxes  *Sandboxes
 	// Actions related to Projects
 	Projects *Projects
 	// Actions related to Subscriptions
@@ -101,8 +96,9 @@ type CriblIo struct {
 	Scripts *Scripts
 	// Actions related to Teams
 	Teams *Teams
-	// Actions related to users
-	Users *Users
+	// Actions related to users. The <code>/system/users</code> endpoints do not apply to Cribl.Cloud deployments. Instead use <code>/products/{product}/users</code>
+	Users      *Users
+	OnlyOnPrem *OnlyOnPrem
 	// Actions related to Lake
 	Lake *Lake
 	// Actions related to DashboardCategories
@@ -145,6 +141,8 @@ type CriblIo struct {
 	HmacFunctions *HmacFunctions
 	// Actions related to inputs
 	Inputs *Inputs
+	// Actions related to source/destination metrics
+	Iometrics *Iometrics
 	// Actions related to outputs
 	Outputs *Outputs
 	// Actions related to Parquet schemas
@@ -221,6 +219,8 @@ type CriblIo struct {
 	Metrics *Metrics
 	// Actions related to UiState
 	UIState *UIState
+	// Actions related to Ai Settings
+	AiSettings *AiSettings
 	// Actions related to Consent
 	Consent *Consent
 	// Actions related to Trust Policies
@@ -393,7 +393,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
 		SDKVersion: "1.0.45",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.0.45 2.648.4 1.0.0 github.com/speakeasy/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.0.45 2.648.4 4.12.2-4b17c8d4-TFProvider-manual github.com/speakeasy/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
@@ -406,10 +406,6 @@ func New(opts ...SDKOption) *CriblIo {
 					"organizationId": "ian",
 					"cloudDomain":    "cribl.cloud",
 					"groupName":      "default",
-				},
-				"managed": {
-					"hostname": "localhost",
-					"port":     "9000",
 				},
 				"managed-group": {
 					"hostname":  "localhost",
@@ -436,10 +432,6 @@ func New(opts ...SDKOption) *CriblIo {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
-	sdk.V5 = newV5(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Billing = newBilling(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Sandboxes = newSandboxes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Projects = newProjects(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Versioning = newVersioning(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -460,6 +452,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Scripts = newScripts(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.OnlyOnPrem = newOnlyOnPrem(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Lake = newLake(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DashboardCategories = newDashboardCategories(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.UsageGroups = newUsageGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -481,6 +474,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.GlobalVariables = newGlobalVariables(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.HmacFunctions = newHmacFunctions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Inputs = newInputs(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Iometrics = newIometrics(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Outputs = newOutputs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Parquetschemas = newParquetschemas(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Profiler = newProfiler(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -519,6 +513,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Processes = newProcesses(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Metrics = newMetrics(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.UIState = newUIState(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.AiSettings = newAiSettings(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Consent = newConsent(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.TrustPolicies = newTrustPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.EdgeContainers = newEdgeContainers(sdk, sdk.sdkConfiguration, sdk.hooks)

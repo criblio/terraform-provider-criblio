@@ -58,13 +58,12 @@ func (r *ParserLibEntryResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Brief description of this parser (optional)`,
+				Computed: true,
+				Optional: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group ID to PATCH`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -77,7 +76,7 @@ func (r *ParserLibEntryResource) Schema(ctx context.Context, req resource.Schema
 			"tags": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `One or more tags related to this parser (optional)`,
+				Description: `Optionally, add tags that you can use for filtering`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,

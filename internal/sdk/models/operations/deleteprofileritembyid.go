@@ -21,16 +21,7 @@ func (o *DeleteProfilerItemByIDRequest) GetID() string {
 
 // DeleteProfilerItemByIDResponseBody - a list of ProfilerItem objects
 type DeleteProfilerItemByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                `json:"count,omitempty"`
 	Items []shared.ProfilerItem `json:"items,omitempty"`
-}
-
-func (o *DeleteProfilerItemByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteProfilerItemByIDResponseBody) GetItems() []shared.ProfilerItem {

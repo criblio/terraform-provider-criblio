@@ -15,7 +15,6 @@ PackPipeline DataSource
 ```terraform
 data "criblio_pack_pipeline" "my_packpipeline" {
   group_id = "...my_group_id..."
-  id       = "...my_id..."
   pack     = "...my_pack..."
 }
 ```
@@ -25,13 +24,13 @@ data "criblio_pack_pipeline" "my_packpipeline" {
 
 ### Required
 
-- `group_id` (String) Group Id
-- `id` (String) Unique ID to GET for pack
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `pack` (String) pack ID to GET
 
 ### Read-Only
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
+- `id` (String) The ID of this resource.
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
@@ -50,13 +49,17 @@ Read-Only:
 
 Read-Only:
 
-- `conf` (Map of String)
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--conf--functions--conf))
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
 - `group_id` (String) Group ID
 - `id` (String) Function ID
+
+<a id="nestedatt--conf--functions--conf"></a>
+### Nested Schema for `conf.functions.conf`
+
 
 
 <a id="nestedatt--conf--groups"></a>

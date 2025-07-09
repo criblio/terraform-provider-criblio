@@ -81,11 +81,11 @@ func (r *ParserLibEntryResourceModel) ToOperationsCreateParserRequest(ctx contex
 func (r *ParserLibEntryResourceModel) ToOperationsUpdateParserByIDRequest(ctx context.Context) (*operations.UpdateParserByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
 	var id string
 	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
 
 	parserLibEntry, parserLibEntryDiags := r.ToSharedParserLibEntry(ctx)
 	diags.Append(parserLibEntryDiags...)
@@ -95,8 +95,8 @@ func (r *ParserLibEntryResourceModel) ToOperationsUpdateParserByIDRequest(ctx co
 	}
 
 	out := operations.UpdateParserByIDRequest{
-		GroupID:        groupID,
 		ID:             id,
+		GroupID:        groupID,
 		ParserLibEntry: *parserLibEntry,
 	}
 

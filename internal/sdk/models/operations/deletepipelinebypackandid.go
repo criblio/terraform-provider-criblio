@@ -12,7 +12,7 @@ type DeletePipelineByPackAndIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to DELETE
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 

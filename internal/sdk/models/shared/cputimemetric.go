@@ -3,8 +3,16 @@
 package shared
 
 type CPUTimeMetric struct {
-	TotalCPUSeconds     float64 `json:"totalCPUSeconds"`
-	TotalExecCPUSeconds float64 `json:"totalExecCPUSeconds"`
+	BillableCPUSeconds  *float64 `json:"billableCPUSeconds,omitempty"`
+	TotalCPUSeconds     float64  `json:"totalCPUSeconds"`
+	TotalExecCPUSeconds float64  `json:"totalExecCPUSeconds"`
+}
+
+func (o *CPUTimeMetric) GetBillableCPUSeconds() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.BillableCPUSeconds
 }
 
 func (o *CPUTimeMetric) GetTotalCPUSeconds() float64 {

@@ -92,17 +92,13 @@ func (r *ProjectResourceModel) ToOperationsUpdateProjectByIDRequest(ctx context.
 	return &out, diags
 }
 
-func (r *ProjectResourceModel) ToOperationsGetProjectByIDRequest(ctx context.Context) (*operations.GetProjectByIDRequest, diag.Diagnostics) {
+func (r *ProjectResourceModel) ToOperationsListProjectRequest(ctx context.Context) (*operations.ListProjectRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetProjectByIDRequest{
-		ID:      id,
+	out := operations.ListProjectRequest{
 		GroupID: groupID,
 	}
 

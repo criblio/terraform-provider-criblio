@@ -9,16 +9,7 @@ import (
 
 // ListRestSecretResponseBody - a list of RestSecret objects
 type ListRestSecretResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.RestSecret `json:"items,omitempty"`
-}
-
-func (o *ListRestSecretResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *ListRestSecretResponseBody) GetItems() []shared.RestSecret {

@@ -30,16 +30,7 @@ func (o *CreateGlobalVariableLibVarsByPackRequest) GetGlobalVar() shared.GlobalV
 
 // CreateGlobalVariableLibVarsByPackResponseBody - a list of Global Variable objects
 type CreateGlobalVariableLibVarsByPackResponseBody struct {
-	// number of items present in the items array
-	Count *int64             `json:"count,omitempty"`
 	Items []shared.GlobalVar `json:"items,omitempty"`
-}
-
-func (o *CreateGlobalVariableLibVarsByPackResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateGlobalVariableLibVarsByPackResponseBody) GetItems() []shared.GlobalVar {

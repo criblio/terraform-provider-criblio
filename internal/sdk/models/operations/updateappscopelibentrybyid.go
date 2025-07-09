@@ -8,19 +8,12 @@ import (
 )
 
 type UpdateAppscopeLibEntryByIDRequest struct {
-	// Group ID to PATCH
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// AppscopeLibEntry object to be updated
 	AppscopeLibEntry shared.AppscopeLibEntry `request:"mediaType=application/json"`
-}
-
-func (o *UpdateAppscopeLibEntryByIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
 }
 
 func (o *UpdateAppscopeLibEntryByIDRequest) GetID() string {
@@ -28,6 +21,13 @@ func (o *UpdateAppscopeLibEntryByIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *UpdateAppscopeLibEntryByIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 func (o *UpdateAppscopeLibEntryByIDRequest) GetAppscopeLibEntry() shared.AppscopeLibEntry {

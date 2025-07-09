@@ -10,6 +10,8 @@ import (
 type UpdateJobsKeepByIDRequest struct {
 	// Job Instance id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// Group ID
+	GroupID *string `queryParam:"style=form,explode=true,name=groupId"`
 }
 
 func (o *UpdateJobsKeepByIDRequest) GetID() string {
@@ -19,18 +21,16 @@ func (o *UpdateJobsKeepByIDRequest) GetID() string {
 	return o.ID
 }
 
-// UpdateJobsKeepByIDResponseBody - a list of JobInfo objects
-type UpdateJobsKeepByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
-	Items []shared.JobInfo `json:"items,omitempty"`
-}
-
-func (o *UpdateJobsKeepByIDResponseBody) GetCount() *int64 {
+func (o *UpdateJobsKeepByIDRequest) GetGroupID() *string {
 	if o == nil {
 		return nil
 	}
-	return o.Count
+	return o.GroupID
+}
+
+// UpdateJobsKeepByIDResponseBody - a list of JobInfo objects
+type UpdateJobsKeepByIDResponseBody struct {
+	Items []shared.JobInfo `json:"items,omitempty"`
 }
 
 func (o *UpdateJobsKeepByIDResponseBody) GetItems() []shared.JobInfo {

@@ -30,16 +30,7 @@ func (o *UpdateSavedJobByIDRequest) GetSavedJob() shared.SavedJob {
 
 // UpdateSavedJobByIDResponseBody - a list of SavedJob objects
 type UpdateSavedJobByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.SavedJob `json:"items,omitempty"`
-}
-
-func (o *UpdateSavedJobByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateSavedJobByIDResponseBody) GetItems() []shared.SavedJob {

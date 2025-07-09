@@ -27,9 +27,11 @@ type GrokDataSource struct {
 
 // GrokDataSourceModel describes the data model.
 type GrokDataSourceModel struct {
-	Content types.String `tfsdk:"content"`
-	GroupID types.String `tfsdk:"group_id"`
-	ID      types.String `tfsdk:"id"`
+	Content types.String  `tfsdk:"content"`
+	GroupID types.String  `tfsdk:"group_id"`
+	ID      types.String  `tfsdk:"id"`
+	Size    types.Float64 `tfsdk:"size"`
+	Tags    types.String  `tfsdk:"tags"`
 }
 
 // Metadata returns the data source type name.
@@ -47,9 +49,16 @@ func (r *GrokDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
+				Computed: true,
+			},
+			"size": schema.Float64Attribute{
+				Computed: true,
+			},
+			"tags": schema.StringAttribute{
 				Computed: true,
 			},
 		},

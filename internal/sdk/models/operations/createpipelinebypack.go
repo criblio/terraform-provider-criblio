@@ -10,7 +10,7 @@ import (
 type CreatePipelineByPackRequest struct {
 	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New Pipeline object
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`

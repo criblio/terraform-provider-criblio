@@ -9,16 +9,7 @@ import (
 
 // CreateSystemMetricsQueryResponseBody - a list of Response objects
 type CreateSystemMetricsQueryResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *CreateSystemMetricsQueryResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemMetricsQueryResponseBody) GetItems() []map[string]any {

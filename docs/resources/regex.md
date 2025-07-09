@@ -29,16 +29,16 @@ resource "criblio_regex" "my_regex" {
 
 ### Required
 
-- `group_id` (String) Group ID to CREATE
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
 - `regex` (String)
 
 ### Optional
 
-- `description` (String) Brief description of this regex (optional)
+- `description` (String)
 - `lib` (String)
-- `sample_data` (String) Sample data for this regex (optional)
-- `tags` (String) One or more tags related to this regex (optional)
+- `sample_data` (String) Optionally, paste in sample data to match against this regex
+- `tags` (String)
 
 ## Import
 

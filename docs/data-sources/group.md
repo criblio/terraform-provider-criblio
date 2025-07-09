@@ -33,12 +33,24 @@ data "criblio_group" "my_group" {
 ### Read-Only
 
 - `cloud` (Attributes) (see [below for nested schema](#nestedatt--cloud))
+- `config_version` (String)
+- `deploying_worker_count` (Number)
+- `description` (String)
 - `estimated_ingest_rate` (Number)
-- `is_fleet` (Boolean) Must be true if product is 'edge'
+- `git` (Attributes) (see [below for nested schema](#nestedatt--git))
+- `incompatible_worker_count` (Number)
+- `inherits` (String)
+- `is_fleet` (Boolean)
+- `is_search` (Boolean)
+- `lookup_deployments` (Attributes List) (see [below for nested schema](#nestedatt--lookup_deployments))
 - `name` (String)
 - `on_prem` (Boolean)
 - `provisioned` (Boolean)
 - `streamtags` (List of String)
+- `tags` (String)
+- `type` (String)
+- `upgrade_version` (String)
+- `worker_count` (Number)
 - `worker_remote_access` (Boolean)
 
 <a id="nestedatt--cloud"></a>
@@ -48,3 +60,44 @@ Read-Only:
 
 - `provider` (String)
 - `region` (String)
+
+
+<a id="nestedatt--git"></a>
+### Nested Schema for `git`
+
+Read-Only:
+
+- `commit` (String)
+- `local_changes` (Number)
+- `log` (Attributes List) (see [below for nested schema](#nestedatt--git--log))
+
+<a id="nestedatt--git--log"></a>
+### Nested Schema for `git.log`
+
+Read-Only:
+
+- `author_email` (String)
+- `author_name` (String)
+- `date` (String)
+- `hash` (String)
+- `message` (String)
+- `short` (String)
+
+
+
+<a id="nestedatt--lookup_deployments"></a>
+### Nested Schema for `lookup_deployments`
+
+Read-Only:
+
+- `context` (String)
+- `lookups` (Attributes List) (see [below for nested schema](#nestedatt--lookup_deployments--lookups))
+
+<a id="nestedatt--lookup_deployments--lookups"></a>
+### Nested Schema for `lookup_deployments.lookups`
+
+Read-Only:
+
+- `deployed_version` (String)
+- `file` (String)
+- `version` (String)

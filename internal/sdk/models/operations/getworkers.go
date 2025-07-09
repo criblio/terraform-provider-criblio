@@ -10,6 +10,8 @@ import (
 type GetWorkersRequest struct {
 	// Filter expression evaluated against nodes
 	FilterExp *string `queryParam:"style=form,explode=true,name=filterExp"`
+	// Sorting object (JSON stringified) expression evaluated against nodes
+	Sort *string `queryParam:"style=form,explode=true,name=sort"`
 	// Sorting expression evaluated against nodes
 	SortExp *string `queryParam:"style=form,explode=true,name=sortExp"`
 	// Maximum number of nodes to return
@@ -25,6 +27,13 @@ func (o *GetWorkersRequest) GetFilterExp() *string {
 		return nil
 	}
 	return o.FilterExp
+}
+
+func (o *GetWorkersRequest) GetSort() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Sort
 }
 
 func (o *GetWorkersRequest) GetSortExp() *string {
@@ -57,16 +66,7 @@ func (o *GetWorkersRequest) GetFilter() *string {
 
 // GetWorkersResponseBody - a list of MasterWorkerEntry objects
 type GetWorkersResponseBody struct {
-	// number of items present in the items array
-	Count *int64                     `json:"count,omitempty"`
 	Items []shared.MasterWorkerEntry `json:"items,omitempty"`
-}
-
-func (o *GetWorkersResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetWorkersResponseBody) GetItems() []shared.MasterWorkerEntry {

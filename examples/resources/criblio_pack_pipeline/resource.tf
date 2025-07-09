@@ -5,7 +5,7 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
     functions = [
       {
         conf = {
-          key = jsonencode("value")
+          # ...
         }
         description = "...my_description..."
         disabled    = false

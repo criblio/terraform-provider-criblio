@@ -21,16 +21,7 @@ func (o *GetPolicyRuleByIDRequest) GetID() string {
 
 // GetPolicyRuleByIDResponseBody - a list of PolicyRule objects
 type GetPolicyRuleByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.PolicyRule `json:"items,omitempty"`
-}
-
-func (o *GetPolicyRuleByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetPolicyRuleByIDResponseBody) GetItems() []shared.PolicyRule {

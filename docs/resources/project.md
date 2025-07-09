@@ -35,7 +35,7 @@ resource "criblio_project" "my_project" {
 ### Required
 
 - `destinations` (List of String)
-- `group_id` (String) Group ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
 - `subscriptions` (List of String)
 
@@ -52,5 +52,5 @@ resource "criblio_project" "my_project" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_project.my_criblio_project "{ \"group_id\": \"\",  \"id\": \"\"}"
+terraform import criblio_project.my_criblio_project ""
 ```

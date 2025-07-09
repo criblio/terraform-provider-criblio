@@ -20,7 +20,7 @@ resource "criblio_pipeline" "my_pipeline" {
     functions = [
       {
         conf = {
-          key = jsonencode("value")
+          # ...
         }
         description = "...my_description..."
         disabled    = true
@@ -53,7 +53,7 @@ resource "criblio_pipeline" "my_pipeline" {
 ### Required
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
-- `group_id` (String) Group Id
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
 
 <a id="nestedatt--conf"></a>
@@ -73,13 +73,17 @@ Optional:
 
 Optional:
 
-- `conf` (Map of String) Not Null
+- `conf` (Attributes) Not Null (see [below for nested schema](#nestedatt--conf--functions--conf))
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
 - `group_id` (String) Group ID
 - `id` (String) Function ID. Not Null
+
+<a id="nestedatt--conf--functions--conf"></a>
+### Nested Schema for `conf.functions.conf`
+
 
 
 <a id="nestedatt--conf--groups"></a>
@@ -96,5 +100,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_pipeline.my_criblio_pipeline "{ \"group_id\": \"\",  \"id\": \"\"}"
+terraform import criblio_pipeline.my_criblio_pipeline ""
 ```

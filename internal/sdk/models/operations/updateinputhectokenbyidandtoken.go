@@ -12,7 +12,7 @@ type UpdateInputHecTokenByIDAndTokenRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// token to update
 	Token string `pathParam:"style=simple,explode=false,name=token"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// UpdateHecTokenRequest object
 	UpdateHecTokenRequest shared.UpdateHecTokenRequest `request:"mediaType=application/json"`
@@ -48,16 +48,7 @@ func (o *UpdateInputHecTokenByIDAndTokenRequest) GetUpdateHecTokenRequest() shar
 
 // UpdateInputHecTokenByIDAndTokenResponseBody - a list of any objects
 type UpdateInputHecTokenByIDAndTokenResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *UpdateInputHecTokenByIDAndTokenResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateInputHecTokenByIDAndTokenResponseBody) GetItems() []map[string]any {

@@ -28,9 +28,11 @@ type GrokResource struct {
 
 // GrokResourceModel describes the resource data model.
 type GrokResourceModel struct {
-	Content types.String `tfsdk:"content"`
-	GroupID types.String `tfsdk:"group_id"`
-	ID      types.String `tfsdk:"id"`
+	Content types.String  `tfsdk:"content"`
+	GroupID types.String  `tfsdk:"group_id"`
+	ID      types.String  `tfsdk:"id"`
+	Size    types.Float64 `tfsdk:"size"`
+	Tags    types.String  `tfsdk:"tags"`
 }
 
 func (r *GrokResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -45,11 +47,19 @@ func (r *GrokResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Required: true,
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to PATCH`,
+			},
+			"size": schema.Float64Attribute{
+				Required: true,
+			},
+			"tags": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
 			},
 		},
 	}

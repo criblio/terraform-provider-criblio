@@ -3,13 +3,12 @@
 page_title: "criblio Provider"
 subcategory: ""
 description: |-
-  
+  Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at docs.cribl.io http://docs.cribl.io.
 ---
 
 # criblio Provider
-> **Warning**: This provider is currently in beta and may experience issues. It is primarily implemented for internal Cribl use cases and should be used with caution in production environments.
 
-
+Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).
 
 ## Example Usage
 
@@ -17,7 +16,7 @@ description: |-
 terraform {
   required_providers {
     criblio = {
-      source  = "criblio/criblio"
+      source  = "speakeasy/criblio"
       version = "1.0.45"
     }
   }

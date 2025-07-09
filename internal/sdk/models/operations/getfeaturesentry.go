@@ -9,16 +9,7 @@ import (
 
 // GetFeaturesEntryResponseBody - a list of FeaturesEntry objects
 type GetFeaturesEntryResponseBody struct {
-	// number of items present in the items array
-	Count *int64                 `json:"count,omitempty"`
 	Items []shared.FeaturesEntry `json:"items,omitempty"`
-}
-
-func (o *GetFeaturesEntryResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetFeaturesEntryResponseBody) GetItems() []shared.FeaturesEntry {

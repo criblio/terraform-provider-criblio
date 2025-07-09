@@ -84,59 +84,59 @@ func (e *AppscopeConfigType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type AppscopeConfigWatchNdjson struct {
-	Allowbinary *bool    `json:"allowbinary,omitempty"`
-	Enabled     *bool    `json:"enabled,omitempty"`
-	Field       *string  `json:"field,omitempty"`
-	Headers     []string `json:"headers,omitempty"`
-	Name        *string  `json:"name,omitempty"`
-	Type        string   `json:"type"`
-	Value       *string  `json:"value,omitempty"`
+type AppscopeConfigWatch struct {
+	Allowbinary *bool   `json:"allowbinary,omitempty"`
+	Enabled     *bool   `json:"enabled,omitempty"`
+	Field       *string `json:"field,omitempty"`
+	Headers     *string `json:"headers,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Type        string  `json:"type"`
+	Value       *string `json:"value,omitempty"`
 }
 
-func (o *AppscopeConfigWatchNdjson) GetAllowbinary() *bool {
+func (o *AppscopeConfigWatch) GetAllowbinary() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Allowbinary
 }
 
-func (o *AppscopeConfigWatchNdjson) GetEnabled() *bool {
+func (o *AppscopeConfigWatch) GetEnabled() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Enabled
 }
 
-func (o *AppscopeConfigWatchNdjson) GetField() *string {
+func (o *AppscopeConfigWatch) GetField() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Field
 }
 
-func (o *AppscopeConfigWatchNdjson) GetHeaders() []string {
+func (o *AppscopeConfigWatch) GetHeaders() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Headers
 }
 
-func (o *AppscopeConfigWatchNdjson) GetName() *string {
+func (o *AppscopeConfigWatch) GetName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Name
 }
 
-func (o *AppscopeConfigWatchNdjson) GetType() string {
+func (o *AppscopeConfigWatch) GetType() string {
 	if o == nil {
 		return ""
 	}
 	return o.Type
 }
 
-func (o *AppscopeConfigWatchNdjson) GetValue() *string {
+func (o *AppscopeConfigWatch) GetValue() *string {
 	if o == nil {
 		return nil
 	}
@@ -144,11 +144,11 @@ func (o *AppscopeConfigWatchNdjson) GetValue() *string {
 }
 
 type AppscopeConfigEvent struct {
-	Enable    bool                        `json:"enable"`
-	Format    AppscopeConfigFormatNdjson  `json:"format"`
-	Transport AppscopeTransport           `json:"transport"`
-	Type      AppscopeConfigType          `json:"type"`
-	Watch     []AppscopeConfigWatchNdjson `json:"watch"`
+	Enable    bool                       `json:"enable"`
+	Format    AppscopeConfigFormatNdjson `json:"format"`
+	Transport AppscopeTransport          `json:"transport"`
+	Type      AppscopeConfigType         `json:"type"`
+	Watch     []AppscopeConfigWatch      `json:"watch"`
 }
 
 func (o *AppscopeConfigEvent) GetEnable() bool {
@@ -179,9 +179,9 @@ func (o *AppscopeConfigEvent) GetType() AppscopeConfigType {
 	return o.Type
 }
 
-func (o *AppscopeConfigEvent) GetWatch() []AppscopeConfigWatchNdjson {
+func (o *AppscopeConfigEvent) GetWatch() []AppscopeConfigWatch {
 	if o == nil {
-		return []AppscopeConfigWatchNdjson{}
+		return []AppscopeConfigWatch{}
 	}
 	return o.Watch
 }
@@ -310,14 +310,11 @@ func (o *AppscopeConfigMetricFormat) GetVerbosity() *float64 {
 	return o.Verbosity
 }
 
-type AppscopeConfigMetricWatch struct {
-}
-
 type AppscopeConfigMetric struct {
-	Enable    bool                        `json:"enable"`
-	Format    AppscopeConfigMetricFormat  `json:"format"`
-	Transport AppscopeTransport           `json:"transport"`
-	Watch     []AppscopeConfigMetricWatch `json:"watch"`
+	Enable    bool                       `json:"enable"`
+	Format    AppscopeConfigMetricFormat `json:"format"`
+	Transport AppscopeTransport          `json:"transport"`
+	Watch     []string                   `json:"watch"`
 }
 
 func (o *AppscopeConfigMetric) GetEnable() bool {
@@ -341,9 +338,9 @@ func (o *AppscopeConfigMetric) GetTransport() AppscopeTransport {
 	return o.Transport
 }
 
-func (o *AppscopeConfigMetric) GetWatch() []AppscopeConfigMetricWatch {
+func (o *AppscopeConfigMetric) GetWatch() []string {
 	if o == nil {
-		return []AppscopeConfigMetricWatch{}
+		return []string{}
 	}
 	return o.Watch
 }

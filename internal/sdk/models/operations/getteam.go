@@ -53,16 +53,7 @@ func (o *GetTeamRequest) GetProduct() *GetTeamProduct {
 
 // GetTeamResponseBody - a list of Team objects
 type GetTeamResponseBody struct {
-	// number of items present in the items array
-	Count *int64        `json:"count,omitempty"`
 	Items []shared.Team `json:"items,omitempty"`
-}
-
-func (o *GetTeamResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetTeamResponseBody) GetItems() []shared.Team {

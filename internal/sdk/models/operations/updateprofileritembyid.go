@@ -30,16 +30,7 @@ func (o *UpdateProfilerItemByIDRequest) GetProfilerItem() shared.ProfilerItem {
 
 // UpdateProfilerItemByIDResponseBody - a list of ProfilerItem objects
 type UpdateProfilerItemByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                `json:"count,omitempty"`
 	Items []shared.ProfilerItem `json:"items,omitempty"`
-}
-
-func (o *UpdateProfilerItemByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateProfilerItemByIDResponseBody) GetItems() []shared.ProfilerItem {

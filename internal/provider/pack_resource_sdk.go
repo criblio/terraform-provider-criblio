@@ -9,25 +9,100 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *PackResourceModel) ToOperationsCreatePacksRequestBody(ctx context.Context) (*operations.CreatePacksRequestBody, diag.Diagnostics) {
+func (r *PackResourceModel) ToSharedPackRequestBody(ctx context.Context) (*shared.PackRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	allowCustomFunctions := new(bool)
+	if !r.AllowCustomFunctions.IsUnknown() && !r.AllowCustomFunctions.IsNull() {
+		*allowCustomFunctions = r.AllowCustomFunctions.ValueBool()
+	} else {
+		allowCustomFunctions = nil
+	}
+	author := new(string)
+	if !r.Author.IsUnknown() && !r.Author.IsNull() {
+		*author = r.Author.ValueString()
+	} else {
+		author = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
 	displayName := new(string)
 	if !r.DisplayName.IsUnknown() && !r.DisplayName.IsNull() {
 		*displayName = r.DisplayName.ValueString()
 	} else {
 		displayName = nil
 	}
+	exports := make([]string, 0, len(r.Exports))
+	for _, exportsItem := range r.Exports {
+		exports = append(exports, exportsItem.ValueString())
+	}
+	force := new(bool)
+	if !r.Force.IsUnknown() && !r.Force.IsNull() {
+		*force = r.Force.ValueBool()
+	} else {
+		force = nil
+	}
 	var id string
 	id = r.ID.ValueString()
 
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
+	inputs := new(float64)
+	if !r.Inputs.IsUnknown() && !r.Inputs.IsNull() {
+		*inputs = r.Inputs.ValueFloat64()
 	} else {
-		description = nil
+		inputs = nil
+	}
+	minLogStreamVersion := new(string)
+	if !r.MinLogStreamVersion.IsUnknown() && !r.MinLogStreamVersion.IsNull() {
+		*minLogStreamVersion = r.MinLogStreamVersion.ValueString()
+	} else {
+		minLogStreamVersion = nil
+	}
+	outputs := new(float64)
+	if !r.Outputs.IsUnknown() && !r.Outputs.IsNull() {
+		*outputs = r.Outputs.ValueFloat64()
+	} else {
+		outputs = nil
+	}
+	var source string
+	source = r.Source.ValueString()
+
+	spec := new(string)
+	if !r.Spec.IsUnknown() && !r.Spec.IsNull() {
+		*spec = r.Spec.ValueString()
+	} else {
+		spec = nil
+	}
+	var tags *shared.PackRequestBodyTags
+	if r.Tags != nil {
+		dataType := make([]string, 0, len(r.Tags.DataType))
+		for _, dataTypeItem := range r.Tags.DataType {
+			dataType = append(dataType, dataTypeItem.ValueString())
+		}
+		domain := make([]string, 0, len(r.Tags.Domain))
+		for _, domainItem := range r.Tags.Domain {
+			domain = append(domain, domainItem.ValueString())
+		}
+		streamtags := make([]string, 0, len(r.Tags.Streamtags))
+		for _, streamtagsItem := range r.Tags.Streamtags {
+			streamtags = append(streamtags, streamtagsItem.ValueString())
+		}
+		technology := make([]string, 0, len(r.Tags.Technology))
+		for _, technologyItem := range r.Tags.Technology {
+			technology = append(technology, technologyItem.ValueString())
+		}
+		tags = &shared.PackRequestBodyTags{
+			DataType:   dataType,
+			Domain:     domain,
+			Streamtags: streamtags,
+			Technology: technology,
+		}
 	}
 	version := new(string)
 	if !r.Version.IsUnknown() && !r.Version.IsNull() {
@@ -35,25 +110,21 @@ func (r *PackResourceModel) ToOperationsCreatePacksRequestBody(ctx context.Conte
 	} else {
 		version = nil
 	}
-	source := new(string)
-	if !r.Source.IsUnknown() && !r.Source.IsNull() {
-		*source = r.Source.ValueString()
-	} else {
-		source = nil
-	}
-	disabled := new(bool)
-	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
-		*disabled = r.Disabled.ValueBool()
-	} else {
-		disabled = nil
-	}
-	out := operations.CreatePacksRequestBody{
-		DisplayName: displayName,
-		ID:          id,
-		Description: description,
-		Version:     version,
-		Source:      source,
-		Disabled:    disabled,
+	out := shared.PackRequestBody{
+		AllowCustomFunctions: allowCustomFunctions,
+		Author:               author,
+		Description:          description,
+		DisplayName:          displayName,
+		Exports:              exports,
+		Force:                force,
+		ID:                   id,
+		Inputs:               inputs,
+		MinLogStreamVersion:  minLogStreamVersion,
+		Outputs:              outputs,
+		Source:               source,
+		Spec:                 spec,
+		Tags:                 tags,
+		Version:              version,
 	}
 
 	return &out, diags
@@ -65,23 +136,16 @@ func (r *PackResourceModel) ToOperationsCreatePacksRequest(ctx context.Context) 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	filename := new(string)
-	if !r.Filename.IsUnknown() && !r.Filename.IsNull() {
-		*filename = r.Filename.ValueString()
-	} else {
-		filename = nil
-	}
-	requestBody, requestBodyDiags := r.ToOperationsCreatePacksRequestBody(ctx)
-	diags.Append(requestBodyDiags...)
+	packRequestBody, packRequestBodyDiags := r.ToSharedPackRequestBody(ctx)
+	diags.Append(packRequestBodyDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
 	out := operations.CreatePacksRequest{
-		GroupID:     groupID,
-		Filename:    filename,
-		RequestBody: *requestBody,
+		GroupID:         groupID,
+		PackRequestBody: *packRequestBody,
 	}
 
 	return &out, diags
@@ -106,19 +170,26 @@ func (r *PackResourceModel) ToOperationsUpdatePacksByIDRequest(ctx context.Conte
 	var id string
 	id = r.ID.ValueString()
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
 	source := new(string)
 	if !r.Source.IsUnknown() && !r.Source.IsNull() {
 		*source = r.Source.ValueString()
 	} else {
 		source = nil
 	}
+	spec := new(string)
+	if !r.Spec.IsUnknown() && !r.Spec.IsNull() {
+		*spec = r.Spec.ValueString()
+	} else {
+		spec = nil
+	}
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
 	out := operations.UpdatePacksByIDRequest{
 		ID:      id,
-		GroupID: groupID,
 		Source:  source,
+		Spec:    spec,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -159,8 +230,10 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 				items.Exports = append(items.Exports, types.StringValue(v))
 			}
 			items.ID = types.StringValue(itemsItem.ID)
+			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
 			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
+			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
 				items.Settings = make(map[string]types.String, len(itemsItem.Settings))
 				for key, value := range itemsItem.Settings {
@@ -202,8 +275,10 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 				r.Items[itemsCount].DisplayName = items.DisplayName
 				r.Items[itemsCount].Exports = items.Exports
 				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].Inputs = items.Inputs
 				r.Items[itemsCount].IsDisabled = items.IsDisabled
 				r.Items[itemsCount].MinLogStreamVersion = items.MinLogStreamVersion
+				r.Items[itemsCount].Outputs = items.Outputs
 				r.Items[itemsCount].Settings = items.Settings
 				r.Items[itemsCount].Source = items.Source
 				r.Items[itemsCount].Spec = items.Spec
@@ -236,8 +311,10 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksResponseBody(ctx contex
 				items.Exports = append(items.Exports, types.StringValue(v))
 			}
 			items.ID = types.StringValue(itemsItem.ID)
+			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
 			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
+			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
 				items.Settings = make(map[string]types.String, len(itemsItem.Settings))
 				for key, value := range itemsItem.Settings {
@@ -278,8 +355,10 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksResponseBody(ctx contex
 				r.Items[itemsCount].DisplayName = items.DisplayName
 				r.Items[itemsCount].Exports = items.Exports
 				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].Inputs = items.Inputs
 				r.Items[itemsCount].IsDisabled = items.IsDisabled
 				r.Items[itemsCount].MinLogStreamVersion = items.MinLogStreamVersion
+				r.Items[itemsCount].Outputs = items.Outputs
 				r.Items[itemsCount].Settings = items.Settings
 				r.Items[itemsCount].Source = items.Source
 				r.Items[itemsCount].Spec = items.Spec
@@ -311,8 +390,10 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 				items.Exports = append(items.Exports, types.StringValue(v))
 			}
 			items.ID = types.StringValue(itemsItem.ID)
+			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
 			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
+			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
 				items.Settings = make(map[string]types.String, len(itemsItem.Settings))
 				for key, value := range itemsItem.Settings {
@@ -353,8 +434,10 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 				r.Items[itemsCount].DisplayName = items.DisplayName
 				r.Items[itemsCount].Exports = items.Exports
 				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].Inputs = items.Inputs
 				r.Items[itemsCount].IsDisabled = items.IsDisabled
 				r.Items[itemsCount].MinLogStreamVersion = items.MinLogStreamVersion
+				r.Items[itemsCount].Outputs = items.Outputs
 				r.Items[itemsCount].Settings = items.Settings
 				r.Items[itemsCount].Source = items.Source
 				r.Items[itemsCount].Spec = items.Spec

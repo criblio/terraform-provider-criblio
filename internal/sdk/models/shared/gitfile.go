@@ -3,17 +3,9 @@
 package shared
 
 type GitFile struct {
-	Cached   *bool     `json:"cached,omitempty"`
 	Children []GitFile `json:"children,omitempty"`
 	Name     string    `json:"name"`
 	State    *string   `json:"state,omitempty"`
-}
-
-func (o *GitFile) GetCached() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Cached
 }
 
 func (o *GitFile) GetChildren() []GitFile {

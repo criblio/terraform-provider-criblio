@@ -30,16 +30,7 @@ func (o *UpdateRoleByIDRequest) GetRole() shared.Role {
 
 // UpdateRoleByIDResponseBody - a list of Role objects
 type UpdateRoleByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64        `json:"count,omitempty"`
 	Items []shared.Role `json:"items,omitempty"`
-}
-
-func (o *UpdateRoleByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateRoleByIDResponseBody) GetItems() []shared.Role {

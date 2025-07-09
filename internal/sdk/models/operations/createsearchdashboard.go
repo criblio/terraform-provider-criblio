@@ -9,16 +9,7 @@ import (
 
 // CreateSearchDashboardResponseBody - a list of SearchDashboard objects
 type CreateSearchDashboardResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.SearchDashboard `json:"items,omitempty"`
-}
-
-func (o *CreateSearchDashboardResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSearchDashboardResponseBody) GetItems() []shared.SearchDashboard {

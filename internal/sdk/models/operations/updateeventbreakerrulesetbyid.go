@@ -10,7 +10,7 @@ import (
 type UpdateEventBreakerRulesetByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to PATCH
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Event Breaker Ruleset object to be updated
 	EventBreakerRuleset shared.EventBreakerRuleset `request:"mediaType=application/json"`

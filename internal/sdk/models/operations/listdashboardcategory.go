@@ -9,16 +9,7 @@ import (
 
 // ListDashboardCategoryResponseBody - a list of DashboardCategory objects
 type ListDashboardCategoryResponseBody struct {
-	// number of items present in the items array
-	Count *int64                     `json:"count,omitempty"`
 	Items []shared.DashboardCategory `json:"items,omitempty"`
-}
-
-func (o *ListDashboardCategoryResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *ListDashboardCategoryResponseBody) GetItems() []shared.DashboardCategory {

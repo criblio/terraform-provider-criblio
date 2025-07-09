@@ -21,16 +21,7 @@ func (o *GetVersionStatusRequest) GetGroup() *string {
 
 // GetVersionStatusResponseBody - a list of GitStatusResult objects
 type GetVersionStatusResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.GitStatusResult `json:"items,omitempty"`
-}
-
-func (o *GetVersionStatusResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetVersionStatusResponseBody) GetItems() []shared.GitStatusResult {

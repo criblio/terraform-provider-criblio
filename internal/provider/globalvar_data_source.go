@@ -54,7 +54,7 @@ func (r *GlobalVarDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group ID to GET`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,

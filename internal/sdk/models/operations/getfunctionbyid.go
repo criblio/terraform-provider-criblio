@@ -21,16 +21,7 @@ func (o *GetFunctionByIDRequest) GetID() string {
 
 // GetFunctionByIDResponseBody - a list of Function objects
 type GetFunctionByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.Function `json:"items,omitempty"`
-}
-
-func (o *GetFunctionByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetFunctionByIDResponseBody) GetItems() []shared.Function {

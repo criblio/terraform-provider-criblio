@@ -10,7 +10,7 @@ import (
 type CreateInputHecTokenByIDRequest struct {
 	// hec input id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// AddHecTokenRequest object
 	AddHecTokenRequest shared.AddHecTokenRequest `request:"mediaType=application/json"`
@@ -39,16 +39,7 @@ func (o *CreateInputHecTokenByIDRequest) GetAddHecTokenRequest() shared.AddHecTo
 
 // CreateInputHecTokenByIDResponseBody - a list of any objects
 type CreateInputHecTokenByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *CreateInputHecTokenByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateInputHecTokenByIDResponseBody) GetItems() []map[string]any {

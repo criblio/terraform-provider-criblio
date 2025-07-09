@@ -10,7 +10,7 @@ import (
 type DeleteRegexLibEntryByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to DELETE
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,16 +30,7 @@ func (o *DeleteRegexLibEntryByIDRequest) GetGroupID() string {
 
 // DeleteRegexLibEntryByIDResponseBody - a list of RegexLibEntry objects
 type DeleteRegexLibEntryByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                 `json:"count,omitempty"`
 	Items []shared.RegexLibEntry `json:"items,omitempty"`
-}
-
-func (o *DeleteRegexLibEntryByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteRegexLibEntryByIDResponseBody) GetItems() []shared.RegexLibEntry {

@@ -30,16 +30,7 @@ func (o *UpdateDataSampleByIDRequest) GetDataSample() shared.DataSample {
 
 // UpdateDataSampleByIDResponseBody - a list of DataSample objects
 type UpdateDataSampleByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.DataSample `json:"items,omitempty"`
-}
-
-func (o *UpdateDataSampleByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateDataSampleByIDResponseBody) GetItems() []shared.DataSample {

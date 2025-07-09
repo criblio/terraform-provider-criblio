@@ -8,9 +8,8 @@ import (
 )
 
 type CreateSubscriptionRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// Subscription object
-	Subscription *shared.Subscription `request:"mediaType=application/json"`
 }
 
 func (o *CreateSubscriptionRequest) GetGroupID() string {
@@ -18,13 +17,6 @@ func (o *CreateSubscriptionRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
-}
-
-func (o *CreateSubscriptionRequest) GetSubscription() *shared.Subscription {
-	if o == nil {
-		return nil
-	}
-	return o.Subscription
 }
 
 // CreateSubscriptionResponseBody - a list of Subscription objects

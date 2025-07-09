@@ -8,16 +8,10 @@ import (
 )
 
 type DeleteGrokFileByIDRequest struct {
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-}
-
-func (o *DeleteGrokFileByIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *DeleteGrokFileByIDRequest) GetID() string {
@@ -25,6 +19,13 @@ func (o *DeleteGrokFileByIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *DeleteGrokFileByIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // DeleteGrokFileByIDResponseBody - a list of GrokFile objects

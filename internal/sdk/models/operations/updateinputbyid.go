@@ -10,7 +10,7 @@ import (
 type UpdateInputByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Input object to be updated
 	Input shared.Input `request:"mediaType=application/json"`

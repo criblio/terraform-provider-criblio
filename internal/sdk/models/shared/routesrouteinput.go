@@ -14,7 +14,7 @@ type RoutesRouteInput struct {
 	Filter *string `default:"true" json:"filter"`
 	// Pipeline to send the matching data to
 	Pipeline string `json:"pipeline"`
-	// Enable to use a JavaScript expression that evaluates to the name of the Output below
+	// Enable to use a JavaScript expression that evaluates to the name of the Description below
 	EnableOutputExpression *bool   `default:"false" json:"enableOutputExpression"`
 	Output                 any     `json:"output,omitempty"`
 	OutputExpression       any     `json:"outputExpression,omitempty"`

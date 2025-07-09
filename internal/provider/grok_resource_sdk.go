@@ -19,9 +19,20 @@ func (r *GrokResourceModel) ToSharedGrokFile(ctx context.Context) (*shared.GrokF
 	var id string
 	id = r.ID.ValueString()
 
+	var size float64
+	size = r.Size.ValueFloat64()
+
+	tags := new(string)
+	if !r.Tags.IsUnknown() && !r.Tags.IsNull() {
+		*tags = r.Tags.ValueString()
+	} else {
+		tags = nil
+	}
 	out := shared.GrokFile{
 		Content: content,
 		ID:      id,
+		Size:    size,
+		Tags:    tags,
 	}
 
 	return &out, diags
@@ -51,11 +62,11 @@ func (r *GrokResourceModel) ToOperationsCreateGrokFileRequest(ctx context.Contex
 func (r *GrokResourceModel) ToOperationsUpdateGrokFileByIDRequest(ctx context.Context) (*operations.UpdateGrokFileByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
 	var id string
 	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
 
 	grokFile, grokFileDiags := r.ToSharedGrokFile(ctx)
 	diags.Append(grokFileDiags...)
@@ -65,8 +76,8 @@ func (r *GrokResourceModel) ToOperationsUpdateGrokFileByIDRequest(ctx context.Co
 	}
 
 	out := operations.UpdateGrokFileByIDRequest{
-		GroupID:  groupID,
 		ID:       id,
+		GroupID:  groupID,
 		GrokFile: *grokFile,
 	}
 
@@ -89,15 +100,15 @@ func (r *GrokResourceModel) ToOperationsListGrokFileRequest(ctx context.Context)
 func (r *GrokResourceModel) ToOperationsDeleteGrokFileByIDRequest(ctx context.Context) (*operations.DeleteGrokFileByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
 	var id string
 	id = r.ID.ValueString()
 
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
 	out := operations.DeleteGrokFileByIDRequest{
-		GroupID: groupID,
 		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -108,6 +119,8 @@ func (r *GrokResourceModel) RefreshFromSharedGrokFile(ctx context.Context, resp 
 
 	r.Content = types.StringValue(resp.Content)
 	r.ID = types.StringValue(resp.ID)
+	r.Size = types.Float64Value(resp.Size)
+	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags
 }

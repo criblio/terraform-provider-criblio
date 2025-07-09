@@ -8,17 +8,10 @@ import (
 )
 
 type DeleteAppscopeLibEntryByIDRequest struct {
-	// Group ID to DELETE
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-}
-
-func (o *DeleteAppscopeLibEntryByIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *DeleteAppscopeLibEntryByIDRequest) GetID() string {
@@ -26,6 +19,13 @@ func (o *DeleteAppscopeLibEntryByIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *DeleteAppscopeLibEntryByIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // DeleteAppscopeLibEntryByIDResponseBody - a list of AppscopeLibEntry objects

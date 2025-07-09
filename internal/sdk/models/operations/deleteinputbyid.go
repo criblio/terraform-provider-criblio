@@ -10,7 +10,7 @@ import (
 type DeleteInputByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,16 +30,7 @@ func (o *DeleteInputByIDRequest) GetGroupID() string {
 
 // DeleteInputByIDResponseBody - a list of Input objects
 type DeleteInputByIDResponseBody struct {
-	// number of items present in the items array
-	CountTotal *int64         `json:"count_total,omitempty"`
-	Items      []shared.Input `json:"items,omitempty"`
-}
-
-func (o *DeleteInputByIDResponseBody) GetCountTotal() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.CountTotal
+	Items []shared.Input `json:"items,omitempty"`
 }
 
 func (o *DeleteInputByIDResponseBody) GetItems() []shared.Input {

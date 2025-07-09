@@ -9,16 +9,7 @@ import (
 
 // GetSystemSettingsCriblResponseBody - a list of PublicSettings objects
 type GetSystemSettingsCriblResponseBody struct {
-	// number of items present in the items array
-	Count *int64                  `json:"count,omitempty"`
 	Items []shared.PublicSettings `json:"items,omitempty"`
-}
-
-func (o *GetSystemSettingsCriblResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSystemSettingsCriblResponseBody) GetItems() []shared.PublicSettings {

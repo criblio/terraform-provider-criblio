@@ -8,6 +8,7 @@ import (
 )
 
 type CreateParserRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New Parser object
 	ParserLibEntry shared.ParserLibEntry `request:"mediaType=application/json"`

@@ -9,16 +9,7 @@ import (
 
 // CreateSystemMetricsEnumResponseBody - a list of MetricNameInfo objects
 type CreateSystemMetricsEnumResponseBody struct {
-	// number of items present in the items array
-	Count *int64                  `json:"count,omitempty"`
 	Items []shared.MetricNameInfo `json:"items,omitempty"`
-}
-
-func (o *CreateSystemMetricsEnumResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemMetricsEnumResponseBody) GetItems() []shared.MetricNameInfo {

@@ -21,16 +21,7 @@ func (o *GetUIByKeyRequest) GetKey() string {
 
 // GetUIByKeyResponseBody - a list of any objects
 type GetUIByKeyResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *GetUIByKeyResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetUIByKeyResponseBody) GetItems() []map[string]any {

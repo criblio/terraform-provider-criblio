@@ -10,7 +10,7 @@ import (
 type CreateOutputTestByIDRequest struct {
 	// Output Id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// OutputTestRequest object
 	OutputTestRequest shared.OutputTestRequest `request:"mediaType=application/json"`
@@ -39,16 +39,7 @@ func (o *CreateOutputTestByIDRequest) GetOutputTestRequest() shared.OutputTestRe
 
 // CreateOutputTestByIDResponseBody - a list of OutputTestResponse objects
 type CreateOutputTestByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                      `json:"count,omitempty"`
 	Items []shared.OutputTestResponse `json:"items,omitempty"`
-}
-
-func (o *CreateOutputTestByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateOutputTestByIDResponseBody) GetItems() []shared.OutputTestResponse {

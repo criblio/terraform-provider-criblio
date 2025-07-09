@@ -8,33 +8,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
-	speakeasy_int64planmodifier "github.com/speakeasy/terraform-provider-criblio/internal/planmodifiers/int64planmodifier"
-	speakeasy_listplanmodifier "github.com/speakeasy/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
-	speakeasy_mapplanmodifier "github.com/speakeasy/terraform-provider-criblio/internal/planmodifiers/mapplanmodifier"
-	speakeasy_objectplanmodifier "github.com/speakeasy/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
-	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk"
-	"github.com/speakeasy/terraform-provider-criblio/internal/validators"
-	speakeasy_mapvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/stringvalidators"
 )
@@ -70,19 +54,11 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 		Attributes: map[string]schema.Attribute{
 			"conf": schema.SingleNestedAttribute{
 				Required: true,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-				},
 				Attributes: map[string]schema.Attribute{
 					"async_func_timeout": schema.Int64Attribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Int64{
-							int64planmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
-						},
-						Description: `Time (in ms) to wait for an async function to complete processing of a data item. Requires replacement if changed.`,
+						Computed:    true,
+						Optional:    true,
+						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
 						Validators: []validator.Int64{
 							int64validator.AtMost(10000),
 						},
@@ -90,199 +66,116 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 					"description": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
 					},
 					"functions": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.List{
-							listplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
-							PlanModifiers: []planmodifier.Object{
-								objectplanmodifier.RequiresReplaceIfConfigured(),
-								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-							},
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.MapAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.Map{
-										mapplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
-									},
-									ElementType: types.StringType,
-									Description: `Not Null; Requires replacement if changed.`,
-									Validators: []validator.Map{
-										speakeasy_mapvalidators.NotNull(),
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+								"conf": schema.SingleNestedAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Simple description of this step. Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Description: `Simple description of this step`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.Bool{
-										boolplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-									},
-									Description: `If true, data will not be pushed through this function. Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Description: `If true, data will not be pushed through this function`,
 								},
 								"filter": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									Default:  stringdefault.StaticString(`true`),
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Filter that selects data to be fed through this Function. Default: "true"; Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Default:     stringdefault.StaticString(`true`),
+									Description: `Filter that selects data to be fed through this Function. Default: "true"`,
 								},
 								"final": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.Bool{
-										boolplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-									},
-									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions. Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
 								},
 								"group_id": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Group ID. Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Description: `Group ID`,
 								},
 								"id": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Function ID. Not Null; Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Description: `Function ID. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
 								},
 							},
 						},
-						Description: `List of Functions to pass data through. Requires replacement if changed.`,
+						Description: `List of Functions to pass data through`,
 					},
 					"groups": schema.MapNestedAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Map{
-							mapplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
-						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
-							PlanModifiers: []planmodifier.Object{
-								objectplanmodifier.RequiresReplaceIfConfigured(),
-								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Short description of this group. Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Description: `Short description of this group`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.Bool{
-										boolplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-									},
-									Description: `Whether this group is disabled. Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Description: `Whether this group is disabled`,
 								},
 								"name": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Not Null; Requires replacement if changed.`,
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
 								},
 							},
 						},
-						Description: `Requires replacement if changed.`,
 					},
 					"output": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						Default:  stringdefault.StaticString(`default`),
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `The output destination for events processed by this Pipeline. Default: "default"; Requires replacement if changed.`,
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`default`),
+						Description: `The output destination for events processed by this Pipeline. Default: "default"`,
 					},
 					"streamtags": schema.ListAttribute{
-						Computed: true,
-						Optional: true,
-						Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-						PlanModifiers: []planmodifier.List{
-							listplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Requires replacement if changed.`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 				},
-				Description: `Requires replacement if changed.`,
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Group Id. Requires replacement if changed.`,
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Requires replacement if changed.`,
+				Required:    true,
+				Description: `Unique ID to PATCH for pack`,
 			},
 			"pack": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `pack ID to POST. Requires replacement if changed.`,
+				Required:    true,
+				Description: `pack ID to POST`,
 			},
 		},
 	}
@@ -386,13 +279,13 @@ func (r *PackPipelineResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetPipelineByPackAndIDRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPipelineByPackRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.GetPipelineByPackAndID(ctx, *request)
+	res, err := r.client.Pipelines.GetPipelineByPack(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -440,7 +333,43 @@ func (r *PackPipelineResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 
-	// Not Implemented; all attributes marked as RequiresReplace
+	request, requestDiags := data.ToOperationsUpdatePipelineByPackAndIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Pipelines.UpdatePipelineByPackAndID(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedPipeline(ctx, &res.Object.Items[0])...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -464,7 +393,29 @@ func (r *PackPipelineResource) Delete(ctx context.Context, req resource.DeleteRe
 		return
 	}
 
-	// Not Implemented; entity does not have a configured DELETE operation
+	request, requestDiags := data.ToOperationsDeletePipelineByPackAndIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Pipelines.DeletePipelineByPackAndID(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+
 }
 
 func (r *PackPipelineResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
@@ -472,12 +423,11 @@ func (r *PackPipelineResource) ImportState(ctx context.Context, req resource.Imp
 	dec.DisallowUnknownFields()
 	var data struct {
 		GroupID string `json:"group_id"`
-		ID      string `json:"id"`
 		Pack    string `json:"pack"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{ "group_id": "",  "id": "",  "pack": ""}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{ "group_id": "",  "pack": ""}': `+err.Error())
 		return
 	}
 
@@ -486,11 +436,6 @@ func (r *PackPipelineResource) ImportState(ctx context.Context, req resource.Imp
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
-	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Pack) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return

@@ -396,6 +396,7 @@ type OnClickAction struct {
 	Search                   *string `json:"search,omitempty"`
 	SelectedDashboardID      *string `json:"selectedDashboardId,omitempty"`
 	SelectedInputID          *string `json:"selectedInputId,omitempty"`
+	SelectedLinkID           *string `json:"selectedLinkId,omitempty"`
 	SelectedTimerangeInputID *string `json:"selectedTimerangeInputId,omitempty"`
 	Type                     *string `json:"type,omitempty"`
 }
@@ -419,6 +420,13 @@ func (o *OnClickAction) GetSelectedInputID() *string {
 		return nil
 	}
 	return o.SelectedInputID
+}
+
+func (o *OnClickAction) GetSelectedLinkID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SelectedLinkID
 }
 
 func (o *OnClickAction) GetSelectedTimerangeInputID() *string {

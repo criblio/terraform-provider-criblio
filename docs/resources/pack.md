@@ -14,14 +14,36 @@ Pack Resource
 
 ```terraform
 resource "criblio_pack" "my_pack" {
-  description  = "...my_description..."
-  disabled     = true
-  display_name = "...my_display_name..."
-  filename     = "...my_filename..."
-  group_id     = "...my_group_id..."
-  id           = "...my_id..."
-  source       = "...my_source..."
-  version      = "...my_version..."
+  allow_custom_functions = false
+  author                 = "...my_author..."
+  description            = "...my_description..."
+  display_name           = "...my_display_name..."
+  exports = [
+    "..."
+  ]
+  force                  = true
+  group_id               = "...my_group_id..."
+  id                     = "...my_id..."
+  inputs                 = 8.61
+  min_log_stream_version = "...my_min_log_stream_version..."
+  outputs                = 6.97
+  source                 = "...my_source..."
+  spec                   = "...my_spec..."
+  tags = {
+    data_type = [
+      "..."
+    ]
+    domain = [
+      "..."
+    ]
+    streamtags = [
+      "..."
+    ]
+    technology = [
+      "..."
+    ]
+  }
+  version = "...my_version..."
 }
 ```
 
@@ -30,21 +52,39 @@ resource "criblio_pack" "my_pack" {
 
 ### Required
 
-- `group_id` (String) Group Id
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Pack name
+- `source` (String) body string required Pack source
 
 ### Optional
 
+- `allow_custom_functions` (Boolean) Requires replacement if changed.
+- `author` (String) Requires replacement if changed.
 - `description` (String) Requires replacement if changed.
-- `disabled` (Boolean) Requires replacement if changed.
 - `display_name` (String) Requires replacement if changed.
-- `filename` (String) the file to upload. Requires replacement if changed.
-- `source` (String) body string required Pack source
+- `exports` (List of String) Requires replacement if changed.
+- `force` (Boolean) Requires replacement if changed.
+- `inputs` (Number) Requires replacement if changed.
+- `min_log_stream_version` (String) Requires replacement if changed.
+- `outputs` (Number) Requires replacement if changed.
+- `spec` (String) body string optional Specify a branch, tag or a semver spec
+- `tags` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--tags))
 - `version` (String) Requires replacement if changed.
 
 ### Read-Only
 
 - `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--tags"></a>
+### Nested Schema for `tags`
+
+Required:
+
+- `data_type` (List of String) Requires replacement if changed.
+- `domain` (List of String) Requires replacement if changed.
+- `streamtags` (List of String) Requires replacement if changed.
+- `technology` (List of String) Requires replacement if changed.
+
 
 <a id="nestedatt--items"></a>
 ### Nested Schema for `items`
@@ -56,8 +96,10 @@ Read-Only:
 - `display_name` (String)
 - `exports` (List of String)
 - `id` (String)
+- `inputs` (Number)
 - `is_disabled` (Boolean)
 - `min_log_stream_version` (String)
+- `outputs` (Number)
 - `settings` (Map of String)
 - `source` (String)
 - `spec` (String)

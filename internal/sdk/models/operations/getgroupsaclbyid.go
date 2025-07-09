@@ -71,16 +71,7 @@ func (o *GetGroupsACLByIDRequest) GetType() *GetGroupsACLByIDType {
 
 // GetGroupsACLByIDResponseBody - a list of UserAccessControlList objects
 type GetGroupsACLByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                         `json:"count,omitempty"`
 	Items []shared.UserAccessControlList `json:"items,omitempty"`
-}
-
-func (o *GetGroupsACLByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetGroupsACLByIDResponseBody) GetItems() []shared.UserAccessControlList {

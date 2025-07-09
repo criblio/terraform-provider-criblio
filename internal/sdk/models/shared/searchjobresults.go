@@ -3,12 +3,12 @@
 package shared
 
 type SearchJobResults struct {
-	IsFinished          bool    `json:"isFinished"`
-	Job                 any     `json:"job"`
-	Limit               float64 `json:"limit"`
-	Offset              float64 `json:"offset"`
-	PersistedEventCount float64 `json:"persistedEventCount"`
-	TotalEventCount     float64 `json:"totalEventCount"`
+	IsFinished          bool     `json:"isFinished"`
+	Job                 any      `json:"job"`
+	Limit               *float64 `json:"limit,omitempty"`
+	Offset              float64  `json:"offset"`
+	PersistedEventCount float64  `json:"persistedEventCount"`
+	TotalEventCount     float64  `json:"totalEventCount"`
 }
 
 func (o *SearchJobResults) GetIsFinished() bool {
@@ -25,9 +25,9 @@ func (o *SearchJobResults) GetJob() any {
 	return o.Job
 }
 
-func (o *SearchJobResults) GetLimit() float64 {
+func (o *SearchJobResults) GetLimit() *float64 {
 	if o == nil {
-		return 0.0
+		return nil
 	}
 	return o.Limit
 }

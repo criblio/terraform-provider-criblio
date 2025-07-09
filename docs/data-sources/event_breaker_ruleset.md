@@ -23,4 +23,50 @@ data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 
 ### Required
 
-- `group_id` (String) Group ID to GET
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+
+### Read-Only
+
+- `description` (String)
+- `id` (String) The ID of this resource.
+- `lib` (String)
+- `min_raw_length` (Number) The  minimum number of characters in _raw to determine which rule to use
+- `rules` (Attributes List) A list of rules that will be applied, in order, to the input data stream (see [below for nested schema](#nestedatt--rules))
+- `tags` (String)
+
+<a id="nestedatt--rules"></a>
+### Nested Schema for `rules`
+
+Read-Only:
+
+- `condition` (String) JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events.
+- `disabled` (Boolean) Disable this breaker rule (enabled by default)
+- `fields` (Attributes List) Key-value pairs to be added to each event (see [below for nested schema](#nestedatt--rules--fields))
+- `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines
+- `name` (String)
+- `parser_enabled` (Boolean)
+- `should_use_data_raw` (Boolean) Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event.
+- `timestamp` (Attributes) Auto, manual format (strptime), or current time (see [below for nested schema](#nestedatt--rules--timestamp))
+- `timestamp_anchor_regex` (String) The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction.
+- `timestamp_earliest` (String) The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time.
+- `timestamp_latest` (String) The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time.
+- `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
+- `type` (String)
+
+<a id="nestedatt--rules--fields"></a>
+### Nested Schema for `rules.fields`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) The JavaScript expression used to compute the field's value (can be constant)
+
+
+<a id="nestedatt--rules--timestamp"></a>
+### Nested Schema for `rules.timestamp`
+
+Read-Only:
+
+- `format` (String)
+- `length` (Number)
+- `type` (String)

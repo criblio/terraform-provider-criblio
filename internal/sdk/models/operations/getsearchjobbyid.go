@@ -21,16 +21,7 @@ func (o *GetSearchJobByIDRequest) GetID() string {
 
 // GetSearchJobByIDResponseBody - a list of SearchJob objects
 type GetSearchJobByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64             `json:"count,omitempty"`
 	Items []shared.SearchJob `json:"items,omitempty"`
-}
-
-func (o *GetSearchJobByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSearchJobByIDResponseBody) GetItems() []shared.SearchJob {

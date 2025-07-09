@@ -10,7 +10,7 @@ import (
 type DeletePipelineByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,16 +30,7 @@ func (o *DeletePipelineByIDRequest) GetGroupID() string {
 
 // DeletePipelineByIDResponseBody - a list of Pipeline objects
 type DeletePipelineByIDResponseBody struct {
-	// number of items present in the items array
-	CountTotal *int64            `json:"count_total,omitempty"`
-	Items      []shared.Pipeline `json:"items,omitempty"`
-}
-
-func (o *DeletePipelineByIDResponseBody) GetCountTotal() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.CountTotal
+	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
 func (o *DeletePipelineByIDResponseBody) GetItems() []shared.Pipeline {

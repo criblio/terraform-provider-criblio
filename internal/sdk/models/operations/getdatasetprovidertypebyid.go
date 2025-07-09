@@ -21,16 +21,7 @@ func (o *GetDatasetProviderTypeByIDRequest) GetID() string {
 
 // GetDatasetProviderTypeByIDResponseBody - a list of DatasetProviderType objects
 type GetDatasetProviderTypeByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                       `json:"count,omitempty"`
 	Items []shared.DatasetProviderType `json:"items,omitempty"`
-}
-
-func (o *GetDatasetProviderTypeByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetDatasetProviderTypeByIDResponseBody) GetItems() []shared.DatasetProviderType {

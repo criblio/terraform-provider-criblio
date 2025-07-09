@@ -9,16 +9,7 @@ import (
 
 // UpdateSecurityKmsConfigResponseBody - a list of KMSProviderConfig objects
 type UpdateSecurityKmsConfigResponseBody struct {
-	// number of items present in the items array
-	Count *int64                     `json:"count,omitempty"`
 	Items []shared.KMSProviderConfig `json:"items,omitempty"`
-}
-
-func (o *UpdateSecurityKmsConfigResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateSecurityKmsConfigResponseBody) GetItems() []shared.KMSProviderConfig {

@@ -23,7 +23,7 @@ data "criblio_source" "my_source" {
 
 ### Required
 
-- `group_id` (String)
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
@@ -33,6 +33,7 @@ data "criblio_source" "my_source" {
 - `input_confluent_cloud` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud))
 - `input_cribl` (Attributes) (see [below for nested schema](#nestedatt--input_cribl))
 - `input_cribl_http` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_http))
+- `input_cribl_lake_http` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http))
 - `input_cribl_tcp` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_tcp))
 - `input_criblmetrics` (Attributes) (see [below for nested schema](#nestedatt--input_criblmetrics))
 - `input_crowdstrike` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike))
@@ -115,7 +116,6 @@ Read-Only:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--tls))
@@ -183,19 +183,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_appscope--status"></a>
-### Nested Schema for `input_appscope.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_appscope--tls"></a>
@@ -208,8 +197,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -222,7 +211,8 @@ Read-Only:
 
 Read-Only:
 
-- `auth_type` (String) Enter connection string directly, or select a stored secret
+- `auth_type` (String)
+- `azure_cloud` (String) The Azure cloud to use. Defaults to Azure Public Cloud.
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `certificate` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob--certificate))
 - `client_id` (String) The service principal's client ID
@@ -231,7 +221,7 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_azure_blob--connections))
 - `description` (String)
 - `disabled` (Boolean)
-- `endpoint_suffix` (String) Endpoint suffix for the service URL. Defaults to core.windows.net.
+- `endpoint_suffix` (String) Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_filter` (String) Regex matching file names to download and process. Defaults to: .*
 - `id` (String) Unique ID for this input
@@ -243,12 +233,11 @@ Read-Only:
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `queue_name` (String) The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. E.g., referencing a Global Variable: `myQueue-${C.vars.myVar}`
+- `queue_name` (String) The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myQueue-${C.vars.myVar}`
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `service_period_secs` (Number) The duration (in seconds) which pollers should be validated and restarted if exited
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob--status))
 - `storage_account_name` (String) The name of your Azure storage account
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tenant_id` (String) The service principal's tenant ID
@@ -292,19 +281,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_azure_blob--status"></a>
-### Nested Schema for `input_azure_blob.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -326,7 +304,6 @@ Read-Only:
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collection--preprocess))
 - `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_collection--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `type` (String)
@@ -359,7 +336,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -371,17 +348,6 @@ Read-Only:
 - `args` (List of String) Arguments to be added to the custom command
 - `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
 - `disabled` (Boolean)
-
-
-<a id="nestedatt--input_collection--status"></a>
-### Nested Schema for `input_collection.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -400,11 +366,11 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `from_beginning` (Boolean) Leave toggled to 'Yes' if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
-- `group_id` (String) Specifies the consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group management facilities.
-      Value must be lower than sessionTimeout, and typically should not exceed 1/3 of the sessionTimeout value.
-      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms).
+- `from_beginning` (Boolean) Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
+      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
 - `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--kafka_schema_registry))
@@ -412,27 +378,26 @@ Read-Only:
 - `max_bytes` (Number) Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).
 - `max_bytes_per_partition` (Number) Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-- `max_socket_errors` (Number) Maximum number of network errors before the consumer recreates a socket.
+- `max_socket_errors` (Number) Maximum number of network errors before the consumer re-creates a socket
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_confluent_cloud--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire.
-- `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance has begun.
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
+- `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-      See details [here](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms).
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_confluent_cloud--sasl))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group management facilities.
-      If the client sends the broker no heartbeats before this timeout expires, 
-      the broker will remove this client from the group, and will initiate a rebalance.
+- `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
+      If the client sends no heartbeats to the broker before the timeout expires, 
+      the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms).
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--status))
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--tls))
-- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to only a single topic.
+- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 - `type` (String)
 
 <a id="nestedatt--input_confluent_cloud--connections"></a>
@@ -451,7 +416,7 @@ Read-Only:
 
 - `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--input_confluent_cloud--kafka_schema_registry--auth))
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
-- `disabled` (Boolean) Enable Schema Registry
+- `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -463,7 +428,7 @@ Read-Only:
 Read-Only:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Enable authentication
+- `disabled` (Boolean)
 
 
 <a id="nestedatt--input_confluent_cloud--kafka_schema_registry--tls"></a>
@@ -473,14 +438,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -504,7 +469,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -513,19 +478,8 @@ Read-Only:
 
 Read-Only:
 
-- `disabled` (Boolean) Enable Authentication
-- `mechanism` (String) SASL authentication mechanism to use.
-
-
-<a id="nestedatt--input_confluent_cloud--status"></a>
-### Nested Schema for `input_confluent_cloud.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
+- `disabled` (Boolean)
+- `mechanism` (String)
 
 
 <a id="nestedatt--input_confluent_cloud--tls"></a>
@@ -535,14 +489,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -563,7 +517,6 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_cribl--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -595,19 +548,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_cribl--status"></a>
-### Nested Schema for `input_cribl.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -622,15 +564,15 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cribl_http--connections))
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl_http--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -640,7 +582,6 @@ Read-Only:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_http--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_http--tls))
 - `type` (String)
@@ -673,19 +614,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_cribl_http--status"></a>
-### Nested Schema for `input_cribl_http.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_cribl_http--tls"></a>
@@ -698,8 +628,92 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
+- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
+- `reject_unauthorized` (String) Parsed as JSON.
+- `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
+
+
+
+<a id="nestedatt--input_cribl_lake_http"></a>
+### Nested Schema for `input_cribl_lake_http`
+
+Read-Only:
+
+- `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
+- `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
+- `capture_headers` (Boolean) Add request headers to events, in the __headers field
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cribl_lake_http--connections))
+- `description` (String)
+- `disabled` (Boolean)
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
+- `id` (String) Unique ID for this input
+- `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
+- `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
+- `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl_lake_http--metadata))
+- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--pq))
+- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
+- `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
+- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
+- `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--tls))
+- `type` (String)
+
+<a id="nestedatt--input_cribl_lake_http--connections"></a>
+### Nested Schema for `input_cribl_lake_http.connections`
+
+Read-Only:
+
+- `output` (String)
+- `pipeline` (String)
+
+
+<a id="nestedatt--input_cribl_lake_http--metadata"></a>
+### Nested Schema for `input_cribl_lake_http.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_cribl_lake_http--pq"></a>
+### Nested Schema for `input_cribl_lake_http.pq`
+
+Read-Only:
+
+- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
+- `compress` (String) Codec to use to compress the persisted data
+- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
+- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+
+
+<a id="nestedatt--input_cribl_lake_http--tls"></a>
+### Nested Schema for `input_cribl_lake_http.tls`
+
+Read-Only:
+
+- `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
+- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
+- `certificate_name` (String) The name of the predefined certificate
+- `common_name_regex` (String) Parsed as JSON.
+- `disabled` (Boolean)
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -730,7 +744,6 @@ Read-Only:
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_tcp--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_tcp--tls))
 - `type` (String)
@@ -763,19 +776,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_cribl_tcp--status"></a>
-### Nested Schema for `input_cribl_tcp.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_cribl_tcp--tls"></a>
@@ -788,8 +790,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -806,7 +808,7 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `full_fidelity` (Boolean) Include granular metrics.  Disabling this will drop the following metrics events: `cribl.logstream.host.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.index.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.source.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.sourcetype.(in_bytes,in_events,out_bytes,out_events)`.
+- `full_fidelity` (Boolean) Include granular metrics. Disabling this will drop the following metrics events: `cribl.logstream.host.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.index.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.source.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.sourcetype.(in_bytes,in_events,out_bytes,out_events)`.
 - `id` (String) Unique ID for this input
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_criblmetrics--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -814,7 +816,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `prefix` (String) A prefix that is applied to the metrics provided by Cribl Stream
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_criblmetrics--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -846,19 +847,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_criblmetrics--status"></a>
-### Nested Schema for `input_criblmetrics.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -880,8 +870,8 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
-- `enable_sqs_assume_role` (Boolean) Use Assume Role credentials when accessing SQS
+- `enable_assume_role` (Boolean) Use Assume Role credentials to access Amazon S3
+- `enable_sqs_assume_role` (Boolean) Use Assume Role credentials when accessing Amazon SQS
 - `encoding` (String) Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -895,6 +885,8 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--preprocess))
+- `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+- `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -904,8 +896,8 @@ Read-Only:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `tag_after_processing` (String)
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
@@ -915,7 +907,7 @@ Read-Only:
 Read-Only:
 
 - `enabled` (Boolean) Resume processing files after an interruption
-- `retries` (Number) If checkpointing is enabled, the number of times to retry processing when a processing error occurs. If skip file on error is enabled, this setting is ignored.
+- `retries` (Number) The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.
 
 
 <a id="nestedatt--input_crowdstrike--connections"></a>
@@ -946,7 +938,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -960,17 +952,6 @@ Read-Only:
 - `disabled` (Boolean)
 
 
-<a id="nestedatt--input_crowdstrike--status"></a>
-### Nested Schema for `input_crowdstrike.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--input_datadog_agent"></a>
 ### Nested Schema for `input_datadog_agent`
@@ -982,16 +963,16 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_datadog_agent--connections))
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_metrics` (Boolean) Toggle to Yes to extract each incoming metric to multiple events, one per data point. This works well when sending metrics to a statsd-type output. If sending metrics to DatadogHQ or any destination that accepts arbitrary JSON, leave toggled to No (the default).
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_datadog_agent--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -1002,7 +983,6 @@ Read-Only:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--tls))
 - `type` (String)
@@ -1035,7 +1015,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -1048,17 +1028,6 @@ Read-Only:
 - `reject_unauthorized` (Boolean) Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).
 
 
-<a id="nestedatt--input_datadog_agent--status"></a>
-### Nested Schema for `input_datadog_agent.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--input_datadog_agent--tls"></a>
 ### Nested Schema for `input_datadog_agent.tls`
 
@@ -1069,8 +1038,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -1092,9 +1061,8 @@ Read-Only:
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_datagen--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `samples` (Attributes List) List of datagens (see [below for nested schema](#nestedatt--input_datagen--samples))
+- `samples` (Attributes List) (see [below for nested schema](#nestedatt--input_datagen--samples))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_datagen--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -1126,7 +1094,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -1135,19 +1103,8 @@ Read-Only:
 
 Read-Only:
 
-- `events_per_sec` (Number) Maximum no. of events to generate per second per worker node. Defaults to 10.
-- `sample` (String) Name of the datagen file
-
-
-<a id="nestedatt--input_datagen--status"></a>
-### Nested Schema for `input_datagen.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
+- `events_per_sec` (Number) Maximum number of events to generate per second per Worker Node. Defaults to 10.
+- `sample` (String)
 
 
 
@@ -1196,7 +1153,6 @@ Read-Only:
 - `search_filter` (Attributes List) EC2 Instance Search Filter (see [below for nested schema](#nestedatt--input_edge_prometheus--search_filter))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `signature_version` (String) Signature version to use for signing EC2 requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_edge_prometheus--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `targets` (Attributes List) (see [below for nested schema](#nestedatt--input_edge_prometheus--targets))
 - `timeout` (Number) Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable
@@ -1253,7 +1209,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -1264,17 +1220,6 @@ Read-Only:
 
 - `name` (String) Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list
 - `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned
-
-
-<a id="nestedatt--input_edge_prometheus--status"></a>
-### Nested Schema for `input_edge_prometheus.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_edge_prometheus--targets"></a>
@@ -1295,30 +1240,29 @@ Read-Only:
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `api_version` (String) The API version to use for communicating with the server.
+- `api_version` (String) The API version to use for communicating with the server
 - `auth_tokens` (List of String) Bearer tokens to include in the authorization header
-- `auth_type` (String) Elastic authentication type
+- `auth_type` (String)
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_elastic--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `custom_api_version` (String) Custom version information to respond to requests
 - `description` (String)
 - `disabled` (Boolean)
-- `elastic_api` (String) Absolute path on which to listen for Elasticsearch API requests. Defaults to /. _bulk will be appended automatically, e.g., /myPath becomes /myPath/_bulk. Requests can then be made to either /myPath/_bulk or /myPath/<myIndexName>/_bulk. Other entries are faked as success.
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `elastic_api` (String) Absolute path on which to listen for Elasticsearch API requests. Defaults to /. _bulk will be appended automatically. For example, /myPath becomes /myPath/_bulk. Requests can then be made to either /myPath/_bulk or /myPath/<myIndexName>/_bulk. Other entries are faked as success.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events. (see [below for nested schema](#nestedatt--input_elastic--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--input_elastic--extra_http_headers))
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
-- `ignore_standard_headers` (Boolean) Whether to ignore extra HTTP headers that don't start with X- or x-
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_elastic--metadata))
-- `password` (String) Password for Basic authentication
+- `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--pq))
@@ -1327,11 +1271,10 @@ Read-Only:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--tls))
 - `type` (String)
-- `username` (String) Username for Basic authentication
+- `username` (String)
 
 <a id="nestedatt--input_elastic--connections"></a>
 ### Nested Schema for `input_elastic.connections`
@@ -1347,8 +1290,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Field name
-- `value` (String) Field value
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--input_elastic--metadata"></a>
@@ -1370,7 +1313,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -1380,22 +1323,11 @@ Read-Only:
 Read-Only:
 
 - `auth_type` (String) Enter credentials directly, or select a stored secret
-- `enabled` (Boolean) Enable proxying of non-bulk API requests to an external Elastic server. Enable this only if you understand the implications; see docs for more details.
-- `reject_unauthorized` (Boolean) Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).
+- `enabled` (Boolean) Enable proxying of non-bulk API requests to an external Elastic server. Enable this only if you understand the implications. See [Cribl Docs](https://docs.cribl.io/stream/sources-elastic/#proxy-mode) for more details.
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)
 - `remove_headers` (List of String) List of headers to remove from the request to proxy
-- `timeout_sec` (Number) Amount of time, in seconds, to wait for a proxy request to complete before canceling it.
-- `url` (String) URL of the Elastic server to proxy non-bulk requests to, e.g., http://elastic:9200
-
-
-<a id="nestedatt--input_elastic--status"></a>
-### Nested Schema for `input_elastic.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
+- `timeout_sec` (Number) Amount of time, in seconds, to wait for a proxy request to complete before canceling it
+- `url` (String) URL of the Elastic server to proxy non-bulk requests to, such as http://elastic:9200
 
 
 <a id="nestedatt--input_elastic--tls"></a>
@@ -1408,8 +1340,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -1426,44 +1358,43 @@ Read-Only:
 - `auto_commit_interval` (Number) How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `auto_commit_threshold` (Number) How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
-- `brokers` (List of String) List of Event Hubs Kafka brokers to connect to, e.g., yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
+- `brokers` (List of String) List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_eventhub--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `from_beginning` (Boolean) Whether to start reading from earliest available data, relevant only during initial subscription.
-- `group_id` (String) Specifies the consumer group this instance belongs to, default is 'Cribl'.
-- `heartbeat_interval` (Number) Expected time (a.k.a heartbeat.interval.ms in Kafka domain) between heartbeats to the consumer coordinator when using Kafka's group management facilities.
-      Value must be lower than sessionTimeout, and typically should not exceed 1/3 of the sessionTimeout value.
-      See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).
+- `from_beginning` (Boolean) Start reading from earliest available data; relevant only during initial subscription
+- `group_id` (String) The consumer group this instance belongs to. Default is 'Cribl'.
+- `heartbeat_interval` (Number) Expected time (heartbeat.interval.ms in Kafka domain) between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
+      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+      See [Recommended configurations](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
 - `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
 - `max_bytes` (Number) Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).
 - `max_bytes_per_partition` (Number) Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-- `max_socket_errors` (Number) Maximum number of network errors before the consumer recreates a socket.
+- `max_socket_errors` (Number) Maximum number of network errors before the consumer re-creates a socket
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_eventhub--metadata))
-- `minimize_duplicates` (Boolean) Enable feature to minimize duplicate events by only starting one consumer for each topic partition.
+- `minimize_duplicates` (Boolean) Minimize duplicate events by starting only one consumer for each topic partition
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire.
-- `rebalance_timeout` (Number) Maximum allowed time (a.k.a rebalance.timeout.ms in Kafka domain) for each worker to join the group after a rebalance has begun.
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
+- `rebalance_timeout` (Number) Maximum allowed time (rebalance.timeout.ms in Kafka domain) for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-      See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).
+      See [Recommended configurations](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_eventhub--sasl))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `session_timeout` (Number) Timeout (a.k.a session.timeout.ms in Kafka domain) used to detect client failures when using Kafka's group management facilities.
-      If the client sends the broker no heartbeats before this timeout expires, the broker will remove this client from the group, and will initiate a rebalance.
+- `session_timeout` (Number) Timeout (session.timeout.ms in Kafka domain) used to detect client failures when using Kafka's group-management facilities.
+      If the client sends no heartbeats to the broker before the timeout expires, the broker will remove the client from the group and initiate a rebalance.
       Value must be lower than rebalanceTimeout.
       See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub--tls))
-- `topics` (List of String) The name of the Event Hub (a.k.a. Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.
+- `topics` (List of String) The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.
 - `type` (String)
 
 <a id="nestedatt--input_eventhub--connections"></a>
@@ -1494,7 +1425,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -1503,19 +1434,8 @@ Read-Only:
 
 Read-Only:
 
-- `disabled` (Boolean) Enable authentication.
-- `mechanism` (String) SASL authentication mechanism to use
-
-
-<a id="nestedatt--input_eventhub--status"></a>
-### Nested Schema for `input_eventhub.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
+- `disabled` (Boolean)
+- `mechanism` (String)
 
 
 <a id="nestedatt--input_eventhub--tls"></a>
@@ -1524,7 +1444,7 @@ Read-Only:
 Read-Only:
 
 - `disabled` (Boolean)
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another trusted CA (e.g., the system's CA).
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)
 
 
 
@@ -1550,7 +1470,6 @@ Read-Only:
 - `schedule_type` (String) Select a schedule type; either an interval (in seconds) or a cron-style schedule.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_exec--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -1582,19 +1501,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_exec--status"></a>
-### Nested Schema for `input_exec.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -1627,7 +1535,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_file--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `suppress_missing_path_errors` (Boolean)
 - `tail_only` (Boolean) Read only new entries at the end of all files discovered at next startup. @{product} will then read newly discovered files from the head. Disable this to resume reading all files from head.
@@ -1661,19 +1568,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_file--status"></a>
-### Nested Schema for `input_file.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -1688,15 +1584,15 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_firehose--connections))
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_firehose--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -1706,7 +1602,6 @@ Read-Only:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--tls))
 - `type` (String)
@@ -1739,19 +1634,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_firehose--status"></a>
-### Nested Schema for `input_firehose.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_firehose--tls"></a>
@@ -1764,8 +1648,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -1780,28 +1664,27 @@ Read-Only:
 
 - `concurrency` (Number) How many streams to pull messages from at one time. Doubling the value doubles the number of messages this Source pulls from the topic (if available), while consuming more CPU and memory. Defaults to 5.
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_google_pubsub--connections))
-- `create_subscription` (Boolean) If enabled, create subscription if it does not exist
-- `create_topic` (Boolean) If enabled, create topic if it does not exist
+- `create_subscription` (Boolean) Create subscription if it does not exist
+- `create_topic` (Boolean) Create topic if it does not exist
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `google_auth_method` (String) Google authentication method. Choose Auto to use Google Application Default Credentials.
+- `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
 - `id` (String) Unique ID for this input
-- `max_backlog` (Number) If Destination exerts backpressure, this setting limits how many inbound events Stream will queue for processing before it stops retrieving events.
+- `max_backlog` (Number) If Destination exerts backpressure, this setting limits how many inbound events Stream will queue for processing before it stops retrieving events
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_google_pubsub--metadata))
-- `ordered_delivery` (Boolean) If enabled, receive events in the order they were added to the queue. For this to work correctly, the process sending events must have ordering enabled.
+- `ordered_delivery` (Boolean) Receive events in the order they were added to the queue. The process sending events must have ordering enabled.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_google_pubsub--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `region` (String) Region to retrieve messages from. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.
-- `request_timeout` (Number) Pull request timeout, in milliseconds.
+- `request_timeout` (Number) Pull request timeout, in milliseconds
 - `secret` (String) Select or create a stored text secret
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_google_pubsub--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `subscription_name` (String) ID of the subscription to use when receiving events.
-- `topic_name` (String) ID of the topic to receive events from.
+- `subscription_name` (String) ID of the subscription to use when receiving events
+- `topic_name` (String) ID of the topic to receive events from
 - `type` (String)
 
 <a id="nestedatt--input_google_pubsub--connections"></a>
@@ -1832,19 +1715,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_google_pubsub--status"></a>
-### Nested Schema for `input_google_pubsub.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -1866,8 +1738,8 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana1--connections))
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
@@ -1876,7 +1748,7 @@ Read-Only:
 - `keep_alive_timeout` (Number) Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes.
 - `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured.
 - `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana1--loki_auth))
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana1--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -1888,7 +1760,6 @@ Read-Only:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana1--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana1--tls))
 - `type` (String)
@@ -1960,7 +1831,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -2003,17 +1874,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_grafana--input_grafana_grafana1--status"></a>
-### Nested Schema for `input_grafana.input_grafana_grafana1.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--input_grafana--input_grafana_grafana1--tls"></a>
 ### Nested Schema for `input_grafana.input_grafana_grafana1.tls`
 
@@ -2024,8 +1884,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -2043,8 +1903,8 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana2--connections))
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
@@ -2053,7 +1913,7 @@ Read-Only:
 - `keep_alive_timeout` (Number) Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes.
 - `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured.
 - `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana2--loki_auth))
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana2--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -2065,7 +1925,6 @@ Read-Only:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana2--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana2--tls))
 - `type` (String)
@@ -2137,7 +1996,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -2180,17 +2039,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_grafana--input_grafana_grafana2--status"></a>
-### Nested Schema for `input_grafana.input_grafana_grafana2.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--input_grafana--input_grafana_grafana2--tls"></a>
 ### Nested Schema for `input_grafana.input_grafana_grafana2.tls`
 
@@ -2201,8 +2049,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -2221,19 +2069,19 @@ Read-Only:
 - `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_http--auth_tokens_ext))
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_http--connections))
-- `cribl_api` (String) Absolute path on which to listen for the Cribl HTTP API requests. At the moment, only _bulk (default /cribl/_bulk) is available. Use empty string to disable.
+- `cribl_api` (String) Absolute path on which to listen for the Cribl HTTP API requests. Only _bulk (default /cribl/_bulk) is available. Use empty string to disable.
 - `description` (String)
 - `disabled` (Boolean)
 - `elastic_api` (String) Absolute path on which to listen for the Elasticsearch API requests. Only _bulk (default /elastic/_bulk) is available. Use empty string to disable.
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_http--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -2245,7 +2093,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `splunk_hec_acks` (Boolean)
 - `splunk_hec_api` (String) Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_http--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_http--tls))
 - `type` (String)
@@ -2257,7 +2104,7 @@ Read-Only:
 
 - `description` (String)
 - `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_http--auth_tokens_ext--metadata))
-- `token` (String) Shared secret to be provided by any client (Authorization: <token>).
+- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
 
 <a id="nestedatt--input_http--auth_tokens_ext--metadata"></a>
 ### Nested Schema for `input_http.auth_tokens_ext.metadata`
@@ -2297,19 +2144,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_http--status"></a>
-### Nested Schema for `input_http.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_http--tls"></a>
@@ -2322,8 +2158,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -2337,7 +2173,7 @@ Read-Only:
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `allowed_methods` (List of String) List of HTTP methods accepted by this input, wildcards are supported, e.g. P*, GET. Defaults to allow all.
+- `allowed_methods` (List of String) List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.
 - `allowed_paths` (List of String) List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all.
 - `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
 - `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext))
@@ -2346,15 +2182,15 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_http_raw--connections))
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_http_raw--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -2365,7 +2201,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--tls))
 - `type` (String)
@@ -2417,19 +2252,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_http_raw--status"></a>
-### Nested Schema for `input_http_raw.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_http_raw--tls"></a>
@@ -2442,8 +2266,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -2472,7 +2296,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `rules` (Attributes List) Add rules to decide which journal objects to allow. Events are generated if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_journal_files--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_journal_files--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -2504,7 +2327,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -2515,17 +2338,6 @@ Read-Only:
 
 - `description` (String) Optional description of this rule's purpose
 - `filter` (String) JavaScript expression applied to Journal objects. Return 'true' to include it.
-
-
-<a id="nestedatt--input_journal_files--status"></a>
-### Nested Schema for `input_journal_files.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -2544,11 +2356,11 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `from_beginning` (Boolean) Leave toggled to 'Yes' if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
-- `group_id` (String) Specifies the consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group management facilities.
-      Value must be lower than sessionTimeout, and typically should not exceed 1/3 of the sessionTimeout value.
-      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms).
+- `from_beginning` (Boolean) Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
+      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
 - `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--kafka_schema_registry))
@@ -2556,27 +2368,26 @@ Read-Only:
 - `max_bytes` (Number) Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).
 - `max_bytes_per_partition` (Number) Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-- `max_socket_errors` (Number) Maximum number of network errors before the consumer recreates a socket.
+- `max_socket_errors` (Number) Maximum number of network errors before the consumer re-creates a socket
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kafka--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire.
-- `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance has begun.
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
+- `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-      See details [here](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms).
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_kafka--sasl))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group management facilities.
-      If the client sends the broker no heartbeats before this timeout expires, 
-      the broker will remove this client from the group, and will initiate a rebalance.
+- `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
+      If the client sends no heartbeats to the broker before the timeout expires, 
+      the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms).
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--status))
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--tls))
-- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to only a single topic.
+- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 - `type` (String)
 
 <a id="nestedatt--input_kafka--connections"></a>
@@ -2595,7 +2406,7 @@ Read-Only:
 
 - `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--input_kafka--kafka_schema_registry--auth))
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
-- `disabled` (Boolean) Enable Schema Registry
+- `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -2607,7 +2418,7 @@ Read-Only:
 Read-Only:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Enable authentication
+- `disabled` (Boolean)
 
 
 <a id="nestedatt--input_kafka--kafka_schema_registry--tls"></a>
@@ -2617,14 +2428,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -2648,7 +2459,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -2657,19 +2468,8 @@ Read-Only:
 
 Read-Only:
 
-- `disabled` (Boolean) Enable Authentication
-- `mechanism` (String) SASL authentication mechanism to use.
-
-
-<a id="nestedatt--input_kafka--status"></a>
-### Nested Schema for `input_kafka.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
+- `disabled` (Boolean)
+- `mechanism` (String)
 
 
 <a id="nestedatt--input_kafka--tls"></a>
@@ -2679,14 +2479,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -2698,7 +2498,7 @@ Read-Only:
 
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `assume_role_external_id` (String) External ID to use when assuming role
-- `avoid_duplicates` (Boolean) Yes means: when resuming streaming from a stored state, Stream will read the next available record, rather than rereading the last-read record. Enabling this can cause data loss after a Worker Node's unexpected shutdown or restart.
+- `avoid_duplicates` (Boolean) When resuming streaming from a stored state, Stream will read the next available record, rather than rereading the last-read record. Enabling this setting can cause data loss after a Worker Node's unexpected shutdown or restart.
 - `aws_api_key` (String)
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
@@ -2724,11 +2524,10 @@ Read-Only:
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `service_interval` (Number) Time interval in minutes between consecutive service calls
-- `shard_expr` (String) A JS expression to be called with each shardId for the stream, if the expression evalutates to a truthy value the shard will be processed.
-- `shard_iterator_type` (String) Location at which to start reading a shard for the first time.
+- `shard_expr` (String) A JavaScript expression to be called with each shardId for the stream. If the expression evaluates to a truthy value, the shard will be processed.
+- `shard_iterator_type` (String) Location at which to start reading a shard for the first time
 - `signature_version` (String) Signature version to use for signing Kinesis stream requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_kinesis--status))
-- `stream_name` (String) Kinesis stream name to read data from.
+- `stream_name` (String) Kinesis Data Stream to read data from
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 - `verify_kpl_check_sums` (Boolean) Verify Kinesis Producer Library (KPL) event checksums
@@ -2761,19 +2560,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_kinesis--status"></a>
-### Nested Schema for `input_kinesis.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -2793,7 +2581,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `rules` (Attributes List) Filtering on event fields (see [below for nested schema](#nestedatt--input_kube_events--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_kube_events--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -2825,7 +2612,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -2836,17 +2623,6 @@ Read-Only:
 
 - `description` (String) Optional description of this rule's purpose
 - `filter` (String) JavaScript expression applied to Kubernetes objects. Return 'true' to include it.
-
-
-<a id="nestedatt--input_kube_events--status"></a>
-### Nested Schema for `input_kube_events.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -2871,7 +2647,6 @@ Read-Only:
 - `rules` (Attributes List) Add rules to decide which Pods to collect logs from. Logs are collected if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_kube_logs--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_kube_logs--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `timestamps` (Boolean) For use when containers do not emit a timestamp, prefix each line of output with a timestamp. If you enable this setting, you can use the Kubernetes Logs Event Breaker and the kubernetes_logs Pre-processing Pipeline to remove them from the events after the timestamps are extracted.
 - `type` (String)
@@ -2916,7 +2691,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -2927,17 +2702,6 @@ Read-Only:
 
 - `description` (String) Optional description of this rule's purpose
 - `filter` (String) JavaScript expression applied to Pod objects. Return 'true' to include it.
-
-
-<a id="nestedatt--input_kube_logs--status"></a>
-### Nested Schema for `input_kube_logs.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -2959,7 +2723,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `rules` (Attributes List) Add rules to decide which Kubernetes objects to generate metrics for. Events are generated if no rules are given or of all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_kube_metrics--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_kube_metrics--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -3004,7 +2767,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -3015,17 +2778,6 @@ Read-Only:
 
 - `description` (String) Optional description of this rule's purpose
 - `filter` (String) JavaScript expression applied to Kubernetes objects. Return 'true' to include it.
-
-
-<a id="nestedatt--input_kube_metrics--status"></a>
-### Nested Schema for `input_kube_metrics.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -3042,17 +2794,17 @@ Read-Only:
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `login_url` (String) URL for OAuth
 - `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'.
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_loki--metadata))
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_loki--oauth_headers))
@@ -3067,7 +2819,6 @@ Read-Only:
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_loki--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_loki--tls))
@@ -3123,19 +2874,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_loki--status"></a>
-### Nested Schema for `input_loki.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_loki--tls"></a>
@@ -3148,8 +2888,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -3176,7 +2916,6 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--tls))
@@ -3212,19 +2951,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_metrics--status"></a>
-### Nested Schema for `input_metrics.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_metrics--tls"></a>
@@ -3237,8 +2965,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -3265,7 +2993,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `shutdown_timeout_ms` (Number) Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_model_driven_telemetry--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_model_driven_telemetry--tls))
 - `type` (String)
@@ -3298,19 +3025,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_model_driven_telemetry--status"></a>
-### Nested Schema for `input_model_driven_telemetry.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_model_driven_telemetry--tls"></a>
@@ -3323,8 +3039,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
@@ -3355,11 +3071,11 @@ Read-Only:
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access MSK
 - `endpoint` (String) MSK cluster service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to MSK cluster-compatible endpoint.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `from_beginning` (Boolean) Leave toggled to 'Yes' if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
-- `group_id` (String) Specifies the consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group management facilities.
-      Value must be lower than sessionTimeout, and typically should not exceed 1/3 of the sessionTimeout value.
-      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms).
+- `from_beginning` (Boolean) Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
+      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
 - `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--input_msk--kafka_schema_registry))
@@ -3367,30 +3083,29 @@ Read-Only:
 - `max_bytes` (Number) Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).
 - `max_bytes_per_partition` (Number) Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-- `max_socket_errors` (Number) Maximum number of network errors before the consumer recreates a socket.
+- `max_socket_errors` (Number) Maximum number of network errors before the consumer re-creates a socket
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_msk--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_msk--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backwards from the moment when credentials are set to expire.
-- `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance has begun.
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
+- `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-      See details [here](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms).
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 - `region` (String) Region where the MSK cluster is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group management facilities.
-      If the client sends the broker no heartbeats before this timeout expires, 
-      the broker will remove this client from the group, and will initiate a rebalance.
+- `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
+      If the client sends no heartbeats to the broker before the timeout expires, 
+      the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-      See details [here](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms).
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 - `signature_version` (String) Signature version to use for signing MSK cluster requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_msk--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_msk--tls))
-- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to only a single topic.
+- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 - `type` (String)
 
 <a id="nestedatt--input_msk--connections"></a>
@@ -3409,7 +3124,7 @@ Read-Only:
 
 - `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--input_msk--kafka_schema_registry--auth))
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
-- `disabled` (Boolean) Enable Schema Registry
+- `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -3421,7 +3136,7 @@ Read-Only:
 Read-Only:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Enable authentication
+- `disabled` (Boolean)
 
 
 <a id="nestedatt--input_msk--kafka_schema_registry--tls"></a>
@@ -3431,14 +3146,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -3462,19 +3177,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_msk--status"></a>
-### Nested Schema for `input_msk.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_msk--tls"></a>
@@ -3484,14 +3188,14 @@ Read-Only:
 
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate.
+- `certificate_name` (String) The name of the predefined certificate
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to use when connecting
-- `min_version` (String) Minimum TLS version to use when connecting
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certs that are not authorized by a CA in the CA certificate path, or by another 
-                    trusted CA (e.g., the system's CA). Defaults to Yes. Overrides the toggle from Advanced Settings, when also present.
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
@@ -3517,7 +3221,6 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_netflow--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_netflow--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `template_cache_minutes` (Number) Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage.
 - `type` (String)
@@ -3553,19 +3256,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_netflow--status"></a>
-### Nested Schema for `input_netflow.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -3583,6 +3275,7 @@ Read-Only:
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `ingestion_lag` (Number) Use this setting to account for ingestion lag. This is necessary because there can be a lag of 60 - 90 minutes (or longer) before Office 365 events are available for retrieval.
 - `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
@@ -3595,7 +3288,6 @@ Read-Only:
 - `publisher_identifier` (String) Optional Publisher Identifier to use in API requests, defaults to tenant id if not defined. For more information see [here](https://docs.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-reference#start-a-subscription)
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tenant_id` (String) Office 365 Azure Tenant ID
 - `text_secret` (String) Select or create a stored text secret
@@ -3643,7 +3335,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -3660,17 +3352,6 @@ Read-Only:
 - `retry_connect_reset` (Boolean) Retry request when a connection reset (ECONNRESET) error occurs
 - `retry_connect_timeout` (Boolean) Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
 - `type` (String) The algorithm to use when performing HTTP retries
-
-
-<a id="nestedatt--input_office365_mgmt--status"></a>
-### Nested Schema for `input_office365_mgmt.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -3691,6 +3372,7 @@ Read-Only:
 - `end_date` (String) Backward offset for the search range's tail. (E.g.: -2h@h) Message Trace data is delayed; this parameter (with Date range start) compensates for delay and gaps.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `interval` (Number) How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.
 - `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
@@ -3708,7 +3390,6 @@ Read-Only:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `start_date` (String) Backward offset for the search range's head. (E.g.: -3h@h) Message Trace data is delayed; this parameter (with Date range end) compensates for delay and gaps.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory.
 - `text_secret` (String) Select or create a secret that references your client_secret to pass in the OAuth request parameter.
@@ -3757,7 +3438,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -3776,17 +3457,6 @@ Read-Only:
 - `type` (String) The algorithm to use when performing HTTP retries
 
 
-<a id="nestedatt--input_office365_msg_trace--status"></a>
-### Nested Schema for `input_office365_msg_trace.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--input_office365_service"></a>
 ### Nested Schema for `input_office365_service`
@@ -3802,6 +3472,7 @@ Read-Only:
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
@@ -3812,7 +3483,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tenant_id` (String) Office 365 Azure Tenant ID
 - `text_secret` (String) Select or create a stored text secret
@@ -3860,7 +3530,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -3877,17 +3547,6 @@ Read-Only:
 - `retry_connect_reset` (Boolean) Retry request when a connection reset (ECONNRESET) error occurs
 - `retry_connect_timeout` (Boolean) Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
 - `type` (String) The algorithm to use when performing HTTP retries
-
-
-<a id="nestedatt--input_office365_service--status"></a>
-### Nested Schema for `input_office365_service.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -3917,7 +3576,7 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
 - `login_url` (String) URL for OAuth
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_open_telemetry--metadata))
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_open_telemetry--oauth_headers))
@@ -3934,7 +3593,6 @@ Read-Only:
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_open_telemetry--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_open_telemetry--tls))
@@ -3990,19 +3648,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_open_telemetry--status"></a>
-### Nested Schema for `input_open_telemetry.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_open_telemetry--tls"></a>
@@ -4015,8 +3662,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -4045,6 +3692,7 @@ Read-Only:
 - `endpoint` (String) EC2 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to EC2-compatible endpoint.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `interval` (Number) How often in minutes to scrape targets for metrics, 60 must be evenly divisible by the value or save will fail.
 - `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
@@ -4066,7 +3714,6 @@ Read-Only:
 - `search_filter` (Attributes List) EC2 Instance Search Filter (see [below for nested schema](#nestedatt--input_prometheus--search_filter))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `signature_version` (String) Signature version to use for signing EC2 requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `target_list` (List of String) List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'.
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
@@ -4102,7 +3749,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -4113,17 +3760,6 @@ Read-Only:
 
 - `name` (String) Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list
 - `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned
-
-
-<a id="nestedatt--input_prometheus--status"></a>
-### Nested Schema for `input_prometheus.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -4140,16 +3776,16 @@ Read-Only:
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `login_url` (String) URL for OAuth
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_prometheus_rw--metadata))
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_prometheus_rw--oauth_headers))
@@ -4165,7 +3801,6 @@ Read-Only:
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus_rw--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus_rw--tls))
@@ -4221,19 +3856,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_prometheus_rw--status"></a>
-### Nested Schema for `input_prometheus_rw.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_prometheus_rw--tls"></a>
@@ -4246,8 +3870,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -4276,7 +3900,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `single_msg_udp_packets` (Boolean) If true, each UDP packet is assumed to contain a single message. If false, each UDP packet is assumed to contain multiple messages, separated by newlines.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_raw_udp--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
@@ -4309,19 +3932,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_raw_udp--status"></a>
-### Nested Schema for `input_raw_udp.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -4343,8 +3955,8 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
-- `enable_sqs_assume_role` (Boolean) Use Assume Role credentials when accessing SQS
+- `enable_assume_role` (Boolean) Use Assume Role credentials to access Amazon S3
+- `enable_sqs_assume_role` (Boolean) Use Assume Role credentials when accessing Amazon SQS
 - `encoding` (String) Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -4360,6 +3972,8 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_s3--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_s3--preprocess))
+- `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+- `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -4369,8 +3983,8 @@ Read-Only:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_s3--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `tag_after_processing` (Boolean) Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
@@ -4380,7 +3994,7 @@ Read-Only:
 Read-Only:
 
 - `enabled` (Boolean) Resume processing files after an interruption
-- `retries` (Number) If checkpointing is enabled, the number of times to retry processing when a processing error occurs. If skip file on error is enabled, this setting is ignored.
+- `retries` (Number) The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.
 
 
 <a id="nestedatt--input_s3--connections"></a>
@@ -4411,7 +4025,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -4423,17 +4037,6 @@ Read-Only:
 - `args` (List of String) Arguments to be added to the custom command
 - `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
 - `disabled` (Boolean)
-
-
-<a id="nestedatt--input_s3--status"></a>
-### Nested Schema for `input_s3.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -4456,8 +4059,8 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
-- `enable_sqs_assume_role` (Boolean) Use Assume Role credentials when accessing SQS
+- `enable_assume_role` (Boolean) Use Assume Role credentials to access Amazon S3
+- `enable_sqs_assume_role` (Boolean) Use Assume Role credentials when accessing Amazon SQS
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_filter` (String) Regex matching file names to download and process. Defaults to: .*
@@ -4473,6 +4076,8 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_s3_inventory--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_s3_inventory--preprocess))
+- `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+- `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -4482,8 +4087,8 @@ Read-Only:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_s3_inventory--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `tag_after_processing` (String)
 - `type` (String)
 - `validate_inventory_files` (Boolean) If set to Yes, each inventory file in the manifest will be validated against its checksum. Defaults to false
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
@@ -4494,7 +4099,7 @@ Read-Only:
 Read-Only:
 
 - `enabled` (Boolean) Resume processing files after an interruption
-- `retries` (Number) If checkpointing is enabled, the number of times to retry processing when a processing error occurs. If skip file on error is enabled, this setting is ignored.
+- `retries` (Number) The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.
 
 
 <a id="nestedatt--input_s3_inventory--connections"></a>
@@ -4525,7 +4130,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -4537,17 +4142,6 @@ Read-Only:
 - `args` (List of String) Arguments to be added to the custom command
 - `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
 - `disabled` (Boolean)
-
-
-<a id="nestedatt--input_s3_inventory--status"></a>
-### Nested Schema for `input_s3_inventory.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -4569,8 +4163,8 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
-- `enable_sqs_assume_role` (Boolean) Use Assume Role credentials when accessing SQS
+- `enable_assume_role` (Boolean) Use Assume Role credentials to access Amazon S3
+- `enable_sqs_assume_role` (Boolean) Use Assume Role credentials when accessing Amazon SQS
 - `encoding` (String) Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -4586,6 +4180,8 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_security_lake--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_security_lake--preprocess))
+- `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+- `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -4595,8 +4191,8 @@ Read-Only:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_security_lake--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `tag_after_processing` (String)
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
@@ -4606,7 +4202,7 @@ Read-Only:
 Read-Only:
 
 - `enabled` (Boolean) Resume processing files after an interruption
-- `retries` (Number) If checkpointing is enabled, the number of times to retry processing when a processing error occurs. If skip file on error is enabled, this setting is ignored.
+- `retries` (Number) The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.
 
 
 <a id="nestedatt--input_security_lake--connections"></a>
@@ -4637,7 +4233,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -4651,23 +4247,13 @@ Read-Only:
 - `disabled` (Boolean)
 
 
-<a id="nestedatt--input_security_lake--status"></a>
-### Nested Schema for `input_security_lake.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--input_snmp"></a>
 ### Nested Schema for `input_snmp`
 
 Read-Only:
 
+- `best_effort_parsing` (Boolean) If enabled, the parser will attempt to parse varbind octet strings as UTF-8, first, otherwise will fallback to other methods
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_snmp--connections))
 - `description` (String)
 - `disabled` (Boolean)
@@ -4683,7 +4269,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `snmp_v3_auth` (Attributes) Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues. (see [below for nested schema](#nestedatt--input_snmp--snmp_v3_auth))
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_snmp--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
@@ -4717,7 +4302,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -4738,19 +4323,8 @@ Read-Only:
 - `auth_key` (String) Parsed as JSON.
 - `auth_protocol` (String)
 - `name` (String)
-- `priv_protocol` (String)
+- `priv_protocol` (String) Parsed as JSON.
 
-
-
-<a id="nestedatt--input_snmp--status"></a>
-### Nested Schema for `input_snmp.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -4759,7 +4333,7 @@ Read-Only:
 
 Read-Only:
 
-- `auth_tokens` (Attributes List) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_splunk--auth_tokens))
+- `auth_tokens` (Attributes List) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_splunk--auth_tokens))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `compress` (String) Controls whether to support reading compressed data from a forwarder. Select 'Automatic' to match the forwarder's configuration, or 'Disabled' to reject compressed connections.
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_splunk--connections))
@@ -4784,7 +4358,6 @@ Read-Only:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_splunk--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_splunk--tls))
 - `type` (String)
@@ -4796,7 +4369,7 @@ Read-Only:
 Read-Only:
 
 - `description` (String)
-- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
+- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
 
 
 <a id="nestedatt--input_splunk--connections"></a>
@@ -4827,19 +4400,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_splunk--status"></a>
-### Nested Schema for `input_splunk.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_splunk--tls"></a>
@@ -4852,8 +4414,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -4879,15 +4441,15 @@ Read-Only:
 - `drop_control_fields` (Boolean) Drop Splunk control fields such as `crcSalt` and `_savedPort`. If disabled, control fields are stored in the internal field `__ctrlFields`.
 - `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
 - `enable_health_check` (String) Parsed as JSON.
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_metrics` (Boolean) Extract and process Splunk-generated metrics as Cribl metrics
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to every event. Overrides fields added at the token or request level. See [the Source documentation](https://docs.cribl.io/stream/sources-splunk-hec/#fields) for more info. (see [below for nested schema](#nestedatt--input_splunk_hec--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -4900,7 +4462,6 @@ Read-Only:
 - `splunk_hec_acks` (Boolean) Enable Splunk HEC acknowledgements
 - `splunk_hec_api` (String) Absolute path on which to listen for the Splunk HTTP Event Collector API requests. This input supports the /event, /raw and /s2s endpoints.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_hec--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_hec--tls))
 - `type` (String)
@@ -4957,19 +4518,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_splunk_hec--status"></a>
-### Nested Schema for `input_splunk_hec.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_splunk_hec--tls"></a>
@@ -4982,8 +4532,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -5011,6 +4561,7 @@ Read-Only:
 - `endpoint_params` (Attributes List) Optional request parameters to send to the endpoint (see [below for nested schema](#nestedatt--input_splunk_search--endpoint_params))
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `latest` (String) The latest time boundary for the search. Can be an exact or relative time. Examples: '2022-01-14T12:00:00Z' or '-1m@m'
@@ -5034,7 +4585,6 @@ Read-Only:
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_search--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `token` (String) Bearer token to include in the authorization header
@@ -5060,7 +4610,7 @@ Read-Only:
 Read-Only:
 
 - `name` (String)
-- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
 
 
 <a id="nestedatt--input_splunk_search--endpoint_params"></a>
@@ -5069,7 +4619,7 @@ Read-Only:
 Read-Only:
 
 - `name` (String)
-- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
 
 
 <a id="nestedatt--input_splunk_search--metadata"></a>
@@ -5109,7 +4659,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -5128,17 +4678,6 @@ Read-Only:
 - `type` (String) The algorithm to use when performing HTTP retries
 
 
-<a id="nestedatt--input_splunk_search--status"></a>
-### Nested Schema for `input_splunk_search.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--input_sqs"></a>
 ### Nested Schema for `input_sqs`
@@ -5153,7 +4692,7 @@ Read-Only:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_sqs--connections))
-- `create_queue` (Boolean) Create queue if it does not exist.
+- `create_queue` (Boolean) Create queue if it does not exist
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
@@ -5169,13 +4708,12 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_sqs--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read events from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can only be evaluated at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
-- `queue_type` (String) The queue type used (or created). Defaults to Standard
+- `queue_type` (String) The queue type used (or created)
 - `region` (String) AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `signature_version` (String) Signature version to use for signing SQS requests
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_sqs--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
@@ -5208,19 +4746,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_sqs--status"></a>
-### Nested Schema for `input_sqs.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -5241,6 +4768,7 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1--connections))
 - `description` (String)
 - `disabled` (Boolean)
+- `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
 - `enable_load_balancing` (Boolean) Load balance traffic across all Worker Processes
 - `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -5261,7 +4789,6 @@ Read-Only:
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
@@ -5299,19 +4826,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_syslog--input_syslog_syslog1--status"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog1.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_syslog--input_syslog_syslog1--tls"></a>
@@ -5324,8 +4840,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -5342,6 +4858,7 @@ Read-Only:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--connections))
 - `description` (String)
 - `disabled` (Boolean)
+- `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
 - `enable_load_balancing` (Boolean) Load balance traffic across all Worker Processes
 - `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -5362,7 +4879,6 @@ Read-Only:
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
@@ -5400,19 +4916,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_syslog--input_syslog_syslog2--status"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog2.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_syslog--input_syslog_syslog2--tls"></a>
@@ -5425,8 +4930,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -5455,7 +4960,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `process` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--process))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -5596,7 +5100,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -5618,17 +5122,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_system_metrics--status"></a>
-### Nested Schema for `input_system_metrics.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--input_system_state"></a>
 ### Nested Schema for `input_system_state`
@@ -5638,6 +5131,7 @@ Read-Only:
 - `collectors` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--collectors))
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_system_state--connections))
 - `description` (String)
+- `disable_native_module` (Boolean) Enable to use built-in tools (PowerShell) to collect events instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
@@ -5648,7 +5142,6 @@ Read-Only:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -5799,19 +5292,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_system_state--status"></a>
-### Nested Schema for `input_system_state.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -5843,7 +5325,6 @@ Read-Only:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--tls))
 - `type` (String)
@@ -5876,7 +5357,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -5890,17 +5371,6 @@ Read-Only:
 - `disabled` (Boolean)
 
 
-<a id="nestedatt--input_tcp--status"></a>
-### Nested Schema for `input_tcp.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 <a id="nestedatt--input_tcp--tls"></a>
 ### Nested Schema for `input_tcp.tls`
 
@@ -5911,8 +5381,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -5946,7 +5416,6 @@ Read-Only:
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_tcpjson--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_tcpjson--tls))
@@ -5980,19 +5449,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_tcpjson--status"></a>
-### Nested Schema for `input_tcpjson.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_tcpjson--tls"></a>
@@ -6005,8 +5463,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
@@ -6019,35 +5477,35 @@ Read-Only:
 
 Read-Only:
 
-- `allow_machine_id_mismatch` (Boolean) Allow events to be ingested even if their MachineID does not match the client certificate CN.
-- `auth_method` (String) Method by which to authenticate incoming client connections.
+- `allow_machine_id_mismatch` (Boolean) Allow events to be ingested even if their MachineID does not match the client certificate CN
+- `auth_method` (String) How to authenticate incoming client connections
 - `ca_fingerprint` (String) SHA1 fingerprint expected by the client, if it does not match the first certificate in the configured CA chain
 - `capture_headers` (Boolean) Add request headers to events in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_wef--connections))
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_proxy_header` (Boolean) Preserve the client’s original IP address in the __srcIpPort field when connecting through an HTTP proxy that supports the X-Forwarded-For header. This does not apply to TCP-layer Proxy Protocol v1/v2.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
-- `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist.
+- `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `keytab` (String) Path to the keytab file containing the service principal credentials. @{product} will use `/etc/krb5.keytab` if not provided.
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `log_fingerprint_mismatch` (Boolean) Log a warning if the client certificate authority (CA) fingerprint does not match the expected value. A mismatch prevents Cribl from receiving events from the Windows Event Forwarder.
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_wef--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_wef--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `principal` (String) Kerberos principal used for authentication, typically in the form HTTP/<hostname>@<REALM>.
+- `principal` (String) Kerberos principal used for authentication, typically in the form HTTP/<hostname>@<REALM>
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_wef--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints. (see [below for nested schema](#nestedatt--input_wef--subscriptions))
+- `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints (see [below for nested schema](#nestedatt--input_wef--subscriptions))
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_wef--tls))
 - `type` (String)
 
@@ -6079,19 +5537,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_wef--status"></a>
-### Nested Schema for `input_wef.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_wef--subscriptions"></a>
@@ -6099,17 +5546,17 @@ Read-Only:
 
 Read-Only:
 
-- `batch_timeout` (Number) Interval (in seconds) over which the endpoint should collect events before sending them to Stream.
-- `compress` (Boolean) If toggled to Yes, Stream will receive compressed events from the source.
-- `content_format` (String) Content format in which the endpoint should deliver events.
-- `heartbeat_interval` (Number) Maximum time (in seconds) between endpoint checkins before considering it unavailable.
+- `batch_timeout` (Number) Interval (in seconds) over which the endpoint should collect events before sending them to Stream
+- `compress` (Boolean) Receive compressed events from the source
+- `content_format` (String) Content format in which the endpoint should deliver events
+- `heartbeat_interval` (Number) Maximum time (in seconds) between endpoint checkins before considering it unavailable
 - `locale` (String) The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US".
 - `metadata` (Attributes List) Fields to add to events ingested under this subscription (see [below for nested schema](#nestedatt--input_wef--subscriptions--metadata))
-- `query_selector` (String) Select the query builder mode.
-- `read_existing_events` (Boolean) Set to Yes if a newly-subscribed endpoint should send previously existing events. Set to No to only receive new events
-- `send_bookmarks` (Boolean) If toggled to Yes, @{product} will keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events' -- see the documentation for details.
-- `subscription_name` (String) Friendly name for this subscription.
-- `targets` (List of String) Enter the DNS names of the endpoints that should forward these events. You may use wildcards, for example: *.mydomain.com
+- `query_selector` (String)
+- `read_existing_events` (Boolean) Newly subscribed endpoints will send previously existing events. Disable to receive new events only.
+- `send_bookmarks` (Boolean) Keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events'. See [Cribl Docs](https://docs.cribl.io/stream/sources-wef/#subscriptions) for more details.
+- `subscription_name` (String)
+- `targets` (List of String) The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com
 - `version` (String) Version UUID for this subscription. If any subscription parameters are modified, this value will change.
 
 <a id="nestedatt--input_wef--subscriptions--metadata"></a>
@@ -6129,19 +5576,19 @@ Read-Only:
 
 - `ca_path` (String) Server path containing CA certificates (in PEM format) to use. Can reference $ENV_VARS. If multiple certificates are present in a .pem, each must directly certify the one preceding it.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) Name of the predefined certificate.
-- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute.
+- `certificate_name` (String) Name of the predefined certificate
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean) Enable TLS
 - `keytab` (String) Parsed as JSON.
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections.
+- `max_version` (String)
+- `min_version` (String)
 - `ocsp_check` (Boolean) Enable OCSP check of certificate
 - `ocsp_check_fail_close` (Boolean) If enabled, checks will fail on any OCSP error. Otherwise, checks will fail only when a certificate is revoked, ignoring other errors.
-- `passphrase` (String) Passphrase to use to decrypt private key.
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `principal` (String) Parsed as JSON.
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Required for WEF certificate authentication.
-- `request_cert` (Boolean) Required for WEF certificate authentication.
+- `reject_unauthorized` (Boolean) Required for WEF certificate authentication
+- `request_cert` (Boolean) Required for WEF certificate authentication
 
 
 
@@ -6167,7 +5614,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `read_mode` (String) Read all stored and future event logs, or only future events
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_win_event_logs--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -6199,19 +5645,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_win_event_logs--status"></a>
-### Nested Schema for `input_win_event_logs.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -6235,7 +5670,6 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `process` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--process))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
@@ -6351,7 +5785,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -6373,17 +5807,6 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_windows_metrics--status"></a>
-### Nested Schema for `input_windows_metrics.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
-
-
 
 <a id="nestedatt--input_wiz"></a>
 ### Nested Schema for `input_wiz`
@@ -6402,6 +5825,7 @@ Read-Only:
 - `endpoint` (String) The Wiz GraphQL API endpoint. Example: https://api.us1.app.wiz.io/graphql
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_wiz--metadata))
@@ -6411,7 +5835,6 @@ Read-Only:
 - `request_timeout` (Number) HTTP request inactivity timeout. Use 0 to disable.
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_wiz--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_wiz--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
@@ -6455,7 +5878,7 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
 
 
@@ -6472,17 +5895,6 @@ Read-Only:
 - `retry_connect_reset` (Boolean) Retry request when a connection reset (ECONNRESET) error occurs
 - `retry_connect_timeout` (Boolean) Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
 - `type` (String) The algorithm to use when performing HTTP retries
-
-
-<a id="nestedatt--input_wiz--status"></a>
-### Nested Schema for `input_wiz.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 
@@ -6502,16 +5914,16 @@ Read-Only:
 - `disabled` (Boolean)
 - `emit_token_metrics` (Boolean) Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
 - `enable_health_check` (String) Parsed as JSON.
-- `enable_proxy_header` (Boolean) Enable when clients are connecting through a proxy that supports the x-forwarded-for header to keep the client's original IP address on the event instead of the proxy's IP address
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `hec_acks` (Boolean) Whether to enable zscaler HEC acknowledgements
+- `hec_acks` (Boolean) Whether to enable Zscaler HEC acknowledgements
 - `hec_api` (String) Absolute path on which to listen for the Zscaler HTTP Event Collector API requests. This input supports the /event endpoint.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `max_active_req` (Number) Maximum number of active requests per Worker Process. Use 0 for unlimited.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to every event. May be overridden by fields added at the token or request level. (see [below for nested schema](#nestedatt--input_zscaler_hec--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -6521,7 +5933,6 @@ Read-Only:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `status` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec--status))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec--tls))
 - `type` (String)
@@ -6577,19 +5988,8 @@ Read-Only:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_zscaler_hec--status"></a>
-### Nested Schema for `input_zscaler_hec.status`
-
-Read-Only:
-
-- `health` (String)
-- `metrics` (Map of String)
-- `timestamp` (Number)
-- `use_status_from_lb` (Boolean)
 
 
 <a id="nestedatt--input_zscaler_hec--tls"></a>
@@ -6602,8 +6002,8 @@ Read-Only:
 - `certificate_name` (String) The name of the predefined certificate
 - `common_name_regex` (String) Parsed as JSON.
 - `disabled` (Boolean)
-- `max_version` (String) Maximum TLS version to accept from connections
-- `min_version` (String) Minimum TLS version to accept from connections
+- `max_version` (String)
+- `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.

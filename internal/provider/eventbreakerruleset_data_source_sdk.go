@@ -5,7 +5,10 @@ package provider
 import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
 func (r *EventBreakerRulesetDataSourceModel) ToOperationsListEventBreakerRulesetRequest(ctx context.Context) (*operations.ListEventBreakerRulesetRequest, diag.Diagnostics) {
@@ -21,11 +24,76 @@ func (r *EventBreakerRulesetDataSourceModel) ToOperationsListEventBreakerRuleset
 	return &out, diags
 }
 
-func (r *EventBreakerRulesetDataSourceModel) RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.ListEventBreakerRulesetResponseBody) diag.Diagnostics {
+func (r *EventBreakerRulesetDataSourceModel) RefreshFromSharedEventBreakerRuleset(ctx context.Context, resp *shared.EventBreakerRuleset) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	if resp.Lib != nil {
+		r.Lib = types.StringValue(string(*resp.Lib))
+	} else {
+		r.Lib = types.StringNull()
 	}
+	r.MinRawLength = types.Float64PointerValue(resp.MinRawLength)
+	r.Rules = []tfTypes.EventBreakerRulesetRule{}
+	if len(r.Rules) > len(resp.Rules) {
+		r.Rules = r.Rules[:len(resp.Rules)]
+	}
+	for rulesCount, rulesItem := range resp.Rules {
+		var rules tfTypes.EventBreakerRulesetRule
+		rules.Condition = types.StringPointerValue(rulesItem.Condition)
+		rules.Disabled = types.BoolPointerValue(rulesItem.Disabled)
+		rules.Fields = []tfTypes.Field{}
+		for fieldsCount, fieldsItem := range rulesItem.Fields {
+			var fields tfTypes.Field
+			fields.Name = types.StringPointerValue(fieldsItem.Name)
+			fields.Value = types.StringValue(fieldsItem.Value)
+			if fieldsCount+1 > len(rules.Fields) {
+				rules.Fields = append(rules.Fields, fields)
+			} else {
+				rules.Fields[fieldsCount].Name = fields.Name
+				rules.Fields[fieldsCount].Value = fields.Value
+			}
+		}
+		rules.MaxEventBytes = types.Float64PointerValue(rulesItem.MaxEventBytes)
+		rules.Name = types.StringValue(rulesItem.Name)
+		rules.ParserEnabled = types.BoolPointerValue(rulesItem.ParserEnabled)
+		rules.ShouldUseDataRaw = types.BoolPointerValue(rulesItem.ShouldUseDataRaw)
+		rules.Timestamp.Format = types.StringPointerValue(rulesItem.Timestamp.Format)
+		rules.Timestamp.Length = types.Float64PointerValue(rulesItem.Timestamp.Length)
+		if rulesItem.Timestamp.Type != nil {
+			rules.Timestamp.Type = types.StringValue(string(*rulesItem.Timestamp.Type))
+		} else {
+			rules.Timestamp.Type = types.StringNull()
+		}
+		rules.TimestampAnchorRegex = types.StringPointerValue(rulesItem.TimestampAnchorRegex)
+		rules.TimestampEarliest = types.StringPointerValue(rulesItem.TimestampEarliest)
+		rules.TimestampLatest = types.StringPointerValue(rulesItem.TimestampLatest)
+		rules.TimestampTimezone = types.StringPointerValue(rulesItem.TimestampTimezone)
+		if rulesItem.Type != nil {
+			rules.Type = types.StringValue(string(*rulesItem.Type))
+		} else {
+			rules.Type = types.StringNull()
+		}
+		if rulesCount+1 > len(r.Rules) {
+			r.Rules = append(r.Rules, rules)
+		} else {
+			r.Rules[rulesCount].Condition = rules.Condition
+			r.Rules[rulesCount].Disabled = rules.Disabled
+			r.Rules[rulesCount].Fields = rules.Fields
+			r.Rules[rulesCount].MaxEventBytes = rules.MaxEventBytes
+			r.Rules[rulesCount].Name = rules.Name
+			r.Rules[rulesCount].ParserEnabled = rules.ParserEnabled
+			r.Rules[rulesCount].ShouldUseDataRaw = rules.ShouldUseDataRaw
+			r.Rules[rulesCount].Timestamp = rules.Timestamp
+			r.Rules[rulesCount].TimestampAnchorRegex = rules.TimestampAnchorRegex
+			r.Rules[rulesCount].TimestampEarliest = rules.TimestampEarliest
+			r.Rules[rulesCount].TimestampLatest = rules.TimestampLatest
+			r.Rules[rulesCount].TimestampTimezone = rules.TimestampTimezone
+			r.Rules[rulesCount].Type = rules.Type
+		}
+	}
+	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-// LookupFileMode2 - Operation mode for CSV-based lookups
 type LookupFileMode2 string
 
 const (
@@ -103,8 +102,7 @@ type LookupFile2 struct {
 	// File size. Optional.
 	Size *float64 `json:"size,omitempty"`
 	// Unique string generated for each modification of this lookup
-	Version *string `json:"version,omitempty"`
-	// Operation mode for CSV-based lookups
+	Version     *string          `json:"version,omitempty"`
 	Mode        *LookupFileMode2 `default:"memory" json:"mode"`
 	PendingTask *PendingTask2    `json:"pendingTask,omitempty"`
 }
@@ -187,7 +185,6 @@ func (o *FileInfo) GetFilename() string {
 	return o.Filename
 }
 
-// LookupFileMode1 - Operation mode for CSV-based lookups
 type LookupFileMode1 string
 
 const (
@@ -280,8 +277,7 @@ type LookupFile1 struct {
 	// File size. Optional.
 	Size *float64 `json:"size,omitempty"`
 	// Unique string generated for each modification of this lookup
-	Version *string `json:"version,omitempty"`
-	// Operation mode for CSV-based lookups
+	Version     *string          `json:"version,omitempty"`
 	Mode        *LookupFileMode1 `default:"memory" json:"mode"`
 	PendingTask *PendingTask1    `json:"pendingTask,omitempty"`
 }
@@ -424,8 +420,7 @@ type LookupFileInput2 struct {
 	// One or more tags related to this lookup. Optional.
 	Tags *string `json:"tags,omitempty"`
 	// File size. Optional.
-	Size *float64 `json:"size,omitempty"`
-	// Operation mode for CSV-based lookups
+	Size *float64         `json:"size,omitempty"`
 	Mode *LookupFileMode2 `default:"memory" json:"mode"`
 }
 
@@ -489,8 +484,7 @@ type LookupFileInput1 struct {
 	// One or more tags related to this lookup. Optional.
 	Tags *string `json:"tags,omitempty"`
 	// File size. Optional.
-	Size *float64 `json:"size,omitempty"`
-	// Operation mode for CSV-based lookups
+	Size *float64         `json:"size,omitempty"`
 	Mode *LookupFileMode1 `default:"memory" json:"mode"`
 }
 

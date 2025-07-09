@@ -9,16 +9,7 @@ import (
 
 // GetEdgeFileinspectResponseBody - a list of EdgeFileInspectResponse objects
 type GetEdgeFileinspectResponseBody struct {
-	// number of items present in the items array
-	Count *int64                           `json:"count,omitempty"`
 	Items []shared.EdgeFileInspectResponse `json:"items,omitempty"`
-}
-
-func (o *GetEdgeFileinspectResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetEdgeFileinspectResponseBody) GetItems() []shared.EdgeFileInspectResponse {

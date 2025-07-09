@@ -21,16 +21,7 @@ func (o *DeleteSearchDashboardByIDRequest) GetID() string {
 
 // DeleteSearchDashboardByIDResponseBody - a list of SearchDashboard objects
 type DeleteSearchDashboardByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.SearchDashboard `json:"items,omitempty"`
-}
-
-func (o *DeleteSearchDashboardByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteSearchDashboardByIDResponseBody) GetItems() []shared.SearchDashboard {

@@ -8,17 +8,10 @@ import (
 )
 
 type GetDatabaseConnectionConfigByIDRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to GET
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-}
-
-func (o *GetDatabaseConnectionConfigByIDRequest) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
 }
 
 func (o *GetDatabaseConnectionConfigByIDRequest) GetGroupID() string {
@@ -26,6 +19,13 @@ func (o *GetDatabaseConnectionConfigByIDRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *GetDatabaseConnectionConfigByIDRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 // GetDatabaseConnectionConfigByIDResponseBody - a list of DatabaseConnectionConfig objects

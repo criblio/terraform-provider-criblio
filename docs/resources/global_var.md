@@ -29,7 +29,7 @@ resource "criblio_global_var" "my_globalvar" {
 
 ### Required
 
-- `group_id` (String) Group ID to CREATE
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Global variable name.
 
 ### Optional

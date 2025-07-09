@@ -21,16 +21,7 @@ func (o *GetFeaturesEntryByIDRequest) GetID() string {
 
 // GetFeaturesEntryByIDResponseBody - a list of FeaturesEntry objects
 type GetFeaturesEntryByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                 `json:"count,omitempty"`
 	Items []shared.FeaturesEntry `json:"items,omitempty"`
-}
-
-func (o *GetFeaturesEntryByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetFeaturesEntryByIDResponseBody) GetItems() []shared.FeaturesEntry {

@@ -9,16 +9,7 @@ import (
 
 // UpdateSystemSettingsAuthResponseBody - a list of AuthConfig objects
 type UpdateSystemSettingsAuthResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.AuthConfig `json:"items,omitempty"`
-}
-
-func (o *UpdateSystemSettingsAuthResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateSystemSettingsAuthResponseBody) GetItems() []shared.AuthConfig {

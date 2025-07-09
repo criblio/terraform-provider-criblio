@@ -30,16 +30,7 @@ func (o *UpdateRoutesByIDRequest) GetRoutes() shared.RoutesInput {
 
 // UpdateRoutesByIDResponseBody - a list of Routes objects
 type UpdateRoutesByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64          `json:"count,omitempty"`
 	Items []shared.Routes `json:"items,omitempty"`
-}
-
-func (o *UpdateRoutesByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateRoutesByIDResponseBody) GetItems() []shared.Routes {

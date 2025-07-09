@@ -21,16 +21,7 @@ func (o *GetEdgeContainersByIDRequest) GetID() string {
 
 // GetEdgeContainersByIDResponseBody - a list of Container objects
 type GetEdgeContainersByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64             `json:"count,omitempty"`
 	Items []shared.Container `json:"items,omitempty"`
-}
-
-func (o *GetEdgeContainersByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetEdgeContainersByIDResponseBody) GetItems() []shared.Container {

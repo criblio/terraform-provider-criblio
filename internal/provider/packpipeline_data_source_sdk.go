@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
@@ -12,11 +11,8 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *PackPipelineDataSourceModel) ToOperationsGetPipelineByPackAndIDRequest(ctx context.Context) (*operations.GetPipelineByPackAndIDRequest, diag.Diagnostics) {
+func (r *PackPipelineDataSourceModel) ToOperationsGetPipelineByPackRequest(ctx context.Context) (*operations.GetPipelineByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
 
 	var pack string
 	pack = r.Pack.ValueString()
@@ -24,8 +20,7 @@ func (r *PackPipelineDataSourceModel) ToOperationsGetPipelineByPackAndIDRequest(
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetPipelineByPackAndIDRequest{
-		ID:      id,
+	out := operations.GetPipelineByPackRequest{
 		Pack:    pack,
 		GroupID: groupID,
 	}
@@ -44,13 +39,6 @@ func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Cont
 	}
 	for functionsCount, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
-		if len(functionsItem.Conf) > 0 {
-			functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
-			for key, value := range functionsItem.Conf {
-				result, _ := json.Marshal(value)
-				functions.Conf[key] = types.StringValue(string(result))
-			}
-		}
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)

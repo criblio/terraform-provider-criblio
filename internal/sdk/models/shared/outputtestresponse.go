@@ -8,7 +8,6 @@ type OutputTestResponse struct {
 	OutputID      string         `json:"outputId"`
 	Success       bool           `json:"success"`
 	SuccessDetail *string        `json:"successDetail,omitempty"`
-	Status        *TFStatus      `json:"status,omitempty"`
 }
 
 func (o *OutputTestResponse) GetDetails() map[string]any {
@@ -44,11 +43,4 @@ func (o *OutputTestResponse) GetSuccessDetail() *string {
 		return nil
 	}
 	return o.SuccessDetail
-}
-
-func (o *OutputTestResponse) GetStatus() *TFStatus {
-	if o == nil {
-		return nil
-	}
-	return o.Status
 }

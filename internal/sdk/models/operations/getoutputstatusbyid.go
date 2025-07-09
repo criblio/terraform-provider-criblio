@@ -21,16 +21,7 @@ func (o *GetOutputStatusByIDRequest) GetID() string {
 
 // GetOutputStatusByIDResponseBody - a list of OutputStatus objects
 type GetOutputStatusByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                `json:"count,omitempty"`
 	Items []shared.OutputStatus `json:"items,omitempty"`
-}
-
-func (o *GetOutputStatusByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetOutputStatusByIDResponseBody) GetItems() []shared.OutputStatus {

@@ -17,6 +17,8 @@ resource "criblio_grok" "my_grok" {
   content  = "...my_content..."
   group_id = "...my_group_id..."
   id       = "...my_id..."
+  size     = 6.73
+  tags     = "...my_tags..."
 }
 ```
 
@@ -26,8 +28,13 @@ resource "criblio_grok" "my_grok" {
 ### Required
 
 - `content` (String)
-- `group_id` (String)
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
+- `size` (Number)
+
+### Optional
+
+- `tags` (String)
 
 ## Import
 

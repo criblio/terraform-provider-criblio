@@ -8,6 +8,7 @@ import (
 )
 
 type CreateLookupFileRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New LookupFile object
 	LookupFile shared.LookupFileInputUnion `request:"mediaType=application/json"`

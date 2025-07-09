@@ -10,7 +10,7 @@ import (
 type UpdateProjectByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to PATCH
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Project object to be updated
 	ProjectConfig shared.ProjectConfig `request:"mediaType=application/json"`

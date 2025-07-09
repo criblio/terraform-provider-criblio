@@ -30,16 +30,7 @@ func (o *GetProtobufLibraryConfigEncodingsByIDAndEncIDRequest) GetEncid() string
 
 // GetProtobufLibraryConfigEncodingsByIDAndEncIDResponseBody - a list of ProtobufEncodingConfig objects
 type GetProtobufLibraryConfigEncodingsByIDAndEncIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                          `json:"count,omitempty"`
 	Items []shared.ProtobufEncodingConfig `json:"items,omitempty"`
-}
-
-func (o *GetProtobufLibraryConfigEncodingsByIDAndEncIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetProtobufLibraryConfigEncodingsByIDAndEncIDResponseBody) GetItems() []shared.ProtobufEncodingConfig {

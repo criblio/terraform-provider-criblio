@@ -21,16 +21,7 @@ func (o *GetBulletinMessageByIDRequest) GetID() string {
 
 // GetBulletinMessageByIDResponseBody - a list of BulletinMessage objects
 type GetBulletinMessageByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.BulletinMessage `json:"items,omitempty"`
-}
-
-func (o *GetBulletinMessageByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetBulletinMessageByIDResponseBody) GetItems() []shared.BulletinMessage {

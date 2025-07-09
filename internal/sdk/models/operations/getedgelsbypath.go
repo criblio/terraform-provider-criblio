@@ -21,16 +21,7 @@ func (o *GetEdgeLsByPathRequest) GetPath() string {
 
 // GetEdgeLsByPathResponseBody - a list of FilesystemEntry objects
 type GetEdgeLsByPathResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.FilesystemEntry `json:"items,omitempty"`
-}
-
-func (o *GetEdgeLsByPathResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetEdgeLsByPathResponseBody) GetItems() []shared.FilesystemEntry {

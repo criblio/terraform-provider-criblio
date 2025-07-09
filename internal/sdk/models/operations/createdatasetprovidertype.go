@@ -9,16 +9,7 @@ import (
 
 // CreateDatasetProviderTypeResponseBody - a list of DatasetProviderType objects
 type CreateDatasetProviderTypeResponseBody struct {
-	// number of items present in the items array
-	Count *int64                       `json:"count,omitempty"`
 	Items []shared.DatasetProviderType `json:"items,omitempty"`
-}
-
-func (o *CreateDatasetProviderTypeResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateDatasetProviderTypeResponseBody) GetItems() []shared.DatasetProviderType {

@@ -21,16 +21,7 @@ func (o *UpdateJobsCancelByIDRequest) GetID() string {
 
 // UpdateJobsCancelByIDResponseBody - a list of JobState objects
 type UpdateJobsCancelByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.JobState `json:"items,omitempty"`
-}
-
-func (o *UpdateJobsCancelByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateJobsCancelByIDResponseBody) GetItems() []shared.JobState {

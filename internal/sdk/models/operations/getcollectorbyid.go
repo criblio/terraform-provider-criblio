@@ -21,16 +21,7 @@ func (o *GetCollectorByIDRequest) GetID() string {
 
 // GetCollectorByIDResponseBody - a list of Collector objects
 type GetCollectorByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64             `json:"count,omitempty"`
 	Items []shared.Collector `json:"items,omitempty"`
-}
-
-func (o *GetCollectorByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetCollectorByIDResponseBody) GetItems() []shared.Collector {

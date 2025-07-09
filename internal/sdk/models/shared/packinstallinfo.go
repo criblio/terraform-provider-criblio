@@ -43,8 +43,10 @@ type PackInstallInfo struct {
 	DisplayName         *string              `json:"displayName,omitempty"`
 	Exports             []string             `json:"exports,omitempty"`
 	ID                  string               `json:"id"`
+	Inputs              *float64             `json:"inputs,omitempty"`
 	IsDisabled          *bool                `json:"isDisabled,omitempty"`
 	MinLogStreamVersion *string              `json:"minLogStreamVersion,omitempty"`
+	Outputs             *float64             `json:"outputs,omitempty"`
 	Settings            map[string]any       `json:"settings,omitempty"`
 	Source              string               `json:"source"`
 	Spec                *string              `json:"spec,omitempty"`
@@ -88,6 +90,13 @@ func (o *PackInstallInfo) GetID() string {
 	return o.ID
 }
 
+func (o *PackInstallInfo) GetInputs() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.Inputs
+}
+
 func (o *PackInstallInfo) GetIsDisabled() *bool {
 	if o == nil {
 		return nil
@@ -100,6 +109,13 @@ func (o *PackInstallInfo) GetMinLogStreamVersion() *string {
 		return nil
 	}
 	return o.MinLogStreamVersion
+}
+
+func (o *PackInstallInfo) GetOutputs() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.Outputs
 }
 
 func (o *PackInstallInfo) GetSettings() map[string]any {

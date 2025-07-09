@@ -9,16 +9,7 @@ import (
 
 // ListDatasetResponseBody - a list of Dataset objects
 type ListDatasetResponseBody struct {
-	// number of items present in the items array
-	Count *int64 `json:"count,omitempty"`
-	Items []any  `json:"items,omitempty"`
-}
-
-func (o *ListDatasetResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
+	Items []any `json:"items,omitempty"`
 }
 
 func (o *ListDatasetResponseBody) GetItems() []any {

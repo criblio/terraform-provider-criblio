@@ -3,11 +3,19 @@
 package shared
 
 type UsageGroup struct {
-	Description *string  `json:"description,omitempty"`
-	Enabled     *bool    `json:"enabled,omitempty"`
-	ID          string   `json:"id"`
-	Rules       any      `json:"rules"`
-	UsersCount  *float64 `json:"usersCount,omitempty"`
+	CoordinatorHeapMemoryLimit *float64 `json:"coordinatorHeapMemoryLimit,omitempty"`
+	Description                *string  `json:"description,omitempty"`
+	Enabled                    *bool    `json:"enabled,omitempty"`
+	ID                         string   `json:"id"`
+	Rules                      any      `json:"rules"`
+	UsersCount                 *float64 `json:"usersCount,omitempty"`
+}
+
+func (o *UsageGroup) GetCoordinatorHeapMemoryLimit() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.CoordinatorHeapMemoryLimit
 }
 
 func (o *UsageGroup) GetDescription() *string {

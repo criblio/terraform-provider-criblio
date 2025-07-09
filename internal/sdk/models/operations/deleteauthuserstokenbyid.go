@@ -10,6 +10,8 @@ import (
 type DeleteAuthUsersTokenByIDRequest struct {
 	// ID of user to invalidate
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// TTL of the token being invalidated
+	TTL *string `queryParam:"style=form,explode=true,name=ttl"`
 }
 
 func (o *DeleteAuthUsersTokenByIDRequest) GetID() string {
@@ -19,18 +21,16 @@ func (o *DeleteAuthUsersTokenByIDRequest) GetID() string {
 	return o.ID
 }
 
-// DeleteAuthUsersTokenByIDResponseBody - a list of any objects
-type DeleteAuthUsersTokenByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
-	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *DeleteAuthUsersTokenByIDResponseBody) GetCount() *int64 {
+func (o *DeleteAuthUsersTokenByIDRequest) GetTTL() *string {
 	if o == nil {
 		return nil
 	}
-	return o.Count
+	return o.TTL
+}
+
+// DeleteAuthUsersTokenByIDResponseBody - a list of any objects
+type DeleteAuthUsersTokenByIDResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
 }
 
 func (o *DeleteAuthUsersTokenByIDResponseBody) GetItems() []map[string]any {

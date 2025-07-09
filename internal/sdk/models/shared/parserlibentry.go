@@ -54,11 +54,10 @@ func (e *ParserLibEntryType) UnmarshalJSON(data []byte) error {
 }
 
 type ParserLibEntry struct {
-	ID  string  `json:"id"`
-	Lib *string `json:"lib,omitempty"`
-	// Brief description of this parser (optional)
+	ID          string  `json:"id"`
+	Lib         *string `json:"lib,omitempty"`
 	Description *string `json:"description,omitempty"`
-	// One or more tags related to this parser (optional)
+	// Optionally, add tags that you can use for filtering
 	Tags *string `json:"tags,omitempty"`
 	// Parser or formatter type to use
 	Type                 *ParserLibEntryType `default:"csv" json:"type"`

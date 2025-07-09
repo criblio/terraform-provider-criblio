@@ -39,16 +39,7 @@ func (o *DeleteSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest)
 
 // DeleteSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody - A list of Pipeline objects for specified Project
 type DeleteSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody struct {
-	// Number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.Pipeline `json:"items,omitempty"`
-}
-
-func (o *DeleteSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody) GetItems() []shared.Pipeline {

@@ -8,7 +8,7 @@ import (
 )
 
 type CreateInputRequest struct {
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New Input object
 	Input shared.Input `request:"mediaType=application/json"`

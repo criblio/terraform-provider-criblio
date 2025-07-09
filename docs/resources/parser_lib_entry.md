@@ -29,15 +29,15 @@ resource "criblio_parser_lib_entry" "my_parserlibentry" {
 
 ### Required
 
-- `group_id` (String) Group ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
 
 ### Optional
 
 - `additional_properties` (String) Parsed as JSON.
-- `description` (String) Brief description of this parser (optional)
+- `description` (String)
 - `lib` (String)
-- `tags` (String) One or more tags related to this parser (optional)
+- `tags` (String) Optionally, add tags that you can use for filtering
 - `type` (String) Parser or formatter type to use. Default: "csv"; must be one of ["csv", "elff", "clf", "kvp", "json", "delim", "regex", "grok"]
 
 ## Import

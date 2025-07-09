@@ -30,16 +30,7 @@ func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDRequest) GetProjec
 
 // GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody - A list of Subscription objects
 type GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody struct {
-	// Number of items present in the items array
-	Count *int64                `json:"count,omitempty"`
 	Items []shared.Subscription `json:"items,omitempty"`
-}
-
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody) GetItems() []shared.Subscription {

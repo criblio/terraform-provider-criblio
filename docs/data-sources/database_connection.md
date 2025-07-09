@@ -24,7 +24,7 @@ data "criblio_database_connection" "my_databaseconnection" {
 
 ### Required
 
-- `group_id` (String) Group ID to GET
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Optional
 

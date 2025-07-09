@@ -39,8 +39,8 @@ func (e *CreateProductsGroupsByProductProduct) UnmarshalJSON(data []byte) error 
 type CreateProductsGroupsByProductRequest struct {
 	// Cribl Product
 	Product CreateProductsGroupsByProductProduct `pathParam:"style=simple,explode=false,name=product"`
-	// Group object
-	Group shared.Group `request:"mediaType=application/json"`
+	// ConfigGroup object
+	ConfigGroup shared.ConfigGroup `request:"mediaType=application/json"`
 }
 
 func (o *CreateProductsGroupsByProductRequest) GetProduct() CreateProductsGroupsByProductProduct {
@@ -50,19 +50,19 @@ func (o *CreateProductsGroupsByProductRequest) GetProduct() CreateProductsGroups
 	return o.Product
 }
 
-func (o *CreateProductsGroupsByProductRequest) GetGroup() shared.Group {
+func (o *CreateProductsGroupsByProductRequest) GetConfigGroup() shared.ConfigGroup {
 	if o == nil {
-		return shared.Group{}
+		return shared.ConfigGroup{}
 	}
-	return o.Group
+	return o.ConfigGroup
 }
 
 // CreateProductsGroupsByProductResponseBody - a list of ConfigGroup objects
 type CreateProductsGroupsByProductResponseBody struct {
-	Items []shared.Group `json:"items,omitempty"`
+	Items []shared.ConfigGroup `json:"items,omitempty"`
 }
 
-func (o *CreateProductsGroupsByProductResponseBody) GetItems() []shared.Group {
+func (o *CreateProductsGroupsByProductResponseBody) GetItems() []shared.ConfigGroup {
 	if o == nil {
 		return nil
 	}

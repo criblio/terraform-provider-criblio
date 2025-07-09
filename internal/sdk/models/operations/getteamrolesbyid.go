@@ -21,16 +21,7 @@ func (o *GetTeamRolesByIDRequest) GetID() string {
 
 // GetTeamRolesByIDResponseBody - a list of string objects
 type GetTeamRolesByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64   `json:"count,omitempty"`
 	Items []string `json:"items,omitempty"`
-}
-
-func (o *GetTeamRolesByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetTeamRolesByIDResponseBody) GetItems() []string {

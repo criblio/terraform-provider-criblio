@@ -9,18 +9,18 @@ import (
 	"net/http"
 )
 
-// Mode - product filter
-type Mode string
+// GetSummaryMode - product filter
+type GetSummaryMode string
 
 const (
-	ModeWorker      Mode = "worker"
-	ModeManagedEdge Mode = "managed-edge"
+	GetSummaryModeWorker      GetSummaryMode = "worker"
+	GetSummaryModeManagedEdge GetSummaryMode = "managed-edge"
 )
 
-func (e Mode) ToPointer() *Mode {
+func (e GetSummaryMode) ToPointer() *GetSummaryMode {
 	return &e
 }
-func (e *Mode) UnmarshalJSON(data []byte) error {
+func (e *GetSummaryMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -29,19 +29,19 @@ func (e *Mode) UnmarshalJSON(data []byte) error {
 	case "worker":
 		fallthrough
 	case "managed-edge":
-		*e = Mode(v)
+		*e = GetSummaryMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for Mode: %v", v)
+		return fmt.Errorf("invalid value for GetSummaryMode: %v", v)
 	}
 }
 
 type GetSummaryRequest struct {
 	// product filter
-	Mode *Mode `queryParam:"style=form,explode=true,name=mode"`
+	Mode *GetSummaryMode `queryParam:"style=form,explode=true,name=mode"`
 }
 
-func (o *GetSummaryRequest) GetMode() *Mode {
+func (o *GetSummaryRequest) GetMode() *GetSummaryMode {
 	if o == nil {
 		return nil
 	}
@@ -50,16 +50,7 @@ func (o *GetSummaryRequest) GetMode() *Mode {
 
 // GetSummaryResponseBody - a list of DistributedSummary objects
 type GetSummaryResponseBody struct {
-	// number of items present in the items array
-	Count *int64                      `json:"count,omitempty"`
 	Items []shared.DistributedSummary `json:"items,omitempty"`
-}
-
-func (o *GetSummaryResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSummaryResponseBody) GetItems() []shared.DistributedSummary {

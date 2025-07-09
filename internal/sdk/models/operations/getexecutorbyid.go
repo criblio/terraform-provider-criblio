@@ -21,16 +21,7 @@ func (o *GetExecutorByIDRequest) GetID() string {
 
 // GetExecutorByIDResponseBody - a list of Executor objects
 type GetExecutorByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.Executor `json:"items,omitempty"`
-}
-
-func (o *GetExecutorByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetExecutorByIDResponseBody) GetItems() []shared.Executor {

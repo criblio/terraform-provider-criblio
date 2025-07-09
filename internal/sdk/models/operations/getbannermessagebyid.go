@@ -21,16 +21,7 @@ func (o *GetBannerMessageByIDRequest) GetID() string {
 
 // GetBannerMessageByIDResponseBody - a list of BannerMessage objects
 type GetBannerMessageByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                 `json:"count,omitempty"`
 	Items []shared.BannerMessage `json:"items,omitempty"`
-}
-
-func (o *GetBannerMessageByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetBannerMessageByIDResponseBody) GetItems() []shared.BannerMessage {

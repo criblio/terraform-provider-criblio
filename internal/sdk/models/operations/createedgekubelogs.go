@@ -9,16 +9,7 @@ import (
 
 // CreateEdgeKubeLogsResponseBody - a list of object objects
 type CreateEdgeKubeLogsResponseBody struct {
-	// number of items present in the items array
-	Count *int64   `json:"count,omitempty"`
 	Items []string `json:"items,omitempty"`
-}
-
-func (o *CreateEdgeKubeLogsResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateEdgeKubeLogsResponseBody) GetItems() []string {

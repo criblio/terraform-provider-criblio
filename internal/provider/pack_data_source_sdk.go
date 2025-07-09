@@ -14,10 +14,17 @@ import (
 func (r *PackDataSourceModel) ToOperationsGetPacksRequest(ctx context.Context) (*operations.GetPacksRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	with := new(string)
+	if !r.With.IsUnknown() && !r.With.IsNull() {
+		*with = r.With.ValueString()
+	} else {
+		with = nil
+	}
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
 	out := operations.GetPacksRequest{
+		With:    with,
 		GroupID: groupID,
 	}
 
@@ -42,8 +49,10 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksResponseBody(ctx cont
 				items.Exports = append(items.Exports, types.StringValue(v))
 			}
 			items.ID = types.StringValue(itemsItem.ID)
+			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
 			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
+			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
 				items.Settings = make(map[string]types.String, len(itemsItem.Settings))
 				for key, value := range itemsItem.Settings {
@@ -83,8 +92,10 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksResponseBody(ctx cont
 				r.Items[itemsCount].DisplayName = items.DisplayName
 				r.Items[itemsCount].Exports = items.Exports
 				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].Inputs = items.Inputs
 				r.Items[itemsCount].IsDisabled = items.IsDisabled
 				r.Items[itemsCount].MinLogStreamVersion = items.MinLogStreamVersion
+				r.Items[itemsCount].Outputs = items.Outputs
 				r.Items[itemsCount].Settings = items.Settings
 				r.Items[itemsCount].Source = items.Source
 				r.Items[itemsCount].Spec = items.Spec

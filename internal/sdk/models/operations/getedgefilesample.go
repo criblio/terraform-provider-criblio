@@ -30,16 +30,7 @@ func (o *GetEdgeFileSampleRequest) GetBytesRequested() *float64 {
 
 // GetEdgeFileSampleResponseBody - a list of SampleFile objects
 type GetEdgeFileSampleResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.SampleFile `json:"items,omitempty"`
-}
-
-func (o *GetEdgeFileSampleResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetEdgeFileSampleResponseBody) GetItems() []shared.SampleFile {

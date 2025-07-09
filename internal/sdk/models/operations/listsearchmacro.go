@@ -9,16 +9,7 @@ import (
 
 // ListSearchMacroResponseBody - a list of SearchMacro objects
 type ListSearchMacroResponseBody struct {
-	// number of items present in the items array
-	Count *int64               `json:"count,omitempty"`
 	Items []shared.SearchMacro `json:"items,omitempty"`
-}
-
-func (o *ListSearchMacroResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *ListSearchMacroResponseBody) GetItems() []shared.SearchMacro {

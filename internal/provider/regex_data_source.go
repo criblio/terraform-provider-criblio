@@ -48,12 +48,11 @@ func (r *RegexDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed:    true,
-				Description: `Brief description of this regex (optional)`,
+				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group ID to GET`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -66,11 +65,10 @@ func (r *RegexDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			},
 			"sample_data": schema.StringAttribute{
 				Computed:    true,
-				Description: `Sample data for this regex (optional)`,
+				Description: `Optionally, paste in sample data to match against this regex`,
 			},
 			"tags": schema.StringAttribute{
-				Computed:    true,
-				Description: `One or more tags related to this regex (optional)`,
+				Computed: true,
 			},
 		},
 	}

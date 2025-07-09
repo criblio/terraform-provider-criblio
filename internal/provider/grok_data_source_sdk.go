@@ -28,6 +28,8 @@ func (r *GrokDataSourceModel) RefreshFromSharedGrokFile(ctx context.Context, res
 
 	r.Content = types.StringValue(resp.Content)
 	r.ID = types.StringValue(resp.ID)
+	r.Size = types.Float64Value(resp.Size)
+	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags
 }

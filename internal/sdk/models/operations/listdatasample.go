@@ -9,16 +9,7 @@ import (
 
 // ListDataSampleResponseBody - a list of DataSample objects
 type ListDataSampleResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.DataSample `json:"items,omitempty"`
-}
-
-func (o *ListDataSampleResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *ListDataSampleResponseBody) GetItems() []shared.DataSample {

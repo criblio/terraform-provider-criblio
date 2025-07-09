@@ -10,7 +10,7 @@ import (
 type GetPipelineByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,16 +30,7 @@ func (o *GetPipelineByPackRequest) GetGroupID() string {
 
 // GetPipelineByPackResponseBody - a list of Pipeline objects
 type GetPipelineByPackResponseBody struct {
-	// number of items present in the items array
-	CountTotal *int64            `json:"count_total,omitempty"`
-	Items      []shared.Pipeline `json:"items,omitempty"`
-}
-
-func (o *GetPipelineByPackResponseBody) GetCountTotal() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.CountTotal
+	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
 func (o *GetPipelineByPackResponseBody) GetItems() []shared.Pipeline {

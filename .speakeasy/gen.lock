@@ -1,8 +1,8 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: e8e49b807a2c752e1d2b5fa2d39e222d
-  docVersion: 1.0.0
+  docChecksum: 0ed52b5260a3272f0418b543ae7b5330
+  docVersion: 4.12.2-4b17c8d4-TFProvider-manual
   speakeasyVersion: 1.575.2
   generationVersion: 2.648.4
   releaseVersion: 1.0.45
@@ -19,7 +19,6 @@ features:
     globalServerURLs: 2.82.2
     ignores: 2.81.1
     inputOutputModels: 2.83.0
-    methodServerURLs: 2.82.1
     nullables: 0.0.0
     oauth2ClientCredentials: 0.1.5
     serverIDs: 2.81.1
@@ -54,7 +53,6 @@ generatedFiles:
   - examples/resources/criblio_commit/resource.tf
   - examples/resources/criblio_database_connection/import.sh
   - examples/resources/criblio_database_connection/resource.tf
-  - examples/resources/criblio_deploy/resource.tf
   - examples/resources/criblio_destination/import.sh
   - examples/resources/criblio_destination/resource.tf
   - examples/resources/criblio_event_breaker_ruleset/import.sh
@@ -115,8 +113,6 @@ generatedFiles:
   - internal/provider/databaseconnection_data_source_sdk.go
   - internal/provider/databaseconnection_resource.go
   - internal/provider/databaseconnection_resource_sdk.go
-  - internal/provider/deploy_resource.go
-  - internal/provider/deploy_resource_sdk.go
   - internal/provider/destination_data_source.go
   - internal/provider/destination_data_source_sdk.go
   - internal/provider/destination_resource.go
@@ -213,11 +209,10 @@ generatedFiles:
   - internal/provider/types/appscope_config_log.go
   - internal/provider/types/appscope_config_metric.go
   - internal/provider/types/appscope_config_metric_format.go
-  - internal/provider/types/appscope_config_metric_watch.go
   - internal/provider/types/appscope_config_payload.go
   - internal/provider/types/appscope_config_protocol.go
   - internal/provider/types/appscope_config_tag.go
-  - internal/provider/types/appscope_config_watch_ndjson.go
+  - internal/provider/types/appscope_config_watch.go
   - internal/provider/types/appscope_config_with_custom.go
   - internal/provider/types/appscope_config_with_custom_cribl.go
   - internal/provider/types/appscope_config_with_custom_event.go
@@ -226,105 +221,23 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_log.go
   - internal/provider/types/appscope_config_with_custom_metric.go
   - internal/provider/types/appscope_config_with_custom_metric_format.go
-  - internal/provider/types/appscope_config_with_custom_metric_watch.go
   - internal/provider/types/appscope_config_with_custom_payload.go
   - internal/provider/types/appscope_config_with_custom_protocol.go
   - internal/provider/types/appscope_config_with_custom_tag.go
-  - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
+  - internal/provider/types/appscope_config_with_custom_watch.go
   - internal/provider/types/appscope_custom.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
-  - internal/provider/types/auth_elastic.go
-  - internal/provider/types/auth_elastic_cloud.go
-  - internal/provider/types/auth_token_metadatum_splunk_hec.go
-  - internal/provider/types/auth_token_metadatum_zscaler_hec.go
-  - internal/provider/types/auth_token_splunk.go
-  - internal/provider/types/auth_token_splunk_hec.go
-  - internal/provider/types/auth_token_zscaler_hec.go
-  - internal/provider/types/auth_tokens_ext_http.go
-  - internal/provider/types/auth_tokens_ext_http_raw.go
-  - internal/provider/types/auth_tokens_ext_metadatum_http.go
-  - internal/provider/types/auth_tokens_ext_metadatum_http_raw.go
-  - internal/provider/types/authentication_azure_eventhub.go
-  - internal/provider/types/authentication_eventhub.go
   - internal/provider/types/author.go
   - internal/provider/types/cert_options.go
-  - internal/provider/types/certificate_azure_data_explorer.go
-  - internal/provider/types/checkpointing_crowdstrike.go
-  - internal/provider/types/checkpointing_s3.go
-  - internal/provider/types/checkpointing_s3_inventory.go
-  - internal/provider/types/checkpointing_security_lake.go
-  - internal/provider/types/cloud.go
   - internal/provider/types/collectors.go
   - internal/provider/types/commit.go
-  - internal/provider/types/config_group.go
   - internal/provider/types/config_group_cloud.go
-  - internal/provider/types/connection_appscope.go
-  - internal/provider/types/connection_azure_blob.go
-  - internal/provider/types/connection_collection.go
-  - internal/provider/types/connection_confluent_cloud.go
-  - internal/provider/types/connection_cribl.go
-  - internal/provider/types/connection_cribl_http.go
-  - internal/provider/types/connection_cribl_tcp.go
-  - internal/provider/types/connection_criblmetrics.go
-  - internal/provider/types/connection_crowdstrike.go
-  - internal/provider/types/connection_datadog_agent.go
-  - internal/provider/types/connection_datagen.go
-  - internal/provider/types/connection_edge_prometheus.go
-  - internal/provider/types/connection_elastic.go
-  - internal/provider/types/connection_eventhub.go
-  - internal/provider/types/connection_firehose.go
-  - internal/provider/types/connection_google_pubsub.go
-  - internal/provider/types/connection_http.go
-  - internal/provider/types/connection_http_raw.go
-  - internal/provider/types/connection_kafka.go
-  - internal/provider/types/connection_kinesis.go
-  - internal/provider/types/connection_kube_events.go
-  - internal/provider/types/connection_kube_logs.go
-  - internal/provider/types/connection_kube_metrics.go
-  - internal/provider/types/connection_loki.go
-  - internal/provider/types/connection_metrics.go
-  - internal/provider/types/connection_model_driven_telemetry.go
-  - internal/provider/types/connection_msk.go
-  - internal/provider/types/connection_netflow.go
-  - internal/provider/types/connection_office365_mgmt.go
-  - internal/provider/types/connection_office365_msg_trace.go
-  - internal/provider/types/connection_office365_service.go
-  - internal/provider/types/connection_open_telemetry.go
-  - internal/provider/types/connection_prometheus.go
-  - internal/provider/types/connection_prometheus_rw.go
-  - internal/provider/types/connection_raw_udp.go
-  - internal/provider/types/connection_s3.go
-  - internal/provider/types/connection_s3_inventory.go
-  - internal/provider/types/connection_security_lake.go
-  - internal/provider/types/connection_snmp.go
-  - internal/provider/types/connection_splunk.go
-  - internal/provider/types/connection_splunk_hec.go
-  - internal/provider/types/connection_splunk_search.go
-  - internal/provider/types/connection_sqs.go
-  - internal/provider/types/connection_system_metrics.go
-  - internal/provider/types/connection_system_state.go
-  - internal/provider/types/connection_tcp.go
-  - internal/provider/types/connection_tcpjson.go
-  - internal/provider/types/connection_wef.go
-  - internal/provider/types/connection_win_event_logs.go
-  - internal/provider/types/connection_windows_metrics.go
-  - internal/provider/types/connection_wiz.go
-  - internal/provider/types/connection_zscaler_hec.go
+  - internal/provider/types/config_group_git.go
+  - internal/provider/types/config_group_lookups.go
+  - internal/provider/types/connection.go
   - internal/provider/types/consumers.go
-  - internal/provider/types/container_filter.go
-  - internal/provider/types/content_config_office365_mgmt.go
-  - internal/provider/types/content_config_office365_service.go
-  - internal/provider/types/content_config_wiz.go
-  - internal/provider/types/cpu_system_metrics.go
-  - internal/provider/types/cpu_windows_metrics.go
   - internal/provider/types/custom_label.go
-  - internal/provider/types/custom_system_metrics.go
-  - internal/provider/types/custom_windows_metrics.go
-  - internal/provider/types/disk_spooling_edge_prometheus.go
-  - internal/provider/types/disk_spooling_kube_logs.go
-  - internal/provider/types/disk_system_metrics.go
-  - internal/provider/types/disk_windows_metrics.go
   - internal/provider/types/disks_and_file_systems.go
   - internal/provider/types/dns.go
   - internal/provider/types/endpoint_header.go
@@ -332,146 +245,297 @@ generatedFiles:
   - internal/provider/types/event_breaker_ruleset_rule.go
   - internal/provider/types/event_breaker_ruleset_timestamp_format.go
   - internal/provider/types/extent_tag.go
-  - internal/provider/types/extra_http_header131.go
-  - internal/provider/types/extra_http_header_azure_logs.go
-  - internal/provider/types/extra_http_header_click_house.go
-  - internal/provider/types/extra_http_header_cribl_http.go
-  - internal/provider/types/extra_http_header_crowdstrike_next_gen_siem.go
-  - internal/provider/types/extra_http_header_datadog.go
-  - internal/provider/types/extra_http_header_dataset.go
-  - internal/provider/types/extra_http_header_dynatrace_http.go
-  - internal/provider/types/extra_http_header_elastic_cloud.go
-  - internal/provider/types/extra_http_header_google_chronicle.go
-  - internal/provider/types/extra_http_header_honeycomb.go
-  - internal/provider/types/extra_http_header_http.go
-  - internal/provider/types/extra_http_header_humio_hec.go
-  - internal/provider/types/extra_http_header_influxdb.go
-  - internal/provider/types/extra_http_header_loki.go
-  - internal/provider/types/extra_http_header_newrelic.go
-  - internal/provider/types/extra_http_header_newrelic_events.go
-  - internal/provider/types/extra_http_header_open_telemetry.go
-  - internal/provider/types/extra_http_header_prometheus.go
-  - internal/provider/types/extra_http_header_sentinel.go
-  - internal/provider/types/extra_http_header_signalfx.go
-  - internal/provider/types/extra_http_header_splunk_hec.go
-  - internal/provider/types/extra_http_header_sumo_logic.go
-  - internal/provider/types/extra_http_header_wavefront.go
-  - internal/provider/types/extra_http_header_webhook.go
-  - internal/provider/types/extra_http_header_xsiam.go
   - internal/provider/types/extra_log_type.go
-  - internal/provider/types/extra_param_elastic.go
-  - internal/provider/types/extra_param_elastic_cloud.go
   - internal/provider/types/field.go
   - internal/provider/types/file_info.go
-  - internal/provider/types/filter_appscope.go
   - internal/provider/types/firewall.go
-  - internal/provider/types/git.go
+  - internal/provider/types/function_specific_configs.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
-  - internal/provider/types/host_cribl_tcp.go
   - internal/provider/types/host_info.go
-  - internal/provider/types/host_netflow.go
-  - internal/provider/types/host_snmp.go
-  - internal/provider/types/host_splunk_lb.go
-  - internal/provider/types/host_system_metrics.go
-  - internal/provider/types/host_tcpjson.go
-  - internal/provider/types/host_windows_metrics.go
   - internal/provider/types/hosts_file.go
   - internal/provider/types/indexer_discovery_configs.go
   - internal/provider/types/ingest_if_not_exist.go
   - internal/provider/types/input_appscope.go
-  - internal/provider/types/input_auth_confluent_cloud.go
-  - internal/provider/types/input_auth_kafka.go
-  - internal/provider/types/input_auth_msk.go
-  - internal/provider/types/input_authentication_confluent_cloud.go
-  - internal/provider/types/input_authentication_kafka.go
+  - internal/provider/types/input_appscope_connection.go
+  - internal/provider/types/input_appscope_filter.go
+  - internal/provider/types/input_appscope_metadatum.go
+  - internal/provider/types/input_appscope_persistence.go
+  - internal/provider/types/input_appscope_pq.go
+  - internal/provider/types/input_appscope_tls_settings_server_side.go
   - internal/provider/types/input_azure_blob.go
-  - internal/provider/types/input_certificate.go
+  - internal/provider/types/input_azure_blob_certificate.go
+  - internal/provider/types/input_azure_blob_connection.go
+  - internal/provider/types/input_azure_blob_metadatum.go
+  - internal/provider/types/input_azure_blob_pq.go
   - internal/provider/types/input_collection.go
+  - internal/provider/types/input_collection_connection.go
+  - internal/provider/types/input_collection_metadatum.go
+  - internal/provider/types/input_collection_pq.go
+  - internal/provider/types/input_collection_preprocess.go
   - internal/provider/types/input_confluent_cloud.go
-  - internal/provider/types/input_container.go
+  - internal/provider/types/input_confluent_cloud_auth.go
+  - internal/provider/types/input_confluent_cloud_authentication.go
+  - internal/provider/types/input_confluent_cloud_connection.go
+  - internal/provider/types/input_confluent_cloud_kafka_schema_registry_authentication.go
+  - internal/provider/types/input_confluent_cloud_kafka_schema_registry_tls_settings_client_side.go
+  - internal/provider/types/input_confluent_cloud_metadatum.go
+  - internal/provider/types/input_confluent_cloud_pq.go
+  - internal/provider/types/input_confluent_cloud_tls_settings_client_side.go
   - internal/provider/types/input_cribl.go
+  - internal/provider/types/input_cribl_connection.go
   - internal/provider/types/input_cribl_http.go
+  - internal/provider/types/input_cribl_http_connection.go
+  - internal/provider/types/input_cribl_http_metadatum.go
+  - internal/provider/types/input_cribl_http_pq.go
+  - internal/provider/types/input_cribl_httptls_settings_server_side.go
+  - internal/provider/types/input_cribl_lake_http.go
+  - internal/provider/types/input_cribl_lake_http_connection.go
+  - internal/provider/types/input_cribl_lake_http_metadatum.go
+  - internal/provider/types/input_cribl_lake_http_pq.go
+  - internal/provider/types/input_cribl_lake_httptls_settings_server_side.go
+  - internal/provider/types/input_cribl_metadatum.go
+  - internal/provider/types/input_cribl_pq.go
   - internal/provider/types/input_cribl_tcp.go
+  - internal/provider/types/input_cribl_tcp_connection.go
+  - internal/provider/types/input_cribl_tcp_metadatum.go
+  - internal/provider/types/input_cribl_tcp_pq.go
+  - internal/provider/types/input_cribl_tcptls_settings_server_side.go
   - internal/provider/types/input_criblmetrics.go
+  - internal/provider/types/input_criblmetrics_connection.go
+  - internal/provider/types/input_criblmetrics_metadatum.go
+  - internal/provider/types/input_criblmetrics_pq.go
   - internal/provider/types/input_crowdstrike.go
+  - internal/provider/types/input_crowdstrike_checkpointing.go
+  - internal/provider/types/input_crowdstrike_connection.go
+  - internal/provider/types/input_crowdstrike_metadatum.go
+  - internal/provider/types/input_crowdstrike_pq.go
+  - internal/provider/types/input_crowdstrike_preprocess.go
   - internal/provider/types/input_datadog_agent.go
+  - internal/provider/types/input_datadog_agent_connection.go
+  - internal/provider/types/input_datadog_agent_metadatum.go
+  - internal/provider/types/input_datadog_agent_pq.go
+  - internal/provider/types/input_datadog_agent_proxy_mode.go
+  - internal/provider/types/input_datadog_agent_tls_settings_server_side.go
   - internal/provider/types/input_datagen.go
+  - internal/provider/types/input_datagen_connection.go
+  - internal/provider/types/input_datagen_metadatum.go
+  - internal/provider/types/input_datagen_pq.go
   - internal/provider/types/input_edge_prometheus.go
+  - internal/provider/types/input_edge_prometheus_connection.go
+  - internal/provider/types/input_edge_prometheus_disk_spooling.go
+  - internal/provider/types/input_edge_prometheus_metadatum.go
+  - internal/provider/types/input_edge_prometheus_pq.go
+  - internal/provider/types/input_edge_prometheus_search_filter.go
   - internal/provider/types/input_elastic.go
+  - internal/provider/types/input_elastic_connection.go
+  - internal/provider/types/input_elastic_extra_http_header.go
+  - internal/provider/types/input_elastic_metadatum.go
+  - internal/provider/types/input_elastic_pq.go
+  - internal/provider/types/input_elastic_proxy_mode.go
+  - internal/provider/types/input_elastic_tls_settings_server_side.go
   - internal/provider/types/input_eventhub.go
+  - internal/provider/types/input_eventhub_authentication.go
+  - internal/provider/types/input_eventhub_connection.go
+  - internal/provider/types/input_eventhub_metadatum.go
+  - internal/provider/types/input_eventhub_pq.go
+  - internal/provider/types/input_eventhub_tls_settings_client_side.go
   - internal/provider/types/input_exec.go
   - internal/provider/types/input_exec_connection.go
   - internal/provider/types/input_exec_metadatum.go
   - internal/provider/types/input_exec_pq.go
-  - internal/provider/types/input_extra_http_header.go
   - internal/provider/types/input_file.go
   - internal/provider/types/input_file_connection.go
   - internal/provider/types/input_file_metadatum.go
   - internal/provider/types/input_file_pq.go
   - internal/provider/types/input_firehose.go
+  - internal/provider/types/input_firehose_connection.go
+  - internal/provider/types/input_firehose_metadatum.go
+  - internal/provider/types/input_firehose_pq.go
+  - internal/provider/types/input_firehose_tls_settings_server_side.go
   - internal/provider/types/input_google_pubsub.go
+  - internal/provider/types/input_google_pubsub_connection.go
+  - internal/provider/types/input_google_pubsub_metadatum.go
+  - internal/provider/types/input_google_pubsub_pq.go
   - internal/provider/types/input_grafana.go
   - internal/provider/types/input_grafana_connection1.go
   - internal/provider/types/input_grafana_connection2.go
   - internal/provider/types/input_grafana_grafana1.go
   - internal/provider/types/input_grafana_grafana2.go
+  - internal/provider/types/input_grafana_loki_auth1.go
+  - internal/provider/types/input_grafana_loki_auth2.go
   - internal/provider/types/input_grafana_metadatum1.go
   - internal/provider/types/input_grafana_metadatum2.go
   - internal/provider/types/input_grafana_pq1.go
   - internal/provider/types/input_grafana_pq2.go
+  - internal/provider/types/input_grafana_prometheus_auth1.go
+  - internal/provider/types/input_grafana_prometheus_auth2.go
   - internal/provider/types/input_grafana_tls_settings_server_side1.go
   - internal/provider/types/input_grafana_tls_settings_server_side2.go
   - internal/provider/types/input_http.go
+  - internal/provider/types/input_http_auth_tokens_ext.go
+  - internal/provider/types/input_http_auth_tokens_ext_metadatum.go
+  - internal/provider/types/input_http_connection.go
+  - internal/provider/types/input_http_metadatum.go
+  - internal/provider/types/input_http_pq.go
   - internal/provider/types/input_http_raw.go
+  - internal/provider/types/input_http_raw_auth_tokens_ext.go
+  - internal/provider/types/input_http_raw_auth_tokens_ext_metadatum.go
+  - internal/provider/types/input_http_raw_connection.go
+  - internal/provider/types/input_http_raw_metadatum.go
+  - internal/provider/types/input_http_raw_pq.go
+  - internal/provider/types/input_http_raw_tls_settings_server_side.go
+  - internal/provider/types/input_httptls_settings_server_side.go
   - internal/provider/types/input_journal_files.go
   - internal/provider/types/input_journal_files_connection.go
   - internal/provider/types/input_journal_files_metadatum.go
   - internal/provider/types/input_journal_files_pq.go
   - internal/provider/types/input_journal_files_rule.go
   - internal/provider/types/input_kafka.go
-  - internal/provider/types/input_kafka_schema_registry_authentication_confluent_cloud.go
-  - internal/provider/types/input_kafka_schema_registry_authentication_kafka.go
-  - internal/provider/types/input_kafka_schema_registry_authentication_msk.go
-  - internal/provider/types/input_kafka_schema_registry_tls_settings_client_side_confluent_cloud.go
-  - internal/provider/types/input_kafka_schema_registry_tls_settings_client_side_kafka.go
-  - internal/provider/types/input_kafka_schema_registry_tls_settings_client_side_msk.go
+  - internal/provider/types/input_kafka_auth.go
+  - internal/provider/types/input_kafka_authentication.go
+  - internal/provider/types/input_kafka_connection.go
+  - internal/provider/types/input_kafka_kafka_schema_registry_authentication.go
+  - internal/provider/types/input_kafka_kafka_schema_registry_tls_settings_client_side.go
+  - internal/provider/types/input_kafka_metadatum.go
+  - internal/provider/types/input_kafka_pq.go
+  - internal/provider/types/input_kafka_tls_settings_client_side.go
   - internal/provider/types/input_kinesis.go
+  - internal/provider/types/input_kinesis_connection.go
+  - internal/provider/types/input_kinesis_metadatum.go
+  - internal/provider/types/input_kinesis_pq.go
   - internal/provider/types/input_kube_events.go
+  - internal/provider/types/input_kube_events_connection.go
+  - internal/provider/types/input_kube_events_metadatum.go
+  - internal/provider/types/input_kube_events_pq.go
+  - internal/provider/types/input_kube_events_rule.go
   - internal/provider/types/input_kube_logs.go
+  - internal/provider/types/input_kube_logs_connection.go
+  - internal/provider/types/input_kube_logs_disk_spooling.go
+  - internal/provider/types/input_kube_logs_metadatum.go
+  - internal/provider/types/input_kube_logs_pq.go
+  - internal/provider/types/input_kube_logs_rule.go
   - internal/provider/types/input_kube_metrics.go
+  - internal/provider/types/input_kube_metrics_connection.go
+  - internal/provider/types/input_kube_metrics_metadatum.go
+  - internal/provider/types/input_kube_metrics_persistence.go
+  - internal/provider/types/input_kube_metrics_pq.go
+  - internal/provider/types/input_kube_metrics_rule.go
   - internal/provider/types/input_loki.go
-  - internal/provider/types/input_loki_auth1.go
-  - internal/provider/types/input_loki_auth2.go
-  - internal/provider/types/input_metadatum_collection.go
-  - internal/provider/types/input_metadatum_http.go
-  - internal/provider/types/input_metadatum_open_telemetry.go
+  - internal/provider/types/input_loki_connection.go
+  - internal/provider/types/input_loki_metadatum.go
+  - internal/provider/types/input_loki_oauth_header.go
+  - internal/provider/types/input_loki_oauth_param.go
+  - internal/provider/types/input_loki_pq.go
+  - internal/provider/types/input_loki_tls_settings_server_side.go
   - internal/provider/types/input_metrics.go
+  - internal/provider/types/input_metrics_connection.go
+  - internal/provider/types/input_metrics_metadatum.go
+  - internal/provider/types/input_metrics_pq.go
+  - internal/provider/types/input_metrics_tls_settings_server_side.go
   - internal/provider/types/input_model_driven_telemetry.go
+  - internal/provider/types/input_model_driven_telemetry_connection.go
+  - internal/provider/types/input_model_driven_telemetry_metadatum.go
+  - internal/provider/types/input_model_driven_telemetry_pq.go
+  - internal/provider/types/input_model_driven_telemetry_tls_settings_server_side.go
   - internal/provider/types/input_msk.go
+  - internal/provider/types/input_msk_auth.go
+  - internal/provider/types/input_msk_connection.go
+  - internal/provider/types/input_msk_kafka_schema_registry_authentication.go
+  - internal/provider/types/input_msk_kafka_schema_registry_tls_settings_client_side.go
+  - internal/provider/types/input_msk_metadatum.go
+  - internal/provider/types/input_msk_pq.go
+  - internal/provider/types/input_msk_tls_settings_client_side.go
   - internal/provider/types/input_netflow.go
-  - internal/provider/types/input_oauth_header_open_telemetry.go
-  - internal/provider/types/input_oauth_param_open_telemetry.go
+  - internal/provider/types/input_netflow_connection.go
+  - internal/provider/types/input_netflow_metadatum.go
+  - internal/provider/types/input_netflow_pq.go
   - internal/provider/types/input_office365_mgmt.go
+  - internal/provider/types/input_office365_mgmt_connection.go
+  - internal/provider/types/input_office365_mgmt_content_config.go
+  - internal/provider/types/input_office365_mgmt_metadatum.go
+  - internal/provider/types/input_office365_mgmt_pq.go
+  - internal/provider/types/input_office365_mgmt_retry_rules.go
   - internal/provider/types/input_office365_msg_trace.go
+  - internal/provider/types/input_office365_msg_trace_connection.go
+  - internal/provider/types/input_office365_msg_trace_metadatum.go
+  - internal/provider/types/input_office365_msg_trace_pq.go
+  - internal/provider/types/input_office365_msg_trace_retry_rules.go
   - internal/provider/types/input_office365_service.go
+  - internal/provider/types/input_office365_service_connection.go
+  - internal/provider/types/input_office365_service_content_config.go
+  - internal/provider/types/input_office365_service_metadatum.go
+  - internal/provider/types/input_office365_service_pq.go
+  - internal/provider/types/input_office365_service_retry_rules.go
   - internal/provider/types/input_open_telemetry.go
-  - internal/provider/types/input_preprocess_collection.go
+  - internal/provider/types/input_open_telemetry_connection.go
+  - internal/provider/types/input_open_telemetry_metadatum.go
+  - internal/provider/types/input_open_telemetry_oauth_header.go
+  - internal/provider/types/input_open_telemetry_oauth_param.go
+  - internal/provider/types/input_open_telemetry_pq.go
+  - internal/provider/types/input_open_telemetry_tls_settings_server_side.go
   - internal/provider/types/input_prometheus.go
-  - internal/provider/types/input_prometheus_auth1.go
-  - internal/provider/types/input_prometheus_auth2.go
+  - internal/provider/types/input_prometheus_connection.go
+  - internal/provider/types/input_prometheus_metadatum.go
+  - internal/provider/types/input_prometheus_pq.go
   - internal/provider/types/input_prometheus_rw.go
+  - internal/provider/types/input_prometheus_rw_connection.go
+  - internal/provider/types/input_prometheus_rw_metadatum.go
+  - internal/provider/types/input_prometheus_rw_oauth_header.go
+  - internal/provider/types/input_prometheus_rw_oauth_param.go
+  - internal/provider/types/input_prometheus_rw_pq.go
+  - internal/provider/types/input_prometheus_rw_tls_settings_server_side.go
+  - internal/provider/types/input_prometheus_search_filter.go
   - internal/provider/types/input_raw_udp.go
-  - internal/provider/types/input_routes.go
+  - internal/provider/types/input_raw_udp_connection.go
+  - internal/provider/types/input_raw_udp_metadatum.go
+  - internal/provider/types/input_raw_udp_pq.go
   - internal/provider/types/input_s3.go
+  - internal/provider/types/input_s3_checkpointing.go
+  - internal/provider/types/input_s3_connection.go
   - internal/provider/types/input_s3_inventory.go
+  - internal/provider/types/input_s3_inventory_checkpointing.go
+  - internal/provider/types/input_s3_inventory_connection.go
+  - internal/provider/types/input_s3_inventory_metadatum.go
+  - internal/provider/types/input_s3_inventory_pq.go
+  - internal/provider/types/input_s3_inventory_preprocess.go
+  - internal/provider/types/input_s3_metadatum.go
+  - internal/provider/types/input_s3_pq.go
+  - internal/provider/types/input_s3_preprocess.go
   - internal/provider/types/input_security_lake.go
+  - internal/provider/types/input_security_lake_checkpointing.go
+  - internal/provider/types/input_security_lake_connection.go
+  - internal/provider/types/input_security_lake_metadatum.go
+  - internal/provider/types/input_security_lake_pq.go
+  - internal/provider/types/input_security_lake_preprocess.go
   - internal/provider/types/input_snmp.go
+  - internal/provider/types/input_snmp_connection.go
+  - internal/provider/types/input_snmp_metadatum.go
+  - internal/provider/types/input_snmp_pq.go
   - internal/provider/types/input_splunk.go
+  - internal/provider/types/input_splunk_auth_token.go
+  - internal/provider/types/input_splunk_connection.go
   - internal/provider/types/input_splunk_hec.go
+  - internal/provider/types/input_splunk_hec_auth_token.go
+  - internal/provider/types/input_splunk_hec_auth_token_metadatum.go
+  - internal/provider/types/input_splunk_hec_connection.go
+  - internal/provider/types/input_splunk_hec_metadatum.go
+  - internal/provider/types/input_splunk_hec_pq.go
+  - internal/provider/types/input_splunk_hec_tls_settings_server_side.go
+  - internal/provider/types/input_splunk_metadatum.go
+  - internal/provider/types/input_splunk_pq.go
   - internal/provider/types/input_splunk_search.go
+  - internal/provider/types/input_splunk_search_connection.go
+  - internal/provider/types/input_splunk_search_metadatum.go
+  - internal/provider/types/input_splunk_search_oauth_header.go
+  - internal/provider/types/input_splunk_search_oauth_param.go
+  - internal/provider/types/input_splunk_search_pq.go
+  - internal/provider/types/input_splunk_search_retry_rules.go
+  - internal/provider/types/input_splunk_tls_settings_server_side.go
   - internal/provider/types/input_sqs.go
-  - internal/provider/types/input_subscription.go
+  - internal/provider/types/input_sqs_connection.go
+  - internal/provider/types/input_sqs_metadatum.go
+  - internal/provider/types/input_sqs_pq.go
   - internal/provider/types/input_syslog.go
   - internal/provider/types/input_syslog_connection1.go
   - internal/provider/types/input_syslog_connection2.go
@@ -484,25 +548,75 @@ generatedFiles:
   - internal/provider/types/input_syslog_tls_settings_server_side1.go
   - internal/provider/types/input_syslog_tls_settings_server_side2.go
   - internal/provider/types/input_system_metrics.go
+  - internal/provider/types/input_system_metrics_connection.go
+  - internal/provider/types/input_system_metrics_container.go
+  - internal/provider/types/input_system_metrics_cpu.go
+  - internal/provider/types/input_system_metrics_custom.go
+  - internal/provider/types/input_system_metrics_disk.go
+  - internal/provider/types/input_system_metrics_filter.go
+  - internal/provider/types/input_system_metrics_host.go
+  - internal/provider/types/input_system_metrics_memory.go
+  - internal/provider/types/input_system_metrics_metadatum.go
+  - internal/provider/types/input_system_metrics_network.go
+  - internal/provider/types/input_system_metrics_persistence.go
+  - internal/provider/types/input_system_metrics_pq.go
+  - internal/provider/types/input_system_metrics_process.go
+  - internal/provider/types/input_system_metrics_set.go
+  - internal/provider/types/input_system_metrics_system.go
   - internal/provider/types/input_system_state.go
+  - internal/provider/types/input_system_state_connection.go
+  - internal/provider/types/input_system_state_metadatum.go
+  - internal/provider/types/input_system_state_persistence.go
+  - internal/provider/types/input_system_state_pq.go
+  - internal/provider/types/input_system_state_routes.go
   - internal/provider/types/input_tcp.go
+  - internal/provider/types/input_tcp_connection.go
+  - internal/provider/types/input_tcp_metadatum.go
+  - internal/provider/types/input_tcp_pq.go
+  - internal/provider/types/input_tcp_preprocess.go
   - internal/provider/types/input_tcpjson.go
-  - internal/provider/types/input_tls_settings_client_side_confluent_cloud.go
-  - internal/provider/types/input_tls_settings_client_side_kafka.go
-  - internal/provider/types/input_tls_settings_client_side_msk.go
+  - internal/provider/types/input_tcpjson_connection.go
+  - internal/provider/types/input_tcpjson_metadatum.go
+  - internal/provider/types/input_tcpjson_pq.go
+  - internal/provider/types/input_tcpjson_tls_settings_server_side.go
+  - internal/provider/types/input_tcptls_settings_server_side.go
   - internal/provider/types/input_wef.go
+  - internal/provider/types/input_wef_connection.go
+  - internal/provider/types/input_wef_metadatum.go
+  - internal/provider/types/input_wef_pq.go
+  - internal/provider/types/input_wef_subscription.go
   - internal/provider/types/input_win_event_logs.go
+  - internal/provider/types/input_win_event_logs_connection.go
+  - internal/provider/types/input_win_event_logs_metadatum.go
+  - internal/provider/types/input_win_event_logs_pq.go
   - internal/provider/types/input_windows_metrics.go
+  - internal/provider/types/input_windows_metrics_connection.go
+  - internal/provider/types/input_windows_metrics_cpu.go
+  - internal/provider/types/input_windows_metrics_custom.go
+  - internal/provider/types/input_windows_metrics_disk.go
+  - internal/provider/types/input_windows_metrics_host.go
+  - internal/provider/types/input_windows_metrics_memory.go
+  - internal/provider/types/input_windows_metrics_metadatum.go
+  - internal/provider/types/input_windows_metrics_network.go
+  - internal/provider/types/input_windows_metrics_persistence.go
+  - internal/provider/types/input_windows_metrics_pq.go
+  - internal/provider/types/input_windows_metrics_process.go
+  - internal/provider/types/input_windows_metrics_set.go
+  - internal/provider/types/input_windows_metrics_system.go
   - internal/provider/types/input_wiz.go
+  - internal/provider/types/input_wiz_connection.go
+  - internal/provider/types/input_wiz_content_config.go
+  - internal/provider/types/input_wiz_metadatum.go
+  - internal/provider/types/input_wiz_pq.go
+  - internal/provider/types/input_wiz_retry_rules.go
   - internal/provider/types/input_zscaler_hec.go
+  - internal/provider/types/input_zscaler_hec_auth_token.go
+  - internal/provider/types/input_zscaler_hec_auth_token_metadatum.go
+  - internal/provider/types/input_zscaler_hec_connection.go
+  - internal/provider/types/input_zscaler_hec_metadatum.go
+  - internal/provider/types/input_zscaler_hec_pq.go
+  - internal/provider/types/input_zscaler_hec_tls_settings_server_side.go
   - internal/provider/types/interfaces.go
-  - internal/provider/types/key_value_metadatum_azure_blob.go
-  - internal/provider/types/key_value_metadatum_dl_s3.go
-  - internal/provider/types/key_value_metadatum_filesystem.go
-  - internal/provider/types/key_value_metadatum_google_cloud_storage.go
-  - internal/provider/types/key_value_metadatum_s3.go
-  - internal/provider/types/key_value_metadatum_security_lake.go
-  - internal/provider/types/label_loki.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -510,117 +624,120 @@ generatedFiles:
   - internal/provider/types/loki_auth_oauth_header2.go
   - internal/provider/types/loki_auth_oauth_param1.go
   - internal/provider/types/loki_auth_oauth_param2.go
+  - internal/provider/types/lookup.go
   - internal/provider/types/lookup_file1.go
   - internal/provider/types/lookup_file2.go
   - internal/provider/types/lookup_file_input1.go
   - internal/provider/types/lookup_file_input2.go
   - internal/provider/types/lookup_file_union.go
-  - internal/provider/types/memory_system_metrics.go
-  - internal/provider/types/memory_windows_metrics.go
-  - internal/provider/types/metadatum131.go
-  - internal/provider/types/metadatum_appscope.go
-  - internal/provider/types/metadatum_azure_blob.go
-  - internal/provider/types/metadatum_confluent_cloud.go
-  - internal/provider/types/metadatum_cribl.go
-  - internal/provider/types/metadatum_cribl_http.go
-  - internal/provider/types/metadatum_cribl_tcp.go
-  - internal/provider/types/metadatum_criblmetrics.go
-  - internal/provider/types/metadatum_crowdstrike.go
-  - internal/provider/types/metadatum_datadog_agent.go
-  - internal/provider/types/metadatum_datagen.go
-  - internal/provider/types/metadatum_edge_prometheus.go
-  - internal/provider/types/metadatum_elastic.go
-  - internal/provider/types/metadatum_eventhub.go
-  - internal/provider/types/metadatum_firehose.go
-  - internal/provider/types/metadatum_google_pubsub.go
-  - internal/provider/types/metadatum_http_raw.go
-  - internal/provider/types/metadatum_kafka.go
-  - internal/provider/types/metadatum_kinesis.go
-  - internal/provider/types/metadatum_kube_events.go
-  - internal/provider/types/metadatum_kube_logs.go
-  - internal/provider/types/metadatum_kube_metrics.go
-  - internal/provider/types/metadatum_loki.go
-  - internal/provider/types/metadatum_metrics.go
-  - internal/provider/types/metadatum_model_driven_telemetry.go
-  - internal/provider/types/metadatum_msk.go
-  - internal/provider/types/metadatum_netflow.go
-  - internal/provider/types/metadatum_newrelic.go
-  - internal/provider/types/metadatum_office365_mgmt.go
-  - internal/provider/types/metadatum_office365_msg_trace.go
-  - internal/provider/types/metadatum_office365_service.go
-  - internal/provider/types/metadatum_prometheus.go
-  - internal/provider/types/metadatum_prometheus_rw.go
-  - internal/provider/types/metadatum_raw_udp.go
-  - internal/provider/types/metadatum_s3.go
-  - internal/provider/types/metadatum_s3_inventory.go
-  - internal/provider/types/metadatum_security_lake.go
-  - internal/provider/types/metadatum_snmp.go
-  - internal/provider/types/metadatum_splunk.go
-  - internal/provider/types/metadatum_splunk_hec.go
-  - internal/provider/types/metadatum_splunk_search.go
-  - internal/provider/types/metadatum_sqs.go
-  - internal/provider/types/metadatum_system_metrics.go
-  - internal/provider/types/metadatum_system_state.go
-  - internal/provider/types/metadatum_tcp.go
-  - internal/provider/types/metadatum_tcpjson.go
-  - internal/provider/types/metadatum_wef.go
-  - internal/provider/types/metadatum_win_event_logs.go
-  - internal/provider/types/metadatum_windows_metrics.go
-  - internal/provider/types/metadatum_wiz.go
-  - internal/provider/types/metadatum_zscaler_hec.go
   - internal/provider/types/mtls_settings.go
-  - internal/provider/types/network_system_metrics.go
-  - internal/provider/types/network_windows_metrics.go
-  - internal/provider/types/oauth_header_click_house.go
-  - internal/provider/types/oauth_header_influxdb.go
-  - internal/provider/types/oauth_header_loki.go
-  - internal/provider/types/oauth_header_prometheus.go
-  - internal/provider/types/oauth_header_prometheus_rw.go
-  - internal/provider/types/oauth_header_splunk_search.go
-  - internal/provider/types/oauth_header_webhook.go
-  - internal/provider/types/oauth_param_click_house.go
-  - internal/provider/types/oauth_param_influxdb.go
-  - internal/provider/types/oauth_param_loki.go
-  - internal/provider/types/oauth_param_prometheus.go
-  - internal/provider/types/oauth_param_prometheus_rw.go
-  - internal/provider/types/oauth_param_splunk_search.go
-  - internal/provider/types/oauth_param_webhook.go
-  - internal/provider/types/output_auth_confluent_cloud.go
-  - internal/provider/types/output_auth_kafka.go
-  - internal/provider/types/output_auth_msk.go
-  - internal/provider/types/output_auth_token.go
-  - internal/provider/types/output_authentication_confluent_cloud.go
-  - internal/provider/types/output_authentication_kafka.go
   - internal/provider/types/output_azure_blob.go
+  - internal/provider/types/output_azure_blob_certificate.go
+  - internal/provider/types/output_azure_blob_key_value_metadatum.go
   - internal/provider/types/output_azure_data_explorer.go
+  - internal/provider/types/output_azure_data_explorer_certificate.go
+  - internal/provider/types/output_azure_data_explorer_pq_controls.go
+  - internal/provider/types/output_azure_data_explorer_response_retry_setting.go
+  - internal/provider/types/output_azure_data_explorer_timeout_retry_settings.go
   - internal/provider/types/output_azure_eventhub.go
+  - internal/provider/types/output_azure_eventhub_authentication.go
+  - internal/provider/types/output_azure_eventhub_pq_controls.go
+  - internal/provider/types/output_azure_eventhub_tls_settings_client_side.go
   - internal/provider/types/output_azure_logs.go
-  - internal/provider/types/output_certificate_azure_blob.go
+  - internal/provider/types/output_azure_logs_extra_http_header.go
+  - internal/provider/types/output_azure_logs_pq_controls.go
+  - internal/provider/types/output_azure_logs_response_retry_setting.go
+  - internal/provider/types/output_azure_logs_timeout_retry_settings.go
   - internal/provider/types/output_click_house.go
+  - internal/provider/types/output_click_house_column_mapping.go
+  - internal/provider/types/output_click_house_extra_http_header.go
+  - internal/provider/types/output_click_house_oauth_header.go
+  - internal/provider/types/output_click_house_oauth_param.go
+  - internal/provider/types/output_click_house_pq_controls.go
+  - internal/provider/types/output_click_house_response_retry_setting.go
+  - internal/provider/types/output_click_house_timeout_retry_settings.go
+  - internal/provider/types/output_click_house_tls_settings_client_side.go
   - internal/provider/types/output_cloudwatch.go
-  - internal/provider/types/output_column_mapping.go
+  - internal/provider/types/output_cloudwatch_pq_controls.go
   - internal/provider/types/output_confluent_cloud.go
+  - internal/provider/types/output_confluent_cloud_auth.go
+  - internal/provider/types/output_confluent_cloud_authentication.go
+  - internal/provider/types/output_confluent_cloud_kafka_schema_registry_authentication.go
+  - internal/provider/types/output_confluent_cloud_kafka_schema_registry_tls_settings_client_side.go
+  - internal/provider/types/output_confluent_cloud_pq_controls.go
+  - internal/provider/types/output_confluent_cloud_tls_settings_client_side.go
   - internal/provider/types/output_cribl_http.go
+  - internal/provider/types/output_cribl_http_extra_http_header.go
+  - internal/provider/types/output_cribl_http_pq_controls.go
+  - internal/provider/types/output_cribl_http_response_retry_setting.go
+  - internal/provider/types/output_cribl_http_timeout_retry_settings.go
+  - internal/provider/types/output_cribl_httptls_settings_client_side.go
+  - internal/provider/types/output_cribl_httpurl.go
   - internal/provider/types/output_cribl_lake.go
   - internal/provider/types/output_cribl_tcp.go
+  - internal/provider/types/output_cribl_tcp_host.go
+  - internal/provider/types/output_cribl_tcp_pq_controls.go
+  - internal/provider/types/output_cribl_tcptls_settings_client_side.go
   - internal/provider/types/output_crowdstrike_next_gen_siem.go
+  - internal/provider/types/output_crowdstrike_next_gen_siem_extra_http_header.go
+  - internal/provider/types/output_crowdstrike_next_gen_siem_pq_controls.go
+  - internal/provider/types/output_crowdstrike_next_gen_siem_response_retry_setting.go
+  - internal/provider/types/output_crowdstrike_next_gen_siem_timeout_retry_settings.go
   - internal/provider/types/output_datadog.go
+  - internal/provider/types/output_datadog_extra_http_header.go
+  - internal/provider/types/output_datadog_pq_controls.go
+  - internal/provider/types/output_datadog_response_retry_setting.go
+  - internal/provider/types/output_datadog_timeout_retry_settings.go
   - internal/provider/types/output_dataset.go
+  - internal/provider/types/output_dataset_extra_http_header.go
+  - internal/provider/types/output_dataset_pq_controls.go
+  - internal/provider/types/output_dataset_response_retry_setting.go
+  - internal/provider/types/output_dataset_timeout_retry_settings.go
   - internal/provider/types/output_default.go
   - internal/provider/types/output_devnull.go
   - internal/provider/types/output_disk_spool.go
   - internal/provider/types/output_dl_s3.go
+  - internal/provider/types/output_dl_s3_key_value_metadatum.go
   - internal/provider/types/output_dynatrace_http.go
+  - internal/provider/types/output_dynatrace_http_extra_http_header.go
+  - internal/provider/types/output_dynatrace_http_pq_controls.go
+  - internal/provider/types/output_dynatrace_http_response_retry_setting.go
+  - internal/provider/types/output_dynatrace_http_timeout_retry_settings.go
   - internal/provider/types/output_dynatrace_otlp.go
+  - internal/provider/types/output_dynatrace_otlp_extra_http_header.go
+  - internal/provider/types/output_dynatrace_otlp_metadatum.go
+  - internal/provider/types/output_dynatrace_otlp_pq_controls.go
+  - internal/provider/types/output_dynatrace_otlp_response_retry_setting.go
+  - internal/provider/types/output_dynatrace_otlp_timeout_retry_settings.go
   - internal/provider/types/output_elastic.go
+  - internal/provider/types/output_elastic_auth.go
   - internal/provider/types/output_elastic_cloud.go
+  - internal/provider/types/output_elastic_cloud_auth.go
+  - internal/provider/types/output_elastic_cloud_extra_http_header.go
+  - internal/provider/types/output_elastic_cloud_extra_param.go
+  - internal/provider/types/output_elastic_cloud_pq_controls.go
+  - internal/provider/types/output_elastic_cloud_response_retry_setting.go
+  - internal/provider/types/output_elastic_cloud_timeout_retry_settings.go
+  - internal/provider/types/output_elastic_extra_http_header.go
+  - internal/provider/types/output_elastic_extra_param.go
+  - internal/provider/types/output_elastic_pq_controls.go
+  - internal/provider/types/output_elastic_response_retry_setting.go
+  - internal/provider/types/output_elastic_timeout_retry_settings.go
+  - internal/provider/types/output_elastic_url.go
   - internal/provider/types/output_exabeam.go
-  - internal/provider/types/output_extra_http_header_elastic.go
   - internal/provider/types/output_filesystem.go
+  - internal/provider/types/output_filesystem_key_value_metadatum.go
   - internal/provider/types/output_google_chronicle.go
+  - internal/provider/types/output_google_chronicle_extra_http_header.go
+  - internal/provider/types/output_google_chronicle_pq_controls.go
+  - internal/provider/types/output_google_chronicle_response_retry_setting.go
+  - internal/provider/types/output_google_chronicle_timeout_retry_settings.go
   - internal/provider/types/output_google_cloud_logging.go
+  - internal/provider/types/output_google_cloud_logging_pq_controls.go
   - internal/provider/types/output_google_cloud_storage.go
+  - internal/provider/types/output_google_cloud_storage_key_value_metadatum.go
   - internal/provider/types/output_google_pubsub.go
+  - internal/provider/types/output_google_pubsub_pq_controls.go
   - internal/provider/types/output_grafana_cloud.go
   - internal/provider/types/output_grafana_cloud_extra_http_header1.go
   - internal/provider/types/output_grafana_cloud_extra_http_header2.go
@@ -628,313 +745,199 @@ generatedFiles:
   - internal/provider/types/output_grafana_cloud_grafana_cloud2.go
   - internal/provider/types/output_grafana_cloud_label1.go
   - internal/provider/types/output_grafana_cloud_label2.go
+  - internal/provider/types/output_grafana_cloud_loki_auth1.go
+  - internal/provider/types/output_grafana_cloud_loki_auth2.go
   - internal/provider/types/output_grafana_cloud_pq_controls1.go
   - internal/provider/types/output_grafana_cloud_pq_controls2.go
+  - internal/provider/types/output_grafana_cloud_prometheus_auth1.go
+  - internal/provider/types/output_grafana_cloud_prometheus_auth2.go
   - internal/provider/types/output_grafana_cloud_response_retry_setting1.go
   - internal/provider/types/output_grafana_cloud_response_retry_setting2.go
   - internal/provider/types/output_grafana_cloud_timeout_retry_settings1.go
   - internal/provider/types/output_grafana_cloud_timeout_retry_settings2.go
   - internal/provider/types/output_graphite.go
+  - internal/provider/types/output_graphite_pq_controls.go
   - internal/provider/types/output_honeycomb.go
+  - internal/provider/types/output_honeycomb_extra_http_header.go
+  - internal/provider/types/output_honeycomb_pq_controls.go
+  - internal/provider/types/output_honeycomb_response_retry_setting.go
+  - internal/provider/types/output_honeycomb_timeout_retry_settings.go
   - internal/provider/types/output_humio_hec.go
+  - internal/provider/types/output_humio_hec_extra_http_header.go
+  - internal/provider/types/output_humio_hec_pq_controls.go
+  - internal/provider/types/output_humio_hec_response_retry_setting.go
+  - internal/provider/types/output_humio_hec_timeout_retry_settings.go
   - internal/provider/types/output_influxdb.go
+  - internal/provider/types/output_influxdb_extra_http_header.go
+  - internal/provider/types/output_influxdb_oauth_header.go
+  - internal/provider/types/output_influxdb_oauth_param.go
+  - internal/provider/types/output_influxdb_pq_controls.go
+  - internal/provider/types/output_influxdb_response_retry_setting.go
+  - internal/provider/types/output_influxdb_timeout_retry_settings.go
   - internal/provider/types/output_kafka.go
-  - internal/provider/types/output_kafka_schema_registry_authentication_confluent_cloud.go
-  - internal/provider/types/output_kafka_schema_registry_authentication_kafka.go
-  - internal/provider/types/output_kafka_schema_registry_authentication_msk.go
-  - internal/provider/types/output_kafka_schema_registry_tls_settings_client_side_confluent_cloud.go
-  - internal/provider/types/output_kafka_schema_registry_tls_settings_client_side_kafka.go
-  - internal/provider/types/output_kafka_schema_registry_tls_settings_client_side_msk.go
+  - internal/provider/types/output_kafka_auth.go
+  - internal/provider/types/output_kafka_authentication.go
+  - internal/provider/types/output_kafka_kafka_schema_registry_authentication.go
+  - internal/provider/types/output_kafka_kafka_schema_registry_tls_settings_client_side.go
+  - internal/provider/types/output_kafka_pq_controls.go
+  - internal/provider/types/output_kafka_tls_settings_client_side.go
   - internal/provider/types/output_kinesis.go
+  - internal/provider/types/output_kinesis_pq_controls.go
   - internal/provider/types/output_loki.go
-  - internal/provider/types/output_loki_auth1.go
-  - internal/provider/types/output_loki_auth2.go
-  - internal/provider/types/output_metadatum_http.go
-  - internal/provider/types/output_metadatum_open_telemetry.go
+  - internal/provider/types/output_loki_extra_http_header.go
+  - internal/provider/types/output_loki_label.go
+  - internal/provider/types/output_loki_pq_controls.go
+  - internal/provider/types/output_loki_response_retry_setting.go
+  - internal/provider/types/output_loki_timeout_retry_settings.go
   - internal/provider/types/output_minio.go
   - internal/provider/types/output_minio_key_value_metadatum.go
   - internal/provider/types/output_msk.go
+  - internal/provider/types/output_msk_auth.go
+  - internal/provider/types/output_msk_kafka_schema_registry_authentication.go
+  - internal/provider/types/output_msk_kafka_schema_registry_tls_settings_client_side.go
+  - internal/provider/types/output_msk_pq_controls.go
+  - internal/provider/types/output_msk_tls_settings_client_side.go
   - internal/provider/types/output_netflow.go
+  - internal/provider/types/output_netflow_host.go
   - internal/provider/types/output_newrelic.go
   - internal/provider/types/output_newrelic_events.go
-  - internal/provider/types/output_oauth_header_open_telemetry.go
-  - internal/provider/types/output_oauth_param_open_telemetry.go
+  - internal/provider/types/output_newrelic_events_extra_http_header.go
+  - internal/provider/types/output_newrelic_events_pq_controls.go
+  - internal/provider/types/output_newrelic_events_response_retry_setting.go
+  - internal/provider/types/output_newrelic_events_timeout_retry_settings.go
+  - internal/provider/types/output_newrelic_extra_http_header.go
+  - internal/provider/types/output_newrelic_metadatum.go
+  - internal/provider/types/output_newrelic_pq_controls.go
+  - internal/provider/types/output_newrelic_response_retry_setting.go
+  - internal/provider/types/output_newrelic_timeout_retry_settings.go
   - internal/provider/types/output_open_telemetry.go
+  - internal/provider/types/output_open_telemetry_extra_http_header.go
+  - internal/provider/types/output_open_telemetry_metadatum.go
+  - internal/provider/types/output_open_telemetry_oauth_header.go
+  - internal/provider/types/output_open_telemetry_oauth_param.go
+  - internal/provider/types/output_open_telemetry_pq_controls.go
+  - internal/provider/types/output_open_telemetry_response_retry_setting.go
+  - internal/provider/types/output_open_telemetry_timeout_retry_settings.go
+  - internal/provider/types/output_open_telemetry_tls_settings_client_side.go
   - internal/provider/types/output_prometheus.go
-  - internal/provider/types/output_prometheus_auth1.go
-  - internal/provider/types/output_prometheus_auth2.go
+  - internal/provider/types/output_prometheus_extra_http_header.go
+  - internal/provider/types/output_prometheus_oauth_header.go
+  - internal/provider/types/output_prometheus_oauth_param.go
+  - internal/provider/types/output_prometheus_pq_controls.go
+  - internal/provider/types/output_prometheus_response_retry_setting.go
+  - internal/provider/types/output_prometheus_timeout_retry_settings.go
   - internal/provider/types/output_ring.go
   - internal/provider/types/output_router.go
-  - internal/provider/types/output_rule.go
+  - internal/provider/types/output_router_rule.go
   - internal/provider/types/output_s3.go
+  - internal/provider/types/output_s3_key_value_metadatum.go
   - internal/provider/types/output_security_lake.go
+  - internal/provider/types/output_security_lake_key_value_metadatum.go
   - internal/provider/types/output_sentinel.go
+  - internal/provider/types/output_sentinel_extra_http_header.go
+  - internal/provider/types/output_sentinel_pq_controls.go
+  - internal/provider/types/output_sentinel_response_retry_setting.go
+  - internal/provider/types/output_sentinel_timeout_retry_settings.go
   - internal/provider/types/output_service_now.go
+  - internal/provider/types/output_service_now_extra_http_header.go
+  - internal/provider/types/output_service_now_metadatum.go
+  - internal/provider/types/output_service_now_pq_controls.go
+  - internal/provider/types/output_service_now_response_retry_setting.go
+  - internal/provider/types/output_service_now_timeout_retry_settings.go
+  - internal/provider/types/output_service_now_tls_settings_client_side.go
   - internal/provider/types/output_signalfx.go
+  - internal/provider/types/output_signalfx_extra_http_header.go
+  - internal/provider/types/output_signalfx_pq_controls.go
+  - internal/provider/types/output_signalfx_response_retry_setting.go
+  - internal/provider/types/output_signalfx_timeout_retry_settings.go
   - internal/provider/types/output_snmp.go
+  - internal/provider/types/output_snmp_host.go
   - internal/provider/types/output_sns.go
+  - internal/provider/types/output_sns_pq_controls.go
   - internal/provider/types/output_splunk.go
   - internal/provider/types/output_splunk_hec.go
+  - internal/provider/types/output_splunk_hec_extra_http_header.go
+  - internal/provider/types/output_splunk_hec_pq_controls.go
+  - internal/provider/types/output_splunk_hec_response_retry_setting.go
+  - internal/provider/types/output_splunk_hec_timeout_retry_settings.go
+  - internal/provider/types/output_splunk_hec_url.go
   - internal/provider/types/output_splunk_lb.go
+  - internal/provider/types/output_splunk_lb_auth_token.go
+  - internal/provider/types/output_splunk_lb_host.go
+  - internal/provider/types/output_splunk_lb_pq_controls.go
+  - internal/provider/types/output_splunk_lb_tls_settings_client_side.go
+  - internal/provider/types/output_splunk_pq_controls.go
+  - internal/provider/types/output_splunk_tls_settings_client_side.go
   - internal/provider/types/output_sqs.go
+  - internal/provider/types/output_sqs_pq_controls.go
   - internal/provider/types/output_statsd.go
   - internal/provider/types/output_statsd_ext.go
+  - internal/provider/types/output_statsd_ext_pq_controls.go
+  - internal/provider/types/output_statsd_pq_controls.go
   - internal/provider/types/output_sumo_logic.go
+  - internal/provider/types/output_sumo_logic_extra_http_header.go
+  - internal/provider/types/output_sumo_logic_pq_controls.go
+  - internal/provider/types/output_sumo_logic_response_retry_setting.go
+  - internal/provider/types/output_sumo_logic_timeout_retry_settings.go
   - internal/provider/types/output_syslog.go
+  - internal/provider/types/output_syslog_pq_controls.go
+  - internal/provider/types/output_syslog_tls_settings_client_side.go
   - internal/provider/types/output_tcpjson.go
-  - internal/provider/types/output_tls_settings_client_side_confluent_cloud.go
-  - internal/provider/types/output_tls_settings_client_side_kafka.go
-  - internal/provider/types/output_tls_settings_client_side_msk.go
+  - internal/provider/types/output_tcpjson_host.go
+  - internal/provider/types/output_tcpjson_pq_controls.go
+  - internal/provider/types/output_tcpjson_tls_settings_client_side.go
   - internal/provider/types/output_wavefront.go
+  - internal/provider/types/output_wavefront_extra_http_header.go
+  - internal/provider/types/output_wavefront_pq_controls.go
+  - internal/provider/types/output_wavefront_response_retry_setting.go
+  - internal/provider/types/output_wavefront_timeout_retry_settings.go
   - internal/provider/types/output_webhook.go
+  - internal/provider/types/output_webhook_extra_http_header.go
+  - internal/provider/types/output_webhook_oauth_header.go
+  - internal/provider/types/output_webhook_oauth_param.go
+  - internal/provider/types/output_webhook_pq_controls.go
+  - internal/provider/types/output_webhook_response_retry_setting.go
+  - internal/provider/types/output_webhook_timeout_retry_settings.go
+  - internal/provider/types/output_webhook_tls_settings_client_side.go
+  - internal/provider/types/output_webhook_url.go
   - internal/provider/types/output_xsiam.go
+  - internal/provider/types/output_xsiam_extra_http_header.go
+  - internal/provider/types/output_xsiam_pq_controls.go
+  - internal/provider/types/output_xsiam_response_retry_setting.go
+  - internal/provider/types/output_xsiam_timeout_retry_settings.go
+  - internal/provider/types/output_xsiam_url.go
   - internal/provider/types/pack_info.go
   - internal/provider/types/pack_info1.go
   - internal/provider/types/pack_info_tags.go
+  - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pending_task1.go
   - internal/provider/types/pending_task2.go
-  - internal/provider/types/persistence_appscope.go
-  - internal/provider/types/persistence_kube_metrics.go
-  - internal/provider/types/persistence_system_metrics.go
-  - internal/provider/types/persistence_system_state.go
-  - internal/provider/types/persistence_windows_metrics.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
-  - internal/provider/types/pq_appscope.go
-  - internal/provider/types/pq_azure_blob.go
-  - internal/provider/types/pq_collection.go
-  - internal/provider/types/pq_confluent_cloud.go
-  - internal/provider/types/pq_controls131.go
-  - internal/provider/types/pq_controls_azure_data_explorer.go
-  - internal/provider/types/pq_controls_azure_eventhub.go
-  - internal/provider/types/pq_controls_azure_logs.go
-  - internal/provider/types/pq_controls_click_house.go
-  - internal/provider/types/pq_controls_cloudwatch.go
-  - internal/provider/types/pq_controls_confluent_cloud.go
-  - internal/provider/types/pq_controls_cribl_http.go
-  - internal/provider/types/pq_controls_cribl_tcp.go
-  - internal/provider/types/pq_controls_crowdstrike_next_gen_siem.go
-  - internal/provider/types/pq_controls_datadog.go
-  - internal/provider/types/pq_controls_dataset.go
-  - internal/provider/types/pq_controls_dynatrace_http.go
-  - internal/provider/types/pq_controls_elastic.go
-  - internal/provider/types/pq_controls_elastic_cloud.go
-  - internal/provider/types/pq_controls_google_chronicle.go
-  - internal/provider/types/pq_controls_google_cloud_logging.go
-  - internal/provider/types/pq_controls_google_pubsub.go
-  - internal/provider/types/pq_controls_graphite.go
-  - internal/provider/types/pq_controls_honeycomb.go
-  - internal/provider/types/pq_controls_http.go
-  - internal/provider/types/pq_controls_humio_hec.go
-  - internal/provider/types/pq_controls_influxdb.go
-  - internal/provider/types/pq_controls_kafka.go
-  - internal/provider/types/pq_controls_kinesis.go
-  - internal/provider/types/pq_controls_loki.go
-  - internal/provider/types/pq_controls_msk.go
-  - internal/provider/types/pq_controls_newrelic.go
-  - internal/provider/types/pq_controls_newrelic_events.go
-  - internal/provider/types/pq_controls_open_telemetry.go
-  - internal/provider/types/pq_controls_prometheus.go
-  - internal/provider/types/pq_controls_sentinel.go
-  - internal/provider/types/pq_controls_signalfx.go
-  - internal/provider/types/pq_controls_sns.go
-  - internal/provider/types/pq_controls_splunk.go
-  - internal/provider/types/pq_controls_splunk_hec.go
-  - internal/provider/types/pq_controls_splunk_lb.go
-  - internal/provider/types/pq_controls_sqs.go
-  - internal/provider/types/pq_controls_statsd.go
-  - internal/provider/types/pq_controls_statsd_ext.go
-  - internal/provider/types/pq_controls_sumo_logic.go
-  - internal/provider/types/pq_controls_syslog.go
-  - internal/provider/types/pq_controls_tcpjson.go
-  - internal/provider/types/pq_controls_wavefront.go
-  - internal/provider/types/pq_controls_webhook.go
-  - internal/provider/types/pq_controls_xsiam.go
-  - internal/provider/types/pq_cribl.go
-  - internal/provider/types/pq_cribl_http.go
-  - internal/provider/types/pq_cribl_tcp.go
-  - internal/provider/types/pq_criblmetrics.go
-  - internal/provider/types/pq_crowdstrike.go
-  - internal/provider/types/pq_datadog_agent.go
-  - internal/provider/types/pq_datagen.go
-  - internal/provider/types/pq_edge_prometheus.go
-  - internal/provider/types/pq_elastic.go
-  - internal/provider/types/pq_eventhub.go
-  - internal/provider/types/pq_firehose.go
-  - internal/provider/types/pq_google_pubsub.go
-  - internal/provider/types/pq_http.go
-  - internal/provider/types/pq_http_raw.go
-  - internal/provider/types/pq_kafka.go
-  - internal/provider/types/pq_kinesis.go
-  - internal/provider/types/pq_kube_events.go
-  - internal/provider/types/pq_kube_logs.go
-  - internal/provider/types/pq_kube_metrics.go
-  - internal/provider/types/pq_loki.go
-  - internal/provider/types/pq_metrics.go
-  - internal/provider/types/pq_model_driven_telemetry.go
-  - internal/provider/types/pq_msk.go
-  - internal/provider/types/pq_netflow.go
-  - internal/provider/types/pq_office365_mgmt.go
-  - internal/provider/types/pq_office365_msg_trace.go
-  - internal/provider/types/pq_office365_service.go
-  - internal/provider/types/pq_open_telemetry.go
-  - internal/provider/types/pq_prometheus.go
-  - internal/provider/types/pq_prometheus_rw.go
-  - internal/provider/types/pq_raw_udp.go
-  - internal/provider/types/pq_s3.go
-  - internal/provider/types/pq_s3_inventory.go
-  - internal/provider/types/pq_security_lake.go
-  - internal/provider/types/pq_snmp.go
-  - internal/provider/types/pq_splunk.go
-  - internal/provider/types/pq_splunk_hec.go
-  - internal/provider/types/pq_splunk_search.go
-  - internal/provider/types/pq_sqs.go
-  - internal/provider/types/pq_system_metrics.go
-  - internal/provider/types/pq_system_state.go
-  - internal/provider/types/pq_tcp.go
-  - internal/provider/types/pq_tcpjson.go
-  - internal/provider/types/pq_wef.go
-  - internal/provider/types/pq_win_event_logs.go
-  - internal/provider/types/pq_windows_metrics.go
-  - internal/provider/types/pq_wiz.go
-  - internal/provider/types/pq_zscaler_hec.go
-  - internal/provider/types/preprocess_crowdstrike.go
-  - internal/provider/types/preprocess_s3.go
-  - internal/provider/types/preprocess_s3_inventory.go
-  - internal/provider/types/preprocess_security_lake.go
-  - internal/provider/types/preprocess_tcp.go
-  - internal/provider/types/process_system_metrics.go
-  - internal/provider/types/process_windows_metrics.go
   - internal/provider/types/prometheus_auth_oauth_header1.go
   - internal/provider/types/prometheus_auth_oauth_header2.go
   - internal/provider/types/prometheus_auth_oauth_param1.go
   - internal/provider/types/prometheus_auth_oauth_param2.go
-  - internal/provider/types/proxy_mode_datadog_agent.go
-  - internal/provider/types/proxy_mode_elastic.go
   - internal/provider/types/resource_type_label.go
-  - internal/provider/types/response_retry_setting131.go
-  - internal/provider/types/response_retry_setting_azure_data_explorer.go
-  - internal/provider/types/response_retry_setting_azure_logs.go
-  - internal/provider/types/response_retry_setting_click_house.go
-  - internal/provider/types/response_retry_setting_cribl_http.go
-  - internal/provider/types/response_retry_setting_crowdstrike_next_gen_siem.go
-  - internal/provider/types/response_retry_setting_datadog.go
-  - internal/provider/types/response_retry_setting_dataset.go
-  - internal/provider/types/response_retry_setting_dynatrace_http.go
-  - internal/provider/types/response_retry_setting_elastic.go
-  - internal/provider/types/response_retry_setting_elastic_cloud.go
-  - internal/provider/types/response_retry_setting_google_chronicle.go
-  - internal/provider/types/response_retry_setting_honeycomb.go
-  - internal/provider/types/response_retry_setting_http.go
-  - internal/provider/types/response_retry_setting_humio_hec.go
-  - internal/provider/types/response_retry_setting_influxdb.go
-  - internal/provider/types/response_retry_setting_loki.go
-  - internal/provider/types/response_retry_setting_newrelic.go
-  - internal/provider/types/response_retry_setting_newrelic_events.go
-  - internal/provider/types/response_retry_setting_open_telemetry.go
-  - internal/provider/types/response_retry_setting_prometheus.go
-  - internal/provider/types/response_retry_setting_sentinel.go
-  - internal/provider/types/response_retry_setting_signalfx.go
-  - internal/provider/types/response_retry_setting_splunk_hec.go
-  - internal/provider/types/response_retry_setting_sumo_logic.go
-  - internal/provider/types/response_retry_setting_wavefront.go
-  - internal/provider/types/response_retry_setting_webhook.go
-  - internal/provider/types/response_retry_setting_xsiam.go
-  - internal/provider/types/retry_rules_office365_mgmt.go
-  - internal/provider/types/retry_rules_office365_msg_trace.go
-  - internal/provider/types/retry_rules_office365_service.go
-  - internal/provider/types/retry_rules_splunk_search.go
-  - internal/provider/types/retry_rules_wiz.go
-  - internal/provider/types/rule_kube_events.go
-  - internal/provider/types/rule_kube_logs.go
-  - internal/provider/types/rule_kube_metrics.go
   - internal/provider/types/sample.go
-  - internal/provider/types/search_filter_edge_prometheus.go
-  - internal/provider/types/search_filter_prometheus.go
   - internal/provider/types/services.go
-  - internal/provider/types/set_system_metrics.go
-  - internal/provider/types/set_windows_metrics.go
   - internal/provider/types/snm_pv3_authentication.go
+  - internal/provider/types/subscription.go
+  - internal/provider/types/subscription_consumer.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
-  - internal/provider/types/system_system_metrics.go
-  - internal/provider/types/system_windows_metrics.go
   - internal/provider/types/target.go
-  - internal/provider/types/tf_status.go
-  - internal/provider/types/timeout_retry_settings131.go
-  - internal/provider/types/timeout_retry_settings_azure_data_explorer.go
-  - internal/provider/types/timeout_retry_settings_azure_logs.go
-  - internal/provider/types/timeout_retry_settings_click_house.go
-  - internal/provider/types/timeout_retry_settings_cribl_http.go
-  - internal/provider/types/timeout_retry_settings_crowdstrike_next_gen_siem.go
-  - internal/provider/types/timeout_retry_settings_datadog.go
-  - internal/provider/types/timeout_retry_settings_dataset.go
-  - internal/provider/types/timeout_retry_settings_dynatrace_http.go
-  - internal/provider/types/timeout_retry_settings_elastic.go
-  - internal/provider/types/timeout_retry_settings_elastic_cloud.go
-  - internal/provider/types/timeout_retry_settings_google_chronicle.go
-  - internal/provider/types/timeout_retry_settings_honeycomb.go
-  - internal/provider/types/timeout_retry_settings_http.go
-  - internal/provider/types/timeout_retry_settings_humio_hec.go
-  - internal/provider/types/timeout_retry_settings_influxdb.go
-  - internal/provider/types/timeout_retry_settings_loki.go
-  - internal/provider/types/timeout_retry_settings_newrelic.go
-  - internal/provider/types/timeout_retry_settings_newrelic_events.go
-  - internal/provider/types/timeout_retry_settings_open_telemetry.go
-  - internal/provider/types/timeout_retry_settings_prometheus.go
-  - internal/provider/types/timeout_retry_settings_sentinel.go
-  - internal/provider/types/timeout_retry_settings_signalfx.go
-  - internal/provider/types/timeout_retry_settings_splunk_hec.go
-  - internal/provider/types/timeout_retry_settings_sumo_logic.go
-  - internal/provider/types/timeout_retry_settings_wavefront.go
-  - internal/provider/types/timeout_retry_settings_webhook.go
-  - internal/provider/types/timeout_retry_settings_xsiam.go
-  - internal/provider/types/tls_settings_client_side131.go
-  - internal/provider/types/tls_settings_client_side_azure_eventhub.go
-  - internal/provider/types/tls_settings_client_side_click_house.go
-  - internal/provider/types/tls_settings_client_side_cribl_http.go
-  - internal/provider/types/tls_settings_client_side_cribl_tcp.go
-  - internal/provider/types/tls_settings_client_side_eventhub.go
-  - internal/provider/types/tls_settings_client_side_open_telemetry.go
-  - internal/provider/types/tls_settings_client_side_splunk.go
-  - internal/provider/types/tls_settings_client_side_splunk_lb.go
-  - internal/provider/types/tls_settings_client_side_syslog.go
-  - internal/provider/types/tls_settings_client_side_tcpjson.go
-  - internal/provider/types/tls_settings_client_side_webhook.go
-  - internal/provider/types/tls_settings_server_side_appscope.go
-  - internal/provider/types/tls_settings_server_side_cribl_http.go
-  - internal/provider/types/tls_settings_server_side_cribl_tcp.go
-  - internal/provider/types/tls_settings_server_side_datadog_agent.go
-  - internal/provider/types/tls_settings_server_side_elastic.go
-  - internal/provider/types/tls_settings_server_side_firehose.go
-  - internal/provider/types/tls_settings_server_side_http.go
-  - internal/provider/types/tls_settings_server_side_http_raw.go
-  - internal/provider/types/tls_settings_server_side_loki.go
-  - internal/provider/types/tls_settings_server_side_metrics.go
-  - internal/provider/types/tls_settings_server_side_model_driven_telemetry.go
-  - internal/provider/types/tls_settings_server_side_open_telemetry.go
-  - internal/provider/types/tls_settings_server_side_prometheus_rw.go
-  - internal/provider/types/tls_settings_server_side_splunk.go
-  - internal/provider/types/tls_settings_server_side_splunk_hec.go
-  - internal/provider/types/tls_settings_server_side_tcp.go
-  - internal/provider/types/tls_settings_server_side_tcpjson.go
-  - internal/provider/types/tls_settings_server_side_zscaler_hec.go
-  - internal/provider/types/url_cribl_http.go
-  - internal/provider/types/url_elastic.go
-  - internal/provider/types/url_splunk_hec.go
-  - internal/provider/types/url_webhook.go
-  - internal/provider/types/url_xsiam.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
+  - internal/sdk/aisettings.go
   - internal/sdk/appscopeconfigs.go
   - internal/sdk/auth.go
   - internal/sdk/authorize.go
   - internal/sdk/banners.go
-  - internal/sdk/billing.go
   - internal/sdk/certificates.go
   - internal/sdk/changelog.go
   - internal/sdk/clickhouse.go
@@ -942,7 +945,6 @@ generatedFiles:
   - internal/sdk/collectors.go
   - internal/sdk/conditions.go
   - internal/sdk/consent.go
-  - internal/sdk/consumption.go
   - internal/sdk/criblio.go
   - internal/sdk/dashboardcategories.go
   - internal/sdk/dashboards.go
@@ -950,7 +952,6 @@ generatedFiles:
   - internal/sdk/datasets.go
   - internal/sdk/diag.go
   - internal/sdk/distributed.go
-  - internal/sdk/docs/models/operations/option.md
   - internal/sdk/edge.go
   - internal/sdk/edgeappscopeprocesses.go
   - internal/sdk/edgecontainers.go
@@ -990,7 +991,7 @@ generatedFiles:
   - internal/sdk/internal/utils/retries.go
   - internal/sdk/internal/utils/security.go
   - internal/sdk/internal/utils/utils.go
-  - internal/sdk/invoices.go
+  - internal/sdk/iometrics.go
   - internal/sdk/jobs.go
   - internal/sdk/keys.go
   - internal/sdk/kubelogs.go
@@ -1004,8 +1005,9 @@ generatedFiles:
   - internal/sdk/messages.go
   - internal/sdk/metrics.go
   - internal/sdk/models/errors/apierror.go
-  - internal/sdk/models/operations/assignsandboxworkspacetouser.go
   - internal/sdk/models/operations/createaiconsent.go
+  - internal/sdk/models/operations/createaisettingsfeatures.go
+  - internal/sdk/models/operations/createaisettingsfeaturesbyfeature.go
   - internal/sdk/models/operations/createappscopelibentry.go
   - internal/sdk/models/operations/createauthslocallback.go
   - internal/sdk/models/operations/createauthssocallback.go
@@ -1045,6 +1047,7 @@ generatedFiles:
   - internal/sdk/models/operations/createoutputtestbyid.go
   - internal/sdk/models/operations/createpacks.go
   - internal/sdk/models/operations/createpacksclone.go
+  - internal/sdk/models/operations/createpackspublishbyid.go
   - internal/sdk/models/operations/createparser.go
   - internal/sdk/models/operations/createpipeline.go
   - internal/sdk/models/operations/createpipelinebypack.go
@@ -1102,6 +1105,7 @@ generatedFiles:
   - internal/sdk/models/operations/createversionrevert.go
   - internal/sdk/models/operations/createversionsync.go
   - internal/sdk/models/operations/deleteappscopelibentrybyid.go
+  - internal/sdk/models/operations/deleteauthusersinvalidationbyid.go
   - internal/sdk/models/operations/deleteauthuserstokenbyid.go
   - internal/sdk/models/operations/deletebannermessagebyid.go
   - internal/sdk/models/operations/deletebulletinmessagebyid.go
@@ -1118,9 +1122,9 @@ generatedFiles:
   - internal/sdk/models/operations/deleteglobalvariablebyid.go
   - internal/sdk/models/operations/deleteglobalvariablelibvarsbypackandid.go
   - internal/sdk/models/operations/deletegrokfilebyid.go
-  - internal/sdk/models/operations/deletegroupsbyid.go
   - internal/sdk/models/operations/deletehmacfunctionbyid.go
   - internal/sdk/models/operations/deleteinputbyid.go
+  - internal/sdk/models/operations/deleteiometricsentrybyid.go
   - internal/sdk/models/operations/deletejobsbyid.go
   - internal/sdk/models/operations/deletekeymetadataentitybyid.go
   - internal/sdk/models/operations/deletelibschemasbyid.go
@@ -1157,8 +1161,9 @@ generatedFiles:
   - internal/sdk/models/operations/deleteusagegroupbyid.go
   - internal/sdk/models/operations/deleteuserbyid.go
   - internal/sdk/models/operations/getaiconsent.go
+  - internal/sdk/models/operations/getaisettingsfeatures.go
+  - internal/sdk/models/operations/getaisettingsfeaturesbyfeature.go
   - internal/sdk/models/operations/getappscopelibentrybyid.go
-  - internal/sdk/models/operations/getassignments.go
   - internal/sdk/models/operations/getauthauthorizationcodecallback.go
   - internal/sdk/models/operations/getauthgroups.go
   - internal/sdk/models/operations/getauthmetadata.go
@@ -1177,8 +1182,6 @@ generatedFiles:
   - internal/sdk/models/operations/getcollectorbyid.go
   - internal/sdk/models/operations/getconditionbyid.go
   - internal/sdk/models/operations/getconfigbundlesbygroupandversion.go
-  - internal/sdk/models/operations/getcosts.go
-  - internal/sdk/models/operations/getcredits.go
   - internal/sdk/models/operations/getcribllakedatasetbylakeid.go
   - internal/sdk/models/operations/getcribllakedatasetbylakeidandid.go
   - internal/sdk/models/operations/getdashboardcategorybyid.go
@@ -1225,8 +1228,7 @@ generatedFiles:
   - internal/sdk/models/operations/gethmacfunctionbyid.go
   - internal/sdk/models/operations/getinputbyid.go
   - internal/sdk/models/operations/getinputstatusbyid.go
-  - internal/sdk/models/operations/getinvoice.go
-  - internal/sdk/models/operations/getinvoices.go
+  - internal/sdk/models/operations/getiometricsentrybyid.go
   - internal/sdk/models/operations/getjobresultsbyid.go
   - internal/sdk/models/operations/getjobs.go
   - internal/sdk/models/operations/getjobsbyid.go
@@ -1247,11 +1249,11 @@ generatedFiles:
   - internal/sdk/models/operations/getoutputstatusbyid.go
   - internal/sdk/models/operations/getpacks.go
   - internal/sdk/models/operations/getpacksexportbyid.go
+  - internal/sdk/models/operations/getpacksrefsbyid.go
   - internal/sdk/models/operations/getparserbyid.go
   - internal/sdk/models/operations/getpipelinebyid.go
   - internal/sdk/models/operations/getpipelinebypack.go
   - internal/sdk/models/operations/getpipelinebypackandid.go
-  - internal/sdk/models/operations/getplan.go
   - internal/sdk/models/operations/getpolicyrulebyid.go
   - internal/sdk/models/operations/getproductsgroupsaclteamsbyproductandid.go
   - internal/sdk/models/operations/getproductsgroupsbyproduct.go
@@ -1286,6 +1288,7 @@ generatedFiles:
   - internal/sdk/models/operations/getsearchjoblogsbyid.go
   - internal/sdk/models/operations/getsearchjobmetrics.go
   - internal/sdk/models/operations/getsearchjobsmetricsbyid.go
+  - internal/sdk/models/operations/getsearchjobsresultsbyid.go
   - internal/sdk/models/operations/getsearchjobsresultspollbyid.go
   - internal/sdk/models/operations/getsearchjobsstagesresultsbyidandstageid.go
   - internal/sdk/models/operations/getsearchmacrobyid.go
@@ -1327,7 +1330,6 @@ generatedFiles:
   - internal/sdk/models/operations/getteamrolesbyid.go
   - internal/sdk/models/operations/getteamusersbyid.go
   - internal/sdk/models/operations/getuibykey.go
-  - internal/sdk/models/operations/getusage.go
   - internal/sdk/models/operations/getusagegroupbyid.go
   - internal/sdk/models/operations/getuserbyid.go
   - internal/sdk/models/operations/getversionbranch.go
@@ -1357,6 +1359,7 @@ generatedFiles:
   - internal/sdk/models/operations/listhmacfunction.go
   - internal/sdk/models/operations/listinput.go
   - internal/sdk/models/operations/listinputstatus.go
+  - internal/sdk/models/operations/listiometricsentry.go
   - internal/sdk/models/operations/listkeymetadataentity.go
   - internal/sdk/models/operations/listlibschemas.go
   - internal/sdk/models/operations/listlicense.go
@@ -1408,11 +1411,10 @@ generatedFiles:
   - internal/sdk/models/operations/updateglobalvariablebyid.go
   - internal/sdk/models/operations/updateglobalvariablelibvarsbypackandid.go
   - internal/sdk/models/operations/updategrokfilebyid.go
-  - internal/sdk/models/operations/updategroupsbyid.go
-  - internal/sdk/models/operations/updategroupsdeploybyid.go
   - internal/sdk/models/operations/updatehmacfunctionbyid.go
   - internal/sdk/models/operations/updateinputbyid.go
   - internal/sdk/models/operations/updateinputhectokenbyidandtoken.go
+  - internal/sdk/models/operations/updateiometricsentrybyid.go
   - internal/sdk/models/operations/updatejobscancelbyid.go
   - internal/sdk/models/operations/updatejobskeepbyid.go
   - internal/sdk/models/operations/updatejobspausebyid.go
@@ -1425,6 +1427,7 @@ generatedFiles:
   - internal/sdk/models/operations/updatenotificationbyid.go
   - internal/sdk/models/operations/updatenotificationtargetbyid.go
   - internal/sdk/models/operations/updateoutputbyid.go
+  - internal/sdk/models/operations/updatepacks.go
   - internal/sdk/models/operations/updatepacksbyid.go
   - internal/sdk/models/operations/updateparserbyid.go
   - internal/sdk/models/operations/updatepipelinebyid.go
@@ -1458,18 +1461,6 @@ generatedFiles:
   - internal/sdk/models/operations/updateuserbyid.go
   - internal/sdk/models/operations/updateuserinfobyid.go
   - internal/sdk/models/operations/updateworkersrestart.go
-  - internal/sdk/models/operations/v5billingconsumptiongetcreditssummary.go
-  - internal/sdk/models/operations/v5billingconsumptiongetcumulativeconsumption.go
-  - internal/sdk/models/operations/v5billingconsumptiongetproductsbreakdown.go
-  - internal/sdk/models/operations/v5billingconsumptiongetproductsconsumptionstats.go
-  - internal/sdk/models/operations/v5billingconsumptiongetsingleproductusagebreakdown.go
-  - internal/sdk/models/operations/v5billinginvoicesgetinvoice.go
-  - internal/sdk/models/operations/v5billinginvoicesgetinvoices.go
-  - internal/sdk/models/operations/workspacescontrollercreateworkspace.go
-  - internal/sdk/models/operations/workspacescontrollerdeleteworkspace.go
-  - internal/sdk/models/operations/workspacescontrollergetworkspace.go
-  - internal/sdk/models/operations/workspacescontrollerlistworkspaces.go
-  - internal/sdk/models/operations/workspacescontrollerpatchworkspace.go
   - internal/sdk/models/shared/accesscontrol.go
   - internal/sdk/models/shared/accesscontrolschema.go
   - internal/sdk/models/shared/addhectokenrequest.go
@@ -1484,7 +1475,6 @@ generatedFiles:
   - internal/sdk/models/shared/appscopeprocessingstatus.go
   - internal/sdk/models/shared/appscopeprocessstatus.go
   - internal/sdk/models/shared/appscopetransport.go
-  - internal/sdk/models/shared/assignedsandboxassignmentdto.go
   - internal/sdk/models/shared/authconfig.go
   - internal/sdk/models/shared/authpolicyentry.go
   - internal/sdk/models/shared/authprovider.go
@@ -1492,14 +1482,11 @@ generatedFiles:
   - internal/sdk/models/shared/awskmsserviceconfig.go
   - internal/sdk/models/shared/awsmetadata.go
   - internal/sdk/models/shared/bannermessage.go
-  - internal/sdk/models/shared/breakdown.go
   - internal/sdk/models/shared/bulletinmessage.go
   - internal/sdk/models/shared/cacheconnection.go
   - internal/sdk/models/shared/captureparams.go
   - internal/sdk/models/shared/certificate.go
   - internal/sdk/models/shared/changelogstate.go
-  - internal/sdk/models/shared/chargegroupkeyv5.go
-  - internal/sdk/models/shared/chargegroupv5.go
   - internal/sdk/models/shared/chartconfig.go
   - internal/sdk/models/shared/chartdata.go
   - internal/sdk/models/shared/chartseries.go
@@ -1520,7 +1507,8 @@ generatedFiles:
   - internal/sdk/models/shared/condition.go
   - internal/sdk/models/shared/configgroup.go
   - internal/sdk/models/shared/configgroupcloud.go
-  - internal/sdk/models/shared/consumptionwindowv5.go
+  - internal/sdk/models/shared/configgrouplookups.go
+  - internal/sdk/models/shared/connection.go
   - internal/sdk/models/shared/container.go
   - internal/sdk/models/shared/containerdcontainer.go
   - internal/sdk/models/shared/containerdinfo.go
@@ -1528,11 +1516,7 @@ generatedFiles:
   - internal/sdk/models/shared/containerdroot.go
   - internal/sdk/models/shared/containerdtask.go
   - internal/sdk/models/shared/containerport.go
-  - internal/sdk/models/shared/costsdata.go
   - internal/sdk/models/shared/cputimemetric.go
-  - internal/sdk/models/shared/createworkspacedto.go
-  - internal/sdk/models/shared/creditsconsumptionitemv5.go
-  - internal/sdk/models/shared/creditssummaryv5.go
   - internal/sdk/models/shared/criblevent.go
   - internal/sdk/models/shared/cribllakedataset.go
   - internal/sdk/models/shared/cribllib.go
@@ -1547,7 +1531,6 @@ generatedFiles:
   - internal/sdk/models/shared/databaseconnectiontest.go
   - internal/sdk/models/shared/databaseconnectiontestresult.go
   - internal/sdk/models/shared/databaseconnectiontype.go
-  - internal/sdk/models/shared/datapoint.go
   - internal/sdk/models/shared/datasample.go
   - internal/sdk/models/shared/datasetmetadata.go
   - internal/sdk/models/shared/datasetmetadataruninfo.go
@@ -1556,7 +1539,6 @@ generatedFiles:
   - internal/sdk/models/shared/datatypeoverrides.go
   - internal/sdk/models/shared/datatypepreviewinput.go
   - internal/sdk/models/shared/datatypepreviewrequestbody.go
-  - internal/sdk/models/shared/deployrequest.go
   - internal/sdk/models/shared/diag.go
   - internal/sdk/models/shared/distributedsummary.go
   - internal/sdk/models/shared/distributedupgraderequest.go
@@ -1581,19 +1563,6 @@ generatedFiles:
   - internal/sdk/models/shared/filesystementry.go
   - internal/sdk/models/shared/formatenum.go
   - internal/sdk/models/shared/function.go
-  - internal/sdk/models/shared/getactiveplandto.go
-  - internal/sdk/models/shared/getcostsdto.go
-  - internal/sdk/models/shared/getcreditsdto.go
-  - internal/sdk/models/shared/getcreditssummaryresponsev5.go
-  - internal/sdk/models/shared/getcumulativeconsumptionresponsev5.go
-  - internal/sdk/models/shared/getinvoiceresponsev5.go
-  - internal/sdk/models/shared/getinvoicesdto.go
-  - internal/sdk/models/shared/getinvoicesresponsev5.go
-  - internal/sdk/models/shared/getproductsbreakdownresponsev5.go
-  - internal/sdk/models/shared/getproductsconsumptionstatsv5.go
-  - internal/sdk/models/shared/getsingleinvoicedto.go
-  - internal/sdk/models/shared/getsingleproductusagebreakdownresponsev5.go
-  - internal/sdk/models/shared/getusagedto.go
   - internal/sdk/models/shared/gitcommitparams.go
   - internal/sdk/models/shared/gitcommitsummary.go
   - internal/sdk/models/shared/gitfile.go
@@ -1606,7 +1575,6 @@ generatedFiles:
   - internal/sdk/models/shared/gitstatusresult.go
   - internal/sdk/models/shared/globalvar.go
   - internal/sdk/models/shared/grokfile.go
-  - internal/sdk/models/shared/group.go
   - internal/sdk/models/shared/hbcriblinfo.go
   - internal/sdk/models/shared/hbleaderinfo.go
   - internal/sdk/models/shared/healthstatus.go
@@ -1616,13 +1584,67 @@ generatedFiles:
   - internal/sdk/models/shared/httpoutextraparamconfig.go
   - internal/sdk/models/shared/httpoutresponseretryconfig.go
   - internal/sdk/models/shared/input.go
+  - internal/sdk/models/shared/inputappscope.go
+  - internal/sdk/models/shared/inputazureblob.go
+  - internal/sdk/models/shared/inputcollection.go
+  - internal/sdk/models/shared/inputconfluentcloud.go
+  - internal/sdk/models/shared/inputcribl.go
+  - internal/sdk/models/shared/inputcriblhttp.go
+  - internal/sdk/models/shared/inputcribllakehttp.go
+  - internal/sdk/models/shared/inputcriblmetrics.go
+  - internal/sdk/models/shared/inputcribltcp.go
+  - internal/sdk/models/shared/inputcrowdstrike.go
+  - internal/sdk/models/shared/inputdatadogagent.go
+  - internal/sdk/models/shared/inputdatagen.go
+  - internal/sdk/models/shared/inputedgeprometheus.go
+  - internal/sdk/models/shared/inputelastic.go
+  - internal/sdk/models/shared/inputeventhub.go
+  - internal/sdk/models/shared/inputexec.go
+  - internal/sdk/models/shared/inputfile.go
+  - internal/sdk/models/shared/inputfirehose.go
+  - internal/sdk/models/shared/inputgooglepubsub.go
+  - internal/sdk/models/shared/inputgrafana.go
+  - internal/sdk/models/shared/inputhttp.go
+  - internal/sdk/models/shared/inputhttpraw.go
+  - internal/sdk/models/shared/inputjournalfiles.go
+  - internal/sdk/models/shared/inputkafka.go
+  - internal/sdk/models/shared/inputkinesis.go
+  - internal/sdk/models/shared/inputkubeevents.go
+  - internal/sdk/models/shared/inputkubelogs.go
+  - internal/sdk/models/shared/inputkubemetrics.go
+  - internal/sdk/models/shared/inputloki.go
+  - internal/sdk/models/shared/inputmetrics.go
+  - internal/sdk/models/shared/inputmodeldriventelemetry.go
+  - internal/sdk/models/shared/inputmsk.go
+  - internal/sdk/models/shared/inputnetflow.go
+  - internal/sdk/models/shared/inputoffice365mgmt.go
+  - internal/sdk/models/shared/inputoffice365msgtrace.go
+  - internal/sdk/models/shared/inputoffice365service.go
+  - internal/sdk/models/shared/inputopentelemetry.go
+  - internal/sdk/models/shared/inputprometheus.go
+  - internal/sdk/models/shared/inputprometheusrw.go
+  - internal/sdk/models/shared/inputrawudp.go
+  - internal/sdk/models/shared/inputs3.go
+  - internal/sdk/models/shared/inputs3inventory.go
+  - internal/sdk/models/shared/inputsecuritylake.go
+  - internal/sdk/models/shared/inputsnmp.go
+  - internal/sdk/models/shared/inputsplunk.go
+  - internal/sdk/models/shared/inputsplunkhec.go
+  - internal/sdk/models/shared/inputsplunksearch.go
+  - internal/sdk/models/shared/inputsqs.go
   - internal/sdk/models/shared/inputstatus.go
-  - internal/sdk/models/shared/invoice.go
-  - internal/sdk/models/shared/invoicegroupedlineitem.go
-  - internal/sdk/models/shared/invoicelineitem.go
-  - internal/sdk/models/shared/invoiceproduct.go
-  - internal/sdk/models/shared/invoiceproductv5.go
-  - internal/sdk/models/shared/invoicev5.go
+  - internal/sdk/models/shared/inputsyslog.go
+  - internal/sdk/models/shared/inputsystemmetrics.go
+  - internal/sdk/models/shared/inputsystemstate.go
+  - internal/sdk/models/shared/inputtcp.go
+  - internal/sdk/models/shared/inputtcpjson.go
+  - internal/sdk/models/shared/inputwef.go
+  - internal/sdk/models/shared/inputwindowsmetrics.go
+  - internal/sdk/models/shared/inputwineventlogs.go
+  - internal/sdk/models/shared/inputwiz.go
+  - internal/sdk/models/shared/inputzscalerhec.go
+  - internal/sdk/models/shared/iometricsentry.go
+  - internal/sdk/models/shared/iometricsentrylevel.go
   - internal/sdk/models/shared/jobexecutionwarning.go
   - internal/sdk/models/shared/jobinfo.go
   - internal/sdk/models/shared/jobsettings.go
@@ -1640,7 +1662,6 @@ generatedFiles:
   - internal/sdk/models/shared/licenselimits.go
   - internal/sdk/models/shared/licenserequest.go
   - internal/sdk/models/shared/limits.go
-  - internal/sdk/models/shared/lineitemv5.go
   - internal/sdk/models/shared/logfileinfo.go
   - internal/sdk/models/shared/loggerconfig.go
   - internal/sdk/models/shared/loggerentry.go
@@ -1649,14 +1670,12 @@ generatedFiles:
   - internal/sdk/models/shared/lookupfileunion.go
   - internal/sdk/models/shared/lookupversions.go
   - internal/sdk/models/shared/mappingtype.go
-  - internal/sdk/models/shared/marketplacetype.go
   - internal/sdk/models/shared/masterworkerentry.go
   - internal/sdk/models/shared/membershipschema.go
   - internal/sdk/models/shared/metadata.go
   - internal/sdk/models/shared/metricnameinfo.go
   - internal/sdk/models/shared/metricsaggopts.go
   - internal/sdk/models/shared/metricsstore.go
-  - internal/sdk/models/shared/metrictype.go
   - internal/sdk/models/shared/multifactorauthschema.go
   - internal/sdk/models/shared/namevalue.go
   - internal/sdk/models/shared/networkinterfaces.go
@@ -1671,16 +1690,79 @@ generatedFiles:
   - internal/sdk/models/shared/originconfig.go
   - internal/sdk/models/shared/osmetadata.go
   - internal/sdk/models/shared/output.go
+  - internal/sdk/models/shared/outputazureblob.go
+  - internal/sdk/models/shared/outputazuredataexplorer.go
+  - internal/sdk/models/shared/outputazureeventhub.go
+  - internal/sdk/models/shared/outputazurelogs.go
+  - internal/sdk/models/shared/outputclickhouse.go
+  - internal/sdk/models/shared/outputcloudwatch.go
+  - internal/sdk/models/shared/outputconfluentcloud.go
+  - internal/sdk/models/shared/outputcriblhttp.go
+  - internal/sdk/models/shared/outputcribllake.go
+  - internal/sdk/models/shared/outputcribltcp.go
+  - internal/sdk/models/shared/outputcrowdstrikenextgensiem.go
+  - internal/sdk/models/shared/outputdatadog.go
+  - internal/sdk/models/shared/outputdataset.go
+  - internal/sdk/models/shared/outputdefault.go
+  - internal/sdk/models/shared/outputdevnull.go
+  - internal/sdk/models/shared/outputdiskspool.go
+  - internal/sdk/models/shared/outputdls3.go
+  - internal/sdk/models/shared/outputdynatracehttp.go
+  - internal/sdk/models/shared/outputdynatraceotlp.go
+  - internal/sdk/models/shared/outputelastic.go
+  - internal/sdk/models/shared/outputelasticcloud.go
+  - internal/sdk/models/shared/outputexabeam.go
+  - internal/sdk/models/shared/outputfilesystem.go
+  - internal/sdk/models/shared/outputgooglechronicle.go
+  - internal/sdk/models/shared/outputgooglecloudlogging.go
+  - internal/sdk/models/shared/outputgooglecloudstorage.go
+  - internal/sdk/models/shared/outputgooglepubsub.go
+  - internal/sdk/models/shared/outputgrafanacloud.go
+  - internal/sdk/models/shared/outputgraphite.go
+  - internal/sdk/models/shared/outputhoneycomb.go
+  - internal/sdk/models/shared/outputhumiohec.go
+  - internal/sdk/models/shared/outputinfluxdb.go
+  - internal/sdk/models/shared/outputkafka.go
+  - internal/sdk/models/shared/outputkinesis.go
+  - internal/sdk/models/shared/outputloki.go
+  - internal/sdk/models/shared/outputminio.go
+  - internal/sdk/models/shared/outputmsk.go
+  - internal/sdk/models/shared/outputnetflow.go
+  - internal/sdk/models/shared/outputnewrelic.go
+  - internal/sdk/models/shared/outputnewrelicevents.go
+  - internal/sdk/models/shared/outputopentelemetry.go
+  - internal/sdk/models/shared/outputprometheus.go
+  - internal/sdk/models/shared/outputring.go
+  - internal/sdk/models/shared/outputrouter.go
+  - internal/sdk/models/shared/outputs3.go
   - internal/sdk/models/shared/outputsamplesresponse.go
+  - internal/sdk/models/shared/outputsecuritylake.go
+  - internal/sdk/models/shared/outputsentinel.go
+  - internal/sdk/models/shared/outputservicenow.go
+  - internal/sdk/models/shared/outputsignalfx.go
+  - internal/sdk/models/shared/outputsnmp.go
+  - internal/sdk/models/shared/outputsns.go
+  - internal/sdk/models/shared/outputsplunk.go
+  - internal/sdk/models/shared/outputsplunkhec.go
+  - internal/sdk/models/shared/outputsplunklb.go
+  - internal/sdk/models/shared/outputsqs.go
+  - internal/sdk/models/shared/outputstatsd.go
+  - internal/sdk/models/shared/outputstatsdext.go
   - internal/sdk/models/shared/outputstatus.go
+  - internal/sdk/models/shared/outputsumologic.go
+  - internal/sdk/models/shared/outputsyslog.go
+  - internal/sdk/models/shared/outputtcpjson.go
   - internal/sdk/models/shared/outputtestrequest.go
   - internal/sdk/models/shared/outputtestresponse.go
+  - internal/sdk/models/shared/outputwavefront.go
+  - internal/sdk/models/shared/outputwebhook.go
+  - internal/sdk/models/shared/outputxsiam.go
   - internal/sdk/models/shared/packclone.go
   - internal/sdk/models/shared/packinfo.go
   - internal/sdk/models/shared/packinstallinfo.go
+  - internal/sdk/models/shared/packrequestbody.go
   - internal/sdk/models/shared/parserlibentry.go
   - internal/sdk/models/shared/parsermode.go
-  - internal/sdk/models/shared/patchworkspacedto.go
   - internal/sdk/models/shared/pipeline.go
   - internal/sdk/models/shared/pipelinefunctionconf.go
   - internal/sdk/models/shared/policyrule.go
@@ -1690,11 +1772,6 @@ generatedFiles:
   - internal/sdk/models/shared/previewresponsebody.go
   - internal/sdk/models/shared/process.go
   - internal/sdk/models/shared/processentry.go
-  - internal/sdk/models/shared/productcosts.go
-  - internal/sdk/models/shared/productcreditsconsumptionitemv5.go
-  - internal/sdk/models/shared/productsbreakdownitemv5.go
-  - internal/sdk/models/shared/productslugv5.go
-  - internal/sdk/models/shared/productunitstatsv5.go
   - internal/sdk/models/shared/profileritem.go
   - internal/sdk/models/shared/projectconfig.go
   - internal/sdk/models/shared/projectdestination.go
@@ -1706,11 +1783,15 @@ generatedFiles:
   - internal/sdk/models/shared/protobuflibraryconversionconfig.go
   - internal/sdk/models/shared/protobuflongconversion.go
   - internal/sdk/models/shared/publicsettings.go
+  - internal/sdk/models/shared/publishpackresponse.go
+  - internal/sdk/models/shared/publishpacktogitstatustype.go
   - internal/sdk/models/shared/rbacresource.go
   - internal/sdk/models/shared/redirectinfo.go
   - internal/sdk/models/shared/rediscachelimits.go
   - internal/sdk/models/shared/redisconnectionlimits.go
   - internal/sdk/models/shared/redislimits.go
+  - internal/sdk/models/shared/referencedentity.go
+  - internal/sdk/models/shared/referencingentity.go
   - internal/sdk/models/shared/regexlibentry.go
   - internal/sdk/models/shared/resourcepolicy.go
   - internal/sdk/models/shared/restartresponse.go
@@ -1727,7 +1808,6 @@ generatedFiles:
   - internal/sdk/models/shared/runnablejobexecutor.go
   - internal/sdk/models/shared/runnablejobscheduledsearch.go
   - internal/sdk/models/shared/samplefile.go
-  - internal/sdk/models/shared/sandboxassignmentdto.go
   - internal/sdk/models/shared/savedjob.go
   - internal/sdk/models/shared/savedjobcollection.go
   - internal/sdk/models/shared/savedjobexecutor.go
@@ -1760,13 +1840,11 @@ generatedFiles:
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/senddiagbundle.go
   - internal/sdk/models/shared/serviceslimits.go
-  - internal/sdk/models/shared/singleproductconsumptionstatsv5.go
-  - internal/sdk/models/shared/singleproductusagebreakdownitemv5.go
-  - internal/sdk/models/shared/singleproductusagebreakdownperunititemv5.go
   - internal/sdk/models/shared/sortbyfield.go
   - internal/sdk/models/shared/stagedependency.go
   - internal/sdk/models/shared/stagedependencytype.go
   - internal/sdk/models/shared/subscription.go
+  - internal/sdk/models/shared/subscriptionconsumer.go
   - internal/sdk/models/shared/symlinkinfo.go
   - internal/sdk/models/shared/systemconf.go
   - internal/sdk/models/shared/systeminfo.go
@@ -1776,7 +1854,6 @@ generatedFiles:
   - internal/sdk/models/shared/tableviewsettings.go
   - internal/sdk/models/shared/team.go
   - internal/sdk/models/shared/teamaccesscontrollist.go
-  - internal/sdk/models/shared/tfstatus.go
   - internal/sdk/models/shared/tlsclientparams.go
   - internal/sdk/models/shared/trustpolicy.go
   - internal/sdk/models/shared/uistatepatch.go
@@ -1786,7 +1863,6 @@ generatedFiles:
   - internal/sdk/models/shared/upgradepackageurls.go
   - internal/sdk/models/shared/upgraderesult.go
   - internal/sdk/models/shared/upgradesettings.go
-  - internal/sdk/models/shared/usagedata.go
   - internal/sdk/models/shared/usagegroup.go
   - internal/sdk/models/shared/user.go
   - internal/sdk/models/shared/useraccesscontrollist.go
@@ -1794,10 +1870,9 @@ generatedFiles:
   - internal/sdk/models/shared/userprofile.go
   - internal/sdk/models/shared/vaultkmstlsclientconfig.go
   - internal/sdk/models/shared/versioninfo.go
-  - internal/sdk/models/shared/workspacedto.go
-  - internal/sdk/models/shared/workspacesdto.go
   - internal/sdk/notifications.go
   - internal/sdk/notificationtargets.go
+  - internal/sdk/onlyonprem.go
   - internal/sdk/outputs.go
   - internal/sdk/packs.go
   - internal/sdk/parquetschemas.go
@@ -1814,7 +1889,6 @@ generatedFiles:
   - internal/sdk/roles.go
   - internal/sdk/routes.go
   - internal/sdk/samples.go
-  - internal/sdk/sandboxes.go
   - internal/sdk/savedjobs.go
   - internal/sdk/savedqueries.go
   - internal/sdk/schemas.go
@@ -1836,11 +1910,8 @@ generatedFiles:
   - internal/sdk/usagegroups.go
   - internal/sdk/users.go
   - internal/sdk/usersacl.go
-  - internal/sdk/v5.go
-  - internal/sdk/v5billing.go
   - internal/sdk/versioning.go
   - internal/sdk/workers.go
-  - internal/sdk/workspaces.go
   - internal/validators/DateValidator.go
   - internal/validators/ExactlyOneChild.go
   - internal/validators/JSONParseValidator.go
@@ -2901,7 +2972,7 @@ examples:
   createSavedJob:
     speakeasy-default-create-saved-job:
       requestBody:
-        application/json: {"type": "collection", "ttl": "4h", "removeFields": [], "resumeOnBoot": false, "streamtags": [], "workerAffinity": false, "collector": {"type": "<value>", "conf": {}, "destructive": false}}
+        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": false, "streamtags": [], "workerAffinity": false, "collector": {"type": "<value>", "conf": {}, "destructive": false}}
       responses:
         "200":
           application/json: {}
@@ -2923,7 +2994,7 @@ examples:
         path:
           id: "<id>"
       requestBody:
-        application/json: {"type": "collection", "ttl": "4h", "removeFields": [], "resumeOnBoot": false, "streamtags": [], "workerAffinity": false, "collector": {"type": "<value>", "conf": {}, "destructive": false}}
+        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": false, "streamtags": [], "workerAffinity": false, "collector": {"type": "<value>", "conf": {}, "destructive": false}}
       responses:
         "200":
           application/json: {}
@@ -3920,7 +3991,7 @@ examples:
         path:
           groupId: "<id>"
       requestBody:
-        application/json: {"content": "<value>", "id": "<id>"}
+        application/json: {"content": "<value>", "id": "<id>", "size": 8001.66}
       responses:
         "200":
           application/json: {}
@@ -3944,7 +4015,7 @@ examples:
           id: "<id>"
           groupId: "<id>"
       requestBody:
-        application/json: {"content": "<value>", "id": "<id>"}
+        application/json: {"content": "<value>", "id": "<id>", "size": 7435.13}
       responses:
         "200":
           application/json: {}
@@ -4458,7 +4529,7 @@ examples:
         query: {}
       responses:
         "200":
-          application/json: {"isFinished": false, "job": "Human Factors Strategist", "limit": 4783.04, "offset": 6995.43, "persistedEventCount": 2187.56, "totalEventCount": 7686.72}
+          application/json: {"isFinished": false, "job": "Human Factors Strategist", "offset": 6995.43, "persistedEventCount": 2187.56, "totalEventCount": 7686.72}
         "500":
           application/json: {}
   getDatabaseConnectionConfig:
@@ -5853,7 +5924,7 @@ examples:
   createJobs:
     speakeasy-default-create-jobs:
       requestBody:
-        application/json: {"type": "scheduledSearch", "ttl": "4h", "removeFields": [], "resumeOnBoot": false, "streamtags": [], "executor": {"type": "<value>", "storeTaskResults": true}}
+        application/json: {"type": "scheduledSearch", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": false, "streamtags": [], "executor": {"type": "<value>", "storeTaskResults": true}}
       responses:
         "200":
           application/json: {}
@@ -6101,7 +6172,7 @@ examples:
           groupId: "<id>"
         query: {}
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"id": "<id>", "source": "<value>"}
       responses:
         "200":
           application/json: {}
@@ -6157,6 +6228,9 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+          id: "<id>"
+        query:
+          mode: "default_only"
       responses:
         "200":
           application/json: {}
@@ -6325,7 +6399,7 @@ examples:
         path:
           product: "stream"
       requestBody:
-        application/json: {"provisioned": true, "id": "<id>"}
+        application/json: {"configVersion": "<value>", "id": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -6380,6 +6454,129 @@ examples:
       parameters:
         path:
           id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getSearchJobsResultsById:
+    speakeasy-default-get-search-jobs-results-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"isFinished": false, "job": "Principal Web Liaison", "offset": 7247.69, "persistedEventCount": 1801.66, "totalEventCount": 6653.39}
+        "500":
+          application/json: {}
+  listIoMetricsEntry:
+    speakeasy-default-list-io-metrics-entry:
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getIoMetricsEntryById:
+    speakeasy-default-get-io-metrics-entry-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  updateIoMetricsEntryById:
+    speakeasy-default-update-io-metrics-entry-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "level": "minimal"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteIoMetricsEntryById:
+    speakeasy-default-delete-io-metrics-entry-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteAuthUsersInvalidationById:
+    speakeasy-default-delete-auth-users-invalidation-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  updatePacks:
+    speakeasy-default-update-packs:
+      parameters:
+        path:
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getPacksRefsById:
+    speakeasy-default-get-packs-refs-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createPacksPublishById:
+    speakeasy-default-create-packs-publish-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getAiSettingsFeaturesByFeature:
+    speakeasy-default-get-ai-settings-features-by-feature:
+      parameters:
+        path:
+          feature: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createAiSettingsFeaturesByFeature:
+    speakeasy-default-create-ai-settings-features-by-feature:
+      parameters:
+        path:
+          feature: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getAiSettingsFeatures:
+    speakeasy-default-get-ai-settings-features:
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createAiSettingsFeatures:
+    speakeasy-default-create-ai-settings-features:
       responses:
         "200":
           application/json: {}

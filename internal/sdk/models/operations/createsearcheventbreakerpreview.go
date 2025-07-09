@@ -9,16 +9,7 @@ import (
 
 // CreateSearchEventBreakerPreviewResponseBody - a list of PreviewResponseBody objects
 type CreateSearchEventBreakerPreviewResponseBody struct {
-	// number of items present in the items array
-	Count *int64                       `json:"count,omitempty"`
 	Items []shared.PreviewResponseBody `json:"items,omitempty"`
-}
-
-func (o *CreateSearchEventBreakerPreviewResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSearchEventBreakerPreviewResponseBody) GetItems() []shared.PreviewResponseBody {

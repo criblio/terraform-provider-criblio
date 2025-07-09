@@ -10,7 +10,7 @@ import (
 type GetParserByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to GET
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,16 +30,7 @@ func (o *GetParserByIDRequest) GetGroupID() string {
 
 // GetParserByIDResponseBody - a list of Parser objects
 type GetParserByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                  `json:"count,omitempty"`
 	Items []shared.ParserLibEntry `json:"items,omitempty"`
-}
-
-func (o *GetParserByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetParserByIDResponseBody) GetItems() []shared.ParserLibEntry {

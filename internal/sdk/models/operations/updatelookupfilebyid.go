@@ -8,19 +8,12 @@ import (
 )
 
 type UpdateLookupFileByIDRequest struct {
-	// Group ID to PATCH
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// LookupFile object to be updated
 	LookupFile shared.LookupFileInputUnion `request:"mediaType=application/json"`
-}
-
-func (o *UpdateLookupFileByIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
 }
 
 func (o *UpdateLookupFileByIDRequest) GetID() string {
@@ -28,6 +21,13 @@ func (o *UpdateLookupFileByIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *UpdateLookupFileByIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 func (o *UpdateLookupFileByIDRequest) GetLookupFile() shared.LookupFileInputUnion {

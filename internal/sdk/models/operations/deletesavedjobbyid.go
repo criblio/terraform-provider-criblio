@@ -21,16 +21,7 @@ func (o *DeleteSavedJobByIDRequest) GetID() string {
 
 // DeleteSavedJobByIDResponseBody - a list of SavedJob objects
 type DeleteSavedJobByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
 	Items []shared.SavedJob `json:"items,omitempty"`
-}
-
-func (o *DeleteSavedJobByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeleteSavedJobByIDResponseBody) GetItems() []shared.SavedJob {

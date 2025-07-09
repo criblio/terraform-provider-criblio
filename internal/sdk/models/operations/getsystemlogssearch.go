@@ -75,16 +75,7 @@ func (o *GetSystemLogsSearchRequest) GetFilter() *string {
 
 // GetSystemLogsSearchResponseBody - a list of any objects
 type GetSystemLogsSearchResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *GetSystemLogsSearchResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSystemLogsSearchResponseBody) GetItems() []map[string]any {

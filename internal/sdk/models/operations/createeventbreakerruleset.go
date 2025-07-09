@@ -8,7 +8,7 @@ import (
 )
 
 type CreateEventBreakerRulesetRequest struct {
-	// Group ID to CREATE
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New Event Breaker Ruleset object
 	EventBreakerRuleset shared.EventBreakerRuleset `request:"mediaType=application/json"`

@@ -6,6 +6,9 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
+type FunctionSpecificConfigs struct {
+}
+
 type PipelineFunctionConf struct {
 	// Filter that selects data to be fed through this Function
 	Filter *string `default:"true" json:"filter"`
@@ -16,8 +19,8 @@ type PipelineFunctionConf struct {
 	// If true, data will not be pushed through this function
 	Disabled *bool `json:"disabled,omitempty"`
 	// If enabled, stops the results of this Function from being passed to the downstream Functions
-	Final *bool          `json:"final,omitempty"`
-	Conf  map[string]any `json:"conf"`
+	Final *bool                   `json:"final,omitempty"`
+	Conf  FunctionSpecificConfigs `json:"conf"`
 	// Group ID
 	GroupID *string `json:"groupId,omitempty"`
 }
@@ -68,9 +71,9 @@ func (o *PipelineFunctionConf) GetFinal() *bool {
 	return o.Final
 }
 
-func (o *PipelineFunctionConf) GetConf() map[string]any {
+func (o *PipelineFunctionConf) GetConf() FunctionSpecificConfigs {
 	if o == nil {
-		return map[string]any{}
+		return FunctionSpecificConfigs{}
 	}
 	return o.Conf
 }

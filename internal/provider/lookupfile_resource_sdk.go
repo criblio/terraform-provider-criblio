@@ -144,11 +144,11 @@ func (r *LookupFileResourceModel) ToOperationsCreateLookupFileRequest(ctx contex
 func (r *LookupFileResourceModel) ToOperationsUpdateLookupFileByIDRequest(ctx context.Context) (*operations.UpdateLookupFileByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
 	var id string
 	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
 
 	lookupFile, lookupFileDiags := r.ToSharedLookupFileInputUnion(ctx)
 	diags.Append(lookupFileDiags...)
@@ -158,8 +158,8 @@ func (r *LookupFileResourceModel) ToOperationsUpdateLookupFileByIDRequest(ctx co
 	}
 
 	out := operations.UpdateLookupFileByIDRequest{
-		GroupID:    groupID,
 		ID:         id,
+		GroupID:    groupID,
 		LookupFile: *lookupFile,
 	}
 
@@ -182,15 +182,15 @@ func (r *LookupFileResourceModel) ToOperationsListLookupFileRequest(ctx context.
 func (r *LookupFileResourceModel) ToOperationsDeleteLookupFileByIDRequest(ctx context.Context) (*operations.DeleteLookupFileByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
 	var id string
 	id = r.ID.ValueString()
 
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
 	out := operations.DeleteLookupFileByIDRequest{
-		GroupID: groupID,
 		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags

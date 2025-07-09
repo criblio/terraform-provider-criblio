@@ -73,7 +73,7 @@ func (r *GlobalVarResourceModel) ToOperationsCreateGlobalVariableRequest(ctx con
 
 	out := operations.CreateGlobalVariableRequest{
 		GroupID:   groupID,
-		GlobalVar: globalVar,
+		GlobalVar: *globalVar,
 	}
 
 	return &out, diags

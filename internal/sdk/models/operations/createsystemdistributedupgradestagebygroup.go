@@ -30,16 +30,7 @@ func (o *CreateSystemDistributedUpgradeStageByGroupRequest) GetUpgradePercentage
 
 // CreateSystemDistributedUpgradeStageByGroupResponseBody - a list of any objects
 type CreateSystemDistributedUpgradeStageByGroupResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *CreateSystemDistributedUpgradeStageByGroupResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemDistributedUpgradeStageByGroupResponseBody) GetItems() []map[string]any {

@@ -21,9 +21,8 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   min_raw_length = 75773.87
   rules = [
     {
-      condition           = "...my_condition..."
-      disabled            = false
-      event_breaker_regex = "...my_event_breaker_regex..."
+      condition = "...my_condition..."
+      disabled  = false
       fields = [
         {
           name  = "...my_name..."
@@ -55,7 +54,7 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 
 ### Required
 
-- `group_id` (String) Group ID to CREATE
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
 
 ### Optional
@@ -71,9 +70,8 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 
 Optional:
 
-- `condition` (String) The JavaScript filter expression used to match the data to apply the rule to. Default: "true"
+- `condition` (String) JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events. Default: "true"
 - `disabled` (Boolean) Disable this breaker rule (enabled by default). Default: false
-- `event_breaker_regex` (String) The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"
 - `fields` (Attributes List) Key-value pairs to be added to each event (see [below for nested schema](#nestedatt--rules--fields))
 - `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200
 - `name` (String) Not Null

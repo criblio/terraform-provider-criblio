@@ -48,13 +48,12 @@ func (r *RegexResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		MarkdownDescription: "Regex Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Brief description of this regex (optional)`,
+				Computed: true,
+				Optional: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group ID to CREATE`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -70,15 +69,14 @@ func (r *RegexResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"sample_data": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Sample data for this regex (optional)`,
+				Description: `Optionally, paste in sample data to match against this regex`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(4096),
 				},
 			},
 			"tags": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `One or more tags related to this regex (optional)`,
+				Computed: true,
+				Optional: true,
 			},
 		},
 	}
@@ -263,43 +261,6 @@ func (r *RegexResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedRegexLibEntry(ctx, &res.Object.Items[0])...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsListRegexLibEntryRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Regexes.ListRegexLibEntry(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil && res1.Object.Items != nil && len(res1.Object.Items) > 0) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedRegexLibEntry(ctx, &res1.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

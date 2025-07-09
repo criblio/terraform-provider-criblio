@@ -30,16 +30,7 @@ func (o *CreateCriblLakeDatasetByLakeIDRequest) GetCriblLakeDataset() shared.Cri
 
 // CreateCriblLakeDatasetByLakeIDResponseBody - a list of CriblLakeDataset objects
 type CreateCriblLakeDatasetByLakeIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                    `json:"count,omitempty"`
 	Items []shared.CriblLakeDataset `json:"items,omitempty"`
-}
-
-func (o *CreateCriblLakeDatasetByLakeIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateCriblLakeDatasetByLakeIDResponseBody) GetItems() []shared.CriblLakeDataset {

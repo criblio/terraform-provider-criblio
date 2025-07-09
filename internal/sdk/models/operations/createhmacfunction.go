@@ -8,7 +8,7 @@ import (
 )
 
 type CreateHmacFunctionRequest struct {
-	// Group ID to CREATE
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New HmacFunction object
 	HmacFunction shared.HmacFunction `request:"mediaType=application/json"`

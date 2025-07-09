@@ -23,7 +23,7 @@ data "criblio_lookup_file" "my_lookupfile" {
 
 ### Required
 
-- `group_id` (String)
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
@@ -45,7 +45,7 @@ Read-Only:
 - `description` (String)
 - `file_info` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file1--file_info))
 - `id` (String)
-- `mode` (String) Operation mode for CSV-based lookups
+- `mode` (String)
 - `pending_task` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file1--pending_task))
 - `size` (Number) File size. Optional.
 - `tags` (String) One or more tags related to this lookup. Optional.
@@ -78,7 +78,7 @@ Read-Only:
 - `content` (String) File content.
 - `description` (String)
 - `id` (String)
-- `mode` (String) Operation mode for CSV-based lookups
+- `mode` (String)
 - `pending_task` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file2--pending_task))
 - `size` (Number) File size. Optional.
 - `tags` (String) One or more tags related to this lookup. Optional.

@@ -30,10 +30,10 @@ func (o *GetGroupsByIDRequest) GetFields() *string {
 
 // GetGroupsByIDResponseBody - a list of ConfigGroup objects
 type GetGroupsByIDResponseBody struct {
-	Items []shared.Group `json:"items,omitempty"`
+	Items []shared.ConfigGroup `json:"items,omitempty"`
 }
 
-func (o *GetGroupsByIDResponseBody) GetItems() []shared.Group {
+func (o *GetGroupsByIDResponseBody) GetItems() []shared.ConfigGroup {
 	if o == nil {
 		return nil
 	}

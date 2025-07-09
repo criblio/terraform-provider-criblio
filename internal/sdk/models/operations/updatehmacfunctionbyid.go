@@ -10,7 +10,7 @@ import (
 type UpdateHmacFunctionByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group ID to PATCH
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// HmacFunction object to be updated
 	HmacFunction shared.HmacFunction `request:"mediaType=application/json"`

@@ -16,7 +16,7 @@ import (
 	"net/url"
 )
 
-// Users - Actions related to users
+// Users - Actions related to users. The <code>/system/users</code> endpoints do not apply to Cribl.Cloud deployments. Instead use <code>/products/{product}/users</code>
 type Users struct {
 	rootSDK          *CriblIo
 	sdkConfiguration config.SDKConfiguration

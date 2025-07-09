@@ -54,7 +54,7 @@ func (r *HmacFunctionResource) Schema(ctx context.Context, req resource.SchemaRe
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Group ID to CREATE`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"header_expression": schema.StringAttribute{
 				Required: true,

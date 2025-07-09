@@ -9,16 +9,7 @@ import (
 
 // CreateLibDatabaseConnectionsTestResponseBody - a list of DatabaseConnectionTestResult objects
 type CreateLibDatabaseConnectionsTestResponseBody struct {
-	// number of items present in the items array
-	Count *int64                                `json:"count,omitempty"`
 	Items []shared.DatabaseConnectionTestResult `json:"items,omitempty"`
-}
-
-func (o *CreateLibDatabaseConnectionsTestResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateLibDatabaseConnectionsTestResponseBody) GetItems() []shared.DatabaseConnectionTestResult {

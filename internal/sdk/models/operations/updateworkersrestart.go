@@ -9,16 +9,7 @@ import (
 
 // UpdateWorkersRestartResponseBody - a list of RestartResponse objects
 type UpdateWorkersRestartResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.RestartResponse `json:"items,omitempty"`
-}
-
-func (o *UpdateWorkersRestartResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateWorkersRestartResponseBody) GetItems() []shared.RestartResponse {

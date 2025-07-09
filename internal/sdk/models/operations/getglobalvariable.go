@@ -10,7 +10,7 @@ import (
 type GetGlobalVariableRequest struct {
 	// Pass "refs" to include references to fields the variable is used in
 	With *string `queryParam:"style=form,explode=true,name=with"`
-	// Group ID to GET
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 

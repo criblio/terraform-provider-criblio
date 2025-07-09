@@ -32,7 +32,7 @@ resource "criblio_hmac_function" "my_hmacfunction" {
 
 ### Required
 
-- `group_id` (String) Group ID to CREATE
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `header_expression` (String)
 - `header_name` (String)
 - `id` (String) Unique ID to PATCH

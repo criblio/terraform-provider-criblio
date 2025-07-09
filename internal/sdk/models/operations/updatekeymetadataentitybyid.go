@@ -30,16 +30,7 @@ func (o *UpdateKeyMetadataEntityByIDRequest) GetKeyMetadataEntity() shared.KeyMe
 
 // UpdateKeyMetadataEntityByIDResponseBody - a list of KeyMetadataEntity objects
 type UpdateKeyMetadataEntityByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                     `json:"count,omitempty"`
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`
-}
-
-func (o *UpdateKeyMetadataEntityByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateKeyMetadataEntityByIDResponseBody) GetItems() []shared.KeyMetadataEntity {

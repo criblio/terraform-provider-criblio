@@ -21,16 +21,7 @@ func (o *CreateSystemSettingsUpgradeByVersionRequest) GetVersion() string {
 
 // CreateSystemSettingsUpgradeByVersionResponseBody - a list of string objects
 type CreateSystemSettingsUpgradeByVersionResponseBody struct {
-	// number of items present in the items array
-	Count *int64   `json:"count,omitempty"`
 	Items []string `json:"items,omitempty"`
-}
-
-func (o *CreateSystemSettingsUpgradeByVersionResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateSystemSettingsUpgradeByVersionResponseBody) GetItems() []string {

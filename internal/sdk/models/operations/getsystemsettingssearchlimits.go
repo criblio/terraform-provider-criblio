@@ -9,16 +9,7 @@ import (
 
 // GetSystemSettingsSearchLimitsResponseBody - a list of SearchSettings objects
 type GetSystemSettingsSearchLimitsResponseBody struct {
-	// number of items present in the items array
-	Count *int64                  `json:"count,omitempty"`
 	Items []shared.SearchSettings `json:"items,omitempty"`
-}
-
-func (o *GetSystemSettingsSearchLimitsResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetSystemSettingsSearchLimitsResponseBody) GetItems() []shared.SearchSettings {

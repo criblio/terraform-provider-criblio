@@ -3,13 +3,72 @@
 package operations
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
+// GetPacksExportByIDMode - Export mode. Note: "merge_safe" is deprecated and will be removed in v5.0.0. Use "merge" instead.
+type GetPacksExportByIDMode string
+
+const (
+	GetPacksExportByIDModeMerge       GetPacksExportByIDMode = "merge"
+	GetPacksExportByIDModeDefaultOnly GetPacksExportByIDMode = "default_only"
+	GetPacksExportByIDModeMergeSafe   GetPacksExportByIDMode = "merge_safe"
+)
+
+func (e GetPacksExportByIDMode) ToPointer() *GetPacksExportByIDMode {
+	return &e
+}
+func (e *GetPacksExportByIDMode) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "merge":
+		fallthrough
+	case "default_only":
+		fallthrough
+	case "merge_safe":
+		*e = GetPacksExportByIDMode(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for GetPacksExportByIDMode: %v", v)
+	}
+}
+
 type GetPacksExportByIDRequest struct {
-	// Group Id
+	// Pack name
+	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// Export mode. Note: "merge_safe" is deprecated and will be removed in v5.0.0. Use "merge" instead.
+	Mode GetPacksExportByIDMode `queryParam:"style=form,explode=true,name=mode"`
+	// Filename of the exported Pack
+	Filename *string `queryParam:"style=form,explode=true,name=filename"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+}
+
+func (o *GetPacksExportByIDRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *GetPacksExportByIDRequest) GetMode() GetPacksExportByIDMode {
+	if o == nil {
+		return GetPacksExportByIDMode("")
+	}
+	return o.Mode
+}
+
+func (o *GetPacksExportByIDRequest) GetFilename() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Filename
 }
 
 func (o *GetPacksExportByIDRequest) GetGroupID() string {
@@ -21,16 +80,7 @@ func (o *GetPacksExportByIDRequest) GetGroupID() string {
 
 // GetPacksExportByIDResponseBody - a list of any objects
 type GetPacksExportByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *GetPacksExportByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetPacksExportByIDResponseBody) GetItems() []map[string]any {

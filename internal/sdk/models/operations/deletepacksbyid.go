@@ -10,7 +10,7 @@ import (
 type DeletePacksByIDRequest struct {
 	// Pack name
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,16 +30,7 @@ func (o *DeletePacksByIDRequest) GetGroupID() string {
 
 // DeletePacksByIDResponseBody - a list of PackInstallInfo objects
 type DeletePacksByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                   `json:"count,omitempty"`
 	Items []shared.PackInstallInfo `json:"items,omitempty"`
-}
-
-func (o *DeletePacksByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *DeletePacksByIDResponseBody) GetItems() []shared.PackInstallInfo {

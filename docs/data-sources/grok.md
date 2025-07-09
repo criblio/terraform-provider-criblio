@@ -23,9 +23,11 @@ data "criblio_grok" "my_grok" {
 
 ### Required
 
-- `group_id` (String)
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
 - `content` (String)
 - `id` (String) The ID of this resource.
+- `size` (Number)
+- `tags` (String)

@@ -23,13 +23,13 @@ data "criblio_parser_lib_entry" "my_parserlibentry" {
 
 ### Required
 
-- `group_id` (String)
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
 - `additional_properties` (String) Parsed as JSON.
-- `description` (String) Brief description of this parser (optional)
+- `description` (String)
 - `id` (String) The ID of this resource.
 - `lib` (String)
-- `tags` (String) One or more tags related to this parser (optional)
+- `tags` (String) Optionally, add tags that you can use for filtering
 - `type` (String) Parser or formatter type to use

@@ -30,16 +30,7 @@ func (o *UpdateRestSecretByIDRequest) GetRestSecret() shared.RestSecret {
 
 // UpdateRestSecretByIDResponseBody - a list of RestSecret objects
 type UpdateRestSecretByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64              `json:"count,omitempty"`
 	Items []shared.RestSecret `json:"items,omitempty"`
-}
-
-func (o *UpdateRestSecretByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *UpdateRestSecretByIDResponseBody) GetItems() []shared.RestSecret {

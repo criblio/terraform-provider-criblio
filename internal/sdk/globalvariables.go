@@ -220,7 +220,7 @@ func (s *GlobalVariables) CreateGlobalVariable(ctx context.Context, request oper
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "GlobalVar", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "GlobalVar", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}

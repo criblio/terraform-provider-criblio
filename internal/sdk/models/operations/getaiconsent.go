@@ -9,16 +9,7 @@ import (
 
 // GetAiConsentResponseBody - a list of Response objects
 type GetAiConsentResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *GetAiConsentResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetAiConsentResponseBody) GetItems() []map[string]any {

@@ -20,6 +20,8 @@ type Limits struct {
 	EdgeNodesCount              *float64                  `json:"edgeNodesCount,omitempty"`
 	EnableMetricsPersistence    bool                      `json:"enableMetricsPersistence"`
 	EventsMetadataSources       []string                  `json:"eventsMetadataSources,omitempty"`
+	LookupMaxSize               *string                   `json:"lookupMaxSize,omitempty"`
+	LookupMaxTotalSize          *string                   `json:"lookupMaxTotalSize,omitempty"`
 	MaxMetrics                  *float64                  `json:"maxMetrics,omitempty"`
 	MaxPQSize                   *string                   `json:"maxPQSize,omitempty"`
 	MetricsDirectory            string                    `json:"metricsDirectory"`
@@ -74,6 +76,20 @@ func (o *Limits) GetEventsMetadataSources() []string {
 		return nil
 	}
 	return o.EventsMetadataSources
+}
+
+func (o *Limits) GetLookupMaxSize() *string {
+	if o == nil {
+		return nil
+	}
+	return o.LookupMaxSize
+}
+
+func (o *Limits) GetLookupMaxTotalSize() *string {
+	if o == nil {
+		return nil
+	}
+	return o.LookupMaxTotalSize
 }
 
 func (o *Limits) GetMaxMetrics() *float64 {

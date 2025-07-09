@@ -8,7 +8,7 @@ import (
 )
 
 type CreatePipelineRequest struct {
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New Pipeline object
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`

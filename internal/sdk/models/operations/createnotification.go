@@ -9,16 +9,7 @@ import (
 
 // CreateNotificationResponseBody - a list of Notification objects
 type CreateNotificationResponseBody struct {
-	// number of items present in the items array
-	Count *int64                `json:"count,omitempty"`
 	Items []shared.Notification `json:"items,omitempty"`
-}
-
-func (o *CreateNotificationResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateNotificationResponseBody) GetItems() []shared.Notification {

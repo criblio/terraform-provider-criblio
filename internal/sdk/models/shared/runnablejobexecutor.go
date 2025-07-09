@@ -37,29 +37,6 @@ func (e *RunnableJobExecutorJobType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type RunnableJobExecutorType string
-
-const (
-	RunnableJobExecutorTypeCollection RunnableJobExecutorType = "collection"
-)
-
-func (e RunnableJobExecutorType) ToPointer() *RunnableJobExecutorType {
-	return &e
-}
-func (e *RunnableJobExecutorType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "collection":
-		*e = RunnableJobExecutorType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for RunnableJobExecutorType: %v", v)
-	}
-}
-
 // RunnableJobExecutorScheduleLogLevel - Level at which to set task logging
 type RunnableJobExecutorScheduleLogLevel string
 
@@ -100,7 +77,6 @@ type RunnableJobExecutorTimeWarning struct {
 }
 
 type RunnableJobExecutorRunSettings struct {
-	Type *RunnableJobExecutorType `json:"type,omitempty"`
 	// Reschedule tasks that failed with non-fatal errors
 	RescheduleDroppedTasks *bool `default:"true" json:"rescheduleDroppedTasks"`
 	// Maximum number of times a task can be rescheduled
@@ -121,19 +97,9 @@ type RunnableJobExecutorRunSettings struct {
 	// A filter for tokens in the provided collect path and/or the events being collected
 	Expression *string `default:"true" json:"expression"`
 	// Limits the bundle size for small tasks. For example,
-	//
-	//
-	//
-	//
-	//
 	//         if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 	MinTaskSize *string `default:"1MB" json:"minTaskSize"`
 	// Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB,
-	//
-	//
-	//
-	//
-	//
 	//         you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
 	MaxTaskSize *string `default:"10MB" json:"maxTaskSize"`
 }
@@ -147,13 +113,6 @@ func (r *RunnableJobExecutorRunSettings) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (o *RunnableJobExecutorRunSettings) GetType() *RunnableJobExecutorType {
-	if o == nil {
-		return nil
-	}
-	return o.Type
 }
 
 func (o *RunnableJobExecutorRunSettings) GetRescheduleDroppedTasks() *bool {
@@ -450,6 +409,8 @@ type RunnableJobExecutor struct {
 	Type        *RunnableJobExecutorJobType `json:"type,omitempty"`
 	// Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 	TTL *string `default:"4h" json:"ttl"`
+	// When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+	IgnoreGroupJobsLimit *bool `default:"false" json:"ignoreGroupJobsLimit"`
 	// List of fields to remove from Discover results. Wildcards (for example, aws*) are allowed. This is useful when discovery returns sensitive fields that should not be exposed in the Jobs user interface.
 	RemoveFields []string `json:"removeFields,omitempty"`
 	// Resume the ad hoc job if a failure condition causes Stream to restart during job execution
@@ -501,6 +462,13 @@ func (o *RunnableJobExecutor) GetTTL() *string {
 		return nil
 	}
 	return o.TTL
+}
+
+func (o *RunnableJobExecutor) GetIgnoreGroupJobsLimit() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IgnoreGroupJobsLimit
 }
 
 func (o *RunnableJobExecutor) GetRemoveFields() []string {

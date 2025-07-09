@@ -21,16 +21,7 @@ func (o *GetTeamByIDRequest) GetID() string {
 
 // GetTeamByIDResponseBody - a list of Team objects
 type GetTeamByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64        `json:"count,omitempty"`
 	Items []shared.Team `json:"items,omitempty"`
-}
-
-func (o *GetTeamByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetTeamByIDResponseBody) GetItems() []shared.Team {

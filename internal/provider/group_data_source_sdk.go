@@ -31,26 +31,102 @@ func (r *GroupDataSourceModel) ToOperationsGetGroupsByIDRequest(ctx context.Cont
 	return &out, diags
 }
 
-func (r *GroupDataSourceModel) RefreshFromSharedGroup(ctx context.Context, resp *shared.Group) diag.Diagnostics {
+func (r *GroupDataSourceModel) RefreshFromSharedConfigGroup(ctx context.Context, resp *shared.ConfigGroup) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp.Cloud == nil {
 		r.Cloud = nil
 	} else {
-		r.Cloud = &tfTypes.Cloud{}
-		r.Cloud.Provider = types.StringValue(string(resp.Cloud.Provider))
+		r.Cloud = &tfTypes.ConfigGroupCloud{}
+		if resp.Cloud.Provider != nil {
+			r.Cloud.Provider = types.StringValue(string(*resp.Cloud.Provider))
+		} else {
+			r.Cloud.Provider = types.StringNull()
+		}
 		r.Cloud.Region = types.StringValue(resp.Cloud.Region)
 	}
+	r.ConfigVersion = types.StringValue(resp.ConfigVersion)
+	r.DeployingWorkerCount = types.Float64PointerValue(resp.DeployingWorkerCount)
+	r.Description = types.StringPointerValue(resp.Description)
 	r.EstimatedIngestRate = types.Float64PointerValue(resp.EstimatedIngestRate)
+	if resp.Git == nil {
+		r.Git = nil
+	} else {
+		r.Git = &tfTypes.ConfigGroupGit{}
+		r.Git.Commit = types.StringPointerValue(resp.Git.Commit)
+		r.Git.LocalChanges = types.Float64PointerValue(resp.Git.LocalChanges)
+		r.Git.Log = []tfTypes.Commit{}
+		if len(r.Git.Log) > len(resp.Git.Log) {
+			r.Git.Log = r.Git.Log[:len(resp.Git.Log)]
+		}
+		for logCount, logItem := range resp.Git.Log {
+			var log tfTypes.Commit
+			log.AuthorEmail = types.StringPointerValue(logItem.AuthorEmail)
+			log.AuthorName = types.StringPointerValue(logItem.AuthorName)
+			log.Date = types.StringValue(logItem.Date)
+			log.Hash = types.StringValue(logItem.Hash)
+			log.Message = types.StringValue(logItem.Message)
+			log.Short = types.StringValue(logItem.Short)
+			if logCount+1 > len(r.Git.Log) {
+				r.Git.Log = append(r.Git.Log, log)
+			} else {
+				r.Git.Log[logCount].AuthorEmail = log.AuthorEmail
+				r.Git.Log[logCount].AuthorName = log.AuthorName
+				r.Git.Log[logCount].Date = log.Date
+				r.Git.Log[logCount].Hash = log.Hash
+				r.Git.Log[logCount].Message = log.Message
+				r.Git.Log[logCount].Short = log.Short
+			}
+		}
+	}
 	r.ID = types.StringValue(resp.ID)
+	r.IncompatibleWorkerCount = types.Float64PointerValue(resp.IncompatibleWorkerCount)
+	r.Inherits = types.StringPointerValue(resp.Inherits)
 	r.IsFleet = types.BoolPointerValue(resp.IsFleet)
+	r.IsSearch = types.BoolPointerValue(resp.IsSearch)
+	r.LookupDeployments = []tfTypes.ConfigGroupLookups{}
+	if len(r.LookupDeployments) > len(resp.LookupDeployments) {
+		r.LookupDeployments = r.LookupDeployments[:len(resp.LookupDeployments)]
+	}
+	for lookupDeploymentsCount, lookupDeploymentsItem := range resp.LookupDeployments {
+		var lookupDeployments tfTypes.ConfigGroupLookups
+		lookupDeployments.Context = types.StringValue(lookupDeploymentsItem.Context)
+		lookupDeployments.Lookups = []tfTypes.Lookup{}
+		for lookupsCount, lookupsItem := range lookupDeploymentsItem.Lookups {
+			var lookups tfTypes.Lookup
+			lookups.DeployedVersion = types.StringPointerValue(lookupsItem.DeployedVersion)
+			lookups.File = types.StringValue(lookupsItem.File)
+			lookups.Version = types.StringPointerValue(lookupsItem.Version)
+			if lookupsCount+1 > len(lookupDeployments.Lookups) {
+				lookupDeployments.Lookups = append(lookupDeployments.Lookups, lookups)
+			} else {
+				lookupDeployments.Lookups[lookupsCount].DeployedVersion = lookups.DeployedVersion
+				lookupDeployments.Lookups[lookupsCount].File = lookups.File
+				lookupDeployments.Lookups[lookupsCount].Version = lookups.Version
+			}
+		}
+		if lookupDeploymentsCount+1 > len(r.LookupDeployments) {
+			r.LookupDeployments = append(r.LookupDeployments, lookupDeployments)
+		} else {
+			r.LookupDeployments[lookupDeploymentsCount].Context = lookupDeployments.Context
+			r.LookupDeployments[lookupDeploymentsCount].Lookups = lookupDeployments.Lookups
+		}
+	}
 	r.Name = types.StringPointerValue(resp.Name)
 	r.OnPrem = types.BoolPointerValue(resp.OnPrem)
-	r.Provisioned = types.BoolValue(resp.Provisioned)
+	r.Provisioned = types.BoolPointerValue(resp.Provisioned)
 	r.Streamtags = make([]types.String, 0, len(resp.Streamtags))
 	for _, v := range resp.Streamtags {
 		r.Streamtags = append(r.Streamtags, types.StringValue(v))
 	}
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
+	}
+	r.UpgradeVersion = types.StringPointerValue(resp.UpgradeVersion)
+	r.WorkerCount = types.Float64PointerValue(resp.WorkerCount)
 	r.WorkerRemoteAccess = types.BoolPointerValue(resp.WorkerRemoteAccess)
 
 	return diags

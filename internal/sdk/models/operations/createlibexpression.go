@@ -9,16 +9,7 @@ import (
 
 // CreateLibExpressionResponseBody - a list of ExprLibEntry objects
 type CreateLibExpressionResponseBody struct {
-	// number of items present in the items array
-	Count *int64                `json:"count,omitempty"`
 	Items []shared.ExprLibEntry `json:"items,omitempty"`
-}
-
-func (o *CreateLibExpressionResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *CreateLibExpressionResponseBody) GetItems() []shared.ExprLibEntry {

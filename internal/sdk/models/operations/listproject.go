@@ -8,6 +8,7 @@ import (
 )
 
 type ListProjectRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -20,16 +21,7 @@ func (o *ListProjectRequest) GetGroupID() string {
 
 // ListProjectResponseBody - a list of Project objects
 type ListProjectResponseBody struct {
-	// number of items present in the items array
-	Count *int64                 `json:"count,omitempty"`
 	Items []shared.ProjectConfig `json:"items,omitempty"`
-}
-
-func (o *ListProjectResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *ListProjectResponseBody) GetItems() []shared.ProjectConfig {

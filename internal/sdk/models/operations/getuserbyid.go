@@ -21,16 +21,7 @@ func (o *GetUserByIDRequest) GetID() string {
 
 // GetUserByIDResponseBody - a list of User objects
 type GetUserByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64        `json:"count,omitempty"`
 	Items []shared.User `json:"items,omitempty"`
-}
-
-func (o *GetUserByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetUserByIDResponseBody) GetItems() []shared.User {

@@ -226,9 +226,8 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 															"field": schema.StringAttribute{
 																Computed: true,
 															},
-															"headers": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
+															"headers": schema.StringAttribute{
+																Computed: true,
 															},
 															"name": schema.StringAttribute{
 																Computed: true,
@@ -357,11 +356,9 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 														},
 													},
 												},
-												"watch": schema.ListNestedAttribute{
-													Computed: true,
-													NestedObject: schema.NestedAttributeObject{
-														Attributes: map[string]schema.Attribute{},
-													},
+												"watch": schema.ListAttribute{
+													Computed:    true,
+													ElementType: types.StringType,
 												},
 											},
 										},
@@ -498,9 +495,8 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 										"field": schema.StringAttribute{
 											Computed: true,
 										},
-										"headers": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
+										"headers": schema.StringAttribute{
+											Computed: true,
 										},
 										"name": schema.StringAttribute{
 											Computed: true,
@@ -629,11 +625,9 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 									},
 								},
 							},
-							"watch": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{},
-								},
+							"watch": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
 							},
 						},
 					},
@@ -692,7 +686,8 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,

@@ -8,19 +8,12 @@ import (
 )
 
 type UpdateParserByIDRequest struct {
-	// Group ID to PATCH
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Parser object to be updated
 	ParserLibEntry shared.ParserLibEntry `request:"mediaType=application/json"`
-}
-
-func (o *UpdateParserByIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
 }
 
 func (o *UpdateParserByIDRequest) GetID() string {
@@ -28,6 +21,13 @@ func (o *UpdateParserByIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *UpdateParserByIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 func (o *UpdateParserByIDRequest) GetParserLibEntry() shared.ParserLibEntry {

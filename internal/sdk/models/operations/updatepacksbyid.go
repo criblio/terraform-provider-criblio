@@ -10,14 +10,14 @@ import (
 type UpdatePacksByIDRequest struct {
 	// Pack name
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group Id
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// body string required Pack source
 	Source *string `queryParam:"style=form,explode=true,name=source"`
 	// body boolean optional Only upgrade to minor/patch versions
 	Minor *string `queryParam:"style=form,explode=true,name=minor"`
 	// body string optional Specify a branch, tag or a semver spec
 	Spec *string `queryParam:"style=form,explode=true,name=spec"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *UpdatePacksByIDRequest) GetID() string {
@@ -25,13 +25,6 @@ func (o *UpdatePacksByIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
-}
-
-func (o *UpdatePacksByIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
 }
 
 func (o *UpdatePacksByIDRequest) GetSource() *string {
@@ -55,18 +48,16 @@ func (o *UpdatePacksByIDRequest) GetSpec() *string {
 	return o.Spec
 }
 
-// UpdatePacksByIDResponseBody - a list of PackInfo objects
-type UpdatePacksByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64            `json:"count,omitempty"`
-	Items []shared.PackInfo `json:"items,omitempty"`
+func (o *UpdatePacksByIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
-func (o *UpdatePacksByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
+// UpdatePacksByIDResponseBody - a list of PackInfo objects
+type UpdatePacksByIDResponseBody struct {
+	Items []shared.PackInfo `json:"items,omitempty"`
 }
 
 func (o *UpdatePacksByIDResponseBody) GetItems() []shared.PackInfo {

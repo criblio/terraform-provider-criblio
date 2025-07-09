@@ -9,16 +9,7 @@ import (
 
 // GetVersionBranchResponseBody - a list of any objects
 type GetVersionBranchResponseBody struct {
-	// number of items present in the items array
-	Count *int64           `json:"count,omitempty"`
 	Items []map[string]any `json:"items,omitempty"`
-}
-
-func (o *GetVersionBranchResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetVersionBranchResponseBody) GetItems() []map[string]any {

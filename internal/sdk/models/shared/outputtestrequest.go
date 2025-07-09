@@ -4,7 +4,6 @@ package shared
 
 type OutputTestRequest struct {
 	Events []CriblEvent `json:"events"`
-	Status *TFStatus    `json:"status,omitempty"`
 }
 
 func (o *OutputTestRequest) GetEvents() []CriblEvent {
@@ -12,11 +11,4 @@ func (o *OutputTestRequest) GetEvents() []CriblEvent {
 		return []CriblEvent{}
 	}
 	return o.Events
-}
-
-func (o *OutputTestRequest) GetStatus() *TFStatus {
-	if o == nil {
-		return nil
-	}
-	return o.Status
 }

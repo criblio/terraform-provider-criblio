@@ -15,7 +15,7 @@ type TableViewSettings struct {
 	ShowRowNumbers         bool                  `json:"showRowNumbers"`
 	ShowRowTotals          bool                  `json:"showRowTotals"`
 	ShowRowTotalsPinned    bool                  `json:"showRowTotalsPinned"`
-	WrapCells              *bool                 `json:"wrapCells,omitempty"`
+	WrapCells              bool                  `json:"wrapCells"`
 }
 
 func (o *TableViewSettings) GetColumnFilterSettings() *ColumnFilterSettings {
@@ -102,9 +102,9 @@ func (o *TableViewSettings) GetShowRowTotalsPinned() bool {
 	return o.ShowRowTotalsPinned
 }
 
-func (o *TableViewSettings) GetWrapCells() *bool {
+func (o *TableViewSettings) GetWrapCells() bool {
 	if o == nil {
-		return nil
+		return false
 	}
 	return o.WrapCells
 }

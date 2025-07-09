@@ -23,13 +23,13 @@ data "criblio_regex" "my_regex" {
 
 ### Required
 
-- `group_id` (String) Group ID to GET
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 
 ### Read-Only
 
-- `description` (String) Brief description of this regex (optional)
+- `description` (String)
 - `id` (String) The ID of this resource.
 - `lib` (String)
 - `regex` (String)
-- `sample_data` (String) Sample data for this regex (optional)
-- `tags` (String) One or more tags related to this regex (optional)
+- `sample_data` (String) Optionally, paste in sample data to match against this regex
+- `tags` (String)

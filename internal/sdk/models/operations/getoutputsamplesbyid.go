@@ -10,7 +10,7 @@ import (
 type GetOutputSamplesByIDRequest struct {
 	// Output Id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Group Id
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,16 +30,7 @@ func (o *GetOutputSamplesByIDRequest) GetGroupID() string {
 
 // GetOutputSamplesByIDResponseBody - a list of OutputSamplesResponse objects
 type GetOutputSamplesByIDResponseBody struct {
-	// number of items present in the items array
-	Count *int64                         `json:"count,omitempty"`
 	Items []shared.OutputSamplesResponse `json:"items,omitempty"`
-}
-
-func (o *GetOutputSamplesByIDResponseBody) GetCount() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Count
 }
 
 func (o *GetOutputSamplesByIDResponseBody) GetItems() []shared.OutputSamplesResponse {
