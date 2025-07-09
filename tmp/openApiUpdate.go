@@ -12,6 +12,7 @@ import (
 )
 
 /* the 'data' var MUST be an interface in order to handle changing OpenAPI file structure. New structure would require struct regeneration, which an interface avoids.
+ * HOWEVER, we could just use the publicly available v3 structures. That would solve a lot of problems here. 
  */
 
 var outFile = "output.OpenApi.yml"               

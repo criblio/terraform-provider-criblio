@@ -72,5 +72,6 @@ required:
 //in '"foo.bar.biz" = "yaml"'; foo.bar must exist!
 var pathSpeakeasyOperation = map[string]string{
 	"paths./products/{product}/groups.post.x-speakeasy-entity-operation": "Group#create",
+	"paths./m/{groupId}/lib/appscope-configs/{id}.patch.x-speakeasy-entity-operation": "Group#create",
 }
 
