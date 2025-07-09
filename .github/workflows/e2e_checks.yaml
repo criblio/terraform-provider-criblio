@@ -2,7 +2,7 @@ name: e2e Tests
 on:
   push:
     branches: 
-      - 'master'
+      - 'main'
 
 jobs:
   e2e_test:
@@ -23,24 +23,24 @@ jobs:
         run: | 
           make e2e-test
 
-# speakeasy_test:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4.2.2
-#
-#      - name: Install Speakeasy
-#        uses: mheap/setup-go-cli@v1
-#        with:
-#          owner: speakeasy-api
-#          repo: speakeasy
-#          cli_name: speakeasy
-#          package_type: zip
-#
-#      - name: Configure speakeasy CLI
-#        run: |
-#          mkdir -p ~/.speakeasy
-#          echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
-#
-#      - name: Run Speakeasy Tests
-#        run: |
-#          make build-speakeasy
+  speakeasy_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: Install Speakeasy
+        uses: mheap/setup-go-cli@v1
+        with:
+          owner: speakeasy-api
+          repo: speakeasy
+          cli_name: speakeasy
+          package_type: zip
+
+      - name: Configure speakeasy CLI
+        run: |
+          mkdir -p ~/.speakeasy
+          echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
+
+      - name: Run Speakeasy Tests
+        run: |
+          make build-speakeasy
