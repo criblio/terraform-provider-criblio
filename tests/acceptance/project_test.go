@@ -54,7 +54,6 @@ output "project" {
 
 data "criblio_project" "my_project" {
   group_id = "default"
-  id       = "foo"
 }
 
 provider "criblio" {

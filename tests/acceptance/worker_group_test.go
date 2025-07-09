@@ -39,6 +39,7 @@ resource "criblio_group" "my_group" {
     provider = "azure"
     region   = "eastus"
   }
+  config_version        = data.criblio_config_version.my_configversion.id
   estimated_ingest_rate = 1024
   id                    = "newgroup"
   is_fleet              = false
@@ -51,6 +52,10 @@ resource "criblio_group" "my_group" {
     "network"
   ]
   worker_remote_access = false
+}
+
+data "criblio_config_version" "my_configversion" {
+  id         = "default"
 }
 
 output "group" {

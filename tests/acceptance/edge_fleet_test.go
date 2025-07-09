@@ -35,6 +35,7 @@ func TestEdgeFleet(t *testing.T) {
 
 const edgeFleetConfig = `
 resource "criblio_group" "my_edge_fleet" {
+  config_version        = data.criblio_config_version.my_configversion.id
   estimated_ingest_rate = 1024
   id                    = "my-edge-fleet"
   is_fleet              = true
@@ -47,6 +48,10 @@ resource "criblio_group" "my_edge_fleet" {
     "network"
   ]
   worker_remote_access = false
+}
+
+data "criblio_config_version" "my_configversion" {
+  id         = "default"
 }
 
 output "edge_fleet" {
