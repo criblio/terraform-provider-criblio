@@ -10,6 +10,8 @@ import (
 type CreatePacksRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// the file to upload
+	Filename *string `queryParam:"style=form,explode=true,name=filename"`
 	// PackRequestBody object
 	PackRequestBody shared.PackRequestBody `request:"mediaType=application/json"`
 }
@@ -19,6 +21,13 @@ func (o *CreatePacksRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *CreatePacksRequest) GetFilename() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Filename
 }
 
 func (o *CreatePacksRequest) GetPackRequestBody() shared.PackRequestBody {

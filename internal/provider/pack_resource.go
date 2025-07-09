@@ -43,6 +43,7 @@ type PackResourceModel struct {
 	Description          types.String                 `tfsdk:"description"`
 	DisplayName          types.String                 `tfsdk:"display_name"`
 	Exports              []types.String               `tfsdk:"exports"`
+	Filename             types.String                 `queryParam:"style=form,explode=true,name=filename" tfsdk:"filename"`
 	Force                types.Bool                   `tfsdk:"force"`
 	GroupID              types.String                 `tfsdk:"group_id"`
 	ID                   types.String                 `tfsdk:"id"`
@@ -99,6 +100,13 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 				ElementType: types.StringType,
 				Description: `Requires replacement if changed.`,
+			},
+			"filename": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `the file to upload. Requires replacement if changed.`,
 			},
 			"force": schema.BoolAttribute{
 				Optional: true,

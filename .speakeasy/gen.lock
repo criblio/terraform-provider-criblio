@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 0ed52b5260a3272f0418b543ae7b5330
+  docChecksum: 9c9ab83104ed45875c523544fb09945f
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.575.2
-  generationVersion: 2.648.4
+  speakeasyVersion: 1.580.0
+  generationVersion: 2.654.2
   releaseVersion: 1.0.45
   configChecksum: 8e92e4c67a6b143f5badf122e57b9a54
   published: true
@@ -13,7 +13,7 @@ features:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.2.1
-    core: 3.41.14
+    core: 3.41.15
     deprecations: 2.82.0
     globalSecurity: 2.81.12
     globalServerURLs: 2.82.2

@@ -58699,6 +58699,12 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: filename
+          in: query
+          required: false
+          schema:
+            type: string
+          description: the file to upload
       operationId: createPacks
       tags:
         - packs

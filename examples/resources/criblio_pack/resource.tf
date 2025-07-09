@@ -6,6 +6,7 @@ resource "criblio_pack" "my_pack" {
   exports = [
     "..."
   ]
+  filename               = "...my_filename..."
   force                  = true
   group_id               = "...my_group_id..."
   id                     = "...my_id..."

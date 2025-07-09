@@ -21,6 +21,7 @@ resource "criblio_pack" "my_pack" {
   exports = [
     "..."
   ]
+  filename               = "...my_filename..."
   force                  = true
   group_id               = "...my_group_id..."
   id                     = "...my_id..."
@@ -63,6 +64,7 @@ resource "criblio_pack" "my_pack" {
 - `description` (String) Requires replacement if changed.
 - `display_name` (String) Requires replacement if changed.
 - `exports` (List of String) Requires replacement if changed.
+- `filename` (String) the file to upload. Requires replacement if changed.
 - `force` (Boolean) Requires replacement if changed.
 - `inputs` (Number) Requires replacement if changed.
 - `min_log_stream_version` (String) Requires replacement if changed.

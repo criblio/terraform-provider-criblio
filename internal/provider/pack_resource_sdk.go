@@ -136,6 +136,12 @@ func (r *PackResourceModel) ToOperationsCreatePacksRequest(ctx context.Context) 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	filename := new(string)
+	if !r.Filename.IsUnknown() && !r.Filename.IsNull() {
+		*filename = r.Filename.ValueString()
+	} else {
+		filename = nil
+	}
 	packRequestBody, packRequestBodyDiags := r.ToSharedPackRequestBody(ctx)
 	diags.Append(packRequestBodyDiags...)
 
@@ -145,6 +151,7 @@ func (r *PackResourceModel) ToOperationsCreatePacksRequest(ctx context.Context) 
 
 	out := operations.CreatePacksRequest{
 		GroupID:         groupID,
+		Filename:        filename,
 		PackRequestBody: *packRequestBody,
 	}
 

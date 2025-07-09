@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestProject(t *testing.T) {
@@ -14,20 +13,13 @@ func TestProject(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: projConfig,
+					Config:             projConfig,
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_project.my_project", "id", "my_project"),
 						resource.TestCheckResourceAttr("criblio_project.my_project", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_project.my_project", "description", "test project"),
 					),
-				},
-				{
-					Config: projConfig,
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
