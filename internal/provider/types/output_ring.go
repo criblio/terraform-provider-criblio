@@ -18,7 +18,6 @@ type OutputRing struct {
 	OnBackpressure types.String   `tfsdk:"on_backpressure"`
 	PartitionExpr  types.String   `tfsdk:"partition_expr"`
 	Pipeline       types.String   `tfsdk:"pipeline"`
-	Status         *TFStatus      `tfsdk:"status"`
 	Streamtags     []types.String `tfsdk:"streamtags"`
 	SystemFields   []types.String `tfsdk:"system_fields"`
 	Type           types.String   `tfsdk:"type"`

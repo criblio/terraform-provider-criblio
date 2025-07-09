@@ -16,7 +16,7 @@ type OutputGrafanaCloudGrafanaCloud2 struct {
 	FlushPeriodSec                types.Float64                             `tfsdk:"flush_period_sec"`
 	ID                            types.String                              `tfsdk:"id"`
 	Labels                        []OutputGrafanaCloudLabel2                `tfsdk:"labels"`
-	LokiAuth                      *OutputLokiAuth2                          `tfsdk:"loki_auth"`
+	LokiAuth                      *OutputGrafanaCloudLokiAuth2              `tfsdk:"loki_auth"`
 	LokiURL                       types.String                              `tfsdk:"loki_url"`
 	MaxPayloadEvents              types.Float64                             `tfsdk:"max_payload_events"`
 	MaxPayloadSizeKB              types.Float64                             `tfsdk:"max_payload_size_kb"`
@@ -32,13 +32,12 @@ type OutputGrafanaCloudGrafanaCloud2 struct {
 	PqMode                        types.String                              `tfsdk:"pq_mode"`
 	PqOnBackpressure              types.String                              `tfsdk:"pq_on_backpressure"`
 	PqPath                        types.String                              `tfsdk:"pq_path"`
-	PrometheusAuth                *OutputPrometheusAuth2                    `tfsdk:"prometheus_auth"`
+	PrometheusAuth                *OutputGrafanaCloudPrometheusAuth2        `tfsdk:"prometheus_auth"`
 	PrometheusURL                 types.String                              `tfsdk:"prometheus_url"`
 	RejectUnauthorized            types.Bool                                `tfsdk:"reject_unauthorized"`
 	ResponseHonorRetryAfterHeader types.Bool                                `tfsdk:"response_honor_retry_after_header"`
 	ResponseRetrySettings         []OutputGrafanaCloudResponseRetrySetting2 `tfsdk:"response_retry_settings"`
 	SafeHeaders                   []types.String                            `tfsdk:"safe_headers"`
-	Status                        *TFStatus                                 `tfsdk:"status"`
 	Streamtags                    []types.String                            `tfsdk:"streamtags"`
 	SystemFields                  []types.String                            `tfsdk:"system_fields"`
 	TimeoutRetrySettings          *OutputGrafanaCloudTimeoutRetrySettings2  `tfsdk:"timeout_retry_settings"`

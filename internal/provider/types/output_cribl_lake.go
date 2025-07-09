@@ -8,7 +8,6 @@ import (
 
 type OutputCriblLake struct {
 	AddIDToStagePath              types.Bool     `tfsdk:"add_id_to_stage_path"`
-	AdditionalProperties          types.String   `tfsdk:"additional_properties"`
 	AssumeRoleArn                 types.String   `tfsdk:"assume_role_arn"`
 	AssumeRoleExternalID          types.String   `tfsdk:"assume_role_external_id"`
 	AwsAuthenticationMethod       types.String   `tfsdk:"aws_authentication_method"`
@@ -47,7 +46,6 @@ type OutputCriblLake struct {
 	ServerSideEncryption          types.String   `tfsdk:"server_side_encryption"`
 	SignatureVersion              types.String   `tfsdk:"signature_version"`
 	StagePath                     types.String   `tfsdk:"stage_path"`
-	Status                        *TFStatus      `tfsdk:"status"`
 	StorageClass                  types.String   `tfsdk:"storage_class"`
 	Streamtags                    []types.String `tfsdk:"streamtags"`
 	SystemFields                  []types.String `tfsdk:"system_fields"`

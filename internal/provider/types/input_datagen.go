@@ -7,18 +7,17 @@ import (
 )
 
 type InputDatagen struct {
-	Connections  []ConnectionDatagen `tfsdk:"connections"`
-	Description  types.String        `tfsdk:"description"`
-	Disabled     types.Bool          `tfsdk:"disabled"`
-	Environment  types.String        `tfsdk:"environment"`
-	ID           types.String        `tfsdk:"id"`
-	Metadata     []MetadatumDatagen  `tfsdk:"metadata"`
-	Pipeline     types.String        `tfsdk:"pipeline"`
-	Pq           *PqDatagen          `tfsdk:"pq"`
-	PqEnabled    types.Bool          `tfsdk:"pq_enabled"`
-	Samples      []Sample            `tfsdk:"samples"`
-	SendToRoutes types.Bool          `tfsdk:"send_to_routes"`
-	Status       *TFStatus           `tfsdk:"status"`
-	Streamtags   []types.String      `tfsdk:"streamtags"`
-	Type         types.String        `tfsdk:"type"`
+	Connections  []InputDatagenConnection `tfsdk:"connections"`
+	Description  types.String             `tfsdk:"description"`
+	Disabled     types.Bool               `tfsdk:"disabled"`
+	Environment  types.String             `tfsdk:"environment"`
+	ID           types.String             `tfsdk:"id"`
+	Metadata     []InputDatagenMetadatum  `tfsdk:"metadata"`
+	Pipeline     types.String             `tfsdk:"pipeline"`
+	Pq           *InputDatagenPq          `tfsdk:"pq"`
+	PqEnabled    types.Bool               `tfsdk:"pq_enabled"`
+	Samples      []Sample                 `tfsdk:"samples"`
+	SendToRoutes types.Bool               `tfsdk:"send_to_routes"`
+	Streamtags   []types.String           `tfsdk:"streamtags"`
+	Type         types.String             `tfsdk:"type"`
 }

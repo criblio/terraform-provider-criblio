@@ -20,14 +20,14 @@ type OutputKafka struct {
 	Format                    types.String                                  `tfsdk:"format"`
 	ID                        types.String                                  `tfsdk:"id"`
 	InitialBackoff            types.Float64                                 `tfsdk:"initial_backoff"`
-	KafkaSchemaRegistry       *OutputKafkaSchemaRegistryAuthenticationKafka `tfsdk:"kafka_schema_registry"`
+	KafkaSchemaRegistry       *OutputKafkaKafkaSchemaRegistryAuthentication `tfsdk:"kafka_schema_registry"`
 	MaxBackOff                types.Float64                                 `tfsdk:"max_back_off"`
 	MaxRecordSizeKB           types.Float64                                 `tfsdk:"max_record_size_kb"`
 	MaxRetries                types.Float64                                 `tfsdk:"max_retries"`
 	OnBackpressure            types.String                                  `tfsdk:"on_backpressure"`
 	Pipeline                  types.String                                  `tfsdk:"pipeline"`
 	PqCompress                types.String                                  `tfsdk:"pq_compress"`
-	PqControls                *PqControlsKafka                              `tfsdk:"pq_controls"`
+	PqControls                *OutputKafkaPqControls                        `tfsdk:"pq_controls"`
 	PqMaxFileSize             types.String                                  `tfsdk:"pq_max_file_size"`
 	PqMaxSize                 types.String                                  `tfsdk:"pq_max_size"`
 	PqMode                    types.String                                  `tfsdk:"pq_mode"`
@@ -36,11 +36,10 @@ type OutputKafka struct {
 	ProtobufLibraryID         types.String                                  `tfsdk:"protobuf_library_id"`
 	ReauthenticationThreshold types.Float64                                 `tfsdk:"reauthentication_threshold"`
 	RequestTimeout            types.Float64                                 `tfsdk:"request_timeout"`
-	Sasl                      *OutputAuthenticationKafka                    `tfsdk:"sasl"`
-	Status                    *TFStatus                                     `tfsdk:"status"`
+	Sasl                      *OutputKafkaAuthentication                    `tfsdk:"sasl"`
 	Streamtags                []types.String                                `tfsdk:"streamtags"`
 	SystemFields              []types.String                                `tfsdk:"system_fields"`
-	TLS                       *OutputTLSSettingsClientSideKafka             `tfsdk:"tls"`
+	TLS                       *OutputKafkaTLSSettingsClientSide             `tfsdk:"tls"`
 	Topic                     types.String                                  `tfsdk:"topic"`
 	Type                      types.String                                  `tfsdk:"type"`
 }

@@ -7,24 +7,23 @@ import (
 )
 
 type InputRawUDP struct {
-	Connections         []ConnectionRawUDP `tfsdk:"connections"`
-	Description         types.String       `tfsdk:"description"`
-	Disabled            types.Bool         `tfsdk:"disabled"`
-	Environment         types.String       `tfsdk:"environment"`
-	Host                types.String       `tfsdk:"host"`
-	ID                  types.String       `tfsdk:"id"`
-	IngestRawBytes      types.Bool         `tfsdk:"ingest_raw_bytes"`
-	IPWhitelistRegex    types.String       `tfsdk:"ip_whitelist_regex"`
-	MaxBufferSize       types.Float64      `tfsdk:"max_buffer_size"`
-	Metadata            []MetadatumRawUDP  `tfsdk:"metadata"`
-	Pipeline            types.String       `tfsdk:"pipeline"`
-	Port                types.Float64      `tfsdk:"port"`
-	Pq                  *PqRawUDP          `tfsdk:"pq"`
-	PqEnabled           types.Bool         `tfsdk:"pq_enabled"`
-	SendToRoutes        types.Bool         `tfsdk:"send_to_routes"`
-	SingleMsgUDPPackets types.Bool         `tfsdk:"single_msg_udp_packets"`
-	Status              *TFStatus          `tfsdk:"status"`
-	Streamtags          []types.String     `tfsdk:"streamtags"`
-	Type                types.String       `tfsdk:"type"`
-	UDPSocketRxBufSize  types.Float64      `tfsdk:"udp_socket_rx_buf_size"`
+	Connections         []InputRawUDPConnection `tfsdk:"connections"`
+	Description         types.String            `tfsdk:"description"`
+	Disabled            types.Bool              `tfsdk:"disabled"`
+	Environment         types.String            `tfsdk:"environment"`
+	Host                types.String            `tfsdk:"host"`
+	ID                  types.String            `tfsdk:"id"`
+	IngestRawBytes      types.Bool              `tfsdk:"ingest_raw_bytes"`
+	IPWhitelistRegex    types.String            `tfsdk:"ip_whitelist_regex"`
+	MaxBufferSize       types.Float64           `tfsdk:"max_buffer_size"`
+	Metadata            []InputRawUDPMetadatum  `tfsdk:"metadata"`
+	Pipeline            types.String            `tfsdk:"pipeline"`
+	Port                types.Float64           `tfsdk:"port"`
+	Pq                  *InputRawUDPPq          `tfsdk:"pq"`
+	PqEnabled           types.Bool              `tfsdk:"pq_enabled"`
+	SendToRoutes        types.Bool              `tfsdk:"send_to_routes"`
+	SingleMsgUDPPackets types.Bool              `tfsdk:"single_msg_udp_packets"`
+	Streamtags          []types.String          `tfsdk:"streamtags"`
+	Type                types.String            `tfsdk:"type"`
+	UDPSocketRxBufSize  types.Float64           `tfsdk:"udp_socket_rx_buf_size"`
 }

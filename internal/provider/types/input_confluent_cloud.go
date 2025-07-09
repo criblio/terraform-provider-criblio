@@ -12,7 +12,7 @@ type InputConfluentCloud struct {
 	AutoCommitThreshold       types.Float64                                         `tfsdk:"auto_commit_threshold"`
 	BackoffRate               types.Float64                                         `tfsdk:"backoff_rate"`
 	Brokers                   []types.String                                        `tfsdk:"brokers"`
-	Connections               []ConnectionConfluentCloud                            `tfsdk:"connections"`
+	Connections               []InputConfluentCloudConnection                       `tfsdk:"connections"`
 	ConnectionTimeout         types.Float64                                         `tfsdk:"connection_timeout"`
 	Description               types.String                                          `tfsdk:"description"`
 	Disabled                  types.Bool                                            `tfsdk:"disabled"`
@@ -22,25 +22,24 @@ type InputConfluentCloud struct {
 	HeartbeatInterval         types.Float64                                         `tfsdk:"heartbeat_interval"`
 	ID                        types.String                                          `tfsdk:"id"`
 	InitialBackoff            types.Float64                                         `tfsdk:"initial_backoff"`
-	KafkaSchemaRegistry       *InputKafkaSchemaRegistryAuthenticationConfluentCloud `tfsdk:"kafka_schema_registry"`
+	KafkaSchemaRegistry       *InputConfluentCloudKafkaSchemaRegistryAuthentication `tfsdk:"kafka_schema_registry"`
 	MaxBackOff                types.Float64                                         `tfsdk:"max_back_off"`
 	MaxBytes                  types.Float64                                         `tfsdk:"max_bytes"`
 	MaxBytesPerPartition      types.Float64                                         `tfsdk:"max_bytes_per_partition"`
 	MaxRetries                types.Float64                                         `tfsdk:"max_retries"`
 	MaxSocketErrors           types.Float64                                         `tfsdk:"max_socket_errors"`
-	Metadata                  []MetadatumConfluentCloud                             `tfsdk:"metadata"`
+	Metadata                  []InputConfluentCloudMetadatum                        `tfsdk:"metadata"`
 	Pipeline                  types.String                                          `tfsdk:"pipeline"`
-	Pq                        *PqConfluentCloud                                     `tfsdk:"pq"`
+	Pq                        *InputConfluentCloudPq                                `tfsdk:"pq"`
 	PqEnabled                 types.Bool                                            `tfsdk:"pq_enabled"`
 	ReauthenticationThreshold types.Float64                                         `tfsdk:"reauthentication_threshold"`
 	RebalanceTimeout          types.Float64                                         `tfsdk:"rebalance_timeout"`
 	RequestTimeout            types.Float64                                         `tfsdk:"request_timeout"`
-	Sasl                      *InputAuthenticationConfluentCloud                    `tfsdk:"sasl"`
+	Sasl                      *InputConfluentCloudAuthentication                    `tfsdk:"sasl"`
 	SendToRoutes              types.Bool                                            `tfsdk:"send_to_routes"`
 	SessionTimeout            types.Float64                                         `tfsdk:"session_timeout"`
-	Status                    *TFStatus                                             `tfsdk:"status"`
 	Streamtags                []types.String                                        `tfsdk:"streamtags"`
-	TLS                       *InputTLSSettingsClientSideConfluentCloud             `tfsdk:"tls"`
+	TLS                       *InputConfluentCloudTLSSettingsClientSide             `tfsdk:"tls"`
 	Topics                    []types.String                                        `tfsdk:"topics"`
 	Type                      types.String                                          `tfsdk:"type"`
 }

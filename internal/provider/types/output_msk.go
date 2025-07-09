@@ -29,14 +29,14 @@ type OutputMsk struct {
 	Format                    types.String                                `tfsdk:"format"`
 	ID                        types.String                                `tfsdk:"id"`
 	InitialBackoff            types.Float64                               `tfsdk:"initial_backoff"`
-	KafkaSchemaRegistry       *OutputKafkaSchemaRegistryAuthenticationMsk `tfsdk:"kafka_schema_registry"`
+	KafkaSchemaRegistry       *OutputMskKafkaSchemaRegistryAuthentication `tfsdk:"kafka_schema_registry"`
 	MaxBackOff                types.Float64                               `tfsdk:"max_back_off"`
 	MaxRecordSizeKB           types.Float64                               `tfsdk:"max_record_size_kb"`
 	MaxRetries                types.Float64                               `tfsdk:"max_retries"`
 	OnBackpressure            types.String                                `tfsdk:"on_backpressure"`
 	Pipeline                  types.String                                `tfsdk:"pipeline"`
 	PqCompress                types.String                                `tfsdk:"pq_compress"`
-	PqControls                *PqControlsMsk                              `tfsdk:"pq_controls"`
+	PqControls                *OutputMskPqControls                        `tfsdk:"pq_controls"`
 	PqMaxFileSize             types.String                                `tfsdk:"pq_max_file_size"`
 	PqMaxSize                 types.String                                `tfsdk:"pq_max_size"`
 	PqMode                    types.String                                `tfsdk:"pq_mode"`
@@ -49,10 +49,9 @@ type OutputMsk struct {
 	RequestTimeout            types.Float64                               `tfsdk:"request_timeout"`
 	ReuseConnections          types.Bool                                  `tfsdk:"reuse_connections"`
 	SignatureVersion          types.String                                `tfsdk:"signature_version"`
-	Status                    *TFStatus                                   `tfsdk:"status"`
 	Streamtags                []types.String                              `tfsdk:"streamtags"`
 	SystemFields              []types.String                              `tfsdk:"system_fields"`
-	TLS                       *OutputTLSSettingsClientSideMsk             `tfsdk:"tls"`
+	TLS                       *OutputMskTLSSettingsClientSide             `tfsdk:"tls"`
 	Topic                     types.String                                `tfsdk:"topic"`
 	Type                      types.String                                `tfsdk:"type"`
 }

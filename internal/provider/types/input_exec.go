@@ -24,7 +24,6 @@ type InputExec struct {
 	ScheduleType        types.String          `tfsdk:"schedule_type"`
 	SendToRoutes        types.Bool            `tfsdk:"send_to_routes"`
 	StaleChannelFlushMs types.Float64         `tfsdk:"stale_channel_flush_ms"`
-	Status              *TFStatus             `tfsdk:"status"`
 	Streamtags          []types.String        `tfsdk:"streamtags"`
 	Type                types.String          `tfsdk:"type"`
 }

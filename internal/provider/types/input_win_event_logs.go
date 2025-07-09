@@ -7,24 +7,23 @@ import (
 )
 
 type InputWinEventLogs struct {
-	BatchSize           types.Float64            `tfsdk:"batch_size"`
-	Connections         []ConnectionWinEventLogs `tfsdk:"connections"`
-	Description         types.String             `tfsdk:"description"`
-	Disabled            types.Bool               `tfsdk:"disabled"`
-	DisableNativeModule types.Bool               `tfsdk:"disable_native_module"`
-	Environment         types.String             `tfsdk:"environment"`
-	EventFormat         types.String             `tfsdk:"event_format"`
-	ID                  types.String             `tfsdk:"id"`
-	Interval            types.Float64            `tfsdk:"interval"`
-	LogNames            []types.String           `tfsdk:"log_names"`
-	MaxEventBytes       types.Float64            `tfsdk:"max_event_bytes"`
-	Metadata            []MetadatumWinEventLogs  `tfsdk:"metadata"`
-	Pipeline            types.String             `tfsdk:"pipeline"`
-	Pq                  *PqWinEventLogs          `tfsdk:"pq"`
-	PqEnabled           types.Bool               `tfsdk:"pq_enabled"`
-	ReadMode            types.String             `tfsdk:"read_mode"`
-	SendToRoutes        types.Bool               `tfsdk:"send_to_routes"`
-	Status              *TFStatus                `tfsdk:"status"`
-	Streamtags          []types.String           `tfsdk:"streamtags"`
-	Type                types.String             `tfsdk:"type"`
+	BatchSize           types.Float64                 `tfsdk:"batch_size"`
+	Connections         []InputWinEventLogsConnection `tfsdk:"connections"`
+	Description         types.String                  `tfsdk:"description"`
+	Disabled            types.Bool                    `tfsdk:"disabled"`
+	DisableNativeModule types.Bool                    `tfsdk:"disable_native_module"`
+	Environment         types.String                  `tfsdk:"environment"`
+	EventFormat         types.String                  `tfsdk:"event_format"`
+	ID                  types.String                  `tfsdk:"id"`
+	Interval            types.Float64                 `tfsdk:"interval"`
+	LogNames            []types.String                `tfsdk:"log_names"`
+	MaxEventBytes       types.Float64                 `tfsdk:"max_event_bytes"`
+	Metadata            []InputWinEventLogsMetadatum  `tfsdk:"metadata"`
+	Pipeline            types.String                  `tfsdk:"pipeline"`
+	Pq                  *InputWinEventLogsPq          `tfsdk:"pq"`
+	PqEnabled           types.Bool                    `tfsdk:"pq_enabled"`
+	ReadMode            types.String                  `tfsdk:"read_mode"`
+	SendToRoutes        types.Bool                    `tfsdk:"send_to_routes"`
+	Streamtags          []types.String                `tfsdk:"streamtags"`
+	Type                types.String                  `tfsdk:"type"`
 }

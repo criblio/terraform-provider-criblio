@@ -7,9 +7,9 @@ import (
 )
 
 type AppscopeConfigWithCustomEvent struct {
-	Enable    types.Bool                            `tfsdk:"enable"`
-	Format    AppscopeConfigWithCustomFormatNdjson  `tfsdk:"format"`
-	Transport AppscopeTransport                     `tfsdk:"transport"`
-	Type      types.String                          `tfsdk:"type"`
-	Watch     []AppscopeConfigWithCustomWatchNdjson `tfsdk:"watch"`
+	Enable    types.Bool                           `tfsdk:"enable"`
+	Format    AppscopeConfigWithCustomFormatNdjson `tfsdk:"format"`
+	Transport AppscopeTransport                    `tfsdk:"transport"`
+	Type      types.String                         `tfsdk:"type"`
+	Watch     []AppscopeConfigWithCustomWatch      `tfsdk:"watch"`
 }

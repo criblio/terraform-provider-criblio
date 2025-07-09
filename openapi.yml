@@ -51779,6 +51779,7 @@ paths:
       tags: *a58
   "/m/{groupId}/lib/appscope-configs":
     get:
+      x-speakeasy-entity-operation: AppscopeConfig#read
       parameters:
         - name: groupId
           in: path
@@ -51817,6 +51818,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: AppscopeConfig#create
       parameters:
         - name: groupId
           in: path
@@ -51858,6 +51860,7 @@ paths:
             type: string
       responses: *a60
     patch:
+      x-speakeasy-entity-operation: AppscopeConfig#update
       operationId: updateAppscopeLibEntryById
       tags: *a59
       summary: Update AppscopeLibEntry
@@ -51883,6 +51886,7 @@ paths:
               $ref: "#/components/schemas/AppscopeLibEntry"
       responses: *a60
     delete:
+      x-speakeasy-entity-operation: AppscopeConfig#delete
       operationId: deleteAppscopeLibEntryById
       tags: *a59
       summary: Delete AppscopeLibEntry
@@ -51902,6 +51906,7 @@ paths:
       responses: *a60
   "/m/{groupId}/lib/grok":
     get:
+      x-speakeasy-entity-operation: Grok#read
       parameters:
         - name: groupId
           in: path
@@ -51940,6 +51945,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: Grok#create
       parameters:
         - name: groupId
           in: path
@@ -51981,6 +51987,7 @@ paths:
             type: string
       responses: *a63
     patch:
+      x-speakeasy-entity-operation: Grok#update
       operationId: updateGrokFileById
       tags: *a62
       summary: Update GrokFile
@@ -52006,6 +52013,7 @@ paths:
               $ref: "#/components/schemas/GrokFile"
       responses: *a63
     delete:
+      x-speakeasy-entity-operation: Grok#delete
       operationId: deleteGrokFileById
       tags: *a62
       summary: Delete GrokFile
@@ -52025,6 +52033,7 @@ paths:
       responses: *a63
   "/m/{groupId}/system/lookups":
     get:
+      x-speakeasy-entity-operation: LookupFile#read
       parameters:
         - name: groupId
           in: path
@@ -52063,6 +52072,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: LookupFile#create
       parameters:
         - name: groupId
           in: path
@@ -52146,6 +52156,7 @@ paths:
             type: string
       responses: *a66
     patch:
+      x-speakeasy-entity-operation: LookupFile#update
       operationId: updateLookupFileById
       tags: *a65
       summary: Update LookupFile
@@ -52171,6 +52182,7 @@ paths:
               $ref: "#/components/schemas/LookupFile"
       responses: *a66
     delete:
+      x-speakeasy-entity-operation: LookupFile#delete
       operationId: deleteLookupFileById
       tags: *a65
       summary: Delete LookupFile
@@ -52190,6 +52202,7 @@ paths:
       responses: *a66
   "/m/{groupId}/lib/parsers":
     get:
+      x-speakeasy-entity-operation: ParserLibEntry#read
       parameters:
         - name: groupId
           in: path
@@ -52228,6 +52241,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: ParserLibEntry#create
       parameters:
         - name: groupId
           in: path
@@ -52269,6 +52283,7 @@ paths:
             type: string
       responses: *a69
     patch:
+      x-speakeasy-entity-operation: ParserLibEntry#update
       operationId: updateParserById
       tags: *a68
       summary: Update Parser
@@ -52471,6 +52486,7 @@ paths:
           description: Library id
   "/m/{groupId}/lib/regex":
     get:
+      x-speakeasy-entity-operation: Regex#read
       parameters:
         - name: groupId
           in: path
@@ -52509,6 +52525,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: Regex#create
       parameters:
         - name: groupId
           in: path
@@ -52550,6 +52567,7 @@ paths:
             type: string
       responses: *a72
     patch:
+      x-speakeasy-entity-operation: Regex#update
       operationId: updateRegexLibEntryById
       tags: *a71
       summary: Update RegexLibEntry
@@ -52575,6 +52593,7 @@ paths:
               $ref: "#/components/schemas/RegexLibEntry"
       responses: *a72
     delete:
+      x-speakeasy-entity-operation: Regex#delete
       operationId: deleteRegexLibEntryById
       tags: *a71
       summary: Delete RegexLibEntry
@@ -53263,6 +53282,7 @@ paths:
           description: search job id
   "/m/{groupId}/lib/database-connections":
     get:
+      x-speakeasy-entity-operation: DatabaseConnection#read
       operationId: getDatabaseConnectionConfig
       tags:
         - database-connections
@@ -53306,6 +53326,7 @@ paths:
           schema:
             type: string
     post:
+      x-speakeasy-entity-operation: DatabaseConnection#create
       parameters:
         - name: groupId
           in: path
@@ -53372,6 +53393,7 @@ paths:
           description: Unique ID to GET
       responses: *a97
     patch:
+      x-speakeasy-entity-operation: DatabaseConnection#update
       operationId: updateDatabaseConnectionConfigById
       tags: *a96
       summary: Update DatabaseConnectionConfig
@@ -53397,6 +53419,7 @@ paths:
               $ref: "#/components/schemas/DatabaseConnectionConfig"
       responses: *a97
     delete:
+      x-speakeasy-entity-operation: DatabaseConnection#delete
       operationId: deleteDatabaseConnectionConfigById
       tags: *a96
       summary: Delete DatabaseConnectionConfig
@@ -53454,6 +53477,7 @@ paths:
               $ref: "#/components/schemas/DatabaseConnectionTest"
   "/m/{groupId}/lib/breakers":
     get:
+      x-speakeasy-entity-operation: EventBreakerRuleset#read
       parameters:
         - name: groupId
           in: path
@@ -53492,6 +53516,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: EventBreakerRuleset#create
       parameters:
         - name: groupId
           in: path
@@ -53533,6 +53558,7 @@ paths:
             type: string
       responses: *a100
     patch:
+      x-speakeasy-entity-operation: EventBreakerRuleset#update
       operationId: updateEventBreakerRulesetById
       tags: *a99
       summary: Update Event Breaker Ruleset
@@ -53558,6 +53584,7 @@ paths:
               $ref: "#/components/schemas/EventBreakerRuleset"
       responses: *a100
     delete:
+      x-speakeasy-entity-operation: EventBreakerRuleset#delete
       operationId: deleteEventBreakerRulesetById
       tags: *a99
       summary: Delete Event Breaker Ruleset
@@ -53577,6 +53604,7 @@ paths:
       responses: *a100
   "/m/{groupId}/lib/vars":
     get:
+      x-speakeasy-entity-operation: GlobalVar#read
       operationId: getGlobalVariable
       tags:
         &a105
@@ -53623,6 +53651,7 @@ paths:
           schema:
             type: string
     post:
+      x-speakeasy-entity-operation: GlobalVar#create
       parameters:
         - name: groupId
           in: path
@@ -53690,6 +53719,7 @@ paths:
             type: string
       responses: *a103
     patch:
+      x-speakeasy-entity-operation: GlobalVar#update
       operationId: updateGlobalVariableById
       tags: *a102
       summary: Update Global Variable
@@ -53716,6 +53746,7 @@ paths:
               $ref: "#/components/schemas/GlobalVar"
       responses: *a103
     delete:
+      x-speakeasy-entity-operation: GlobalVar#delete
       operationId: deleteGlobalVariableById
       tags: *a102
       summary: Delete Global Variable
@@ -53823,6 +53854,7 @@ paths:
       responses: *a103
   "/m/{groupId}/lib/hmac-functions":
     get:
+      x-speakeasy-entity-operation: HmacFunction#read
       parameters:
         - name: groupId
           in: path
@@ -53861,6 +53893,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: HmacFunction#create
       parameters:
         - name: groupId
           in: path
@@ -53902,6 +53935,7 @@ paths:
             type: string
       responses: *a112
     patch:
+      x-speakeasy-entity-operation: HmacFunction#update
       operationId: updateHmacFunctionById
       tags: *a111
       summary: Update HmacFunction
@@ -53927,6 +53961,7 @@ paths:
               $ref: "#/components/schemas/HmacFunction"
       responses: *a112
     delete:
+      x-speakeasy-entity-operation: HmacFunction#delete
       operationId: deleteHmacFunctionById
       tags: *a111
       summary: Delete HmacFunction
@@ -53946,6 +53981,7 @@ paths:
       responses: *a112
   "/m/{groupId}/system/inputs":
     get:
+      x-speakeasy-entity-operation: Source#read
       parameters:
         - name: groupId
           in: path
@@ -53984,6 +54020,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: Source#create
       parameters:
         - name: groupId
           in: path
@@ -54025,6 +54062,7 @@ paths:
             type: string
       responses: *a115
     patch:
+      x-speakeasy-entity-operation: Source#update
       operationId: updateInputById
       tags: *a114
       summary: Update Input
@@ -54050,6 +54088,7 @@ paths:
               $ref: "#/components/schemas/Input"
       responses: *a115
     delete:
+      x-speakeasy-entity-operation: Source#delete
       operationId: deleteInputById
       tags: *a114
       summary: Delete Input
@@ -54257,6 +54296,7 @@ paths:
       responses: *a118
   "/m/{groupId}/system/outputs":
     get:
+      x-speakeasy-entity-operation: Destination#read
       parameters:
         - name: groupId
           in: path
@@ -54295,6 +54335,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: Destination#create
       parameters:
         - name: groupId
           in: path
@@ -54336,6 +54377,7 @@ paths:
             type: string
       responses: *a121
     patch:
+      x-speakeasy-entity-operation: Destination#update
       operationId: updateOutputById
       tags: *a120
       summary: Update Output
@@ -54361,6 +54403,7 @@ paths:
               $ref: "#/components/schemas/Output"
       responses: *a121
     delete:
+      x-speakeasy-entity-operation: Destination#delete
       operationId: deleteOutputById
       tags: *a120
       summary: Delete Output
@@ -54568,6 +54611,7 @@ paths:
             type: string
   "/m/{groupId}/lib/parquet-schemas":
     get:
+      x-speakeasy-entity-operation: ParquetSchema#read
       parameters:
         - name: groupId
           in: path
@@ -54606,6 +54650,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: ParquetSchema#create
       operationId: createSchema
       tags: *a123
       summary: Create Schema
@@ -54647,6 +54692,7 @@ paths:
             type: string
       responses: *a124
     patch:
+      x-speakeasy-entity-operation: ParquetSchema#update
       operationId: updateSchemaById
       tags: *a123
       summary: Update Schema
@@ -54672,6 +54718,7 @@ paths:
               $ref: "#/components/schemas/SchemaLibEntry"
       responses: *a124
     delete:
+      x-speakeasy-entity-operation: ParquetSchema#delete
       operationId: deleteSchemaById
       tags: *a123
       summary: Delete Schema
@@ -54691,6 +54738,7 @@ paths:
       responses: *a124
   "/m/{groupId}/pipelines":
     get:
+      x-speakeasy-entity-operation: Pipeline#read
       parameters:
         - name: groupId
           in: path
@@ -54729,6 +54777,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: Pipeline#create
       parameters:
         - name: groupId
           in: path
@@ -54771,6 +54820,7 @@ paths:
             type: string
       responses: *a127
     patch:
+      x-speakeasy-entity-operation: Pipeline#update
       operationId: updatePipelineById
       tags: *a126
       summary: Update Pipeline
@@ -54797,6 +54847,7 @@ paths:
               $ref: "#/components/schemas/Pipeline"
       responses: *a127
     delete:
+      x-speakeasy-entity-operation: Pipeline#delete
       operationId: deletePipelineById
       tags: *a126
       summary: Delete Pipeline
@@ -54816,6 +54867,7 @@ paths:
       responses: *a127
   "/m/{groupId}/p/{pack}/pipelines":
     get:
+      x-speakeasy-entity-operation: PackPipeline#read
       operationId: getPipelineByPack
       tags: *a126
       summary: Get a list of Pipeline objects within a Pack
@@ -54836,6 +54888,7 @@ paths:
           schema:
             type: string
     post:
+      x-speakeasy-entity-operation: PackPipeline#create
       operationId: createPipelineByPack
       tags: *a126
       summary: Create Pipeline within a Pack
@@ -54879,6 +54932,7 @@ paths:
             type: string
       responses: *a127
     patch:
+      x-speakeasy-entity-operation: PackPipeline#update
       operationId: updatePipelineByPackAndId
       tags: *a126
       summary: Update Pipeline within a Pack
@@ -54903,6 +54957,7 @@ paths:
       requestBody: *a131
       responses: *a127
     delete:
+      x-speakeasy-entity-operation: PackPipeline#delete
       operationId: deletePipelineByPackAndId
       tags: *a126
       summary: Delete Pipeline within a Pack
@@ -55208,6 +55263,7 @@ paths:
           description: pack ID to POST
   "/m/{groupId}/lib/schemas":
     get:
+      x-speakeasy-entity-operation: Schema#read
       parameters:
         - name: groupId
           in: path
@@ -55246,6 +55302,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: Schema#create
       parameters:
         - name: groupId
           in: path
@@ -55288,6 +55345,7 @@ paths:
             type: string
       responses: *a145
     patch:
+      x-speakeasy-entity-operation: Schema#update
       operationId: updateLibSchemasById
       tags: *a144
       summary: Update Schema
@@ -55314,6 +55372,7 @@ paths:
               $ref: "#/components/schemas/SchemaLibEntry"
       responses: *a145
     delete:
+      x-speakeasy-entity-operation: Schema#delete
       operationId: deleteLibSchemasById
       tags: *a144
       summary: Delete Schema
@@ -58476,6 +58535,7 @@ paths:
           description: Filter
   "/m/{groupId}/packs":
     post:
+      x-speakeasy-entity-operation: Pack#create
       parameters:
         - name: groupId
           in: path
@@ -58520,6 +58580,7 @@ paths:
             schema:
               $ref: "#/components/schemas/PackRequestBody"
     get:
+      x-speakeasy-entity-operation: Pack#read
       operationId: getPacks
       tags:
         - packs
@@ -58608,6 +58669,7 @@ paths:
             type: string
   "/m/{groupId}/packs/{id}":
     delete:
+      x-speakeasy-entity-operation: Pack#delete
       operationId: deletePacksById
       tags:
         - packs
@@ -58651,6 +58713,7 @@ paths:
           schema:
             type: string
     patch:
+      x-speakeasy-entity-operation: Pack#update
       operationId: updatePacksById
       tags:
         - packs
@@ -60327,6 +60390,7 @@ paths:
                 $ref: "#/components/schemas/Error"
   /version/commit:
     post:
+      x-speakeasy-entity-operation: Commit#create
       operationId: createVersionCommit
       tags:
         - versioning
@@ -61719,6 +61783,7 @@ paths:
       responses: *a172
   "/m/{groupId}/system/projects":
     get:
+      x-speakeasy-entity-operation: Project#read
       parameters:
         - name: groupId
           in: path
@@ -61757,6 +61822,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: Project#create
       parameters:
         - name: groupId
           in: path
@@ -61798,6 +61864,7 @@ paths:
             type: string
       responses: *a174
     patch:
+      x-speakeasy-entity-operation: Project#update
       operationId: updateProjectById
       tags: *a173
       summary: Update Project
@@ -61823,6 +61890,7 @@ paths:
               $ref: "#/components/schemas/ProjectConfig"
       responses: *a174
     delete:
+      x-speakeasy-entity-operation: Project#delete
       operationId: deleteProjectById
       tags: *a173
       summary: Delete Project
@@ -61977,6 +62045,7 @@ paths:
           description: Project Id
   "/m/{groupId}/system/subscriptions":
     get:
+      x-speakeasy-entity-operation: Subscription#read
       parameters:
         - name: groupId
           in: path
@@ -62015,6 +62084,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
+      x-speakeasy-entity-operation: Subscription#create
       parameters:
         - name: groupId
           in: path
@@ -62072,6 +62142,7 @@ paths:
             type: string
       responses: *a184
     patch:
+      x-speakeasy-entity-operation: Subscription#update
       operationId: updateSubscriptionById
       tags:
         - subscriptions
@@ -62115,6 +62186,7 @@ paths:
           schema:
             type: string
     delete:
+      x-speakeasy-entity-operation: Subscription#delete
       operationId: deleteSubscriptionById
       tags:
         - subscriptions
@@ -62198,6 +62270,7 @@ paths:
           description: Project Id
   "/master/groups/{id}/configVersion":
     get:
+      x-speakeasy-entity-operation: ConfigVersion#read
       operationId: getGroupsConfigVersionById
       tags:
         - groups
@@ -62236,6 +62309,7 @@ paths:
           description: Group ID
   "/products/{product}/groups":
     post:
+      x-speakeasy-entity-operation: Group#create
       operationId: createProductsGroupsByProduct
       tags:
         - groups
@@ -62330,6 +62404,7 @@ paths:
           description: Cribl Product
   "/master/groups/{id}":
     get:
+      x-speakeasy-entity-operation: Group#get
       operationId: getGroupsById
       tags:
         - groups

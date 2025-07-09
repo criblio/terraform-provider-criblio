@@ -7,8 +7,8 @@ import (
 )
 
 type AppscopeConfigWithCustomMetric struct {
-	Enable    types.Bool                            `tfsdk:"enable"`
-	Format    AppscopeConfigWithCustomMetricFormat  `tfsdk:"format"`
-	Transport AppscopeTransport                     `tfsdk:"transport"`
-	Watch     []AppscopeConfigWithCustomMetricWatch `tfsdk:"watch"`
+	Enable    types.Bool                           `tfsdk:"enable"`
+	Format    AppscopeConfigWithCustomMetricFormat `tfsdk:"format"`
+	Transport AppscopeTransport                    `tfsdk:"transport"`
+	Watch     []types.String                       `tfsdk:"watch"`
 }

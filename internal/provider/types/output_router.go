@@ -7,13 +7,12 @@ import (
 )
 
 type OutputRouter struct {
-	Description  types.String   `tfsdk:"description"`
-	Environment  types.String   `tfsdk:"environment"`
-	ID           types.String   `tfsdk:"id"`
-	Pipeline     types.String   `tfsdk:"pipeline"`
-	Rules        []OutputRule   `tfsdk:"rules"`
-	Status       *TFStatus      `tfsdk:"status"`
-	Streamtags   []types.String `tfsdk:"streamtags"`
-	SystemFields []types.String `tfsdk:"system_fields"`
-	Type         types.String   `tfsdk:"type"`
+	Description  types.String       `tfsdk:"description"`
+	Environment  types.String       `tfsdk:"environment"`
+	ID           types.String       `tfsdk:"id"`
+	Pipeline     types.String       `tfsdk:"pipeline"`
+	Rules        []OutputRouterRule `tfsdk:"rules"`
+	Streamtags   []types.String     `tfsdk:"streamtags"`
+	SystemFields []types.String     `tfsdk:"system_fields"`
+	Type         types.String       `tfsdk:"type"`
 }

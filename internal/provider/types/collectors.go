@@ -3,15 +3,15 @@
 package types
 
 type Collectors struct {
-	Disk       *DisksAndFileSystems `tfsdk:"disk"`
-	DNS        *DNS                 `tfsdk:"dns"`
-	Firewall   *Firewall            `tfsdk:"firewall"`
-	Hostsfile  *HostsFile           `tfsdk:"hostsfile"`
-	Interfaces *Interfaces          `tfsdk:"interfaces"`
-	LoginUsers *LoggedInUsers       `tfsdk:"login_users"`
-	Metadata   *HostInfo            `tfsdk:"metadata"`
-	Ports      *ListeningPorts      `tfsdk:"ports"`
-	Routes     *InputRoutes         `tfsdk:"routes"`
-	Services   *Services            `tfsdk:"services"`
-	User       *UsersAndGroups      `tfsdk:"user"`
+	Disk       *DisksAndFileSystems    `tfsdk:"disk"`
+	DNS        *DNS                    `tfsdk:"dns"`
+	Firewall   *Firewall               `tfsdk:"firewall"`
+	Hostsfile  *HostsFile              `tfsdk:"hostsfile"`
+	Interfaces *Interfaces             `tfsdk:"interfaces"`
+	LoginUsers *LoggedInUsers          `tfsdk:"login_users"`
+	Metadata   *HostInfo               `tfsdk:"metadata"`
+	Ports      *ListeningPorts         `tfsdk:"ports"`
+	Routes     *InputSystemStateRoutes `tfsdk:"routes"`
+	Services   *Services               `tfsdk:"services"`
+	User       *UsersAndGroups         `tfsdk:"user"`
 }

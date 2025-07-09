@@ -7,21 +7,20 @@ import (
 )
 
 type InputCollection struct {
-	BreakerRulesets     []types.String             `tfsdk:"breaker_rulesets"`
-	Connections         []ConnectionCollection     `tfsdk:"connections"`
-	Disabled            types.Bool                 `tfsdk:"disabled"`
-	Environment         types.String               `tfsdk:"environment"`
-	ID                  types.String               `tfsdk:"id"`
-	Metadata            []InputMetadatumCollection `tfsdk:"metadata"`
-	Output              types.String               `tfsdk:"output"`
-	Pipeline            types.String               `tfsdk:"pipeline"`
-	Pq                  *PqCollection              `tfsdk:"pq"`
-	PqEnabled           types.Bool                 `tfsdk:"pq_enabled"`
-	Preprocess          *InputPreprocessCollection `tfsdk:"preprocess"`
-	SendToRoutes        types.Bool                 `tfsdk:"send_to_routes"`
-	StaleChannelFlushMs types.Float64              `tfsdk:"stale_channel_flush_ms"`
-	Status              *TFStatus                  `tfsdk:"status"`
-	Streamtags          []types.String             `tfsdk:"streamtags"`
-	ThrottleRatePerSec  types.String               `tfsdk:"throttle_rate_per_sec"`
-	Type                types.String               `tfsdk:"type"`
+	BreakerRulesets     []types.String              `tfsdk:"breaker_rulesets"`
+	Connections         []InputCollectionConnection `tfsdk:"connections"`
+	Disabled            types.Bool                  `tfsdk:"disabled"`
+	Environment         types.String                `tfsdk:"environment"`
+	ID                  types.String                `tfsdk:"id"`
+	Metadata            []InputCollectionMetadatum  `tfsdk:"metadata"`
+	Output              types.String                `tfsdk:"output"`
+	Pipeline            types.String                `tfsdk:"pipeline"`
+	Pq                  *InputCollectionPq          `tfsdk:"pq"`
+	PqEnabled           types.Bool                  `tfsdk:"pq_enabled"`
+	Preprocess          *InputCollectionPreprocess  `tfsdk:"preprocess"`
+	SendToRoutes        types.Bool                  `tfsdk:"send_to_routes"`
+	StaleChannelFlushMs types.Float64               `tfsdk:"stale_channel_flush_ms"`
+	Streamtags          []types.String              `tfsdk:"streamtags"`
+	ThrottleRatePerSec  types.String                `tfsdk:"throttle_rate_per_sec"`
+	Type                types.String                `tfsdk:"type"`
 }

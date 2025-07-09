@@ -7,14 +7,13 @@ import (
 )
 
 type OutputNetflow struct {
-	Description         types.String   `tfsdk:"description"`
-	DNSResolvePeriodSec types.Float64  `tfsdk:"dns_resolve_period_sec"`
-	Environment         types.String   `tfsdk:"environment"`
-	Hosts               []HostNetflow  `tfsdk:"hosts"`
-	ID                  types.String   `tfsdk:"id"`
-	Pipeline            types.String   `tfsdk:"pipeline"`
-	Status              *TFStatus      `tfsdk:"status"`
-	Streamtags          []types.String `tfsdk:"streamtags"`
-	SystemFields        []types.String `tfsdk:"system_fields"`
-	Type                types.String   `tfsdk:"type"`
+	Description         types.String        `tfsdk:"description"`
+	DNSResolvePeriodSec types.Float64       `tfsdk:"dns_resolve_period_sec"`
+	Environment         types.String        `tfsdk:"environment"`
+	Hosts               []OutputNetflowHost `tfsdk:"hosts"`
+	ID                  types.String        `tfsdk:"id"`
+	Pipeline            types.String        `tfsdk:"pipeline"`
+	Streamtags          []types.String      `tfsdk:"streamtags"`
+	SystemFields        []types.String      `tfsdk:"system_fields"`
+	Type                types.String        `tfsdk:"type"`
 }

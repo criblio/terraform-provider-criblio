@@ -37,7 +37,6 @@ type OutputExabeam struct {
 	SiteID                 types.String   `tfsdk:"site_id"`
 	SiteName               types.String   `tfsdk:"site_name"`
 	StagePath              types.String   `tfsdk:"stage_path"`
-	Status                 *TFStatus      `tfsdk:"status"`
 	StorageClass           types.String   `tfsdk:"storage_class"`
 	Streamtags             []types.String `tfsdk:"streamtags"`
 	SystemFields           []types.String `tfsdk:"system_fields"`

@@ -18,7 +18,7 @@ type InputMsk struct {
 	AwsSecretKey              types.String                               `tfsdk:"aws_secret_key"`
 	BackoffRate               types.Float64                              `tfsdk:"backoff_rate"`
 	Brokers                   []types.String                             `tfsdk:"brokers"`
-	Connections               []ConnectionMsk                            `tfsdk:"connections"`
+	Connections               []InputMskConnection                       `tfsdk:"connections"`
 	ConnectionTimeout         types.Float64                              `tfsdk:"connection_timeout"`
 	Description               types.String                               `tfsdk:"description"`
 	Disabled                  types.Bool                                 `tfsdk:"disabled"`
@@ -31,15 +31,15 @@ type InputMsk struct {
 	HeartbeatInterval         types.Float64                              `tfsdk:"heartbeat_interval"`
 	ID                        types.String                               `tfsdk:"id"`
 	InitialBackoff            types.Float64                              `tfsdk:"initial_backoff"`
-	KafkaSchemaRegistry       *InputKafkaSchemaRegistryAuthenticationMsk `tfsdk:"kafka_schema_registry"`
+	KafkaSchemaRegistry       *InputMskKafkaSchemaRegistryAuthentication `tfsdk:"kafka_schema_registry"`
 	MaxBackOff                types.Float64                              `tfsdk:"max_back_off"`
 	MaxBytes                  types.Float64                              `tfsdk:"max_bytes"`
 	MaxBytesPerPartition      types.Float64                              `tfsdk:"max_bytes_per_partition"`
 	MaxRetries                types.Float64                              `tfsdk:"max_retries"`
 	MaxSocketErrors           types.Float64                              `tfsdk:"max_socket_errors"`
-	Metadata                  []MetadatumMsk                             `tfsdk:"metadata"`
+	Metadata                  []InputMskMetadatum                        `tfsdk:"metadata"`
 	Pipeline                  types.String                               `tfsdk:"pipeline"`
-	Pq                        *PqMsk                                     `tfsdk:"pq"`
+	Pq                        *InputMskPq                                `tfsdk:"pq"`
 	PqEnabled                 types.Bool                                 `tfsdk:"pq_enabled"`
 	ReauthenticationThreshold types.Float64                              `tfsdk:"reauthentication_threshold"`
 	RebalanceTimeout          types.Float64                              `tfsdk:"rebalance_timeout"`
@@ -50,9 +50,8 @@ type InputMsk struct {
 	SendToRoutes              types.Bool                                 `tfsdk:"send_to_routes"`
 	SessionTimeout            types.Float64                              `tfsdk:"session_timeout"`
 	SignatureVersion          types.String                               `tfsdk:"signature_version"`
-	Status                    *TFStatus                                  `tfsdk:"status"`
 	Streamtags                []types.String                             `tfsdk:"streamtags"`
-	TLS                       *InputTLSSettingsClientSideMsk             `tfsdk:"tls"`
+	TLS                       *InputMskTLSSettingsClientSide             `tfsdk:"tls"`
 	Topics                    []types.String                             `tfsdk:"topics"`
 	Type                      types.String                               `tfsdk:"type"`
 }

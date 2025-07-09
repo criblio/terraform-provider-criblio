@@ -21,7 +21,7 @@ type InputGrafanaGrafana1 struct {
 	IPDenylistRegex       types.String                        `tfsdk:"ip_denylist_regex"`
 	KeepAliveTimeout      types.Float64                       `tfsdk:"keep_alive_timeout"`
 	LokiAPI               types.String                        `tfsdk:"loki_api"`
-	LokiAuth              *InputLokiAuth1                     `tfsdk:"loki_auth"`
+	LokiAuth              *InputGrafanaLokiAuth1              `tfsdk:"loki_auth"`
 	MaxActiveReq          types.Float64                       `tfsdk:"max_active_req"`
 	MaxRequestsPerSocket  types.Int64                         `tfsdk:"max_requests_per_socket"`
 	Metadata              []InputGrafanaMetadatum1            `tfsdk:"metadata"`
@@ -30,11 +30,10 @@ type InputGrafanaGrafana1 struct {
 	Pq                    *InputGrafanaPq1                    `tfsdk:"pq"`
 	PqEnabled             types.Bool                          `tfsdk:"pq_enabled"`
 	PrometheusAPI         types.String                        `tfsdk:"prometheus_api"`
-	PrometheusAuth        *InputPrometheusAuth1               `tfsdk:"prometheus_auth"`
+	PrometheusAuth        *InputGrafanaPrometheusAuth1        `tfsdk:"prometheus_auth"`
 	RequestTimeout        types.Float64                       `tfsdk:"request_timeout"`
 	SendToRoutes          types.Bool                          `tfsdk:"send_to_routes"`
 	SocketTimeout         types.Float64                       `tfsdk:"socket_timeout"`
-	Status                *TFStatus                           `tfsdk:"status"`
 	Streamtags            []types.String                      `tfsdk:"streamtags"`
 	TLS                   *InputGrafanaTLSSettingsServerSide1 `tfsdk:"tls"`
 	Type                  types.String                        `tfsdk:"type"`

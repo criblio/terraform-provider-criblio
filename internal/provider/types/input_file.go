@@ -31,7 +31,6 @@ type InputFile struct {
 	PqEnabled                   types.Bool            `tfsdk:"pq_enabled"`
 	SendToRoutes                types.Bool            `tfsdk:"send_to_routes"`
 	StaleChannelFlushMs         types.Float64         `tfsdk:"stale_channel_flush_ms"`
-	Status                      *TFStatus             `tfsdk:"status"`
 	Streamtags                  []types.String        `tfsdk:"streamtags"`
 	SuppressMissingPathErrors   types.Bool            `tfsdk:"suppress_missing_path_errors"`
 	TailOnly                    types.Bool            `tfsdk:"tail_only"`

@@ -15,7 +15,6 @@ type OutputDiskSpool struct {
 	MaxDataTime   types.String   `tfsdk:"max_data_time"`
 	PartitionExpr types.String   `tfsdk:"partition_expr"`
 	Pipeline      types.String   `tfsdk:"pipeline"`
-	Status        *TFStatus      `tfsdk:"status"`
 	Streamtags    []types.String `tfsdk:"streamtags"`
 	SystemFields  []types.String `tfsdk:"system_fields"`
 	TimeWindow    types.String   `tfsdk:"time_window"`

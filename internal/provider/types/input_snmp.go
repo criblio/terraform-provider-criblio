@@ -7,7 +7,8 @@ import (
 )
 
 type InputSnmp struct {
-	Connections        []ConnectionSnmp      `tfsdk:"connections"`
+	BestEffortParsing  types.Bool            `tfsdk:"best_effort_parsing"`
+	Connections        []InputSnmpConnection `tfsdk:"connections"`
 	Description        types.String          `tfsdk:"description"`
 	Disabled           types.Bool            `tfsdk:"disabled"`
 	Environment        types.String          `tfsdk:"environment"`
@@ -15,14 +16,13 @@ type InputSnmp struct {
 	ID                 types.String          `tfsdk:"id"`
 	IPWhitelistRegex   types.String          `tfsdk:"ip_whitelist_regex"`
 	MaxBufferSize      types.Float64         `tfsdk:"max_buffer_size"`
-	Metadata           []MetadatumSnmp       `tfsdk:"metadata"`
+	Metadata           []InputSnmpMetadatum  `tfsdk:"metadata"`
 	Pipeline           types.String          `tfsdk:"pipeline"`
 	Port               types.Float64         `tfsdk:"port"`
-	Pq                 *PqSnmp               `tfsdk:"pq"`
+	Pq                 *InputSnmpPq          `tfsdk:"pq"`
 	PqEnabled          types.Bool            `tfsdk:"pq_enabled"`
 	SendToRoutes       types.Bool            `tfsdk:"send_to_routes"`
 	SnmpV3Auth         *SNMPv3Authentication `tfsdk:"snmp_v3_auth"`
-	Status             *TFStatus             `tfsdk:"status"`
 	Streamtags         []types.String        `tfsdk:"streamtags"`
 	Type               types.String          `tfsdk:"type"`
 	UDPSocketRxBufSize types.Float64         `tfsdk:"udp_socket_rx_buf_size"`

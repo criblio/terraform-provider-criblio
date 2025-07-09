@@ -7,22 +7,21 @@ import (
 )
 
 type InputModelDrivenTelemetry struct {
-	Connections       []ConnectionModelDrivenTelemetry           `tfsdk:"connections"`
-	Description       types.String                               `tfsdk:"description"`
-	Disabled          types.Bool                                 `tfsdk:"disabled"`
-	Environment       types.String                               `tfsdk:"environment"`
-	Host              types.String                               `tfsdk:"host"`
-	ID                types.String                               `tfsdk:"id"`
-	MaxActiveCxn      types.Float64                              `tfsdk:"max_active_cxn"`
-	Metadata          []MetadatumModelDrivenTelemetry            `tfsdk:"metadata"`
-	Pipeline          types.String                               `tfsdk:"pipeline"`
-	Port              types.Float64                              `tfsdk:"port"`
-	Pq                *PqModelDrivenTelemetry                    `tfsdk:"pq"`
-	PqEnabled         types.Bool                                 `tfsdk:"pq_enabled"`
-	SendToRoutes      types.Bool                                 `tfsdk:"send_to_routes"`
-	ShutdownTimeoutMs types.Float64                              `tfsdk:"shutdown_timeout_ms"`
-	Status            *TFStatus                                  `tfsdk:"status"`
-	Streamtags        []types.String                             `tfsdk:"streamtags"`
-	TLS               *TLSSettingsServerSideModelDrivenTelemetry `tfsdk:"tls"`
-	Type              types.String                               `tfsdk:"type"`
+	Connections       []InputModelDrivenTelemetryConnection           `tfsdk:"connections"`
+	Description       types.String                                    `tfsdk:"description"`
+	Disabled          types.Bool                                      `tfsdk:"disabled"`
+	Environment       types.String                                    `tfsdk:"environment"`
+	Host              types.String                                    `tfsdk:"host"`
+	ID                types.String                                    `tfsdk:"id"`
+	MaxActiveCxn      types.Float64                                   `tfsdk:"max_active_cxn"`
+	Metadata          []InputModelDrivenTelemetryMetadatum            `tfsdk:"metadata"`
+	Pipeline          types.String                                    `tfsdk:"pipeline"`
+	Port              types.Float64                                   `tfsdk:"port"`
+	Pq                *InputModelDrivenTelemetryPq                    `tfsdk:"pq"`
+	PqEnabled         types.Bool                                      `tfsdk:"pq_enabled"`
+	SendToRoutes      types.Bool                                      `tfsdk:"send_to_routes"`
+	ShutdownTimeoutMs types.Float64                                   `tfsdk:"shutdown_timeout_ms"`
+	Streamtags        []types.String                                  `tfsdk:"streamtags"`
+	TLS               *InputModelDrivenTelemetryTLSSettingsServerSide `tfsdk:"tls"`
+	Type              types.String                                    `tfsdk:"type"`
 }

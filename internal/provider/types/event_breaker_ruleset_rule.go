@@ -9,7 +9,6 @@ import (
 type EventBreakerRulesetRule struct {
 	Condition            types.String                       `tfsdk:"condition"`
 	Disabled             types.Bool                         `tfsdk:"disabled"`
-	EventBreakerRegex    types.String                       `tfsdk:"event_breaker_regex"`
 	Fields               []Field                            `tfsdk:"fields"`
 	MaxEventBytes        types.Float64                      `tfsdk:"max_event_bytes"`
 	Name                 types.String                       `tfsdk:"name"`

@@ -55,7 +55,6 @@ type OutputMinio struct {
 	ShouldLogInvalidRows    types.Bool                     `tfsdk:"should_log_invalid_rows"`
 	SignatureVersion        types.String                   `tfsdk:"signature_version"`
 	StagePath               types.String                   `tfsdk:"stage_path"`
-	Status                  *TFStatus                      `tfsdk:"status"`
 	StorageClass            types.String                   `tfsdk:"storage_class"`
 	Streamtags              []types.String                 `tfsdk:"streamtags"`
 	SystemFields            []types.String                 `tfsdk:"system_fields"`
