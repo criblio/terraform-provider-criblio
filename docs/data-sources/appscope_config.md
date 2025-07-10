@@ -192,7 +192,7 @@ Read-Only:
 - `allowbinary` (Boolean)
 - `enabled` (Boolean)
 - `field` (String)
-- `headers` (String)
+- `headers` (List of String)
 - `name` (String)
 - `type` (String)
 - `value` (String)
@@ -250,7 +250,7 @@ Read-Only:
 - `enable` (Boolean)
 - `format` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--format))
 - `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--transport))
-- `watch` (List of String)
+- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--metric--watch))
 
 <a id="nestedatt--config--custom--config--metric--format"></a>
 ### Nested Schema for `config.custom.config.metric.format`
@@ -284,6 +284,10 @@ Read-Only:
 - `enable` (Boolean)
 - `validateserver` (Boolean)
 
+
+
+<a id="nestedatt--config--custom--config--metric--watch"></a>
+### Nested Schema for `config.custom.config.metric.watch`
 
 
 
@@ -371,7 +375,7 @@ Read-Only:
 - `allowbinary` (Boolean)
 - `enabled` (Boolean)
 - `field` (String)
-- `headers` (String)
+- `headers` (List of String)
 - `name` (String)
 - `type` (String)
 - `value` (String)
@@ -429,7 +433,7 @@ Read-Only:
 - `enable` (Boolean)
 - `format` (Attributes) (see [below for nested schema](#nestedatt--config--metric--format))
 - `transport` (Attributes) (see [below for nested schema](#nestedatt--config--metric--transport))
-- `watch` (List of String)
+- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--metric--watch))
 
 <a id="nestedatt--config--metric--format"></a>
 ### Nested Schema for `config.metric.format`
@@ -463,6 +467,10 @@ Read-Only:
 - `enable` (Boolean)
 - `validateserver` (Boolean)
 
+
+
+<a id="nestedatt--config--metric--watch"></a>
+### Nested Schema for `config.metric.watch`
 
 
 

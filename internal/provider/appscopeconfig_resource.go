@@ -335,9 +335,10 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 																Computed: true,
 																Optional: true,
 															},
-															"headers": schema.StringAttribute{
-																Computed: true,
-																Optional: true,
+															"headers": schema.ListAttribute{
+																Computed:    true,
+																Optional:    true,
+																ElementType: types.StringType,
 															},
 															"name": schema.StringAttribute{
 																Computed: true,
@@ -546,10 +547,15 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 														speakeasy_objectvalidators.NotNull(),
 													},
 												},
-												"watch": schema.ListAttribute{
-													Computed:    true,
-													Optional:    true,
-													ElementType: types.StringType,
+												"watch": schema.ListNestedAttribute{
+													Computed: true,
+													Optional: true,
+													NestedObject: schema.NestedAttributeObject{
+														Validators: []validator.Object{
+															speakeasy_objectvalidators.NotNull(),
+														},
+														Attributes: map[string]schema.Attribute{},
+													},
 													Description: `Not Null`,
 													Validators: []validator.List{
 														speakeasy_listvalidators.NotNull(),
@@ -812,9 +818,10 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 											Computed: true,
 											Optional: true,
 										},
-										"headers": schema.StringAttribute{
-											Computed: true,
-											Optional: true,
+										"headers": schema.ListAttribute{
+											Computed:    true,
+											Optional:    true,
+											ElementType: types.StringType,
 										},
 										"name": schema.StringAttribute{
 											Computed: true,
@@ -1023,10 +1030,15 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 									speakeasy_objectvalidators.NotNull(),
 								},
 							},
-							"watch": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
+							"watch": schema.ListNestedAttribute{
+								Computed: true,
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
+									Attributes: map[string]schema.Attribute{},
+								},
 								Description: `Not Null`,
 								Validators: []validator.List{
 									speakeasy_listvalidators.NotNull(),

@@ -28,6 +28,7 @@ data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 ### Read-Only
 
 - `description` (String)
+- `event_breaker_regex` (String) The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction.
 - `id` (String) The ID of this resource.
 - `lib` (String)
 - `min_raw_length` (Number) The  minimum number of characters in _raw to determine which rule to use

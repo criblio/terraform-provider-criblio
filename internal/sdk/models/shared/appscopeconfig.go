@@ -84,59 +84,59 @@ func (e *AppscopeConfigType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type AppscopeConfigWatch struct {
-	Allowbinary *bool   `json:"allowbinary,omitempty"`
-	Enabled     *bool   `json:"enabled,omitempty"`
-	Field       *string `json:"field,omitempty"`
-	Headers     *string `json:"headers,omitempty"`
-	Name        *string `json:"name,omitempty"`
-	Type        string  `json:"type"`
-	Value       *string `json:"value,omitempty"`
+type AppscopeConfigWatchNdjson struct {
+	Allowbinary *bool    `json:"allowbinary,omitempty"`
+	Enabled     *bool    `json:"enabled,omitempty"`
+	Field       *string  `json:"field,omitempty"`
+	Headers     []string `json:"headers,omitempty"`
+	Name        *string  `json:"name,omitempty"`
+	Type        string   `json:"type"`
+	Value       *string  `json:"value,omitempty"`
 }
 
-func (o *AppscopeConfigWatch) GetAllowbinary() *bool {
+func (o *AppscopeConfigWatchNdjson) GetAllowbinary() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Allowbinary
 }
 
-func (o *AppscopeConfigWatch) GetEnabled() *bool {
+func (o *AppscopeConfigWatchNdjson) GetEnabled() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Enabled
 }
 
-func (o *AppscopeConfigWatch) GetField() *string {
+func (o *AppscopeConfigWatchNdjson) GetField() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Field
 }
 
-func (o *AppscopeConfigWatch) GetHeaders() *string {
+func (o *AppscopeConfigWatchNdjson) GetHeaders() []string {
 	if o == nil {
 		return nil
 	}
 	return o.Headers
 }
 
-func (o *AppscopeConfigWatch) GetName() *string {
+func (o *AppscopeConfigWatchNdjson) GetName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Name
 }
 
-func (o *AppscopeConfigWatch) GetType() string {
+func (o *AppscopeConfigWatchNdjson) GetType() string {
 	if o == nil {
 		return ""
 	}
 	return o.Type
 }
 
-func (o *AppscopeConfigWatch) GetValue() *string {
+func (o *AppscopeConfigWatchNdjson) GetValue() *string {
 	if o == nil {
 		return nil
 	}
@@ -144,11 +144,11 @@ func (o *AppscopeConfigWatch) GetValue() *string {
 }
 
 type AppscopeConfigEvent struct {
-	Enable    bool                       `json:"enable"`
-	Format    AppscopeConfigFormatNdjson `json:"format"`
-	Transport AppscopeTransport          `json:"transport"`
-	Type      AppscopeConfigType         `json:"type"`
-	Watch     []AppscopeConfigWatch      `json:"watch"`
+	Enable    bool                        `json:"enable"`
+	Format    AppscopeConfigFormatNdjson  `json:"format"`
+	Transport AppscopeTransport           `json:"transport"`
+	Type      AppscopeConfigType          `json:"type"`
+	Watch     []AppscopeConfigWatchNdjson `json:"watch"`
 }
 
 func (o *AppscopeConfigEvent) GetEnable() bool {
@@ -179,9 +179,9 @@ func (o *AppscopeConfigEvent) GetType() AppscopeConfigType {
 	return o.Type
 }
 
-func (o *AppscopeConfigEvent) GetWatch() []AppscopeConfigWatch {
+func (o *AppscopeConfigEvent) GetWatch() []AppscopeConfigWatchNdjson {
 	if o == nil {
-		return []AppscopeConfigWatch{}
+		return []AppscopeConfigWatchNdjson{}
 	}
 	return o.Watch
 }
@@ -310,11 +310,14 @@ func (o *AppscopeConfigMetricFormat) GetVerbosity() *float64 {
 	return o.Verbosity
 }
 
+type AppscopeConfigMetricWatch struct {
+}
+
 type AppscopeConfigMetric struct {
-	Enable    bool                       `json:"enable"`
-	Format    AppscopeConfigMetricFormat `json:"format"`
-	Transport AppscopeTransport          `json:"transport"`
-	Watch     []string                   `json:"watch"`
+	Enable    bool                        `json:"enable"`
+	Format    AppscopeConfigMetricFormat  `json:"format"`
+	Transport AppscopeTransport           `json:"transport"`
+	Watch     []AppscopeConfigMetricWatch `json:"watch"`
 }
 
 func (o *AppscopeConfigMetric) GetEnable() bool {
@@ -338,9 +341,9 @@ func (o *AppscopeConfigMetric) GetTransport() AppscopeTransport {
 	return o.Transport
 }
 
-func (o *AppscopeConfigMetric) GetWatch() []string {
+func (o *AppscopeConfigMetric) GetWatch() []AppscopeConfigMetricWatch {
 	if o == nil {
-		return []string{}
+		return []AppscopeConfigMetricWatch{}
 	}
 	return o.Watch
 }

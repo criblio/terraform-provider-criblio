@@ -78,10 +78,12 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
                 allowbinary = true
                 enabled     = true
                 field       = "...my_field..."
-                headers     = "...my_headers..."
-                name        = "...my_name..."
-                type        = "...my_type..."
-                value       = "...my_value..."
+                headers = [
+                  "..."
+                ]
+                name  = "...my_name..."
+                type  = "...my_type..."
+                value = "...my_value..."
               }
             ]
           }
@@ -126,7 +128,9 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
               type = "...my_type..."
             }
             watch = [
-              "..."
+              {
+                # ...
+              }
             ]
           }
           payload = {
@@ -180,10 +184,12 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
           allowbinary = true
           enabled     = true
           field       = "...my_field..."
-          headers     = "...my_headers..."
-          name        = "...my_name..."
-          type        = "...my_type..."
-          value       = "...my_value..."
+          headers = [
+            "..."
+          ]
+          name  = "...my_name..."
+          type  = "...my_type..."
+          value = "...my_value..."
         }
       ]
     }
@@ -228,7 +234,9 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
         type = "...my_type..."
       }
       watch = [
-        "..."
+        {
+          # ...
+        }
       ]
     }
     payload = {
@@ -434,7 +442,7 @@ Optional:
 - `allowbinary` (Boolean)
 - `enabled` (Boolean)
 - `field` (String)
-- `headers` (String)
+- `headers` (List of String)
 - `name` (String)
 - `type` (String) Not Null
 - `value` (String)
@@ -492,7 +500,7 @@ Optional:
 - `enable` (Boolean) Not Null
 - `format` (Attributes) Not Null (see [below for nested schema](#nestedatt--config--custom--config--metric--format))
 - `transport` (Attributes) Not Null (see [below for nested schema](#nestedatt--config--custom--config--metric--transport))
-- `watch` (List of String) Not Null
+- `watch` (Attributes List) Not Null (see [below for nested schema](#nestedatt--config--custom--config--metric--watch))
 
 <a id="nestedatt--config--custom--config--metric--format"></a>
 ### Nested Schema for `config.custom.config.metric.format`
@@ -526,6 +534,10 @@ Optional:
 - `enable` (Boolean)
 - `validateserver` (Boolean)
 
+
+
+<a id="nestedatt--config--custom--config--metric--watch"></a>
+### Nested Schema for `config.custom.config.metric.watch`
 
 
 
@@ -613,7 +625,7 @@ Optional:
 - `allowbinary` (Boolean)
 - `enabled` (Boolean)
 - `field` (String)
-- `headers` (String)
+- `headers` (List of String)
 - `name` (String)
 - `type` (String) Not Null
 - `value` (String)
@@ -671,7 +683,7 @@ Optional:
 - `enable` (Boolean) Not Null
 - `format` (Attributes) Not Null (see [below for nested schema](#nestedatt--config--metric--format))
 - `transport` (Attributes) Not Null (see [below for nested schema](#nestedatt--config--metric--transport))
-- `watch` (List of String) Not Null
+- `watch` (Attributes List) Not Null (see [below for nested schema](#nestedatt--config--metric--watch))
 
 <a id="nestedatt--config--metric--format"></a>
 ### Nested Schema for `config.metric.format`
@@ -705,6 +717,10 @@ Optional:
 - `enable` (Boolean)
 - `validateserver` (Boolean)
 
+
+
+<a id="nestedatt--config--metric--watch"></a>
+### Nested Schema for `config.metric.watch`
 
 
 

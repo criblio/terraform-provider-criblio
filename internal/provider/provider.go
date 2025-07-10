@@ -170,6 +170,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewAppscopeConfigResource,
 		NewCommitResource,
 		NewDatabaseConnectionResource,
+		NewDeployResource,
 		NewDestinationResource,
 		NewEventBreakerRulesetResource,
 		NewGlobalVarResource,

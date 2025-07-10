@@ -299,6 +299,8 @@ type EventBreakerRuleset struct {
 	Lib         *Library `default:"custom" json:"lib"`
 	Description *string  `json:"description,omitempty"`
 	Tags        *string  `json:"tags,omitempty"`
+	// The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction.
+	EventBreakerRegex *string `default:"/[\\\\n\\\\r]+(?!\\\\s)/" json:"eventBreakerRegex"`
 	// The  minimum number of characters in _raw to determine which rule to use
 	MinRawLength *float64 `default:"256" json:"minRawLength"`
 	// A list of rules that will be applied, in order, to the input data stream
@@ -342,6 +344,13 @@ func (o *EventBreakerRuleset) GetTags() *string {
 		return nil
 	}
 	return o.Tags
+}
+
+func (o *EventBreakerRuleset) GetEventBreakerRegex() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventBreakerRegex
 }
 
 func (o *EventBreakerRuleset) GetMinRawLength() *float64 {

@@ -26,6 +26,7 @@ resource "criblio_pack" "my_pack" {
   group_id               = "...my_group_id..."
   id                     = "...my_id..."
   inputs                 = 8.61
+  is_disabled            = false
   min_log_stream_version = "...my_min_log_stream_version..."
   outputs                = 6.97
   source                 = "...my_source..."
@@ -55,7 +56,6 @@ resource "criblio_pack" "my_pack" {
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Pack name
-- `source` (String) body string required Pack source
 
 ### Optional
 
@@ -67,8 +67,10 @@ resource "criblio_pack" "my_pack" {
 - `filename` (String) the file to upload. Requires replacement if changed.
 - `force` (Boolean) Requires replacement if changed.
 - `inputs` (Number) Requires replacement if changed.
+- `is_disabled` (Boolean) Requires replacement if changed.
 - `min_log_stream_version` (String) Requires replacement if changed.
 - `outputs` (Number) Requires replacement if changed.
+- `source` (String) body string required Pack source
 - `spec` (String) body string optional Specify a branch, tag or a semver spec
 - `tags` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--tags))
 - `version` (String) Requires replacement if changed.

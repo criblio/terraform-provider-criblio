@@ -38,13 +38,14 @@ type EventBreakerRulesetResource struct {
 
 // EventBreakerRulesetResourceModel describes the resource data model.
 type EventBreakerRulesetResourceModel struct {
-	Description  types.String                      `tfsdk:"description"`
-	GroupID      types.String                      `tfsdk:"group_id"`
-	ID           types.String                      `tfsdk:"id"`
-	Lib          types.String                      `tfsdk:"lib"`
-	MinRawLength types.Float64                     `tfsdk:"min_raw_length"`
-	Rules        []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
-	Tags         types.String                      `tfsdk:"tags"`
+	Description       types.String                      `tfsdk:"description"`
+	EventBreakerRegex types.String                      `tfsdk:"event_breaker_regex"`
+	GroupID           types.String                      `tfsdk:"group_id"`
+	ID                types.String                      `tfsdk:"id"`
+	Lib               types.String                      `tfsdk:"lib"`
+	MinRawLength      types.Float64                     `tfsdk:"min_raw_length"`
+	Rules             []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
+	Tags              types.String                      `tfsdk:"tags"`
 }
 
 func (r *EventBreakerRulesetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -58,6 +59,12 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+			},
+			"event_breaker_regex": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(`/[\\n\\r]+(?!\\s)/`),
+				Description: `The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,

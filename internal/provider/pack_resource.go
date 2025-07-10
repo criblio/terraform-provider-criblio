@@ -48,6 +48,7 @@ type PackResourceModel struct {
 	GroupID              types.String                 `tfsdk:"group_id"`
 	ID                   types.String                 `tfsdk:"id"`
 	Inputs               types.Float64                `tfsdk:"inputs"`
+	IsDisabled           types.Bool                   `tfsdk:"is_disabled"`
 	Items                []tfTypes.PackInfo           `tfsdk:"items"`
 	MinLogStreamVersion  types.String                 `tfsdk:"min_log_stream_version"`
 	Outputs              types.Float64                `tfsdk:"outputs"`
@@ -127,6 +128,13 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional: true,
 				PlanModifiers: []planmodifier.Float64{
 					float64planmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
+			},
+			"is_disabled": schema.BoolAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
 			},
@@ -224,7 +232,7 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Description: `Requires replacement if changed.`,
 			},
 			"source": schema.StringAttribute{
-				Required:    true,
+				Optional:    true,
 				Description: `body string required Pack source`,
 			},
 			"spec": schema.StringAttribute{

@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 9c9ab83104ed45875c523544fb09945f
+  docChecksum: bb65a29cc4bd6c145c103b4977d9b83f
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.580.0
-  generationVersion: 2.654.2
+  speakeasyVersion: 1.580.1
+  generationVersion: 2.656.3
   releaseVersion: 1.0.45
   configChecksum: 8e92e4c67a6b143f5badf122e57b9a54
   published: true
@@ -53,6 +53,7 @@ generatedFiles:
   - examples/resources/criblio_commit/resource.tf
   - examples/resources/criblio_database_connection/import.sh
   - examples/resources/criblio_database_connection/resource.tf
+  - examples/resources/criblio_deploy/resource.tf
   - examples/resources/criblio_destination/import.sh
   - examples/resources/criblio_destination/resource.tf
   - examples/resources/criblio_event_breaker_ruleset/import.sh
@@ -113,6 +114,8 @@ generatedFiles:
   - internal/provider/databaseconnection_data_source_sdk.go
   - internal/provider/databaseconnection_resource.go
   - internal/provider/databaseconnection_resource_sdk.go
+  - internal/provider/deploy_resource.go
+  - internal/provider/deploy_resource_sdk.go
   - internal/provider/destination_data_source.go
   - internal/provider/destination_data_source_sdk.go
   - internal/provider/destination_resource.go
@@ -209,10 +212,11 @@ generatedFiles:
   - internal/provider/types/appscope_config_log.go
   - internal/provider/types/appscope_config_metric.go
   - internal/provider/types/appscope_config_metric_format.go
+  - internal/provider/types/appscope_config_metric_watch.go
   - internal/provider/types/appscope_config_payload.go
   - internal/provider/types/appscope_config_protocol.go
   - internal/provider/types/appscope_config_tag.go
-  - internal/provider/types/appscope_config_watch.go
+  - internal/provider/types/appscope_config_watch_ndjson.go
   - internal/provider/types/appscope_config_with_custom.go
   - internal/provider/types/appscope_config_with_custom_cribl.go
   - internal/provider/types/appscope_config_with_custom_event.go
@@ -221,10 +225,11 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_log.go
   - internal/provider/types/appscope_config_with_custom_metric.go
   - internal/provider/types/appscope_config_with_custom_metric_format.go
+  - internal/provider/types/appscope_config_with_custom_metric_watch.go
   - internal/provider/types/appscope_config_with_custom_payload.go
   - internal/provider/types/appscope_config_with_custom_protocol.go
   - internal/provider/types/appscope_config_with_custom_tag.go
-  - internal/provider/types/appscope_config_with_custom_watch.go
+  - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
   - internal/provider/types/appscope_custom.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
@@ -232,6 +237,7 @@ generatedFiles:
   - internal/provider/types/cert_options.go
   - internal/provider/types/collectors.go
   - internal/provider/types/commit.go
+  - internal/provider/types/config_group.go
   - internal/provider/types/config_group_cloud.go
   - internal/provider/types/config_group_git.go
   - internal/provider/types/config_group_lookups.go
@@ -1411,6 +1417,7 @@ generatedFiles:
   - internal/sdk/models/operations/updateglobalvariablebyid.go
   - internal/sdk/models/operations/updateglobalvariablelibvarsbypackandid.go
   - internal/sdk/models/operations/updategrokfilebyid.go
+  - internal/sdk/models/operations/updategroupsdeploybyid.go
   - internal/sdk/models/operations/updatehmacfunctionbyid.go
   - internal/sdk/models/operations/updateinputbyid.go
   - internal/sdk/models/operations/updateinputhectokenbyidandtoken.go
@@ -1539,6 +1546,7 @@ generatedFiles:
   - internal/sdk/models/shared/datatypeoverrides.go
   - internal/sdk/models/shared/datatypepreviewinput.go
   - internal/sdk/models/shared/datatypepreviewrequestbody.go
+  - internal/sdk/models/shared/deployrequest.go
   - internal/sdk/models/shared/diag.go
   - internal/sdk/models/shared/distributedsummary.go
   - internal/sdk/models/shared/distributedupgraderequest.go
@@ -4614,7 +4622,7 @@ examples:
         path:
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
+        application/json: {"id": "<id>", "lib": "custom", "eventBreakerRegex": "/[\\\\n\\\\r]+(?!\\\\s)/", "minRawLength": 256}
       responses:
         "200":
           application/json: {}
@@ -4638,7 +4646,7 @@ examples:
           id: "<id>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
+        application/json: {"id": "<id>", "lib": "custom", "eventBreakerRegex": "/[\\\\n\\\\r]+(?!\\\\s)/", "minRawLength": 256}
       responses:
         "200":
           application/json: {}
@@ -6172,7 +6180,7 @@ examples:
           groupId: "<id>"
         query: {}
       requestBody:
-        application/json: {"id": "<id>", "source": "<value>"}
+        application/json: {"id": "<id>"}
       responses:
         "200":
           application/json: {}

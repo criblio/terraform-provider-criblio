@@ -63,10 +63,12 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
                 allowbinary = true
                 enabled     = true
                 field       = "...my_field..."
-                headers     = "...my_headers..."
-                name        = "...my_name..."
-                type        = "...my_type..."
-                value       = "...my_value..."
+                headers = [
+                  "..."
+                ]
+                name  = "...my_name..."
+                type  = "...my_type..."
+                value = "...my_value..."
               }
             ]
           }
@@ -111,7 +113,9 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
               type = "...my_type..."
             }
             watch = [
-              "..."
+              {
+                # ...
+              }
             ]
           }
           payload = {
@@ -165,10 +169,12 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
           allowbinary = true
           enabled     = true
           field       = "...my_field..."
-          headers     = "...my_headers..."
-          name        = "...my_name..."
-          type        = "...my_type..."
-          value       = "...my_value..."
+          headers = [
+            "..."
+          ]
+          name  = "...my_name..."
+          type  = "...my_type..."
+          value = "...my_value..."
         }
       ]
     }
@@ -213,7 +219,9 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
         type = "...my_type..."
       }
       watch = [
-        "..."
+        {
+          # ...
+        }
       ]
     }
     payload = {

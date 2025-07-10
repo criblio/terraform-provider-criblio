@@ -110,7 +110,7 @@ const appConfig = `resource "criblio_appscope_config" "my_appscopeconfig" {
           name    = ".*"
           field   = ".*"
           value   = ".*"
-          headers = ["host","user-agent","x-forwarded-for","x-appscope"]
+          headers = [ "host","user-agent","x-forwarded-for","x-appscope"]
         },
         {
           type    = "metric"

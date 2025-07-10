@@ -46,7 +46,6 @@ resource "criblio_pack" "my_pack" {
   display_name = "Pack from file"
   filename       = "cribl-palo-alto-networks-source-1.0.0.crbl"
   version      = "1.0.0"
-
 }
 
 # Output the pack details to see the read-only attributes

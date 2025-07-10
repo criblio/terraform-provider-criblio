@@ -238,7 +238,7 @@ This project is licensed under the terms of the license included in the reposito
 <!-- Start Summary [summary] -->
 ## Summary
 
-
+Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -268,7 +268,7 @@ terraform {
   required_providers {
     criblio = {
       source  = "speakeasy/criblio"
-      version = "1.0.41"
+      version = "1.0.45"
     }
   }
 }

@@ -28,13 +28,14 @@ type EventBreakerRulesetDataSource struct {
 
 // EventBreakerRulesetDataSourceModel describes the data model.
 type EventBreakerRulesetDataSourceModel struct {
-	Description  types.String                      `tfsdk:"description"`
-	GroupID      types.String                      `tfsdk:"group_id"`
-	ID           types.String                      `tfsdk:"id"`
-	Lib          types.String                      `tfsdk:"lib"`
-	MinRawLength types.Float64                     `tfsdk:"min_raw_length"`
-	Rules        []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
-	Tags         types.String                      `tfsdk:"tags"`
+	Description       types.String                      `tfsdk:"description"`
+	EventBreakerRegex types.String                      `tfsdk:"event_breaker_regex"`
+	GroupID           types.String                      `tfsdk:"group_id"`
+	ID                types.String                      `tfsdk:"id"`
+	Lib               types.String                      `tfsdk:"lib"`
+	MinRawLength      types.Float64                     `tfsdk:"min_raw_length"`
+	Rules             []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
+	Tags              types.String                      `tfsdk:"tags"`
 }
 
 // Metadata returns the data source type name.
@@ -50,6 +51,10 @@ func (r *EventBreakerRulesetDataSource) Schema(ctx context.Context, req datasour
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
 				Computed: true,
+			},
+			"event_breaker_regex": schema.StringAttribute{
+				Computed:    true,
+				Description: `The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,

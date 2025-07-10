@@ -45,10 +45,11 @@ type PackRequestBody struct {
 	Exports              []string             `json:"exports,omitempty"`
 	Force                *bool                `json:"force,omitempty"`
 	ID                   string               `json:"id"`
+	IsDisabled           *bool                `json:"isDisabled,omitempty"`
 	Inputs               *float64             `json:"inputs,omitempty"`
 	MinLogStreamVersion  *string              `json:"minLogStreamVersion,omitempty"`
 	Outputs              *float64             `json:"outputs,omitempty"`
-	Source               string               `json:"source"`
+	Source               *string              `json:"source,omitempty"`
 	Spec                 *string              `json:"spec,omitempty"`
 	Tags                 *PackRequestBodyTags `json:"tags,omitempty"`
 	Version              *string              `json:"version,omitempty"`
@@ -103,6 +104,13 @@ func (o *PackRequestBody) GetID() string {
 	return o.ID
 }
 
+func (o *PackRequestBody) GetIsDisabled() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IsDisabled
+}
+
 func (o *PackRequestBody) GetInputs() *float64 {
 	if o == nil {
 		return nil
@@ -124,9 +132,9 @@ func (o *PackRequestBody) GetOutputs() *float64 {
 	return o.Outputs
 }
 
-func (o *PackRequestBody) GetSource() string {
+func (o *PackRequestBody) GetSource() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.Source
 }

@@ -52,6 +52,12 @@ func (r *PackResourceModel) ToSharedPackRequestBody(ctx context.Context) (*share
 	var id string
 	id = r.ID.ValueString()
 
+	isDisabled := new(bool)
+	if !r.IsDisabled.IsUnknown() && !r.IsDisabled.IsNull() {
+		*isDisabled = r.IsDisabled.ValueBool()
+	} else {
+		isDisabled = nil
+	}
 	inputs := new(float64)
 	if !r.Inputs.IsUnknown() && !r.Inputs.IsNull() {
 		*inputs = r.Inputs.ValueFloat64()
@@ -70,9 +76,12 @@ func (r *PackResourceModel) ToSharedPackRequestBody(ctx context.Context) (*share
 	} else {
 		outputs = nil
 	}
-	var source string
-	source = r.Source.ValueString()
-
+	source := new(string)
+	if !r.Source.IsUnknown() && !r.Source.IsNull() {
+		*source = r.Source.ValueString()
+	} else {
+		source = nil
+	}
 	spec := new(string)
 	if !r.Spec.IsUnknown() && !r.Spec.IsNull() {
 		*spec = r.Spec.ValueString()
@@ -118,6 +127,7 @@ func (r *PackResourceModel) ToSharedPackRequestBody(ctx context.Context) (*share
 		Exports:              exports,
 		Force:                force,
 		ID:                   id,
+		IsDisabled:           isDisabled,
 		Inputs:               inputs,
 		MinLogStreamVersion:  minLogStreamVersion,
 		Outputs:              outputs,
@@ -248,7 +258,7 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 					items.Settings[key] = types.StringValue(string(result))
 				}
 			}
-			items.Source = types.StringValue(itemsItem.Source)
+			items.Source = types.StringPointerValue(itemsItem.Source)
 			items.Spec = types.StringPointerValue(itemsItem.Spec)
 			if itemsItem.Tags == nil {
 				items.Tags = nil
@@ -329,7 +339,7 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksResponseBody(ctx contex
 					items.Settings[key] = types.StringValue(string(result))
 				}
 			}
-			items.Source = types.StringValue(itemsItem.Source)
+			items.Source = types.StringPointerValue(itemsItem.Source)
 			items.Spec = types.StringPointerValue(itemsItem.Spec)
 			if itemsItem.Tags == nil {
 				items.Tags = nil
@@ -408,7 +418,7 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 					items.Settings[key] = types.StringValue(string(result))
 				}
 			}
-			items.Source = types.StringValue(itemsItem.Source)
+			items.Source = types.StringPointerValue(itemsItem.Source)
 			items.Spec = types.StringPointerValue(itemsItem.Spec)
 			if itemsItem.Tags == nil {
 				items.Tags = nil

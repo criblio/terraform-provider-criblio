@@ -48,7 +48,7 @@ type PackInstallInfo struct {
 	MinLogStreamVersion *string              `json:"minLogStreamVersion,omitempty"`
 	Outputs             *float64             `json:"outputs,omitempty"`
 	Settings            map[string]any       `json:"settings,omitempty"`
-	Source              string               `json:"source"`
+	Source              *string              `json:"source,omitempty"`
 	Spec                *string              `json:"spec,omitempty"`
 	Tags                *PackInstallInfoTags `json:"tags,omitempty"`
 	Version             *string              `json:"version,omitempty"`
@@ -125,9 +125,9 @@ func (o *PackInstallInfo) GetSettings() map[string]any {
 	return o.Settings
 }
 
-func (o *PackInstallInfo) GetSource() string {
+func (o *PackInstallInfo) GetSource() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.Source
 }

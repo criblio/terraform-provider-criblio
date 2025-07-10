@@ -11,6 +11,7 @@ resource "criblio_pack" "my_pack" {
   group_id               = "...my_group_id..."
   id                     = "...my_id..."
   inputs                 = 8.61
+  is_disabled            = false
   min_log_stream_version = "...my_min_log_stream_version..."
   outputs                = 6.97
   source                 = "...my_source..."

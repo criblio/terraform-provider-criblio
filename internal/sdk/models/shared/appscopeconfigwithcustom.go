@@ -84,59 +84,59 @@ func (e *AppscopeConfigWithCustomType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type AppscopeConfigWithCustomWatch struct {
-	Allowbinary *bool   `json:"allowbinary,omitempty"`
-	Enabled     *bool   `json:"enabled,omitempty"`
-	Field       *string `json:"field,omitempty"`
-	Headers     *string `json:"headers,omitempty"`
-	Name        *string `json:"name,omitempty"`
-	Type        string  `json:"type"`
-	Value       *string `json:"value,omitempty"`
+type AppscopeConfigWithCustomWatchNdjson struct {
+	Allowbinary *bool    `json:"allowbinary,omitempty"`
+	Enabled     *bool    `json:"enabled,omitempty"`
+	Field       *string  `json:"field,omitempty"`
+	Headers     []string `json:"headers,omitempty"`
+	Name        *string  `json:"name,omitempty"`
+	Type        string   `json:"type"`
+	Value       *string  `json:"value,omitempty"`
 }
 
-func (o *AppscopeConfigWithCustomWatch) GetAllowbinary() *bool {
+func (o *AppscopeConfigWithCustomWatchNdjson) GetAllowbinary() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Allowbinary
 }
 
-func (o *AppscopeConfigWithCustomWatch) GetEnabled() *bool {
+func (o *AppscopeConfigWithCustomWatchNdjson) GetEnabled() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Enabled
 }
 
-func (o *AppscopeConfigWithCustomWatch) GetField() *string {
+func (o *AppscopeConfigWithCustomWatchNdjson) GetField() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Field
 }
 
-func (o *AppscopeConfigWithCustomWatch) GetHeaders() *string {
+func (o *AppscopeConfigWithCustomWatchNdjson) GetHeaders() []string {
 	if o == nil {
 		return nil
 	}
 	return o.Headers
 }
 
-func (o *AppscopeConfigWithCustomWatch) GetName() *string {
+func (o *AppscopeConfigWithCustomWatchNdjson) GetName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Name
 }
 
-func (o *AppscopeConfigWithCustomWatch) GetType() string {
+func (o *AppscopeConfigWithCustomWatchNdjson) GetType() string {
 	if o == nil {
 		return ""
 	}
 	return o.Type
 }
 
-func (o *AppscopeConfigWithCustomWatch) GetValue() *string {
+func (o *AppscopeConfigWithCustomWatchNdjson) GetValue() *string {
 	if o == nil {
 		return nil
 	}
@@ -144,11 +144,11 @@ func (o *AppscopeConfigWithCustomWatch) GetValue() *string {
 }
 
 type AppscopeConfigWithCustomEvent struct {
-	Enable    bool                                 `json:"enable"`
-	Format    AppscopeConfigWithCustomFormatNdjson `json:"format"`
-	Transport AppscopeTransport                    `json:"transport"`
-	Type      AppscopeConfigWithCustomType         `json:"type"`
-	Watch     []AppscopeConfigWithCustomWatch      `json:"watch"`
+	Enable    bool                                  `json:"enable"`
+	Format    AppscopeConfigWithCustomFormatNdjson  `json:"format"`
+	Transport AppscopeTransport                     `json:"transport"`
+	Type      AppscopeConfigWithCustomType          `json:"type"`
+	Watch     []AppscopeConfigWithCustomWatchNdjson `json:"watch"`
 }
 
 func (o *AppscopeConfigWithCustomEvent) GetEnable() bool {
@@ -179,9 +179,9 @@ func (o *AppscopeConfigWithCustomEvent) GetType() AppscopeConfigWithCustomType {
 	return o.Type
 }
 
-func (o *AppscopeConfigWithCustomEvent) GetWatch() []AppscopeConfigWithCustomWatch {
+func (o *AppscopeConfigWithCustomEvent) GetWatch() []AppscopeConfigWithCustomWatchNdjson {
 	if o == nil {
-		return []AppscopeConfigWithCustomWatch{}
+		return []AppscopeConfigWithCustomWatchNdjson{}
 	}
 	return o.Watch
 }
@@ -310,11 +310,14 @@ func (o *AppscopeConfigWithCustomMetricFormat) GetVerbosity() *float64 {
 	return o.Verbosity
 }
 
+type AppscopeConfigWithCustomMetricWatch struct {
+}
+
 type AppscopeConfigWithCustomMetric struct {
-	Enable    bool                                 `json:"enable"`
-	Format    AppscopeConfigWithCustomMetricFormat `json:"format"`
-	Transport AppscopeTransport                    `json:"transport"`
-	Watch     []string                             `json:"watch"`
+	Enable    bool                                  `json:"enable"`
+	Format    AppscopeConfigWithCustomMetricFormat  `json:"format"`
+	Transport AppscopeTransport                     `json:"transport"`
+	Watch     []AppscopeConfigWithCustomMetricWatch `json:"watch"`
 }
 
 func (o *AppscopeConfigWithCustomMetric) GetEnable() bool {
@@ -338,9 +341,9 @@ func (o *AppscopeConfigWithCustomMetric) GetTransport() AppscopeTransport {
 	return o.Transport
 }
 
-func (o *AppscopeConfigWithCustomMetric) GetWatch() []string {
+func (o *AppscopeConfigWithCustomMetric) GetWatch() []AppscopeConfigWithCustomMetricWatch {
 	if o == nil {
-		return []string{}
+		return []AppscopeConfigWithCustomMetricWatch{}
 	}
 	return o.Watch
 }

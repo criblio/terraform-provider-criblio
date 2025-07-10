@@ -14,11 +14,12 @@ EventBreakerRuleset Resource
 
 ```terraform
 resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-  description    = "...my_description..."
-  group_id       = "...my_group_id..."
-  id             = "...my_id..."
-  lib            = "custom"
-  min_raw_length = 75773.87
+  description         = "...my_description..."
+  event_breaker_regex = "...my_event_breaker_regex..."
+  group_id            = "...my_group_id..."
+  id                  = "...my_id..."
+  lib                 = "custom"
+  min_raw_length      = 75773.87
   rules = [
     {
       condition = "...my_condition..."
@@ -60,6 +61,7 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 ### Optional
 
 - `description` (String)
+- `event_breaker_regex` (String) The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"
 - `lib` (String) Default: "custom"; must be one of ["custom", "cribl-custom"]
 - `min_raw_length` (Number) The  minimum number of characters in _raw to determine which rule to use. Default: 256
 - `rules` (Attributes List) A list of rules that will be applied, in order, to the input data stream (see [below for nested schema](#nestedatt--rules))

@@ -1521,7 +1521,9 @@ components:
                   field:
                     type: string
                   headers:
-                    type: string
+                    type: array
+                    items:
+                      type: string
                   name:
                     type: string
                   type:
@@ -1579,7 +1581,7 @@ components:
             watch:
               type: array
               items:
-                type: string
+                type: object
           required:
             - enable
             - format
@@ -1701,7 +1703,9 @@ components:
                   field:
                     type: string
                   headers:
-                    type: string
+                    type: array
+                    items:
+                      type: string
                   name:
                     type: string
                   type:
@@ -1759,7 +1763,7 @@ components:
             watch:
               type: array
               items:
-                type: string
+                type: object
           required:
             - enable
             - format
@@ -2682,6 +2686,11 @@ components:
         tags:
           type: string
           title: Tags
+        eventBreakerRegex:
+          type: string
+          title: Event breaker regex
+          description: The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction.
+          default: /[\\n\\r]+(?!\\s)/
         minRawLength:
           type: number
           title: Min raw length
@@ -46075,7 +46084,6 @@ components:
           $ref: "#/components/schemas/InstallWarnings"
       required:
         - id
-        - source
         - warnings
     PackRequestBody:
       type: object
@@ -46096,6 +46104,8 @@ components:
           type: boolean
         id:
           type: string
+        isDisabled:
+          type: boolean
         inputs:
           type: number
         minLogStreamVersion:
@@ -46134,7 +46144,6 @@ components:
           type: string
       required:
         - id
-        - source
     PackInfo:
       type: object
       properties:
@@ -46193,7 +46202,6 @@ components:
           type: string
       required:
         - id
-        - source
     PackClone:
       type: object
       properties:
@@ -48608,6 +48616,13 @@ components:
       enum:
         - aws
         - azure
+    DeployRequest:
+      type: object
+      properties:
+        version:
+          type: string
+      required:
+      - version
     ConfigGroupCloud:
       type: object
       properties:
@@ -62807,6 +62822,52 @@ paths:
               - dashboards
               - macros
           description: resource type by which to filter access levels
+  /master/groups/{id}/deploy:
+    patch:
+      operationId: updateGroupsDeployById
+      tags:
+      - groups
+      summary: Deploy commits for a Fleet or Worker Group
+      description: Deploy commits for a Fleet or Worker Group
+      x-speakeasy-entity-operation: Deploy#create
+      responses:
+        '200':
+          description: a list of ConfigGroup objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count_total:
+                    type: integer
+                    description: number of items present in the items array
+                    x-speakeasy-ignore: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ConfigGroup'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        description: DeployRequest object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployRequest'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Group ID
 servers:
 - url: https://app.cribl.cloud
   x-speakeasy-server-id: cloud

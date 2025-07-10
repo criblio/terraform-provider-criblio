@@ -60,7 +60,7 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksResponseBody(ctx cont
 					items.Settings[key] = types.StringValue(string(result))
 				}
 			}
-			items.Source = types.StringValue(itemsItem.Source)
+			items.Source = types.StringPointerValue(itemsItem.Source)
 			items.Spec = types.StringPointerValue(itemsItem.Spec)
 			if itemsItem.Tags == nil {
 				items.Tags = nil

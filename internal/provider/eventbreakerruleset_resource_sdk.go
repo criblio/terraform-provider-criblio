@@ -35,6 +35,12 @@ func (r *EventBreakerRulesetResourceModel) ToSharedEventBreakerRuleset(ctx conte
 	} else {
 		tags = nil
 	}
+	eventBreakerRegex := new(string)
+	if !r.EventBreakerRegex.IsUnknown() && !r.EventBreakerRegex.IsNull() {
+		*eventBreakerRegex = r.EventBreakerRegex.ValueString()
+	} else {
+		eventBreakerRegex = nil
+	}
 	minRawLength := new(float64)
 	if !r.MinRawLength.IsUnknown() && !r.MinRawLength.IsNull() {
 		*minRawLength = r.MinRawLength.ValueFloat64()
@@ -162,12 +168,13 @@ func (r *EventBreakerRulesetResourceModel) ToSharedEventBreakerRuleset(ctx conte
 		})
 	}
 	out := shared.EventBreakerRuleset{
-		ID:           id,
-		Lib:          lib,
-		Description:  description,
-		Tags:         tags,
-		MinRawLength: minRawLength,
-		Rules:        rules,
+		ID:                id,
+		Lib:               lib,
+		Description:       description,
+		Tags:              tags,
+		EventBreakerRegex: eventBreakerRegex,
+		MinRawLength:      minRawLength,
+		Rules:             rules,
 	}
 
 	return &out, diags
@@ -253,6 +260,7 @@ func (r *EventBreakerRulesetResourceModel) RefreshFromSharedEventBreakerRuleset(
 	var diags diag.Diagnostics
 
 	r.Description = types.StringPointerValue(resp.Description)
+	r.EventBreakerRegex = types.StringPointerValue(resp.EventBreakerRegex)
 	r.ID = types.StringValue(resp.ID)
 	if resp.Lib != nil {
 		r.Lib = types.StringValue(string(*resp.Lib))

@@ -28,6 +28,7 @@ func (r *EventBreakerRulesetDataSourceModel) RefreshFromSharedEventBreakerRulese
 	var diags diag.Diagnostics
 
 	r.Description = types.StringPointerValue(resp.Description)
+	r.EventBreakerRegex = types.StringPointerValue(resp.EventBreakerRegex)
 	r.ID = types.StringValue(resp.ID)
 	if resp.Lib != nil {
 		r.Lib = types.StringValue(string(*resp.Lib))
