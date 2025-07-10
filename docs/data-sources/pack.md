@@ -14,6 +14,7 @@ Pack DataSource
 
 ```terraform
 data "criblio_pack" "my_pack" {
+  disabled = true
   group_id = "...my_group_id..."
   with     = "...my_with..."
 }
@@ -28,6 +29,7 @@ data "criblio_pack" "my_pack" {
 
 ### Optional
 
+- `disabled` (Boolean)
 - `with` (String) Comma separated list of entities, "outputs", "inputs"
 
 ### Read-Only

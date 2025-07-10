@@ -17,7 +17,8 @@ type UpdatePacksByIDRequest struct {
 	// body string optional Specify a branch, tag or a semver spec
 	Spec *string `queryParam:"style=form,explode=true,name=spec"`
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	GroupID  string `pathParam:"style=simple,explode=false,name=groupId"`
+	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 }
 
 func (o *UpdatePacksByIDRequest) GetID() string {
@@ -53,6 +54,13 @@ func (o *UpdatePacksByIDRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *UpdatePacksByIDRequest) GetDisabled() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Disabled
 }
 
 // UpdatePacksByIDResponseBody - a list of PackInfo objects

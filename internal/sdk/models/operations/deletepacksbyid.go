@@ -11,7 +11,8 @@ type DeletePacksByIDRequest struct {
 	// Pack name
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	GroupID  string `pathParam:"style=simple,explode=false,name=groupId"`
+	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 }
 
 func (o *DeletePacksByIDRequest) GetID() string {
@@ -26,6 +27,13 @@ func (o *DeletePacksByIDRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *DeletePacksByIDRequest) GetDisabled() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Disabled
 }
 
 // DeletePacksByIDResponseBody - a list of PackInstallInfo objects

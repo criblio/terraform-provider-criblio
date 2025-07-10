@@ -2,6 +2,7 @@ resource "criblio_pack" "my_pack" {
   allow_custom_functions = false
   author                 = "...my_author..."
   description            = "...my_description..."
+  disabled               = true
   display_name           = "...my_display_name..."
   exports = [
     "..."

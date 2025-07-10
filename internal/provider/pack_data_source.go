@@ -28,9 +28,10 @@ type PackDataSource struct {
 
 // PackDataSourceModel describes the data model.
 type PackDataSourceModel struct {
-	GroupID types.String        `tfsdk:"group_id"`
-	Items   []tfTypes.PackInfo1 `tfsdk:"items"`
-	With    types.String        `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
+	Disabled types.Bool          `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
+	GroupID  types.String        `tfsdk:"group_id"`
+	Items    []tfTypes.PackInfo1 `tfsdk:"items"`
+	With     types.String        `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
 }
 
 // Metadata returns the data source type name.
@@ -44,6 +45,9 @@ func (r *PackDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 		MarkdownDescription: "Pack DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"disabled": schema.BoolAttribute{
+				Optional: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,

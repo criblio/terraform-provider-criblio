@@ -10,6 +10,14 @@ import (
 type ListSubscriptionRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Project Id
+	Disabled *bool `queryParam:"style=form,explode=true,name=disabled"`
+	// Project description
+	Description *string `queryParam:"style=form,explode=true,name=description"`
+	// filter
+	Filter *string `queryParam:"style=form,explode=true,name=filter"`
+	// pipeline to be used
+	Pipeline *string `queryParam:"style=form,explode=true,name=pipeline"`
 }
 
 func (o *ListSubscriptionRequest) GetGroupID() string {
@@ -17,6 +25,34 @@ func (o *ListSubscriptionRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *ListSubscriptionRequest) GetDisabled() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Disabled
+}
+
+func (o *ListSubscriptionRequest) GetDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *ListSubscriptionRequest) GetFilter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Filter
+}
+
+func (o *ListSubscriptionRequest) GetPipeline() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Pipeline
 }
 
 // ListSubscriptionResponseBody - a list of Subscription objects

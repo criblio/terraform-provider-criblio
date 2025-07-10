@@ -152,6 +152,12 @@ func (r *PackResourceModel) ToOperationsCreatePacksRequest(ctx context.Context) 
 	} else {
 		filename = nil
 	}
+	disabled := new(bool)
+	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
+		*disabled = r.Disabled.ValueBool()
+	} else {
+		disabled = nil
+	}
 	packRequestBody, packRequestBodyDiags := r.ToSharedPackRequestBody(ctx)
 	diags.Append(packRequestBodyDiags...)
 
@@ -162,6 +168,7 @@ func (r *PackResourceModel) ToOperationsCreatePacksRequest(ctx context.Context) 
 	out := operations.CreatePacksRequest{
 		GroupID:         groupID,
 		Filename:        filename,
+		Disabled:        disabled,
 		PackRequestBody: *packRequestBody,
 	}
 
@@ -174,8 +181,15 @@ func (r *PackResourceModel) ToOperationsGetPacksRequest(ctx context.Context) (*o
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	disabled := new(bool)
+	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
+		*disabled = r.Disabled.ValueBool()
+	} else {
+		disabled = nil
+	}
 	out := operations.GetPacksRequest{
-		GroupID: groupID,
+		GroupID:  groupID,
+		Disabled: disabled,
 	}
 
 	return &out, diags
@@ -202,11 +216,18 @@ func (r *PackResourceModel) ToOperationsUpdatePacksByIDRequest(ctx context.Conte
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	disabled := new(bool)
+	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
+		*disabled = r.Disabled.ValueBool()
+	} else {
+		disabled = nil
+	}
 	out := operations.UpdatePacksByIDRequest{
-		ID:      id,
-		Source:  source,
-		Spec:    spec,
-		GroupID: groupID,
+		ID:       id,
+		Source:   source,
+		Spec:     spec,
+		GroupID:  groupID,
+		Disabled: disabled,
 	}
 
 	return &out, diags
@@ -221,9 +242,16 @@ func (r *PackResourceModel) ToOperationsDeletePacksByIDRequest(ctx context.Conte
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	disabled := new(bool)
+	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
+		*disabled = r.Disabled.ValueBool()
+	} else {
+		disabled = nil
+	}
 	out := operations.DeletePacksByIDRequest{
-		ID:      id,
-		GroupID: groupID,
+		ID:       id,
+		GroupID:  groupID,
+		Disabled: disabled,
 	}
 
 	return &out, diags

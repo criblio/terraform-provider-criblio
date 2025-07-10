@@ -12,6 +12,7 @@ type CreatePacksRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// the file to upload
 	Filename *string `queryParam:"style=form,explode=true,name=filename"`
+	Disabled *bool   `queryParam:"style=form,explode=true,name=disabled"`
 	// PackRequestBody object
 	PackRequestBody shared.PackRequestBody `request:"mediaType=application/json"`
 }
@@ -28,6 +29,13 @@ func (o *CreatePacksRequest) GetFilename() *string {
 		return nil
 	}
 	return o.Filename
+}
+
+func (o *CreatePacksRequest) GetDisabled() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Disabled
 }
 
 func (o *CreatePacksRequest) GetPackRequestBody() shared.PackRequestBody {

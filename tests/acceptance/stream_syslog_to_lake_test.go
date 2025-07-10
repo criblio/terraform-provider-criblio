@@ -34,7 +34,7 @@ var s3Config = `
 
 # Worker Group Configuration
 resource "criblio_group" "syslog_worker_group" {
-  config_version = data.criblio_config_version.my_configversion
+  config_version = data.criblio_config_version.my_configversion.id
   cloud = {
     provider = "aws"
     region   = "us-west-2"
@@ -165,7 +165,6 @@ resource "criblio_pack" "syslog_pack" {
   version      = "1.0.0"
 }
 
-# Commit and Deploy Configuration
 data "criblio_config_version" "my_configversion" {
   id         = "syslog-workers"
 }
@@ -178,7 +177,7 @@ resource "criblio_commit" "my_commit" {
 }
 
 resource "criblio_deploy" "my_deploy" {
-  id      = "syslog-workers"
+  id      = "default"
   version = data.criblio_config_version.my_configversion.items[0]
 }
 

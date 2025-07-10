@@ -14,8 +14,12 @@ Subscription Resource
 
 ```terraform
 resource "criblio_subscription" "my_subscription" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  description = "...my_description..."
+  disabled    = true
+  filter      = "...my_filter..."
+  group_id    = "...my_group_id..."
+  id          = "...my_id..."
+  pipeline    = "...my_pipeline..."
 }
 ```
 
@@ -26,6 +30,13 @@ resource "criblio_subscription" "my_subscription" {
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Subscription ID
+
+### Optional
+
+- `description` (String) Project description. Requires replacement if changed.
+- `disabled` (Boolean) Project Id. Requires replacement if changed.
+- `filter` (String) filter. Requires replacement if changed.
+- `pipeline` (String) pipeline to be used. Requires replacement if changed.
 
 ### Read-Only
 

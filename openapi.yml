@@ -46213,6 +46213,8 @@ components:
             type: string
         force:
           type: boolean
+        isDisabled:
+          type: boolean
         packs:
           type: array
           items:
@@ -55059,6 +55061,11 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
       requestBody: *a131
       responses: *a127
     delete:
@@ -58720,6 +58727,11 @@ paths:
           schema:
             type: string
           description: the file to upload
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
       operationId: createPacks
       tags:
         - packs
@@ -58802,6 +58814,11 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
     put:
       operationId: updatePacks
       tags:
@@ -58893,6 +58910,11 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
     patch:
       x-speakeasy-entity-operation: Pack#update
       operationId: updatePacksById
@@ -58956,6 +58978,11 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
   "/m/{groupId}/packs/__clone__":
     post:
       parameters:
@@ -62305,6 +62332,30 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Project Id
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Project description
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: filter
+        - name: pipeline
+          in: query
+          required: false
+          schema:
+            type: string
+          description: pipeline to be used
       operationId: listSubscription
       tags:
         &a183
@@ -62345,6 +62396,30 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Project Id
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Project description
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: filter
+        - name: pipeline
+          in: query
+          required: false
+          schema:
+            type: string
+          description: pipeline to be used
       operationId: createSubscription
       tags:
         - subscriptions

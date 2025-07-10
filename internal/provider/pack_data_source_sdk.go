@@ -23,9 +23,16 @@ func (r *PackDataSourceModel) ToOperationsGetPacksRequest(ctx context.Context) (
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	disabled := new(bool)
+	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
+		*disabled = r.Disabled.ValueBool()
+	} else {
+		disabled = nil
+	}
 	out := operations.GetPacksRequest{
-		With:    with,
-		GroupID: groupID,
+		With:     with,
+		GroupID:  groupID,
+		Disabled: disabled,
 	}
 
 	return &out, diags

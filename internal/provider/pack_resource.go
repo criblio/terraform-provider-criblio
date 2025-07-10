@@ -41,6 +41,7 @@ type PackResourceModel struct {
 	AllowCustomFunctions types.Bool                   `tfsdk:"allow_custom_functions"`
 	Author               types.String                 `tfsdk:"author"`
 	Description          types.String                 `tfsdk:"description"`
+	Disabled             types.Bool                   `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
 	DisplayName          types.String                 `tfsdk:"display_name"`
 	Exports              []types.String               `tfsdk:"exports"`
 	Filename             types.String                 `queryParam:"style=form,explode=true,name=filename" tfsdk:"filename"`
@@ -86,6 +87,9 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
+			},
+			"disabled": schema.BoolAttribute{
+				Optional: true,
 			},
 			"display_name": schema.StringAttribute{
 				Optional: true,

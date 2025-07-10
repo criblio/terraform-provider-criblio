@@ -17,6 +17,7 @@ resource "criblio_pack" "my_pack" {
   allow_custom_functions = false
   author                 = "...my_author..."
   description            = "...my_description..."
+  disabled               = true
   display_name           = "...my_display_name..."
   exports = [
     "..."
@@ -62,6 +63,7 @@ resource "criblio_pack" "my_pack" {
 - `allow_custom_functions` (Boolean) Requires replacement if changed.
 - `author` (String) Requires replacement if changed.
 - `description` (String) Requires replacement if changed.
+- `disabled` (Boolean)
 - `display_name` (String) Requires replacement if changed.
 - `exports` (List of String) Requires replacement if changed.
 - `filename` (String) the file to upload. Requires replacement if changed.
