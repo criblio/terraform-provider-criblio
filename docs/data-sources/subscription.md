@@ -32,7 +32,7 @@ data "criblio_subscription" "my_subscription" {
 ### Optional
 
 - `description` (String) Project description
-- `disabled` (Boolean) Project Id
+- `disabled` (Boolean) Project enabled
 - `filter` (String) filter
 - `pipeline` (String) pipeline to be used
 

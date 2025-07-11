@@ -41,7 +41,6 @@ provider "criblio" {
 
 # Worker Group Configuration
 resource "criblio_group" "syslog_worker_group" {
-  config_version = data.criblio_config_version.my_configversion.id
   cloud = {
     provider = "aws"
     region   = "us-west-2"
@@ -182,7 +181,7 @@ resource "criblio_commit" "my_commit" {
   effective  = true
   group      = "syslog-workers"
   message    = "test"
-  //depends_on = [criblio_source.syslog_source, criblio_destination.cribl_lake, criblio_pack.syslog_pack]
+  depends_on = [criblio_source.syslog_source, criblio_destination.cribl_lake, criblio_pack.syslog_pack]
 }
 
 resource "criblio_deploy" "my_deploy" {

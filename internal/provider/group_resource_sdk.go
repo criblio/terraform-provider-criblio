@@ -30,9 +30,12 @@ func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.C
 			Region:   region,
 		}
 	}
-	var configVersion string
-	configVersion = r.ConfigVersion.ValueString()
-
+	configVersion := new(string)
+	if !r.ConfigVersion.IsUnknown() && !r.ConfigVersion.IsNull() {
+		*configVersion = r.ConfigVersion.ValueString()
+	} else {
+		configVersion = nil
+	}
 	deployingWorkerCount := new(float64)
 	if !r.DeployingWorkerCount.IsUnknown() && !r.DeployingWorkerCount.IsNull() {
 		*deployingWorkerCount = r.DeployingWorkerCount.ValueFloat64()
@@ -291,7 +294,7 @@ func (r *GroupResourceModel) RefreshFromSharedConfigGroup(ctx context.Context, r
 		}
 		r.Cloud.Region = types.StringValue(resp.Cloud.Region)
 	}
-	r.ConfigVersion = types.StringValue(resp.ConfigVersion)
+	r.ConfigVersion = types.StringPointerValue(resp.ConfigVersion)
 	r.DeployingWorkerCount = types.Float64PointerValue(resp.DeployingWorkerCount)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.EstimatedIngestRate = types.Float64PointerValue(resp.EstimatedIngestRate)

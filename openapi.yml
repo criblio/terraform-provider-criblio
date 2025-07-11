@@ -48613,9 +48613,6 @@ components:
           type: string
         pipeline:
           type: string
-      required:
-        - id
-        - pipeline
     CloudProvider:
       type: string
       nullable: true
@@ -48741,7 +48738,6 @@ components:
         workerRemoteAccess:
           type: boolean
       required:
-        - configVersion
         - id
     TeamAccessControlList:
       type: object

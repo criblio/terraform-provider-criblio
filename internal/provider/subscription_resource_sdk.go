@@ -159,8 +159,8 @@ func (r *SubscriptionResourceModel) RefreshFromOperationsCreateSubscriptionRespo
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
 			items.Filter = types.StringPointerValue(itemsItem.Filter)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Pipeline = types.StringValue(itemsItem.Pipeline)
+			items.ID = types.StringPointerValue(itemsItem.ID)
+			items.Pipeline = types.StringPointerValue(itemsItem.Pipeline)
 			if itemsCount+1 > len(r.Items) {
 				r.Items = append(r.Items, items)
 			} else {
@@ -209,8 +209,8 @@ func (r *SubscriptionResourceModel) RefreshFromOperationsListSubscriptionRespons
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
 			items.Filter = types.StringPointerValue(itemsItem.Filter)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Pipeline = types.StringValue(itemsItem.Pipeline)
+			items.ID = types.StringPointerValue(itemsItem.ID)
+			items.Pipeline = types.StringPointerValue(itemsItem.Pipeline)
 			if itemsCount+1 > len(r.Items) {
 				r.Items = append(r.Items, items)
 			} else {
@@ -259,8 +259,8 @@ func (r *SubscriptionResourceModel) RefreshFromOperationsUpdateSubscriptionByIDR
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
 			items.Filter = types.StringPointerValue(itemsItem.Filter)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Pipeline = types.StringValue(itemsItem.Pipeline)
+			items.ID = types.StringPointerValue(itemsItem.ID)
+			items.Pipeline = types.StringPointerValue(itemsItem.Pipeline)
 			if itemsCount+1 > len(r.Items) {
 				r.Items = append(r.Items, items)
 			} else {

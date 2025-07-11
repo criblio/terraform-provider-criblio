@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: f3b752e3a2f67c8878606601e58d65b9
+  docChecksum: b60e813050223fb6d13bbb792d4829e5
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
   speakeasyVersion: 1.581.0
   generationVersion: 2.656.5
@@ -6410,7 +6410,7 @@ examples:
         path:
           product: "stream"
       requestBody:
-        application/json: {"configVersion": "<value>", "id": "<id>"}
+        application/json: {"id": "<id>"}
       responses:
         "200":
           application/json: {}

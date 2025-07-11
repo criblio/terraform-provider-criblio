@@ -59,7 +59,7 @@ func (e *ConfigGroupType) UnmarshalJSON(data []byte) error {
 
 type ConfigGroup struct {
 	Cloud                   *ConfigGroupCloud    `json:"cloud,omitempty"`
-	ConfigVersion           string               `json:"configVersion"`
+	ConfigVersion           *string              `json:"configVersion,omitempty"`
 	DeployingWorkerCount    *float64             `json:"deployingWorkerCount,omitempty"`
 	Description             *string              `json:"description,omitempty"`
 	EstimatedIngestRate     *float64             `json:"estimatedIngestRate,omitempty"`
@@ -88,9 +88,9 @@ func (o *ConfigGroup) GetCloud() *ConfigGroupCloud {
 	return o.Cloud
 }
 
-func (o *ConfigGroup) GetConfigVersion() string {
+func (o *ConfigGroup) GetConfigVersion() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.ConfigVersion
 }

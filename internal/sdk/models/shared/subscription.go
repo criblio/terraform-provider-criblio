@@ -7,8 +7,8 @@ type Subscription struct {
 	Description *string               `json:"description,omitempty"`
 	Disabled    *bool                 `json:"disabled,omitempty"`
 	Filter      *string               `json:"filter,omitempty"`
-	ID          string                `json:"id"`
-	Pipeline    string                `json:"pipeline"`
+	ID          *string               `json:"id,omitempty"`
+	Pipeline    *string               `json:"pipeline,omitempty"`
 }
 
 func (o *Subscription) GetConsumer() *SubscriptionConsumer {
@@ -39,16 +39,16 @@ func (o *Subscription) GetFilter() *string {
 	return o.Filter
 }
 
-func (o *Subscription) GetID() string {
+func (o *Subscription) GetID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.ID
 }
 
-func (o *Subscription) GetPipeline() string {
+func (o *Subscription) GetPipeline() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.Pipeline
 }

@@ -53,7 +53,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"disabled": schema.BoolAttribute{
 				Optional:    true,
-				Description: `Project Id`,
+				Description: `Project enabled`,
 			},
 			"filter": schema.StringAttribute{
 				Optional:    true,

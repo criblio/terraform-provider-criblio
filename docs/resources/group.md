@@ -73,13 +73,13 @@ resource "criblio_group" "my_group" {
 
 ### Required
 
-- `config_version` (String) Requires replacement if changed.
 - `id` (String) Requires replacement if changed.
 - `product` (String) Cribl Product. must be one of ["stream", "edge"]; Requires replacement if changed.
 
 ### Optional
 
 - `cloud` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--cloud))
+- `config_version` (String) Requires replacement if changed.
 - `deploying_worker_count` (Number) Requires replacement if changed.
 - `description` (String) Requires replacement if changed.
 - `estimated_ingest_rate` (Number) Requires replacement if changed.

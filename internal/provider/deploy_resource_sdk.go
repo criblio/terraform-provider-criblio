@@ -66,7 +66,7 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 				}
 				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
 			}
-			items.ConfigVersion = types.StringValue(itemsItem.ConfigVersion)
+			items.ConfigVersion = types.StringPointerValue(itemsItem.ConfigVersion)
 			items.DeployingWorkerCount = types.Float64PointerValue(itemsItem.DeployingWorkerCount)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)

@@ -45,7 +45,7 @@ func (r *GroupDataSourceModel) RefreshFromSharedConfigGroup(ctx context.Context,
 		}
 		r.Cloud.Region = types.StringValue(resp.Cloud.Region)
 	}
-	r.ConfigVersion = types.StringValue(resp.ConfigVersion)
+	r.ConfigVersion = types.StringPointerValue(resp.ConfigVersion)
 	r.DeployingWorkerCount = types.Float64PointerValue(resp.DeployingWorkerCount)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.EstimatedIngestRate = types.Float64PointerValue(resp.EstimatedIngestRate)
