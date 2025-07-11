@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 78048fd456a5cdc87db9d2713c7eebac
+  docChecksum: f3b752e3a2f67c8878606601e58d65b9
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.580.1
-  generationVersion: 2.656.3
+  speakeasyVersion: 1.581.0
+  generationVersion: 2.656.5
   releaseVersion: 1.0.45
   configChecksum: 8e92e4c67a6b143f5badf122e57b9a54
   published: true
@@ -2490,6 +2490,9 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+        query:
+          pipeline: "<value>"
+          id: "<id>"
       requestBody:
         application/json: {"id": "<id>", "pipeline": "<value>"}
       responses:

@@ -3574,6 +3574,7 @@ resource "criblio_source" "my_source" {
         compress           = false
         content_format     = "RenderedText"
         heartbeat_interval = 5.28
+        id                 = "...my_id..."
         locale             = "...my_locale..."
         metadata = [
           {

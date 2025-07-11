@@ -7348,6 +7348,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				subscriptions.ContentFormat = types.StringNull()
 			}
 			subscriptions.HeartbeatInterval = types.Float64PointerValue(subscriptionsItem.HeartbeatInterval)
+			subscriptions.ID = types.StringValue(subscriptionsItem.ID)
 			subscriptions.Locale = types.StringPointerValue(subscriptionsItem.Locale)
 			subscriptions.Metadata = []tfTypes.SubscriptionMetadatum{}
 			for metadataCount59, metadataItem59 := range subscriptionsItem.Metadata {
@@ -7381,6 +7382,7 @@ func (r *SourceDataSourceModel) RefreshFromSharedInput(ctx context.Context, resp
 				r.InputWef.Subscriptions[subscriptionsCount].Compress = subscriptions.Compress
 				r.InputWef.Subscriptions[subscriptionsCount].ContentFormat = subscriptions.ContentFormat
 				r.InputWef.Subscriptions[subscriptionsCount].HeartbeatInterval = subscriptions.HeartbeatInterval
+				r.InputWef.Subscriptions[subscriptionsCount].ID = subscriptions.ID
 				r.InputWef.Subscriptions[subscriptionsCount].Locale = subscriptions.Locale
 				r.InputWef.Subscriptions[subscriptionsCount].Metadata = subscriptions.Metadata
 				r.InputWef.Subscriptions[subscriptionsCount].QuerySelector = subscriptions.QuerySelector

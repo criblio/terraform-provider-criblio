@@ -20207,8 +20207,12 @@ components:
               - heartbeatInterval
               - batchTimeout
               - targets
+              - id
             minLength: 1
             properties:
+              id:
+                title: Subscription id
+                type: string
               subscriptionName:
                 title: Subscription name
                 type: string
@@ -62337,7 +62341,7 @@ paths:
           required: false
           schema:
             type: boolean
-          description: Project Id
+          description: Project enabled
         - name: description
           in: query
           required: false
@@ -62416,7 +62420,13 @@ paths:
           description: filter
         - name: pipeline
           in: query
-          required: false
+          required: true
+          schema:
+            type: string
+          description: pipeline to be used
+        - name: id
+          in: query
+          required: true
           schema:
             type: string
           description: pipeline to be used

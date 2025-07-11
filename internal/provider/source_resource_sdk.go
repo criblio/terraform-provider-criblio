@@ -18835,6 +18835,9 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		subscriptions := make([]shared.InputWefSubscription, 0, len(r.InputWef.Subscriptions))
 		for _, subscriptionsItem := range r.InputWef.Subscriptions {
+			var id53 string
+			id53 = subscriptionsItem.ID.ValueString()
+
 			var subscriptionName1 string
 			subscriptionName1 = subscriptionsItem.SubscriptionName.ValueString()
 
@@ -18910,6 +18913,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				})
 			}
 			subscriptions = append(subscriptions, shared.InputWefSubscription{
+				ID:                 id53,
 				SubscriptionName:   subscriptionName1,
 				Version:            version,
 				ContentFormat:      contentFormat,
@@ -18990,11 +18994,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputWinEventLogs *shared.InputWinEventLogs
 	if r.InputWinEventLogs != nil {
-		id53 := new(string)
+		id54 := new(string)
 		if !r.InputWinEventLogs.ID.IsUnknown() && !r.InputWinEventLogs.ID.IsNull() {
-			*id53 = r.InputWinEventLogs.ID.ValueString()
+			*id54 = r.InputWinEventLogs.ID.ValueString()
 		} else {
-			id53 = nil
+			id54 = nil
 		}
 		typeVar57 := shared.InputWinEventLogsType(r.InputWinEventLogs.Type.ValueString())
 		disabled97 := new(bool)
@@ -19161,7 +19165,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			description62 = nil
 		}
 		inputWinEventLogs = &shared.InputWinEventLogs{
-			ID:                  id53,
+			ID:                  id54,
 			Type:                typeVar57,
 			Disabled:            disabled97,
 			Pipeline:            pipeline106,
@@ -19189,11 +19193,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputRawUDP *shared.InputRawUDP
 	if r.InputRawUDP != nil {
-		id54 := new(string)
+		id55 := new(string)
 		if !r.InputRawUDP.ID.IsUnknown() && !r.InputRawUDP.ID.IsNull() {
-			*id54 = r.InputRawUDP.ID.ValueString()
+			*id55 = r.InputRawUDP.ID.ValueString()
 		} else {
-			id54 = nil
+			id55 = nil
 		}
 		typeVar58 := new(shared.InputRawUDPType)
 		if !r.InputRawUDP.Type.IsUnknown() && !r.InputRawUDP.Type.IsNull() {
@@ -19364,7 +19368,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			description63 = nil
 		}
 		inputRawUDP = &shared.InputRawUDP{
-			ID:                  id54,
+			ID:                  id55,
 			Type:                typeVar58,
 			Disabled:            disabled98,
 			Pipeline:            pipeline108,
@@ -19392,11 +19396,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputJournalFiles *shared.InputJournalFiles
 	if r.InputJournalFiles != nil {
-		id55 := new(string)
+		id56 := new(string)
 		if !r.InputJournalFiles.ID.IsUnknown() && !r.InputJournalFiles.ID.IsNull() {
-			*id55 = r.InputJournalFiles.ID.ValueString()
+			*id56 = r.InputJournalFiles.ID.ValueString()
 		} else {
-			id55 = nil
+			id56 = nil
 		}
 		typeVar59 := new(shared.InputJournalFilesType)
 		if !r.InputJournalFiles.Type.IsUnknown() && !r.InputJournalFiles.Type.IsNull() {
@@ -19569,7 +19573,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			description65 = nil
 		}
 		inputJournalFiles = &shared.InputJournalFiles{
-			ID:           id55,
+			ID:           id56,
 			Type:         typeVar59,
 			Disabled:     disabled99,
 			Pipeline:     pipeline110,
@@ -19596,11 +19600,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputWiz *shared.InputWiz
 	if r.InputWiz != nil {
-		id56 := new(string)
+		id57 := new(string)
 		if !r.InputWiz.ID.IsUnknown() && !r.InputWiz.ID.IsNull() {
-			*id56 = r.InputWiz.ID.ValueString()
+			*id57 = r.InputWiz.ID.ValueString()
 		} else {
-			id56 = nil
+			id57 = nil
 		}
 		typeVar60 := new(shared.InputWizType)
 		if !r.InputWiz.Type.IsUnknown() && !r.InputWiz.Type.IsNull() {
@@ -19880,7 +19884,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			textSecret14 = nil
 		}
 		inputWiz = &shared.InputWiz{
-			ID:                   id56,
+			ID:                   id57,
 			Type:                 typeVar60,
 			Disabled:             disabled100,
 			Pipeline:             pipeline112,
@@ -19915,11 +19919,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputNetflow *shared.InputNetflow
 	if r.InputNetflow != nil {
-		id57 := new(string)
+		id58 := new(string)
 		if !r.InputNetflow.ID.IsUnknown() && !r.InputNetflow.ID.IsNull() {
-			*id57 = r.InputNetflow.ID.ValueString()
+			*id58 = r.InputNetflow.ID.ValueString()
 		} else {
-			id57 = nil
+			id58 = nil
 		}
 		typeVar62 := new(shared.InputNetflowType)
 		if !r.InputNetflow.Type.IsUnknown() && !r.InputNetflow.Type.IsNull() {
@@ -20111,7 +20115,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			description67 = nil
 		}
 		inputNetflow = &shared.InputNetflow{
-			ID:                   id57,
+			ID:                   id58,
 			Type:                 typeVar62,
 			Disabled:             disabled101,
 			Pipeline:             pipeline114,
@@ -20142,11 +20146,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputSecurityLake *shared.InputSecurityLake
 	if r.InputSecurityLake != nil {
-		id58 := new(string)
+		id59 := new(string)
 		if !r.InputSecurityLake.ID.IsUnknown() && !r.InputSecurityLake.ID.IsNull() {
-			*id58 = r.InputSecurityLake.ID.ValueString()
+			*id59 = r.InputSecurityLake.ID.ValueString()
 		} else {
-			id58 = nil
+			id59 = nil
 		}
 		typeVar63 := shared.InputSecurityLakeType(r.InputSecurityLake.Type.ValueString())
 		disabled102 := new(bool)
@@ -20497,7 +20501,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			processedTagValue3 = nil
 		}
 		inputSecurityLake = &shared.InputSecurityLake{
-			ID:                          id58,
+			ID:                          id59,
 			Type:                        typeVar63,
 			Disabled:                    disabled102,
 			Pipeline:                    pipeline116,
@@ -20551,11 +20555,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputZscalerHec *shared.InputZscalerHec
 	if r.InputZscalerHec != nil {
-		id59 := new(string)
+		id60 := new(string)
 		if !r.InputZscalerHec.ID.IsUnknown() && !r.InputZscalerHec.ID.IsNull() {
-			*id59 = r.InputZscalerHec.ID.ValueString()
+			*id60 = r.InputZscalerHec.ID.ValueString()
 		} else {
-			id59 = nil
+			id60 = nil
 		}
 		typeVar64 := new(shared.InputZscalerHecType)
 		if !r.InputZscalerHec.Type.IsUnknown() && !r.InputZscalerHec.Type.IsNull() {
@@ -20921,7 +20925,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			description70 = nil
 		}
 		inputZscalerHec = &shared.InputZscalerHec{
-			ID:                        id59,
+			ID:                        id60,
 			Type:                      typeVar64,
 			Disabled:                  disabled104,
 			Pipeline:                  pipeline118,
@@ -28364,6 +28368,7 @@ func (r *SourceResourceModel) RefreshFromSharedInput(ctx context.Context, resp *
 				subscriptions.ContentFormat = types.StringNull()
 			}
 			subscriptions.HeartbeatInterval = types.Float64PointerValue(subscriptionsItem.HeartbeatInterval)
+			subscriptions.ID = types.StringValue(subscriptionsItem.ID)
 			subscriptions.Locale = types.StringPointerValue(subscriptionsItem.Locale)
 			subscriptions.Metadata = []tfTypes.SubscriptionMetadatum{}
 			for metadataCount59, metadataItem59 := range subscriptionsItem.Metadata {
@@ -28397,6 +28402,7 @@ func (r *SourceResourceModel) RefreshFromSharedInput(ctx context.Context, resp *
 				r.InputWef.Subscriptions[subscriptionsCount].Compress = subscriptions.Compress
 				r.InputWef.Subscriptions[subscriptionsCount].ContentFormat = subscriptions.ContentFormat
 				r.InputWef.Subscriptions[subscriptionsCount].HeartbeatInterval = subscriptions.HeartbeatInterval
+				r.InputWef.Subscriptions[subscriptionsCount].ID = subscriptions.ID
 				r.InputWef.Subscriptions[subscriptionsCount].Locale = subscriptions.Locale
 				r.InputWef.Subscriptions[subscriptionsCount].Metadata = subscriptions.Metadata
 				r.InputWef.Subscriptions[subscriptionsCount].QuerySelector = subscriptions.QuerySelector

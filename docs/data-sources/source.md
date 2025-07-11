@@ -5550,6 +5550,7 @@ Read-Only:
 - `compress` (Boolean) Receive compressed events from the source
 - `content_format` (String) Content format in which the endpoint should deliver events
 - `heartbeat_interval` (Number) Maximum time (in seconds) between endpoint checkins before considering it unavailable
+- `id` (String)
 - `locale` (String) The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US".
 - `metadata` (Attributes List) Fields to add to events ingested under this subscription (see [below for nested schema](#nestedatt--input_wef--subscriptions--metadata))
 - `query_selector` (String)

@@ -12497,6 +12497,9 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Computed:    true,
 									Description: `Maximum time (in seconds) between endpoint checkins before considering it unavailable`,
 								},
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
 								"locale": schema.StringAttribute{
 									Computed:    true,
 									Description: `The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US".`,

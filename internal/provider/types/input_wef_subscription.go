@@ -11,6 +11,7 @@ type InputWefSubscription struct {
 	Compress           types.Bool              `tfsdk:"compress"`
 	ContentFormat      types.String            `tfsdk:"content_format"`
 	HeartbeatInterval  types.Float64           `tfsdk:"heartbeat_interval"`
+	ID                 types.String            `tfsdk:"id"`
 	Locale             types.String            `tfsdk:"locale"`
 	Metadata           []SubscriptionMetadatum `tfsdk:"metadata"`
 	QuerySelector      types.String            `tfsdk:"query_selector"`

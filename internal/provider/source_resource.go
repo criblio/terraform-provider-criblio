@@ -25721,6 +25721,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										float64validator.AtLeast(1),
 									},
 								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
 								"locale": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,

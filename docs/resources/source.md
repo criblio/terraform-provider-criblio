@@ -3589,6 +3589,7 @@ resource "criblio_source" "my_source" {
         compress           = false
         content_format     = "RenderedText"
         heartbeat_interval = 5.28
+        id                 = "...my_id..."
         locale             = "...my_locale..."
         metadata = [
           {
@@ -9460,6 +9461,7 @@ Optional:
 - `compress` (Boolean) Receive compressed events from the source. Default: true
 - `content_format` (String) Content format in which the endpoint should deliver events. Default: "Raw"; must be one of ["Raw", "RenderedText"]
 - `heartbeat_interval` (Number) Maximum time (in seconds) between endpoint checkins before considering it unavailable. Default: 60
+- `id` (String) Not Null
 - `locale` (String) The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US". Default: "en-US"
 - `metadata` (Attributes List) Fields to add to events ingested under this subscription (see [below for nested schema](#nestedatt--input_wef--subscriptions--metadata))
 - `query_selector` (String) Default: "simple"; must be one of ["simple", "xml"]

@@ -34,18 +34,19 @@ func (r *SubscriptionResourceModel) ToOperationsCreateSubscriptionRequest(ctx co
 	} else {
 		filter = nil
 	}
-	pipeline := new(string)
-	if !r.Pipeline.IsUnknown() && !r.Pipeline.IsNull() {
-		*pipeline = r.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
+	var pipeline string
+	pipeline = r.Pipeline.ValueString()
+
+	var id string
+	id = r.ID.ValueString()
+
 	out := operations.CreateSubscriptionRequest{
 		GroupID:     groupID,
 		Disabled:    disabled,
 		Description: description,
 		Filter:      filter,
 		Pipeline:    pipeline,
+		ID:          id,
 	}
 
 	return &out, diags

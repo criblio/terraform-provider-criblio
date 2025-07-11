@@ -491,6 +491,7 @@ func (o *SubscriptionMetadatum) GetValue() string {
 }
 
 type InputWefSubscription struct {
+	ID               string `json:"id"`
 	SubscriptionName string `json:"subscriptionName"`
 	// Version UUID for this subscription. If any subscription parameters are modified, this value will change.
 	Version *string `json:"version,omitempty"`
@@ -524,6 +525,13 @@ func (i *InputWefSubscription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (o *InputWefSubscription) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 func (o *InputWefSubscription) GetSubscriptionName() string {

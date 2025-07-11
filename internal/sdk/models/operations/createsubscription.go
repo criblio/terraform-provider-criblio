@@ -17,7 +17,9 @@ type CreateSubscriptionRequest struct {
 	// filter
 	Filter *string `queryParam:"style=form,explode=true,name=filter"`
 	// pipeline to be used
-	Pipeline *string `queryParam:"style=form,explode=true,name=pipeline"`
+	Pipeline string `queryParam:"style=form,explode=true,name=pipeline"`
+	// pipeline to be used
+	ID string `queryParam:"style=form,explode=true,name=id"`
 }
 
 func (o *CreateSubscriptionRequest) GetGroupID() string {
@@ -48,11 +50,18 @@ func (o *CreateSubscriptionRequest) GetFilter() *string {
 	return o.Filter
 }
 
-func (o *CreateSubscriptionRequest) GetPipeline() *string {
+func (o *CreateSubscriptionRequest) GetPipeline() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Pipeline
+}
+
+func (o *CreateSubscriptionRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 // CreateSubscriptionResponseBody - a list of Subscription objects
