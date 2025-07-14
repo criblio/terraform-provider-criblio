@@ -3,6 +3,10 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+concurrency:
+  group: merge-checks
+  cancel-in-progress: false
+
 jobs:
   terraform_fmt_checks:
     runs-on: ubuntu-latest
