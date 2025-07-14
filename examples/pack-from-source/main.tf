@@ -1,4 +1,3 @@
-
 resource "criblio_pack" "my_pack" {
   id           = "pack-from-source"
   group_id     = "default"

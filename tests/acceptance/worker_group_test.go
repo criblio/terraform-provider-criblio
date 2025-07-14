@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/config"
 )
 
 func TestWorkerGroup(t *testing.T) {
@@ -13,7 +14,7 @@ func TestWorkerGroup(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					Config: wgConfig,
+					ConfigDirectory:         config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_group.my_group", "id", "newgroup"),
 						resource.TestCheckResourceAttr("criblio_group.my_group", "name", "newgroup"),
@@ -21,7 +22,7 @@ func TestWorkerGroup(t *testing.T) {
 					),
 				},
 				{
-					Config: wgConfig,
+					ConfigDirectory:         config.TestNameDirectory(),
 					ConfigPlanChecks: resource.ConfigPlanChecks{
 						PreApply: []plancheck.PlanCheck{
 							plancheck.ExpectEmptyPlan(),
@@ -33,39 +34,3 @@ func TestWorkerGroup(t *testing.T) {
 	})
 }
 
-var wgConfig = `
-resource "criblio_group" "my_group" {
-  cloud = {
-    provider = "azure"
-    region   = "eastus"
-  }
-  config_version        = data.criblio_config_version.my_configversion.id
-  estimated_ingest_rate = 1024
-  id                    = "newgroup"
-  is_fleet              = false
-  name                  = "newgroup"
-  on_prem               = false
-  product               = "stream"
-  provisioned           = false
-  streamtags = [
-    "test",
-    "network"
-  ]
-  worker_remote_access = false
-}
-
-data "criblio_config_version" "my_configversion" {
-  id         = "default"
-}
-
-output "group" {
-  value = criblio_group.my_group
-}
-
-provider "criblio" {
-  server_url = "https://app.cribl-playground.cloud"
-  organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
-  version = "999.99.9"
-}
-`

@@ -1,4 +1,3 @@
-
 resource "criblio_parquet_schema" "my_parquet_schema" {
   description           = "test parquest"
   group_id              = "default"

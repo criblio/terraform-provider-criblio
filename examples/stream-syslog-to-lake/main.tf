@@ -1,15 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  
-}
-
 # Worker Group Configuration
 resource "criblio_group" "syslog_worker_group" {
   cloud = {

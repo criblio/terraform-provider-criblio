@@ -1,18 +1,7 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  # Configuration options
-}
-
 resource "criblio_grok" "my_grok" {
   group_id = "default"
   id       = "test_grok"
+  size     = 1
   content  = <<-EOT
 SYSLOG5424PRINTASCII [!-~]+
 

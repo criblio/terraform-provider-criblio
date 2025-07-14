@@ -1,0 +1,1 @@
+../../../../../examples/appscope-configs/main.tf

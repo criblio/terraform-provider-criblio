@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/config"
 )
 
 func TestPackFromSource(t *testing.T) {
@@ -13,7 +14,7 @@ func TestPackFromSource(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					Config: pSourceConfig,
+					ConfigDirectory:         config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-from-source"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
@@ -25,7 +26,7 @@ func TestPackFromSource(t *testing.T) {
 					),
 				},
 				{
-					Config: pSourceConfig,
+					ConfigDirectory:         config.TestNameDirectory(),
 					ConfigPlanChecks: resource.ConfigPlanChecks{
 						PreApply: []plancheck.PlanCheck{
 							plancheck.ExpectEmptyPlan(),
@@ -37,26 +38,3 @@ func TestPackFromSource(t *testing.T) {
 	})
 }
 
-var pSourceConfig = `
-resource "criblio_pack" "my_pack" {
-  id           = "pack-from-source"
-  group_id     = "default"
-  description  = "Pack from source"
-  display_name = "Pack from source"
-  source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
-  version      = "1.0.0"
-}
-
-# Output the pack details to see the read-only attributes
-output "pack_details" {
-  value = criblio_pack.my_pack
-}
-
-provider "criblio" {
-  server_url = "https://app.cribl-playground.cloud"
-  organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id = "tfprovider"
-  version = "999.99.9"
-}
-
-`

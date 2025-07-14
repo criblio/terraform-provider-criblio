@@ -1,0 +1,1 @@
+../../../../../examples/pack-from-file/main.tf

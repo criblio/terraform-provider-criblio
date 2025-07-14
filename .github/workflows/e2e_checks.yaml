@@ -5,7 +5,7 @@ on:
       - 'main'
 
 concurrency:
-  group: e2e-checks
+  group: tfprovider
   cancel-in-progress: false
 
 jobs:

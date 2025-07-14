@@ -1,4 +1,3 @@
-
 resource "criblio_subscription" "my_subscription" {
   description = "test subscription"
   disabled    = true

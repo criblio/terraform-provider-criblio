@@ -1,15 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  # Configuration options
-}
-
 resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   description    = "test"
   group_id       = "default"
