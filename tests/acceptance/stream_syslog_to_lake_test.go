@@ -13,7 +13,7 @@ func TestStreamSyslogToLake(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config:             s3Config,
+					Config: s3Config,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "id", "syslog-workers"),
 						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "name", "syslog-workers"),
