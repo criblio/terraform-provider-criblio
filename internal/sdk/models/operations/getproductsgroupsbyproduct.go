@@ -37,17 +37,8 @@ func (e *GetProductsGroupsByProductProduct) UnmarshalJSON(data []byte) error {
 }
 
 type GetProductsGroupsByProductRequest struct {
-	// fields to add to results: git.commit, git.localChanges, git.log
-	Fields *string `queryParam:"style=form,explode=true,name=fields"`
 	// Cribl Product
 	Product GetProductsGroupsByProductProduct `pathParam:"style=simple,explode=false,name=product"`
-}
-
-func (o *GetProductsGroupsByProductRequest) GetFields() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Fields
 }
 
 func (o *GetProductsGroupsByProductRequest) GetProduct() GetProductsGroupsByProductProduct {

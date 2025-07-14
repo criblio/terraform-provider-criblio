@@ -62776,12 +62776,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       parameters:
-        - name: fields
-          in: query
-          required: false
-          schema:
-            type: string
-          description: "fields to add to results: git.commit, git.localChanges, git.log"
         - name: product
           in: path
           required: true
