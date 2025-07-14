@@ -13,7 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
+	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
+	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk"
 )
 
@@ -32,13 +33,12 @@ type SubscriptionResource struct {
 
 // SubscriptionResourceModel describes the resource data model.
 type SubscriptionResourceModel struct {
-	Description types.String           `queryParam:"style=form,explode=true,name=description" tfsdk:"description"`
-	Disabled    types.Bool             `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
-	Filter      types.String           `queryParam:"style=form,explode=true,name=filter" tfsdk:"filter"`
-	GroupID     types.String           `tfsdk:"group_id"`
-	ID          types.String           `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
-	Items       []tfTypes.Subscription `tfsdk:"items"`
-	Pipeline    types.String           `queryParam:"style=form,explode=true,name=pipeline" tfsdk:"pipeline"`
+	Description types.String `queryParam:"style=form,explode=true,name=description" tfsdk:"description"`
+	Disabled    types.Bool   `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
+	Filter      types.String `queryParam:"style=form,explode=true,name=filter" tfsdk:"filter"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
+	Pipeline    types.String `queryParam:"style=form,explode=true,name=pipeline" tfsdk:"pipeline"`
 }
 
 func (r *SubscriptionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -50,23 +50,29 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 		MarkdownDescription: "Subscription Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Project description. Requires replacement if changed.`,
 			},
 			"disabled": schema.BoolAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
 				Description: `Project Id. Requires replacement if changed.`,
 			},
 			"filter": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `filter. Requires replacement if changed.`,
 			},
@@ -78,56 +84,11 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Required:    true,
 				Description: `pipeline to be used`,
 			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"consumer": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"connections": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"output": schema.StringAttribute{
-												Computed: true,
-											},
-											"pipeline": schema.StringAttribute{
-												Computed: true,
-											},
-										},
-									},
-								},
-								"disabled": schema.BoolAttribute{
-									Computed: true,
-								},
-								"type": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"disabled": schema.BoolAttribute{
-							Computed: true,
-						},
-						"filter": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"pipeline": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
-			},
 			"pipeline": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `pipeline to be used. Requires replacement if changed.`,
 			},
@@ -195,48 +156,11 @@ func (r *SubscriptionResource) Create(ctx context.Context, req resource.CreateRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateSubscriptionResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsListSubscriptionRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Subscriptions.ListSubscription(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSubscriptionResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSubscription(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -296,11 +220,11 @@ func (r *SubscriptionResource) Read(ctx context.Context, req resource.ReadReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSubscriptionResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSubscription(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -346,48 +270,11 @@ func (r *SubscriptionResource) Update(ctx context.Context, req resource.UpdateRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateSubscriptionByIDResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsListSubscriptionRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Subscriptions.ListSubscription(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSubscriptionResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSubscription(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

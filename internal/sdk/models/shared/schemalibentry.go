@@ -2,27 +2,11 @@
 
 package shared
 
-import (
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/utils"
-)
-
 type SchemaLibEntry struct {
 	ID          string  `json:"id"`
 	Description *string `json:"description,omitempty"`
 	// JSON schema matching standards of draft version 2019-09
-	Schema               string `json:"schema"`
-	AdditionalProperties any    `additionalProperties:"true" json:"-"`
-}
-
-func (s SchemaLibEntry) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
-}
-
-func (s *SchemaLibEntry) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
-		return err
-	}
-	return nil
+	Schema string `json:"schema"`
 }
 
 func (o *SchemaLibEntry) GetID() string {
@@ -44,11 +28,4 @@ func (o *SchemaLibEntry) GetSchema() string {
 		return ""
 	}
 	return o.Schema
-}
-
-func (o *SchemaLibEntry) GetAdditionalProperties() any {
-	if o == nil {
-		return nil
-	}
-	return o.AdditionalProperties
 }

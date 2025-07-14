@@ -3,19 +3,11 @@
 package shared
 
 type Subscription struct {
-	Consumer    *SubscriptionConsumer `json:"consumer,omitempty"`
-	Description *string               `json:"description,omitempty"`
-	Disabled    *bool                 `json:"disabled,omitempty"`
-	Filter      *string               `json:"filter,omitempty"`
-	ID          *string               `json:"id,omitempty"`
-	Pipeline    *string               `json:"pipeline,omitempty"`
-}
-
-func (o *Subscription) GetConsumer() *SubscriptionConsumer {
-	if o == nil {
-		return nil
-	}
-	return o.Consumer
+	Description *string `json:"description,omitempty"`
+	Disabled    *bool   `json:"disabled,omitempty"`
+	Filter      *string `json:"filter,omitempty"`
+	ID          string  `json:"id"`
+	Pipeline    string  `json:"pipeline"`
 }
 
 func (o *Subscription) GetDescription() *string {
@@ -39,16 +31,16 @@ func (o *Subscription) GetFilter() *string {
 	return o.Filter
 }
 
-func (o *Subscription) GetID() *string {
+func (o *Subscription) GetID() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.ID
 }
 
-func (o *Subscription) GetPipeline() *string {
+func (o *Subscription) GetPipeline() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Pipeline
 }

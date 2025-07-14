@@ -14,16 +14,16 @@ EventBreakerRuleset Resource
 
 ```terraform
 resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-  description         = "...my_description..."
-  event_breaker_regex = "...my_event_breaker_regex..."
-  group_id            = "...my_group_id..."
-  id                  = "...my_id..."
-  lib                 = "custom"
-  min_raw_length      = 75773.87
+  description    = "...my_description..."
+  group_id       = "...my_group_id..."
+  id             = "...my_id..."
+  lib            = "custom"
+  min_raw_length = 75773.87
   rules = [
     {
-      condition = "...my_condition..."
-      disabled  = false
+      condition           = "...my_condition..."
+      disabled            = false
+      event_breaker_regex = "...my_event_breaker_regex..."
       fields = [
         {
           name  = "...my_name..."
@@ -61,7 +61,6 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 ### Optional
 
 - `description` (String)
-- `event_breaker_regex` (String) The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"
 - `lib` (String) Default: "custom"; must be one of ["custom", "cribl-custom"]
 - `min_raw_length` (Number) The  minimum number of characters in _raw to determine which rule to use. Default: 256
 - `rules` (Attributes List) A list of rules that will be applied, in order, to the input data stream (see [below for nested schema](#nestedatt--rules))
@@ -70,30 +69,25 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 <a id="nestedatt--rules"></a>
 ### Nested Schema for `rules`
 
+Required:
+
+- `name` (String)
+- `timestamp` (Attributes) Auto, manual format (strptime), or current time (see [below for nested schema](#nestedatt--rules--timestamp))
+
 Optional:
 
 - `condition` (String) JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events. Default: "true"
 - `disabled` (Boolean) Disable this breaker rule (enabled by default). Default: false
+- `event_breaker_regex` (String) The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"
 - `fields` (Attributes List) Key-value pairs to be added to each event (see [below for nested schema](#nestedatt--rules--fields))
 - `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200
-- `name` (String) Not Null
 - `parser_enabled` (Boolean) Default: false
 - `should_use_data_raw` (Boolean) Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event. Default: false
-- `timestamp` (Attributes) Auto, manual format (strptime), or current time. Not Null (see [below for nested schema](#nestedatt--rules--timestamp))
 - `timestamp_anchor_regex` (String) The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/^/"
 - `timestamp_earliest` (String) The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time. Default: "-420weeks"
 - `timestamp_latest` (String) The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time. Default: "+1week"
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info. Default: "local"
 - `type` (String) Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow"]
-
-<a id="nestedatt--rules--fields"></a>
-### Nested Schema for `rules.fields`
-
-Optional:
-
-- `name` (String)
-- `value` (String) The JavaScript expression used to compute the field's value (can be constant). Not Null
-
 
 <a id="nestedatt--rules--timestamp"></a>
 ### Nested Schema for `rules.timestamp`
@@ -103,6 +97,18 @@ Optional:
 - `format` (String)
 - `length` (Number) Default: 150
 - `type` (String) Default: "auto"; must be one of ["auto", "format", "current"]
+
+
+<a id="nestedatt--rules--fields"></a>
+### Nested Schema for `rules.fields`
+
+Required:
+
+- `value` (String) The JavaScript expression used to compute the field's value (can be constant)
+
+Optional:
+
+- `name` (String)
 
 ## Import
 

@@ -39,14 +39,6 @@ func (o *UpdateEventBreakerRulesetByIDRequest) GetEventBreakerRuleset() shared.E
 
 // UpdateEventBreakerRulesetByIDResponseBody - a list of Event Breaker Ruleset objects
 type UpdateEventBreakerRulesetByIDResponseBody struct {
-	Items []shared.EventBreakerRuleset `json:"items,omitempty"`
-}
-
-func (o *UpdateEventBreakerRulesetByIDResponseBody) GetItems() []shared.EventBreakerRuleset {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type UpdateEventBreakerRulesetByIDResponse struct {

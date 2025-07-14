@@ -30,14 +30,6 @@ func (o *CreateInputRequest) GetInput() shared.Input {
 
 // CreateInputResponseBody - a list of Input objects
 type CreateInputResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
-}
-
-func (o *CreateInputResponseBody) GetItems() []shared.Input {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type CreateInputResponse struct {

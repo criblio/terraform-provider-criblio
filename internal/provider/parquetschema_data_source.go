@@ -27,11 +27,10 @@ type ParquetSchemaDataSource struct {
 
 // ParquetSchemaDataSourceModel describes the data model.
 type ParquetSchemaDataSourceModel struct {
-	AdditionalProperties types.String `tfsdk:"additional_properties"`
-	Description          types.String `tfsdk:"description"`
-	GroupID              types.String `tfsdk:"group_id"`
-	ID                   types.String `tfsdk:"id"`
-	Schema               types.String `tfsdk:"schema"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Schema      types.String `tfsdk:"schema"`
 }
 
 // Metadata returns the data source type name.
@@ -45,10 +44,6 @@ func (r *ParquetSchemaDataSource) Schema(ctx context.Context, req datasource.Sch
 		MarkdownDescription: "ParquetSchema DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"additional_properties": schema.StringAttribute{
-				Computed:    true,
-				Description: `Parsed as JSON.`,
-			},
 			"description": schema.StringAttribute{
 				Computed: true,
 			},

@@ -25,10 +25,6 @@ import (
 	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk"
 	"github.com/speakeasy/terraform-provider-criblio/internal/validators"
-	speakeasy_float64validators "github.com/speakeasy/terraform-provider-criblio/internal/validators/float64validators"
-	speakeasy_listvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/listvalidators"
-	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/objectvalidators"
-	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/stringvalidators"
 	"regexp"
 )
 
@@ -126,7 +122,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Unique ID to DELETE`,
 			},
 			"input_appscope": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_token": schema.StringAttribute{
@@ -148,29 +143,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -178,7 +162,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -200,66 +183,45 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Toggle to Yes to specify a file-backed UNIX domain socket connection, instead of a network host and port. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"filter": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"allow": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"arg": schema.StringAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `Specify a string to substring-match against process command-line.`,
 										},
 										"config": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Choose a config to apply to processes that match the process name and/or argument. Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required:    true,
+											Description: `Choose a config to apply to processes that match the process name and/or argument.`,
 										},
 										"procname": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Specify the name of a process or family of processes. Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required:    true,
+											Description: `Specify the name of a process or family of processes.`,
 										},
 									},
 								},
 								Description: `Specify processes that AppScope should be loaded into, and the config to use.`,
 							},
 							"transport_url": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `To override the UNIX domain socket or address/port specified in General Settings (while leaving Authentication settings as is), enter a URL.`,
 							},
 						},
 					},
 					"host": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses).`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"ip_whitelist_regex": schema.StringAttribute{
 						Computed:    true,
@@ -274,35 +236,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"compress": schema.StringAttribute{
@@ -356,12 +304,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Port to listen on`,
 						Validators: []validator.Float64{
@@ -369,7 +315,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -487,31 +432,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -525,7 +464,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -538,7 +476,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -551,17 +488,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -577,11 +511,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "appscope"`,
+						Required:    true,
+						Description: `must be "appscope"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("appscope"),
 						},
 					},
@@ -592,7 +524,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Path to the UNIX domain socket to listen on. Default: "$CRIBL_HOME/state/appscope.sock"`,
 					},
 					"unix_socket_perms": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Permissions to set for socket e.g., 777. If empty, falls back to the runtime user's default permissions.`,
 					},
@@ -660,7 +591,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_azure_blob": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_type": schema.StringAttribute{
@@ -678,63 +608,43 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"azure_cloud": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The Azure cloud to use. Defaults to Azure Public Cloud.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"certificate": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `The certificate you registered as credentials for your app in the Azure portal. Not Null`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-								},
+								Required:    true,
+								Description: `The certificate you registered as credentials for your app in the Azure portal`,
 							},
 						},
 					},
 					"client_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The service principal's client ID`,
 					},
 					"client_text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
 					"connection_string": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Enter your Azure Storage account connection string. If left blank, Stream will fall back to env.AZURE_STORAGE_CONNECTION_STRING.`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -742,7 +652,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -752,12 +661,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"endpoint_suffix": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -768,7 +675,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Regex matching file names to download and process. Defaults to: .*. Default: "/.*/"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -782,28 +688,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -837,12 +730,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -920,12 +811,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"queue_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: ` + "`" + `myQueue-${C.vars.myVar}` + "`" + `. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: ` + "`" + `myQueue-${C.vars.myVar}` + "`" + ``,
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -958,7 +845,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"storage_account_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The name of your Azure storage account`,
 					},
@@ -970,21 +856,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tenant_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The service principal's tenant ID`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "azure_blob"`,
+						Required:    true,
+						Description: `must be "azure_blob"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"azure_blob",
 							),
@@ -1063,33 +945,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_collection": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -1103,58 +973,37 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"output": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Destination to send results to`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process results`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -1232,17 +1081,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"args": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Arguments to be added to the custom command`,
 							},
 							"command": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 							},
@@ -1360,7 +1206,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_confluent_cloud": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"authentication_timeout": schema.Float64Attribute{
@@ -1373,7 +1218,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auto_commit_interval": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
 						Validators: []validator.Float64{
@@ -1381,7 +1225,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auto_commit_threshold": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
 						Validators: []validator.Float64{
@@ -1398,12 +1241,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"brokers": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092. Not Null`,
+						Description: `List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092`,
 						Validators: []validator.List{
-							speakeasy_listvalidators.NotNull(),
 							listvalidator.SizeAtLeast(1),
 						},
 					},
@@ -1417,23 +1258,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -1441,7 +1272,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -1451,7 +1281,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -1480,7 +1309,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -1494,15 +1322,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"auth": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a secret that references your credentials`,
 									},
@@ -1555,21 +1380,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http. Default: "http://localhost:8081"`,
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
 									},
 									"cert_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"certificate_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the predefined certificate`,
 									},
@@ -1580,7 +1401,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Default: true`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -1593,7 +1413,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"min_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -1606,12 +1425,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"passphrase": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
@@ -1624,7 +1441,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											`Default: true`,
 									},
 									"servername": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
 									},
@@ -1678,40 +1494,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -1819,7 +1620,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
@@ -1873,21 +1673,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
@@ -1898,7 +1694,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: false`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -1911,7 +1706,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -1924,12 +1718,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
@@ -1942,7 +1734,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									`Default: true`,
 							},
 							"servername": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
 							},
@@ -1959,7 +1750,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "confluent_cloud"`,
 						Validators: []validator.String{
@@ -2032,27 +1822,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_cribl": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -2060,7 +1839,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -2070,57 +1848,36 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"filter": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -2211,11 +1968,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "cribl"`,
+						Required:    true,
+						Description: `must be "cribl"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("cribl"),
 						},
 					},
@@ -2283,7 +2038,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_cribl_http": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -2296,7 +2050,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
@@ -2308,23 +2061,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -2332,7 +2075,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -2354,7 +2096,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -2365,7 +2106,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -2403,49 +2143,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -2548,26 +2271,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -2581,7 +2299,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -2594,7 +2311,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -2607,17 +2323,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -2633,7 +2346,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "cribl_http"`,
 						Validators: []validator.String{
@@ -2706,7 +2418,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_cribl_lake_http": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -2719,7 +2430,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
@@ -2731,23 +2441,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -2755,7 +2455,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -2777,7 +2476,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -2788,7 +2486,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -2826,49 +2523,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -2971,26 +2651,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -3004,7 +2679,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -3017,7 +2691,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -3030,17 +2703,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -3056,7 +2726,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "cribl_lake_http"`,
 						Validators: []validator.String{
@@ -3129,27 +2798,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_criblmetrics": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -3157,7 +2815,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -3167,7 +2824,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -3178,48 +2834,29 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Include granular metrics. Disabling this will drop the following metrics events: ` + "`" + `cribl.logstream.host.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.index.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.source.(in_bytes,in_events,out_bytes,out_events)` + "`" + `, ` + "`" + `cribl.logstream.sourcetype.(in_bytes,in_events,out_bytes,out_events)` + "`" + `. Default: true`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -3316,11 +2953,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "criblmetrics"`,
+						Required:    true,
+						Description: `must be "criblmetrics"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"criblmetrics",
 							),
@@ -3390,27 +3025,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_cribl_tcp": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -3418,7 +3042,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -3440,7 +3063,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable if the connection is proxied by a device that supports proxy protocol v1 or v2. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -3451,7 +3073,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -3462,49 +3083,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -3613,26 +3217,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -3646,7 +3245,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -3659,7 +3257,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -3672,17 +3269,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -3698,7 +3292,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "cribl_tcp"`,
 						Validators: []validator.String{
@@ -3771,11 +3364,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_crowdstrike": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -3784,17 +3375,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
 					"aws_account_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -3811,22 +3399,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
@@ -3847,23 +3431,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -3871,7 +3445,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -3902,17 +3475,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials when accessing Amazon SQS. Default: false`,
 					},
 					"encoding": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -3923,7 +3493,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Regex matching file names to download and process. Defaults to: .*. Default: "/.*/"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -3937,28 +3506,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -3974,7 +3530,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -3988,7 +3543,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -4066,17 +3620,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"args": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Arguments to be added to the custom command`,
 							},
 							"command": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 							},
@@ -4089,25 +3640,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"processed_tag_key": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"processed_tag_value": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"queue_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `.`,
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.`,
 					},
@@ -4170,7 +3714,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tag_after_processing": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be one of ["false", "true"]`,
 						Validators: []validator.String{
@@ -4181,11 +3724,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "crowdstrike"`,
+						Required:    true,
+						Description: `must be "crowdstrike"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"crowdstrike",
 							),
@@ -4264,7 +3805,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_datadog_agent": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -4283,23 +3823,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -4307,7 +3837,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -4329,7 +3858,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -4346,7 +3874,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -4384,49 +3911,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -4504,7 +4014,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"proxy_mode": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
@@ -4547,26 +4056,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -4580,7 +4084,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -4593,7 +4096,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -4606,17 +4108,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -4632,7 +4131,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "datadog_agent"`,
 						Validators: []validator.String{
@@ -4705,27 +4203,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_datagen": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -4733,7 +4220,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -4743,50 +4229,33 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -4864,12 +4333,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"samples": schema.ListNestedAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"events_per_sec": schema.Float64Attribute{
 									Computed:    true,
@@ -4881,18 +4346,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"sample": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 							},
 						},
-						Description: `Not Null`,
 						Validators: []validator.List{
-							speakeasy_listvalidators.NotNull(),
 							listvalidator.SizeAtLeast(1),
 						},
 					},
@@ -4910,11 +4368,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "datagen"`,
+						Required:    true,
+						Description: `must be "datagen"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("datagen"),
 						},
 					},
@@ -4982,11 +4438,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_edge_prometheus": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -4995,7 +4449,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
@@ -5026,27 +4479,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -5054,16 +4496,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"credentials_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your credentials`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"dimension_list": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Other dimensions to include in events`,
@@ -5105,17 +4544,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials to access EC2. Default: false`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `EC2 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to EC2-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -5129,28 +4565,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -5167,12 +4590,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"password": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Password for Prometheus Basic authentication`,
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"compress": schema.StringAttribute{
@@ -5220,30 +4641,20 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pod_filter": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Optional description of this rule's purpose`,
 								},
 								"filter": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression applied to pods objects. Return 'true' to include it. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression applied to pods objects. Return 'true' to include it.`,
 								},
 							},
 						},
@@ -5252,7 +4663,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							`  expressions evaluate to true.`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -5343,7 +4753,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Region where the EC2 is located`,
 					},
@@ -5408,20 +4817,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Protocol to use when collecting metrics. Default: "metadata.annotations['prometheus.io/scheme'] || 'http'"`,
 					},
 					"search_filter": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list`,
 								},
 								"values": schema.ListAttribute{
 									Computed:    true,
@@ -5457,20 +4858,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"targets": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"host": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Name of host from which to pull metrics. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `Name of host from which to pull metrics.`,
 								},
 								"path": schema.StringAttribute{
 									Computed:    true,
@@ -5518,7 +4911,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "edge_prometheus"`,
 						Validators: []validator.String{
@@ -5534,7 +4926,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use public IP address for discovered targets. Set to false if the private IP address should be used. Default: true`,
 					},
 					"username": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Username for Prometheus Basic authentication`,
 					},
@@ -5602,7 +4993,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_elastic": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -5628,7 +5018,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Bearer tokens to include in the authorization header`,
@@ -5654,23 +5043,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -5678,7 +5057,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"credentials_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your credentials`,
 					},
@@ -5704,7 +5082,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Custom version information to respond to requests. Default: "{\n    \"name\": \"AzU84iL\",\n    \"cluster_name\": \"cribl\",\n    \"cluster_uuid\": \"Js6_Z2VKS3KbfRSxPmPbaw\",\n    \"version\": {\n        \"number\": \"8.3.2\",\n        \"build_type\": \"tar\",\n        \"build_hash\": \"bca0c8d\",\n        \"build_date\": \"2019-10-16T06:19:49.319352Z\",\n        \"build_snapshot\": false,\n        \"lucene_version\": \"9.7.2\",\n        \"minimum_wire_compatibility_version\": \"7.17.0\",\n        \"minimum_index_compatibility_version\": \"7.0.0\"\n    },\n    \"tagline\": \"You Know, for Search\"\n}"`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -5735,29 +5112,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"extra_http_headers": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 							},
 						},
@@ -5770,7 +5136,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -5808,53 +5173,35 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"password": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -5932,7 +5279,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"proxy_mode": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
@@ -5961,7 +5307,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Reject certificates that cannot be verified against a valid CA (such as self-signed certificates). Default: false`,
 							},
 							"remove_headers": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `List of headers to remove from the request to proxy`,
@@ -5976,7 +5321,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"url": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `URL of the Elastic server to proxy non-bulk requests to, such as http://elastic:9200`,
 							},
@@ -6008,26 +5352,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -6041,7 +5380,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -6054,7 +5392,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -6067,17 +5404,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -6093,7 +5427,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "elastic"`,
 						Validators: []validator.String{
@@ -6101,7 +5434,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 				},
@@ -6168,7 +5500,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_eventhub": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"authentication_timeout": schema.Float64Attribute{
@@ -6181,7 +5512,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auto_commit_interval": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
 						Validators: []validator.Float64{
@@ -6189,7 +5519,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auto_commit_threshold": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
 						Validators: []validator.Float64{
@@ -6206,12 +5535,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"brokers": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies. Not Null`,
+						Description: `List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.`,
 						Validators: []validator.List{
-							speakeasy_listvalidators.NotNull(),
 							listvalidator.SizeAtLeast(1),
 						},
 					},
@@ -6225,23 +5552,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -6249,7 +5566,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -6259,7 +5575,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -6288,7 +5603,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -6347,28 +5661,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -6381,12 +5682,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Minimize duplicate events by starting only one consumer for each topic partition. Default: false`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -6494,7 +5793,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
@@ -6545,7 +5843,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
@@ -6573,7 +5870,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "eventhub"`,
 						Validators: []validator.String{
@@ -6644,41 +5940,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_exec": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"command": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Command to execute; supports Bourne shell (or CMD on Windows) syntax. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Command to execute; supports Bourne shell (or CMD on Windows) syntax`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -6692,7 +5972,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Cron schedule to execute the command on. Default: "* * * * *"`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -6702,12 +5981,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -6721,40 +5998,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -6872,11 +6134,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "exec"`,
+						Required:    true,
+						Description: `must be "exec"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("exec"),
 						},
 					},
@@ -6944,11 +6204,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_file": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
@@ -6960,23 +6218,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Skip files with modification times earlier than the maximum age duration. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -6990,12 +6238,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Delete files after they have been collected. Default: false`,
 					},
 					"depth": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Set how many subdirectories deep to search. Use 0 to search only files in the given path, 1 to also look in its immediate subdirectories, etc. Leave it empty for unlimited depth.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -7005,12 +6251,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"filenames": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `The full path of discovered files are matched against this wildcard list`,
@@ -7031,12 +6275,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"idle_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -7063,33 +6303,19 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"max_age_dur": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The maximum age of files to monitor. Format examples: 60s, 4h, 3d, 1w. Age is relative to file modification time. Leave empty to apply no age filters.`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -7108,17 +6334,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"path": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Directory path to search for files. Environment variables will be resolved, e.g. $CRIBL_HOME/log/.`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -7230,11 +6453,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Read only new entries at the end of all files discovered at next startup. @{product} will then read newly discovered files from the head. Disable this to resume reading all files from head. Default: false`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "file"`,
+						Required:    true,
+						Description: `must be "file"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("file"),
 						},
 					},
@@ -7302,7 +6523,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_firehose": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -7315,7 +6535,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
@@ -7327,23 +6546,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -7351,7 +6560,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -7373,7 +6581,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -7384,7 +6591,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -7422,49 +6628,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -7567,26 +6756,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -7600,7 +6784,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -7613,7 +6796,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -7626,17 +6808,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -7652,7 +6831,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "firehose"`,
 						Validators: []validator.String{
@@ -7723,7 +6901,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_google_pubsub": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"concurrency": schema.Float64Attribute{
@@ -7736,23 +6913,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -7772,7 +6939,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Create topic if it does not exist. Default: false`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -7782,7 +6948,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -7800,7 +6965,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -7814,28 +6978,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -7848,12 +6999,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Receive events in the order they were added to the queue. The process sending events must have ordering enabled. Default: false`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -7931,7 +7080,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Region to retrieve messages from. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.`,
 					},
@@ -7945,7 +7093,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
@@ -7956,7 +7103,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
 					"service_account_credentials": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
 					},
@@ -7968,23 +7114,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"subscription_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `ID of the subscription to use when receiving events. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `ID of the subscription to use when receiving events`,
 					},
 					"topic_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `ID of the topic to receive events from. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `ID of the topic to receive events from`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "google_pubsub"`,
 						Validators: []validator.String{
@@ -8057,11 +7194,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_grafana": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"input_grafana_grafana1": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"activity_log_sample_rate": schema.Float64Attribute{
@@ -8080,23 +7215,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Add request headers to events, in the __headers field. Default: false`,
 							},
 							"connections": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"output": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"pipeline": schema.StringAttribute{
-											Computed: true,
 											Optional: true,
 										},
 									},
@@ -8104,7 +7229,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 							},
 							"description": schema.StringAttribute{
-								Computed: true,
 								Optional: true,
 							},
 							"disabled": schema.BoolAttribute{
@@ -8126,7 +7250,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 							},
 							"environment": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 							},
@@ -8137,7 +7260,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 							},
 							"id": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Unique ID for this input`,
 							},
@@ -8172,7 +7294,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"loki_auth": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
@@ -8198,12 +7319,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a secret that references your credentials`,
 									},
 									"login_url": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `URL for OAuth`,
 										Validators: []validator.String{
@@ -8211,87 +7330,57 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"oauth_headers": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth header name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth header name`,
 												},
 												"value": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth header value. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth header value`,
 												},
 											},
 										},
 										Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 									},
 									"oauth_params": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth parameter name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth parameter name`,
 												},
 												"value": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth parameter value. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth parameter value`,
 												},
 											},
 										},
 										Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 									},
 									"password": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Secret parameter value to pass in request body`,
 									},
 									"secret_param_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Secret parameter name to pass in request body`,
 									},
 									"text_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a stored text secret`,
 									},
 									"token": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Bearer token to include in the authorization header`,
 									},
 									"token_attribute_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 									},
@@ -8305,7 +7394,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"username": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 								},
@@ -8323,49 +7411,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 							},
 							"metadata": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process data from this Source before sending it through the Routes`,
 							},
 							"port": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Port to listen on. Not Null`,
+								Required:    true,
+								Description: `Port to listen on`,
 								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
 									float64validator.AtMost(65535),
 								},
 							},
 							"pq": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"commit_frequency": schema.Float64Attribute{
@@ -8452,7 +7523,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"prometheus_auth": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
@@ -8478,12 +7548,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a secret that references your credentials`,
 									},
 									"login_url": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `URL for OAuth`,
 										Validators: []validator.String{
@@ -8491,87 +7559,57 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"oauth_headers": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth header name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth header name`,
 												},
 												"value": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth header value. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth header value`,
 												},
 											},
 										},
 										Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 									},
 									"oauth_params": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth parameter name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth parameter name`,
 												},
 												"value": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth parameter value. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth parameter value`,
 												},
 											},
 										},
 										Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 									},
 									"password": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Secret parameter value to pass in request body`,
 									},
 									"secret_param_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Secret parameter name to pass in request body`,
 									},
 									"text_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a stored text secret`,
 									},
 									"token": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Bearer token to include in the authorization header`,
 									},
 									"token_attribute_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 									},
@@ -8585,7 +7623,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"username": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 								},
@@ -8616,26 +7653,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Tags for filtering and grouping in @{product}`,
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"cert_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"certificate_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the predefined certificate`,
 									},
 									"common_name_regex": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Parsed as JSON.`,
 										Validators: []validator.String{
@@ -8649,7 +7681,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Default: true`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -8662,7 +7693,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"min_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -8675,17 +7705,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"passphrase": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"reject_unauthorized": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Parsed as JSON.`,
 										Validators: []validator.String{
@@ -8701,7 +7728,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be "grafana"`,
 								Validators: []validator.String{
@@ -8716,7 +7742,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"input_grafana_grafana2": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"activity_log_sample_rate": schema.Float64Attribute{
@@ -8735,23 +7760,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Add request headers to events, in the __headers field. Default: false`,
 							},
 							"connections": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"output": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"pipeline": schema.StringAttribute{
-											Computed: true,
 											Optional: true,
 										},
 									},
@@ -8759,7 +7774,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 							},
 							"description": schema.StringAttribute{
-								Computed: true,
 								Optional: true,
 							},
 							"disabled": schema.BoolAttribute{
@@ -8781,7 +7795,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 							},
 							"environment": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 							},
@@ -8792,7 +7805,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 							},
 							"id": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Unique ID for this input`,
 							},
@@ -8827,7 +7839,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"loki_auth": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
@@ -8853,12 +7864,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a secret that references your credentials`,
 									},
 									"login_url": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `URL for OAuth`,
 										Validators: []validator.String{
@@ -8866,87 +7875,57 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"oauth_headers": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth header name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth header name`,
 												},
 												"value": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth header value. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth header value`,
 												},
 											},
 										},
 										Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 									},
 									"oauth_params": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth parameter name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth parameter name`,
 												},
 												"value": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth parameter value. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth parameter value`,
 												},
 											},
 										},
 										Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 									},
 									"password": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Secret parameter value to pass in request body`,
 									},
 									"secret_param_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Secret parameter name to pass in request body`,
 									},
 									"text_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a stored text secret`,
 									},
 									"token": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Bearer token to include in the authorization header`,
 									},
 									"token_attribute_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 									},
@@ -8960,7 +7939,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"username": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 								},
@@ -8978,49 +7956,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 							},
 							"metadata": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process data from this Source before sending it through the Routes`,
 							},
 							"port": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Port to listen on. Not Null`,
+								Required:    true,
+								Description: `Port to listen on`,
 								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
 									float64validator.AtMost(65535),
 								},
 							},
 							"pq": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"commit_frequency": schema.Float64Attribute{
@@ -9107,7 +8068,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"prometheus_auth": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
@@ -9133,12 +8093,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a secret that references your credentials`,
 									},
 									"login_url": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `URL for OAuth`,
 										Validators: []validator.String{
@@ -9146,87 +8104,57 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"oauth_headers": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth header name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth header name`,
 												},
 												"value": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth header value. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth header value`,
 												},
 											},
 										},
 										Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 									},
 									"oauth_params": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth parameter name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth parameter name`,
 												},
 												"value": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `OAuth parameter value. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `OAuth parameter value`,
 												},
 											},
 										},
 										Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 									},
 									"password": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Secret parameter value to pass in request body`,
 									},
 									"secret_param_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Secret parameter name to pass in request body`,
 									},
 									"text_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a stored text secret`,
 									},
 									"token": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Bearer token to include in the authorization header`,
 									},
 									"token_attribute_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 									},
@@ -9240,7 +8168,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"username": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 								},
@@ -9271,26 +8198,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Tags for filtering and grouping in @{product}`,
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"cert_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"certificate_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the predefined certificate`,
 									},
 									"common_name_regex": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Parsed as JSON.`,
 										Validators: []validator.String{
@@ -9304,7 +8226,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Default: true`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -9317,7 +8238,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"min_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -9330,17 +8250,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"passphrase": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"reject_unauthorized": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Parsed as JSON.`,
 										Validators: []validator.String{
@@ -9356,7 +8273,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be "grafana"`,
 								Validators: []validator.String{
@@ -9434,7 +8350,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_http": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -9447,58 +8362,35 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 					},
 					"auth_tokens_ext": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"metadata": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required: true,
 											},
 											"value": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 											},
 										},
 									},
 									Description: `Fields to add to events referencing this token`,
 								},
 								"token": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Shared secret to be provided by any client (Authorization: <token>). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 							},
 						},
@@ -9511,23 +8403,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -9544,7 +8426,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -9575,7 +8456,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -9586,7 +8466,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -9624,49 +8503,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -9784,26 +8646,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -9817,7 +8674,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -9830,7 +8686,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -9843,17 +8698,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -9869,7 +8721,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "http"`,
 						Validators: []validator.String{
@@ -9940,7 +8791,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_http_raw": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -9953,77 +8803,51 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"allowed_methods": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.`,
 					},
 					"allowed_paths": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all.`,
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 					},
 					"auth_tokens_ext": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"metadata": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required: true,
 											},
 											"value": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 											},
 										},
 									},
 									Description: `Fields to add to events referencing this token`,
 								},
 								"token": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Shared secret to be provided by any client (Authorization: <token>). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 							},
 						},
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
@@ -10035,23 +8859,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -10059,7 +8873,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -10081,7 +8894,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -10092,7 +8904,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -10130,49 +8941,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -10284,26 +9078,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -10317,7 +9106,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -10330,7 +9118,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -10343,17 +9130,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -10369,7 +9153,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "http_raw"`,
 						Validators: []validator.String{
@@ -10440,27 +9223,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_journal_files": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -10474,7 +9246,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Skip log messages that are not part of the current boot session. Default: false`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -10484,12 +9255,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -10503,59 +9272,38 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"journals": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `The full path of discovered journals are matched against this wildcard list.`,
 					},
 					"max_age_dur": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The maximum log message age, in duration form (e.g,: 60s, 4h, 3d, 1w).  Default of no value will apply no max age filters.`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"path": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Directory path to search for journals. Environment variables will be resolved, e.g. $CRIBL_EDGE_FS_ROOT/var/log/journal/$MACHINE_ID. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Directory path to search for journals. Environment variables will be resolved, e.g. $CRIBL_EDGE_FS_ROOT/var/log/journal/$MACHINE_ID.`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -10633,25 +9381,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"rules": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Optional description of this rule's purpose`,
 								},
 								"filter": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression applied to Journal objects. Return 'true' to include it. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression applied to Journal objects. Return 'true' to include it.`,
 								},
 							},
 						},
@@ -10671,7 +9410,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "journal_files"`,
 						Validators: []validator.String{
@@ -10744,7 +9482,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_kafka": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"authentication_timeout": schema.Float64Attribute{
@@ -10757,7 +9494,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auto_commit_interval": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
 						Validators: []validator.Float64{
@@ -10765,7 +9501,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auto_commit_threshold": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
 						Validators: []validator.Float64{
@@ -10782,12 +9517,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"brokers": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092). Not Null`,
+						Description: `Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).`,
 						Validators: []validator.List{
-							speakeasy_listvalidators.NotNull(),
 							listvalidator.SizeAtLeast(1),
 						},
 					},
@@ -10801,23 +9534,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -10825,7 +9548,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -10835,7 +9557,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -10864,7 +9585,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -10878,15 +9598,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"auth": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a secret that references your credentials`,
 									},
@@ -10939,21 +9656,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http. Default: "http://localhost:8081"`,
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
 									},
 									"cert_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"certificate_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the predefined certificate`,
 									},
@@ -10964,7 +9677,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Default: true`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -10977,7 +9689,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"min_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -10990,12 +9701,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"passphrase": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
@@ -11008,7 +9717,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											`Default: true`,
 									},
 									"servername": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
 									},
@@ -11062,40 +9770,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -11203,7 +9896,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
@@ -11257,21 +9949,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
@@ -11282,7 +9970,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -11295,7 +9982,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -11308,12 +9994,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
@@ -11326,7 +10010,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									`Default: true`,
 							},
 							"servername": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
 							},
@@ -11343,7 +10026,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "kafka"`,
 						Validators: []validator.String{
@@ -11414,11 +10096,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_kinesis": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -11427,7 +10107,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
@@ -11438,7 +10117,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `When resuming streaming from a stored state, Stream will read the next available record, rather than rereading the last-read record. Enabling this setting can cause data loss after a Worker Node's unexpected shutdown or restart. Default: false`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -11455,32 +10133,20 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -11488,7 +10154,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -11513,12 +10178,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials to access Kinesis stream. Default: false`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Kinesis stream service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to Kinesis stream-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -11541,7 +10204,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -11558,28 +10220,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -11600,12 +10249,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -11683,12 +10330,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Region where the Kinesis stream is located. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Region where the Kinesis stream is located`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Computed:    true,
@@ -11745,12 +10388,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"stream_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Kinesis Data Stream to read data from. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Kinesis Data Stream to read data from`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -11760,7 +10399,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "kinesis"`,
 						Validators: []validator.String{
@@ -11837,27 +10475,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_kube_events": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -11865,7 +10492,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -11875,53 +10501,33 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -11999,25 +10605,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"rules": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Optional description of this rule's purpose`,
 								},
 								"filter": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression applied to Kubernetes objects. Return 'true' to include it. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression applied to Kubernetes objects. Return 'true' to include it.`,
 								},
 							},
 						},
@@ -12037,11 +10634,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "kube_events"`,
+						Required:    true,
+						Description: `must be "kube_events"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"kube_events",
 							),
@@ -12111,33 +10706,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_kube_logs": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -12145,7 +10728,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -12161,17 +10743,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Load balance traffic across all Worker Processes. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"interval": schema.Float64Attribute{
 						Computed:    true,
@@ -12183,35 +10760,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"compress": schema.StringAttribute{
@@ -12259,12 +10822,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -12342,25 +10903,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"rules": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Optional description of this rule's purpose`,
 								},
 								"filter": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression applied to Pod objects. Return 'true' to include it. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression applied to Pod objects. Return 'true' to include it.`,
 								},
 							},
 						},
@@ -12395,11 +10947,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `For use when containers do not emit a timestamp, prefix each line of output with a timestamp. If you enable this setting, you can use the Kubernetes Logs Event Breaker and the kubernetes_logs Pre-processing Pipeline to remove them from the events after the timestamps are extracted. Default: false`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "kube_logs"`,
+						Required:    true,
+						Description: `must be "kube_logs"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"kube_logs",
 							),
@@ -12469,27 +11019,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_kube_metrics": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -12497,7 +11036,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -12507,17 +11045,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"interval": schema.Float64Attribute{
 						Computed:    true,
@@ -12529,35 +11062,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"compress": schema.StringAttribute{
@@ -12611,12 +11130,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -12694,25 +11211,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"rules": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Optional description of this rule's purpose`,
 								},
 								"filter": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression applied to Kubernetes objects. Return 'true' to include it. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression applied to Kubernetes objects. Return 'true' to include it.`,
 								},
 							},
 						},
@@ -12732,11 +11240,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "kube_metrics"`,
+						Required:    true,
+						Description: `must be "kube_metrics"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"kube_metrics",
 							),
@@ -12806,7 +11312,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_loki": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -12847,23 +11352,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -12871,12 +11366,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"credentials_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your credentials`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -12898,7 +11391,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -12909,7 +11401,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -12935,7 +11426,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"login_url": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `URL for OAuth`,
 						Validators: []validator.String{
@@ -12964,109 +11454,67 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"oauth_headers": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth header name. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth header name`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth header value. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth header value`,
 								},
 							},
 						},
 						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth parameter name. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth parameter name`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth parameter value. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth parameter value`,
 								},
 							},
 						},
 						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"password": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -13150,12 +11598,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
 					},
 					"secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Secret parameter name to pass in request body`,
 					},
@@ -13179,31 +11625,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -13217,7 +11657,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -13230,7 +11669,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -13243,17 +11681,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -13269,12 +11704,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"token": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
@@ -13288,7 +11721,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "loki"`,
 						Validators: []validator.String{
@@ -13296,7 +11728,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 				},
@@ -13363,27 +11794,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_metrics": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -13391,7 +11811,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -13407,7 +11826,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -13418,7 +11836,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -13435,40 +11852,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -13559,7 +11961,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tcp_port": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
 						Validators: []validator.Float64{
@@ -13567,26 +11968,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -13600,7 +11996,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -13613,7 +12008,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -13626,17 +12020,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -13652,16 +12043,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "metrics"`,
+						Required:    true,
+						Description: `must be "metrics"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("metrics"),
 						},
 					},
 					"udp_port": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
 						Validators: []validator.Float64{
@@ -13669,7 +12057,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"udp_socket_rx_buf_size": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 						Validators: []validator.Float64{
@@ -13740,27 +12127,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_model_driven_telemetry": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -13768,7 +12144,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -13778,7 +12153,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -13789,7 +12163,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -13800,35 +12173,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -13842,7 +12201,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -13942,26 +12300,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -13975,7 +12328,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -13988,7 +12340,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -14001,12 +12352,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -14022,7 +12371,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "model_driven_telemetry"`,
 						Validators: []validator.String{
@@ -14095,11 +12443,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_msk": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -14108,7 +12454,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
@@ -14122,7 +12467,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auto_commit_interval": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
 						Validators: []validator.Float64{
@@ -14130,7 +12474,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auto_commit_threshold": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
 						Validators: []validator.Float64{
@@ -14138,7 +12481,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -14155,12 +12497,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"backoff_rate": schema.Float64Attribute{
@@ -14173,12 +12513,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"brokers": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092). Not Null`,
+						Description: `Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).`,
 						Validators: []validator.List{
-							speakeasy_listvalidators.NotNull(),
 							listvalidator.SizeAtLeast(1),
 						},
 					},
@@ -14192,23 +12530,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -14216,7 +12544,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -14241,12 +12568,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials to access MSK. Default: false`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `MSK cluster service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to MSK cluster-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -14275,7 +12600,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -14289,15 +12613,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"auth": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Select or create a secret that references your credentials`,
 									},
@@ -14350,21 +12671,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http. Default: "http://localhost:8081"`,
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
 									},
 									"cert_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"certificate_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the predefined certificate`,
 									},
@@ -14375,7 +12692,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Default: true`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -14388,7 +12704,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"min_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -14401,12 +12716,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"passphrase": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
@@ -14419,7 +12732,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											`Default: true`,
 									},
 									"servername": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
 									},
@@ -14473,40 +12785,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -14605,12 +12902,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Region where the MSK cluster is located. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Region where the MSK cluster is located`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Computed:    true,
@@ -14670,21 +12963,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
@@ -14695,7 +12984,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: false`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -14708,7 +12996,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -14721,12 +13008,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
@@ -14739,7 +13024,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									`Default: true`,
 							},
 							"servername": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
 							},
@@ -14756,7 +13040,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "msk"`,
 						Validators: []validator.String{
@@ -14827,27 +13110,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_netflow": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -14855,7 +13127,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -14871,7 +13142,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Allow forwarding of events to a NetFlow destination. Enabling this feature will generate an extra event containing __netflowRaw which can be routed to a NetFlow destination. Note that these events will not count against ingest quota. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -14882,7 +13152,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -14905,35 +13174,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Accept messages in IPFIX format. Default: false`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -14947,7 +13202,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -15047,7 +13301,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "netflow"`,
 						Validators: []validator.String{
@@ -15055,7 +13308,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"udp_socket_rx_buf_size": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 						Validators: []validator.Float64{
@@ -15138,16 +13390,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_office365_mgmt": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"app_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Office 365 Azure Application ID. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Office 365 Azure Application ID`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -15162,28 +13409,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"client_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Office 365 Azure client secret`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -15191,36 +13427,27 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"content_config": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"content_type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Office 365 Management Activity API Content Type`,
 								},
 								"description": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `If interval type is minutes the value entered must evenly divisible by 60 or save will fail`,
 								},
 								"enabled": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"interval": schema.Float64Attribute{
-									Computed: true,
 									Optional: true,
 									Validators: []validator.Float64{
 										float64validator.Between(1, 60),
 									},
 								},
 								"log_level": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Collector runtime Log Level. must be one of ["error", "warn", "info", "debug"]`,
 									Validators: []validator.String{
@@ -15237,7 +13464,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable Office 365 Management Activity API content types and polling intervals. Polling intervals are used to set up search date range and cron schedule, e.g.: */${interval} * * * *. Because of this, intervals entered must be evenly divisible by 60 to give a predictable schedule.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -15247,12 +13473,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -15299,35 +13523,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -15346,7 +13556,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -15424,16 +13633,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"publisher_identifier": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optional Publisher Identifier to use in API requests, defaults to tenant id if not defined. For more information see [here](https://docs.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-reference#start-a-subscription)`,
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.Float64Type,
 								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
@@ -15515,15 +13721,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tenant_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Office 365 Azure Tenant ID. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Office 365 Azure Tenant ID`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
@@ -15546,7 +13747,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "office365_mgmt"`,
 						Validators: []validator.String{
@@ -15619,7 +13819,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_office365_msg_trace": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_type": schema.StringAttribute{
@@ -15638,65 +13837,42 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"cert_options": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Path to the certificate to use. Certificate should be in PEM format. Can reference $ENV_VARS. Not Null`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-								},
+								Required:    true,
+								Description: `Path to the certificate to use. Certificate should be in PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate.`,
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt the private key.`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Path to the private key to use. Key should be in PEM format. Can reference $ENV_VARS. Not Null`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-								},
+								Required:    true,
+								Description: `Path to the private key to use. Key should be in PEM format. Can reference $ENV_VARS.`,
 							},
 						},
 					},
 					"client_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `client_id to pass in the OAuth request parameter.`,
 					},
 					"client_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `client_secret to pass in the OAuth request parameter.`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -15704,12 +13880,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"credentials_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your credentials.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disable_time_filter": schema.BoolAttribute{
@@ -15725,17 +13899,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"end_date": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Backward offset for the search range's tail. (E.g.: -2h@h) Message Trace data is delayed; this parameter (with Date range start) compensates for delay and gaps.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -15806,40 +13977,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"password": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Password to run Message Trace API call.`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -15858,7 +14014,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -15948,11 +14103,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Resource to pass in the OAuth request parameter. Default: "https://outlook.office365.com"`,
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.Float64Type,
 								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
@@ -16027,7 +14180,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
 					"start_date": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Backward offset for the search range's head. (E.g.: -3h@h) Message Trace data is delayed; this parameter (with Date range end) compensates for delay and gaps.`,
 					},
@@ -16039,12 +14191,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tenant_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Directory ID (tenant identifier) in Azure Active Directory.`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your client_secret to pass in the OAuth request parameter.`,
 					},
@@ -16067,7 +14217,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "office365_msg_trace"`,
 						Validators: []validator.String{
@@ -16083,7 +14232,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `URL to use when retrieving report data. Default: "https://reports.office365.com/ecp/reportingwebservice/reporting.svc/MessageTrace"`,
 					},
 					"username": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Username to run Message Trace API call.`,
 					},
@@ -16151,16 +14299,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_office365_service": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"app_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Office 365 Azure Application ID. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Office 365 Azure Application ID`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -16175,28 +14318,17 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"client_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Office 365 Azure client secret`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -16204,36 +14336,27 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"content_config": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"content_type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Office 365 Services API Content Type`,
 								},
 								"description": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `If interval type is minutes the value entered must evenly divisible by 60 or save will fail`,
 								},
 								"enabled": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"interval": schema.Float64Attribute{
-									Computed: true,
 									Optional: true,
 									Validators: []validator.Float64{
 										float64validator.AtMost(60),
 									},
 								},
 								"log_level": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Collector runtime Log Level. must be one of ["error", "warn", "info", "debug"]`,
 									Validators: []validator.String{
@@ -16250,7 +14373,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable Office 365 Service Communication API content types and polling intervals. Polling intervals are used to set up search date range and cron schedule, e.g.: */${interval} * * * *. Because of this, intervals entered for current and historical status must be evenly divisible by 60 to give a predictable schedule.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -16260,12 +14382,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -16303,35 +14423,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -16350,7 +14456,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -16428,11 +14533,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.Float64Type,
 								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
@@ -16514,15 +14617,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tenant_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Office 365 Azure Tenant ID. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Office 365 Azure Tenant ID`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
@@ -16545,7 +14643,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "office365_service"`,
 						Validators: []validator.String{
@@ -16618,11 +14715,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_open_telemetry": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Parsed as JSON.`,
 						Validators: []validator.String{
@@ -16652,7 +14747,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"capture_headers": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Parsed as JSON.`,
 						Validators: []validator.String{
@@ -16660,23 +14754,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -16684,12 +14768,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"credentials_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your credentials`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -16705,7 +14787,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Parsed as JSON.`,
 						Validators: []validator.String{
@@ -16713,7 +14794,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -16742,7 +14822,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -16768,7 +14847,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"login_url": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `URL for OAuth`,
 						Validators: []validator.String{
@@ -16794,84 +14872,47 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"oauth_headers": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth header name. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth header name`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth header value. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth header value`,
 								},
 							},
 						},
 						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth parameter name. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth parameter name`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth parameter value. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth parameter value`,
 								},
 							},
 						},
@@ -16890,11 +14931,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"password": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -16908,7 +14947,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -17004,12 +15042,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
 					},
 					"secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Secret parameter name to pass in request body`,
 					},
@@ -17033,31 +15069,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -17071,7 +15101,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -17084,7 +15113,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -17097,17 +15125,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -17123,12 +15148,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"token": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
@@ -17142,7 +15165,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "open_telemetry"`,
 						Validators: []validator.String{
@@ -17152,7 +15174,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 				},
@@ -17219,11 +15240,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_prometheus": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -17232,7 +15251,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
@@ -17262,27 +15280,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -17290,16 +15297,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"credentials_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your credentials`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"dimension_list": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Other dimensions to include in events`,
@@ -17339,17 +15343,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials to access EC2. Default: false`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `EC2 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to EC2-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -17410,28 +15411,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -17448,17 +15436,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"password": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Password for Prometheus Basic authentication`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -17549,7 +15534,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Region where the EC2 is located`,
 					},
@@ -17596,20 +15580,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"search_filter": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list`,
 								},
 								"values": schema.ListAttribute{
 									Computed:    true,
@@ -17664,7 +15640,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "prometheus"`,
 						Validators: []validator.String{
@@ -17680,7 +15655,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use public IP address for discovered targets. Set to false if the private IP address should be used. Default: true`,
 					},
 					"username": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Username for Prometheus Basic authentication`,
 					},
@@ -17748,7 +15722,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_prometheus_rw": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.Float64Attribute{
@@ -17789,23 +15762,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -17813,12 +15776,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"credentials_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your credentials`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -17840,7 +15801,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -17851,7 +15811,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -17877,7 +15836,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"login_url": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `URL for OAuth`,
 						Validators: []validator.String{
@@ -17897,109 +15855,67 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"oauth_headers": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth header name. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth header name`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth header value. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth header value`,
 								},
 							},
 						},
 						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth parameter name. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth parameter name`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth parameter value. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth parameter value`,
 								},
 							},
 						},
 						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"password": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -18092,12 +16008,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
 					},
 					"secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Secret parameter name to pass in request body`,
 					},
@@ -18121,31 +16035,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -18159,7 +16067,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -18172,7 +16079,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -18185,17 +16091,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -18211,12 +16114,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"token": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
@@ -18230,7 +16131,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "prometheus_rw"`,
 						Validators: []validator.String{
@@ -18240,7 +16140,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 				},
@@ -18307,27 +16206,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_raw_udp": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -18335,7 +16223,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -18345,7 +16232,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -18356,7 +16242,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -18379,49 +16264,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of events to buffer when downstream is blocking. Default: 1000`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -18518,7 +16386,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "raw_udp"`,
 						Validators: []validator.String{
@@ -18526,7 +16393,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"udp_socket_rx_buf_size": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 						Validators: []validator.Float64{
@@ -18597,11 +16463,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_s3": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -18610,17 +16474,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
 					"aws_account_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -18637,22 +16498,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
@@ -18673,23 +16530,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -18697,7 +16544,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -18728,17 +16574,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials when accessing Amazon SQS. Default: false`,
 					},
 					"encoding": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -18749,7 +16592,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Regex matching file names to download and process. Defaults to: .*. Default: "/.*/"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -18763,28 +16605,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -18818,7 +16647,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -18832,7 +16660,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -18910,17 +16737,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"args": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Arguments to be added to the custom command`,
 							},
 							"command": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 							},
@@ -18933,25 +16757,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"processed_tag_key": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"processed_tag_value": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"queue_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `.`,
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.`,
 					},
@@ -19020,11 +16837,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions. Default: false`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "s3"`,
+						Required:    true,
+						Description: `must be "s3"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("s3"),
 						},
 					},
@@ -19101,11 +16916,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_s3_inventory": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -19114,17 +16927,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
 					"aws_account_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -19141,22 +16951,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
@@ -19183,23 +16989,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Filename suffix of the manifest checksum file. If a filename matching this suffix is received        in the queue, the matching manifest file will be downloaded and validated against its value. Defaults to "checksum". Default: "checksum"`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -19207,7 +17003,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -19238,12 +17033,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials when accessing Amazon SQS. Default: false`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -19254,7 +17047,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Regex matching file names to download and process. Defaults to: .*. Default: "/.*/"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -19277,28 +17069,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -19332,7 +17111,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -19346,7 +17124,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -19424,17 +17201,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"args": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Arguments to be added to the custom command`,
 							},
 							"command": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 							},
@@ -19447,25 +17221,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"processed_tag_key": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"processed_tag_value": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"queue_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `.`,
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.`,
 					},
@@ -19528,7 +17295,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tag_after_processing": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be one of ["false", "true"]`,
 						Validators: []validator.String{
@@ -19539,11 +17305,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "s3_inventory"`,
+						Required:    true,
+						Description: `must be "s3_inventory"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"s3_inventory",
 							),
@@ -19628,11 +17392,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_security_lake": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -19641,17 +17403,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
 					"aws_account_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -19668,22 +17427,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"checkpointing": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
@@ -19704,23 +17459,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -19728,7 +17473,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -19759,17 +17503,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials when accessing Amazon SQS. Default: false`,
 					},
 					"encoding": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -19780,7 +17521,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Regex matching file names to download and process. Defaults to: .*. Default: "/.*/"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -19794,28 +17534,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -19849,7 +17576,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -19863,7 +17589,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -19941,17 +17666,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"args": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Arguments to be added to the custom command`,
 							},
 							"command": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 							},
@@ -19964,25 +17686,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"processed_tag_key": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"processed_tag_value": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
 					},
 					"queue_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `.`,
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.`,
 					},
@@ -20045,7 +17760,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tag_after_processing": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be one of ["false", "true"]`,
 						Validators: []validator.String{
@@ -20056,11 +17770,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "security_lake"`,
+						Required:    true,
+						Description: `must be "security_lake"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"security_lake",
 							),
@@ -20139,7 +17851,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_snmp": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"best_effort_parsing": schema.BoolAttribute{
@@ -20149,23 +17860,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `If enabled, the parser will attempt to parse varbind octet strings as UTF-8, first, otherwise will fallback to other methods. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -20173,7 +17874,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -20183,7 +17883,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -20194,7 +17893,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -20211,35 +17909,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of events to buffer when downstream is blocking. Default: 1000`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -20253,7 +17937,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -20337,7 +18020,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
 					},
 					"snmp_v3_auth": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"allow_unmatched_trap": schema.BoolAttribute{
@@ -20353,15 +18035,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: false`,
 							},
 							"v3_users": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"auth_key": schema.StringAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `Parsed as JSON.`,
 											Validators: []validator.String{
@@ -20386,11 +18063,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 										},
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
+											Required: true,
 											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
 												stringvalidator.UTF8LengthAtLeast(1),
 											},
 										},
@@ -20421,7 +18095,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "snmp"`,
 						Validators: []validator.String{
@@ -20429,7 +18102,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"udp_socket_rx_buf_size": schema.Float64Attribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 						Validators: []validator.Float64{
@@ -20506,35 +18178,24 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_splunk": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_tokens": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"token": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 								},
 							},
 						},
 						Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
@@ -20553,23 +18214,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -20577,7 +18228,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -20599,7 +18249,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable if the connection is proxied by a device that supports proxy protocol v1 or v2. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -20616,7 +18265,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -20642,49 +18290,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -20802,26 +18433,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -20835,7 +18461,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -20848,7 +18473,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -20861,17 +18485,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -20887,7 +18508,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "splunk"`,
 						Validators: []validator.String{
@@ -20964,17 +18584,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_splunk_hec": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"access_control_allow_headers": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
 					},
 					"access_control_allow_origin": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
@@ -20989,21 +18606,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"allowed_indexes": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
 					},
 					"auth_tokens": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"allowed_indexes_at_token": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
@@ -21021,7 +18632,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Optional token description`,
 								},
@@ -21032,44 +18642,28 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Description: `Default: true`,
 								},
 								"metadata": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required: true,
 											},
 											"value": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 											},
 										},
 									},
 									Description: `Fields to add to events referencing this token`,
 								},
 								"token": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null; Parsed as JSON.`,
+									Required:    true,
+									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
 										validators.IsValidJSON(),
 									},
 								},
 								"token_secret": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -21081,7 +18675,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
@@ -21093,23 +18686,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -21117,7 +18700,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -21139,7 +18721,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
 					"enable_health_check": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Parsed as JSON.`,
 						Validators: []validator.String{
@@ -21153,7 +18734,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -21170,7 +18750,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -21208,49 +18787,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to every event. Overrides fields added at the token or request level. See [the Source documentation](https://docs.cribl.io/stream/sources-splunk-hec/#fields) for more info.`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -21377,26 +18939,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -21410,7 +18967,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -21423,7 +18979,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -21436,17 +18991,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -21462,7 +19014,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "splunk_hec"`,
 						Validators: []validator.String{
@@ -21541,7 +19092,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_splunk_search": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_header_expr": schema.StringAttribute{
@@ -21567,29 +19117,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -21597,7 +19136,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"credentials_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a secret that references your credentials`,
 					},
@@ -21608,7 +19146,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `A cron schedule on which to run this job. Default: "*/15 * * * *"`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -21624,7 +19161,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `The earliest time boundary for the search. Can be an exact or relative time. Examples: '2022-01-14T12:00:00Z' or '-16m@m'. Default: "-16m@m"`,
 					},
 					"encoding": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 					},
@@ -21635,68 +19171,40 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `REST API used to create a search. Default: "/services/search/v2/jobs/export"`,
 					},
 					"endpoint_headers": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
 								},
 							},
 						},
 						Description: `Optional request headers to send to the endpoint`,
 					},
 					"endpoint_params": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
 								},
 							},
 						},
 						Description: `Optional request parameters to send to the endpoint`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -21731,7 +19239,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `The latest time boundary for the search. Can be an exact or relative time. Examples: '2022-01-14T12:00:00Z' or '-1m@m'. Default: "-1m@m"`,
 					},
 					"log_level": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Collector runtime log level (verbosity). must be one of ["error", "warn", "info", "debug"]`,
 						Validators: []validator.String{
@@ -21744,7 +19251,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"login_url": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `URL for OAuth`,
 						Validators: []validator.String{
@@ -21761,84 +19267,47 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"oauth_headers": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth header name. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth header name`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth header value. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth header value`,
 								},
 							},
 						},
 						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth parameter name. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth parameter name`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `OAuth parameter value. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `OAuth parameter value`,
 								},
 							},
 						},
@@ -21857,16 +19326,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"password": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -21959,11 +19425,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.Float64Type,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
@@ -22032,12 +19496,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"search": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Enter Splunk search here. Examples: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Enter Splunk search here. Examples: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'`,
 					},
 					"search_head": schema.StringAttribute{
 						Computed:    true,
@@ -22046,12 +19506,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Search head base URL. Can be an expression. Default is https://localhost:8089. Default: "https://localhost:8089"`,
 					},
 					"secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Secret parameter name to pass in request body`,
 					},
@@ -22078,17 +19536,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
 					"token": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
@@ -22111,7 +19566,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "splunk_search"`,
 						Validators: []validator.String{
@@ -22127,7 +19581,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. Default: false`,
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 				},
@@ -22194,11 +19647,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_sqs": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
 						Validators: []validator.String{
@@ -22207,17 +19658,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID to use when assuming role`,
 					},
 					"aws_account_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -22234,32 +19682,20 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"aws_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -22273,7 +19709,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Create queue if it does not exist. Default: false`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -22298,17 +19733,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use Assume Role credentials to access SQS. Default: false`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SQS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SQS-compatible endpoint.`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -22322,28 +19754,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
@@ -22359,7 +19778,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -22373,7 +19791,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -22451,12 +19868,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"queue_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The name, URL, or ARN of the SQS queue to read events from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can only be evaluated at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The name, URL, or ARN of the SQS queue to read events from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can only be evaluated at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `.`,
 					},
 					"queue_type": schema.StringAttribute{
 						Computed:    true,
@@ -22471,7 +19884,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.`,
 					},
@@ -22510,7 +19922,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "sqs"`,
 						Validators: []validator.String{
@@ -22590,11 +20001,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_syslog": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"input_syslog_syslog1": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"allow_non_standard_app_name": schema.BoolAttribute{
@@ -22604,23 +20013,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages. Default: false`,
 							},
 							"connections": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"output": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"pipeline": schema.StringAttribute{
-											Computed: true,
 											Optional: true,
 										},
 									},
@@ -22628,7 +20027,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 							},
 							"description": schema.StringAttribute{
-								Computed: true,
 								Optional: true,
 							},
 							"disabled": schema.BoolAttribute{
@@ -22638,7 +20036,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: false`,
 							},
 							"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
 							},
@@ -22655,7 +20052,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2. Default: false`,
 							},
 							"environment": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 							},
@@ -22666,7 +20062,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
 							},
 							"id": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Unique ID for this input`,
 							},
@@ -22702,28 +20097,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
 							},
 							"metadata": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 										},
 									},
 								},
@@ -22736,12 +20118,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable if incoming messages use octet counting per RFC 6587. Default: false`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process data from this Source before sending it through the Routes`,
 							},
 							"pq": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"commit_frequency": schema.Float64Attribute{
@@ -22862,7 +20242,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424. Default: true`,
 							},
 							"tcp_port": schema.Float64Attribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
 								Validators: []validator.Float64{
@@ -22876,26 +20255,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Timezone to assign to timestamps without timezone info. Default: "local"`,
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"cert_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"certificate_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the predefined certificate`,
 									},
 									"common_name_regex": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Parsed as JSON.`,
 										Validators: []validator.String{
@@ -22909,7 +20283,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Default: true`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -22922,7 +20295,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"min_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -22935,17 +20307,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"passphrase": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"reject_unauthorized": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Parsed as JSON.`,
 										Validators: []validator.String{
@@ -22961,25 +20330,20 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be "syslog"`,
+								Required:    true,
+								Description: `must be "syslog"`,
 								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf("syslog"),
 								},
 							},
 							"udp_port": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Enter UDP port number to listen on. Not required if listening on TCP. Not Null`,
+								Required:    true,
+								Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
 								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
 									float64validator.AtMost(65535),
 								},
 							},
 							"udp_socket_rx_buf_size": schema.Float64Attribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 								Validators: []validator.Float64{
@@ -22994,7 +20358,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"input_syslog_syslog2": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"allow_non_standard_app_name": schema.BoolAttribute{
@@ -23004,23 +20367,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages. Default: false`,
 							},
 							"connections": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"output": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"pipeline": schema.StringAttribute{
-											Computed: true,
 											Optional: true,
 										},
 									},
@@ -23028,7 +20381,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 							},
 							"description": schema.StringAttribute{
-								Computed: true,
 								Optional: true,
 							},
 							"disabled": schema.BoolAttribute{
@@ -23038,7 +20390,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: false`,
 							},
 							"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
 							},
@@ -23055,7 +20406,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2. Default: false`,
 							},
 							"environment": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 							},
@@ -23066,7 +20416,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
 							},
 							"id": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Unique ID for this input`,
 							},
@@ -23102,28 +20451,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
 							},
 							"metadata": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 										},
 									},
 								},
@@ -23136,12 +20472,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable if incoming messages use octet counting per RFC 6587. Default: false`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process data from this Source before sending it through the Routes`,
 							},
 							"pq": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"commit_frequency": schema.Float64Attribute{
@@ -23262,11 +20596,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424. Default: true`,
 							},
 							"tcp_port": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Enter TCP port number to listen on. Not required if listening on UDP. Not Null`,
+								Required:    true,
+								Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
 								Validators: []validator.Float64{
-									speakeasy_float64validators.NotNull(),
 									float64validator.AtMost(65535),
 								},
 							},
@@ -23277,26 +20609,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Timezone to assign to timestamps without timezone info. Default: "local"`,
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"cert_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"certificate_name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the predefined certificate`,
 									},
 									"common_name_regex": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Parsed as JSON.`,
 										Validators: []validator.String{
@@ -23310,7 +20637,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Default: true`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -23323,7 +20649,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"min_version": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 										Validators: []validator.String{
@@ -23336,17 +20661,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"passphrase": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"priv_key_path": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"reject_unauthorized": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Parsed as JSON.`,
 										Validators: []validator.String{
@@ -23362,16 +20684,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be "syslog"`,
+								Required:    true,
+								Description: `must be "syslog"`,
 								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf("syslog"),
 								},
 							},
 							"udp_port": schema.Float64Attribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
 								Validators: []validator.Float64{
@@ -23379,7 +20698,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"udp_socket_rx_buf_size": schema.Float64Attribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 								Validators: []validator.Float64{
@@ -23457,27 +20775,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_system_metrics": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -23485,7 +20792,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"container": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"all_containers": schema.BoolAttribute{
@@ -23501,7 +20807,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Generate full container metrics. Default: false`,
 							},
 							"docker_socket": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Full paths for Docker's UNIX-domain socket`,
@@ -23516,20 +20821,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"filters": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"expr": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 									},
 								},
@@ -23558,7 +20854,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -23568,20 +20863,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"host": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"custom": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"cpu": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"detail": schema.BoolAttribute{
@@ -23619,7 +20910,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"disk": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"detail": schema.BoolAttribute{
@@ -23629,7 +20919,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Description: `Generate full disk metrics. Default: false`,
 											},
 											"devices": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 												Description: `Block devices to include/exclude. Examples: sda*, !loop*. Wildcards and ! (not) operators are supported. All devices are included if this list is empty.`,
@@ -23671,7 +20960,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"memory": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"detail": schema.BoolAttribute{
@@ -23697,7 +20985,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"network": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"detail": schema.BoolAttribute{
@@ -23707,7 +20994,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Description: `Generate full network metrics. Default: false`,
 											},
 											"devices": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 												Description: `Network interfaces to include/exclude. Examples: eth0, !lo. All interfaces are included if this list is empty.`,
@@ -23735,7 +21021,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"system": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
@@ -23779,12 +21064,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"interval": schema.Float64Attribute{
 						Computed:    true,
@@ -23796,35 +21077,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"compress": schema.StringAttribute{
@@ -23878,12 +21145,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -23961,24 +21226,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"process": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"sets": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"filter": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"include_children": schema.BoolAttribute{
 											Computed:    true,
@@ -23987,12 +21242,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											Description: `Default: false`,
 										},
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 									},
 								},
@@ -24014,11 +21264,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "system_metrics"`,
+						Required:    true,
+						Description: `must be "system_metrics"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"system_metrics",
 							),
@@ -24088,15 +21336,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_system_state": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collectors": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"disk": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24109,7 +21354,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events for physical disks, partitions, and file systems`,
 							},
 							"dns": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24122,7 +21366,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events for DNS resolvers and search entries`,
 							},
 							"firewall": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24135,7 +21378,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events for Firewall rules entries`,
 							},
 							"hostsfile": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24148,7 +21390,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events based on entries collected from the hosts file`,
 							},
 							"interfaces": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24161,7 +21402,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events for each of the host’s network interfaces`,
 							},
 							"login_users": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24174,7 +21414,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events from list of logged-in users`,
 							},
 							"metadata": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24187,7 +21426,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events based on the host system’s current state`,
 							},
 							"ports": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24200,7 +21438,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events from list of listening ports`,
 							},
 							"routes": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24213,7 +21450,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events based on entries collected from the host’s network routes`,
 							},
 							"services": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24226,7 +21462,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Creates events from the list of services`,
 							},
 							"user": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
@@ -24241,23 +21476,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -24265,7 +21490,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disable_native_module": schema.BoolAttribute{
@@ -24281,17 +21505,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"interval": schema.Float64Attribute{
 						Computed:    true,
@@ -24303,35 +21522,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"compress": schema.StringAttribute{
@@ -24385,12 +21590,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -24481,11 +21684,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "system_state"`,
+						Required:    true,
+						Description: `must be "system_state"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"system_state",
 							),
@@ -24555,7 +21756,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_tcp": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_type": schema.StringAttribute{
@@ -24571,29 +21771,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -24601,7 +21790,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -24623,7 +21811,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable if the connection is proxied by a device that supports proxy protocol v1 or v2. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -24634,7 +21821,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -24651,49 +21837,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -24771,17 +21940,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"args": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Arguments to be added to the custom command`,
 							},
 							"command": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 							},
@@ -24834,26 +22000,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -24867,7 +22028,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -24880,7 +22040,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -24893,17 +22052,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -24919,7 +22075,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "tcp"`,
 						Validators: []validator.String{
@@ -24990,7 +22145,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_tcpjson": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_token": schema.StringAttribute{
@@ -25012,23 +22166,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -25036,7 +22180,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -25058,7 +22201,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable if the connection is proxied by a device that supports proxy protocol v1 or v2. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -25069,7 +22211,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -25086,49 +22227,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -25237,31 +22361,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -25275,7 +22393,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -25288,7 +22405,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -25301,17 +22417,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -25327,7 +22440,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "tcpjson"`,
 						Validators: []validator.String{
@@ -25398,7 +22510,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_wef": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"allow_machine_id_mismatch": schema.BoolAttribute{
@@ -25420,7 +22531,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"ca_fingerprint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SHA1 fingerprint expected by the client, if it does not match the first certificate in the configured CA chain`,
 					},
@@ -25431,23 +22541,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -25455,7 +22555,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -25477,7 +22576,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Preserve the client’s original IP address in the __srcIpPort field when connecting through an HTTP proxy that supports the X-Forwarded-For header. This does not apply to TCP-layer Proxy Protocol v1/v2. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -25488,7 +22586,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -25514,7 +22611,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"keytab": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Path to the keytab file containing the service principal credentials. @{product} will use ` + "`" + `/etc/krb5.keytab` + "`" + ` if not provided.`,
 					},
@@ -25537,35 +22633,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
@@ -25579,7 +22661,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -25657,7 +22738,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"principal": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Kerberos principal used for authentication, typically in the form HTTP/<hostname>@<REALM>`,
 					},
@@ -25681,12 +22761,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"subscriptions": schema.ListNestedAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"batch_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -25722,12 +22798,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"id": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"locale": schema.StringAttribute{
 									Computed:    true,
@@ -25736,28 +22807,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Description: `The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US". Default: "en-US"`,
 								},
 								"metadata": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required: true,
 											},
 											"value": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 											},
 										},
 									},
@@ -25788,53 +22846,33 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Description: `Keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events'. See [Cribl Docs](https://docs.cribl.io/stream/sources-wef/#subscriptions) for more details. Default: true`,
 								},
 								"subscription_name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"targets": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com`,
 								},
 								"version": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Version UUID for this subscription. If any subscription parameters are modified, this value will change.`,
 								},
 							},
 						},
-						Description: `Subscriptions to events on forwarding endpoints. Not Null`,
-						Validators: []validator.List{
-							speakeasy_listvalidators.NotNull(),
-						},
+						Description: `Subscriptions to events on forwarding endpoints`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Server path containing CA certificates (in PEM format) to use. Can reference $ENV_VARS. If multiple certificates are present in a .pem, each must directly certify the one preceding it. Not Null`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-								},
+								Required:    true,
+								Description: `Server path containing CA certificates (in PEM format) to use. Can reference $ENV_VARS. If multiple certificates are present in a .pem, each must directly certify the one preceding it.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS. Not Null`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-								},
+								Required:    true,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Name of the predefined certificate`,
 							},
@@ -25851,7 +22889,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable TLS. Default: false`,
 							},
 							"keytab": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -25859,7 +22896,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -25872,7 +22908,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -25897,12 +22932,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `If enabled, checks will fail on any OCSP error. Otherwise, checks will fail only when a certificate is revoked, ignoring other errors. Default: false`,
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"principal": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -25910,12 +22943,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS. Not Null`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-								},
+								Required:    true,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed:    true,
@@ -25932,7 +22961,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "wef"`,
 						Validators: []validator.String{
@@ -26003,27 +23031,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_windows_metrics": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -26031,7 +23048,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disable_native_module": schema.BoolAttribute{
@@ -26047,20 +23063,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"host": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"custom": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"cpu": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"detail": schema.BoolAttribute{
@@ -26098,7 +23110,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"disk": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"mode": schema.StringAttribute{
@@ -26122,7 +23133,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Description: `Generate separate metrics for each volume. Default: false`,
 											},
 											"volumes": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 												Description: `Windows volumes to include/exclude. E.g.: C:, !E:, etc. Wildcards and ! (not) operators are supported. All volumes are included if this list is empty.`,
@@ -26130,7 +23140,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"memory": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"detail": schema.BoolAttribute{
@@ -26156,7 +23165,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"network": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"detail": schema.BoolAttribute{
@@ -26166,7 +23174,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Description: `Generate full network metrics. Default: false`,
 											},
 											"devices": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 												Description: `Network interfaces to include/exclude. All interfaces are included if this list is empty.`,
@@ -26194,7 +23201,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"system": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"detail": schema.BoolAttribute{
@@ -26238,12 +23244,8 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this input. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Unique ID for this input`,
 					},
 					"interval": schema.Float64Attribute{
 						Computed:    true,
@@ -26255,35 +23257,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"compress": schema.StringAttribute{
@@ -26337,12 +23325,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -26420,24 +23406,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
 					},
 					"process": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"sets": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 									Attributes: map[string]schema.Attribute{
 										"filter": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 										"include_children": schema.BoolAttribute{
 											Computed:    true,
@@ -26446,12 +23422,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											Description: `Default: false`,
 										},
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
+											Required: true,
 										},
 									},
 								},
@@ -26473,11 +23444,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "windows_metrics"`,
+						Required:    true,
+						Description: `must be "windows_metrics"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"windows_metrics",
 							),
@@ -26547,7 +23516,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_win_event_logs": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"batch_size": schema.Float64Attribute{
@@ -26560,23 +23528,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -26584,7 +23542,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disable_native_module": schema.BoolAttribute{
@@ -26600,7 +23557,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -26617,7 +23573,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -26631,7 +23586,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"log_names": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.`,
@@ -26650,40 +23604,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -26786,11 +23725,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "win_event_logs"`,
+						Required:    true,
+						Description: `must be "win_event_logs"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"win_event_logs",
 							),
@@ -26860,11 +23797,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_wiz": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_audience_override": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The audience to use when requesting an OAuth token for a custom auth URL. When not specified, ` + "`" + `wiz-api` + "`" + ` will be used.`,
 					},
@@ -26881,44 +23816,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"auth_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The authentication URL to generate an OAuth token. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The authentication URL to generate an OAuth token`,
 					},
 					"client_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The client ID of the Wiz application. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The client ID of the Wiz application`,
 					},
 					"client_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The client secret of the Wiz application`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -26926,24 +23842,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"content_config": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"content_description": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"content_type": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `The name of the Wiz query. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `The name of the Wiz query`,
 								},
 								"enabled": schema.BoolAttribute{
 									Computed:    true,
@@ -26955,7 +23862,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -26974,12 +23880,10 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -27008,40 +23912,25 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to events from this input`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -27128,11 +24017,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
 								ElementType: types.Float64Type,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
@@ -27214,7 +24101,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"text_secret": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Select or create a stored text secret`,
 					},
@@ -27228,7 +24114,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "wiz"`,
 						Validators: []validator.String{
@@ -27299,17 +24184,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"input_zscaler_hec": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"access_control_allow_headers": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
 					},
 					"access_control_allow_origin": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
@@ -27324,21 +24206,15 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"allowed_indexes": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
 					},
 					"auth_tokens": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"allowed_indexes_at_token": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
@@ -27356,7 +24232,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"enabled": schema.BoolAttribute{
@@ -27366,44 +24241,28 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Description: `Default: true`,
 								},
 								"metadata": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required: true,
 											},
 											"value": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
+												Required:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 											},
 										},
 									},
 									Description: `Fields to add to events referencing this token`,
 								},
 								"token": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null; Parsed as JSON.`,
+									Required:    true,
+									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
 										validators.IsValidJSON(),
 									},
 								},
 								"token_secret": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -27421,23 +24280,13 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Add request headers to events, in the __headers field. Default: false`,
 					},
 					"connections": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"output": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -27445,7 +24294,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
@@ -27461,7 +24309,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
 					"enable_health_check": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Parsed as JSON.`,
 						Validators: []validator.String{
@@ -27475,7 +24322,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
@@ -27501,7 +24347,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Unique ID for this input`,
 					},
@@ -27539,49 +24384,32 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
 					},
 					"metadata": schema.ListNestedAttribute{
-						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required: true,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
 						Description: `Fields to add to every event. May be overridden by fields added at the token or request level.`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 					},
 					"port": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Port to listen on. Not Null`,
+						Required:    true,
+						Description: `Port to listen on`,
 						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
 							float64validator.AtMost(65535),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -27684,26 +24512,21 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"certificate_name": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -27717,7 +24540,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default: true`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -27730,7 +24552,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"min_version": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
 								Validators: []validator.String{
@@ -27743,17 +24564,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"passphrase": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Parsed as JSON.`,
 								Validators: []validator.String{
@@ -27769,7 +24587,6 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `must be "zscaler_hec"`,
 						Validators: []validator.String{
@@ -27905,11 +24722,11 @@ func (r *SourceResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInput(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateInputResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -27969,11 +24786,11 @@ func (r *SourceResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInput(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListInputResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -28019,11 +24836,11 @@ func (r *SourceResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInput(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateInputByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -28056,11 +24873,11 @@ func (r *SourceResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.Object != nil && res1.Object.Items != nil && len(res1.Object.Items) > 0) {
+	if !(res1.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInput(ctx, &res1.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListInputResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk"
 )
 
@@ -28,12 +27,12 @@ type SubscriptionDataSource struct {
 
 // SubscriptionDataSourceModel describes the data model.
 type SubscriptionDataSourceModel struct {
-	Description types.String           `queryParam:"style=form,explode=true,name=description" tfsdk:"description"`
-	Disabled    types.Bool             `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
-	Filter      types.String           `queryParam:"style=form,explode=true,name=filter" tfsdk:"filter"`
-	GroupID     types.String           `tfsdk:"group_id"`
-	Items       []tfTypes.Subscription `tfsdk:"items"`
-	Pipeline    types.String           `queryParam:"style=form,explode=true,name=pipeline" tfsdk:"pipeline"`
+	Description types.String `queryParam:"style=form,explode=true,name=description" tfsdk:"description"`
+	Disabled    types.Bool   `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
+	Filter      types.String `queryParam:"style=form,explode=true,name=filter" tfsdk:"filter"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Pipeline    types.String `queryParam:"style=form,explode=true,name=pipeline" tfsdk:"pipeline"`
 }
 
 // Metadata returns the data source type name.
@@ -48,14 +47,17 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Project description`,
 			},
 			"disabled": schema.BoolAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Project enabled`,
 			},
 			"filter": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `filter`,
 			},
@@ -63,53 +65,11 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
-			"items": schema.ListNestedAttribute{
+			"id": schema.StringAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"consumer": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"connections": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"output": schema.StringAttribute{
-												Computed: true,
-											},
-											"pipeline": schema.StringAttribute{
-												Computed: true,
-											},
-										},
-									},
-								},
-								"disabled": schema.BoolAttribute{
-									Computed: true,
-								},
-								"type": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"disabled": schema.BoolAttribute{
-							Computed: true,
-						},
-						"filter": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"pipeline": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
 			},
 			"pipeline": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `pipeline to be used`,
 			},
@@ -177,11 +137,11 @@ func (r *SubscriptionDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSubscriptionResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSubscription(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

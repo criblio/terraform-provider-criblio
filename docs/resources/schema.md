@@ -14,11 +14,10 @@ Schema Resource
 
 ```terraform
 resource "criblio_schema" "my_schema" {
-  additional_properties = "{ \"see\": \"documentation\" }"
-  description           = "...my_description..."
-  group_id              = "...my_group_id..."
-  id                    = "...my_id..."
-  schema                = "...my_schema..."
+  description = "...my_description..."
+  group_id    = "...my_group_id..."
+  id          = "...my_id..."
+  schema      = "...my_schema..."
 }
 ```
 
@@ -33,7 +32,6 @@ resource "criblio_schema" "my_schema" {
 
 ### Optional
 
-- `additional_properties` (String) Parsed as JSON.
 - `description` (String)
 
 ## Import

@@ -38,33 +38,4 @@ data "criblio_subscription" "my_subscription" {
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `consumer` (Attributes) (see [below for nested schema](#nestedatt--items--consumer))
-- `description` (String)
-- `disabled` (Boolean)
-- `filter` (String)
-- `id` (String)
-- `pipeline` (String)
-
-<a id="nestedatt--items--consumer"></a>
-### Nested Schema for `items.consumer`
-
-Read-Only:
-
-- `connections` (Attributes List) (see [below for nested schema](#nestedatt--items--consumer--connections))
-- `disabled` (Boolean)
-- `type` (String)
-
-<a id="nestedatt--items--consumer--connections"></a>
-### Nested Schema for `items.consumer.connections`
-
-Read-Only:
-
-- `output` (String)
-- `pipeline` (String)
+- `id` (String) The ID of this resource.

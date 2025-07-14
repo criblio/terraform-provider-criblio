@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Connection struct {
-	Output   types.String `tfsdk:"output"`
-	Pipeline types.String `tfsdk:"pipeline"`
+type Cloud struct {
+	Provider types.String `tfsdk:"provider"`
+	Region   types.String `tfsdk:"region"`
 }

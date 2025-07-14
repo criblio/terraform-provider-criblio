@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
@@ -27,12 +26,6 @@ func (r *SchemaDataSourceModel) ToOperationsListLibSchemasRequest(ctx context.Co
 func (r *SchemaDataSourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Context, resp *shared.SchemaLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp.AdditionalProperties == nil {
-		r.AdditionalProperties = types.StringNull()
-	} else {
-		additionalPropertiesResult, _ := json.Marshal(resp.AdditionalProperties)
-		r.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
-	}
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
 	r.Schema = types.StringValue(resp.Schema)

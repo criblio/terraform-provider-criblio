@@ -1,14 +1,14 @@
 resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-  description         = "...my_description..."
-  event_breaker_regex = "...my_event_breaker_regex..."
-  group_id            = "...my_group_id..."
-  id                  = "...my_id..."
-  lib                 = "custom"
-  min_raw_length      = 75773.87
+  description    = "...my_description..."
+  group_id       = "...my_group_id..."
+  id             = "...my_id..."
+  lib            = "custom"
+  min_raw_length = 75773.87
   rules = [
     {
-      condition = "...my_condition..."
-      disabled  = false
+      condition           = "...my_condition..."
+      disabled            = false
+      event_breaker_regex = "...my_event_breaker_regex..."
       fields = [
         {
           name  = "...my_name..."

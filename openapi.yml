@@ -2686,11 +2686,6 @@ components:
         tags:
           type: string
           title: Tags
-        eventBreakerRegex:
-          type: string
-          title: Event breaker regex
-          description: The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction.
-          default: /[\\n\\r]+(?!\\s)/
         minRawLength:
           type: number
           title: Min raw length
@@ -2741,6 +2736,12 @@ components:
                 description: The regex to match before attempting timestamp extraction. Use $
                   (end-of-string anchor) to prevent extraction.
                 default: /^/
+              eventBreakerRegex:
+                type: string
+                title: Event breaker regex
+                description: The regex to match before attempting event breaker extraction.
+                  Use $ (end-of-string anchor) to prevent extraction.
+                default: /[\\n\\r]+(?!\\s)/
               timestamp:
                 type: object
                 required:
@@ -43274,7 +43275,6 @@ components:
         - events
     SchemaLibEntry:
       type: object
-      additionalProperties: true
       required:
         - id
         - schema
@@ -47948,6 +47948,7 @@ components:
           type: string
         eventBreakerRegex:
           type: string
+          default: "/^/"
         fields:
           type: array
           items:
@@ -48601,8 +48602,6 @@ components:
     Subscription:
       type: object
       properties:
-        consumer:
-          $ref: "#/components/schemas/SubscriptionConsumer"
         description:
           type: string
         disabled:
@@ -48613,12 +48612,51 @@ components:
           type: string
         pipeline:
           type: string
+      required:
+        - id
+        - pipeline
     CloudProvider:
       type: string
       nullable: true
       enum:
         - aws
         - azure
+    Group:
+      type: object
+      properties:
+        onPrem:
+          type: boolean
+        workerRemoteAccess:
+          type: boolean
+        streamtags:
+          type: array
+          items:
+            type: string
+        cloud:
+          type: object
+          properties:
+            provider:
+              type: string
+              enum: ["aws", "azure"]
+            region:
+              type: string
+          required:
+            - provider
+            - region
+        provisioned:
+          type: boolean
+        isFleet:
+          type: boolean
+          description: Must be true if product is 'edge'
+        estimatedIngestRate:
+          type: number
+        name:
+          type: string
+        id:
+          type: string
+      required:
+        - provisioned
+        - id
     DeployRequest:
       type: object
       properties:
@@ -53600,6 +53638,7 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/EventBreakerRuleset"
+                    x-speakeasy-ignore: true
         "401":
           description: Unauthorized
         "500":
@@ -54108,6 +54147,7 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Input"
+                    x-speakeasy-ignore: true
         "401":
           description: Unauthorized
         "500":
@@ -54427,6 +54467,7 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Output"
+                    x-speakeasy-ignore: true
         "401":
           description: Unauthorized
         "500":
@@ -62456,6 +62497,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      requestBody:
+        description: Subscription object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subscription"
   "/m/{groupId}/system/subscriptions/{id}":
     get:
       operationId: getSubscriptionById
@@ -62670,7 +62718,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/ConfigGroup"
+                      $ref: "#/components/schemas/Group"
         "401":
           description: Unauthorized
         "500":
@@ -62718,7 +62766,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/ConfigGroup"
+                      $ref: "#/components/schemas/Group"
         "401":
           description: Unauthorized
         "500":
@@ -62767,7 +62815,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/ConfigGroup"
+                      $ref: "#/components/schemas/Group"
         "401":
           description: Unauthorized
         "500":
@@ -62789,6 +62837,36 @@ paths:
           schema:
             type: string
           description: "fields to add to results: git.commit, git.localChanges, git.log"
+    patch:
+      operationId: updateGroupsById
+      tags:
+      - groups
+      summary: Update a specific ConfigGroup object
+      description: Update a specific ConfigGroup object
+      x-speakeasy-entity-operation: Group#update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Group id
+      responses:
+        '200':
+          description: a list of ConfigGroup objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count_total:
+                    type: integer
+                    description: number of items present in the items array
+                    x-speakeasy-ignore: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Group'
   "/products/{product}/groups/{id}/acl/teams":
     get:
       operationId: getProductsGroupsAclTeamsByProductAndId

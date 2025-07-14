@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: b60e813050223fb6d13bbb792d4829e5
+  docChecksum: ba539b0dd1e7032fc98a80c35eef662f
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
   speakeasyVersion: 1.581.0
   generationVersion: 2.656.5
@@ -235,13 +235,13 @@ generatedFiles:
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/author.go
   - internal/provider/types/cert_options.go
+  - internal/provider/types/cloud.go
   - internal/provider/types/collectors.go
   - internal/provider/types/commit.go
   - internal/provider/types/config_group.go
   - internal/provider/types/config_group_cloud.go
   - internal/provider/types/config_group_git.go
   - internal/provider/types/config_group_lookups.go
-  - internal/provider/types/connection.go
   - internal/provider/types/consumers.go
   - internal/provider/types/custom_label.go
   - internal/provider/types/disks_and_file_systems.go
@@ -258,6 +258,7 @@ generatedFiles:
   - internal/provider/types/function_specific_configs.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
+  - internal/provider/types/group.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
   - internal/provider/types/indexer_discovery_configs.go
@@ -930,8 +931,6 @@ generatedFiles:
   - internal/provider/types/sample.go
   - internal/provider/types/services.go
   - internal/provider/types/snm_pv3_authentication.go
-  - internal/provider/types/subscription.go
-  - internal/provider/types/subscription_consumer.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
   - internal/provider/types/target.go
@@ -1417,6 +1416,7 @@ generatedFiles:
   - internal/sdk/models/operations/updateglobalvariablebyid.go
   - internal/sdk/models/operations/updateglobalvariablelibvarsbypackandid.go
   - internal/sdk/models/operations/updategrokfilebyid.go
+  - internal/sdk/models/operations/updategroupsbyid.go
   - internal/sdk/models/operations/updategroupsdeploybyid.go
   - internal/sdk/models/operations/updatehmacfunctionbyid.go
   - internal/sdk/models/operations/updateinputbyid.go
@@ -1515,7 +1515,6 @@ generatedFiles:
   - internal/sdk/models/shared/configgroup.go
   - internal/sdk/models/shared/configgroupcloud.go
   - internal/sdk/models/shared/configgrouplookups.go
-  - internal/sdk/models/shared/connection.go
   - internal/sdk/models/shared/container.go
   - internal/sdk/models/shared/containerdcontainer.go
   - internal/sdk/models/shared/containerdinfo.go
@@ -1583,6 +1582,7 @@ generatedFiles:
   - internal/sdk/models/shared/gitstatusresult.go
   - internal/sdk/models/shared/globalvar.go
   - internal/sdk/models/shared/grokfile.go
+  - internal/sdk/models/shared/group.go
   - internal/sdk/models/shared/hbcriblinfo.go
   - internal/sdk/models/shared/hbleaderinfo.go
   - internal/sdk/models/shared/healthstatus.go
@@ -1852,7 +1852,6 @@ generatedFiles:
   - internal/sdk/models/shared/stagedependency.go
   - internal/sdk/models/shared/stagedependencytype.go
   - internal/sdk/models/shared/subscription.go
-  - internal/sdk/models/shared/subscriptionconsumer.go
   - internal/sdk/models/shared/symlinkinfo.go
   - internal/sdk/models/shared/systemconf.go
   - internal/sdk/models/shared/systeminfo.go
@@ -4625,7 +4624,7 @@ examples:
         path:
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "lib": "custom", "eventBreakerRegex": "/[\\\\n\\\\r]+(?!\\\\s)/", "minRawLength": 256}
+        application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
         "200":
           application/json: {}
@@ -4649,7 +4648,7 @@ examples:
           id: "<id>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "lib": "custom", "eventBreakerRegex": "/[\\\\n\\\\r]+(?!\\\\s)/", "minRawLength": 256}
+        application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
         "200":
           application/json: {}

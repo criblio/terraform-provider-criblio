@@ -20,6 +20,8 @@ type CreateSubscriptionRequest struct {
 	Pipeline string `queryParam:"style=form,explode=true,name=pipeline"`
 	// pipeline to be used
 	ID string `queryParam:"style=form,explode=true,name=id"`
+	// Subscription object
+	Subscription shared.Subscription `request:"mediaType=application/json"`
 }
 
 func (o *CreateSubscriptionRequest) GetGroupID() string {
@@ -62,6 +64,13 @@ func (o *CreateSubscriptionRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *CreateSubscriptionRequest) GetSubscription() shared.Subscription {
+	if o == nil {
+		return shared.Subscription{}
+	}
+	return o.Subscription
 }
 
 // CreateSubscriptionResponseBody - a list of Subscription objects

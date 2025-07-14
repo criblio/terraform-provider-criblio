@@ -18,8 +18,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk"
-	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/objectvalidators"
-	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-criblio/internal/validators/stringvalidators"
 	"regexp"
 )
 
@@ -38,14 +36,13 @@ type EventBreakerRulesetResource struct {
 
 // EventBreakerRulesetResourceModel describes the resource data model.
 type EventBreakerRulesetResourceModel struct {
-	Description       types.String                      `tfsdk:"description"`
-	EventBreakerRegex types.String                      `tfsdk:"event_breaker_regex"`
-	GroupID           types.String                      `tfsdk:"group_id"`
-	ID                types.String                      `tfsdk:"id"`
-	Lib               types.String                      `tfsdk:"lib"`
-	MinRawLength      types.Float64                     `tfsdk:"min_raw_length"`
-	Rules             []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
-	Tags              types.String                      `tfsdk:"tags"`
+	Description  types.String                      `tfsdk:"description"`
+	GroupID      types.String                      `tfsdk:"group_id"`
+	ID           types.String                      `tfsdk:"id"`
+	Lib          types.String                      `tfsdk:"lib"`
+	MinRawLength types.Float64                     `tfsdk:"min_raw_length"`
+	Rules        []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
+	Tags         types.String                      `tfsdk:"tags"`
 }
 
 func (r *EventBreakerRulesetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -57,14 +54,7 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 		MarkdownDescription: "EventBreakerRuleset Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed: true,
 				Optional: true,
-			},
-			"event_breaker_regex": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     stringdefault.StaticString(`/[\\n\\r]+(?!\\s)/`),
-				Description: `The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -99,12 +89,8 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			"rules": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
-					Validators: []validator.Object{
-						speakeasy_objectvalidators.NotNull(),
-					},
 					Attributes: map[string]schema.Attribute{
 						"condition": schema.StringAttribute{
 							Computed:    true,
@@ -118,25 +104,22 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 							Default:     booldefault.StaticBool(false),
 							Description: `Disable this breaker rule (enabled by default). Default: false`,
 						},
+						"event_breaker_regex": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`/[\\n\\r]+(?!\\s)/`),
+							Description: `The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"`,
+						},
 						"fields": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
-								Validators: []validator.Object{
-									speakeasy_objectvalidators.NotNull(),
-								},
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"value": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `The JavaScript expression used to compute the field's value (can be constant). Not Null`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
+										Required:    true,
+										Description: `The JavaScript expression used to compute the field's value (can be constant)`,
 									},
 								},
 							},
@@ -152,12 +135,7 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Not Null`,
-							Validators: []validator.String{
-								speakeasy_stringvalidators.NotNull(),
-							},
+							Required: true,
 						},
 						"parser_enabled": schema.BoolAttribute{
 							Computed:    true,
@@ -172,11 +150,9 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 							Description: `Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event. Default: false`,
 						},
 						"timestamp": schema.SingleNestedAttribute{
-							Computed: true,
-							Optional: true,
+							Required: true,
 							Attributes: map[string]schema.Attribute{
 								"format": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"length": schema.Float64Attribute{
@@ -202,10 +178,7 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 									},
 								},
 							},
-							Description: `Auto, manual format (strptime), or current time. Not Null`,
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
+							Description: `Auto, manual format (strptime), or current time`,
 						},
 						"timestamp_anchor_regex": schema.StringAttribute{
 							Computed:    true,
@@ -254,7 +227,6 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 				Description: `A list of rules that will be applied, in order, to the input data stream`,
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
 				Optional: true,
 			},
 		},
@@ -321,11 +293,48 @@ func (r *EventBreakerRulesetResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedEventBreakerRuleset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateEventBreakerRulesetResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsListEventBreakerRulesetRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.EventBreakerRules.ListEventBreakerRuleset(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -385,11 +394,11 @@ func (r *EventBreakerRulesetResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedEventBreakerRuleset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -435,11 +444,48 @@ func (r *EventBreakerRulesetResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedEventBreakerRuleset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateEventBreakerRulesetByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsListEventBreakerRulesetRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.EventBreakerRules.ListEventBreakerRuleset(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

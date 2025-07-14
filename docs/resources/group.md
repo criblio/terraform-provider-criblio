@@ -73,7 +73,7 @@ resource "criblio_group" "my_group" {
 
 ### Required
 
-- `id` (String) Requires replacement if changed.
+- `id` (String) Group id
 - `product` (String) Cribl Product. must be one of ["stream", "edge"]; Requires replacement if changed.
 
 ### Optional
@@ -99,13 +99,20 @@ resource "criblio_group" "my_group" {
 - `worker_count` (Number) Requires replacement if changed.
 - `worker_remote_access` (Boolean) Requires replacement if changed.
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
 <a id="nestedatt--cloud"></a>
 ### Nested Schema for `cloud`
+
+Required:
+
+- `region` (String) Requires replacement if changed.
 
 Optional:
 
 - `provider` (String) must be one of ["aws", "azure"]; Requires replacement if changed.
-- `region` (String) Not Null; Requires replacement if changed.
 
 
 <a id="nestedatt--git"></a>
@@ -120,33 +127,64 @@ Optional:
 <a id="nestedatt--git--log"></a>
 ### Nested Schema for `git.log`
 
+Required:
+
+- `date` (String) Requires replacement if changed.
+- `hash` (String) Requires replacement if changed.
+- `message` (String) Requires replacement if changed.
+- `short` (String) Requires replacement if changed.
+
 Optional:
 
 - `author_email` (String) Requires replacement if changed.
 - `author_name` (String) Requires replacement if changed.
-- `date` (String) Not Null; Requires replacement if changed.
-- `hash` (String) Not Null; Requires replacement if changed.
-- `message` (String) Not Null; Requires replacement if changed.
-- `short` (String) Not Null; Requires replacement if changed.
 
 
 
 <a id="nestedatt--lookup_deployments"></a>
 ### Nested Schema for `lookup_deployments`
 
-Optional:
+Required:
 
-- `context` (String) Not Null; Requires replacement if changed.
-- `lookups` (Attributes List) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--lookup_deployments--lookups))
+- `context` (String) Requires replacement if changed.
+- `lookups` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--lookup_deployments--lookups))
 
 <a id="nestedatt--lookup_deployments--lookups"></a>
 ### Nested Schema for `lookup_deployments.lookups`
 
+Required:
+
+- `file` (String) Requires replacement if changed.
+
 Optional:
 
 - `deployed_version` (String) Requires replacement if changed.
-- `file` (String) Not Null; Requires replacement if changed.
 - `version` (String) Requires replacement if changed.
+
+
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `cloud` (Attributes) (see [below for nested schema](#nestedatt--items--cloud))
+- `estimated_ingest_rate` (Number)
+- `id` (String)
+- `is_fleet` (Boolean) Must be true if product is 'edge'
+- `name` (String)
+- `on_prem` (Boolean)
+- `provisioned` (Boolean)
+- `streamtags` (List of String)
+- `worker_remote_access` (Boolean)
+
+<a id="nestedatt--items--cloud"></a>
+### Nested Schema for `items.cloud`
+
+Read-Only:
+
+- `provider` (String) must be one of ["aws", "azure"]
+- `region` (String)
 
 ## Import
 

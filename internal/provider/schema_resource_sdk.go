@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
@@ -26,15 +25,10 @@ func (r *SchemaResourceModel) ToSharedSchemaLibEntry(ctx context.Context) (*shar
 	var schema string
 	schema = r.Schema.ValueString()
 
-	var additionalProperties interface{}
-	if !r.AdditionalProperties.IsUnknown() && !r.AdditionalProperties.IsNull() {
-		_ = json.Unmarshal([]byte(r.AdditionalProperties.ValueString()), &additionalProperties)
-	}
 	out := shared.SchemaLibEntry{
-		ID:                   id,
-		Description:          description,
-		Schema:               schema,
-		AdditionalProperties: additionalProperties,
+		ID:          id,
+		Description: description,
+		Schema:      schema,
 	}
 
 	return &out, diags
@@ -119,12 +113,6 @@ func (r *SchemaResourceModel) ToOperationsDeleteLibSchemasByIDRequest(ctx contex
 func (r *SchemaResourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Context, resp *shared.SchemaLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp.AdditionalProperties == nil {
-		r.AdditionalProperties = types.StringNull()
-	} else {
-		additionalPropertiesResult, _ := json.Marshal(resp.AdditionalProperties)
-		r.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
-	}
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
 	r.Schema = types.StringValue(resp.Schema)

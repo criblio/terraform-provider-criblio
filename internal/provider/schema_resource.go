@@ -8,11 +8,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk"
-	"github.com/speakeasy/terraform-provider-criblio/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -30,11 +28,10 @@ type SchemaResource struct {
 
 // SchemaResourceModel describes the resource data model.
 type SchemaResourceModel struct {
-	AdditionalProperties types.String `tfsdk:"additional_properties"`
-	Description          types.String `tfsdk:"description"`
-	GroupID              types.String `tfsdk:"group_id"`
-	ID                   types.String `tfsdk:"id"`
-	Schema               types.String `tfsdk:"schema"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Schema      types.String `tfsdk:"schema"`
 }
 
 func (r *SchemaResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -45,14 +42,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Schema Resource",
 		Attributes: map[string]schema.Attribute{
-			"additional_properties": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
-			},
 			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,

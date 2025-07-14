@@ -805,7 +805,7 @@ type EventBreakerRule struct {
 	DelimiterRegex       *string                  `json:"delimiterRegex,omitempty"`
 	Disabled             *bool                    `json:"disabled,omitempty"`
 	EscapeChar           *string                  `json:"escapeChar,omitempty"`
-	EventBreakerRegex    *string                  `json:"eventBreakerRegex,omitempty"`
+	EventBreakerRegex    *string                  `default:"/^/" json:"eventBreakerRegex"`
 	Fields               []EventBreakerRuleFields `json:"fields,omitempty"`
 	FieldsLineRegex      *string                  `json:"fieldsLineRegex,omitempty"`
 	HeaderLineRegex      *string                  `json:"headerLineRegex,omitempty"`
@@ -827,6 +827,17 @@ type EventBreakerRule struct {
 	TimestampLatest      *string                  `json:"timestampLatest,omitempty"`
 	TimestampTimezone    TimestampTimezoneUnion   `json:"timestampTimezone"`
 	Type                 *EventBreakerRuleType    `json:"type,omitempty"`
+}
+
+func (e EventBreakerRule) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *EventBreakerRule) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *EventBreakerRule) GetCleanFields() *bool {

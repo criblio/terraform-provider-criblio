@@ -30,14 +30,6 @@ func (o *CreateOutputRequest) GetOutput() shared.Output {
 
 // CreateOutputResponseBody - a list of Output objects
 type CreateOutputResponseBody struct {
-	Items []shared.Output `json:"items,omitempty"`
-}
-
-func (o *CreateOutputResponseBody) GetItems() []shared.Output {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type CreateOutputResponse struct {
