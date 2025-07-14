@@ -14,7 +14,6 @@ func TestStreamSyslogToLake(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					Config:             s3Config,
-					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "id", "syslog-workers"),
 						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "name", "syslog-workers"),
