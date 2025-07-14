@@ -3,8 +3,8 @@ package tests
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestRegex(t *testing.T) {

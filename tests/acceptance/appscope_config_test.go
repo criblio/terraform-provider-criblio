@@ -3,8 +3,8 @@ package tests
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAppscopeConfig(t *testing.T) {
@@ -14,7 +14,7 @@ func TestAppscopeConfig(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-                   			ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
 					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "description", "A sample AppScope configuration"),
@@ -28,4 +28,3 @@ func TestAppscopeConfig(t *testing.T) {
 		})
 	})
 }
-

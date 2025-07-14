@@ -3,8 +3,8 @@ package tests
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestHmacFunctions(t *testing.T) {
@@ -15,7 +15,7 @@ func TestHmacFunctions(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ExpectNonEmptyPlan: true,
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "id", "my_hmacfunction"),
 						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "description", "test hmac function"),
@@ -27,4 +27,3 @@ func TestHmacFunctions(t *testing.T) {
 		})
 	})
 }
-

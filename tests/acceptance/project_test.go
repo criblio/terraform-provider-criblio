@@ -3,8 +3,8 @@ package tests
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestProject(t *testing.T) {
@@ -14,7 +14,7 @@ func TestProject(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
 					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_project.my_project", "id", "my_project"),
@@ -26,4 +26,3 @@ func TestProject(t *testing.T) {
 		})
 	})
 }
-

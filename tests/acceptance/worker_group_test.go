@@ -3,9 +3,9 @@ package tests
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
-	"github.com/hashicorp/terraform-plugin-testing/config"
 )
 
 func TestWorkerGroup(t *testing.T) {
@@ -14,7 +14,7 @@ func TestWorkerGroup(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_group.my_group", "id", "newgroup"),
 						resource.TestCheckResourceAttr("criblio_group.my_group", "name", "newgroup"),
@@ -22,7 +22,7 @@ func TestWorkerGroup(t *testing.T) {
 					),
 				},
 				{
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					ConfigPlanChecks: resource.ConfigPlanChecks{
 						PreApply: []plancheck.PlanCheck{
 							plancheck.ExpectEmptyPlan(),
@@ -33,4 +33,3 @@ func TestWorkerGroup(t *testing.T) {
 		})
 	})
 }
-

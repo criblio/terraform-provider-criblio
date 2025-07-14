@@ -3,8 +3,8 @@ package tests
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestGrok(t *testing.T) {
@@ -15,7 +15,7 @@ func TestGrok(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ExpectNonEmptyPlan: true,
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_grok.my_grok", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_grok.my_grok", "id", "test_grok"),
@@ -25,4 +25,3 @@ func TestGrok(t *testing.T) {
 		})
 	})
 }
-

@@ -3,9 +3,9 @@ package tests
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
-	"github.com/hashicorp/terraform-plugin-testing/config"
 )
 
 func TestPackFromFile(t *testing.T) {
@@ -15,7 +15,7 @@ func TestPackFromFile(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-from-file"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
@@ -26,7 +26,7 @@ func TestPackFromFile(t *testing.T) {
 					),
 				},
 				{
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					ConfigPlanChecks: resource.ConfigPlanChecks{
 						PreApply: []plancheck.PlanCheck{
 							plancheck.ExpectEmptyPlan(),
@@ -37,4 +37,3 @@ func TestPackFromFile(t *testing.T) {
 		})
 	})
 }
-

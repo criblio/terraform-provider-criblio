@@ -3,8 +3,8 @@ package tests
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestStreamSyslogToLake(t *testing.T) {
@@ -14,7 +14,7 @@ func TestStreamSyslogToLake(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "id", "syslog-workers"),
 						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "name", "syslog-workers"),
@@ -29,4 +29,3 @@ func TestStreamSyslogToLake(t *testing.T) {
 		})
 	})
 }
-

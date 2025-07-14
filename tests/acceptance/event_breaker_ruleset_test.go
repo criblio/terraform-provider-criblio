@@ -3,9 +3,9 @@ package tests
 import (
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
-	"github.com/hashicorp/terraform-plugin-testing/config"
 )
 
 func TestEventBreakerRuleset(t *testing.T) {
@@ -15,7 +15,7 @@ func TestEventBreakerRuleset(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:         config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "id", "test_eventbreakerruleset"),
 						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "description", "test"),
@@ -25,7 +25,7 @@ func TestEventBreakerRuleset(t *testing.T) {
 					),
 				},
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					ConfigPlanChecks: resource.ConfigPlanChecks{
 						PreApply: []plancheck.PlanCheck{
 							plancheck.ExpectEmptyPlan(),
@@ -36,4 +36,3 @@ func TestEventBreakerRuleset(t *testing.T) {
 		})
 	})
 }
-
