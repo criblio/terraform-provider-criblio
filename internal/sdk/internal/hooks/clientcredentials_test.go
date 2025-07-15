@@ -12,14 +12,14 @@ func TestHasTokenExpired(t *testing.T) {
 }
 
 func TestSDKInit(t *testing.T) {
-        myUrl := "foobar"
+	myUrl := "foobar"
 	var myClient HTTPClient
-        	
+
 	credsHook := NewClientCredentialsHook()
 	url, _ := credsHook.SDKInit(myUrl, myClient)
 
-        if url != myUrl {
-	         t.Errorf("creds hook init returned %s, expected %s", url, myUrl)
-        }
+	if url != myUrl {
+		t.Errorf("creds hook init returned %s, expected %s", url, myUrl)
+	}
 
 }

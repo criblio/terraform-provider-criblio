@@ -87,8 +87,9 @@ jobs:
         env:
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
+          CRIBL_SERVER_URL: "https://app.cribl-playground.cloud"
         run: | 
-          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET
+          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET CRIBL_SERVER_URL
           make acceptance-test
 
 
