@@ -3,6 +3,7 @@ package hooks
 import (
 	"encoding/json"
 	"fmt"
+	"errors"
 	"log"
 	"os"
 	"path/filepath"
@@ -18,6 +19,49 @@ type CriblConfig struct {
 
 type CriblConfigFile struct {
 	Profiles map[string]CriblConfig `json:"profiles"`
+}
+
+func checkLocalConfigDir() ([]byte, error) {
+	// Then try ~/.cribl/credentials file
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Printf("[ERROR] Failed to get home directory: %v", err)
+		return []byte{}, fmt.Errorf("failed to get home directory: %v", err)
+	}
+
+	// Check for credentials in ~/.cribl/credentials
+	configDir := filepath.Join(homeDir, ".cribl")
+	configPath := filepath.Join(configDir, "credentials")
+	var filePath string
+
+	_, err = os.Stat(configPath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			legacyPath := filepath.Join(homeDir, ".cribl")
+			_, err := os.Stat(legacyPath)
+			if err != nil {
+				if errors.Is(err, os.ErrNotExist) {
+					log.Printf("[DEBUG] No config file found %s", configPath)
+					return []byte{}, err
+				} else {
+					return []byte{}, err
+				}
+				filePath = legacyPath
+			}
+		} else {
+			return []byte{}, err
+		}
+	} else {
+		filePath = configPath
+	}
+
+	log.Printf("[DEBUG] Reading credentials from: %s", filePath)
+	file, err := os.ReadFile(filePath)
+	if err != nil {
+		return []byte{}, fmt.Errorf("failed to read credentials file: %v", err)
+	}
+
+	return file, nil
 }
 
 // GetCredentials reads credentials from environment variables or credentials file
@@ -42,27 +86,19 @@ func GetCredentials() (*CriblConfig, error) {
 		}, nil
 	}
 
-	// Then try ~/.cribl/credentials file
-	homeDir, err := os.UserHomeDir()
+	file, err := checkLocalConfigDir()
 	if err != nil {
-		log.Printf("[ERROR] Failed to get home directory: %v", err)
-		return nil, fmt.Errorf("failed to get home directory: %v", err)
-	}
-
-	// Check for credentials in ~/.cribl/credentials
-	configDir := filepath.Join(homeDir, ".cribl")
-	configPath := filepath.Join(configDir, "credentials")
-
-	log.Printf("[DEBUG] Reading credentials from: %s", configPath)
-	file, err := os.ReadFile(configPath)
-	if err != nil {
-		// Fallback to legacy ~/.cribl file if credentials file doesn't exist
-		legacyPath := filepath.Join(homeDir, ".cribl")
-		log.Printf("[DEBUG] Credentials file not found, trying legacy path: %s", legacyPath)
-		file, err = os.ReadFile(legacyPath)
-		if err != nil {
-			log.Printf("[ERROR] Failed to read both credentials files: %v", err)
-			return nil, fmt.Errorf("failed to read credentials file: %v", err)
+		//if error is not expected, then return error. Check if error is expected first
+		if errors.Is(err, os.ErrNotExist) {
+			log.Printf("[DEBUG] No configuration file found, continuing")
+			return &CriblConfig{
+				ClientID:       clientID,
+				ClientSecret:   clientSecret,
+				OrganizationID: organizationID,
+				Workspace:      workspace,
+			}, nil
+		} else {
+			return nil, err
 		}
 	}
 
