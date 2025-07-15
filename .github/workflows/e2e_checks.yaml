@@ -5,7 +5,7 @@ on:
       - 'main'
 
 concurrency:
-  group: tfprovider
+  group: tfprovider2
   cancel-in-progress: false
 
 jobs:

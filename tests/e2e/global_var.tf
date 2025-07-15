@@ -1,0 +1,1 @@
+../../examples/global-var/main.tf
