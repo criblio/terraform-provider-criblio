@@ -6,9 +6,9 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   min_raw_length = 256
   rules = [
     {
-      condition = "PASS_THROUGH_SOURCE_TYPE"
-      disabled  = false
-      fields = []
+      condition           = "PASS_THROUGH_SOURCE_TYPE"
+      disabled            = false
+      fields              = []
       max_event_bytes     = 51200
       name                = "test"
       parser_enabled      = false

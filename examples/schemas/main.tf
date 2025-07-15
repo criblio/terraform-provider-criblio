@@ -1,8 +1,8 @@
 resource "criblio_schema" "my_schema" {
-  description           = "test schema"
-  group_id              = "default"
-  id                    = "my_schema"
-  schema                = <<-EOT
+  description = "test schema"
+  group_id    = "default"
+  id          = "my_schema"
+  schema      = <<-EOT
 {
   "$id": "https://example.com/person.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
