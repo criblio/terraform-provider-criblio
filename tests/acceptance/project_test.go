@@ -15,7 +15,6 @@ func TestProject(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_project.my_project", "id", "my_project"),
 						resource.TestCheckResourceAttr("criblio_project.my_project", "group_id", "default"),

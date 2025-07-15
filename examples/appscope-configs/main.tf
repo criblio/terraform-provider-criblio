@@ -121,7 +121,7 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
   }
   description = "A sample AppScope configuration"
   group_id    = "default"
-  id          = "test_appscope_config"
+  id          = "sample_appscope_config"
   lib         = "cribl"
   tags        = "cribl, test"
 }
