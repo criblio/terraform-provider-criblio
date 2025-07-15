@@ -13,10 +13,8 @@ e2e-test:
 	#the remote mirror won't have our custom version, so this will always fail, hence || true
 	@cd tests/e2e; terraform providers mirror ./local-plugins || true
 	#echo lines required in order to setup imports
-	@echo 'import { to = criblio_group.my_edge_fleet ' >> tests/e2e/edge_fleet.tf
-	@echo 'id = "my-edge-fleet" }' >> tests/e2e/edge_fleet.tf
-	@echo 'import { to = criblio_group.syslog_worker_group' >> tests/e2e/stream_syslog_to_lake.tf
-	@echo ' id = "syslog-workers" }' >> tests/e2e/stream_syslog_to_lake.tf
+	@echo 'import { ' >> tests/e2e/edge_fleet.tf; echo 'to = criblio_group.my_edge_fleet ' >> tests/e2e/edge_fleet.tf; echo 'id = "my-edge-fleet" ' >> tests/e2e/edge_fleet.tf; echo '}' >> tests/e2e/edge_fleet.tf
+	@echo 'import { ' >> tests/e2e/stream_syslog_to_lake.tf; echo 'to = criblio_group.syslog_worker_group ' >> tests/e2e/stream_syslog_to_lake.tf; echo 'id = "syslog-workers" ' >> tests/e2e/stream_syslog_to_lake.tf; echo '}' >> tests/e2e/stream_syslog_to_lake.tf
 	@cd tests/e2e; ls -R local-plugins; terraform init -plugin-dir ./local-plugins; flag1=$$?; terraform apply -auto-approve; flag2=$$?; terraform destroy -auto-approve; flag3=$$?; if [[ $$flag1 -ne 0 ]] || [[ $$flag2 -ne 0 ]] || [[ $$flag3 -ne 0 ]]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
 
 acceptance-test:
