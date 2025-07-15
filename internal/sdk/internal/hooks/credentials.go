@@ -96,7 +96,6 @@ func GetCredentials() (*CriblConfig, error) {
 			ClientSecret:   clientSecret,
 			OrganizationID: organizationID,
 			Workspace:      workspace,
-
 		}, nil
 	}
 

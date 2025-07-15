@@ -10,28 +10,14 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *ParquetSchemaResourceModel) ToSharedSchemaLibEntry(ctx context.Context) (*shared.SchemaLibEntry, diag.Diagnostics) {
+func (r *ParquetSchemaResourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Context, resp *shared.SchemaLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	var id string
-	id = r.ID.ValueString()
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Schema = types.StringValue(resp.Schema)
 
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	var schema string
-	schema = r.Schema.ValueString()
-
-	out := shared.SchemaLibEntry{
-		ID:          id,
-		Description: description,
-		Schema:      schema,
-	}
-
-	return &out, diags
+	return diags
 }
 
 func (r *ParquetSchemaResourceModel) ToOperationsCreateSchemaRequest(ctx context.Context) (*operations.CreateSchemaRequest, diag.Diagnostics) {
@@ -50,6 +36,36 @@ func (r *ParquetSchemaResourceModel) ToOperationsCreateSchemaRequest(ctx context
 	out := operations.CreateSchemaRequest{
 		GroupID:        groupID,
 		SchemaLibEntry: *schemaLibEntry,
+	}
+
+	return &out, diags
+}
+
+func (r *ParquetSchemaResourceModel) ToOperationsDeleteSchemaByIDRequest(ctx context.Context) (*operations.DeleteSchemaByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteSchemaByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *ParquetSchemaResourceModel) ToOperationsListSchemaRequest(ctx context.Context) (*operations.ListSchemaRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListSchemaRequest{
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -80,42 +96,26 @@ func (r *ParquetSchemaResourceModel) ToOperationsUpdateSchemaByIDRequest(ctx con
 	return &out, diags
 }
 
-func (r *ParquetSchemaResourceModel) ToOperationsListSchemaRequest(ctx context.Context) (*operations.ListSchemaRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListSchemaRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *ParquetSchemaResourceModel) ToOperationsDeleteSchemaByIDRequest(ctx context.Context) (*operations.DeleteSchemaByIDRequest, diag.Diagnostics) {
+func (r *ParquetSchemaResourceModel) ToSharedSchemaLibEntry(ctx context.Context) (*shared.SchemaLibEntry, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var id string
 	id = r.ID.ValueString()
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	var schema string
+	schema = r.Schema.ValueString()
 
-	out := operations.DeleteSchemaByIDRequest{
-		ID:      id,
-		GroupID: groupID,
+	out := shared.SchemaLibEntry{
+		ID:          id,
+		Description: description,
+		Schema:      schema,
 	}
 
 	return &out, diags
-}
-
-func (r *ParquetSchemaResourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Context, resp *shared.SchemaLibEntry) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Description = types.StringPointerValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Schema = types.StringValue(resp.Schema)
-
-	return diags
 }

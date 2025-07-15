@@ -8,6 +8,15 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
+func (r *EventBreakerRulesetDataSourceModel) RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.ListEventBreakerRulesetResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
 func (r *EventBreakerRulesetDataSourceModel) ToOperationsListEventBreakerRulesetRequest(ctx context.Context) (*operations.ListEventBreakerRulesetRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -19,13 +28,4 @@ func (r *EventBreakerRulesetDataSourceModel) ToOperationsListEventBreakerRuleset
 	}
 
 	return &out, diags
-}
-
-func (r *EventBreakerRulesetDataSourceModel) RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.ListEventBreakerRulesetResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
 }

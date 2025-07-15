@@ -11,38 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *CommitResourceModel) ToSharedGitCommitParams(ctx context.Context) (*shared.GitCommitParams, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	effective := new(bool)
-	if !r.Effective.IsUnknown() && !r.Effective.IsNull() {
-		*effective = r.Effective.ValueBool()
-	} else {
-		effective = nil
-	}
-	files := make([]string, 0, len(r.Files))
-	for _, filesItem := range r.Files {
-		files = append(files, filesItem.ValueString())
-	}
-	group := new(string)
-	if !r.Group.IsUnknown() && !r.Group.IsNull() {
-		*group = r.Group.ValueString()
-	} else {
-		group = nil
-	}
-	var message string
-	message = r.Message.ValueString()
-
-	out := shared.GitCommitParams{
-		Effective: effective,
-		Files:     files,
-		Group:     group,
-		Message:   message,
-	}
-
-	return &out, diags
-}
-
 func (r *CommitResourceModel) RefreshFromOperationsCreateVersionCommitResponseBody(ctx context.Context, resp *operations.CreateVersionCommitResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -89,4 +57,36 @@ func (r *CommitResourceModel) RefreshFromOperationsCreateVersionCommitResponseBo
 	}
 
 	return diags
+}
+
+func (r *CommitResourceModel) ToSharedGitCommitParams(ctx context.Context) (*shared.GitCommitParams, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	effective := new(bool)
+	if !r.Effective.IsUnknown() && !r.Effective.IsNull() {
+		*effective = r.Effective.ValueBool()
+	} else {
+		effective = nil
+	}
+	files := make([]string, 0, len(r.Files))
+	for _, filesItem := range r.Files {
+		files = append(files, filesItem.ValueString())
+	}
+	group := new(string)
+	if !r.Group.IsUnknown() && !r.Group.IsNull() {
+		*group = r.Group.ValueString()
+	} else {
+		group = nil
+	}
+	var message string
+	message = r.Message.ValueString()
+
+	out := shared.GitCommitParams{
+		Effective: effective,
+		Files:     files,
+		Group:     group,
+		Message:   message,
+	}
+
+	return &out, diags
 }

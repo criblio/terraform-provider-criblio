@@ -10,6 +10,107 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *DatabaseConnectionResourceModel) RefreshFromSharedDatabaseConnectionConfig(ctx context.Context, resp *shared.DatabaseConnectionConfig) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.AuthType = types.StringValue(resp.AuthType)
+	r.ConfigObj = types.StringPointerValue(resp.ConfigObj)
+	r.ConnectionString = types.StringPointerValue(resp.ConnectionString)
+	r.ConnectionTimeout = types.Float64PointerValue(resp.ConnectionTimeout)
+	r.DatabaseType = types.StringValue(string(resp.DatabaseType))
+	r.Description = types.StringValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Password = types.StringPointerValue(resp.Password)
+	r.RequestTimeout = types.Float64PointerValue(resp.RequestTimeout)
+	r.Tags = types.StringPointerValue(resp.Tags)
+	r.User = types.StringPointerValue(resp.User)
+
+	return diags
+}
+
+func (r *DatabaseConnectionResourceModel) ToOperationsCreateDatabaseConnectionConfigRequest(ctx context.Context) (*operations.CreateDatabaseConnectionConfigRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	databaseConnectionConfig, databaseConnectionConfigDiags := r.ToSharedDatabaseConnectionConfig(ctx)
+	diags.Append(databaseConnectionConfigDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateDatabaseConnectionConfigRequest{
+		GroupID:                  groupID,
+		DatabaseConnectionConfig: *databaseConnectionConfig,
+	}
+
+	return &out, diags
+}
+
+func (r *DatabaseConnectionResourceModel) ToOperationsDeleteDatabaseConnectionConfigByIDRequest(ctx context.Context) (*operations.DeleteDatabaseConnectionConfigByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteDatabaseConnectionConfigByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *DatabaseConnectionResourceModel) ToOperationsGetDatabaseConnectionConfigRequest(ctx context.Context) (*operations.GetDatabaseConnectionConfigRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	databaseType := new(string)
+	if !r.DatabaseType.IsUnknown() && !r.DatabaseType.IsNull() {
+		*databaseType = r.DatabaseType.ValueString()
+	} else {
+		databaseType = nil
+	}
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.GetDatabaseConnectionConfigRequest{
+		DatabaseType: databaseType,
+		GroupID:      groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *DatabaseConnectionResourceModel) ToOperationsUpdateDatabaseConnectionConfigByIDRequest(ctx context.Context) (*operations.UpdateDatabaseConnectionConfigByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	databaseConnectionConfig, databaseConnectionConfigDiags := r.ToSharedDatabaseConnectionConfig(ctx)
+	diags.Append(databaseConnectionConfigDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateDatabaseConnectionConfigByIDRequest{
+		ID:                       id,
+		GroupID:                  groupID,
+		DatabaseConnectionConfig: *databaseConnectionConfig,
+	}
+
+	return &out, diags
+}
+
 func (r *DatabaseConnectionResourceModel) ToSharedDatabaseConnectionConfig(ctx context.Context) (*shared.DatabaseConnectionConfig, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -80,105 +181,4 @@ func (r *DatabaseConnectionResourceModel) ToSharedDatabaseConnectionConfig(ctx c
 	}
 
 	return &out, diags
-}
-
-func (r *DatabaseConnectionResourceModel) ToOperationsCreateDatabaseConnectionConfigRequest(ctx context.Context) (*operations.CreateDatabaseConnectionConfigRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	databaseConnectionConfig, databaseConnectionConfigDiags := r.ToSharedDatabaseConnectionConfig(ctx)
-	diags.Append(databaseConnectionConfigDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateDatabaseConnectionConfigRequest{
-		GroupID:                  groupID,
-		DatabaseConnectionConfig: *databaseConnectionConfig,
-	}
-
-	return &out, diags
-}
-
-func (r *DatabaseConnectionResourceModel) ToOperationsUpdateDatabaseConnectionConfigByIDRequest(ctx context.Context) (*operations.UpdateDatabaseConnectionConfigByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	databaseConnectionConfig, databaseConnectionConfigDiags := r.ToSharedDatabaseConnectionConfig(ctx)
-	diags.Append(databaseConnectionConfigDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateDatabaseConnectionConfigByIDRequest{
-		ID:                       id,
-		GroupID:                  groupID,
-		DatabaseConnectionConfig: *databaseConnectionConfig,
-	}
-
-	return &out, diags
-}
-
-func (r *DatabaseConnectionResourceModel) ToOperationsGetDatabaseConnectionConfigRequest(ctx context.Context) (*operations.GetDatabaseConnectionConfigRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	databaseType := new(string)
-	if !r.DatabaseType.IsUnknown() && !r.DatabaseType.IsNull() {
-		*databaseType = r.DatabaseType.ValueString()
-	} else {
-		databaseType = nil
-	}
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.GetDatabaseConnectionConfigRequest{
-		DatabaseType: databaseType,
-		GroupID:      groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *DatabaseConnectionResourceModel) ToOperationsDeleteDatabaseConnectionConfigByIDRequest(ctx context.Context) (*operations.DeleteDatabaseConnectionConfigByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteDatabaseConnectionConfigByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *DatabaseConnectionResourceModel) RefreshFromSharedDatabaseConnectionConfig(ctx context.Context, resp *shared.DatabaseConnectionConfig) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.AuthType = types.StringValue(resp.AuthType)
-	r.ConfigObj = types.StringPointerValue(resp.ConfigObj)
-	r.ConnectionString = types.StringPointerValue(resp.ConnectionString)
-	r.ConnectionTimeout = types.Float64PointerValue(resp.ConnectionTimeout)
-	r.DatabaseType = types.StringValue(string(resp.DatabaseType))
-	r.Description = types.StringValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Password = types.StringPointerValue(resp.Password)
-	r.RequestTimeout = types.Float64PointerValue(resp.RequestTimeout)
-	r.Tags = types.StringPointerValue(resp.Tags)
-	r.User = types.StringPointerValue(resp.User)
-
-	return diags
 }

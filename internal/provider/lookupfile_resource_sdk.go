@@ -11,191 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *LookupFileResourceModel) ToSharedLookupFileInputUnion(ctx context.Context) (*shared.LookupFileInputUnion, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var out shared.LookupFileInputUnion
-	var lookupFileInput1 *shared.LookupFileInput1
-	if r.LookupFileInput1 != nil {
-		var fileInfo *shared.FileInfo
-		if r.LookupFileInput1.FileInfo != nil {
-			var filename string
-			filename = r.LookupFileInput1.FileInfo.Filename.ValueString()
-
-			fileInfo = &shared.FileInfo{
-				Filename: filename,
-			}
-		}
-		var id string
-		id = r.LookupFileInput1.ID.ValueString()
-
-		description := new(string)
-		if !r.LookupFileInput1.Description.IsUnknown() && !r.LookupFileInput1.Description.IsNull() {
-			*description = r.LookupFileInput1.Description.ValueString()
-		} else {
-			description = nil
-		}
-		tags := new(string)
-		if !r.LookupFileInput1.Tags.IsUnknown() && !r.LookupFileInput1.Tags.IsNull() {
-			*tags = r.LookupFileInput1.Tags.ValueString()
-		} else {
-			tags = nil
-		}
-		size := new(float64)
-		if !r.LookupFileInput1.Size.IsUnknown() && !r.LookupFileInput1.Size.IsNull() {
-			*size = r.LookupFileInput1.Size.ValueFloat64()
-		} else {
-			size = nil
-		}
-		mode := new(shared.LookupFileMode1)
-		if !r.LookupFileInput1.Mode.IsUnknown() && !r.LookupFileInput1.Mode.IsNull() {
-			*mode = shared.LookupFileMode1(r.LookupFileInput1.Mode.ValueString())
-		} else {
-			mode = nil
-		}
-		lookupFileInput1 = &shared.LookupFileInput1{
-			FileInfo:    fileInfo,
-			ID:          id,
-			Description: description,
-			Tags:        tags,
-			Size:        size,
-			Mode:        mode,
-		}
-	}
-	if lookupFileInput1 != nil {
-		out = shared.LookupFileInputUnion{
-			LookupFileInput1: lookupFileInput1,
-		}
-	}
-	var lookupFileInput2 *shared.LookupFileInput2
-	if r.LookupFileInput2 != nil {
-		content := new(string)
-		if !r.LookupFileInput2.Content.IsUnknown() && !r.LookupFileInput2.Content.IsNull() {
-			*content = r.LookupFileInput2.Content.ValueString()
-		} else {
-			content = nil
-		}
-		var id1 string
-		id1 = r.LookupFileInput2.ID.ValueString()
-
-		description1 := new(string)
-		if !r.LookupFileInput2.Description.IsUnknown() && !r.LookupFileInput2.Description.IsNull() {
-			*description1 = r.LookupFileInput2.Description.ValueString()
-		} else {
-			description1 = nil
-		}
-		tags1 := new(string)
-		if !r.LookupFileInput2.Tags.IsUnknown() && !r.LookupFileInput2.Tags.IsNull() {
-			*tags1 = r.LookupFileInput2.Tags.ValueString()
-		} else {
-			tags1 = nil
-		}
-		size1 := new(float64)
-		if !r.LookupFileInput2.Size.IsUnknown() && !r.LookupFileInput2.Size.IsNull() {
-			*size1 = r.LookupFileInput2.Size.ValueFloat64()
-		} else {
-			size1 = nil
-		}
-		mode1 := new(shared.LookupFileMode2)
-		if !r.LookupFileInput2.Mode.IsUnknown() && !r.LookupFileInput2.Mode.IsNull() {
-			*mode1 = shared.LookupFileMode2(r.LookupFileInput2.Mode.ValueString())
-		} else {
-			mode1 = nil
-		}
-		lookupFileInput2 = &shared.LookupFileInput2{
-			Content:     content,
-			ID:          id1,
-			Description: description1,
-			Tags:        tags1,
-			Size:        size1,
-			Mode:        mode1,
-		}
-	}
-	if lookupFileInput2 != nil {
-		out = shared.LookupFileInputUnion{
-			LookupFileInput2: lookupFileInput2,
-		}
-	}
-
-	return &out, diags
-}
-
-func (r *LookupFileResourceModel) ToOperationsCreateLookupFileRequest(ctx context.Context) (*operations.CreateLookupFileRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	lookupFile, lookupFileDiags := r.ToSharedLookupFileInputUnion(ctx)
-	diags.Append(lookupFileDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateLookupFileRequest{
-		GroupID:    groupID,
-		LookupFile: *lookupFile,
-	}
-
-	return &out, diags
-}
-
-func (r *LookupFileResourceModel) ToOperationsUpdateLookupFileByIDRequest(ctx context.Context) (*operations.UpdateLookupFileByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	lookupFile, lookupFileDiags := r.ToSharedLookupFileInputUnion(ctx)
-	diags.Append(lookupFileDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateLookupFileByIDRequest{
-		ID:         id,
-		GroupID:    groupID,
-		LookupFile: *lookupFile,
-	}
-
-	return &out, diags
-}
-
-func (r *LookupFileResourceModel) ToOperationsListLookupFileRequest(ctx context.Context) (*operations.ListLookupFileRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListLookupFileRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *LookupFileResourceModel) ToOperationsDeleteLookupFileByIDRequest(ctx context.Context) (*operations.DeleteLookupFileByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteLookupFileByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *LookupFileResourceModel) RefreshFromOperationsCreateLookupFileResponseBody(ctx context.Context, resp *operations.CreateLookupFileResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -431,4 +246,189 @@ func (r *LookupFileResourceModel) RefreshFromOperationsUpdateLookupFileByIDRespo
 	}
 
 	return diags
+}
+
+func (r *LookupFileResourceModel) ToOperationsCreateLookupFileRequest(ctx context.Context) (*operations.CreateLookupFileRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	lookupFile, lookupFileDiags := r.ToSharedLookupFileInputUnion(ctx)
+	diags.Append(lookupFileDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateLookupFileRequest{
+		GroupID:    groupID,
+		LookupFile: *lookupFile,
+	}
+
+	return &out, diags
+}
+
+func (r *LookupFileResourceModel) ToOperationsDeleteLookupFileByIDRequest(ctx context.Context) (*operations.DeleteLookupFileByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteLookupFileByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *LookupFileResourceModel) ToOperationsListLookupFileRequest(ctx context.Context) (*operations.ListLookupFileRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListLookupFileRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *LookupFileResourceModel) ToOperationsUpdateLookupFileByIDRequest(ctx context.Context) (*operations.UpdateLookupFileByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	lookupFile, lookupFileDiags := r.ToSharedLookupFileInputUnion(ctx)
+	diags.Append(lookupFileDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateLookupFileByIDRequest{
+		ID:         id,
+		GroupID:    groupID,
+		LookupFile: *lookupFile,
+	}
+
+	return &out, diags
+}
+
+func (r *LookupFileResourceModel) ToSharedLookupFileInputUnion(ctx context.Context) (*shared.LookupFileInputUnion, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var out shared.LookupFileInputUnion
+	var lookupFileInput1 *shared.LookupFileInput1
+	if r.LookupFileInput1 != nil {
+		var fileInfo *shared.FileInfo
+		if r.LookupFileInput1.FileInfo != nil {
+			var filename string
+			filename = r.LookupFileInput1.FileInfo.Filename.ValueString()
+
+			fileInfo = &shared.FileInfo{
+				Filename: filename,
+			}
+		}
+		var id string
+		id = r.LookupFileInput1.ID.ValueString()
+
+		description := new(string)
+		if !r.LookupFileInput1.Description.IsUnknown() && !r.LookupFileInput1.Description.IsNull() {
+			*description = r.LookupFileInput1.Description.ValueString()
+		} else {
+			description = nil
+		}
+		tags := new(string)
+		if !r.LookupFileInput1.Tags.IsUnknown() && !r.LookupFileInput1.Tags.IsNull() {
+			*tags = r.LookupFileInput1.Tags.ValueString()
+		} else {
+			tags = nil
+		}
+		size := new(float64)
+		if !r.LookupFileInput1.Size.IsUnknown() && !r.LookupFileInput1.Size.IsNull() {
+			*size = r.LookupFileInput1.Size.ValueFloat64()
+		} else {
+			size = nil
+		}
+		mode := new(shared.LookupFileMode1)
+		if !r.LookupFileInput1.Mode.IsUnknown() && !r.LookupFileInput1.Mode.IsNull() {
+			*mode = shared.LookupFileMode1(r.LookupFileInput1.Mode.ValueString())
+		} else {
+			mode = nil
+		}
+		lookupFileInput1 = &shared.LookupFileInput1{
+			FileInfo:    fileInfo,
+			ID:          id,
+			Description: description,
+			Tags:        tags,
+			Size:        size,
+			Mode:        mode,
+		}
+	}
+	if lookupFileInput1 != nil {
+		out = shared.LookupFileInputUnion{
+			LookupFileInput1: lookupFileInput1,
+		}
+	}
+	var lookupFileInput2 *shared.LookupFileInput2
+	if r.LookupFileInput2 != nil {
+		content := new(string)
+		if !r.LookupFileInput2.Content.IsUnknown() && !r.LookupFileInput2.Content.IsNull() {
+			*content = r.LookupFileInput2.Content.ValueString()
+		} else {
+			content = nil
+		}
+		var id1 string
+		id1 = r.LookupFileInput2.ID.ValueString()
+
+		description1 := new(string)
+		if !r.LookupFileInput2.Description.IsUnknown() && !r.LookupFileInput2.Description.IsNull() {
+			*description1 = r.LookupFileInput2.Description.ValueString()
+		} else {
+			description1 = nil
+		}
+		tags1 := new(string)
+		if !r.LookupFileInput2.Tags.IsUnknown() && !r.LookupFileInput2.Tags.IsNull() {
+			*tags1 = r.LookupFileInput2.Tags.ValueString()
+		} else {
+			tags1 = nil
+		}
+		size1 := new(float64)
+		if !r.LookupFileInput2.Size.IsUnknown() && !r.LookupFileInput2.Size.IsNull() {
+			*size1 = r.LookupFileInput2.Size.ValueFloat64()
+		} else {
+			size1 = nil
+		}
+		mode1 := new(shared.LookupFileMode2)
+		if !r.LookupFileInput2.Mode.IsUnknown() && !r.LookupFileInput2.Mode.IsNull() {
+			*mode1 = shared.LookupFileMode2(r.LookupFileInput2.Mode.ValueString())
+		} else {
+			mode1 = nil
+		}
+		lookupFileInput2 = &shared.LookupFileInput2{
+			Content:     content,
+			ID:          id1,
+			Description: description1,
+			Tags:        tags1,
+			Size:        size1,
+			Mode:        mode1,
+		}
+	}
+	if lookupFileInput2 != nil {
+		out = shared.LookupFileInputUnion{
+			LookupFileInput2: lookupFileInput2,
+		}
+	}
+
+	return &out, diags
 }

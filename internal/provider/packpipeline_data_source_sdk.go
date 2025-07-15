@@ -11,23 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *PackPipelineDataSourceModel) ToOperationsGetPipelineByPackRequest(ctx context.Context) (*operations.GetPipelineByPackRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.GetPipelineByPackRequest{
-		Pack:    pack,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -76,4 +59,21 @@ func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Cont
 	r.ID = types.StringValue(resp.ID)
 
 	return diags
+}
+
+func (r *PackPipelineDataSourceModel) ToOperationsGetPipelineByPackRequest(ctx context.Context) (*operations.GetPipelineByPackRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pack string
+	pack = r.Pack.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.GetPipelineByPackRequest{
+		Pack:    pack,
+		GroupID: groupID,
+	}
+
+	return &out, diags
 }

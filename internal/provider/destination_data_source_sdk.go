@@ -8,6 +8,15 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
+func (r *DestinationDataSourceModel) RefreshFromOperationsListOutputResponseBody(ctx context.Context, resp *operations.ListOutputResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
 func (r *DestinationDataSourceModel) ToOperationsListOutputRequest(ctx context.Context) (*operations.ListOutputRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -19,13 +28,4 @@ func (r *DestinationDataSourceModel) ToOperationsListOutputRequest(ctx context.C
 	}
 
 	return &out, diags
-}
-
-func (r *DestinationDataSourceModel) RefreshFromOperationsListOutputResponseBody(ctx context.Context, resp *operations.ListOutputResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
 }

@@ -11,40 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *DeployResourceModel) ToSharedDeployRequest(ctx context.Context) (*shared.DeployRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var version string
-	version = r.Version.ValueString()
-
-	out := shared.DeployRequest{
-		Version: version,
-	}
-
-	return &out, diags
-}
-
-func (r *DeployResourceModel) ToOperationsUpdateGroupsDeployByIDRequest(ctx context.Context) (*operations.UpdateGroupsDeployByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	deployRequest, deployRequestDiags := r.ToSharedDeployRequest(ctx)
-	diags.Append(deployRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateGroupsDeployByIDRequest{
-		ID:            id,
-		DeployRequest: *deployRequest,
-	}
-
-	return &out, diags
-}
-
 func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDResponseBody(ctx context.Context, resp *operations.UpdateGroupsDeployByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -172,4 +138,38 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 	}
 
 	return diags
+}
+
+func (r *DeployResourceModel) ToOperationsUpdateGroupsDeployByIDRequest(ctx context.Context) (*operations.UpdateGroupsDeployByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	deployRequest, deployRequestDiags := r.ToSharedDeployRequest(ctx)
+	diags.Append(deployRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateGroupsDeployByIDRequest{
+		ID:            id,
+		DeployRequest: *deployRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *DeployResourceModel) ToSharedDeployRequest(ctx context.Context) (*shared.DeployRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var version string
+	version = r.Version.ValueString()
+
+	out := shared.DeployRequest{
+		Version: version,
+	}
+
+	return &out, diags
 }

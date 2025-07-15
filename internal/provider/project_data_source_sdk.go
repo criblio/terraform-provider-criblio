@@ -11,19 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *ProjectDataSourceModel) ToOperationsListProjectRequest(ctx context.Context) (*operations.ListProjectRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListProjectRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *ProjectDataSourceModel) RefreshFromSharedProjectConfig(ctx context.Context, resp *shared.ProjectConfig) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -44,4 +31,17 @@ func (r *ProjectDataSourceModel) RefreshFromSharedProjectConfig(ctx context.Cont
 	}
 
 	return diags
+}
+
+func (r *ProjectDataSourceModel) ToOperationsListProjectRequest(ctx context.Context) (*operations.ListProjectRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListProjectRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
 }

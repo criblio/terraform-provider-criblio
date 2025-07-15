@@ -9,6 +9,109 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsCreateEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.CreateEventBreakerRulesetResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.ListEventBreakerRulesetResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsUpdateEventBreakerRulesetByIDResponseBody(ctx context.Context, resp *operations.UpdateEventBreakerRulesetByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *EventBreakerRulesetResourceModel) ToOperationsCreateEventBreakerRulesetRequest(ctx context.Context) (*operations.CreateEventBreakerRulesetRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	eventBreakerRuleset, eventBreakerRulesetDiags := r.ToSharedEventBreakerRuleset(ctx)
+	diags.Append(eventBreakerRulesetDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateEventBreakerRulesetRequest{
+		GroupID:             groupID,
+		EventBreakerRuleset: *eventBreakerRuleset,
+	}
+
+	return &out, diags
+}
+
+func (r *EventBreakerRulesetResourceModel) ToOperationsDeleteEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.DeleteEventBreakerRulesetByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.DeleteEventBreakerRulesetByIDRequest{
+		GroupID: groupID,
+		ID:      id,
+	}
+
+	return &out, diags
+}
+
+func (r *EventBreakerRulesetResourceModel) ToOperationsListEventBreakerRulesetRequest(ctx context.Context) (*operations.ListEventBreakerRulesetRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListEventBreakerRulesetRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *EventBreakerRulesetResourceModel) ToOperationsUpdateEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.UpdateEventBreakerRulesetByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	eventBreakerRuleset, eventBreakerRulesetDiags := r.ToSharedEventBreakerRuleset(ctx)
+	diags.Append(eventBreakerRulesetDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateEventBreakerRulesetByIDRequest{
+		ID:                  id,
+		GroupID:             groupID,
+		EventBreakerRuleset: *eventBreakerRuleset,
+	}
+
+	return &out, diags
+}
+
 func (r *EventBreakerRulesetResourceModel) ToSharedEventBreakerRuleset(ctx context.Context) (*shared.EventBreakerRuleset, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -176,107 +279,4 @@ func (r *EventBreakerRulesetResourceModel) ToSharedEventBreakerRuleset(ctx conte
 	}
 
 	return &out, diags
-}
-
-func (r *EventBreakerRulesetResourceModel) ToOperationsCreateEventBreakerRulesetRequest(ctx context.Context) (*operations.CreateEventBreakerRulesetRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	eventBreakerRuleset, eventBreakerRulesetDiags := r.ToSharedEventBreakerRuleset(ctx)
-	diags.Append(eventBreakerRulesetDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateEventBreakerRulesetRequest{
-		GroupID:             groupID,
-		EventBreakerRuleset: *eventBreakerRuleset,
-	}
-
-	return &out, diags
-}
-
-func (r *EventBreakerRulesetResourceModel) ToOperationsUpdateEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.UpdateEventBreakerRulesetByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	eventBreakerRuleset, eventBreakerRulesetDiags := r.ToSharedEventBreakerRuleset(ctx)
-	diags.Append(eventBreakerRulesetDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateEventBreakerRulesetByIDRequest{
-		ID:                  id,
-		GroupID:             groupID,
-		EventBreakerRuleset: *eventBreakerRuleset,
-	}
-
-	return &out, diags
-}
-
-func (r *EventBreakerRulesetResourceModel) ToOperationsListEventBreakerRulesetRequest(ctx context.Context) (*operations.ListEventBreakerRulesetRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListEventBreakerRulesetRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *EventBreakerRulesetResourceModel) ToOperationsDeleteEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.DeleteEventBreakerRulesetByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.DeleteEventBreakerRulesetByIDRequest{
-		GroupID: groupID,
-		ID:      id,
-	}
-
-	return &out, diags
-}
-
-func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsCreateEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.CreateEventBreakerRulesetResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.ListEventBreakerRulesetResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsUpdateEventBreakerRulesetByIDResponseBody(ctx context.Context, resp *operations.UpdateEventBreakerRulesetByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
 }

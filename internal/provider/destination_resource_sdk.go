@@ -10,6 +10,109 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *DestinationResourceModel) RefreshFromOperationsCreateOutputResponseBody(ctx context.Context, resp *operations.CreateOutputResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *DestinationResourceModel) RefreshFromOperationsListOutputResponseBody(ctx context.Context, resp *operations.ListOutputResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *DestinationResourceModel) RefreshFromOperationsUpdateOutputByIDResponseBody(ctx context.Context, resp *operations.UpdateOutputByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *DestinationResourceModel) ToOperationsCreateOutputRequest(ctx context.Context) (*operations.CreateOutputRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	output, outputDiags := r.ToSharedOutput(ctx)
+	diags.Append(outputDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateOutputRequest{
+		GroupID: groupID,
+		Output:  *output,
+	}
+
+	return &out, diags
+}
+
+func (r *DestinationResourceModel) ToOperationsDeleteOutputByIDRequest(ctx context.Context) (*operations.DeleteOutputByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteOutputByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *DestinationResourceModel) ToOperationsListOutputRequest(ctx context.Context) (*operations.ListOutputRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListOutputRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *DestinationResourceModel) ToOperationsUpdateOutputByIDRequest(ctx context.Context) (*operations.UpdateOutputByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	output, outputDiags := r.ToSharedOutput(ctx)
+	diags.Append(outputDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateOutputByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+		Output:  *output,
+	}
+
+	return &out, diags
+}
+
 func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.Output, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -20434,107 +20537,4 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 
 	return &out, diags
-}
-
-func (r *DestinationResourceModel) ToOperationsCreateOutputRequest(ctx context.Context) (*operations.CreateOutputRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	output, outputDiags := r.ToSharedOutput(ctx)
-	diags.Append(outputDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateOutputRequest{
-		GroupID: groupID,
-		Output:  *output,
-	}
-
-	return &out, diags
-}
-
-func (r *DestinationResourceModel) ToOperationsUpdateOutputByIDRequest(ctx context.Context) (*operations.UpdateOutputByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	output, outputDiags := r.ToSharedOutput(ctx)
-	diags.Append(outputDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateOutputByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-		Output:  *output,
-	}
-
-	return &out, diags
-}
-
-func (r *DestinationResourceModel) ToOperationsListOutputRequest(ctx context.Context) (*operations.ListOutputRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListOutputRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *DestinationResourceModel) ToOperationsDeleteOutputByIDRequest(ctx context.Context) (*operations.DeleteOutputByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteOutputByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *DestinationResourceModel) RefreshFromOperationsCreateOutputResponseBody(ctx context.Context, resp *operations.CreateOutputResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *DestinationResourceModel) RefreshFromOperationsListOutputResponseBody(ctx context.Context, resp *operations.ListOutputResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *DestinationResourceModel) RefreshFromOperationsUpdateOutputByIDResponseBody(ctx context.Context, resp *operations.UpdateOutputByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
 }

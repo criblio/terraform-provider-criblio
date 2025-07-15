@@ -11,6 +11,104 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *ProjectResourceModel) RefreshFromSharedProjectConfig(ctx context.Context, resp *shared.ProjectConfig) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp.Consumers == nil {
+		r.Consumers = nil
+	} else {
+		r.Consumers = &tfTypes.Consumers{}
+	}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.Destinations = make([]types.String, 0, len(resp.Destinations))
+	for _, v := range resp.Destinations {
+		r.Destinations = append(r.Destinations, types.StringValue(v))
+	}
+	r.ID = types.StringValue(resp.ID)
+	r.Subscriptions = make([]types.String, 0, len(resp.Subscriptions))
+	for _, v := range resp.Subscriptions {
+		r.Subscriptions = append(r.Subscriptions, types.StringValue(v))
+	}
+
+	return diags
+}
+
+func (r *ProjectResourceModel) ToOperationsCreateProjectRequest(ctx context.Context) (*operations.CreateProjectRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	projectConfig, projectConfigDiags := r.ToSharedProjectConfig(ctx)
+	diags.Append(projectConfigDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateProjectRequest{
+		GroupID:       groupID,
+		ProjectConfig: *projectConfig,
+	}
+
+	return &out, diags
+}
+
+func (r *ProjectResourceModel) ToOperationsDeleteProjectByIDRequest(ctx context.Context) (*operations.DeleteProjectByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteProjectByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *ProjectResourceModel) ToOperationsListProjectRequest(ctx context.Context) (*operations.ListProjectRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListProjectRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *ProjectResourceModel) ToOperationsUpdateProjectByIDRequest(ctx context.Context) (*operations.UpdateProjectByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	projectConfig, projectConfigDiags := r.ToSharedProjectConfig(ctx)
+	diags.Append(projectConfigDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateProjectByIDRequest{
+		ID:            id,
+		GroupID:       groupID,
+		ProjectConfig: *projectConfig,
+	}
+
+	return &out, diags
+}
+
 func (r *ProjectResourceModel) ToSharedProjectConfig(ctx context.Context) (*shared.ProjectConfig, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -44,102 +142,4 @@ func (r *ProjectResourceModel) ToSharedProjectConfig(ctx context.Context) (*shar
 	}
 
 	return &out, diags
-}
-
-func (r *ProjectResourceModel) ToOperationsCreateProjectRequest(ctx context.Context) (*operations.CreateProjectRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	projectConfig, projectConfigDiags := r.ToSharedProjectConfig(ctx)
-	diags.Append(projectConfigDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateProjectRequest{
-		GroupID:       groupID,
-		ProjectConfig: *projectConfig,
-	}
-
-	return &out, diags
-}
-
-func (r *ProjectResourceModel) ToOperationsUpdateProjectByIDRequest(ctx context.Context) (*operations.UpdateProjectByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	projectConfig, projectConfigDiags := r.ToSharedProjectConfig(ctx)
-	diags.Append(projectConfigDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateProjectByIDRequest{
-		ID:            id,
-		GroupID:       groupID,
-		ProjectConfig: *projectConfig,
-	}
-
-	return &out, diags
-}
-
-func (r *ProjectResourceModel) ToOperationsListProjectRequest(ctx context.Context) (*operations.ListProjectRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListProjectRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *ProjectResourceModel) ToOperationsDeleteProjectByIDRequest(ctx context.Context) (*operations.DeleteProjectByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteProjectByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *ProjectResourceModel) RefreshFromSharedProjectConfig(ctx context.Context, resp *shared.ProjectConfig) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp.Consumers == nil {
-		r.Consumers = nil
-	} else {
-		r.Consumers = &tfTypes.Consumers{}
-	}
-	r.Description = types.StringPointerValue(resp.Description)
-	r.Destinations = make([]types.String, 0, len(resp.Destinations))
-	for _, v := range resp.Destinations {
-		r.Destinations = append(r.Destinations, types.StringValue(v))
-	}
-	r.ID = types.StringValue(resp.ID)
-	r.Subscriptions = make([]types.String, 0, len(resp.Subscriptions))
-	for _, v := range resp.Subscriptions {
-		r.Subscriptions = append(r.Subscriptions, types.StringValue(v))
-	}
-
-	return diags
 }

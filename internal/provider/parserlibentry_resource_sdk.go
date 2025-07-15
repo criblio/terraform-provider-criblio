@@ -11,6 +11,87 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *ParserLibEntryResourceModel) RefreshFromSharedParserLibEntry(ctx context.Context, resp *shared.ParserLibEntry) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp.AdditionalProperties == nil {
+		r.AdditionalProperties = types.StringNull()
+	} else {
+		additionalPropertiesResult, _ := json.Marshal(resp.AdditionalProperties)
+		r.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
+	}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringPointerValue(resp.Lib)
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
+	}
+
+	return diags
+}
+
+func (r *ParserLibEntryResourceModel) ToOperationsCreateParserRequest(ctx context.Context) (*operations.CreateParserRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	parserLibEntry, parserLibEntryDiags := r.ToSharedParserLibEntry(ctx)
+	diags.Append(parserLibEntryDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateParserRequest{
+		GroupID:        groupID,
+		ParserLibEntry: *parserLibEntry,
+	}
+
+	return &out, diags
+}
+
+func (r *ParserLibEntryResourceModel) ToOperationsListParserRequest(ctx context.Context) (*operations.ListParserRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListParserRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *ParserLibEntryResourceModel) ToOperationsUpdateParserByIDRequest(ctx context.Context) (*operations.UpdateParserByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	parserLibEntry, parserLibEntryDiags := r.ToSharedParserLibEntry(ctx)
+	diags.Append(parserLibEntryDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateParserByIDRequest{
+		ID:             id,
+		GroupID:        groupID,
+		ParserLibEntry: *parserLibEntry,
+	}
+
+	return &out, diags
+}
+
 func (r *ParserLibEntryResourceModel) ToSharedParserLibEntry(ctx context.Context) (*shared.ParserLibEntry, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -55,85 +136,4 @@ func (r *ParserLibEntryResourceModel) ToSharedParserLibEntry(ctx context.Context
 	}
 
 	return &out, diags
-}
-
-func (r *ParserLibEntryResourceModel) ToOperationsCreateParserRequest(ctx context.Context) (*operations.CreateParserRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	parserLibEntry, parserLibEntryDiags := r.ToSharedParserLibEntry(ctx)
-	diags.Append(parserLibEntryDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateParserRequest{
-		GroupID:        groupID,
-		ParserLibEntry: *parserLibEntry,
-	}
-
-	return &out, diags
-}
-
-func (r *ParserLibEntryResourceModel) ToOperationsUpdateParserByIDRequest(ctx context.Context) (*operations.UpdateParserByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	parserLibEntry, parserLibEntryDiags := r.ToSharedParserLibEntry(ctx)
-	diags.Append(parserLibEntryDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateParserByIDRequest{
-		ID:             id,
-		GroupID:        groupID,
-		ParserLibEntry: *parserLibEntry,
-	}
-
-	return &out, diags
-}
-
-func (r *ParserLibEntryResourceModel) ToOperationsListParserRequest(ctx context.Context) (*operations.ListParserRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListParserRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *ParserLibEntryResourceModel) RefreshFromSharedParserLibEntry(ctx context.Context, resp *shared.ParserLibEntry) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp.AdditionalProperties == nil {
-		r.AdditionalProperties = types.StringNull()
-	} else {
-		additionalPropertiesResult, _ := json.Marshal(resp.AdditionalProperties)
-		r.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
-	}
-	r.Description = types.StringPointerValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Lib = types.StringPointerValue(resp.Lib)
-	r.Tags = types.StringPointerValue(resp.Tags)
-	if resp.Type != nil {
-		r.Type = types.StringValue(string(*resp.Type))
-	} else {
-		r.Type = types.StringNull()
-	}
-
-	return diags
 }

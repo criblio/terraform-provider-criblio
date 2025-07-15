@@ -10,6 +10,16 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *SchemaDataSourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Context, resp *shared.SchemaLibEntry) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Schema = types.StringValue(resp.Schema)
+
+	return diags
+}
+
 func (r *SchemaDataSourceModel) ToOperationsListLibSchemasRequest(ctx context.Context) (*operations.ListLibSchemasRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -21,14 +31,4 @@ func (r *SchemaDataSourceModel) ToOperationsListLibSchemasRequest(ctx context.Co
 	}
 
 	return &out, diags
-}
-
-func (r *SchemaDataSourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Context, resp *shared.SchemaLibEntry) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Description = types.StringPointerValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Schema = types.StringValue(resp.Schema)
-
-	return diags
 }

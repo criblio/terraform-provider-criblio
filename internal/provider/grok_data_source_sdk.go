@@ -10,6 +10,17 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *GrokDataSourceModel) RefreshFromSharedGrokFile(ctx context.Context, resp *shared.GrokFile) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Content = types.StringValue(resp.Content)
+	r.ID = types.StringValue(resp.ID)
+	r.Size = types.Float64Value(resp.Size)
+	r.Tags = types.StringPointerValue(resp.Tags)
+
+	return diags
+}
+
 func (r *GrokDataSourceModel) ToOperationsListGrokFileRequest(ctx context.Context) (*operations.ListGrokFileRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -21,15 +32,4 @@ func (r *GrokDataSourceModel) ToOperationsListGrokFileRequest(ctx context.Contex
 	}
 
 	return &out, diags
-}
-
-func (r *GrokDataSourceModel) RefreshFromSharedGrokFile(ctx context.Context, resp *shared.GrokFile) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Content = types.StringValue(resp.Content)
-	r.ID = types.StringValue(resp.ID)
-	r.Size = types.Float64Value(resp.Size)
-	r.Tags = types.StringPointerValue(resp.Tags)
-
-	return diags
 }

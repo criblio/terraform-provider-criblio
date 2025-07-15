@@ -10,19 +10,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *HmacFunctionDataSourceModel) ToOperationsListHmacFunctionRequest(ctx context.Context) (*operations.ListHmacFunctionRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListHmacFunctionRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *HmacFunctionDataSourceModel) RefreshFromSharedHmacFunction(ctx context.Context, resp *shared.HmacFunction) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -38,4 +25,17 @@ func (r *HmacFunctionDataSourceModel) RefreshFromSharedHmacFunction(ctx context.
 	r.StringDelim = types.StringPointerValue(resp.StringDelim)
 
 	return diags
+}
+
+func (r *HmacFunctionDataSourceModel) ToOperationsListHmacFunctionRequest(ctx context.Context) (*operations.ListHmacFunctionRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListHmacFunctionRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
 }

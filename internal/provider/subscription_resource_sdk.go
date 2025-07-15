@@ -10,42 +10,16 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *SubscriptionResourceModel) ToSharedSubscription(ctx context.Context) (*shared.Subscription, diag.Diagnostics) {
+func (r *SubscriptionResourceModel) RefreshFromSharedSubscription(ctx context.Context, resp *shared.Subscription) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	disabled := new(bool)
-	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
-		*disabled = r.Disabled.ValueBool()
-	} else {
-		disabled = nil
-	}
-	filter := new(string)
-	if !r.Filter.IsUnknown() && !r.Filter.IsNull() {
-		*filter = r.Filter.ValueString()
-	} else {
-		filter = nil
-	}
-	var id string
-	id = r.ID.ValueString()
+	r.Description = types.StringPointerValue(resp.Description)
+	r.Disabled = types.BoolPointerValue(resp.Disabled)
+	r.Filter = types.StringPointerValue(resp.Filter)
+	r.ID = types.StringValue(resp.ID)
+	r.Pipeline = types.StringValue(resp.Pipeline)
 
-	var pipeline string
-	pipeline = r.Pipeline.ValueString()
-
-	out := shared.Subscription{
-		Description: description,
-		Disabled:    disabled,
-		Filter:      filter,
-		ID:          id,
-		Pipeline:    pipeline,
-	}
-
-	return &out, diags
+	return diags
 }
 
 func (r *SubscriptionResourceModel) ToOperationsCreateSubscriptionRequest(ctx context.Context) (*operations.CreateSubscriptionRequest, diag.Diagnostics) {
@@ -93,6 +67,23 @@ func (r *SubscriptionResourceModel) ToOperationsCreateSubscriptionRequest(ctx co
 		Pipeline:     pipeline,
 		ID:           id,
 		Subscription: *subscription,
+	}
+
+	return &out, diags
+}
+
+func (r *SubscriptionResourceModel) ToOperationsDeleteSubscriptionByIDRequest(ctx context.Context) (*operations.DeleteSubscriptionByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteSubscriptionByIDRequest{
+		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -156,31 +147,40 @@ func (r *SubscriptionResourceModel) ToOperationsUpdateSubscriptionByIDRequest(ct
 	return &out, diags
 }
 
-func (r *SubscriptionResourceModel) ToOperationsDeleteSubscriptionByIDRequest(ctx context.Context) (*operations.DeleteSubscriptionByIDRequest, diag.Diagnostics) {
+func (r *SubscriptionResourceModel) ToSharedSubscription(ctx context.Context) (*shared.Subscription, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	disabled := new(bool)
+	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
+		*disabled = r.Disabled.ValueBool()
+	} else {
+		disabled = nil
+	}
+	filter := new(string)
+	if !r.Filter.IsUnknown() && !r.Filter.IsNull() {
+		*filter = r.Filter.ValueString()
+	} else {
+		filter = nil
+	}
 	var id string
 	id = r.ID.ValueString()
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
+	var pipeline string
+	pipeline = r.Pipeline.ValueString()
 
-	out := operations.DeleteSubscriptionByIDRequest{
-		ID:      id,
-		GroupID: groupID,
+	out := shared.Subscription{
+		Description: description,
+		Disabled:    disabled,
+		Filter:      filter,
+		ID:          id,
+		Pipeline:    pipeline,
 	}
 
 	return &out, diags
-}
-
-func (r *SubscriptionResourceModel) RefreshFromSharedSubscription(ctx context.Context, resp *shared.Subscription) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Description = types.StringPointerValue(resp.Description)
-	r.Disabled = types.BoolPointerValue(resp.Disabled)
-	r.Filter = types.StringPointerValue(resp.Filter)
-	r.ID = types.StringValue(resp.ID)
-	r.Pipeline = types.StringValue(resp.Pipeline)
-
-	return diags
 }

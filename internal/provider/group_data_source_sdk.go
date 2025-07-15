@@ -10,26 +10,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
-func (r *GroupDataSourceModel) ToOperationsGetGroupsByIDRequest(ctx context.Context) (*operations.GetGroupsByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	fields := new(string)
-	if !r.Fields.IsUnknown() && !r.Fields.IsNull() {
-		*fields = r.Fields.ValueString()
-	} else {
-		fields = nil
-	}
-	out := operations.GetGroupsByIDRequest{
-		ID:     id,
-		Fields: fields,
-	}
-
-	return &out, diags
-}
-
 func (r *GroupDataSourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx context.Context, resp *operations.GetGroupsByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -75,4 +55,24 @@ func (r *GroupDataSourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ct
 	}
 
 	return diags
+}
+
+func (r *GroupDataSourceModel) ToOperationsGetGroupsByIDRequest(ctx context.Context) (*operations.GetGroupsByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	fields := new(string)
+	if !r.Fields.IsUnknown() && !r.Fields.IsNull() {
+		*fields = r.Fields.ValueString()
+	} else {
+		fields = nil
+	}
+	out := operations.GetGroupsByIDRequest{
+		ID:     id,
+		Fields: fields,
+	}
+
+	return &out, diags
 }

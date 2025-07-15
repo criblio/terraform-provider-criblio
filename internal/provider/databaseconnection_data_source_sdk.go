@@ -10,6 +10,24 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *DatabaseConnectionDataSourceModel) RefreshFromSharedDatabaseConnectionConfig(ctx context.Context, resp *shared.DatabaseConnectionConfig) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.AuthType = types.StringValue(resp.AuthType)
+	r.ConfigObj = types.StringPointerValue(resp.ConfigObj)
+	r.ConnectionString = types.StringPointerValue(resp.ConnectionString)
+	r.ConnectionTimeout = types.Float64PointerValue(resp.ConnectionTimeout)
+	r.DatabaseType = types.StringValue(string(resp.DatabaseType))
+	r.Description = types.StringValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Password = types.StringPointerValue(resp.Password)
+	r.RequestTimeout = types.Float64PointerValue(resp.RequestTimeout)
+	r.Tags = types.StringPointerValue(resp.Tags)
+	r.User = types.StringPointerValue(resp.User)
+
+	return diags
+}
+
 func (r *DatabaseConnectionDataSourceModel) ToOperationsGetDatabaseConnectionConfigRequest(ctx context.Context) (*operations.GetDatabaseConnectionConfigRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -28,22 +46,4 @@ func (r *DatabaseConnectionDataSourceModel) ToOperationsGetDatabaseConnectionCon
 	}
 
 	return &out, diags
-}
-
-func (r *DatabaseConnectionDataSourceModel) RefreshFromSharedDatabaseConnectionConfig(ctx context.Context, resp *shared.DatabaseConnectionConfig) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.AuthType = types.StringValue(resp.AuthType)
-	r.ConfigObj = types.StringPointerValue(resp.ConfigObj)
-	r.ConnectionString = types.StringPointerValue(resp.ConnectionString)
-	r.ConnectionTimeout = types.Float64PointerValue(resp.ConnectionTimeout)
-	r.DatabaseType = types.StringValue(string(resp.DatabaseType))
-	r.Description = types.StringValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Password = types.StringPointerValue(resp.Password)
-	r.RequestTimeout = types.Float64PointerValue(resp.RequestTimeout)
-	r.Tags = types.StringPointerValue(resp.Tags)
-	r.User = types.StringPointerValue(resp.User)
-
-	return diags
 }

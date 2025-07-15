@@ -11,6 +11,500 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx context.Context, resp *shared.AppscopeLibEntry) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp.Config.Cribl == nil {
+		r.Config.Cribl = nil
+	} else {
+		r.Config.Cribl = &tfTypes.AppscopeConfigWithCustomCribl{}
+		r.Config.Cribl.Authtoken = types.StringPointerValue(resp.Config.Cribl.Authtoken)
+		r.Config.Cribl.Enable = types.BoolPointerValue(resp.Config.Cribl.Enable)
+		if resp.Config.Cribl.Transport == nil {
+			r.Config.Cribl.Transport = nil
+		} else {
+			r.Config.Cribl.Transport = &tfTypes.AppscopeTransport{}
+			if resp.Config.Cribl.Transport.Buffer != nil {
+				r.Config.Cribl.Transport.Buffer = types.StringValue(string(*resp.Config.Cribl.Transport.Buffer))
+			} else {
+				r.Config.Cribl.Transport.Buffer = types.StringNull()
+			}
+			r.Config.Cribl.Transport.Host = types.StringPointerValue(resp.Config.Cribl.Transport.Host)
+			r.Config.Cribl.Transport.Path = types.StringPointerValue(resp.Config.Cribl.Transport.Path)
+			r.Config.Cribl.Transport.Port = types.Float64PointerValue(resp.Config.Cribl.Transport.Port)
+			if resp.Config.Cribl.Transport.TLS == nil {
+				r.Config.Cribl.Transport.TLS = nil
+			} else {
+				r.Config.Cribl.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
+				r.Config.Cribl.Transport.TLS.Cacertpath = types.StringPointerValue(resp.Config.Cribl.Transport.TLS.Cacertpath)
+				r.Config.Cribl.Transport.TLS.Enable = types.BoolPointerValue(resp.Config.Cribl.Transport.TLS.Enable)
+				r.Config.Cribl.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Cribl.Transport.TLS.Validateserver)
+			}
+			r.Config.Cribl.Transport.Type = types.StringPointerValue(resp.Config.Cribl.Transport.Type)
+		}
+		r.Config.Cribl.UseScopeSourceTransport = types.BoolPointerValue(resp.Config.Cribl.UseScopeSourceTransport)
+	}
+	r.Config.Custom = []tfTypes.AppscopeCustom{}
+	if len(r.Config.Custom) > len(resp.Config.Custom) {
+		r.Config.Custom = r.Config.Custom[:len(resp.Config.Custom)]
+	}
+	for customCount, customItem := range resp.Config.Custom {
+		var custom tfTypes.AppscopeCustom
+		custom.Ancestor = types.StringPointerValue(customItem.Ancestor)
+		custom.Arg = types.StringPointerValue(customItem.Arg)
+		if customItem.Config.Cribl == nil {
+			custom.Config.Cribl = nil
+		} else {
+			custom.Config.Cribl = &tfTypes.AppscopeConfigCribl{}
+			custom.Config.Cribl.Authtoken = types.StringPointerValue(customItem.Config.Cribl.Authtoken)
+			custom.Config.Cribl.Enable = types.BoolPointerValue(customItem.Config.Cribl.Enable)
+			if customItem.Config.Cribl.Transport == nil {
+				custom.Config.Cribl.Transport = nil
+			} else {
+				custom.Config.Cribl.Transport = &tfTypes.AppscopeTransport{}
+				if customItem.Config.Cribl.Transport.Buffer != nil {
+					custom.Config.Cribl.Transport.Buffer = types.StringValue(string(*customItem.Config.Cribl.Transport.Buffer))
+				} else {
+					custom.Config.Cribl.Transport.Buffer = types.StringNull()
+				}
+				custom.Config.Cribl.Transport.Host = types.StringPointerValue(customItem.Config.Cribl.Transport.Host)
+				custom.Config.Cribl.Transport.Path = types.StringPointerValue(customItem.Config.Cribl.Transport.Path)
+				custom.Config.Cribl.Transport.Port = types.Float64PointerValue(customItem.Config.Cribl.Transport.Port)
+				if customItem.Config.Cribl.Transport.TLS == nil {
+					custom.Config.Cribl.Transport.TLS = nil
+				} else {
+					custom.Config.Cribl.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
+					custom.Config.Cribl.Transport.TLS.Cacertpath = types.StringPointerValue(customItem.Config.Cribl.Transport.TLS.Cacertpath)
+					custom.Config.Cribl.Transport.TLS.Enable = types.BoolPointerValue(customItem.Config.Cribl.Transport.TLS.Enable)
+					custom.Config.Cribl.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Cribl.Transport.TLS.Validateserver)
+				}
+				custom.Config.Cribl.Transport.Type = types.StringPointerValue(customItem.Config.Cribl.Transport.Type)
+			}
+			custom.Config.Cribl.UseScopeSourceTransport = types.BoolPointerValue(customItem.Config.Cribl.UseScopeSourceTransport)
+		}
+		if customItem.Config.Event == nil {
+			custom.Config.Event = nil
+		} else {
+			custom.Config.Event = &tfTypes.AppscopeConfigEvent{}
+			custom.Config.Event.Enable = types.BoolValue(customItem.Config.Event.Enable)
+			custom.Config.Event.Format.Enhancefs = types.BoolValue(customItem.Config.Event.Format.Enhancefs)
+			custom.Config.Event.Format.Maxeventpersec = types.Float64Value(customItem.Config.Event.Format.Maxeventpersec)
+			if customItem.Config.Event.Transport.Buffer != nil {
+				custom.Config.Event.Transport.Buffer = types.StringValue(string(*customItem.Config.Event.Transport.Buffer))
+			} else {
+				custom.Config.Event.Transport.Buffer = types.StringNull()
+			}
+			custom.Config.Event.Transport.Host = types.StringPointerValue(customItem.Config.Event.Transport.Host)
+			custom.Config.Event.Transport.Path = types.StringPointerValue(customItem.Config.Event.Transport.Path)
+			custom.Config.Event.Transport.Port = types.Float64PointerValue(customItem.Config.Event.Transport.Port)
+			if customItem.Config.Event.Transport.TLS == nil {
+				custom.Config.Event.Transport.TLS = nil
+			} else {
+				custom.Config.Event.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
+				custom.Config.Event.Transport.TLS.Cacertpath = types.StringPointerValue(customItem.Config.Event.Transport.TLS.Cacertpath)
+				custom.Config.Event.Transport.TLS.Enable = types.BoolPointerValue(customItem.Config.Event.Transport.TLS.Enable)
+				custom.Config.Event.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Event.Transport.TLS.Validateserver)
+			}
+			custom.Config.Event.Transport.Type = types.StringPointerValue(customItem.Config.Event.Transport.Type)
+			custom.Config.Event.Type = types.StringValue(string(customItem.Config.Event.Type))
+			custom.Config.Event.Watch = []tfTypes.AppscopeConfigWatchNdjson{}
+			for watchCount, watchItem := range customItem.Config.Event.Watch {
+				var watch tfTypes.AppscopeConfigWatchNdjson
+				watch.Allowbinary = types.BoolPointerValue(watchItem.Allowbinary)
+				watch.Enabled = types.BoolPointerValue(watchItem.Enabled)
+				watch.Field = types.StringPointerValue(watchItem.Field)
+				watch.Headers = make([]types.String, 0, len(watchItem.Headers))
+				for _, v := range watchItem.Headers {
+					watch.Headers = append(watch.Headers, types.StringValue(v))
+				}
+				watch.Name = types.StringPointerValue(watchItem.Name)
+				watch.Type = types.StringValue(watchItem.Type)
+				watch.Value = types.StringPointerValue(watchItem.Value)
+				if watchCount+1 > len(custom.Config.Event.Watch) {
+					custom.Config.Event.Watch = append(custom.Config.Event.Watch, watch)
+				} else {
+					custom.Config.Event.Watch[watchCount].Allowbinary = watch.Allowbinary
+					custom.Config.Event.Watch[watchCount].Enabled = watch.Enabled
+					custom.Config.Event.Watch[watchCount].Field = watch.Field
+					custom.Config.Event.Watch[watchCount].Headers = watch.Headers
+					custom.Config.Event.Watch[watchCount].Name = watch.Name
+					custom.Config.Event.Watch[watchCount].Type = watch.Type
+					custom.Config.Event.Watch[watchCount].Value = watch.Value
+				}
+			}
+		}
+		if customItem.Config.Libscope == nil {
+			custom.Config.Libscope = nil
+		} else {
+			custom.Config.Libscope = &tfTypes.AppscopeConfigLibscope{}
+			custom.Config.Libscope.Commanddir = types.StringPointerValue(customItem.Config.Libscope.Commanddir)
+			custom.Config.Libscope.Configevent = types.BoolPointerValue(customItem.Config.Libscope.Configevent)
+			if customItem.Config.Libscope.Log == nil {
+				custom.Config.Libscope.Log = nil
+			} else {
+				custom.Config.Libscope.Log = &tfTypes.AppscopeConfigLog{}
+				if customItem.Config.Libscope.Log.Level != nil {
+					custom.Config.Libscope.Log.Level = types.StringValue(string(*customItem.Config.Libscope.Log.Level))
+				} else {
+					custom.Config.Libscope.Log.Level = types.StringNull()
+				}
+				if customItem.Config.Libscope.Log.Transport == nil {
+					custom.Config.Libscope.Log.Transport = nil
+				} else {
+					custom.Config.Libscope.Log.Transport = &tfTypes.AppscopeTransport{}
+					if customItem.Config.Libscope.Log.Transport.Buffer != nil {
+						custom.Config.Libscope.Log.Transport.Buffer = types.StringValue(string(*customItem.Config.Libscope.Log.Transport.Buffer))
+					} else {
+						custom.Config.Libscope.Log.Transport.Buffer = types.StringNull()
+					}
+					custom.Config.Libscope.Log.Transport.Host = types.StringPointerValue(customItem.Config.Libscope.Log.Transport.Host)
+					custom.Config.Libscope.Log.Transport.Path = types.StringPointerValue(customItem.Config.Libscope.Log.Transport.Path)
+					custom.Config.Libscope.Log.Transport.Port = types.Float64PointerValue(customItem.Config.Libscope.Log.Transport.Port)
+					if customItem.Config.Libscope.Log.Transport.TLS == nil {
+						custom.Config.Libscope.Log.Transport.TLS = nil
+					} else {
+						custom.Config.Libscope.Log.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
+						custom.Config.Libscope.Log.Transport.TLS.Cacertpath = types.StringPointerValue(customItem.Config.Libscope.Log.Transport.TLS.Cacertpath)
+						custom.Config.Libscope.Log.Transport.TLS.Enable = types.BoolPointerValue(customItem.Config.Libscope.Log.Transport.TLS.Enable)
+						custom.Config.Libscope.Log.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Libscope.Log.Transport.TLS.Validateserver)
+					}
+					custom.Config.Libscope.Log.Transport.Type = types.StringPointerValue(customItem.Config.Libscope.Log.Transport.Type)
+				}
+			}
+			custom.Config.Libscope.Summaryperiod = types.Float64PointerValue(customItem.Config.Libscope.Summaryperiod)
+		}
+		if customItem.Config.Metric == nil {
+			custom.Config.Metric = nil
+		} else {
+			custom.Config.Metric = &tfTypes.AppscopeConfigMetric{}
+			custom.Config.Metric.Enable = types.BoolValue(customItem.Config.Metric.Enable)
+			custom.Config.Metric.Format.Statsdmaxlen = types.Float64PointerValue(customItem.Config.Metric.Format.Statsdmaxlen)
+			custom.Config.Metric.Format.Statsdprefix = types.StringPointerValue(customItem.Config.Metric.Format.Statsdprefix)
+			custom.Config.Metric.Format.Type = types.StringPointerValue(customItem.Config.Metric.Format.Type)
+			custom.Config.Metric.Format.Verbosity = types.Float64PointerValue(customItem.Config.Metric.Format.Verbosity)
+			if customItem.Config.Metric.Transport.Buffer != nil {
+				custom.Config.Metric.Transport.Buffer = types.StringValue(string(*customItem.Config.Metric.Transport.Buffer))
+			} else {
+				custom.Config.Metric.Transport.Buffer = types.StringNull()
+			}
+			custom.Config.Metric.Transport.Host = types.StringPointerValue(customItem.Config.Metric.Transport.Host)
+			custom.Config.Metric.Transport.Path = types.StringPointerValue(customItem.Config.Metric.Transport.Path)
+			custom.Config.Metric.Transport.Port = types.Float64PointerValue(customItem.Config.Metric.Transport.Port)
+			if customItem.Config.Metric.Transport.TLS == nil {
+				custom.Config.Metric.Transport.TLS = nil
+			} else {
+				custom.Config.Metric.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
+				custom.Config.Metric.Transport.TLS.Cacertpath = types.StringPointerValue(customItem.Config.Metric.Transport.TLS.Cacertpath)
+				custom.Config.Metric.Transport.TLS.Enable = types.BoolPointerValue(customItem.Config.Metric.Transport.TLS.Enable)
+				custom.Config.Metric.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Metric.Transport.TLS.Validateserver)
+			}
+			custom.Config.Metric.Transport.Type = types.StringPointerValue(customItem.Config.Metric.Transport.Type)
+		}
+		if customItem.Config.Payload == nil {
+			custom.Config.Payload = nil
+		} else {
+			custom.Config.Payload = &tfTypes.AppscopeConfigPayload{}
+			custom.Config.Payload.Dir = types.StringValue(customItem.Config.Payload.Dir)
+			custom.Config.Payload.Enable = types.BoolValue(customItem.Config.Payload.Enable)
+		}
+		custom.Config.Protocol = []tfTypes.AppscopeConfigProtocol{}
+		for protocolCount, protocolItem := range customItem.Config.Protocol {
+			var protocol tfTypes.AppscopeConfigProtocol
+			protocol.Binary = types.BoolValue(protocolItem.Binary)
+			protocol.Detect = types.BoolValue(protocolItem.Detect)
+			protocol.Len = types.Float64Value(protocolItem.Len)
+			protocol.Name = types.StringValue(protocolItem.Name)
+			protocol.Payload = types.BoolValue(protocolItem.Payload)
+			protocol.Regex = types.StringValue(protocolItem.Regex)
+			if protocolCount+1 > len(custom.Config.Protocol) {
+				custom.Config.Protocol = append(custom.Config.Protocol, protocol)
+			} else {
+				custom.Config.Protocol[protocolCount].Binary = protocol.Binary
+				custom.Config.Protocol[protocolCount].Detect = protocol.Detect
+				custom.Config.Protocol[protocolCount].Len = protocol.Len
+				custom.Config.Protocol[protocolCount].Name = protocol.Name
+				custom.Config.Protocol[protocolCount].Payload = protocol.Payload
+				custom.Config.Protocol[protocolCount].Regex = protocol.Regex
+			}
+		}
+		custom.Config.Tags = []tfTypes.AppscopeConfigTag{}
+		for tagsCount, tagsItem := range customItem.Config.Tags {
+			var tags tfTypes.AppscopeConfigTag
+			tags.Key = types.StringValue(tagsItem.Key)
+			tags.Value = types.StringValue(tagsItem.Value)
+			if tagsCount+1 > len(custom.Config.Tags) {
+				custom.Config.Tags = append(custom.Config.Tags, tags)
+			} else {
+				custom.Config.Tags[tagsCount].Key = tags.Key
+				custom.Config.Tags[tagsCount].Value = tags.Value
+			}
+		}
+		custom.Env = types.StringPointerValue(customItem.Env)
+		custom.Hostname = types.StringPointerValue(customItem.Hostname)
+		custom.Procname = types.StringPointerValue(customItem.Procname)
+		custom.Username = types.StringPointerValue(customItem.Username)
+		if customCount+1 > len(r.Config.Custom) {
+			r.Config.Custom = append(r.Config.Custom, custom)
+		} else {
+			r.Config.Custom[customCount].Ancestor = custom.Ancestor
+			r.Config.Custom[customCount].Arg = custom.Arg
+			r.Config.Custom[customCount].Config = custom.Config
+			r.Config.Custom[customCount].Env = custom.Env
+			r.Config.Custom[customCount].Hostname = custom.Hostname
+			r.Config.Custom[customCount].Procname = custom.Procname
+			r.Config.Custom[customCount].Username = custom.Username
+		}
+	}
+	if resp.Config.Event == nil {
+		r.Config.Event = nil
+	} else {
+		r.Config.Event = &tfTypes.AppscopeConfigWithCustomEvent{}
+		r.Config.Event.Enable = types.BoolValue(resp.Config.Event.Enable)
+		r.Config.Event.Format.Enhancefs = types.BoolValue(resp.Config.Event.Format.Enhancefs)
+		r.Config.Event.Format.Maxeventpersec = types.Float64Value(resp.Config.Event.Format.Maxeventpersec)
+		if resp.Config.Event.Transport.Buffer != nil {
+			r.Config.Event.Transport.Buffer = types.StringValue(string(*resp.Config.Event.Transport.Buffer))
+		} else {
+			r.Config.Event.Transport.Buffer = types.StringNull()
+		}
+		r.Config.Event.Transport.Host = types.StringPointerValue(resp.Config.Event.Transport.Host)
+		r.Config.Event.Transport.Path = types.StringPointerValue(resp.Config.Event.Transport.Path)
+		r.Config.Event.Transport.Port = types.Float64PointerValue(resp.Config.Event.Transport.Port)
+		if resp.Config.Event.Transport.TLS == nil {
+			r.Config.Event.Transport.TLS = nil
+		} else {
+			r.Config.Event.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
+			r.Config.Event.Transport.TLS.Cacertpath = types.StringPointerValue(resp.Config.Event.Transport.TLS.Cacertpath)
+			r.Config.Event.Transport.TLS.Enable = types.BoolPointerValue(resp.Config.Event.Transport.TLS.Enable)
+			r.Config.Event.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Event.Transport.TLS.Validateserver)
+		}
+		r.Config.Event.Transport.Type = types.StringPointerValue(resp.Config.Event.Transport.Type)
+		r.Config.Event.Type = types.StringValue(string(resp.Config.Event.Type))
+		r.Config.Event.Watch = []tfTypes.AppscopeConfigWithCustomWatchNdjson{}
+		if len(r.Config.Event.Watch) > len(resp.Config.Event.Watch) {
+			r.Config.Event.Watch = r.Config.Event.Watch[:len(resp.Config.Event.Watch)]
+		}
+		for watchCount1, watchItem1 := range resp.Config.Event.Watch {
+			var watch1 tfTypes.AppscopeConfigWithCustomWatchNdjson
+			watch1.Allowbinary = types.BoolPointerValue(watchItem1.Allowbinary)
+			watch1.Enabled = types.BoolPointerValue(watchItem1.Enabled)
+			watch1.Field = types.StringPointerValue(watchItem1.Field)
+			watch1.Headers = make([]types.String, 0, len(watchItem1.Headers))
+			for _, v := range watchItem1.Headers {
+				watch1.Headers = append(watch1.Headers, types.StringValue(v))
+			}
+			watch1.Name = types.StringPointerValue(watchItem1.Name)
+			watch1.Type = types.StringValue(watchItem1.Type)
+			watch1.Value = types.StringPointerValue(watchItem1.Value)
+			if watchCount1+1 > len(r.Config.Event.Watch) {
+				r.Config.Event.Watch = append(r.Config.Event.Watch, watch1)
+			} else {
+				r.Config.Event.Watch[watchCount1].Allowbinary = watch1.Allowbinary
+				r.Config.Event.Watch[watchCount1].Enabled = watch1.Enabled
+				r.Config.Event.Watch[watchCount1].Field = watch1.Field
+				r.Config.Event.Watch[watchCount1].Headers = watch1.Headers
+				r.Config.Event.Watch[watchCount1].Name = watch1.Name
+				r.Config.Event.Watch[watchCount1].Type = watch1.Type
+				r.Config.Event.Watch[watchCount1].Value = watch1.Value
+			}
+		}
+	}
+	if resp.Config.Libscope == nil {
+		r.Config.Libscope = nil
+	} else {
+		r.Config.Libscope = &tfTypes.AppscopeConfigWithCustomLibscope{}
+		r.Config.Libscope.Commanddir = types.StringPointerValue(resp.Config.Libscope.Commanddir)
+		r.Config.Libscope.Configevent = types.BoolPointerValue(resp.Config.Libscope.Configevent)
+		if resp.Config.Libscope.Log == nil {
+			r.Config.Libscope.Log = nil
+		} else {
+			r.Config.Libscope.Log = &tfTypes.AppscopeConfigWithCustomLog{}
+			if resp.Config.Libscope.Log.Level != nil {
+				r.Config.Libscope.Log.Level = types.StringValue(string(*resp.Config.Libscope.Log.Level))
+			} else {
+				r.Config.Libscope.Log.Level = types.StringNull()
+			}
+			if resp.Config.Libscope.Log.Transport == nil {
+				r.Config.Libscope.Log.Transport = nil
+			} else {
+				r.Config.Libscope.Log.Transport = &tfTypes.AppscopeTransport{}
+				if resp.Config.Libscope.Log.Transport.Buffer != nil {
+					r.Config.Libscope.Log.Transport.Buffer = types.StringValue(string(*resp.Config.Libscope.Log.Transport.Buffer))
+				} else {
+					r.Config.Libscope.Log.Transport.Buffer = types.StringNull()
+				}
+				r.Config.Libscope.Log.Transport.Host = types.StringPointerValue(resp.Config.Libscope.Log.Transport.Host)
+				r.Config.Libscope.Log.Transport.Path = types.StringPointerValue(resp.Config.Libscope.Log.Transport.Path)
+				r.Config.Libscope.Log.Transport.Port = types.Float64PointerValue(resp.Config.Libscope.Log.Transport.Port)
+				if resp.Config.Libscope.Log.Transport.TLS == nil {
+					r.Config.Libscope.Log.Transport.TLS = nil
+				} else {
+					r.Config.Libscope.Log.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
+					r.Config.Libscope.Log.Transport.TLS.Cacertpath = types.StringPointerValue(resp.Config.Libscope.Log.Transport.TLS.Cacertpath)
+					r.Config.Libscope.Log.Transport.TLS.Enable = types.BoolPointerValue(resp.Config.Libscope.Log.Transport.TLS.Enable)
+					r.Config.Libscope.Log.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Libscope.Log.Transport.TLS.Validateserver)
+				}
+				r.Config.Libscope.Log.Transport.Type = types.StringPointerValue(resp.Config.Libscope.Log.Transport.Type)
+			}
+		}
+		r.Config.Libscope.Summaryperiod = types.Float64PointerValue(resp.Config.Libscope.Summaryperiod)
+	}
+	if resp.Config.Metric == nil {
+		r.Config.Metric = nil
+	} else {
+		r.Config.Metric = &tfTypes.AppscopeConfigWithCustomMetric{}
+		r.Config.Metric.Enable = types.BoolValue(resp.Config.Metric.Enable)
+		r.Config.Metric.Format.Statsdmaxlen = types.Float64PointerValue(resp.Config.Metric.Format.Statsdmaxlen)
+		r.Config.Metric.Format.Statsdprefix = types.StringPointerValue(resp.Config.Metric.Format.Statsdprefix)
+		r.Config.Metric.Format.Type = types.StringPointerValue(resp.Config.Metric.Format.Type)
+		r.Config.Metric.Format.Verbosity = types.Float64PointerValue(resp.Config.Metric.Format.Verbosity)
+		if resp.Config.Metric.Transport.Buffer != nil {
+			r.Config.Metric.Transport.Buffer = types.StringValue(string(*resp.Config.Metric.Transport.Buffer))
+		} else {
+			r.Config.Metric.Transport.Buffer = types.StringNull()
+		}
+		r.Config.Metric.Transport.Host = types.StringPointerValue(resp.Config.Metric.Transport.Host)
+		r.Config.Metric.Transport.Path = types.StringPointerValue(resp.Config.Metric.Transport.Path)
+		r.Config.Metric.Transport.Port = types.Float64PointerValue(resp.Config.Metric.Transport.Port)
+		if resp.Config.Metric.Transport.TLS == nil {
+			r.Config.Metric.Transport.TLS = nil
+		} else {
+			r.Config.Metric.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
+			r.Config.Metric.Transport.TLS.Cacertpath = types.StringPointerValue(resp.Config.Metric.Transport.TLS.Cacertpath)
+			r.Config.Metric.Transport.TLS.Enable = types.BoolPointerValue(resp.Config.Metric.Transport.TLS.Enable)
+			r.Config.Metric.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Metric.Transport.TLS.Validateserver)
+		}
+		r.Config.Metric.Transport.Type = types.StringPointerValue(resp.Config.Metric.Transport.Type)
+	}
+	if resp.Config.Payload == nil {
+		r.Config.Payload = nil
+	} else {
+		r.Config.Payload = &tfTypes.AppscopeConfigWithCustomPayload{}
+		r.Config.Payload.Dir = types.StringValue(resp.Config.Payload.Dir)
+		r.Config.Payload.Enable = types.BoolValue(resp.Config.Payload.Enable)
+	}
+	r.Config.Protocol = []tfTypes.AppscopeConfigWithCustomProtocol{}
+	if len(r.Config.Protocol) > len(resp.Config.Protocol) {
+		r.Config.Protocol = r.Config.Protocol[:len(resp.Config.Protocol)]
+	}
+	for protocolCount1, protocolItem1 := range resp.Config.Protocol {
+		var protocol1 tfTypes.AppscopeConfigWithCustomProtocol
+		protocol1.Binary = types.BoolValue(protocolItem1.Binary)
+		protocol1.Detect = types.BoolValue(protocolItem1.Detect)
+		protocol1.Len = types.Float64Value(protocolItem1.Len)
+		protocol1.Name = types.StringValue(protocolItem1.Name)
+		protocol1.Payload = types.BoolValue(protocolItem1.Payload)
+		protocol1.Regex = types.StringValue(protocolItem1.Regex)
+		if protocolCount1+1 > len(r.Config.Protocol) {
+			r.Config.Protocol = append(r.Config.Protocol, protocol1)
+		} else {
+			r.Config.Protocol[protocolCount1].Binary = protocol1.Binary
+			r.Config.Protocol[protocolCount1].Detect = protocol1.Detect
+			r.Config.Protocol[protocolCount1].Len = protocol1.Len
+			r.Config.Protocol[protocolCount1].Name = protocol1.Name
+			r.Config.Protocol[protocolCount1].Payload = protocol1.Payload
+			r.Config.Protocol[protocolCount1].Regex = protocol1.Regex
+		}
+	}
+	r.Config.Tags = []tfTypes.AppscopeConfigWithCustomTag{}
+	if len(r.Config.Tags) > len(resp.Config.Tags) {
+		r.Config.Tags = r.Config.Tags[:len(resp.Config.Tags)]
+	}
+	for tagsCount1, tagsItem1 := range resp.Config.Tags {
+		var tags1 tfTypes.AppscopeConfigWithCustomTag
+		tags1.Key = types.StringValue(tagsItem1.Key)
+		tags1.Value = types.StringValue(tagsItem1.Value)
+		if tagsCount1+1 > len(r.Config.Tags) {
+			r.Config.Tags = append(r.Config.Tags, tags1)
+		} else {
+			r.Config.Tags[tagsCount1].Key = tags1.Key
+			r.Config.Tags[tagsCount1].Value = tags1.Value
+		}
+	}
+	r.Description = types.StringValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringValue(string(resp.Lib))
+	r.Tags = types.StringPointerValue(resp.Tags)
+
+	return diags
+}
+
+func (r *AppscopeConfigResourceModel) ToOperationsCreateAppscopeLibEntryRequest(ctx context.Context) (*operations.CreateAppscopeLibEntryRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	appscopeLibEntry, appscopeLibEntryDiags := r.ToSharedAppscopeLibEntry(ctx)
+	diags.Append(appscopeLibEntryDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateAppscopeLibEntryRequest{
+		GroupID:          groupID,
+		AppscopeLibEntry: *appscopeLibEntry,
+	}
+
+	return &out, diags
+}
+
+func (r *AppscopeConfigResourceModel) ToOperationsDeleteAppscopeLibEntryByIDRequest(ctx context.Context) (*operations.DeleteAppscopeLibEntryByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteAppscopeLibEntryByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *AppscopeConfigResourceModel) ToOperationsListAppscopeLibEntryRequest(ctx context.Context) (*operations.ListAppscopeLibEntryRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListAppscopeLibEntryRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *AppscopeConfigResourceModel) ToOperationsUpdateAppscopeLibEntryByIDRequest(ctx context.Context) (*operations.UpdateAppscopeLibEntryByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	appscopeLibEntry, appscopeLibEntryDiags := r.ToSharedAppscopeLibEntry(ctx)
+	diags.Append(appscopeLibEntryDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateAppscopeLibEntryByIDRequest{
+		ID:               id,
+		GroupID:          groupID,
+		AppscopeLibEntry: *appscopeLibEntry,
+	}
+
+	return &out, diags
+}
+
 func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Context) (*shared.AppscopeLibEntry, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -1103,498 +1597,4 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 	}
 
 	return &out, diags
-}
-
-func (r *AppscopeConfigResourceModel) ToOperationsCreateAppscopeLibEntryRequest(ctx context.Context) (*operations.CreateAppscopeLibEntryRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	appscopeLibEntry, appscopeLibEntryDiags := r.ToSharedAppscopeLibEntry(ctx)
-	diags.Append(appscopeLibEntryDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateAppscopeLibEntryRequest{
-		GroupID:          groupID,
-		AppscopeLibEntry: *appscopeLibEntry,
-	}
-
-	return &out, diags
-}
-
-func (r *AppscopeConfigResourceModel) ToOperationsUpdateAppscopeLibEntryByIDRequest(ctx context.Context) (*operations.UpdateAppscopeLibEntryByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	appscopeLibEntry, appscopeLibEntryDiags := r.ToSharedAppscopeLibEntry(ctx)
-	diags.Append(appscopeLibEntryDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateAppscopeLibEntryByIDRequest{
-		ID:               id,
-		GroupID:          groupID,
-		AppscopeLibEntry: *appscopeLibEntry,
-	}
-
-	return &out, diags
-}
-
-func (r *AppscopeConfigResourceModel) ToOperationsListAppscopeLibEntryRequest(ctx context.Context) (*operations.ListAppscopeLibEntryRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListAppscopeLibEntryRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *AppscopeConfigResourceModel) ToOperationsDeleteAppscopeLibEntryByIDRequest(ctx context.Context) (*operations.DeleteAppscopeLibEntryByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteAppscopeLibEntryByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx context.Context, resp *shared.AppscopeLibEntry) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp.Config.Cribl == nil {
-		r.Config.Cribl = nil
-	} else {
-		r.Config.Cribl = &tfTypes.AppscopeConfigWithCustomCribl{}
-		r.Config.Cribl.Authtoken = types.StringPointerValue(resp.Config.Cribl.Authtoken)
-		r.Config.Cribl.Enable = types.BoolPointerValue(resp.Config.Cribl.Enable)
-		if resp.Config.Cribl.Transport == nil {
-			r.Config.Cribl.Transport = nil
-		} else {
-			r.Config.Cribl.Transport = &tfTypes.AppscopeTransport{}
-			if resp.Config.Cribl.Transport.Buffer != nil {
-				r.Config.Cribl.Transport.Buffer = types.StringValue(string(*resp.Config.Cribl.Transport.Buffer))
-			} else {
-				r.Config.Cribl.Transport.Buffer = types.StringNull()
-			}
-			r.Config.Cribl.Transport.Host = types.StringPointerValue(resp.Config.Cribl.Transport.Host)
-			r.Config.Cribl.Transport.Path = types.StringPointerValue(resp.Config.Cribl.Transport.Path)
-			r.Config.Cribl.Transport.Port = types.Float64PointerValue(resp.Config.Cribl.Transport.Port)
-			if resp.Config.Cribl.Transport.TLS == nil {
-				r.Config.Cribl.Transport.TLS = nil
-			} else {
-				r.Config.Cribl.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
-				r.Config.Cribl.Transport.TLS.Cacertpath = types.StringPointerValue(resp.Config.Cribl.Transport.TLS.Cacertpath)
-				r.Config.Cribl.Transport.TLS.Enable = types.BoolPointerValue(resp.Config.Cribl.Transport.TLS.Enable)
-				r.Config.Cribl.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Cribl.Transport.TLS.Validateserver)
-			}
-			r.Config.Cribl.Transport.Type = types.StringPointerValue(resp.Config.Cribl.Transport.Type)
-		}
-		r.Config.Cribl.UseScopeSourceTransport = types.BoolPointerValue(resp.Config.Cribl.UseScopeSourceTransport)
-	}
-	r.Config.Custom = []tfTypes.AppscopeCustom{}
-	if len(r.Config.Custom) > len(resp.Config.Custom) {
-		r.Config.Custom = r.Config.Custom[:len(resp.Config.Custom)]
-	}
-	for customCount, customItem := range resp.Config.Custom {
-		var custom tfTypes.AppscopeCustom
-		custom.Ancestor = types.StringPointerValue(customItem.Ancestor)
-		custom.Arg = types.StringPointerValue(customItem.Arg)
-		if customItem.Config.Cribl == nil {
-			custom.Config.Cribl = nil
-		} else {
-			custom.Config.Cribl = &tfTypes.AppscopeConfigCribl{}
-			custom.Config.Cribl.Authtoken = types.StringPointerValue(customItem.Config.Cribl.Authtoken)
-			custom.Config.Cribl.Enable = types.BoolPointerValue(customItem.Config.Cribl.Enable)
-			if customItem.Config.Cribl.Transport == nil {
-				custom.Config.Cribl.Transport = nil
-			} else {
-				custom.Config.Cribl.Transport = &tfTypes.AppscopeTransport{}
-				if customItem.Config.Cribl.Transport.Buffer != nil {
-					custom.Config.Cribl.Transport.Buffer = types.StringValue(string(*customItem.Config.Cribl.Transport.Buffer))
-				} else {
-					custom.Config.Cribl.Transport.Buffer = types.StringNull()
-				}
-				custom.Config.Cribl.Transport.Host = types.StringPointerValue(customItem.Config.Cribl.Transport.Host)
-				custom.Config.Cribl.Transport.Path = types.StringPointerValue(customItem.Config.Cribl.Transport.Path)
-				custom.Config.Cribl.Transport.Port = types.Float64PointerValue(customItem.Config.Cribl.Transport.Port)
-				if customItem.Config.Cribl.Transport.TLS == nil {
-					custom.Config.Cribl.Transport.TLS = nil
-				} else {
-					custom.Config.Cribl.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
-					custom.Config.Cribl.Transport.TLS.Cacertpath = types.StringPointerValue(customItem.Config.Cribl.Transport.TLS.Cacertpath)
-					custom.Config.Cribl.Transport.TLS.Enable = types.BoolPointerValue(customItem.Config.Cribl.Transport.TLS.Enable)
-					custom.Config.Cribl.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Cribl.Transport.TLS.Validateserver)
-				}
-				custom.Config.Cribl.Transport.Type = types.StringPointerValue(customItem.Config.Cribl.Transport.Type)
-			}
-			custom.Config.Cribl.UseScopeSourceTransport = types.BoolPointerValue(customItem.Config.Cribl.UseScopeSourceTransport)
-		}
-		if customItem.Config.Event == nil {
-			custom.Config.Event = nil
-		} else {
-			custom.Config.Event = &tfTypes.AppscopeConfigEvent{}
-			custom.Config.Event.Enable = types.BoolValue(customItem.Config.Event.Enable)
-			custom.Config.Event.Format.Enhancefs = types.BoolValue(customItem.Config.Event.Format.Enhancefs)
-			custom.Config.Event.Format.Maxeventpersec = types.Float64Value(customItem.Config.Event.Format.Maxeventpersec)
-			if customItem.Config.Event.Transport.Buffer != nil {
-				custom.Config.Event.Transport.Buffer = types.StringValue(string(*customItem.Config.Event.Transport.Buffer))
-			} else {
-				custom.Config.Event.Transport.Buffer = types.StringNull()
-			}
-			custom.Config.Event.Transport.Host = types.StringPointerValue(customItem.Config.Event.Transport.Host)
-			custom.Config.Event.Transport.Path = types.StringPointerValue(customItem.Config.Event.Transport.Path)
-			custom.Config.Event.Transport.Port = types.Float64PointerValue(customItem.Config.Event.Transport.Port)
-			if customItem.Config.Event.Transport.TLS == nil {
-				custom.Config.Event.Transport.TLS = nil
-			} else {
-				custom.Config.Event.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
-				custom.Config.Event.Transport.TLS.Cacertpath = types.StringPointerValue(customItem.Config.Event.Transport.TLS.Cacertpath)
-				custom.Config.Event.Transport.TLS.Enable = types.BoolPointerValue(customItem.Config.Event.Transport.TLS.Enable)
-				custom.Config.Event.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Event.Transport.TLS.Validateserver)
-			}
-			custom.Config.Event.Transport.Type = types.StringPointerValue(customItem.Config.Event.Transport.Type)
-			custom.Config.Event.Type = types.StringValue(string(customItem.Config.Event.Type))
-			custom.Config.Event.Watch = []tfTypes.AppscopeConfigWatchNdjson{}
-			for watchCount, watchItem := range customItem.Config.Event.Watch {
-				var watch tfTypes.AppscopeConfigWatchNdjson
-				watch.Allowbinary = types.BoolPointerValue(watchItem.Allowbinary)
-				watch.Enabled = types.BoolPointerValue(watchItem.Enabled)
-				watch.Field = types.StringPointerValue(watchItem.Field)
-				watch.Headers = make([]types.String, 0, len(watchItem.Headers))
-				for _, v := range watchItem.Headers {
-					watch.Headers = append(watch.Headers, types.StringValue(v))
-				}
-				watch.Name = types.StringPointerValue(watchItem.Name)
-				watch.Type = types.StringValue(watchItem.Type)
-				watch.Value = types.StringPointerValue(watchItem.Value)
-				if watchCount+1 > len(custom.Config.Event.Watch) {
-					custom.Config.Event.Watch = append(custom.Config.Event.Watch, watch)
-				} else {
-					custom.Config.Event.Watch[watchCount].Allowbinary = watch.Allowbinary
-					custom.Config.Event.Watch[watchCount].Enabled = watch.Enabled
-					custom.Config.Event.Watch[watchCount].Field = watch.Field
-					custom.Config.Event.Watch[watchCount].Headers = watch.Headers
-					custom.Config.Event.Watch[watchCount].Name = watch.Name
-					custom.Config.Event.Watch[watchCount].Type = watch.Type
-					custom.Config.Event.Watch[watchCount].Value = watch.Value
-				}
-			}
-		}
-		if customItem.Config.Libscope == nil {
-			custom.Config.Libscope = nil
-		} else {
-			custom.Config.Libscope = &tfTypes.AppscopeConfigLibscope{}
-			custom.Config.Libscope.Commanddir = types.StringPointerValue(customItem.Config.Libscope.Commanddir)
-			custom.Config.Libscope.Configevent = types.BoolPointerValue(customItem.Config.Libscope.Configevent)
-			if customItem.Config.Libscope.Log == nil {
-				custom.Config.Libscope.Log = nil
-			} else {
-				custom.Config.Libscope.Log = &tfTypes.AppscopeConfigLog{}
-				if customItem.Config.Libscope.Log.Level != nil {
-					custom.Config.Libscope.Log.Level = types.StringValue(string(*customItem.Config.Libscope.Log.Level))
-				} else {
-					custom.Config.Libscope.Log.Level = types.StringNull()
-				}
-				if customItem.Config.Libscope.Log.Transport == nil {
-					custom.Config.Libscope.Log.Transport = nil
-				} else {
-					custom.Config.Libscope.Log.Transport = &tfTypes.AppscopeTransport{}
-					if customItem.Config.Libscope.Log.Transport.Buffer != nil {
-						custom.Config.Libscope.Log.Transport.Buffer = types.StringValue(string(*customItem.Config.Libscope.Log.Transport.Buffer))
-					} else {
-						custom.Config.Libscope.Log.Transport.Buffer = types.StringNull()
-					}
-					custom.Config.Libscope.Log.Transport.Host = types.StringPointerValue(customItem.Config.Libscope.Log.Transport.Host)
-					custom.Config.Libscope.Log.Transport.Path = types.StringPointerValue(customItem.Config.Libscope.Log.Transport.Path)
-					custom.Config.Libscope.Log.Transport.Port = types.Float64PointerValue(customItem.Config.Libscope.Log.Transport.Port)
-					if customItem.Config.Libscope.Log.Transport.TLS == nil {
-						custom.Config.Libscope.Log.Transport.TLS = nil
-					} else {
-						custom.Config.Libscope.Log.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
-						custom.Config.Libscope.Log.Transport.TLS.Cacertpath = types.StringPointerValue(customItem.Config.Libscope.Log.Transport.TLS.Cacertpath)
-						custom.Config.Libscope.Log.Transport.TLS.Enable = types.BoolPointerValue(customItem.Config.Libscope.Log.Transport.TLS.Enable)
-						custom.Config.Libscope.Log.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Libscope.Log.Transport.TLS.Validateserver)
-					}
-					custom.Config.Libscope.Log.Transport.Type = types.StringPointerValue(customItem.Config.Libscope.Log.Transport.Type)
-				}
-			}
-			custom.Config.Libscope.Summaryperiod = types.Float64PointerValue(customItem.Config.Libscope.Summaryperiod)
-		}
-		if customItem.Config.Metric == nil {
-			custom.Config.Metric = nil
-		} else {
-			custom.Config.Metric = &tfTypes.AppscopeConfigMetric{}
-			custom.Config.Metric.Enable = types.BoolValue(customItem.Config.Metric.Enable)
-			custom.Config.Metric.Format.Statsdmaxlen = types.Float64PointerValue(customItem.Config.Metric.Format.Statsdmaxlen)
-			custom.Config.Metric.Format.Statsdprefix = types.StringPointerValue(customItem.Config.Metric.Format.Statsdprefix)
-			custom.Config.Metric.Format.Type = types.StringPointerValue(customItem.Config.Metric.Format.Type)
-			custom.Config.Metric.Format.Verbosity = types.Float64PointerValue(customItem.Config.Metric.Format.Verbosity)
-			if customItem.Config.Metric.Transport.Buffer != nil {
-				custom.Config.Metric.Transport.Buffer = types.StringValue(string(*customItem.Config.Metric.Transport.Buffer))
-			} else {
-				custom.Config.Metric.Transport.Buffer = types.StringNull()
-			}
-			custom.Config.Metric.Transport.Host = types.StringPointerValue(customItem.Config.Metric.Transport.Host)
-			custom.Config.Metric.Transport.Path = types.StringPointerValue(customItem.Config.Metric.Transport.Path)
-			custom.Config.Metric.Transport.Port = types.Float64PointerValue(customItem.Config.Metric.Transport.Port)
-			if customItem.Config.Metric.Transport.TLS == nil {
-				custom.Config.Metric.Transport.TLS = nil
-			} else {
-				custom.Config.Metric.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
-				custom.Config.Metric.Transport.TLS.Cacertpath = types.StringPointerValue(customItem.Config.Metric.Transport.TLS.Cacertpath)
-				custom.Config.Metric.Transport.TLS.Enable = types.BoolPointerValue(customItem.Config.Metric.Transport.TLS.Enable)
-				custom.Config.Metric.Transport.TLS.Validateserver = types.BoolPointerValue(customItem.Config.Metric.Transport.TLS.Validateserver)
-			}
-			custom.Config.Metric.Transport.Type = types.StringPointerValue(customItem.Config.Metric.Transport.Type)
-		}
-		if customItem.Config.Payload == nil {
-			custom.Config.Payload = nil
-		} else {
-			custom.Config.Payload = &tfTypes.AppscopeConfigPayload{}
-			custom.Config.Payload.Dir = types.StringValue(customItem.Config.Payload.Dir)
-			custom.Config.Payload.Enable = types.BoolValue(customItem.Config.Payload.Enable)
-		}
-		custom.Config.Protocol = []tfTypes.AppscopeConfigProtocol{}
-		for protocolCount, protocolItem := range customItem.Config.Protocol {
-			var protocol tfTypes.AppscopeConfigProtocol
-			protocol.Binary = types.BoolValue(protocolItem.Binary)
-			protocol.Detect = types.BoolValue(protocolItem.Detect)
-			protocol.Len = types.Float64Value(protocolItem.Len)
-			protocol.Name = types.StringValue(protocolItem.Name)
-			protocol.Payload = types.BoolValue(protocolItem.Payload)
-			protocol.Regex = types.StringValue(protocolItem.Regex)
-			if protocolCount+1 > len(custom.Config.Protocol) {
-				custom.Config.Protocol = append(custom.Config.Protocol, protocol)
-			} else {
-				custom.Config.Protocol[protocolCount].Binary = protocol.Binary
-				custom.Config.Protocol[protocolCount].Detect = protocol.Detect
-				custom.Config.Protocol[protocolCount].Len = protocol.Len
-				custom.Config.Protocol[protocolCount].Name = protocol.Name
-				custom.Config.Protocol[protocolCount].Payload = protocol.Payload
-				custom.Config.Protocol[protocolCount].Regex = protocol.Regex
-			}
-		}
-		custom.Config.Tags = []tfTypes.AppscopeConfigTag{}
-		for tagsCount, tagsItem := range customItem.Config.Tags {
-			var tags tfTypes.AppscopeConfigTag
-			tags.Key = types.StringValue(tagsItem.Key)
-			tags.Value = types.StringValue(tagsItem.Value)
-			if tagsCount+1 > len(custom.Config.Tags) {
-				custom.Config.Tags = append(custom.Config.Tags, tags)
-			} else {
-				custom.Config.Tags[tagsCount].Key = tags.Key
-				custom.Config.Tags[tagsCount].Value = tags.Value
-			}
-		}
-		custom.Env = types.StringPointerValue(customItem.Env)
-		custom.Hostname = types.StringPointerValue(customItem.Hostname)
-		custom.Procname = types.StringPointerValue(customItem.Procname)
-		custom.Username = types.StringPointerValue(customItem.Username)
-		if customCount+1 > len(r.Config.Custom) {
-			r.Config.Custom = append(r.Config.Custom, custom)
-		} else {
-			r.Config.Custom[customCount].Ancestor = custom.Ancestor
-			r.Config.Custom[customCount].Arg = custom.Arg
-			r.Config.Custom[customCount].Config = custom.Config
-			r.Config.Custom[customCount].Env = custom.Env
-			r.Config.Custom[customCount].Hostname = custom.Hostname
-			r.Config.Custom[customCount].Procname = custom.Procname
-			r.Config.Custom[customCount].Username = custom.Username
-		}
-	}
-	if resp.Config.Event == nil {
-		r.Config.Event = nil
-	} else {
-		r.Config.Event = &tfTypes.AppscopeConfigWithCustomEvent{}
-		r.Config.Event.Enable = types.BoolValue(resp.Config.Event.Enable)
-		r.Config.Event.Format.Enhancefs = types.BoolValue(resp.Config.Event.Format.Enhancefs)
-		r.Config.Event.Format.Maxeventpersec = types.Float64Value(resp.Config.Event.Format.Maxeventpersec)
-		if resp.Config.Event.Transport.Buffer != nil {
-			r.Config.Event.Transport.Buffer = types.StringValue(string(*resp.Config.Event.Transport.Buffer))
-		} else {
-			r.Config.Event.Transport.Buffer = types.StringNull()
-		}
-		r.Config.Event.Transport.Host = types.StringPointerValue(resp.Config.Event.Transport.Host)
-		r.Config.Event.Transport.Path = types.StringPointerValue(resp.Config.Event.Transport.Path)
-		r.Config.Event.Transport.Port = types.Float64PointerValue(resp.Config.Event.Transport.Port)
-		if resp.Config.Event.Transport.TLS == nil {
-			r.Config.Event.Transport.TLS = nil
-		} else {
-			r.Config.Event.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
-			r.Config.Event.Transport.TLS.Cacertpath = types.StringPointerValue(resp.Config.Event.Transport.TLS.Cacertpath)
-			r.Config.Event.Transport.TLS.Enable = types.BoolPointerValue(resp.Config.Event.Transport.TLS.Enable)
-			r.Config.Event.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Event.Transport.TLS.Validateserver)
-		}
-		r.Config.Event.Transport.Type = types.StringPointerValue(resp.Config.Event.Transport.Type)
-		r.Config.Event.Type = types.StringValue(string(resp.Config.Event.Type))
-		r.Config.Event.Watch = []tfTypes.AppscopeConfigWithCustomWatchNdjson{}
-		if len(r.Config.Event.Watch) > len(resp.Config.Event.Watch) {
-			r.Config.Event.Watch = r.Config.Event.Watch[:len(resp.Config.Event.Watch)]
-		}
-		for watchCount1, watchItem1 := range resp.Config.Event.Watch {
-			var watch1 tfTypes.AppscopeConfigWithCustomWatchNdjson
-			watch1.Allowbinary = types.BoolPointerValue(watchItem1.Allowbinary)
-			watch1.Enabled = types.BoolPointerValue(watchItem1.Enabled)
-			watch1.Field = types.StringPointerValue(watchItem1.Field)
-			watch1.Headers = make([]types.String, 0, len(watchItem1.Headers))
-			for _, v := range watchItem1.Headers {
-				watch1.Headers = append(watch1.Headers, types.StringValue(v))
-			}
-			watch1.Name = types.StringPointerValue(watchItem1.Name)
-			watch1.Type = types.StringValue(watchItem1.Type)
-			watch1.Value = types.StringPointerValue(watchItem1.Value)
-			if watchCount1+1 > len(r.Config.Event.Watch) {
-				r.Config.Event.Watch = append(r.Config.Event.Watch, watch1)
-			} else {
-				r.Config.Event.Watch[watchCount1].Allowbinary = watch1.Allowbinary
-				r.Config.Event.Watch[watchCount1].Enabled = watch1.Enabled
-				r.Config.Event.Watch[watchCount1].Field = watch1.Field
-				r.Config.Event.Watch[watchCount1].Headers = watch1.Headers
-				r.Config.Event.Watch[watchCount1].Name = watch1.Name
-				r.Config.Event.Watch[watchCount1].Type = watch1.Type
-				r.Config.Event.Watch[watchCount1].Value = watch1.Value
-			}
-		}
-	}
-	if resp.Config.Libscope == nil {
-		r.Config.Libscope = nil
-	} else {
-		r.Config.Libscope = &tfTypes.AppscopeConfigWithCustomLibscope{}
-		r.Config.Libscope.Commanddir = types.StringPointerValue(resp.Config.Libscope.Commanddir)
-		r.Config.Libscope.Configevent = types.BoolPointerValue(resp.Config.Libscope.Configevent)
-		if resp.Config.Libscope.Log == nil {
-			r.Config.Libscope.Log = nil
-		} else {
-			r.Config.Libscope.Log = &tfTypes.AppscopeConfigWithCustomLog{}
-			if resp.Config.Libscope.Log.Level != nil {
-				r.Config.Libscope.Log.Level = types.StringValue(string(*resp.Config.Libscope.Log.Level))
-			} else {
-				r.Config.Libscope.Log.Level = types.StringNull()
-			}
-			if resp.Config.Libscope.Log.Transport == nil {
-				r.Config.Libscope.Log.Transport = nil
-			} else {
-				r.Config.Libscope.Log.Transport = &tfTypes.AppscopeTransport{}
-				if resp.Config.Libscope.Log.Transport.Buffer != nil {
-					r.Config.Libscope.Log.Transport.Buffer = types.StringValue(string(*resp.Config.Libscope.Log.Transport.Buffer))
-				} else {
-					r.Config.Libscope.Log.Transport.Buffer = types.StringNull()
-				}
-				r.Config.Libscope.Log.Transport.Host = types.StringPointerValue(resp.Config.Libscope.Log.Transport.Host)
-				r.Config.Libscope.Log.Transport.Path = types.StringPointerValue(resp.Config.Libscope.Log.Transport.Path)
-				r.Config.Libscope.Log.Transport.Port = types.Float64PointerValue(resp.Config.Libscope.Log.Transport.Port)
-				if resp.Config.Libscope.Log.Transport.TLS == nil {
-					r.Config.Libscope.Log.Transport.TLS = nil
-				} else {
-					r.Config.Libscope.Log.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
-					r.Config.Libscope.Log.Transport.TLS.Cacertpath = types.StringPointerValue(resp.Config.Libscope.Log.Transport.TLS.Cacertpath)
-					r.Config.Libscope.Log.Transport.TLS.Enable = types.BoolPointerValue(resp.Config.Libscope.Log.Transport.TLS.Enable)
-					r.Config.Libscope.Log.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Libscope.Log.Transport.TLS.Validateserver)
-				}
-				r.Config.Libscope.Log.Transport.Type = types.StringPointerValue(resp.Config.Libscope.Log.Transport.Type)
-			}
-		}
-		r.Config.Libscope.Summaryperiod = types.Float64PointerValue(resp.Config.Libscope.Summaryperiod)
-	}
-	if resp.Config.Metric == nil {
-		r.Config.Metric = nil
-	} else {
-		r.Config.Metric = &tfTypes.AppscopeConfigWithCustomMetric{}
-		r.Config.Metric.Enable = types.BoolValue(resp.Config.Metric.Enable)
-		r.Config.Metric.Format.Statsdmaxlen = types.Float64PointerValue(resp.Config.Metric.Format.Statsdmaxlen)
-		r.Config.Metric.Format.Statsdprefix = types.StringPointerValue(resp.Config.Metric.Format.Statsdprefix)
-		r.Config.Metric.Format.Type = types.StringPointerValue(resp.Config.Metric.Format.Type)
-		r.Config.Metric.Format.Verbosity = types.Float64PointerValue(resp.Config.Metric.Format.Verbosity)
-		if resp.Config.Metric.Transport.Buffer != nil {
-			r.Config.Metric.Transport.Buffer = types.StringValue(string(*resp.Config.Metric.Transport.Buffer))
-		} else {
-			r.Config.Metric.Transport.Buffer = types.StringNull()
-		}
-		r.Config.Metric.Transport.Host = types.StringPointerValue(resp.Config.Metric.Transport.Host)
-		r.Config.Metric.Transport.Path = types.StringPointerValue(resp.Config.Metric.Transport.Path)
-		r.Config.Metric.Transport.Port = types.Float64PointerValue(resp.Config.Metric.Transport.Port)
-		if resp.Config.Metric.Transport.TLS == nil {
-			r.Config.Metric.Transport.TLS = nil
-		} else {
-			r.Config.Metric.Transport.TLS = &tfTypes.AppscopeTransportTLS{}
-			r.Config.Metric.Transport.TLS.Cacertpath = types.StringPointerValue(resp.Config.Metric.Transport.TLS.Cacertpath)
-			r.Config.Metric.Transport.TLS.Enable = types.BoolPointerValue(resp.Config.Metric.Transport.TLS.Enable)
-			r.Config.Metric.Transport.TLS.Validateserver = types.BoolPointerValue(resp.Config.Metric.Transport.TLS.Validateserver)
-		}
-		r.Config.Metric.Transport.Type = types.StringPointerValue(resp.Config.Metric.Transport.Type)
-	}
-	if resp.Config.Payload == nil {
-		r.Config.Payload = nil
-	} else {
-		r.Config.Payload = &tfTypes.AppscopeConfigWithCustomPayload{}
-		r.Config.Payload.Dir = types.StringValue(resp.Config.Payload.Dir)
-		r.Config.Payload.Enable = types.BoolValue(resp.Config.Payload.Enable)
-	}
-	r.Config.Protocol = []tfTypes.AppscopeConfigWithCustomProtocol{}
-	if len(r.Config.Protocol) > len(resp.Config.Protocol) {
-		r.Config.Protocol = r.Config.Protocol[:len(resp.Config.Protocol)]
-	}
-	for protocolCount1, protocolItem1 := range resp.Config.Protocol {
-		var protocol1 tfTypes.AppscopeConfigWithCustomProtocol
-		protocol1.Binary = types.BoolValue(protocolItem1.Binary)
-		protocol1.Detect = types.BoolValue(protocolItem1.Detect)
-		protocol1.Len = types.Float64Value(protocolItem1.Len)
-		protocol1.Name = types.StringValue(protocolItem1.Name)
-		protocol1.Payload = types.BoolValue(protocolItem1.Payload)
-		protocol1.Regex = types.StringValue(protocolItem1.Regex)
-		if protocolCount1+1 > len(r.Config.Protocol) {
-			r.Config.Protocol = append(r.Config.Protocol, protocol1)
-		} else {
-			r.Config.Protocol[protocolCount1].Binary = protocol1.Binary
-			r.Config.Protocol[protocolCount1].Detect = protocol1.Detect
-			r.Config.Protocol[protocolCount1].Len = protocol1.Len
-			r.Config.Protocol[protocolCount1].Name = protocol1.Name
-			r.Config.Protocol[protocolCount1].Payload = protocol1.Payload
-			r.Config.Protocol[protocolCount1].Regex = protocol1.Regex
-		}
-	}
-	r.Config.Tags = []tfTypes.AppscopeConfigWithCustomTag{}
-	if len(r.Config.Tags) > len(resp.Config.Tags) {
-		r.Config.Tags = r.Config.Tags[:len(resp.Config.Tags)]
-	}
-	for tagsCount1, tagsItem1 := range resp.Config.Tags {
-		var tags1 tfTypes.AppscopeConfigWithCustomTag
-		tags1.Key = types.StringValue(tagsItem1.Key)
-		tags1.Value = types.StringValue(tagsItem1.Value)
-		if tagsCount1+1 > len(r.Config.Tags) {
-			r.Config.Tags = append(r.Config.Tags, tags1)
-		} else {
-			r.Config.Tags[tagsCount1].Key = tags1.Key
-			r.Config.Tags[tagsCount1].Value = tags1.Value
-		}
-	}
-	r.Description = types.StringValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Lib = types.StringValue(string(resp.Lib))
-	r.Tags = types.StringPointerValue(resp.Tags)
-
-	return diags
 }

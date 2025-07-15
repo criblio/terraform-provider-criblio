@@ -11,6 +11,192 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *GroupResourceModel) RefreshFromOperationsCreateProductsGroupsByProductResponseBody(ctx context.Context, resp *operations.CreateProductsGroupsByProductResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Group{}
+		if len(r.Items) > len(resp.Items) {
+			r.Items = r.Items[:len(resp.Items)]
+		}
+		for itemsCount, itemsItem := range resp.Items {
+			var items tfTypes.Group
+			if itemsItem.Cloud == nil {
+				items.Cloud = nil
+			} else {
+				items.Cloud = &tfTypes.Cloud{}
+				items.Cloud.Provider = types.StringValue(string(itemsItem.Cloud.Provider))
+				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
+			}
+			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
+			items.Name = types.StringPointerValue(itemsItem.Name)
+			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
+			items.Provisioned = types.BoolValue(itemsItem.Provisioned)
+			items.Streamtags = make([]types.String, 0, len(itemsItem.Streamtags))
+			for _, v := range itemsItem.Streamtags {
+				items.Streamtags = append(items.Streamtags, types.StringValue(v))
+			}
+			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
+			if itemsCount+1 > len(r.Items) {
+				r.Items = append(r.Items, items)
+			} else {
+				r.Items[itemsCount].Cloud = items.Cloud
+				r.Items[itemsCount].EstimatedIngestRate = items.EstimatedIngestRate
+				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].IsFleet = items.IsFleet
+				r.Items[itemsCount].Name = items.Name
+				r.Items[itemsCount].OnPrem = items.OnPrem
+				r.Items[itemsCount].Provisioned = items.Provisioned
+				r.Items[itemsCount].Streamtags = items.Streamtags
+				r.Items[itemsCount].WorkerRemoteAccess = items.WorkerRemoteAccess
+			}
+		}
+	}
+
+	return diags
+}
+
+func (r *GroupResourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx context.Context, resp *operations.GetGroupsByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Group{}
+		if len(r.Items) > len(resp.Items) {
+			r.Items = r.Items[:len(resp.Items)]
+		}
+		for itemsCount, itemsItem := range resp.Items {
+			var items tfTypes.Group
+			if itemsItem.Cloud == nil {
+				items.Cloud = nil
+			} else {
+				items.Cloud = &tfTypes.Cloud{}
+				items.Cloud.Provider = types.StringValue(string(itemsItem.Cloud.Provider))
+				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
+			}
+			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
+			items.Name = types.StringPointerValue(itemsItem.Name)
+			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
+			items.Provisioned = types.BoolValue(itemsItem.Provisioned)
+			items.Streamtags = make([]types.String, 0, len(itemsItem.Streamtags))
+			for _, v := range itemsItem.Streamtags {
+				items.Streamtags = append(items.Streamtags, types.StringValue(v))
+			}
+			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
+			if itemsCount+1 > len(r.Items) {
+				r.Items = append(r.Items, items)
+			} else {
+				r.Items[itemsCount].Cloud = items.Cloud
+				r.Items[itemsCount].EstimatedIngestRate = items.EstimatedIngestRate
+				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].IsFleet = items.IsFleet
+				r.Items[itemsCount].Name = items.Name
+				r.Items[itemsCount].OnPrem = items.OnPrem
+				r.Items[itemsCount].Provisioned = items.Provisioned
+				r.Items[itemsCount].Streamtags = items.Streamtags
+				r.Items[itemsCount].WorkerRemoteAccess = items.WorkerRemoteAccess
+			}
+		}
+	}
+
+	return diags
+}
+
+func (r *GroupResourceModel) RefreshFromOperationsUpdateGroupsByIDResponseBody(ctx context.Context, resp *operations.UpdateGroupsByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Group{}
+		if len(r.Items) > len(resp.Items) {
+			r.Items = r.Items[:len(resp.Items)]
+		}
+		for itemsCount, itemsItem := range resp.Items {
+			var items tfTypes.Group
+			if itemsItem.Cloud == nil {
+				items.Cloud = nil
+			} else {
+				items.Cloud = &tfTypes.Cloud{}
+				items.Cloud.Provider = types.StringValue(string(itemsItem.Cloud.Provider))
+				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
+			}
+			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
+			items.Name = types.StringPointerValue(itemsItem.Name)
+			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
+			items.Provisioned = types.BoolValue(itemsItem.Provisioned)
+			items.Streamtags = make([]types.String, 0, len(itemsItem.Streamtags))
+			for _, v := range itemsItem.Streamtags {
+				items.Streamtags = append(items.Streamtags, types.StringValue(v))
+			}
+			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
+			if itemsCount+1 > len(r.Items) {
+				r.Items = append(r.Items, items)
+			} else {
+				r.Items[itemsCount].Cloud = items.Cloud
+				r.Items[itemsCount].EstimatedIngestRate = items.EstimatedIngestRate
+				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].IsFleet = items.IsFleet
+				r.Items[itemsCount].Name = items.Name
+				r.Items[itemsCount].OnPrem = items.OnPrem
+				r.Items[itemsCount].Provisioned = items.Provisioned
+				r.Items[itemsCount].Streamtags = items.Streamtags
+				r.Items[itemsCount].WorkerRemoteAccess = items.WorkerRemoteAccess
+			}
+		}
+	}
+
+	return diags
+}
+
+func (r *GroupResourceModel) ToOperationsCreateProductsGroupsByProductRequest(ctx context.Context) (*operations.CreateProductsGroupsByProductRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	product := operations.CreateProductsGroupsByProductProduct(r.Product.ValueString())
+	configGroup, configGroupDiags := r.ToSharedConfigGroup(ctx)
+	diags.Append(configGroupDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateProductsGroupsByProductRequest{
+		Product:     product,
+		ConfigGroup: *configGroup,
+	}
+
+	return &out, diags
+}
+
+func (r *GroupResourceModel) ToOperationsGetGroupsByIDRequest(ctx context.Context) (*operations.GetGroupsByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetGroupsByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
+}
+
+func (r *GroupResourceModel) ToOperationsUpdateGroupsByIDRequest(ctx context.Context) (*operations.UpdateGroupsByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.UpdateGroupsByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
+}
+
 func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.ConfigGroup, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -246,190 +432,4 @@ func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.C
 	}
 
 	return &out, diags
-}
-
-func (r *GroupResourceModel) ToOperationsCreateProductsGroupsByProductRequest(ctx context.Context) (*operations.CreateProductsGroupsByProductRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	product := operations.CreateProductsGroupsByProductProduct(r.Product.ValueString())
-	configGroup, configGroupDiags := r.ToSharedConfigGroup(ctx)
-	diags.Append(configGroupDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateProductsGroupsByProductRequest{
-		Product:     product,
-		ConfigGroup: *configGroup,
-	}
-
-	return &out, diags
-}
-
-func (r *GroupResourceModel) ToOperationsGetGroupsByIDRequest(ctx context.Context) (*operations.GetGroupsByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetGroupsByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
-}
-
-func (r *GroupResourceModel) ToOperationsUpdateGroupsByIDRequest(ctx context.Context) (*operations.UpdateGroupsByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.UpdateGroupsByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
-}
-
-func (r *GroupResourceModel) RefreshFromOperationsCreateProductsGroupsByProductResponseBody(ctx context.Context, resp *operations.CreateProductsGroupsByProductResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.Group{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Group
-			if itemsItem.Cloud == nil {
-				items.Cloud = nil
-			} else {
-				items.Cloud = &tfTypes.Cloud{}
-				items.Cloud.Provider = types.StringValue(string(itemsItem.Cloud.Provider))
-				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
-			}
-			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
-			items.Name = types.StringPointerValue(itemsItem.Name)
-			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
-			items.Provisioned = types.BoolValue(itemsItem.Provisioned)
-			items.Streamtags = make([]types.String, 0, len(itemsItem.Streamtags))
-			for _, v := range itemsItem.Streamtags {
-				items.Streamtags = append(items.Streamtags, types.StringValue(v))
-			}
-			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Cloud = items.Cloud
-				r.Items[itemsCount].EstimatedIngestRate = items.EstimatedIngestRate
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].IsFleet = items.IsFleet
-				r.Items[itemsCount].Name = items.Name
-				r.Items[itemsCount].OnPrem = items.OnPrem
-				r.Items[itemsCount].Provisioned = items.Provisioned
-				r.Items[itemsCount].Streamtags = items.Streamtags
-				r.Items[itemsCount].WorkerRemoteAccess = items.WorkerRemoteAccess
-			}
-		}
-	}
-
-	return diags
-}
-
-func (r *GroupResourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx context.Context, resp *operations.GetGroupsByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.Group{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Group
-			if itemsItem.Cloud == nil {
-				items.Cloud = nil
-			} else {
-				items.Cloud = &tfTypes.Cloud{}
-				items.Cloud.Provider = types.StringValue(string(itemsItem.Cloud.Provider))
-				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
-			}
-			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
-			items.Name = types.StringPointerValue(itemsItem.Name)
-			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
-			items.Provisioned = types.BoolValue(itemsItem.Provisioned)
-			items.Streamtags = make([]types.String, 0, len(itemsItem.Streamtags))
-			for _, v := range itemsItem.Streamtags {
-				items.Streamtags = append(items.Streamtags, types.StringValue(v))
-			}
-			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Cloud = items.Cloud
-				r.Items[itemsCount].EstimatedIngestRate = items.EstimatedIngestRate
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].IsFleet = items.IsFleet
-				r.Items[itemsCount].Name = items.Name
-				r.Items[itemsCount].OnPrem = items.OnPrem
-				r.Items[itemsCount].Provisioned = items.Provisioned
-				r.Items[itemsCount].Streamtags = items.Streamtags
-				r.Items[itemsCount].WorkerRemoteAccess = items.WorkerRemoteAccess
-			}
-		}
-	}
-
-	return diags
-}
-
-func (r *GroupResourceModel) RefreshFromOperationsUpdateGroupsByIDResponseBody(ctx context.Context, resp *operations.UpdateGroupsByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.Group{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Group
-			if itemsItem.Cloud == nil {
-				items.Cloud = nil
-			} else {
-				items.Cloud = &tfTypes.Cloud{}
-				items.Cloud.Provider = types.StringValue(string(itemsItem.Cloud.Provider))
-				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
-			}
-			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
-			items.Name = types.StringPointerValue(itemsItem.Name)
-			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
-			items.Provisioned = types.BoolValue(itemsItem.Provisioned)
-			items.Streamtags = make([]types.String, 0, len(itemsItem.Streamtags))
-			for _, v := range itemsItem.Streamtags {
-				items.Streamtags = append(items.Streamtags, types.StringValue(v))
-			}
-			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Cloud = items.Cloud
-				r.Items[itemsCount].EstimatedIngestRate = items.EstimatedIngestRate
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].IsFleet = items.IsFleet
-				r.Items[itemsCount].Name = items.Name
-				r.Items[itemsCount].OnPrem = items.OnPrem
-				r.Items[itemsCount].Provisioned = items.Provisioned
-				r.Items[itemsCount].Streamtags = items.Streamtags
-				r.Items[itemsCount].WorkerRemoteAccess = items.WorkerRemoteAccess
-			}
-		}
-	}
-
-	return diags
 }

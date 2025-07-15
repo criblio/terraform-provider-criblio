@@ -10,6 +10,95 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *RegexResourceModel) RefreshFromSharedRegexLibEntry(ctx context.Context, resp *shared.RegexLibEntry) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringPointerValue(resp.Lib)
+	r.Regex = types.StringValue(resp.Regex)
+	r.SampleData = types.StringPointerValue(resp.SampleData)
+	r.Tags = types.StringPointerValue(resp.Tags)
+
+	return diags
+}
+
+func (r *RegexResourceModel) ToOperationsCreateRegexLibEntryRequest(ctx context.Context) (*operations.CreateRegexLibEntryRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	regexLibEntry, regexLibEntryDiags := r.ToSharedRegexLibEntry(ctx)
+	diags.Append(regexLibEntryDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateRegexLibEntryRequest{
+		GroupID:       groupID,
+		RegexLibEntry: *regexLibEntry,
+	}
+
+	return &out, diags
+}
+
+func (r *RegexResourceModel) ToOperationsDeleteRegexLibEntryByIDRequest(ctx context.Context) (*operations.DeleteRegexLibEntryByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteRegexLibEntryByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *RegexResourceModel) ToOperationsListRegexLibEntryRequest(ctx context.Context) (*operations.ListRegexLibEntryRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListRegexLibEntryRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *RegexResourceModel) ToOperationsUpdateRegexLibEntryByIDRequest(ctx context.Context) (*operations.UpdateRegexLibEntryByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	regexLibEntry, regexLibEntryDiags := r.ToSharedRegexLibEntry(ctx)
+	diags.Append(regexLibEntryDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateRegexLibEntryByIDRequest{
+		ID:            id,
+		GroupID:       groupID,
+		RegexLibEntry: *regexLibEntry,
+	}
+
+	return &out, diags
+}
+
 func (r *RegexResourceModel) ToSharedRegexLibEntry(ctx context.Context) (*shared.RegexLibEntry, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -53,93 +142,4 @@ func (r *RegexResourceModel) ToSharedRegexLibEntry(ctx context.Context) (*shared
 	}
 
 	return &out, diags
-}
-
-func (r *RegexResourceModel) ToOperationsCreateRegexLibEntryRequest(ctx context.Context) (*operations.CreateRegexLibEntryRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	regexLibEntry, regexLibEntryDiags := r.ToSharedRegexLibEntry(ctx)
-	diags.Append(regexLibEntryDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateRegexLibEntryRequest{
-		GroupID:       groupID,
-		RegexLibEntry: *regexLibEntry,
-	}
-
-	return &out, diags
-}
-
-func (r *RegexResourceModel) ToOperationsUpdateRegexLibEntryByIDRequest(ctx context.Context) (*operations.UpdateRegexLibEntryByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	regexLibEntry, regexLibEntryDiags := r.ToSharedRegexLibEntry(ctx)
-	diags.Append(regexLibEntryDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateRegexLibEntryByIDRequest{
-		ID:            id,
-		GroupID:       groupID,
-		RegexLibEntry: *regexLibEntry,
-	}
-
-	return &out, diags
-}
-
-func (r *RegexResourceModel) ToOperationsListRegexLibEntryRequest(ctx context.Context) (*operations.ListRegexLibEntryRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListRegexLibEntryRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *RegexResourceModel) ToOperationsDeleteRegexLibEntryByIDRequest(ctx context.Context) (*operations.DeleteRegexLibEntryByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteRegexLibEntryByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *RegexResourceModel) RefreshFromSharedRegexLibEntry(ctx context.Context, resp *shared.RegexLibEntry) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Description = types.StringPointerValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Lib = types.StringPointerValue(resp.Lib)
-	r.Regex = types.StringValue(resp.Regex)
-	r.SampleData = types.StringPointerValue(resp.SampleData)
-	r.Tags = types.StringPointerValue(resp.Tags)
-
-	return diags
 }

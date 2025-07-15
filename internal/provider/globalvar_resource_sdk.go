@@ -10,6 +10,99 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *GlobalVarResourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringPointerValue(resp.Lib)
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
+	}
+	r.Value = types.StringPointerValue(resp.Value)
+
+	return diags
+}
+
+func (r *GlobalVarResourceModel) ToOperationsCreateGlobalVariableRequest(ctx context.Context) (*operations.CreateGlobalVariableRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	globalVar, globalVarDiags := r.ToSharedGlobalVar(ctx)
+	diags.Append(globalVarDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateGlobalVariableRequest{
+		GroupID:   groupID,
+		GlobalVar: *globalVar,
+	}
+
+	return &out, diags
+}
+
+func (r *GlobalVarResourceModel) ToOperationsDeleteGlobalVariableByIDRequest(ctx context.Context) (*operations.DeleteGlobalVariableByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteGlobalVariableByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *GlobalVarResourceModel) ToOperationsGetGlobalVariableRequest(ctx context.Context) (*operations.GetGlobalVariableRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.GetGlobalVariableRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *GlobalVarResourceModel) ToOperationsUpdateGlobalVariableByIDRequest(ctx context.Context) (*operations.UpdateGlobalVariableByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	globalVar, globalVarDiags := r.ToSharedGlobalVar(ctx)
+	diags.Append(globalVarDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateGlobalVariableByIDRequest{
+		ID:        id,
+		GroupID:   groupID,
+		GlobalVar: *globalVar,
+	}
+
+	return &out, diags
+}
+
 func (r *GlobalVarResourceModel) ToSharedGlobalVar(ctx context.Context) (*shared.GlobalVar, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -56,97 +149,4 @@ func (r *GlobalVarResourceModel) ToSharedGlobalVar(ctx context.Context) (*shared
 	}
 
 	return &out, diags
-}
-
-func (r *GlobalVarResourceModel) ToOperationsCreateGlobalVariableRequest(ctx context.Context) (*operations.CreateGlobalVariableRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	globalVar, globalVarDiags := r.ToSharedGlobalVar(ctx)
-	diags.Append(globalVarDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateGlobalVariableRequest{
-		GroupID:   groupID,
-		GlobalVar: *globalVar,
-	}
-
-	return &out, diags
-}
-
-func (r *GlobalVarResourceModel) ToOperationsUpdateGlobalVariableByIDRequest(ctx context.Context) (*operations.UpdateGlobalVariableByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	globalVar, globalVarDiags := r.ToSharedGlobalVar(ctx)
-	diags.Append(globalVarDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateGlobalVariableByIDRequest{
-		ID:        id,
-		GroupID:   groupID,
-		GlobalVar: *globalVar,
-	}
-
-	return &out, diags
-}
-
-func (r *GlobalVarResourceModel) ToOperationsGetGlobalVariableRequest(ctx context.Context) (*operations.GetGlobalVariableRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.GetGlobalVariableRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *GlobalVarResourceModel) ToOperationsDeleteGlobalVariableByIDRequest(ctx context.Context) (*operations.DeleteGlobalVariableByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteGlobalVariableByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *GlobalVarResourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Description = types.StringPointerValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Lib = types.StringPointerValue(resp.Lib)
-	r.Tags = types.StringPointerValue(resp.Tags)
-	if resp.Type != nil {
-		r.Type = types.StringValue(string(*resp.Type))
-	} else {
-		r.Type = types.StringNull()
-	}
-	r.Value = types.StringPointerValue(resp.Value)
-
-	return diags
 }

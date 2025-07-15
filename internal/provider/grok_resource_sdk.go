@@ -10,32 +10,15 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *GrokResourceModel) ToSharedGrokFile(ctx context.Context) (*shared.GrokFile, diag.Diagnostics) {
+func (r *GrokResourceModel) RefreshFromSharedGrokFile(ctx context.Context, resp *shared.GrokFile) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	var content string
-	content = r.Content.ValueString()
+	r.Content = types.StringValue(resp.Content)
+	r.ID = types.StringValue(resp.ID)
+	r.Size = types.Float64Value(resp.Size)
+	r.Tags = types.StringPointerValue(resp.Tags)
 
-	var id string
-	id = r.ID.ValueString()
-
-	var size float64
-	size = r.Size.ValueFloat64()
-
-	tags := new(string)
-	if !r.Tags.IsUnknown() && !r.Tags.IsNull() {
-		*tags = r.Tags.ValueString()
-	} else {
-		tags = nil
-	}
-	out := shared.GrokFile{
-		Content: content,
-		ID:      id,
-		Size:    size,
-		Tags:    tags,
-	}
-
-	return &out, diags
+	return diags
 }
 
 func (r *GrokResourceModel) ToOperationsCreateGrokFileRequest(ctx context.Context) (*operations.CreateGrokFileRequest, diag.Diagnostics) {
@@ -54,6 +37,36 @@ func (r *GrokResourceModel) ToOperationsCreateGrokFileRequest(ctx context.Contex
 	out := operations.CreateGrokFileRequest{
 		GroupID:  groupID,
 		GrokFile: *grokFile,
+	}
+
+	return &out, diags
+}
+
+func (r *GrokResourceModel) ToOperationsDeleteGrokFileByIDRequest(ctx context.Context) (*operations.DeleteGrokFileByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteGrokFileByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *GrokResourceModel) ToOperationsListGrokFileRequest(ctx context.Context) (*operations.ListGrokFileRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListGrokFileRequest{
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -84,43 +97,30 @@ func (r *GrokResourceModel) ToOperationsUpdateGrokFileByIDRequest(ctx context.Co
 	return &out, diags
 }
 
-func (r *GrokResourceModel) ToOperationsListGrokFileRequest(ctx context.Context) (*operations.ListGrokFileRequest, diag.Diagnostics) {
+func (r *GrokResourceModel) ToSharedGrokFile(ctx context.Context) (*shared.GrokFile, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListGrokFileRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *GrokResourceModel) ToOperationsDeleteGrokFileByIDRequest(ctx context.Context) (*operations.DeleteGrokFileByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
+	var content string
+	content = r.Content.ValueString()
 
 	var id string
 	id = r.ID.ValueString()
 
-	var groupID string
-	groupID = r.GroupID.ValueString()
+	var size float64
+	size = r.Size.ValueFloat64()
 
-	out := operations.DeleteGrokFileByIDRequest{
+	tags := new(string)
+	if !r.Tags.IsUnknown() && !r.Tags.IsNull() {
+		*tags = r.Tags.ValueString()
+	} else {
+		tags = nil
+	}
+	out := shared.GrokFile{
+		Content: content,
 		ID:      id,
-		GroupID: groupID,
+		Size:    size,
+		Tags:    tags,
 	}
 
 	return &out, diags
-}
-
-func (r *GrokResourceModel) RefreshFromSharedGrokFile(ctx context.Context, resp *shared.GrokFile) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Content = types.StringValue(resp.Content)
-	r.ID = types.StringValue(resp.ID)
-	r.Size = types.Float64Value(resp.Size)
-	r.Tags = types.StringPointerValue(resp.Tags)
-
-	return diags
 }

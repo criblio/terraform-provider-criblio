@@ -89,6 +89,9 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	ServerURL := data.ServerURL.ValueString()
 
+	if ServerURL == "" && len(os.Getenv("CRIBL_SERVER_URL")) > 0 {
+		ServerURL = os.Getenv("CRIBL_SERVER_URL")
+	}
 	if ServerURL == "" {
 		ServerURL = "https://app.cribl.cloud"
 	}
@@ -119,10 +122,6 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	if !data.TokenURL.IsUnknown() {
 		clientOauth.TokenURL = data.TokenURL.ValueString()
-	}
-
-	if tokenURLEnvVar := os.Getenv("CRIBL_TOKEN_URL"); clientOauth.TokenURL == "" && tokenURLEnvVar != "" {
-		clientOauth.TokenURL = tokenURLEnvVar
 	}
 
 	if clientOauth.ClientID != "" && clientOauth.ClientSecret != "" {

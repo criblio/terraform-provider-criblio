@@ -3,17 +3,17 @@ id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
   docChecksum: 492f2a8243699c68fb8387f96535c7ae
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.581.0
-  generationVersion: 2.656.5
+  speakeasyVersion: 1.581.2
+  generationVersion: 2.656.9
   releaseVersion: 1.0.45
-  configChecksum: 8e92e4c67a6b143f5badf122e57b9a54
+  configChecksum: 2c0aa29fe4086a9aab71e43f1a9def0b
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.2.1
-    core: 3.41.15
+    core: 3.41.16
     deprecations: 2.82.0
     globalSecurity: 2.81.12
     globalServerURLs: 2.82.2

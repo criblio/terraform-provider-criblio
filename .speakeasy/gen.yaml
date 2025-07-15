@@ -39,8 +39,8 @@ terraform:
       providerAttribute: client_id
     - env: CRIBL_CLIENT_SECRET
       providerAttribute: client_secret
-    - env: CRIBL_TOKEN_URL
-      providerAttribute: token_url
+    - env: CRIBL_SERVER_URL
+      providerAttribute: server_url
     - env: CRIBL_ORGANIZATION_ID
       providerAttribute: organization_id
     - env: CRIBL_WORKSPACE_ID

@@ -10,19 +10,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *RegexDataSourceModel) ToOperationsListRegexLibEntryRequest(ctx context.Context) (*operations.ListRegexLibEntryRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListRegexLibEntryRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *RegexDataSourceModel) RefreshFromSharedRegexLibEntry(ctx context.Context, resp *shared.RegexLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -34,4 +21,17 @@ func (r *RegexDataSourceModel) RefreshFromSharedRegexLibEntry(ctx context.Contex
 	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags
+}
+
+func (r *RegexDataSourceModel) ToOperationsListRegexLibEntryRequest(ctx context.Context) (*operations.ListRegexLibEntryRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListRegexLibEntryRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
 }

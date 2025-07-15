@@ -11,19 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *ParserLibEntryDataSourceModel) ToOperationsListParserRequest(ctx context.Context) (*operations.ListParserRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListParserRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *ParserLibEntryDataSourceModel) RefreshFromSharedParserLibEntry(ctx context.Context, resp *shared.ParserLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -44,4 +31,17 @@ func (r *ParserLibEntryDataSourceModel) RefreshFromSharedParserLibEntry(ctx cont
 	}
 
 	return diags
+}
+
+func (r *ParserLibEntryDataSourceModel) ToOperationsListParserRequest(ctx context.Context) (*operations.ListParserRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListParserRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
 }

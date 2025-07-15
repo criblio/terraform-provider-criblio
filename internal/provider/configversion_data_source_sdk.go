@@ -9,19 +9,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
-func (r *ConfigVersionDataSourceModel) ToOperationsGetGroupsConfigVersionByIDRequest(ctx context.Context) (*operations.GetGroupsConfigVersionByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetGroupsConfigVersionByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
-}
-
 func (r *ConfigVersionDataSourceModel) RefreshFromOperationsGetGroupsConfigVersionByIDResponseBody(ctx context.Context, resp *operations.GetGroupsConfigVersionByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -33,4 +20,17 @@ func (r *ConfigVersionDataSourceModel) RefreshFromOperationsGetGroupsConfigVersi
 	}
 
 	return diags
+}
+
+func (r *ConfigVersionDataSourceModel) ToOperationsGetGroupsConfigVersionByIDRequest(ctx context.Context) (*operations.GetGroupsConfigVersionByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetGroupsConfigVersionByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
 }

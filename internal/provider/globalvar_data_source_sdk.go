@@ -10,6 +10,23 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *GlobalVarDataSourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringPointerValue(resp.Lib)
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
+	}
+	r.Value = types.StringPointerValue(resp.Value)
+
+	return diags
+}
+
 func (r *GlobalVarDataSourceModel) ToOperationsGetGlobalVariableRequest(ctx context.Context) (*operations.GetGlobalVariableRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -28,21 +45,4 @@ func (r *GlobalVarDataSourceModel) ToOperationsGetGlobalVariableRequest(ctx cont
 	}
 
 	return &out, diags
-}
-
-func (r *GlobalVarDataSourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Description = types.StringPointerValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Lib = types.StringPointerValue(resp.Lib)
-	r.Tags = types.StringPointerValue(resp.Tags)
-	if resp.Type != nil {
-		r.Type = types.StringValue(string(*resp.Type))
-	} else {
-		r.Type = types.StringNull()
-	}
-	r.Value = types.StringPointerValue(resp.Value)
-
-	return diags
 }

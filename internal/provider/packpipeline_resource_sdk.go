@@ -11,6 +11,148 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(resp.Conf.AsyncFuncTimeout)
+	r.Conf.Description = types.StringPointerValue(resp.Conf.Description)
+	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
+	if len(r.Conf.Functions) > len(resp.Conf.Functions) {
+		r.Conf.Functions = r.Conf.Functions[:len(resp.Conf.Functions)]
+	}
+	for functionsCount, functionsItem := range resp.Conf.Functions {
+		var functions tfTypes.PipelineFunctionConf
+		functions.Description = types.StringPointerValue(functionsItem.Description)
+		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+		functions.Filter = types.StringPointerValue(functionsItem.Filter)
+		functions.Final = types.BoolPointerValue(functionsItem.Final)
+		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
+		functions.ID = types.StringValue(functionsItem.ID)
+		if functionsCount+1 > len(r.Conf.Functions) {
+			r.Conf.Functions = append(r.Conf.Functions, functions)
+		} else {
+			r.Conf.Functions[functionsCount].Conf = functions.Conf
+			r.Conf.Functions[functionsCount].Description = functions.Description
+			r.Conf.Functions[functionsCount].Disabled = functions.Disabled
+			r.Conf.Functions[functionsCount].Filter = functions.Filter
+			r.Conf.Functions[functionsCount].Final = functions.Final
+			r.Conf.Functions[functionsCount].GroupID = functions.GroupID
+			r.Conf.Functions[functionsCount].ID = functions.ID
+		}
+	}
+	if len(resp.Conf.Groups) > 0 {
+		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
+		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
+			var pipelineGroupsResult tfTypes.PipelineGroups
+			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
+			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
+			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
+
+			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+		}
+	}
+	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
+	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
+	for _, v := range resp.Conf.Streamtags {
+		r.Conf.Streamtags = append(r.Conf.Streamtags, types.StringValue(v))
+	}
+	r.ID = types.StringValue(resp.ID)
+
+	return diags
+}
+
+func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx context.Context) (*operations.CreatePipelineByPackRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pack string
+	pack = r.Pack.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	pipeline, pipelineDiags := r.ToSharedPipeline(ctx)
+	diags.Append(pipelineDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreatePipelineByPackRequest{
+		Pack:     pack,
+		GroupID:  groupID,
+		Pipeline: *pipeline,
+	}
+
+	return &out, diags
+}
+
+func (r *PackPipelineResourceModel) ToOperationsDeletePipelineByPackAndIDRequest(ctx context.Context) (*operations.DeletePipelineByPackAndIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var pack string
+	pack = r.Pack.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeletePipelineByPackAndIDRequest{
+		ID:      id,
+		Pack:    pack,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *PackPipelineResourceModel) ToOperationsGetPipelineByPackRequest(ctx context.Context) (*operations.GetPipelineByPackRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pack string
+	pack = r.Pack.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.GetPipelineByPackRequest{
+		Pack:    pack,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *PackPipelineResourceModel) ToOperationsUpdatePipelineByPackAndIDRequest(ctx context.Context) (*operations.UpdatePipelineByPackAndIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var pack string
+	pack = r.Pack.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	pipeline, pipelineDiags := r.ToSharedPipeline(ctx)
+	diags.Append(pipelineDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdatePipelineByPackAndIDRequest{
+		ID:       id,
+		Pack:     pack,
+		GroupID:  groupID,
+		Pipeline: *pipeline,
+	}
+
+	return &out, diags
+}
+
 func (r *PackPipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shared.Pipeline, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -123,146 +265,4 @@ func (r *PackPipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shar
 	}
 
 	return &out, diags
-}
-
-func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx context.Context) (*operations.CreatePipelineByPackRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	pipeline, pipelineDiags := r.ToSharedPipeline(ctx)
-	diags.Append(pipelineDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreatePipelineByPackRequest{
-		Pack:     pack,
-		GroupID:  groupID,
-		Pipeline: *pipeline,
-	}
-
-	return &out, diags
-}
-
-func (r *PackPipelineResourceModel) ToOperationsUpdatePipelineByPackAndIDRequest(ctx context.Context) (*operations.UpdatePipelineByPackAndIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	pipeline, pipelineDiags := r.ToSharedPipeline(ctx)
-	diags.Append(pipelineDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdatePipelineByPackAndIDRequest{
-		ID:       id,
-		Pack:     pack,
-		GroupID:  groupID,
-		Pipeline: *pipeline,
-	}
-
-	return &out, diags
-}
-
-func (r *PackPipelineResourceModel) ToOperationsGetPipelineByPackRequest(ctx context.Context) (*operations.GetPipelineByPackRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.GetPipelineByPackRequest{
-		Pack:    pack,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *PackPipelineResourceModel) ToOperationsDeletePipelineByPackAndIDRequest(ctx context.Context) (*operations.DeletePipelineByPackAndIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeletePipelineByPackAndIDRequest{
-		ID:      id,
-		Pack:    pack,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(resp.Conf.AsyncFuncTimeout)
-	r.Conf.Description = types.StringPointerValue(resp.Conf.Description)
-	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-	if len(r.Conf.Functions) > len(resp.Conf.Functions) {
-		r.Conf.Functions = r.Conf.Functions[:len(resp.Conf.Functions)]
-	}
-	for functionsCount, functionsItem := range resp.Conf.Functions {
-		var functions tfTypes.PipelineFunctionConf
-		functions.Description = types.StringPointerValue(functionsItem.Description)
-		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
-		functions.Filter = types.StringPointerValue(functionsItem.Filter)
-		functions.Final = types.BoolPointerValue(functionsItem.Final)
-		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-		functions.ID = types.StringValue(functionsItem.ID)
-		if functionsCount+1 > len(r.Conf.Functions) {
-			r.Conf.Functions = append(r.Conf.Functions, functions)
-		} else {
-			r.Conf.Functions[functionsCount].Conf = functions.Conf
-			r.Conf.Functions[functionsCount].Description = functions.Description
-			r.Conf.Functions[functionsCount].Disabled = functions.Disabled
-			r.Conf.Functions[functionsCount].Filter = functions.Filter
-			r.Conf.Functions[functionsCount].Final = functions.Final
-			r.Conf.Functions[functionsCount].GroupID = functions.GroupID
-			r.Conf.Functions[functionsCount].ID = functions.ID
-		}
-	}
-	if len(resp.Conf.Groups) > 0 {
-		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
-		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
-			var pipelineGroupsResult tfTypes.PipelineGroups
-			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
-
-			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
-		}
-	}
-	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
-	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
-	for _, v := range resp.Conf.Streamtags {
-		r.Conf.Streamtags = append(r.Conf.Streamtags, types.StringValue(v))
-	}
-	r.ID = types.StringValue(resp.ID)
-
-	return diags
 }

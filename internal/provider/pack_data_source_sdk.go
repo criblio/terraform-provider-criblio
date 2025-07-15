@@ -11,33 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
-func (r *PackDataSourceModel) ToOperationsGetPacksRequest(ctx context.Context) (*operations.GetPacksRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	with := new(string)
-	if !r.With.IsUnknown() && !r.With.IsNull() {
-		*with = r.With.ValueString()
-	} else {
-		with = nil
-	}
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	disabled := new(bool)
-	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
-		*disabled = r.Disabled.ValueBool()
-	} else {
-		disabled = nil
-	}
-	out := operations.GetPacksRequest{
-		With:     with,
-		GroupID:  groupID,
-		Disabled: disabled,
-	}
-
-	return &out, diags
-}
-
 func (r *PackDataSourceModel) RefreshFromOperationsGetPacksResponseBody(ctx context.Context, resp *operations.GetPacksResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -113,4 +86,31 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksResponseBody(ctx cont
 	}
 
 	return diags
+}
+
+func (r *PackDataSourceModel) ToOperationsGetPacksRequest(ctx context.Context) (*operations.GetPacksRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	with := new(string)
+	if !r.With.IsUnknown() && !r.With.IsNull() {
+		*with = r.With.ValueString()
+	} else {
+		with = nil
+	}
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	disabled := new(bool)
+	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
+		*disabled = r.Disabled.ValueBool()
+	} else {
+		disabled = nil
+	}
+	out := operations.GetPacksRequest{
+		With:     with,
+		GroupID:  groupID,
+		Disabled: disabled,
+	}
+
+	return &out, diags
 }

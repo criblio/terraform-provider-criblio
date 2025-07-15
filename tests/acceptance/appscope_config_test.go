@@ -20,7 +20,7 @@ func TestAppscopeConfig(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "description", "A sample AppScope configuration"),
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "lib", "cribl"),
-						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "id", "new_appscope_config"),
+						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "id", "test_appscope_config"),
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "tags", "cribl, test"),
 					),
 				},

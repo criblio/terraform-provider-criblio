@@ -11,19 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
-func (r *AppscopeConfigDataSourceModel) ToOperationsListAppscopeLibEntryRequest(ctx context.Context) (*operations.ListAppscopeLibEntryRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListAppscopeLibEntryRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *AppscopeConfigDataSourceModel) RefreshFromSharedAppscopeLibEntry(ctx context.Context, resp *shared.AppscopeLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -440,4 +427,17 @@ func (r *AppscopeConfigDataSourceModel) RefreshFromSharedAppscopeLibEntry(ctx co
 	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags
+}
+
+func (r *AppscopeConfigDataSourceModel) ToOperationsListAppscopeLibEntryRequest(ctx context.Context) (*operations.ListAppscopeLibEntryRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListAppscopeLibEntryRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
 }

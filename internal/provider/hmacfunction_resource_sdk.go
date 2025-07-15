@@ -10,6 +10,99 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
+func (r *HmacFunctionResourceModel) RefreshFromSharedHmacFunction(ctx context.Context, resp *shared.HmacFunction) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Description = types.StringPointerValue(resp.Description)
+	r.HeaderExpression = types.StringValue(resp.HeaderExpression)
+	r.HeaderName = types.StringValue(resp.HeaderName)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringValue(string(resp.Lib))
+	r.StringBuilders = make([]types.String, 0, len(resp.StringBuilders))
+	for _, v := range resp.StringBuilders {
+		r.StringBuilders = append(r.StringBuilders, types.StringValue(v))
+	}
+	r.StringDelim = types.StringPointerValue(resp.StringDelim)
+
+	return diags
+}
+
+func (r *HmacFunctionResourceModel) ToOperationsCreateHmacFunctionRequest(ctx context.Context) (*operations.CreateHmacFunctionRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	hmacFunction, hmacFunctionDiags := r.ToSharedHmacFunction(ctx)
+	diags.Append(hmacFunctionDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateHmacFunctionRequest{
+		GroupID:      groupID,
+		HmacFunction: *hmacFunction,
+	}
+
+	return &out, diags
+}
+
+func (r *HmacFunctionResourceModel) ToOperationsDeleteHmacFunctionByIDRequest(ctx context.Context) (*operations.DeleteHmacFunctionByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteHmacFunctionByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *HmacFunctionResourceModel) ToOperationsListHmacFunctionRequest(ctx context.Context) (*operations.ListHmacFunctionRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListHmacFunctionRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *HmacFunctionResourceModel) ToOperationsUpdateHmacFunctionByIDRequest(ctx context.Context) (*operations.UpdateHmacFunctionByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	hmacFunction, hmacFunctionDiags := r.ToSharedHmacFunction(ctx)
+	diags.Append(hmacFunctionDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateHmacFunctionByIDRequest{
+		ID:           id,
+		GroupID:      groupID,
+		HmacFunction: *hmacFunction,
+	}
+
+	return &out, diags
+}
+
 func (r *HmacFunctionResourceModel) ToSharedHmacFunction(ctx context.Context) (*shared.HmacFunction, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -50,97 +143,4 @@ func (r *HmacFunctionResourceModel) ToSharedHmacFunction(ctx context.Context) (*
 	}
 
 	return &out, diags
-}
-
-func (r *HmacFunctionResourceModel) ToOperationsCreateHmacFunctionRequest(ctx context.Context) (*operations.CreateHmacFunctionRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	hmacFunction, hmacFunctionDiags := r.ToSharedHmacFunction(ctx)
-	diags.Append(hmacFunctionDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateHmacFunctionRequest{
-		GroupID:      groupID,
-		HmacFunction: *hmacFunction,
-	}
-
-	return &out, diags
-}
-
-func (r *HmacFunctionResourceModel) ToOperationsUpdateHmacFunctionByIDRequest(ctx context.Context) (*operations.UpdateHmacFunctionByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	hmacFunction, hmacFunctionDiags := r.ToSharedHmacFunction(ctx)
-	diags.Append(hmacFunctionDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateHmacFunctionByIDRequest{
-		ID:           id,
-		GroupID:      groupID,
-		HmacFunction: *hmacFunction,
-	}
-
-	return &out, diags
-}
-
-func (r *HmacFunctionResourceModel) ToOperationsListHmacFunctionRequest(ctx context.Context) (*operations.ListHmacFunctionRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListHmacFunctionRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *HmacFunctionResourceModel) ToOperationsDeleteHmacFunctionByIDRequest(ctx context.Context) (*operations.DeleteHmacFunctionByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteHmacFunctionByIDRequest{
-		ID:      id,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *HmacFunctionResourceModel) RefreshFromSharedHmacFunction(ctx context.Context, resp *shared.HmacFunction) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Description = types.StringPointerValue(resp.Description)
-	r.HeaderExpression = types.StringValue(resp.HeaderExpression)
-	r.HeaderName = types.StringValue(resp.HeaderName)
-	r.ID = types.StringValue(resp.ID)
-	r.Lib = types.StringValue(string(resp.Lib))
-	r.StringBuilders = make([]types.String, 0, len(resp.StringBuilders))
-	for _, v := range resp.StringBuilders {
-		r.StringBuilders = append(r.StringBuilders, types.StringValue(v))
-	}
-	r.StringDelim = types.StringPointerValue(resp.StringDelim)
-
-	return diags
 }

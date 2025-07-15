@@ -10,19 +10,6 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
-func (r *LookupFileDataSourceModel) ToOperationsListLookupFileRequest(ctx context.Context) (*operations.ListLookupFileRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.ListLookupFileRequest{
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *LookupFileDataSourceModel) RefreshFromOperationsListLookupFileResponseBody(ctx context.Context, resp *operations.ListLookupFileResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -100,4 +87,17 @@ func (r *LookupFileDataSourceModel) RefreshFromOperationsListLookupFileResponseB
 	}
 
 	return diags
+}
+
+func (r *LookupFileDataSourceModel) ToOperationsListLookupFileRequest(ctx context.Context) (*operations.ListLookupFileRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListLookupFileRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
 }
