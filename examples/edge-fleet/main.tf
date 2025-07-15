@@ -16,10 +16,3 @@ resource "criblio_group" "my_edge_fleet" {
 output "edge_fleet" {
   value = criblio_group.my_edge_fleet
 }
-
-//import currently required for our testing due to provider not currently allowing deletion of criblio_group resource
-//will be removed in a future revision when we enable resource deletion -- 15Jul2025 KT
-import {
-  to = criblio_group.my_edge_fleet
-  id = "my-edge-fleet"
-}
