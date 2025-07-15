@@ -14,7 +14,7 @@ func TestProject(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_project.my_project", "id", "my_project"),
 						resource.TestCheckResourceAttr("criblio_project.my_project", "group_id", "default"),

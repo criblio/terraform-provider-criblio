@@ -17,7 +17,7 @@ func TestGlobalVar(t *testing.T) {
 					ExpectNonEmptyPlan: true,
 					ConfigDirectory:    config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "id", "my_globalvar"),
+						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "id", "sample_globalvar"),
 						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "description", "test"),
 						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "lib", "test"),
