@@ -46,8 +46,8 @@ func checkLocalConfigDir() ([]byte, error) {
 				} else {
 					return []byte{}, err
 				}
-				filePath = legacyPath
 			}
+			filePath = legacyPath
 		} else {
 			return []byte{}, err
 		}
