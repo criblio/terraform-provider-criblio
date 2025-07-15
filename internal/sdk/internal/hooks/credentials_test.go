@@ -41,7 +41,7 @@ func TestGetCredentialsNoFile(t *testing.T) {
 	os.Setenv("CRIBL_WORKSPACE_ID", "")
 	os.Setenv("HOME", "/tmp")
 
-	_, err := checkLocalConfigDir() 
+	_, err := checkLocalConfigDir()
 	if err == nil {
 		t.Errorf("GetCredentials error was expected, but not returned")
 	}

@@ -2,8 +2,8 @@ package hooks
 
 import (
 	"encoding/json"
-	"fmt"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
