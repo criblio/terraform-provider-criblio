@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"gopkg.in/ini.v1"
 )
 
 type CriblConfig struct {
@@ -36,21 +37,18 @@ func checkLocalConfigDir() ([]byte, error) {
 
 	_, err = os.Stat(configPath)
 	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			legacyPath := filepath.Join(homeDir, ".cribl")
-			_, err := os.Stat(legacyPath)
-			if err != nil {
-				if errors.Is(err, os.ErrNotExist) {
-					log.Printf("[DEBUG] No config file found %s", configPath)
-					return []byte{}, err
-				} else {
-					return []byte{}, err
-				}
+		log.Printf("[DEBUG] No config file found %s", configPath)
+		legacyPath := filepath.Join(homeDir, ".cribl")
+		_, err := os.Stat(legacyPath)
+		if err != nil {
+			if errors.Is(err, os.ErrNotExist) {
+				log.Printf("[DEBUG] No config file found %s", legacyPath)
+				return []byte{}, err
+			} else {
+				return []byte{}, err
 			}
-			filePath = legacyPath
-		} else {
-			return []byte{}, err
 		}
+		filePath = legacyPath
 	} else {
 		filePath = configPath
 	}
@@ -62,6 +60,21 @@ func checkLocalConfigDir() ([]byte, error) {
 	}
 
 	return file, nil
+}
+
+func checkConfigFileFormat(input []byte) (string, error) {
+	var data interface{}
+        err := json.Unmarshal(input, &data)
+	if err == nil {
+		return "json", nil
+	}
+
+        _, err = ini.Load(input)
+	if err == nil {
+        	return "ini", nil
+	}	
+
+	return "", errors.New("Config file type not recognized")
 }
 
 // GetCredentials reads credentials from environment variables or credentials file
