@@ -11,7 +11,7 @@ func TestHasTokenExpired(t *testing.T) {
 	}
 }
 
-func TestSDKInit(t *testing.T) {
+func TestCredsSDKInit(t *testing.T) {
 	myUrl := "foobar"
 	var myClient HTTPClient
 

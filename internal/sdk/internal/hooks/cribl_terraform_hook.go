@@ -69,6 +69,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	// First try to get credentials from security context
 	var clientID, clientSecret, orgID, workspaceID string
 
+	//this code path is not currently unit tested
 	if ctx.SecuritySource != nil {
 		if security, err := ctx.SecuritySource(ctx.Context); err == nil {
 			if s, ok := security.(shared.Security); ok {
@@ -112,6 +113,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 		}
 	}
 
+	//this code path is not currently unit tested
 	// Handle authentication
 	if bearerToken := os.Getenv("CRIBL_BEARER_TOKEN"); bearerToken != "" {
 		req.Header.Set("Authorization", "Bearer "+bearerToken)

@@ -191,7 +191,6 @@ func GetCredentials() (*CriblConfig, error) {
 
 	file, err := checkLocalConfigDir()
 	if err != nil {
-		//if error is not expected, then return error. Check if error is expected first
 		if errors.Is(err, os.ErrNotExist) {
 			log.Printf("[DEBUG] No configuration file found, continuing")
 			return &CriblConfig{
