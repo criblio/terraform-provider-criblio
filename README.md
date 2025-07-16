@@ -47,9 +47,6 @@ export CRIBL_CLIENT_SECRET="your-client-secret"
 export CRIBL_ORGANIZATION_ID="your-organization-id"
 export CRIBL_WORKSPACE_ID="your-workspace-id"
 
-# Configure a different API endpoint
-export CRIBL_SERVER_URL="https://app.cribl-playground.cloud"
-
 ```
 
 ### Credentials File
@@ -68,7 +65,6 @@ client_id = another-client-id
 client_secret = another-client-secret
 organization_id = another-organization-id
 workspace = another-workspace-id
-server_url = "https://app.cribl-playground.cloud"
 ```
 
 To use a specific profile, set the `CRIBL_PROFILE` environment variable:
@@ -92,8 +88,6 @@ provider "criblio" {
   organization_id  = "your-organization-id"
   workspace_id     = "your-workspace-id"
 
-  # configure API endpoint
-  server_url = "https://app.cribl-playground.cloud"
 }
 ```
 
