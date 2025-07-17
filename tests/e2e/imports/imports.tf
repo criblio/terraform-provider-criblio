@@ -74,61 +74,61 @@ import {
 }
 
 data "criblio_appscope_config" "my_appscopeconfig" {
-  id         = "sample_appscope_config"
+  group_id   = "default"
 }
 
 data "criblio_global_var" "my_globalvar" {
-  id         = "sample_globalvar"
+  group_id   = "default"
 }
 
 data "criblio_pack" "my_pack" {
-  id         = "pack-from-source"
+  group_id   = "default"
 }
 
 data "criblio_schema" "my_schema" {
-  id         = "my_schema"
+  group_id   = "default"
 }
 
 data "criblio_grok" "my_grok" {
-  id         = "my_grok"
+  group_id   = "default"
 }
 
 data "criblio_parquet_schema" "criblio_parquet_schemas" {
-  id         = "my_parquet_schema"
+  group_id   = "default"
 }
 
 data "criblio_source" "syslog_source" {
-  id         = "syslog-input"
+  group_id   = "syslog-workers"
 }
 
 data "criblio_destination" "cribl_lake" {
-  id         = "cribl-lake-2"
+  group_id = "default"
 }
 
 data "criblio_pack" "syslog_pack" {
-  id         = "syslog-processing"
+  group_id = "syslog_workers"
 }
 
 data "criblio_database_connection" "my_databaseconnection" {
-  id         = "my_databaseconnection"
+  group_id = "default"
 }
 
 data "criblio_hmac_function" "my_hmacfunction" {
-  id = "my_hmacfunction"
+  group_id = "default"
 }
 
 data "criblio_project" "my_project" {
-  id = "my_project"
+  group_id = "default"
 }
 
 data "criblio_subscription" "my_subscription" {
-  id = "my_subscription"
+  group_id = "default"
 }
 
 data "criblio_subscription" "my_subscription_with_enabled" {
-  id = "my_subscription_with_enabled"
+  group_id = "default"
 }
 
 data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-  id = "test_eventbreakerruleset"
+  group_id = "default"
 }
