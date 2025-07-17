@@ -50,6 +50,6 @@ jobs:
           echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
 
       - name: Run Speakeasy Tests
-        command_timeout: 200m
+        shell: bash
         run: |
-          make build-speakeasy
+          timeout 30m make build-speakeasy
