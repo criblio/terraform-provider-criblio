@@ -16,7 +16,7 @@ func TestNewCriblTerraformHook(t *testing.T) {
 
 	output := NewCriblTerraformHook()
 	if fmt.Sprintf("%+v", &testData) != fmt.Sprintf("%+v", output) {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect struct, expected '%+v' got '%+v'", &testData, output))
+		t.Errorf(fmt.Sprintf("NewCriblTerraformHook returned incorrect struct, expected '%+v' got '%+v'", &testData, output))
 	}
 }
 
