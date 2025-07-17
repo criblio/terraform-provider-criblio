@@ -72,3 +72,63 @@ import {
     to = criblio_event_breaker_ruleset.my_eventbreakerruleset
     id = "test_eventbreakerruleset"
 }
+
+data "criblio_appscope_config" "my_appscopeconfig" {
+  id         = "sample_appscope_config"
+}
+
+data "criblio_global_var" "my_globalvar" {
+  id         = "sample_globalvar"
+}
+
+data "criblio_pack" "my_pack" {
+  id         = "pack-from-source"
+}
+
+data "criblio_schema" "my_schema" {
+  id         = "my_schema"
+}
+
+data "criblio_grok" "my_grok" {
+  id         = "my_grok"
+}
+
+data "criblio_parquet_schema" "criblio_parquet_schemas" {
+  id         = "my_parquet_schema"
+}
+
+data "criblio_source" "syslog_source" {
+  id         = "syslog-input"
+}
+
+data "criblio_destination" "cribl_lake" {
+  id         = "cribl-lake-2"
+}
+
+data "criblio_pack" "syslog_pack" {
+  id         = "syslog-processing"
+}
+
+data "criblio_database_connection" "my_databaseconnection" {
+  id         = "my_databaseconnection"
+}
+
+data "criblio_hmac_function" "my_hmacfunction" {
+  id = "my_hmacfunction"
+}
+
+data "criblio_project" "my_project" {
+  id = "my_project"
+}
+
+data "criblio_subscription" "my_subscription" {
+  id = "my_subscription"
+}
+
+data "criblio_subscription" "my_subscription_with_enabled" {
+  id = "my_subscription_with_enabled"
+}
+
+data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
+  id = "test_eventbreakerruleset"
+}

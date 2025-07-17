@@ -14,10 +14,10 @@ e2e-test:
 	@echo 'import { ' >> tests/e2e/stream_syslog_to_lake.tf; echo 'to = criblio_group.syslog_worker_group ' >> tests/e2e/stream_syslog_to_lake.tf; echo 'id = "syslog-workers" ' >> tests/e2e/stream_syslog_to_lake.tf; echo '}' >> tests/e2e/stream_syslog_to_lake.tf
 	#run init and apply
 	@cd tests/e2e; ls -R local-plugins; terraform init -plugin-dir ./local-plugins; flag1=$$?; terraform apply -auto-approve; flag2=$$?; if [ $$flag1 -ne 0 ] || [ $$flag2 -ne 0 ]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
-	#kill the state, copy import file, run import 
-	@cd tests/e2e; rm terraform*; cp imports/imports.tf .; terraform init -plugin-dir ./local-plugins; terraform refresh
+	#kill the state, copy import file, run imports and data
+	@cd tests/e2e; rm terraform*; cp imports/imports.tf .; terraform init -plugin-dir ./local-plugins; terraform refresh; flag3=$$?; [ $$flag3 -ne 0 ]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
 	#run the destroy
-	@#cd tests/e2e; terraform destroy -auto-approve; flag3=$$?; [ $$flag3 -ne 0 ]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
+	@cd tests/e2e; terraform destroy -auto-approve; flag4=$$?; [ $$flag4 -ne 0 ]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
 
 acceptance-test:
 	export CRIBL_SERVER_URL="https://app.cribl-playground.cloud" && \
