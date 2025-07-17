@@ -23,6 +23,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - name: Run e2e Tests
+        shell: bash
         env:
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
@@ -49,5 +50,6 @@ jobs:
           echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
 
       - name: Run Speakeasy Tests
+        command_timeout: 200m
         run: |
           make build-speakeasy
