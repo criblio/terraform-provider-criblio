@@ -44,6 +44,8 @@ jobs:
           cli_name: speakeasy
           package_type: zip
 
+      - uses: dominikh/staticcheck-action@v1.2.0
+
       - name: Configure speakeasy CLI
         run: |
           mkdir -p ~/.speakeasy
