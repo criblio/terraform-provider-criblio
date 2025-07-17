@@ -16,7 +16,3 @@ resource "criblio_group" "my_edge_fleet" {
 output "edge_fleet" {
   value = criblio_group.my_edge_fleet
 }
-import { 
-to = criblio_group.my_edge_fleet 
-id = "my-edge-fleet" 
-}
