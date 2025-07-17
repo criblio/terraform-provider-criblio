@@ -167,3 +167,7 @@ output "destination_details" {
     id = criblio_destination.cribl_lake.id
   }
 }
+import { 
+to = criblio_group.syslog_worker_group 
+id = "syslog-workers" 
+}
