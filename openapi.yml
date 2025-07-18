@@ -55345,6 +55345,144 @@ paths:
             type: string
           description: the route table to be appended to - currently default is the only
             supported value
+  "/packs":
+    get:
+      operationId: getPacks
+      tags: *a135
+      summary: Get a list of Pipeline objects within a Pack
+      description: Get a list of Pipeline objects within a Pack
+      responses: *a136
+  "/p/{pack}/pipeline":
+    get:
+      operationId: getPipelinesByPack
+      tags: *a135
+      summary: Get a list of Pipeline objects within a Pack
+      description: Get a list of Pipeline objects within a Pack
+      responses: *a136
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack ID to GET
+  "/p/{pack}/pipeline/{id}":
+    get:
+      operationId: getPipelinesByPackWithId
+      tags: *a135
+      summary: Get a list of Pipelines by ID within a Pack
+      description: Get a list of Pipeline by ID within a Pack
+      responses: *a136
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack ID to GET
+        - name: id
+          in: path
+          required: true
+          schema: *a137
+          description: Unique ID to GET for pack
+  "/p/{pack}/system/inputs":
+    get:
+      operationId: getSystemInputsByPack
+      tags: *a135
+      summary: Get a list of inputs within a Pack
+      description: Get a list of inputs within a Pack
+      responses: *a136
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack inputs to GET
+  "/p/{pack}/system/outputs":
+    get:
+      operationId: getSystemOutputsByPack
+      tags: *a135
+      summary: Get a list of outputs within a Pack
+      description: Get a list of outputs within a Pack
+      responses: *a136
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack outputs to GET
+  "/p/{pack}/system/lookups":
+    get:
+      operationId: getSystemLookupsByPack
+      tags: *a135
+      summary: Get a list of lookup objects within a Pack
+      description: Get a list of lookups objects within a Pack
+      responses: *a136
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack ID to GET
+  "/p/{pack}/system/lookups/{id}":
+    get:
+      operationId: getSystemLookupsByPackAndId
+      tags: *a135
+      summary: Get list of lookups by ID within a Pack
+      description: Get list of lookups by ID within a Pack
+      responses: *a136
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *a137
+          description: Unique ID to GET for pack
+        - name: pack
+          in: path
+          required: true
+          schema: *a138
+          description: pack ID to GET
+  "/p/{pack}/lib/breakers":
+    get:
+      operationId: getBreakersByPack
+      tags: *a135
+      summary: Get a list of breakers within a Pack
+      description: Get a list of breakers within a Pack
+      responses: *a136
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack ID to GET
+  "/p/{pack}/lib/breakers/{id}":
+    get:
+      operationId: getBreakersByPackAndId
+      tags: *a135
+      summary: Get list of breakers by ID within a Pack
+      description: Get list of breakers by ID within a Pack
+      responses: *a136
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *a137
+          description: Unique ID to GET for pack
+        - name: pack
+          in: path
+          required: true
+          schema: *a138
+          description: pack ID to GET
   "/p/{pack}/routes":
     get:
       operationId: getRoutesByPack
@@ -58812,7 +58950,7 @@ paths:
               $ref: "#/components/schemas/PackRequestBody"
     get:
       x-speakeasy-entity-operation: Pack#read
-      operationId: getPacks
+      operationId: getPacksByGroup
       tags:
         - packs
       summary: Get info on packs

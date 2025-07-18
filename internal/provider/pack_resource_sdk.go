@@ -92,7 +92,7 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 	return diags
 }
 
-func (r *PackResourceModel) RefreshFromOperationsGetPacksResponseBody(ctx context.Context, resp *operations.GetPacksResponseBody) diag.Diagnostics {
+func (r *PackResourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(ctx context.Context, resp *operations.GetPacksByGroupResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -309,7 +309,7 @@ func (r *PackResourceModel) ToOperationsDeletePacksByIDRequest(ctx context.Conte
 	return &out, diags
 }
 
-func (r *PackResourceModel) ToOperationsGetPacksRequest(ctx context.Context) (*operations.GetPacksRequest, diag.Diagnostics) {
+func (r *PackResourceModel) ToOperationsGetPacksByGroupRequest(ctx context.Context) (*operations.GetPacksByGroupRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var groupID string
@@ -321,7 +321,7 @@ func (r *PackResourceModel) ToOperationsGetPacksRequest(ctx context.Context) (*o
 	} else {
 		disabled = nil
 	}
-	out := operations.GetPacksRequest{
+	out := operations.GetPacksByGroupRequest{
 		GroupID:  groupID,
 		Disabled: disabled,
 	}

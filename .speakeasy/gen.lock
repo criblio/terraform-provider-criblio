@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 492f2a8243699c68fb8387f96535c7ae
+  docChecksum: 33f169217b2a33f1882a9b77e538bdab
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
   speakeasyVersion: 1.581.2
   generationVersion: 2.656.9
@@ -1180,6 +1180,8 @@ generatedFiles:
   - internal/sdk/models/operations/getauthsso.go
   - internal/sdk/models/operations/getauthssocallback.go
   - internal/sdk/models/operations/getbannermessagebyid.go
+  - internal/sdk/models/operations/getbreakersbypack.go
+  - internal/sdk/models/operations/getbreakersbypackandid.go
   - internal/sdk/models/operations/getbulletinmessagebyid.go
   - internal/sdk/models/operations/getcertificatebyid.go
   - internal/sdk/models/operations/getchangelogviewed.go
@@ -1253,12 +1255,15 @@ generatedFiles:
   - internal/sdk/models/operations/getoutputsamplesbyid.go
   - internal/sdk/models/operations/getoutputstatusbyid.go
   - internal/sdk/models/operations/getpacks.go
+  - internal/sdk/models/operations/getpacksbygroup.go
   - internal/sdk/models/operations/getpacksexportbyid.go
   - internal/sdk/models/operations/getpacksrefsbyid.go
   - internal/sdk/models/operations/getparserbyid.go
   - internal/sdk/models/operations/getpipelinebyid.go
   - internal/sdk/models/operations/getpipelinebypack.go
   - internal/sdk/models/operations/getpipelinebypackandid.go
+  - internal/sdk/models/operations/getpipelinesbypack.go
+  - internal/sdk/models/operations/getpipelinesbypackwithid.go
   - internal/sdk/models/operations/getpolicyrulebyid.go
   - internal/sdk/models/operations/getproductsgroupsaclteamsbyproductandid.go
   - internal/sdk/models/operations/getproductsgroupsbyproduct.go
@@ -1306,11 +1311,15 @@ generatedFiles:
   - internal/sdk/models/operations/getsystemdiag.go
   - internal/sdk/models/operations/getsystemdistributedupgradedownloadbyfile.go
   - internal/sdk/models/operations/getsysteminfo.go
+  - internal/sdk/models/operations/getsysteminputsbypack.go
   - internal/sdk/models/operations/getsystemjobslogsbyidandgroupid.go
   - internal/sdk/models/operations/getsystemlogs.go
   - internal/sdk/models/operations/getsystemlogsbyid.go
   - internal/sdk/models/operations/getsystemlogssearch.go
+  - internal/sdk/models/operations/getsystemlookupsbypack.go
+  - internal/sdk/models/operations/getsystemlookupsbypackandid.go
   - internal/sdk/models/operations/getsystemmetrics.go
+  - internal/sdk/models/operations/getsystemoutputsbypack.go
   - internal/sdk/models/operations/getsystemprocesses.go
   - internal/sdk/models/operations/getsystemprojectspipelinesbygroupidandprojectid.go
   - internal/sdk/models/operations/getsystemprojectspipelinesbygroupidandprojectidandpipelineid.go
@@ -6587,6 +6596,99 @@ examples:
           application/json: {}
   createAiSettingsFeatures:
     speakeasy-default-create-ai-settings-features:
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getPipelinesByPack:
+    speakeasy-default-get-pipelines-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getPipelinesByPackWithId:
+    speakeasy-default-get-pipelines-by-pack-with-id:
+      parameters:
+        path:
+          pack: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getSystemInputsByPack:
+    speakeasy-default-get-system-inputs-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getSystemOutputsByPack:
+    speakeasy-default-get-system-outputs-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getSystemLookupsByPack:
+    speakeasy-default-get-system-lookups-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getSystemLookupsByPackAndId:
+    speakeasy-default-get-system-lookups-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getBreakersByPack:
+    speakeasy-default-get-breakers-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getBreakersByPackAndId:
+    speakeasy-default-get-breakers-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getPacksByGroup:
+    speakeasy-default-get-packs-by-group:
+      parameters:
+        path:
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
