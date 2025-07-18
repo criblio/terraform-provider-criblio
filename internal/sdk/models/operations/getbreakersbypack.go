@@ -7,19 +7,31 @@ import (
 	"net/http"
 )
 
-// GetPacksResponseBody - a list of Routes objects
-type GetPacksResponseBody struct {
+type GetBreakersByPackRequest struct {
+	// pack ID to GET
+	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+}
+
+func (o *GetBreakersByPackRequest) GetPack() string {
+	if o == nil {
+		return ""
+	}
+	return o.Pack
+}
+
+// GetBreakersByPackResponseBody - a list of Routes objects
+type GetBreakersByPackResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetPacksResponseBody) GetItems() []shared.Routes {
+func (o *GetBreakersByPackResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetPacksResponse struct {
+type GetBreakersByPackResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -27,40 +39,40 @@ type GetPacksResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Routes objects
-	Object *GetPacksResponseBody
+	Object *GetBreakersByPackResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetPacksResponse) GetContentType() string {
+func (o *GetBreakersByPackResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetPacksResponse) GetStatusCode() int {
+func (o *GetBreakersByPackResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetPacksResponse) GetRawResponse() *http.Response {
+func (o *GetBreakersByPackResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetPacksResponse) GetObject() *GetPacksResponseBody {
+func (o *GetBreakersByPackResponse) GetObject() *GetBreakersByPackResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetPacksResponse) GetError() *shared.Error {
+func (o *GetBreakersByPackResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

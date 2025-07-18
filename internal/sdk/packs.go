@@ -193,9 +193,9 @@ func (s *Packs) CreatePacks(ctx context.Context, request operations.CreatePacksR
 
 }
 
-// GetPacks - Get info on packs
+// GetPacksByGroup - Get info on packs
 // Get info on packs
-func (s *Packs) GetPacks(ctx context.Context, request operations.GetPacksRequest, opts ...operations.Option) (*operations.GetPacksResponse, error) {
+func (s *Packs) GetPacksByGroup(ctx context.Context, request operations.GetPacksByGroupRequest, opts ...operations.Option) (*operations.GetPacksByGroupResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -223,7 +223,7 @@ func (s *Packs) GetPacks(ctx context.Context, request operations.GetPacksRequest
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "getPacks",
+		OperationID:      "getPacksByGroup",
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -287,7 +287,7 @@ func (s *Packs) GetPacks(ctx context.Context, request operations.GetPacksRequest
 		}
 	}
 
-	res := &operations.GetPacksResponse{
+	res := &operations.GetPacksByGroupResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -302,7 +302,7 @@ func (s *Packs) GetPacks(ctx context.Context, request operations.GetPacksRequest
 				return nil, err
 			}
 
-			var out operations.GetPacksResponseBody
+			var out operations.GetPacksByGroupResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

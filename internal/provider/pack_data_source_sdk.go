@@ -11,7 +11,7 @@ import (
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
-func (r *PackDataSourceModel) RefreshFromOperationsGetPacksResponseBody(ctx context.Context, resp *operations.GetPacksResponseBody) diag.Diagnostics {
+func (r *PackDataSourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(ctx context.Context, resp *operations.GetPacksByGroupResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -88,7 +88,7 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksResponseBody(ctx cont
 	return diags
 }
 
-func (r *PackDataSourceModel) ToOperationsGetPacksRequest(ctx context.Context) (*operations.GetPacksRequest, diag.Diagnostics) {
+func (r *PackDataSourceModel) ToOperationsGetPacksByGroupRequest(ctx context.Context) (*operations.GetPacksByGroupRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	with := new(string)
@@ -106,7 +106,7 @@ func (r *PackDataSourceModel) ToOperationsGetPacksRequest(ctx context.Context) (
 	} else {
 		disabled = nil
 	}
-	out := operations.GetPacksRequest{
+	out := operations.GetPacksByGroupRequest{
 		With:     with,
 		GroupID:  groupID,
 		Disabled: disabled,
