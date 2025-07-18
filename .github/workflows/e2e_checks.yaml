@@ -3,6 +3,7 @@ on:
   push:
     branches: 
       - 'main'
+      - 'INFRA-5243/ktraister/polish-e2e-tests'
 
 concurrency:
   group: tfprovider2
@@ -22,9 +23,15 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - name: Run e2e Tests
+        shell: bash
         env:
-          CRIBL_BEARER_TOKEN: ${{ secrets.CRIBL_BEARER_TOKEN }}
+          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
+          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
+          CRIBL_SERVER_URL: "https://app.cribl-playground.cloud"
+          CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
+          CRIBL_WORKSPACE_ID: "tfprovider2"
         run: | 
+          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET CRIBL_SERVER_URL CRIBL_ORGANIZATION_ID CRIBL_WORKSPACE_ID
           make e2e-test
 
   speakeasy_test:
@@ -40,6 +47,8 @@ jobs:
           cli_name: speakeasy
           package_type: zip
 
+      - uses: dominikh/staticcheck-action@v1.3.1
+
       - name: Configure speakeasy CLI
         run: |
           mkdir -p ~/.speakeasy
@@ -48,5 +57,6 @@ jobs:
       - uses: dominikh/staticcheck-action@v1.3.1
 
       - name: Run Speakeasy Tests
+        shell: bash
         run: |
           timeout 30m make build-speakeasy
