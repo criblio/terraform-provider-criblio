@@ -53900,6 +53900,7 @@ paths:
       responses: *a103
   "/p/{pack}/lib/vars":
     get:
+      x-speakeasy-entity-operation: PackVars#read
       operationId: getGlobalVariableLibVarsByPack
       tags: *a105
       summary: List all GlobalVars with references within a Pack
@@ -53921,6 +53922,7 @@ paths:
             type: string
           description: pack ID to GET
     post:
+      x-speakeasy-entity-operation: PackVars#create
       operationId: createGlobalVariableLibVarsByPack
       tags: *a102
       summary: Create Global Variable within a Pack
@@ -53952,6 +53954,7 @@ paths:
           description: pack ID to GET
       responses: *a103
     patch:
+      x-speakeasy-entity-operation: PackVars#update
       operationId: updateGlobalVariableLibVarsByPackAndId
       tags: *a102
       summary: Update Global Variable within a Pack
@@ -53970,6 +53973,7 @@ paths:
       requestBody: *a110
       responses: *a103
     delete:
+      x-speakeasy-entity-operation: PackVars#delete
       operationId: deleteGlobalVariableLibVarsByPackAndId
       tags: *a102
       summary: Delete Global Variable within a Pack
@@ -55015,8 +55019,8 @@ paths:
       responses: *a127
   "/m/{groupId}/p/{pack}/pipelines":
     get:
-      x-speakeasy-entity-operation: PackPipeline#read
-      operationId: getPipelineByPack
+      x-speakeasy-entity-operation: GroupPackPipeline#read
+      operationId: getGroupPipelineByPack
       tags: *a126
       summary: Get a list of Pipeline objects within a Pack
       description: Get a list of Pipeline objects within a Pack
@@ -55036,8 +55040,8 @@ paths:
           schema:
             type: string
     post:
-      x-speakeasy-entity-operation: PackPipeline#create
-      operationId: createPipelineByPack
+      x-speakeasy-entity-operation: GroupPackPipeline#create
+      operationId: createGroupPipelineByPack
       tags: *a126
       summary: Create Pipeline within a Pack
       description: Create Pipeline within a Pack
@@ -55057,7 +55061,7 @@ paths:
             type: string
   "/m/{groupId}/p/{pack}/pipelines/{id}":
     get:
-      operationId: getPipelineByPackAndId
+      operationId: getGroupPipelineByPackAndId
       tags: *a126
       summary: Get Pipeline by ID within a Pack
       description: Get Pipeline by ID within a Pack
@@ -55080,8 +55084,8 @@ paths:
             type: string
       responses: *a127
     patch:
-      x-speakeasy-entity-operation: PackPipeline#update
-      operationId: updatePipelineByPackAndId
+      x-speakeasy-entity-operation: GroupPackPipeline#update
+      operationId: updateGroupPipelineByPackAndId
       tags: *a126
       summary: Update Pipeline within a Pack
       description: Update Pipeline within a Pack
@@ -55110,8 +55114,8 @@ paths:
       requestBody: *a131
       responses: *a127
     delete:
-      x-speakeasy-entity-operation: PackPipeline#delete
-      operationId: deletePipelineByPackAndId
+      x-speakeasy-entity-operation: GroupPackPipeline#delete
+      operationId: deleteGroupPipelineByPackAndId
       tags: *a126
       summary: Delete Pipeline within a Pack
       description: Delete Pipeline within a Pack
@@ -55354,6 +55358,7 @@ paths:
       responses: *a136
   "/p/{pack}/pipeline":
     get:
+      x-speakeasy-entity-operation: PackPipeline#read
       operationId: getPipelinesByPack
       tags: *a135
       summary: Get a list of Pipeline objects within a Pack
@@ -55367,6 +55372,20 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+    post:
+      x-speakeasy-entity-operation: PackPipeline#create
+      operationId: createPipelineByPack
+      tags: *a126
+      summary: Create Pipeline within a Pack
+      description: Create Pipeline within a Pack
+      requestBody: *a129
+      responses: *a127
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to POST
   "/p/{pack}/pipeline/{id}":
     get:
       operationId: getPipelinesByPackWithId
@@ -55387,8 +55406,52 @@ paths:
           required: true
           schema: *a137
           description: Unique ID to GET for pack
+    patch:
+      x-speakeasy-entity-operation: PackPipeline#update
+      operationId: updatePipelineByPackAndId
+      tags: *a126
+      summary: Update Pipeline within a Pack
+      description: Update Pipeline within a Pack
+      
+      responses: *a127
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *a128
+          description: Unique ID to PATCH for pack
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to PATCH
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+    delete:
+      x-speakeasy-entity-operation: PackPipeline#delete
+      operationId: deletePipelineByPackAndId
+      tags: *a126
+      summary: Delete Pipeline within a Pack
+      description: Delete Pipeline within a Pack
+      requestBody: *a131
+      responses: *a127
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *a128
+          description: Unique ID to DELETE for pack
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack pipeline ID to DELETE
   "/p/{pack}/system/inputs":
     get:
+      x-speakeasy-entity-operation: PackSource#read
       operationId: getSystemInputsByPack
       tags: *a135
       summary: Get a list of inputs within a Pack
@@ -55402,12 +55465,59 @@ paths:
             &a138
             type: string
           description: pack inputs to GET
+    post:
+      x-speakeasy-entity-operation: PackSource#create
+      operationId: createSystemInputsByPack
+      tags: *a126
+      summary: Create input source for a Pack
+      description: Create input source for a Pack
+      requestBody: *a129
+      responses: *a127
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack inputs to POST
+    patch:
+      x-speakeasy-entity-operation: PackSource#update
+      operationId: updateSystemInputsByPack
+      tags: *a126
+      summary: Update input source a Pack
+      description: Update input source a Pack
+      requestBody: *a131
+      responses: *a127
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to PATCH
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+    delete:
+      x-speakeasy-entity-operation: PackSource#delete
+      operationId: deleteSystemInputsByPack
+      tags: *a126
+      summary: Delete input source a Pack
+      description: Delete input source a Pack
+      responses: *a127
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to DELETE
   "/p/{pack}/system/outputs":
     get:
+      x-speakeasy-entity-operation: PackDestination#read
       operationId: getSystemOutputsByPack
       tags: *a135
-      summary: Get a list of outputs within a Pack
-      description: Get a list of outputs within a Pack
+      summary: Get a list of inputs within a Pack
+      description: Get a list of inputs within a Pack
       responses: *a136
       parameters:
         - name: pack
@@ -55416,13 +55526,75 @@ paths:
           schema:
             &a138
             type: string
-          description: pack outputs to GET
+          description: pack inputs to GET
+    post:
+      x-speakeasy-entity-operation: PackDestination#create
+      operationId: createSystemOutputsByPack
+      tags: *a126
+      summary: Create input source for a Pack
+      description: Create input source for a Pack
+      requestBody: *a129
+      responses: *a127
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack inputs to POST
+    patch:
+      x-speakeasy-entity-operation: PackDestination#update
+      operationId: updateSystemOutputsByPackAndId
+      tags: *a126
+      summary: Update input source a Pack
+      description: Update input source a Pack
+      requestBody: *a131
+      responses: *a127
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to PATCH
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+    delete:
+      x-speakeasy-entity-operation: PackDestination#delete
+      operationId: deleteSystemOutputsByPackAndId
+      tags: *a126
+      summary: Delete input source a Pack
+      description: Delete input source a Pack
+      responses: *a127
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to DELETE
   "/p/{pack}/system/lookups":
     get:
+      x-speakeasy-entity-operation: PackLookups#read
       operationId: getSystemLookupsByPack
       tags: *a135
       summary: Get a list of lookup objects within a Pack
       description: Get a list of lookups objects within a Pack
+      responses: *a136
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack ID to GET
+    post:
+      x-speakeasy-entity-operation: PackLookups#create
+      operationId: createSystemLookupsByPack
+      tags: *a135
+      summary: Create a lookup objects within a Pack
+      description: Get a lookups objects within a Pack
       responses: *a136
       parameters:
         - name: pack
@@ -55450,8 +55622,51 @@ paths:
           required: true
           schema: *a138
           description: pack ID to GET
+    patch:
+      x-speakeasy-entity-operation: PackLookups#update
+      operationId: createSystemLookupsByPackAndId
+      tags: *a126
+      summary: Update system lookup within a Pack
+      description: Update system lookup within a Pack
+      requestBody: *a131
+      responses: *a127
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *a128
+          description: Unique ID to PATCH for pack
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to PATCH
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+    delete:
+      x-speakeasy-entity-operation: PackLookups#delete
+      operationId: deleteSystemLookupsByPackAndId
+      tags: *a126
+      summary: Delete system lookup within a Pack
+      description: Delete system lookup within a Pack
+      responses: *a127
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *a128
+          description: Unique ID to DELETE for pack
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to DELETE
   "/p/{pack}/lib/breakers":
     get:
+      x-speakeasy-entity-operation: PackBreakers#read
       operationId: getBreakersByPack
       tags: *a135
       summary: Get a list of breakers within a Pack
@@ -55465,6 +55680,21 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+    post:
+      x-speakeasy-entity-operation: PackBreakers#create
+      operationId: createBreakersByPack
+      tags: *a135
+      summary: Create a breaker within a Pack
+      description: Get a breaker within a Pack
+      responses: *a136
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack ID to POST
   "/p/{pack}/lib/breakers/{id}":
     get:
       operationId: getBreakersByPackAndId
@@ -55481,10 +55711,54 @@ paths:
         - name: pack
           in: path
           required: true
-          schema: *a138
-          description: pack ID to GET
+          schema:
+            &a138
+            type: string
+          description: pack ID to POST
+    post:
+      x-speakeasy-entity-operation: PackBreakers#update
+      operationId: updateBreakersByPackAndId
+      tags: *a135
+      summary: Update Routes within a Pack
+      description: Update Routes by ID within a Pack
+      requestBody: *a131
+      responses: *a136
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            &a138
+            type: string
+          description: Unique ID to PATCH for pack
+        - name: pack
+          in: path
+          required: true
+          schema:
+            &a138
+            type: string
+          description: pack ID to POST
+    delete:
+      x-speakeasy-entity-operation: PackBreaker#delete
+      operationId: deleteBreakersByPackAndId
+      tags: *a126
+      summary: Delete breakers within a Pack
+      description: Delete breakers within a Pack
+      responses: *a127
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *a128
+          description: Unique ID to DELETE for pack
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to DELETE
   "/p/{pack}/routes":
     get:
+      x-speakeasy-entity-operation: PackRoutes#read
       operationId: getRoutesByPack
       tags: *a135
       summary: Get a list of Routes objects within a Pack
@@ -55498,9 +55772,23 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+    post:
+      x-speakeasy-entity-operation: PackRoutes#create
+      operationId: createRoutesByPack
+      tags: *a126
+      summary: Create route for a Pack
+      description: Create route for a Pack
+      requestBody: *a129
+      responses: *a127
+      parameters:
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack inputs to POST
   "/p/{pack}/routes/{id}":
     get:
-      operationId: getRoutesByPackAndId
+      operationId: readRoutesByPackAndId
       tags: *a135
       summary: Get Routes by ID within a Pack
       description: Get Routes by ID within a Pack
@@ -55517,10 +55805,11 @@ paths:
           description: pack ID to GET
       responses: *a136
     patch:
+      x-speakeasy-entity-operation: PackRoutes#update
       operationId: updateRoutesByPackAndId
       tags: *a135
       summary: Update Routes within a Pack
-      description: Update Routes within a Pack
+      description: Update Routes by ID within a Pack
       parameters:
         - name: id
           in: path
@@ -55534,6 +55823,24 @@ paths:
           description: pack ID to PATCH
       requestBody: *a139
       responses: *a136
+    delete:
+      x-speakeasy-entity-operation: PackRoutes#delete
+      operationId: deleteRoutesByPackAndId
+      tags: *a126
+      summary: Delete routes within a Pack
+      description: Delete routes within a Pack
+      responses: *a127
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *a128
+          description: Unique ID to DELETE for pack
+        - name: pack
+          in: path
+          required: true
+          schema: *a130
+          description: pack ID to DELETE
   "/p/{pack}/routes/{id}/append":
     post:
       operationId: createRoutesAppendByPackAndId
