@@ -45,6 +45,8 @@ jobs:
           mkdir -p ~/.speakeasy
           echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
 
+      - uses: dominikh/staticcheck-action@v1.3.1
+
       - name: Run Speakeasy Tests
         run: |
-          make build-speakeasy
+          timeout 30m make build-speakeasy
