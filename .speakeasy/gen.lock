@@ -5,8 +5,8 @@ management:
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
   speakeasyVersion: 1.583.0
   generationVersion: 2.658.3
-  releaseVersion: 1.0.55
-  configChecksum: f7f9536ab48b12227f5c8e4b0d358885
+  releaseVersion: 1.0.58
+  configChecksum: 8605bb020e2ce0b925ea2ffce4efcf46
   published: true
 features:
   terraform:

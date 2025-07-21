@@ -1,28 +1,15 @@
 ![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/e2e_checks.yaml/badge.svg) ![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/tf_provider_release.yaml/badge.svg)
 
-<!-- Start Summary [summary] -->
-## Summary
 
-Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).
-<!-- End Summary [summary] -->
+# terraform-provider-criblio
 
-<!-- Start Table of Contents [toc] -->
-## Table of Contents
-<!-- $toc-max-depth=2 -->
-  * [Requirements](#requirements)
-  * [Installation](#installation)
-  * [Available Resources and Data Sources](#available-resources-and-data-sources)
-  * [Testing the provider locally](#testing-the-provider-locally)
-  * [Contributing](#contributing)
-  * [License](#license)
-
-<!-- End Table of Contents [toc] -->
+A Terraform provider for managing Cribl resources.
 
 ## Requirements
 
 - [Terraform](https://www.terraform.io/downloads.html) >= 1.0
 - [Go](https://golang.org/doc/install) >= 1.19
-<!-- Start Installation [installation] -->
+
 ## Installation
 
 To install this provider, copy and paste this code into your Terraform configuration. Then, run `terraform init`.
@@ -32,7 +19,6 @@ terraform {
   required_providers {
     criblio = {
       source  = "criblio/criblio"
-      version = "1.0.55"
     }
   }
 }
@@ -41,7 +27,128 @@ provider "criblio" {
   # Configuration options
 }
 ```
-<!-- End Installation [installation] -->
+
+## Authentication
+
+The Cribl provider supports multiple authentication methods. You can configure authentication using environment variables, credentials file, or directly in the provider configuration block.
+
+### Environment Variables
+
+You can set the following environment variables:
+
+```bash
+# Direct authentication
+export CRIBL_BEARER_TOKEN="your-bearer-token"
+
+# OAuth authentication
+export CRIBL_CLIENT_ID="your-client-id"
+export CRIBL_CLIENT_SECRET="your-client-secret"
+export CRIBL_ORGANIZATION_ID="your-organization-id"
+export CRIBL_WORKSPACE_ID="your-workspace-id"
+
+```
+
+### Credentials File
+
+You can store your credentials in `~/.cribl/credentials` or `~/.cribl` (legacy) with the following format:
+
+```ini
+[default]
+client_id = your-client-id
+client_secret = your-client-secret
+organization_id = your-organization-id
+workspace = your-workspace-id
+
+[profile2]
+client_id = another-client-id
+client_secret = another-client-secret
+organization_id = another-organization-id
+workspace = another-workspace-id
+```
+
+To use a specific profile, set the `CRIBL_PROFILE` environment variable:
+
+```bash
+export CRIBL_PROFILE="profile2"
+```
+
+### Provider Configuration
+
+You can also configure authentication directly in your Terraform configuration:
+
+```hcl
+provider "criblio" {
+  # Using bearer token
+  bearer_token = "your-bearer-token"
+
+  # Or using OAuth credentials
+  client_id        = "your-client-id"
+  client_secret    = "your-client-secret"
+  organization_id  = "your-organization-id"
+  workspace_id     = "your-workspace-id"
+
+}
+```
+
+### Authentication Methods
+
+#### 1. Bearer Token
+
+The simplest way to authenticate is using a bearer token:
+
+```hcl
+provider "criblio" {
+  bearer_token = "your-bearer-token"
+}
+```
+
+#### 2. OAuth Authentication (Recommended)
+
+For OAuth authentication, you can use client credentials:
+
+```hcl
+provider "criblio" {
+  client_id       = "your-client-id"
+  client_secret   = "your-client-secret"
+  organization_id = "your-organization-id"
+  workspace_id    = "your-workspace-id"
+}
+```
+
+### Example with Environment Variables
+
+```hcl
+# main.tf
+provider "criblio" {
+  # Credentials will be read from environment variables
+}
+
+# Use the provider
+resource "criblio_pipeline" "example" {
+  name = "example-pipeline"
+  # ... other configuration
+}
+```
+
+```bash
+# Set environment variables
+export CRIBL_CLIENT_ID="your-client-id"
+export CRIBL_CLIENT_SECRET="your-client-secret"
+export CRIBL_ORGANIZATION_ID="your-organization-id"
+export CRIBL_WORKSPACE_ID="your-workspace-id"
+
+# Run Terraform
+terraform init
+terraform plan
+```
+
+<!-- No Installation [installation] -->
+
+
+<!-- No Summary [summary] -->
+
+
+<!-- No Table of Contents [toc] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
@@ -93,6 +200,8 @@ provider "criblio" {
 * [criblio_subscription](docs/data-sources/subscription.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
+<!-- No SDK Installation -->
+<!-- No SDK Example Usage -->
 <!-- Start Testing the provider locally [usage] -->
 ## Testing the provider locally
 
