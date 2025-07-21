@@ -2,16 +2,16 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.12.2-4b17c8d4-TFProvider-manual and generator version 2.656.9
+// Generated from OpenAPI doc version 4.12.2-4b17c8d4-TFProvider-manual and generator version 2.658.3
 
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/config"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/hooks"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/utils"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/retry"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/config"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/hooks"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/retry"
 	"net/http"
 	"time"
 )
@@ -391,9 +391,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.0.45",
+		SDKVersion: "1.0.55",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.0.45 2.656.9 4.12.2-4b17c8d4-TFProvider-manual github.com/speakeasy/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.0.55 2.658.3 4.12.2-4b17c8d4-TFProvider-manual github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {

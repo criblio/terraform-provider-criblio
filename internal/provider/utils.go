@@ -21,7 +21,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	tfReflect "github.com/speakeasy/terraform-provider-criblio/internal/provider/reflect"
+	tfReflect "github.com/criblio/terraform-provider-criblio/internal/provider/reflect"
 )
 
 func debugResponse(response *http.Response) string {

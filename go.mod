@@ -1,4 +1,4 @@
-module github.com/speakeasy/terraform-provider-criblio
+module github.com/criblio/terraform-provider-criblio
 
 go 1.23.0
 

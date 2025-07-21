@@ -5,10 +5,10 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
 func (r *ParserLibEntryDataSourceModel) RefreshFromSharedParserLibEntry(ctx context.Context, resp *shared.ParserLibEntry) diag.Diagnostics {

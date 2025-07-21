@@ -21,7 +21,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 1.0.45
+  version: 1.0.55
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
@@ -30,7 +30,7 @@ terraform:
     tlsSkipVerify: ""
   additionalResources: []
   allowUnknownFieldsInWeakUnions: false
-  author: speakeasy
+  author: criblio
   baseErrorName: CriblIoError
   defaultErrorName: APIError
   enableTypeDeduplication: false

@@ -4,8 +4,8 @@ package operations
 
 import (
 	"errors"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/utils"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/retry"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/retry"
 	"time"
 )
 

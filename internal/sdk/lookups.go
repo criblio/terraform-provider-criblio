@@ -6,12 +6,12 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/config"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/hooks"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/utils"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/errors"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/config"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/hooks"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/errors"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 

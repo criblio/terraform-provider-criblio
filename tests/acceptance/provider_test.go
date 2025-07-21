@@ -3,7 +3,7 @@ package tests
 import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
-	"github.com/speakeasy/terraform-provider-criblio/internal/provider"
+	"github.com/criblio/terraform-provider-criblio/internal/provider"
 )
 
 var (

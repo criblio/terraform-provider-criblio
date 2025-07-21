@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/utils"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
 type OutputGrafanaCloudType2 string

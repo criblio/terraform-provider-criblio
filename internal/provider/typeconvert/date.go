@@ -3,7 +3,7 @@
 package typeconvert
 
 import (
-	sdkTypes "github.com/speakeasy/terraform-provider-criblio/internal/sdk/types"
+	sdkTypes "github.com/criblio/terraform-provider-criblio/internal/sdk/types"
 )
 
 // Converts a date types.Date to string.

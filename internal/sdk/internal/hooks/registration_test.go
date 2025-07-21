@@ -8,25 +8,25 @@ func TestInitHooks(t *testing.T) {
 	var newHook Hooks
 	var preBRH, postBRH, preAEH, postAEH, preASH, postASH int
 
-	for _, _ = range newHook.beforeRequestHook {
+	for range newHook.beforeRequestHook {
 		preBRH++
 	}
-	for _, _ = range newHook.afterErrorHook {
+	for range newHook.afterErrorHook {
 		preAEH++
 	}
-	for _, _ = range newHook.afterSuccessHook {
+	for range newHook.afterSuccessHook {
 		preASH++
 	}
 
 	initHooks(&newHook)
 
-	for _, _ = range newHook.beforeRequestHook {
+	for range newHook.beforeRequestHook {
 		postBRH++
 	}
-	for _, _ = range newHook.afterErrorHook {
+	for range newHook.afterErrorHook {
 		postAEH++
 	}
-	for _, _ = range newHook.afterSuccessHook {
+	for range newHook.afterSuccessHook {
 		postASH++
 	}
 

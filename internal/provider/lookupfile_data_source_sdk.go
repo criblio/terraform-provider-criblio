@@ -4,10 +4,10 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
 func (r *LookupFileDataSourceModel) RefreshFromOperationsListLookupFileResponseBody(ctx context.Context, resp *operations.ListLookupFileResponseBody) diag.Diagnostics {

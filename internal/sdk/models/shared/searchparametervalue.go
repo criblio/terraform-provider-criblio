@@ -5,7 +5,7 @@ package shared
 import (
 	"errors"
 	"fmt"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/utils"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
 type SearchParameterValueType string

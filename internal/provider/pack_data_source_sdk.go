@@ -5,10 +5,10 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
 func (r *PackDataSourceModel) RefreshFromOperationsGetPacksResponseBody(ctx context.Context, resp *operations.GetPacksResponseBody) diag.Diagnostics {

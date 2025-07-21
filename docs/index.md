@@ -16,8 +16,8 @@ Cribl API Reference: This API Reference lists available REST endpoints, along wi
 terraform {
   required_providers {
     criblio = {
-      source  = "speakeasy/criblio"
-      version = "1.0.45"
+      source  = "criblio/criblio"
+      version = "1.0.55"
     }
   }
 }

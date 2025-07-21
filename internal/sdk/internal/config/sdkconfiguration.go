@@ -4,7 +4,7 @@ package config
 
 import (
 	"context"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/retry"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/retry"
 	"net/http"
 	"time"
 )

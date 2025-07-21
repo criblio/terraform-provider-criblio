@@ -4,9 +4,9 @@ package validators
 
 import (
 	"context"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/types"
 	"github.com/hashicorp/terraform-plugin-framework-validators/helpers/validatordiag"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/types"
 )
 
 var _ validator.String = DateValidator{}

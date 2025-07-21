@@ -4,8 +4,8 @@ package provider
 
 import (
 	"context"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 )
 
 func (r *SourceDataSourceModel) RefreshFromOperationsListInputResponseBody(ctx context.Context, resp *operations.ListInputResponseBody) diag.Diagnostics {

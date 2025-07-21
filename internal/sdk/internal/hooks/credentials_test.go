@@ -8,10 +8,10 @@ import (
 )
 
 func TestGetCredentialsEnvConfig(t *testing.T) {
-	client := "yo"
-	secret := "AllAmericanRejects"
-	org := "lung"
-	workspace := "desk"
+	client := "test-client"
+	secret := "test-secret"
+	org := "test-org"
+	workspace := "test-workspace"
 
 	os.Setenv("CRIBL_CLIENT_ID", client)
 	os.Setenv("CRIBL_CLIENT_SECRET", secret)
@@ -24,13 +24,13 @@ func TestGetCredentialsEnvConfig(t *testing.T) {
 	}
 
 	if cfg.ClientID != client {
-		t.Errorf(fmt.Sprintf("GetCredentials returned incorrect ClientID, expected %s got %s", client, cfg.ClientID))
+		t.Errorf("GetCredentials returned incorrect ClientID, expected %s got %s", client, cfg.ClientID)
 	} else if cfg.ClientSecret != secret {
-		t.Errorf(fmt.Sprintf("GetCredentials returned incorrect ClientSecret, expected %s got %s", secret, cfg.ClientSecret))
+		t.Errorf("GetCredentials returned incorrect ClientSecret, expected %s got %s", secret, cfg.ClientSecret)
 	} else if cfg.OrganizationID != org {
-		t.Errorf(fmt.Sprintf("GetCredentials returned incorrect OrganizationID, expected %s got %s", org, cfg.OrganizationID))
+		t.Errorf("GetCredentials returned incorrect OrganizationID, expected %s got %s", org, cfg.OrganizationID)
 	} else if cfg.Workspace != workspace {
-		t.Errorf(fmt.Sprintf("GetCredentials returned incorrect Workspace, expected %s got %s", workspace, cfg.Workspace))
+		t.Errorf("GetCredentials returned incorrect Workspace, expected %s got %s", workspace, cfg.Workspace)
 	}
 }
 
@@ -78,13 +78,13 @@ func TestGetCredentialsIniFile(t *testing.T) {
 	}
 
 	if cfg.ClientID != "your-client-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID))
+		t.Errorf("parseIniConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID)
 	} else if cfg.ClientSecret != "your-client-secret" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret))
+		t.Errorf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret)
 	} else if cfg.OrganizationID != "your-organization-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID))
+		t.Errorf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID)
 	} else if cfg.Workspace != "your-workspace-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace))
+		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace)
 	}
 
 	err = os.RemoveAll(path)
@@ -123,13 +123,13 @@ func TestGetCredentialsJSONFile(t *testing.T) {
 	}
 
 	if cfg.ClientID != "your-client-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID))
+		t.Errorf("parseIniConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID)
 	} else if cfg.ClientSecret != "your-client-secret" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret))
+		t.Errorf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret)
 	} else if cfg.OrganizationID != "your-organization-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID))
+		t.Errorf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID)
 	} else if cfg.Workspace != "your-workspace-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace))
+		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace)
 	}
 
 	err = os.RemoveAll(path)
@@ -265,13 +265,13 @@ func TestParseJSONConfig(t *testing.T) {
 	}
 
 	if cfg.ClientID != "your-client-id" {
-		t.Errorf(fmt.Sprintf("parseJSONConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID))
+		t.Errorf("parseJSONConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID)
 	} else if cfg.ClientSecret != "your-client-secret" {
-		t.Errorf(fmt.Sprintf("parseJSONConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret))
+		t.Errorf("parseJSONConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret)
 	} else if cfg.OrganizationID != "your-organization-id" {
-		t.Errorf(fmt.Sprintf("parseJSONConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID))
+		t.Errorf("parseJSONConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID)
 	} else if cfg.Workspace != "your-workspace-id" {
-		t.Errorf(fmt.Sprintf("parseJSONConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace))
+		t.Errorf("parseJSONConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace)
 	}
 }
 
@@ -300,12 +300,12 @@ func TestParseIniConfig(t *testing.T) {
 	}
 
 	if cfg.ClientID != "your-client-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID))
+		t.Errorf("parseIniConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID)
 	} else if cfg.ClientSecret != "your-client-secret" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret))
+		t.Errorf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret)
 	} else if cfg.OrganizationID != "your-organization-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID))
+		t.Errorf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID)
 	} else if cfg.Workspace != "your-workspace-id" {
-		t.Errorf(fmt.Sprintf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace))
+		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace)
 	}
 }

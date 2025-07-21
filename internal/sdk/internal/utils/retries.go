@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/retry"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/retry"
 	"math"
 	"math/rand"
 	"net/http"

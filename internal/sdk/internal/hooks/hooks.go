@@ -5,7 +5,7 @@ package hooks
 import (
 	"context"
 	"errors"
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/internal/config"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/config"
 	"net/http"
 )
 

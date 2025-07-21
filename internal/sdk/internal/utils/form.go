@@ -12,7 +12,7 @@ import (
 
 	"github.com/ericlagergren/decimal"
 
-	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/types"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/types"
 )
 
 func populateForm(paramName string, explode bool, objType reflect.Type, objValue reflect.Value, delimiter string, defaultValue *string, getFieldName func(reflect.StructField) string) url.Values {
