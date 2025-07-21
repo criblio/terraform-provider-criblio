@@ -9,14 +9,32 @@ import (
 
 type GetRoutesByPackRequest struct {
 	// pack ID to GET
-	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	PackPathParameter string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Pipeline object to be updated in specified Project
+	Pack1 shared.Pack `request:"mediaType=application/json"`
 }
 
-func (o *GetRoutesByPackRequest) GetPack() string {
+func (o *GetRoutesByPackRequest) GetPackPathParameter() string {
 	if o == nil {
 		return ""
 	}
-	return o.Pack
+	return o.PackPathParameter
+}
+
+func (o *GetRoutesByPackRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
+}
+
+func (o *GetRoutesByPackRequest) GetPack1() shared.Pack {
+	if o == nil {
+		return shared.Pack{}
+	}
+	return o.Pack1
 }
 
 // GetRoutesByPackResponseBody - a list of Routes objects

@@ -7,40 +7,49 @@ import (
 	"net/http"
 )
 
-type GetPipelineByPackRequest struct {
-	// pack ID to GET
+type DeleteRoutesByPackAndIDRequest struct {
+	// Unique ID to DELETE for pack
+	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// pack ID to DELETE
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetPipelineByPackRequest) GetPack() string {
+func (o *DeleteRoutesByPackAndIDRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *DeleteRoutesByPackAndIDRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
 	return o.Pack
 }
 
-func (o *GetPipelineByPackRequest) GetGroupID() string {
+func (o *DeleteRoutesByPackAndIDRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// GetPipelineByPackResponseBody - a list of Pipeline objects
-type GetPipelineByPackResponseBody struct {
+// DeleteRoutesByPackAndIDResponseBody - a list of Pipeline objects
+type DeleteRoutesByPackAndIDResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *GetPipelineByPackResponseBody) GetItems() []shared.Pipeline {
+func (o *DeleteRoutesByPackAndIDResponseBody) GetItems() []shared.Pipeline {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetPipelineByPackResponse struct {
+type DeleteRoutesByPackAndIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,40 +57,40 @@ type GetPipelineByPackResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Pipeline objects
-	Object *GetPipelineByPackResponseBody
+	Object *DeleteRoutesByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetPipelineByPackResponse) GetContentType() string {
+func (o *DeleteRoutesByPackAndIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetPipelineByPackResponse) GetStatusCode() int {
+func (o *DeleteRoutesByPackAndIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetPipelineByPackResponse) GetRawResponse() *http.Response {
+func (o *DeleteRoutesByPackAndIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetPipelineByPackResponse) GetObject() *GetPipelineByPackResponseBody {
+func (o *DeleteRoutesByPackAndIDResponse) GetObject() *DeleteRoutesByPackAndIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetPipelineByPackResponse) GetError() *shared.Error {
+func (o *DeleteRoutesByPackAndIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

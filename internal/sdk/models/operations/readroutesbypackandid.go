@@ -7,40 +7,49 @@ import (
 	"net/http"
 )
 
-type GetRoutesByPackAndIDRequest struct {
+type ReadRoutesByPackAndIDRequest struct {
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetRoutesByPackAndIDRequest) GetID() string {
+func (o *ReadRoutesByPackAndIDRequest) GetID() string {
 	if o == nil {
 		return ""
 	}
 	return o.ID
 }
 
-func (o *GetRoutesByPackAndIDRequest) GetPack() string {
+func (o *ReadRoutesByPackAndIDRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
 	return o.Pack
 }
 
-// GetRoutesByPackAndIDResponseBody - a list of Routes objects
-type GetRoutesByPackAndIDResponseBody struct {
+func (o *ReadRoutesByPackAndIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
+}
+
+// ReadRoutesByPackAndIDResponseBody - a list of Routes objects
+type ReadRoutesByPackAndIDResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetRoutesByPackAndIDResponseBody) GetItems() []shared.Routes {
+func (o *ReadRoutesByPackAndIDResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetRoutesByPackAndIDResponse struct {
+type ReadRoutesByPackAndIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,40 +57,40 @@ type GetRoutesByPackAndIDResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Routes objects
-	Object *GetRoutesByPackAndIDResponseBody
+	Object *ReadRoutesByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetContentType() string {
+func (o *ReadRoutesByPackAndIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetStatusCode() int {
+func (o *ReadRoutesByPackAndIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetRawResponse() *http.Response {
+func (o *ReadRoutesByPackAndIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetObject() *GetRoutesByPackAndIDResponseBody {
+func (o *ReadRoutesByPackAndIDResponse) GetObject() *ReadRoutesByPackAndIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetError() *shared.Error {
+func (o *ReadRoutesByPackAndIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

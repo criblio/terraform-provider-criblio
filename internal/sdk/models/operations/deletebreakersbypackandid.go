@@ -7,49 +7,49 @@ import (
 	"net/http"
 )
 
-type GetPipelineByPackAndIDRequest struct {
-	// Unique ID to GET for pack
+type DeleteBreakersByPackAndIDRequest struct {
+	// Unique ID to DELETE for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// pack ID to GET
+	// pack ID to DELETE
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetPipelineByPackAndIDRequest) GetID() string {
+func (o *DeleteBreakersByPackAndIDRequest) GetID() string {
 	if o == nil {
 		return ""
 	}
 	return o.ID
 }
 
-func (o *GetPipelineByPackAndIDRequest) GetPack() string {
+func (o *DeleteBreakersByPackAndIDRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
 	return o.Pack
 }
 
-func (o *GetPipelineByPackAndIDRequest) GetGroupID() string {
+func (o *DeleteBreakersByPackAndIDRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// GetPipelineByPackAndIDResponseBody - a list of Pipeline objects
-type GetPipelineByPackAndIDResponseBody struct {
+// DeleteBreakersByPackAndIDResponseBody - a list of Pipeline objects
+type DeleteBreakersByPackAndIDResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *GetPipelineByPackAndIDResponseBody) GetItems() []shared.Pipeline {
+func (o *DeleteBreakersByPackAndIDResponseBody) GetItems() []shared.Pipeline {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetPipelineByPackAndIDResponse struct {
+type DeleteBreakersByPackAndIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -57,40 +57,40 @@ type GetPipelineByPackAndIDResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Pipeline objects
-	Object *GetPipelineByPackAndIDResponseBody
+	Object *DeleteBreakersByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetContentType() string {
+func (o *DeleteBreakersByPackAndIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetStatusCode() int {
+func (o *DeleteBreakersByPackAndIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetRawResponse() *http.Response {
+func (o *DeleteBreakersByPackAndIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetObject() *GetPipelineByPackAndIDResponseBody {
+func (o *DeleteBreakersByPackAndIDResponse) GetObject() *DeleteBreakersByPackAndIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetError() *shared.Error {
+func (o *DeleteBreakersByPackAndIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

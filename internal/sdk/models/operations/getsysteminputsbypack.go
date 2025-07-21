@@ -10,6 +10,8 @@ import (
 type GetSystemInputsByPackRequest struct {
 	// pack inputs to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *GetSystemInputsByPackRequest) GetPack() string {
@@ -17,6 +19,13 @@ func (o *GetSystemInputsByPackRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *GetSystemInputsByPackRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // GetSystemInputsByPackResponseBody - a list of Routes objects

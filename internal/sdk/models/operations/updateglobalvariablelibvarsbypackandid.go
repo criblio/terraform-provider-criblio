@@ -12,6 +12,8 @@ type UpdateGlobalVariableLibVarsByPackAndIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to PATCH
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Global Variable object to be updated
 	GlobalVar shared.GlobalVar `request:"mediaType=application/json"`
 }
@@ -28,6 +30,13 @@ func (o *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 func (o *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetGlobalVar() shared.GlobalVar {

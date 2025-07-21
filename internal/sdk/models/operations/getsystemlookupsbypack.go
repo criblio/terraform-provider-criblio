@@ -10,6 +10,10 @@ import (
 type GetSystemLookupsByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Pipeline object to be updated in specified Project
+	LookupFile shared.LookupFileInputUnion `request:"mediaType=application/json"`
 }
 
 func (o *GetSystemLookupsByPackRequest) GetPack() string {
@@ -17,6 +21,20 @@ func (o *GetSystemLookupsByPackRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *GetSystemLookupsByPackRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
+}
+
+func (o *GetSystemLookupsByPackRequest) GetLookupFile() shared.LookupFileInputUnion {
+	if o == nil {
+		return shared.LookupFileInputUnion{}
+	}
+	return o.LookupFile
 }
 
 // GetSystemLookupsByPackResponseBody - a list of Routes objects

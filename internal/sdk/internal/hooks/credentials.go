@@ -74,7 +74,7 @@ func checkConfigFileFormat(input []byte) (string, error) {
 		return "ini", nil
 	}
 
-	return "", errors.New("Config file type not recognized")
+	return "", errors.New("config file type not recognized")
 }
 
 func parseJSONConfig(file []byte) (*CriblConfig, error) {

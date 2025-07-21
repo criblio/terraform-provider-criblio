@@ -4,12 +4,111 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
+
+func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Routes{}
+		if len(r.Items) > len(resp.Items) {
+			r.Items = r.Items[:len(resp.Items)]
+		}
+		for itemsCount, itemsItem := range resp.Items {
+			var items tfTypes.Routes
+			items.ID = types.StringPointerValue(itemsItem.ID)
+			items.Routes = []tfTypes.RoutesRoute{}
+			for routesCount, routesItem := range itemsItem.Routes {
+				var routes tfTypes.RoutesRoute
+				routes.ID = types.StringPointerValue(routesItem.ID)
+				routes.Name = types.StringValue(routesItem.Name)
+				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
+				routes.Filter = types.StringPointerValue(routesItem.Filter)
+				routes.Pipeline = types.StringValue(routesItem.Pipeline)
+				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
+				if routesItem.Output == nil {
+					routes.Output = types.StringNull()
+				} else {
+					outputResult, _ := json.Marshal(routesItem.Output)
+					routes.Output = types.StringValue(string(outputResult))
+				}
+				if routesItem.OutputExpression == nil {
+					routes.OutputExpression = types.StringNull()
+				} else {
+					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
+					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
+				}
+				routes.Description = types.StringPointerValue(routesItem.Description)
+				routes.Final = types.BoolPointerValue(routesItem.Final)
+				if routesItem.AdditionalProperties == nil {
+					routes.AdditionalProperties = types.StringNull()
+				} else {
+					additionalPropertiesResult, _ := json.Marshal(routesItem.AdditionalProperties)
+					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
+				}
+				if routesCount+1 > len(items.Routes) {
+					items.Routes = append(items.Routes, routes)
+				} else {
+					items.Routes[routesCount].ID = routes.ID
+					items.Routes[routesCount].Name = routes.Name
+					items.Routes[routesCount].Disabled = routes.Disabled
+					items.Routes[routesCount].Filter = routes.Filter
+					items.Routes[routesCount].Pipeline = routes.Pipeline
+					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
+					items.Routes[routesCount].Output = routes.Output
+					items.Routes[routesCount].OutputExpression = routes.OutputExpression
+					items.Routes[routesCount].Description = routes.Description
+					items.Routes[routesCount].Final = routes.Final
+					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
+				}
+			}
+			if len(itemsItem.Groups) > 0 {
+				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
+				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
+					var routesGroupsResult tfTypes.RoutesGroups
+					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
+					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
+					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
+
+					items.Groups[routesGroupsKey] = routesGroupsResult
+				}
+			}
+			items.Comments = []tfTypes.Comment{}
+			for commentsCount, commentsItem := range itemsItem.Comments {
+				var comments tfTypes.Comment
+				comments.Comment = types.StringPointerValue(commentsItem.Comment)
+				if commentsItem.AdditionalProperties == nil {
+					comments.AdditionalProperties = types.StringNull()
+				} else {
+					additionalPropertiesResult1, _ := json.Marshal(commentsItem.AdditionalProperties)
+					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
+				}
+				if commentsCount+1 > len(items.Comments) {
+					items.Comments = append(items.Comments, comments)
+				} else {
+					items.Comments[commentsCount].Comment = comments.Comment
+					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
+				}
+			}
+			if itemsCount+1 > len(r.Items) {
+				r.Items = append(r.Items, items)
+			} else {
+				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].Routes = items.Routes
+				r.Items[itemsCount].Groups = items.Groups
+				r.Items[itemsCount].Comments = items.Comments
+			}
+		}
+	}
+
+	return diags
+}
 
 func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
 	var diags diag.Diagnostics
@@ -98,16 +197,24 @@ func (r *PackPipelineResourceModel) ToOperationsDeletePipelineByPackAndIDRequest
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	pipeline, pipelineDiags := r.ToSharedPipeline(ctx)
+	diags.Append(pipelineDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := operations.DeletePipelineByPackAndIDRequest{
-		ID:      id,
-		Pack:    pack,
-		GroupID: groupID,
+		ID:       id,
+		Pack:     pack,
+		GroupID:  groupID,
+		Pipeline: *pipeline,
 	}
 
 	return &out, diags
 }
 
-func (r *PackPipelineResourceModel) ToOperationsGetPipelineByPackRequest(ctx context.Context) (*operations.GetPipelineByPackRequest, diag.Diagnostics) {
+func (r *PackPipelineResourceModel) ToOperationsGetPipelinesByPackRequest(ctx context.Context) (*operations.GetPipelinesByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var pack string
@@ -116,7 +223,7 @@ func (r *PackPipelineResourceModel) ToOperationsGetPipelineByPackRequest(ctx con
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetPipelineByPackRequest{
+	out := operations.GetPipelinesByPackRequest{
 		Pack:    pack,
 		GroupID: groupID,
 	}
@@ -136,18 +243,10 @@ func (r *PackPipelineResourceModel) ToOperationsUpdatePipelineByPackAndIDRequest
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	pipeline, pipelineDiags := r.ToSharedPipeline(ctx)
-	diags.Append(pipelineDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
 	out := operations.UpdatePipelineByPackAndIDRequest{
-		ID:       id,
-		Pack:     pack,
-		GroupID:  groupID,
-		Pipeline: *pipeline,
+		ID:      id,
+		Pack:    pack,
+		GroupID: groupID,
 	}
 
 	return &out, diags

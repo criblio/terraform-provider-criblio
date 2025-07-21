@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 33f169217b2a33f1882a9b77e538bdab
+  docChecksum: 35635898b1e112c7f0622e0edf167b27
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.581.2
-  generationVersion: 2.656.9
+  speakeasyVersion: 1.583.1
+  generationVersion: 2.658.3
   releaseVersion: 1.0.45
   configChecksum: 2c0aa29fe4086a9aab71e43f1a9def0b
   published: true
@@ -15,6 +15,7 @@ features:
     constsAndDefaults: 0.2.1
     core: 3.41.16
     deprecations: 2.82.0
+    getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
     globalServerURLs: 2.82.2
     ignores: 2.81.1
@@ -38,7 +39,13 @@ generatedFiles:
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
   - examples/data-sources/criblio_pack/data-source.tf
+  - examples/data-sources/criblio_pack_breakers/data-source.tf
+  - examples/data-sources/criblio_pack_destination/data-source.tf
+  - examples/data-sources/criblio_pack_lookups/data-source.tf
   - examples/data-sources/criblio_pack_pipeline/data-source.tf
+  - examples/data-sources/criblio_pack_routes/data-source.tf
+  - examples/data-sources/criblio_pack_source/data-source.tf
+  - examples/data-sources/criblio_pack_vars/data-source.tf
   - examples/data-sources/criblio_parquet_schema/data-source.tf
   - examples/data-sources/criblio_parser_lib_entry/data-source.tf
   - examples/data-sources/criblio_pipeline/data-source.tf
@@ -70,8 +77,20 @@ generatedFiles:
   - examples/resources/criblio_lookup_file/resource.tf
   - examples/resources/criblio_pack/import.sh
   - examples/resources/criblio_pack/resource.tf
+  - examples/resources/criblio_pack_breakers/import.sh
+  - examples/resources/criblio_pack_breakers/resource.tf
+  - examples/resources/criblio_pack_destination/import.sh
+  - examples/resources/criblio_pack_destination/resource.tf
+  - examples/resources/criblio_pack_lookups/import.sh
+  - examples/resources/criblio_pack_lookups/resource.tf
   - examples/resources/criblio_pack_pipeline/import.sh
   - examples/resources/criblio_pack_pipeline/resource.tf
+  - examples/resources/criblio_pack_routes/import.sh
+  - examples/resources/criblio_pack_routes/resource.tf
+  - examples/resources/criblio_pack_source/import.sh
+  - examples/resources/criblio_pack_source/resource.tf
+  - examples/resources/criblio_pack_vars/import.sh
+  - examples/resources/criblio_pack_vars/resource.tf
   - examples/resources/criblio_parquet_schema/import.sh
   - examples/resources/criblio_parquet_schema/resource.tf
   - examples/resources/criblio_parser_lib_entry/import.sh
@@ -148,10 +167,34 @@ generatedFiles:
   - internal/provider/pack_data_source_sdk.go
   - internal/provider/pack_resource.go
   - internal/provider/pack_resource_sdk.go
+  - internal/provider/packbreakers_data_source.go
+  - internal/provider/packbreakers_data_source_sdk.go
+  - internal/provider/packbreakers_resource.go
+  - internal/provider/packbreakers_resource_sdk.go
+  - internal/provider/packdestination_data_source.go
+  - internal/provider/packdestination_data_source_sdk.go
+  - internal/provider/packdestination_resource.go
+  - internal/provider/packdestination_resource_sdk.go
+  - internal/provider/packlookups_data_source.go
+  - internal/provider/packlookups_data_source_sdk.go
+  - internal/provider/packlookups_resource.go
+  - internal/provider/packlookups_resource_sdk.go
   - internal/provider/packpipeline_data_source.go
   - internal/provider/packpipeline_data_source_sdk.go
   - internal/provider/packpipeline_resource.go
   - internal/provider/packpipeline_resource_sdk.go
+  - internal/provider/packroutes_data_source.go
+  - internal/provider/packroutes_data_source_sdk.go
+  - internal/provider/packroutes_resource.go
+  - internal/provider/packroutes_resource_sdk.go
+  - internal/provider/packsource_data_source.go
+  - internal/provider/packsource_data_source_sdk.go
+  - internal/provider/packsource_resource.go
+  - internal/provider/packsource_resource_sdk.go
+  - internal/provider/packvars_data_source.go
+  - internal/provider/packvars_data_source_sdk.go
+  - internal/provider/packvars_resource.go
+  - internal/provider/packvars_resource_sdk.go
   - internal/provider/parquetschema_data_source.go
   - internal/provider/parquetschema_data_source_sdk.go
   - internal/provider/parquetschema_resource.go
@@ -237,6 +280,7 @@ generatedFiles:
   - internal/provider/types/cert_options.go
   - internal/provider/types/cloud.go
   - internal/provider/types/collectors.go
+  - internal/provider/types/comment.go
   - internal/provider/types/commit.go
   - internal/provider/types/config_group.go
   - internal/provider/types/config_group_cloud.go
@@ -928,6 +972,10 @@ generatedFiles:
   - internal/provider/types/prometheus_auth_oauth_param1.go
   - internal/provider/types/prometheus_auth_oauth_param2.go
   - internal/provider/types/resource_type_label.go
+  - internal/provider/types/routes.go
+  - internal/provider/types/routes1.go
+  - internal/provider/types/routes_groups.go
+  - internal/provider/types/routes_route.go
   - internal/provider/types/sample.go
   - internal/provider/types/services.go
   - internal/provider/types/snm_pv3_authentication.go
@@ -1017,6 +1065,7 @@ generatedFiles:
   - internal/sdk/models/operations/createauthslocallback.go
   - internal/sdk/models/operations/createauthssocallback.go
   - internal/sdk/models/operations/createbannermessage.go
+  - internal/sdk/models/operations/createbreakersbypack.go
   - internal/sdk/models/operations/createbulletinmessage.go
   - internal/sdk/models/operations/createcertificate.go
   - internal/sdk/models/operations/createcribllakedatasetbylakeid.go
@@ -1069,6 +1118,7 @@ generatedFiles:
   - internal/sdk/models/operations/createrole.go
   - internal/sdk/models/operations/createroutesappendbyid.go
   - internal/sdk/models/operations/createroutesappendbypackandid.go
+  - internal/sdk/models/operations/createroutesbypack.go
   - internal/sdk/models/operations/createsavedjob.go
   - internal/sdk/models/operations/createsavedquery.go
   - internal/sdk/models/operations/createschema.go
@@ -1088,8 +1138,12 @@ generatedFiles:
   - internal/sdk/models/operations/createsystemdistributedupgradebygroup.go
   - internal/sdk/models/operations/createsystemdistributedupgradecancelbygroup.go
   - internal/sdk/models/operations/createsystemdistributedupgradestagebygroup.go
+  - internal/sdk/models/operations/createsysteminputsbypack.go
+  - internal/sdk/models/operations/createsystemlookupsbypack.go
+  - internal/sdk/models/operations/createsystemlookupsbypackandid.go
   - internal/sdk/models/operations/createsystemmetricsenum.go
   - internal/sdk/models/operations/createsystemmetricsquery.go
+  - internal/sdk/models/operations/createsystemoutputsbypack.go
   - internal/sdk/models/operations/createsystemprojectscapturebygroupidandprojectid.go
   - internal/sdk/models/operations/createsystemprojectscapturebyprojectid.go
   - internal/sdk/models/operations/createsystemprojectspipelinesbygroupidandprojectid.go
@@ -1113,6 +1167,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteauthusersinvalidationbyid.go
   - internal/sdk/models/operations/deleteauthuserstokenbyid.go
   - internal/sdk/models/operations/deletebannermessagebyid.go
+  - internal/sdk/models/operations/deletebreakersbypackandid.go
   - internal/sdk/models/operations/deletebulletinmessagebyid.go
   - internal/sdk/models/operations/deletecertificatebyid.go
   - internal/sdk/models/operations/deletecribllakedatasetbylakeidandid.go
@@ -1151,6 +1206,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteregexlibentrybyid.go
   - internal/sdk/models/operations/deleterestsecretbyid.go
   - internal/sdk/models/operations/deleterolebyid.go
+  - internal/sdk/models/operations/deleteroutesbypackandid.go
   - internal/sdk/models/operations/deletesavedjobbyid.go
   - internal/sdk/models/operations/deletesavedquerybyid.go
   - internal/sdk/models/operations/deleteschemabyid.go
@@ -1161,6 +1217,9 @@ generatedFiles:
   - internal/sdk/models/operations/deletesearchmacrobyid.go
   - internal/sdk/models/operations/deletesubscriptionbyid.go
   - internal/sdk/models/operations/deletesystemdiag.go
+  - internal/sdk/models/operations/deletesysteminputsbypack.go
+  - internal/sdk/models/operations/deletesystemlookupsbypackandid.go
+  - internal/sdk/models/operations/deletesystemoutputsbypackandid.go
   - internal/sdk/models/operations/deletesystemprojectspipelinesbygroupidandprojectidandpipelineid.go
   - internal/sdk/models/operations/deleteteambyid.go
   - internal/sdk/models/operations/deleteusagegroupbyid.go
@@ -1260,8 +1319,6 @@ generatedFiles:
   - internal/sdk/models/operations/getpacksrefsbyid.go
   - internal/sdk/models/operations/getparserbyid.go
   - internal/sdk/models/operations/getpipelinebyid.go
-  - internal/sdk/models/operations/getpipelinebypack.go
-  - internal/sdk/models/operations/getpipelinebypackandid.go
   - internal/sdk/models/operations/getpipelinesbypack.go
   - internal/sdk/models/operations/getpipelinesbypackwithid.go
   - internal/sdk/models/operations/getpolicyrulebyid.go
@@ -1283,7 +1340,6 @@ generatedFiles:
   - internal/sdk/models/operations/getrolebyid.go
   - internal/sdk/models/operations/getroutesbyid.go
   - internal/sdk/models/operations/getroutesbypack.go
-  - internal/sdk/models/operations/getroutesbypackandid.go
   - internal/sdk/models/operations/getsavedjobbyid.go
   - internal/sdk/models/operations/getsavedquerybyid.go
   - internal/sdk/models/operations/getschemabyid.go
@@ -1406,11 +1462,13 @@ generatedFiles:
   - internal/sdk/models/operations/login.go
   - internal/sdk/models/operations/logout.go
   - internal/sdk/models/operations/options.go
+  - internal/sdk/models/operations/readroutesbypackandid.go
   - internal/sdk/models/operations/reloadsettings.go
   - internal/sdk/models/operations/triggerrestart.go
   - internal/sdk/models/operations/undolastcommit.go
   - internal/sdk/models/operations/updateappscopelibentrybyid.go
   - internal/sdk/models/operations/updatebannermessagebyid.go
+  - internal/sdk/models/operations/updatebreakersbypackandid.go
   - internal/sdk/models/operations/updatecertificatebyid.go
   - internal/sdk/models/operations/updatechangelogviewed.go
   - internal/sdk/models/operations/updatecribllakedatasetbylakeidandid.go
@@ -1466,6 +1524,8 @@ generatedFiles:
   - internal/sdk/models/operations/updatesearchmacrobyid.go
   - internal/sdk/models/operations/updatesecuritykmsconfig.go
   - internal/sdk/models/operations/updatesubscriptionbyid.go
+  - internal/sdk/models/operations/updatesysteminputsbypack.go
+  - internal/sdk/models/operations/updatesystemoutputsbypackandid.go
   - internal/sdk/models/operations/updatesystemprojectspipelinesbygroupidandprojectidandpipelineid.go
   - internal/sdk/models/operations/updatesystemsettings.go
   - internal/sdk/models/operations/updatesystemsettingsauth.go
@@ -1684,7 +1744,7 @@ generatedFiles:
   - internal/sdk/models/shared/loggerentry.go
   - internal/sdk/models/shared/logininfo.go
   - internal/sdk/models/shared/lookupfileinforesponse.go
-  - internal/sdk/models/shared/lookupfileunion.go
+  - internal/sdk/models/shared/lookupfileinputunion.go
   - internal/sdk/models/shared/lookupversions.go
   - internal/sdk/models/shared/mappingtype.go
   - internal/sdk/models/shared/masterworkerentry.go
@@ -1774,6 +1834,7 @@ generatedFiles:
   - internal/sdk/models/shared/outputwavefront.go
   - internal/sdk/models/shared/outputwebhook.go
   - internal/sdk/models/shared/outputxsiam.go
+  - internal/sdk/models/shared/pack.go
   - internal/sdk/models/shared/packclone.go
   - internal/sdk/models/shared/packinfo.go
   - internal/sdk/models/shared/packinstallinfo.go
@@ -2863,6 +2924,8 @@ examples:
           id: "<id>"
           pack: "<value>"
           groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
       responses:
         "200":
           application/json: {}
@@ -4736,6 +4799,7 @@ examples:
       parameters:
         path:
           pack: "<value>"
+          groupId: "<id>"
         query: {}
       responses:
         "200":
@@ -4747,6 +4811,7 @@ examples:
       parameters:
         path:
           pack: "<value>"
+          groupId: "<id>"
       requestBody:
         application/json: {"id": "<id>", "type": "any"}
       responses:
@@ -4760,6 +4825,7 @@ examples:
         path:
           id: "<id>"
           pack: "<value>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -4771,6 +4837,7 @@ examples:
         path:
           id: "<id>"
           pack: "<value>"
+          groupId: "<id>"
       requestBody:
         application/json: {"id": "<id>", "type": "any"}
       responses:
@@ -4784,6 +4851,7 @@ examples:
         path:
           id: "<id>"
           pack: "<value>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -5218,6 +5286,9 @@ examples:
       parameters:
         path:
           pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -5240,8 +5311,9 @@ examples:
         path:
           id: "<id>"
           pack: "<value>"
+          groupId: "<id>"
       requestBody:
-        application/json: {"routes": [{"name": "<value>", "filter": "true", "pipeline": "<value>", "enableOutputExpression": false, "final": true}]}
+        application/json: {"id": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -5253,6 +5325,7 @@ examples:
         path:
           id: "<id>"
           pack: "<value>"
+          groupId: "<id>"
       requestBody:
         application/json: [{"final": true, "id": "<id>", "name": "<value>", "pipeline": "<value>"}, {"final": true, "id": "<id>", "name": "<value>", "pipeline": "<value>"}]
       responses:
@@ -6606,6 +6679,7 @@ examples:
       parameters:
         path:
           pack: "<value>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -6617,6 +6691,7 @@ examples:
         path:
           pack: "<value>"
           id: "<id>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -6627,6 +6702,7 @@ examples:
       parameters:
         path:
           pack: "<value>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -6637,6 +6713,9 @@ examples:
       parameters:
         path:
           pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -6647,6 +6726,9 @@ examples:
       parameters:
         path:
           pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "mode": "memory"}
       responses:
         "200":
           application/json: {}
@@ -6658,6 +6740,7 @@ examples:
         path:
           id: "<id>"
           pack: "<value>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -6668,6 +6751,9 @@ examples:
       parameters:
         path:
           pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -6679,6 +6765,7 @@ examples:
         path:
           id: "<id>"
           pack: "<value>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -6688,6 +6775,195 @@ examples:
     speakeasy-default-get-packs-by-group:
       parameters:
         path:
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createSystemInputsByPack:
+    speakeasy-default-create-system-inputs-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  updateSystemInputsByPack:
+    speakeasy-default-update-system-inputs-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteSystemInputsByPack:
+    speakeasy-default-delete-system-inputs-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createSystemOutputsByPack:
+    speakeasy-default-create-system-outputs-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  updateSystemOutputsByPackAndId:
+    speakeasy-default-update-system-outputs-by-pack-and-id:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteSystemOutputsByPackAndId:
+    speakeasy-default-delete-system-outputs-by-pack-and-id:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createSystemLookupsByPackAndId:
+    speakeasy-default-create-system-lookups-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "mode": "memory"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteSystemLookupsByPackAndId:
+    speakeasy-default-delete-system-lookups-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteBreakersByPackAndId:
+    speakeasy-default-delete-breakers-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createRoutesByPack:
+    speakeasy-default-create-routes-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteRoutesByPackAndId:
+    speakeasy-default-delete-routes-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createSystemLookupsByPack:
+    speakeasy-default-create-system-lookups-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "mode": "memory"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createBreakersByPack:
+    speakeasy-default-create-breakers-by-pack:
+      parameters:
+        path:
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  updateBreakersByPackAndId:
+    speakeasy-default-update-breakers-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+          groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  readRoutesByPackAndId:
+    speakeasy-default-read-routes-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
           groupId: "<id>"
       responses:
         "200":

@@ -10,10 +10,12 @@ import (
 type DeletePipelineByPackAndIDRequest struct {
 	// Unique ID to DELETE for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// pack ID to DELETE
+	// pack pipeline ID to DELETE
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Pipeline object to be updated
+	Pipeline shared.Pipeline `request:"mediaType=application/json"`
 }
 
 func (o *DeletePipelineByPackAndIDRequest) GetID() string {
@@ -35,6 +37,13 @@ func (o *DeletePipelineByPackAndIDRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *DeletePipelineByPackAndIDRequest) GetPipeline() shared.Pipeline {
+	if o == nil {
+		return shared.Pipeline{}
+	}
+	return o.Pipeline
 }
 
 // DeletePipelineByPackAndIDResponseBody - a list of Pipeline objects

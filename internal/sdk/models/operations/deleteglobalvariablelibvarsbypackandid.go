@@ -12,6 +12,8 @@ type DeleteGlobalVariableLibVarsByPackAndIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to DELETE
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetID() string {
@@ -26,6 +28,13 @@ func (o *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // DeleteGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects

@@ -12,6 +12,8 @@ type GetPipelinesByPackWithIDRequest struct {
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// group ID
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *GetPipelinesByPackWithIDRequest) GetPack() string {
@@ -26,6 +28,13 @@ func (o *GetPipelinesByPackWithIDRequest) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *GetPipelinesByPackWithIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // GetPipelinesByPackWithIDResponseBody - a list of Routes objects

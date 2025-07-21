@@ -12,6 +12,8 @@ type GetSystemLookupsByPackAndIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *GetSystemLookupsByPackAndIDRequest) GetID() string {
@@ -26,6 +28,13 @@ func (o *GetSystemLookupsByPackAndIDRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *GetSystemLookupsByPackAndIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // GetSystemLookupsByPackAndIDResponseBody - a list of Routes objects

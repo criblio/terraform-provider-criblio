@@ -8,8 +8,12 @@ import (
 )
 
 type GetSystemOutputsByPackRequest struct {
-	// pack outputs to GET
+	// pack inputs to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// PackRequestBody object
+	PackRequestBody shared.PackRequestBody `request:"mediaType=application/json"`
 }
 
 func (o *GetSystemOutputsByPackRequest) GetPack() string {
@@ -17,6 +21,20 @@ func (o *GetSystemOutputsByPackRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *GetSystemOutputsByPackRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
+}
+
+func (o *GetSystemOutputsByPackRequest) GetPackRequestBody() shared.PackRequestBody {
+	if o == nil {
+		return shared.PackRequestBody{}
+	}
+	return o.PackRequestBody
 }
 
 // GetSystemOutputsByPackResponseBody - a list of Routes objects

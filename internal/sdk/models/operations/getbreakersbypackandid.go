@@ -10,8 +10,10 @@ import (
 type GetBreakersByPackAndIDRequest struct {
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// pack ID to GET
+	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *GetBreakersByPackAndIDRequest) GetID() string {
@@ -26,6 +28,13 @@ func (o *GetBreakersByPackAndIDRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *GetBreakersByPackAndIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // GetBreakersByPackAndIDResponseBody - a list of Routes objects

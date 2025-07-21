@@ -10,6 +10,8 @@ import (
 type GetPipelinesByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *GetPipelinesByPackRequest) GetPack() string {
@@ -17,6 +19,13 @@ func (o *GetPipelinesByPackRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *GetPipelinesByPackRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // GetPipelinesByPackResponseBody - a list of Routes objects

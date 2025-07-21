@@ -11,9 +11,11 @@ type UpdateRoutesByPackAndIDRequest struct {
 	// Unique ID to PATCH for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to PATCH
-	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// Routes object to be updated
-	Routes shared.RoutesInput `request:"mediaType=application/json"`
+	PackPathParameter string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Pipeline object to be updated in specified Project
+	Pack1 shared.Pack `request:"mediaType=application/json"`
 }
 
 func (o *UpdateRoutesByPackAndIDRequest) GetID() string {
@@ -23,18 +25,25 @@ func (o *UpdateRoutesByPackAndIDRequest) GetID() string {
 	return o.ID
 }
 
-func (o *UpdateRoutesByPackAndIDRequest) GetPack() string {
+func (o *UpdateRoutesByPackAndIDRequest) GetPackPathParameter() string {
 	if o == nil {
 		return ""
 	}
-	return o.Pack
+	return o.PackPathParameter
 }
 
-func (o *UpdateRoutesByPackAndIDRequest) GetRoutes() shared.RoutesInput {
+func (o *UpdateRoutesByPackAndIDRequest) GetGroupID() string {
 	if o == nil {
-		return shared.RoutesInput{}
+		return ""
 	}
-	return o.Routes
+	return o.GroupID
+}
+
+func (o *UpdateRoutesByPackAndIDRequest) GetPack1() shared.Pack {
+	if o == nil {
+		return shared.Pack{}
+	}
+	return o.Pack1
 }
 
 // UpdateRoutesByPackAndIDResponseBody - a list of Routes objects
