@@ -7,81 +7,81 @@ import (
 	"net/http"
 )
 
-type GetPipelineByPackRequest struct {
-	// pack ID to GET
+type GetSystemInputsByPackRequest struct {
+	// pack inputs to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetPipelineByPackRequest) GetPack() string {
+func (o *GetSystemInputsByPackRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
 	return o.Pack
 }
 
-func (o *GetPipelineByPackRequest) GetGroupID() string {
+func (o *GetSystemInputsByPackRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// GetPipelineByPackResponseBody - a list of Pipeline objects
-type GetPipelineByPackResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
+// GetSystemInputsByPackResponseBody - a list of Routes objects
+type GetSystemInputsByPackResponseBody struct {
+	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetPipelineByPackResponseBody) GetItems() []shared.Pipeline {
+func (o *GetSystemInputsByPackResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetPipelineByPackResponse struct {
+type GetSystemInputsByPackResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
-	Object *GetPipelineByPackResponseBody
+	// a list of Routes objects
+	Object *GetSystemInputsByPackResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetPipelineByPackResponse) GetContentType() string {
+func (o *GetSystemInputsByPackResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetPipelineByPackResponse) GetStatusCode() int {
+func (o *GetSystemInputsByPackResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetPipelineByPackResponse) GetRawResponse() *http.Response {
+func (o *GetSystemInputsByPackResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetPipelineByPackResponse) GetObject() *GetPipelineByPackResponseBody {
+func (o *GetSystemInputsByPackResponse) GetObject() *GetSystemInputsByPackResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetPipelineByPackResponse) GetError() *shared.Error {
+func (o *GetSystemInputsByPackResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

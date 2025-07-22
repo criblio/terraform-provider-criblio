@@ -10,7 +10,7 @@ import (
 type CreatePipelineByPackRequest struct {
 	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New Pipeline object
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`
@@ -37,12 +37,12 @@ func (o *CreatePipelineByPackRequest) GetPipeline() shared.Pipeline {
 	return o.Pipeline
 }
 
-// CreatePipelineByPackResponseBody - a list of Pipeline objects
+// CreatePipelineByPackResponseBody - a list of Routes objects
 type CreatePipelineByPackResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
+	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *CreatePipelineByPackResponseBody) GetItems() []shared.Pipeline {
+func (o *CreatePipelineByPackResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ type CreatePipelineByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
+	// a list of Routes objects
 	Object *CreatePipelineByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

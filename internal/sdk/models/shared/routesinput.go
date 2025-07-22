@@ -66,44 +66,6 @@ func (o *Comment) GetAdditionalProperties() any {
 	return o.AdditionalProperties
 }
 
-type Routes struct {
-	// Routes ID
-	ID *string `json:"id,omitempty"`
-	// Pipeline routing rules
-	Routes []RoutesRoute           `json:"routes"`
-	Groups map[string]RoutesGroups `json:"groups,omitempty"`
-	// Comments
-	Comments []Comment `json:"comments,omitempty"`
-}
-
-func (o *Routes) GetID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ID
-}
-
-func (o *Routes) GetRoutes() []RoutesRoute {
-	if o == nil {
-		return []RoutesRoute{}
-	}
-	return o.Routes
-}
-
-func (o *Routes) GetGroups() map[string]RoutesGroups {
-	if o == nil {
-		return nil
-	}
-	return o.Groups
-}
-
-func (o *Routes) GetComments() []Comment {
-	if o == nil {
-		return nil
-	}
-	return o.Comments
-}
-
 type RoutesInput struct {
 	// Routes ID
 	ID *string `json:"id,omitempty"`
@@ -136,6 +98,44 @@ func (o *RoutesInput) GetGroups() map[string]RoutesGroups {
 }
 
 func (o *RoutesInput) GetComments() []Comment {
+	if o == nil {
+		return nil
+	}
+	return o.Comments
+}
+
+type Routes struct {
+	// Routes ID
+	ID *string `json:"id,omitempty"`
+	// Pipeline routing rules
+	Routes []RoutesRoute           `json:"routes"`
+	Groups map[string]RoutesGroups `json:"groups,omitempty"`
+	// Comments
+	Comments []Comment `json:"comments,omitempty"`
+}
+
+func (o *Routes) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *Routes) GetRoutes() []RoutesRoute {
+	if o == nil {
+		return []RoutesRoute{}
+	}
+	return o.Routes
+}
+
+func (o *Routes) GetGroups() map[string]RoutesGroups {
+	if o == nil {
+		return nil
+	}
+	return o.Groups
+}
+
+func (o *Routes) GetComments() []Comment {
 	if o == nil {
 		return nil
 	}

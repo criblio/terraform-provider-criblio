@@ -828,7 +828,7 @@ func (s *GlobalVariables) GetGlobalVariableLibVarsByPack(ctx context.Context, re
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/p/{pack}/lib/vars", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/p/{pack}/lib/vars", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -984,7 +984,7 @@ func (s *GlobalVariables) CreateGlobalVariableLibVarsByPack(ctx context.Context,
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/p/{pack}/lib/vars", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/p/{pack}/lib/vars", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1143,7 +1143,7 @@ func (s *GlobalVariables) GetGlobalVariableLibVarsByPackAndID(ctx context.Contex
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/p/{pack}/lib/vars/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/p/{pack}/lib/vars/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1295,7 +1295,7 @@ func (s *GlobalVariables) UpdateGlobalVariableLibVarsByPackAndID(ctx context.Con
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/p/{pack}/lib/vars/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/p/{pack}/lib/vars/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1454,7 +1454,7 @@ func (s *GlobalVariables) DeleteGlobalVariableLibVarsByPackAndID(ctx context.Con
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/p/{pack}/lib/vars/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/p/{pack}/lib/vars/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

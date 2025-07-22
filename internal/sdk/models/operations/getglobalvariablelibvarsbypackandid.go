@@ -12,6 +12,8 @@ type GetGlobalVariableLibVarsByPackAndIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *GetGlobalVariableLibVarsByPackAndIDRequest) GetID() string {
@@ -26,6 +28,13 @@ func (o *GetGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *GetGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // GetGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects

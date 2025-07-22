@@ -1,0 +1,1 @@
+../../../../../examples/pack-with-source/main.tf

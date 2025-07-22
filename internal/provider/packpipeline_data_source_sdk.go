@@ -4,64 +4,112 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
+func (r *PackPipelineDataSourceModel) RefreshFromOperationsGetPipelinesByPackResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(resp.Conf.AsyncFuncTimeout)
-	r.Conf.Description = types.StringPointerValue(resp.Conf.Description)
-	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-	if len(r.Conf.Functions) > len(resp.Conf.Functions) {
-		r.Conf.Functions = r.Conf.Functions[:len(resp.Conf.Functions)]
-	}
-	for functionsCount, functionsItem := range resp.Conf.Functions {
-		var functions tfTypes.PipelineFunctionConf
-		functions.Description = types.StringPointerValue(functionsItem.Description)
-		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
-		functions.Filter = types.StringPointerValue(functionsItem.Filter)
-		functions.Final = types.BoolPointerValue(functionsItem.Final)
-		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-		functions.ID = types.StringValue(functionsItem.ID)
-		if functionsCount+1 > len(r.Conf.Functions) {
-			r.Conf.Functions = append(r.Conf.Functions, functions)
-		} else {
-			r.Conf.Functions[functionsCount].Conf = functions.Conf
-			r.Conf.Functions[functionsCount].Description = functions.Description
-			r.Conf.Functions[functionsCount].Disabled = functions.Disabled
-			r.Conf.Functions[functionsCount].Filter = functions.Filter
-			r.Conf.Functions[functionsCount].Final = functions.Final
-			r.Conf.Functions[functionsCount].GroupID = functions.GroupID
-			r.Conf.Functions[functionsCount].ID = functions.ID
+	if resp != nil {
+		r.Items = []tfTypes.Routes{}
+		if len(r.Items) > len(resp.Items) {
+			r.Items = r.Items[:len(resp.Items)]
 		}
-	}
-	if len(resp.Conf.Groups) > 0 {
-		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
-		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
-			var pipelineGroupsResult tfTypes.PipelineGroups
-			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
+		for itemsCount, itemsItem := range resp.Items {
+			var items tfTypes.Routes
+			items.Comments = []tfTypes.Comment{}
+			for commentsCount, commentsItem := range itemsItem.Comments {
+				var comments tfTypes.Comment
+				if commentsItem.AdditionalProperties == nil {
+					comments.AdditionalProperties = types.StringNull()
+				} else {
+					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
+					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
+				}
+				comments.Comment = types.StringPointerValue(commentsItem.Comment)
+				if commentsCount+1 > len(items.Comments) {
+					items.Comments = append(items.Comments, comments)
+				} else {
+					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
+					items.Comments[commentsCount].Comment = comments.Comment
+				}
+			}
+			if len(itemsItem.Groups) > 0 {
+				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
+				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
+					var routesGroupsResult tfTypes.RoutesGroups
+					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
+					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
+					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
 
-			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+					items.Groups[routesGroupsKey] = routesGroupsResult
+				}
+			}
+			items.ID = types.StringPointerValue(itemsItem.ID)
+			items.Routes = []tfTypes.RoutesRoute{}
+			for routesCount, routesItem := range itemsItem.Routes {
+				var routes tfTypes.RoutesRoute
+				if routesItem.AdditionalProperties == nil {
+					routes.AdditionalProperties = types.StringNull()
+				} else {
+					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
+					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
+				}
+				routes.Description = types.StringPointerValue(routesItem.Description)
+				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
+				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
+				routes.Filter = types.StringPointerValue(routesItem.Filter)
+				routes.Final = types.BoolPointerValue(routesItem.Final)
+				routes.ID = types.StringPointerValue(routesItem.ID)
+				routes.Name = types.StringValue(routesItem.Name)
+				if routesItem.Output == nil {
+					routes.Output = types.StringNull()
+				} else {
+					outputResult, _ := json.Marshal(routesItem.Output)
+					routes.Output = types.StringValue(string(outputResult))
+				}
+				if routesItem.OutputExpression == nil {
+					routes.OutputExpression = types.StringNull()
+				} else {
+					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
+					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
+				}
+				routes.Pipeline = types.StringValue(routesItem.Pipeline)
+				if routesCount+1 > len(items.Routes) {
+					items.Routes = append(items.Routes, routes)
+				} else {
+					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
+					items.Routes[routesCount].Description = routes.Description
+					items.Routes[routesCount].Disabled = routes.Disabled
+					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
+					items.Routes[routesCount].Filter = routes.Filter
+					items.Routes[routesCount].Final = routes.Final
+					items.Routes[routesCount].ID = routes.ID
+					items.Routes[routesCount].Name = routes.Name
+					items.Routes[routesCount].Output = routes.Output
+					items.Routes[routesCount].OutputExpression = routes.OutputExpression
+					items.Routes[routesCount].Pipeline = routes.Pipeline
+				}
+			}
+			if itemsCount+1 > len(r.Items) {
+				r.Items = append(r.Items, items)
+			} else {
+				r.Items[itemsCount].Comments = items.Comments
+				r.Items[itemsCount].Groups = items.Groups
+				r.Items[itemsCount].ID = items.ID
+				r.Items[itemsCount].Routes = items.Routes
+			}
 		}
 	}
-	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
-	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
-	for _, v := range resp.Conf.Streamtags {
-		r.Conf.Streamtags = append(r.Conf.Streamtags, types.StringValue(v))
-	}
-	r.ID = types.StringValue(resp.ID)
 
 	return diags
 }
 
-func (r *PackPipelineDataSourceModel) ToOperationsGetPipelineByPackRequest(ctx context.Context) (*operations.GetPipelineByPackRequest, diag.Diagnostics) {
+func (r *PackPipelineDataSourceModel) ToOperationsGetPipelinesByPackRequest(ctx context.Context) (*operations.GetPipelinesByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var pack string
@@ -70,7 +118,7 @@ func (r *PackPipelineDataSourceModel) ToOperationsGetPipelineByPackRequest(ctx c
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetPipelineByPackRequest{
+	out := operations.GetPipelinesByPackRequest{
 		Pack:    pack,
 		GroupID: groupID,
 	}

@@ -11,11 +11,11 @@ type UpdatePipelineByPackAndIDRequest struct {
 	// Unique ID to PATCH for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to PATCH
-	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
-	GroupID  string `pathParam:"style=simple,explode=false,name=groupId"`
+	Pack     string `pathParam:"style=simple,explode=false,name=pack"`
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
-	// Pipeline object to be updated
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// New Pipeline object
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`
 }
 
@@ -33,18 +33,18 @@ func (o *UpdatePipelineByPackAndIDRequest) GetPack() string {
 	return o.Pack
 }
 
-func (o *UpdatePipelineByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
-}
-
 func (o *UpdatePipelineByPackAndIDRequest) GetDisabled() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Disabled
+}
+
+func (o *UpdatePipelineByPackAndIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 func (o *UpdatePipelineByPackAndIDRequest) GetPipeline() shared.Pipeline {

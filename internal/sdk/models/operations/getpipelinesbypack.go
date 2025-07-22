@@ -7,40 +7,40 @@ import (
 	"net/http"
 )
 
-type GetRoutesByPackAndIDRequest struct {
-	// Unique ID to GET for pack
-	ID string `pathParam:"style=simple,explode=false,name=id"`
+type GetPipelinesByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetRoutesByPackAndIDRequest) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
-}
-
-func (o *GetRoutesByPackAndIDRequest) GetPack() string {
+func (o *GetPipelinesByPackRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
 	return o.Pack
 }
 
-// GetRoutesByPackAndIDResponseBody - a list of Routes objects
-type GetRoutesByPackAndIDResponseBody struct {
+func (o *GetPipelinesByPackRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
+}
+
+// GetPipelinesByPackResponseBody - a list of Routes objects
+type GetPipelinesByPackResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetRoutesByPackAndIDResponseBody) GetItems() []shared.Routes {
+func (o *GetPipelinesByPackResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetRoutesByPackAndIDResponse struct {
+type GetPipelinesByPackResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,40 +48,40 @@ type GetRoutesByPackAndIDResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Routes objects
-	Object *GetRoutesByPackAndIDResponseBody
+	Object *GetPipelinesByPackResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetContentType() string {
+func (o *GetPipelinesByPackResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetStatusCode() int {
+func (o *GetPipelinesByPackResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetRawResponse() *http.Response {
+func (o *GetPipelinesByPackResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetObject() *GetRoutesByPackAndIDResponseBody {
+func (o *GetPipelinesByPackResponse) GetObject() *GetPipelinesByPackResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetRoutesByPackAndIDResponse) GetError() *shared.Error {
+func (o *GetPipelinesByPackResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

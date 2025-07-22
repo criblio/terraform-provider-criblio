@@ -10,6 +10,8 @@ import (
 type GetRoutesByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (o *GetRoutesByPackRequest) GetPack() string {
@@ -17,6 +19,13 @@ func (o *GetRoutesByPackRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *GetRoutesByPackRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 // GetRoutesByPackResponseBody - a list of Routes objects

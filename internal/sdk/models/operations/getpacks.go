@@ -7,41 +7,12 @@ import (
 	"net/http"
 )
 
-type GetPacksRequest struct {
-	// Comma separated list of entities, "outputs", "inputs"
-	With *string `queryParam:"style=form,explode=true,name=with"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
-	GroupID  string `pathParam:"style=simple,explode=false,name=groupId"`
-	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
-}
-
-func (o *GetPacksRequest) GetWith() *string {
-	if o == nil {
-		return nil
-	}
-	return o.With
-}
-
-func (o *GetPacksRequest) GetGroupID() string {
-	if o == nil {
-		return ""
-	}
-	return o.GroupID
-}
-
-func (o *GetPacksRequest) GetDisabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Disabled
-}
-
-// GetPacksResponseBody - a list of PackInfo objects
+// GetPacksResponseBody - a list of Routes objects
 type GetPacksResponseBody struct {
-	Items []shared.PackInfo `json:"items,omitempty"`
+	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetPacksResponseBody) GetItems() []shared.PackInfo {
+func (o *GetPacksResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
@@ -55,7 +26,7 @@ type GetPacksResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of PackInfo objects
+	// a list of Routes objects
 	Object *GetPacksResponseBody
 	// Unexpected error
 	Error *shared.Error

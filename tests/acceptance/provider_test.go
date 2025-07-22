@@ -1,9 +1,9 @@
 package tests
 
 import (
-	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
+	"github.com/criblio/terraform-provider-criblio/internal/provider"
 )
 
 var (

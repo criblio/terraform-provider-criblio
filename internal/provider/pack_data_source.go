@@ -167,13 +167,13 @@ func (r *PackDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetPacksRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPacksByGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Packs.GetPacks(ctx, *request)
+	res, err := r.client.Packs.GetPacksByGroup(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -193,7 +193,7 @@ func (r *PackDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByGroupResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

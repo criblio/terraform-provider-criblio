@@ -10,6 +10,8 @@ import (
 type CreateGlobalVariableLibVarsByPackRequest struct {
 	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New Global Variable object
 	GlobalVar shared.GlobalVar `request:"mediaType=application/json"`
 }
@@ -19,6 +21,13 @@ func (o *CreateGlobalVariableLibVarsByPackRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *CreateGlobalVariableLibVarsByPackRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 func (o *CreateGlobalVariableLibVarsByPackRequest) GetGlobalVar() shared.GlobalVar {

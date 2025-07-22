@@ -35,6 +35,235 @@ func (e *LookupFileMode2) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type LookupFileInput2 struct {
+	// File content.
+	Content     *string `json:"content,omitempty"`
+	ID          string  `json:"id"`
+	Description *string `json:"description,omitempty"`
+	// One or more tags related to this lookup. Optional.
+	Tags *string `json:"tags,omitempty"`
+	// File size. Optional.
+	Size *float64         `json:"size,omitempty"`
+	Mode *LookupFileMode2 `default:"memory" json:"mode"`
+}
+
+func (l LookupFileInput2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LookupFileInput2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *LookupFileInput2) GetContent() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Content
+}
+
+func (o *LookupFileInput2) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *LookupFileInput2) GetDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *LookupFileInput2) GetTags() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Tags
+}
+
+func (o *LookupFileInput2) GetSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.Size
+}
+
+func (o *LookupFileInput2) GetMode() *LookupFileMode2 {
+	if o == nil {
+		return nil
+	}
+	return o.Mode
+}
+
+type FileInfo struct {
+	Filename string `json:"filename"`
+}
+
+func (o *FileInfo) GetFilename() string {
+	if o == nil {
+		return ""
+	}
+	return o.Filename
+}
+
+type LookupFileMode1 string
+
+const (
+	LookupFileMode1Memory LookupFileMode1 = "memory"
+	LookupFileMode1Disk   LookupFileMode1 = "disk"
+)
+
+func (e LookupFileMode1) ToPointer() *LookupFileMode1 {
+	return &e
+}
+func (e *LookupFileMode1) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "memory":
+		fallthrough
+	case "disk":
+		*e = LookupFileMode1(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for LookupFileMode1: %v", v)
+	}
+}
+
+type LookupFileInput1 struct {
+	FileInfo    *FileInfo `json:"fileInfo,omitempty"`
+	ID          string    `json:"id"`
+	Description *string   `json:"description,omitempty"`
+	// One or more tags related to this lookup. Optional.
+	Tags *string `json:"tags,omitempty"`
+	// File size. Optional.
+	Size *float64         `json:"size,omitempty"`
+	Mode *LookupFileMode1 `default:"memory" json:"mode"`
+}
+
+func (l LookupFileInput1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LookupFileInput1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *LookupFileInput1) GetFileInfo() *FileInfo {
+	if o == nil {
+		return nil
+	}
+	return o.FileInfo
+}
+
+func (o *LookupFileInput1) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *LookupFileInput1) GetDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *LookupFileInput1) GetTags() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Tags
+}
+
+func (o *LookupFileInput1) GetSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.Size
+}
+
+func (o *LookupFileInput1) GetMode() *LookupFileMode1 {
+	if o == nil {
+		return nil
+	}
+	return o.Mode
+}
+
+type LookupFileInputUnionType string
+
+const (
+	LookupFileInputUnionTypeLookupFileInput1 LookupFileInputUnionType = "LookupFile_input_1"
+	LookupFileInputUnionTypeLookupFileInput2 LookupFileInputUnionType = "LookupFile_input_2"
+)
+
+type LookupFileInputUnion struct {
+	LookupFileInput1 *LookupFileInput1 `queryParam:"inline"`
+	LookupFileInput2 *LookupFileInput2 `queryParam:"inline"`
+
+	Type LookupFileInputUnionType
+}
+
+func CreateLookupFileInputUnionLookupFileInput1(lookupFileInput1 LookupFileInput1) LookupFileInputUnion {
+	typ := LookupFileInputUnionTypeLookupFileInput1
+
+	return LookupFileInputUnion{
+		LookupFileInput1: &lookupFileInput1,
+		Type:             typ,
+	}
+}
+
+func CreateLookupFileInputUnionLookupFileInput2(lookupFileInput2 LookupFileInput2) LookupFileInputUnion {
+	typ := LookupFileInputUnionTypeLookupFileInput2
+
+	return LookupFileInputUnion{
+		LookupFileInput2: &lookupFileInput2,
+		Type:             typ,
+	}
+}
+
+func (u *LookupFileInputUnion) UnmarshalJSON(data []byte) error {
+
+	var lookupFileInput1 LookupFileInput1 = LookupFileInput1{}
+	if err := utils.UnmarshalJSON(data, &lookupFileInput1, "", true, true); err == nil {
+		u.LookupFileInput1 = &lookupFileInput1
+		u.Type = LookupFileInputUnionTypeLookupFileInput1
+		return nil
+	}
+
+	var lookupFileInput2 LookupFileInput2 = LookupFileInput2{}
+	if err := utils.UnmarshalJSON(data, &lookupFileInput2, "", true, true); err == nil {
+		u.LookupFileInput2 = &lookupFileInput2
+		u.Type = LookupFileInputUnionTypeLookupFileInput2
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for LookupFileInputUnion", string(data))
+}
+
+func (u LookupFileInputUnion) MarshalJSON() ([]byte, error) {
+	if u.LookupFileInput1 != nil {
+		return utils.MarshalJSON(u.LookupFileInput1, "", true)
+	}
+
+	if u.LookupFileInput2 != nil {
+		return utils.MarshalJSON(u.LookupFileInput2, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type LookupFileInputUnion: all fields are null")
+}
+
 // LookupFileType2 - Task type
 type LookupFileType2 string
 
@@ -172,43 +401,6 @@ func (o *LookupFile2) GetPendingTask() *PendingTask2 {
 		return nil
 	}
 	return o.PendingTask
-}
-
-type FileInfo struct {
-	Filename string `json:"filename"`
-}
-
-func (o *FileInfo) GetFilename() string {
-	if o == nil {
-		return ""
-	}
-	return o.Filename
-}
-
-type LookupFileMode1 string
-
-const (
-	LookupFileMode1Memory LookupFileMode1 = "memory"
-	LookupFileMode1Disk   LookupFileMode1 = "disk"
-)
-
-func (e LookupFileMode1) ToPointer() *LookupFileMode1 {
-	return &e
-}
-func (e *LookupFileMode1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "memory":
-		fallthrough
-	case "disk":
-		*e = LookupFileMode1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for LookupFileMode1: %v", v)
-	}
 }
 
 // LookupFileType1 - Task type
@@ -410,196 +602,4 @@ func (u LookupFileUnion) MarshalJSON() ([]byte, error) {
 	}
 
 	return nil, errors.New("could not marshal union type LookupFileUnion: all fields are null")
-}
-
-type LookupFileInput2 struct {
-	// File content.
-	Content     *string `json:"content,omitempty"`
-	ID          string  `json:"id"`
-	Description *string `json:"description,omitempty"`
-	// One or more tags related to this lookup. Optional.
-	Tags *string `json:"tags,omitempty"`
-	// File size. Optional.
-	Size *float64         `json:"size,omitempty"`
-	Mode *LookupFileMode2 `default:"memory" json:"mode"`
-}
-
-func (l LookupFileInput2) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(l, "", false)
-}
-
-func (l *LookupFileInput2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, true); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *LookupFileInput2) GetContent() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Content
-}
-
-func (o *LookupFileInput2) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
-}
-
-func (o *LookupFileInput2) GetDescription() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Description
-}
-
-func (o *LookupFileInput2) GetTags() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Tags
-}
-
-func (o *LookupFileInput2) GetSize() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Size
-}
-
-func (o *LookupFileInput2) GetMode() *LookupFileMode2 {
-	if o == nil {
-		return nil
-	}
-	return o.Mode
-}
-
-type LookupFileInput1 struct {
-	FileInfo    *FileInfo `json:"fileInfo,omitempty"`
-	ID          string    `json:"id"`
-	Description *string   `json:"description,omitempty"`
-	// One or more tags related to this lookup. Optional.
-	Tags *string `json:"tags,omitempty"`
-	// File size. Optional.
-	Size *float64         `json:"size,omitempty"`
-	Mode *LookupFileMode1 `default:"memory" json:"mode"`
-}
-
-func (l LookupFileInput1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(l, "", false)
-}
-
-func (l *LookupFileInput1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, true); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *LookupFileInput1) GetFileInfo() *FileInfo {
-	if o == nil {
-		return nil
-	}
-	return o.FileInfo
-}
-
-func (o *LookupFileInput1) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
-}
-
-func (o *LookupFileInput1) GetDescription() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Description
-}
-
-func (o *LookupFileInput1) GetTags() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Tags
-}
-
-func (o *LookupFileInput1) GetSize() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Size
-}
-
-func (o *LookupFileInput1) GetMode() *LookupFileMode1 {
-	if o == nil {
-		return nil
-	}
-	return o.Mode
-}
-
-type LookupFileInputUnionType string
-
-const (
-	LookupFileInputUnionTypeLookupFileInput1 LookupFileInputUnionType = "LookupFile_input_1"
-	LookupFileInputUnionTypeLookupFileInput2 LookupFileInputUnionType = "LookupFile_input_2"
-)
-
-type LookupFileInputUnion struct {
-	LookupFileInput1 *LookupFileInput1 `queryParam:"inline"`
-	LookupFileInput2 *LookupFileInput2 `queryParam:"inline"`
-
-	Type LookupFileInputUnionType
-}
-
-func CreateLookupFileInputUnionLookupFileInput1(lookupFileInput1 LookupFileInput1) LookupFileInputUnion {
-	typ := LookupFileInputUnionTypeLookupFileInput1
-
-	return LookupFileInputUnion{
-		LookupFileInput1: &lookupFileInput1,
-		Type:             typ,
-	}
-}
-
-func CreateLookupFileInputUnionLookupFileInput2(lookupFileInput2 LookupFileInput2) LookupFileInputUnion {
-	typ := LookupFileInputUnionTypeLookupFileInput2
-
-	return LookupFileInputUnion{
-		LookupFileInput2: &lookupFileInput2,
-		Type:             typ,
-	}
-}
-
-func (u *LookupFileInputUnion) UnmarshalJSON(data []byte) error {
-
-	var lookupFileInput1 LookupFileInput1 = LookupFileInput1{}
-	if err := utils.UnmarshalJSON(data, &lookupFileInput1, "", true, true); err == nil {
-		u.LookupFileInput1 = &lookupFileInput1
-		u.Type = LookupFileInputUnionTypeLookupFileInput1
-		return nil
-	}
-
-	var lookupFileInput2 LookupFileInput2 = LookupFileInput2{}
-	if err := utils.UnmarshalJSON(data, &lookupFileInput2, "", true, true); err == nil {
-		u.LookupFileInput2 = &lookupFileInput2
-		u.Type = LookupFileInputUnionTypeLookupFileInput2
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for LookupFileInputUnion", string(data))
-}
-
-func (u LookupFileInputUnion) MarshalJSON() ([]byte, error) {
-	if u.LookupFileInput1 != nil {
-		return utils.MarshalJSON(u.LookupFileInput1, "", true)
-	}
-
-	if u.LookupFileInput2 != nil {
-		return utils.MarshalJSON(u.LookupFileInput2, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type LookupFileInputUnion: all fields are null")
 }

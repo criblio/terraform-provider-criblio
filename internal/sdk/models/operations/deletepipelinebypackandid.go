@@ -10,9 +10,9 @@ import (
 type DeletePipelineByPackAndIDRequest struct {
 	// Unique ID to DELETE for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// pack ID to DELETE
+	// pack pipeline ID to DELETE
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 

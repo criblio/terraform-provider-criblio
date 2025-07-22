@@ -7,90 +7,90 @@ import (
 	"net/http"
 )
 
-type GetPipelineByPackAndIDRequest struct {
+type GetBreakersByPackAndIDRequest struct {
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// pack ID to GET
+	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetPipelineByPackAndIDRequest) GetID() string {
+func (o *GetBreakersByPackAndIDRequest) GetID() string {
 	if o == nil {
 		return ""
 	}
 	return o.ID
 }
 
-func (o *GetPipelineByPackAndIDRequest) GetPack() string {
+func (o *GetBreakersByPackAndIDRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
 	return o.Pack
 }
 
-func (o *GetPipelineByPackAndIDRequest) GetGroupID() string {
+func (o *GetBreakersByPackAndIDRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// GetPipelineByPackAndIDResponseBody - a list of Pipeline objects
-type GetPipelineByPackAndIDResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
+// GetBreakersByPackAndIDResponseBody - a list of Routes objects
+type GetBreakersByPackAndIDResponseBody struct {
+	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetPipelineByPackAndIDResponseBody) GetItems() []shared.Pipeline {
+func (o *GetBreakersByPackAndIDResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetPipelineByPackAndIDResponse struct {
+type GetBreakersByPackAndIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
-	Object *GetPipelineByPackAndIDResponseBody
+	// a list of Routes objects
+	Object *GetBreakersByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetContentType() string {
+func (o *GetBreakersByPackAndIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetStatusCode() int {
+func (o *GetBreakersByPackAndIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetRawResponse() *http.Response {
+func (o *GetBreakersByPackAndIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetObject() *GetPipelineByPackAndIDResponseBody {
+func (o *GetBreakersByPackAndIDResponse) GetObject() *GetBreakersByPackAndIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetPipelineByPackAndIDResponse) GetError() *shared.Error {
+func (o *GetBreakersByPackAndIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

@@ -12,6 +12,8 @@ type CreateRoutesAppendByPackAndIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
+	// group Id
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// RouteDefinitions object
 	RequestBody []shared.RouteConf `request:"mediaType=application/json"`
 }
@@ -28,6 +30,13 @@ func (o *CreateRoutesAppendByPackAndIDRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *CreateRoutesAppendByPackAndIDRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
 }
 
 func (o *CreateRoutesAppendByPackAndIDRequest) GetRequestBody() []shared.RouteConf {
