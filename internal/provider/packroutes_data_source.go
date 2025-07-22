@@ -29,15 +29,9 @@ type PackRoutesDataSource struct {
 
 // PackRoutesDataSourceModel describes the data model.
 type PackRoutesDataSourceModel struct {
-	Description       types.String     `tfsdk:"description"`
-	Disabled          types.Bool       `tfsdk:"disabled"`
-	DisplayName       types.String     `tfsdk:"display_name"`
-	GroupID           types.String     `tfsdk:"group_id"`
-	ID                types.String     `tfsdk:"id"`
-	Items             []tfTypes.Routes `tfsdk:"items"`
-	PackPathParameter types.String     `tfsdk:"pack_path_parameter"`
-	Source            types.String     `tfsdk:"source"`
-	Version           types.String     `tfsdk:"version"`
+	GroupID types.String     `tfsdk:"group_id"`
+	Items   []tfTypes.Routes `tfsdk:"items"`
+	Pack    types.String     `tfsdk:"pack"`
 }
 
 // Metadata returns the data source type name.
@@ -51,21 +45,9 @@ func (r *PackRoutesDataSource) Schema(ctx context.Context, req datasource.Schema
 		MarkdownDescription: "PackRoutes DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
-				Optional: true,
-			},
-			"disabled": schema.BoolAttribute{
-				Optional: true,
-			},
-			"display_name": schema.StringAttribute{
-				Optional: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
-			},
-			"id": schema.StringAttribute{
-				Required: true,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -161,15 +143,9 @@ func (r *PackRoutesDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
-			"pack_path_parameter": schema.StringAttribute{
+			"pack": schema.StringAttribute{
 				Required:    true,
 				Description: `pack ID to GET`,
-			},
-			"source": schema.StringAttribute{
-				Optional: true,
-			},
-			"version": schema.StringAttribute{
-				Optional: true,
 			},
 		},
 	}

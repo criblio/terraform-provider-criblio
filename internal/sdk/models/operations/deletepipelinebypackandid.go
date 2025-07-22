@@ -14,8 +14,6 @@ type DeletePipelineByPackAndIDRequest struct {
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// Pipeline object to be updated
-	Pipeline shared.Pipeline `request:"mediaType=application/json"`
 }
 
 func (o *DeletePipelineByPackAndIDRequest) GetID() string {
@@ -37,13 +35,6 @@ func (o *DeletePipelineByPackAndIDRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
-}
-
-func (o *DeletePipelineByPackAndIDRequest) GetPipeline() shared.Pipeline {
-	if o == nil {
-		return shared.Pipeline{}
-	}
-	return o.Pipeline
 }
 
 // DeletePipelineByPackAndIDResponseBody - a list of Pipeline objects

@@ -318,17 +318,9 @@ func (r *PackLookupsResourceModel) ToOperationsGetSystemLookupsByPackRequest(ctx
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	lookupFile, lookupFileDiags := r.ToSharedLookupFileInputUnion(ctx)
-	diags.Append(lookupFileDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
 	out := operations.GetSystemLookupsByPackRequest{
-		Pack:       pack,
-		GroupID:    groupID,
-		LookupFile: *lookupFile,
+		Pack:    pack,
+		GroupID: groupID,
 	}
 
 	return &out, diags

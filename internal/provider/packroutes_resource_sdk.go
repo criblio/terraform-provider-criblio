@@ -9,18 +9,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	tfTypes "github.com/speakeasy/terraform-provider-criblio/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/speakeasy/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
 func (r *PackRoutesResourceModel) RefreshFromOperationsCreateRoutesByPackResponseBody(ctx context.Context, resp *operations.CreateRoutesByPackResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.Description = rPriorData.Description
-		r.Disabled = rPriorData.Disabled
-		r.DisplayName = rPriorData.DisplayName
-		r.GroupID = rPriorData.GroupID
-		r.ID = rPriorData.ID
 		r.Items = []tfTypes.Routes1{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
@@ -78,10 +73,6 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsCreateRoutesByPackRespons
 				r.Items[itemsCount].ID = items.ID
 			}
 		}
-		r.Pack = rPriorData.Pack
-		r.PackPathParameter = rPriorData.PackPathParameter
-		r.Source = rPriorData.Source
-		r.Version = rPriorData.Version
 	}
 
 	return diags
@@ -91,12 +82,6 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsGetRoutesByPackResponseBo
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.Description = rPriorData.Description
-		r.Disabled = rPriorData.Disabled
-		r.DisplayName = rPriorData.DisplayName
-		r.GroupID = rPriorData.GroupID
-		r.ID = rPriorData.ID
 		r.Items = []tfTypes.Routes1{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
@@ -188,10 +173,6 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsGetRoutesByPackResponseBo
 				r.Items[itemsCount].Routes = items.Routes
 			}
 		}
-		r.Pack = rPriorData.Pack
-		r.PackPathParameter = rPriorData.PackPathParameter
-		r.Source = rPriorData.Source
-		r.Version = rPriorData.Version
 	}
 
 	return diags
@@ -201,12 +182,6 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsUpdateRoutesByPackAndIDRe
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.Description = rPriorData.Description
-		r.Disabled = rPriorData.Disabled
-		r.DisplayName = rPriorData.DisplayName
-		r.GroupID = rPriorData.GroupID
-		r.ID = rPriorData.ID
 		r.Items = []tfTypes.Routes1{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
@@ -298,10 +273,6 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsUpdateRoutesByPackAndIDRe
 				r.Items[itemsCount].Routes = items.Routes
 			}
 		}
-		r.Pack = rPriorData.Pack
-		r.PackPathParameter = rPriorData.PackPathParameter
-		r.Source = rPriorData.Source
-		r.Version = rPriorData.Version
 	}
 
 	return diags
@@ -310,15 +281,24 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsUpdateRoutesByPackAndIDRe
 func (r *PackRoutesResourceModel) ToOperationsCreateRoutesByPackRequest(ctx context.Context) (*operations.CreateRoutesByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var packPathParameter string
-	packPathParameter = r.PackPathParameter.ValueString()
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	routesPtr, routesDiags := r.ToSharedRoutesInput(ctx)
+	diags.Append(routesDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	routes := *routesPtr
 	out := operations.CreateRoutesByPackRequest{
-		PackPathParameter: packPathParameter,
-		GroupID:           groupID,
+		Pack:    pack,
+		GroupID: groupID,
+		Routes:  routes,
 	}
 
 	return &out, diags
@@ -348,15 +328,15 @@ func (r *PackRoutesResourceModel) ToOperationsDeleteRoutesByPackAndIDRequest(ctx
 func (r *PackRoutesResourceModel) ToOperationsGetRoutesByPackRequest(ctx context.Context) (*operations.GetRoutesByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var packPathParameter string
-	packPathParameter = r.PackPathParameter.ValueString()
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
 	out := operations.GetRoutesByPackRequest{
-		PackPathParameter: packPathParameter,
-		GroupID:           groupID,
+		Pack:    pack,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -368,16 +348,148 @@ func (r *PackRoutesResourceModel) ToOperationsUpdateRoutesByPackAndIDRequest(ctx
 	var id string
 	id = r.ID.ValueString()
 
-	var packPathParameter string
-	packPathParameter = r.PackPathParameter.ValueString()
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	routesPtr, routesDiags := r.ToSharedRoutesInput(ctx)
+	diags.Append(routesDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	routes := *routesPtr
 	out := operations.UpdateRoutesByPackAndIDRequest{
-		ID:                id,
-		PackPathParameter: packPathParameter,
-		GroupID:           groupID,
+		ID:      id,
+		Pack:    pack,
+		GroupID: groupID,
+		Routes:  routes,
+	}
+
+	return &out, diags
+}
+
+func (r *PackRoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*shared.RoutesInput, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
+	routes := make([]shared.RoutesRouteInput, 0, len(r.Routes))
+	for _, routesItem := range r.Routes {
+		var name string
+		name = routesItem.Name.ValueString()
+
+		disabled := new(bool)
+		if !routesItem.Disabled.IsUnknown() && !routesItem.Disabled.IsNull() {
+			*disabled = routesItem.Disabled.ValueBool()
+		} else {
+			disabled = nil
+		}
+		filter := new(string)
+		if !routesItem.Filter.IsUnknown() && !routesItem.Filter.IsNull() {
+			*filter = routesItem.Filter.ValueString()
+		} else {
+			filter = nil
+		}
+		var pipeline string
+		pipeline = routesItem.Pipeline.ValueString()
+
+		enableOutputExpression := new(bool)
+		if !routesItem.EnableOutputExpression.IsUnknown() && !routesItem.EnableOutputExpression.IsNull() {
+			*enableOutputExpression = routesItem.EnableOutputExpression.ValueBool()
+		} else {
+			enableOutputExpression = nil
+		}
+		var output interface{}
+		if !routesItem.Output.IsUnknown() && !routesItem.Output.IsNull() {
+			_ = json.Unmarshal([]byte(routesItem.Output.ValueString()), &output)
+		}
+		var outputExpression interface{}
+		if !routesItem.OutputExpression.IsUnknown() && !routesItem.OutputExpression.IsNull() {
+			_ = json.Unmarshal([]byte(routesItem.OutputExpression.ValueString()), &outputExpression)
+		}
+		description := new(string)
+		if !routesItem.Description.IsUnknown() && !routesItem.Description.IsNull() {
+			*description = routesItem.Description.ValueString()
+		} else {
+			description = nil
+		}
+		final := new(bool)
+		if !routesItem.Final.IsUnknown() && !routesItem.Final.IsNull() {
+			*final = routesItem.Final.ValueBool()
+		} else {
+			final = nil
+		}
+		var additionalProperties interface{}
+		if !routesItem.AdditionalProperties.IsUnknown() && !routesItem.AdditionalProperties.IsNull() {
+			_ = json.Unmarshal([]byte(routesItem.AdditionalProperties.ValueString()), &additionalProperties)
+		}
+		routes = append(routes, shared.RoutesRouteInput{
+			Name:                   name,
+			Disabled:               disabled,
+			Filter:                 filter,
+			Pipeline:               pipeline,
+			EnableOutputExpression: enableOutputExpression,
+			Output:                 output,
+			OutputExpression:       outputExpression,
+			Description:            description,
+			Final:                  final,
+			AdditionalProperties:   additionalProperties,
+		})
+	}
+	groups := make(map[string]shared.RoutesGroups)
+	for groupsKey, groupsValue := range r.Groups {
+		var name1 string
+		name1 = groupsValue.Name.ValueString()
+
+		description1 := new(string)
+		if !groupsValue.Description.IsUnknown() && !groupsValue.Description.IsNull() {
+			*description1 = groupsValue.Description.ValueString()
+		} else {
+			description1 = nil
+		}
+		disabled1 := new(bool)
+		if !groupsValue.Disabled.IsUnknown() && !groupsValue.Disabled.IsNull() {
+			*disabled1 = groupsValue.Disabled.ValueBool()
+		} else {
+			disabled1 = nil
+		}
+		groupsInst := shared.RoutesGroups{
+			Name:        name1,
+			Description: description1,
+			Disabled:    disabled1,
+		}
+		groups[groupsKey] = groupsInst
+	}
+	comments := make([]shared.Comment, 0, len(r.Comments))
+	for _, commentsItem := range r.Comments {
+		comment := new(string)
+		if !commentsItem.Comment.IsUnknown() && !commentsItem.Comment.IsNull() {
+			*comment = commentsItem.Comment.ValueString()
+		} else {
+			comment = nil
+		}
+		var additionalProperties1 interface{}
+		if !commentsItem.AdditionalProperties.IsUnknown() && !commentsItem.AdditionalProperties.IsNull() {
+			_ = json.Unmarshal([]byte(commentsItem.AdditionalProperties.ValueString()), &additionalProperties1)
+		}
+		comments = append(comments, shared.Comment{
+			Comment:              comment,
+			AdditionalProperties: additionalProperties1,
+		})
+	}
+	out := shared.RoutesInput{
+		ID:       id,
+		Routes:   routes,
+		Groups:   groups,
+		Comments: comments,
 	}
 
 	return &out, diags

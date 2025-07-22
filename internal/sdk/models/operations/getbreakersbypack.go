@@ -11,9 +11,8 @@ type GetBreakersByPackRequest struct {
 	// pack ID to GET
 	PackPathParameter string `pathParam:"style=simple,explode=false,name=pack"`
 	// group ID to GET
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// Pipeline object to be updated in specified Project
-	Pack1 shared.Pack `request:"mediaType=application/json"`
+	GroupID string       `pathParam:"style=simple,explode=false,name=groupId"`
+	Pack1   *shared.Pack `request:"mediaType=application/json"`
 }
 
 func (o *GetBreakersByPackRequest) GetPackPathParameter() string {
@@ -30,9 +29,9 @@ func (o *GetBreakersByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *GetBreakersByPackRequest) GetPack1() shared.Pack {
+func (o *GetBreakersByPackRequest) GetPack1() *shared.Pack {
 	if o == nil {
-		return shared.Pack{}
+		return nil
 	}
 	return o.Pack1
 }

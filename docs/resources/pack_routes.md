@@ -14,15 +14,36 @@ PackRoutes Resource
 
 ```terraform
 resource "criblio_pack_routes" "my_packroutes" {
-  description         = "...my_description..."
-  disabled            = true
-  display_name        = "...my_display_name..."
-  group_id            = "...my_group_id..."
-  id                  = "...my_id..."
-  pack                = "...my_pack..."
-  pack_path_parameter = "...my_pack_path_parameter..."
-  source              = "...my_source..."
-  version             = "...my_version..."
+  comments = [
+    {
+      additional_properties = "{ \"see\": \"documentation\" }"
+      comment               = "...my_comment..."
+    }
+  ]
+  group_id = "...my_group_id..."
+  groups = {
+    key = {
+      description = "...my_description..."
+      disabled    = true
+      name        = "...my_name..."
+    }
+  }
+  id   = "...my_id..."
+  pack = "...my_pack..."
+  routes = [
+    {
+      additional_properties    = "{ \"see\": \"documentation\" }"
+      description              = "...my_description..."
+      disabled                 = true
+      enable_output_expression = true
+      filter                   = "...my_filter..."
+      final                    = false
+      name                     = "...my_name..."
+      output                   = "{ \"see\": \"documentation\" }"
+      output_expression        = "{ \"see\": \"documentation\" }"
+      pipeline                 = "...my_pipeline..."
+    }
+  ]
 }
 ```
 
@@ -32,21 +53,60 @@ resource "criblio_pack_routes" "my_packroutes" {
 ### Required
 
 - `group_id` (String) group Id
-- `id` (String) Unique ID to PATCH for pack
-- `pack` (String) pack ID to DELETE
-- `pack_path_parameter` (String) pack inputs to POST
+- `pack` (String) pack inputs to POST
+- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--routes))
 
 ### Optional
 
-- `description` (String)
-- `disabled` (Boolean)
-- `display_name` (String)
-- `source` (String)
-- `version` (String)
+- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--comments))
+- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))
+- `id` (String) Routes ID
 
 ### Read-Only
 
 - `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--routes"></a>
+### Nested Schema for `routes`
+
+Required:
+
+- `name` (String)
+- `pipeline` (String) Pipeline to send the matching data to
+
+Optional:
+
+- `additional_properties` (String) Parsed as JSON.
+- `description` (String)
+- `disabled` (Boolean) Disable this routing rule
+- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false
+- `filter` (String) JavaScript expression to select data to route. Default: "true"
+- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true
+- `output` (String) Parsed as JSON.
+- `output_expression` (String) Parsed as JSON.
+
+
+<a id="nestedatt--comments"></a>
+### Nested Schema for `comments`
+
+Optional:
+
+- `additional_properties` (String) Parsed as JSON.
+- `comment` (String) Optional, short description of this Route's purpose
+
+
+<a id="nestedatt--groups"></a>
+### Nested Schema for `groups`
+
+Required:
+
+- `name` (String)
+
+Optional:
+
+- `description` (String) Short description of this group
+- `disabled` (Boolean) Whether this group is disabled
+
 
 <a id="nestedatt--items"></a>
 ### Nested Schema for `items`
@@ -141,5 +201,5 @@ Read-Only:
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_pack_routes.my_criblio_pack_routes '{"group_id": "", "id": "", "pack_path_parameter": ""}'
+terraform import criblio_pack_routes.my_criblio_pack_routes '{"group_id": "", "pack": ""}'
 ```

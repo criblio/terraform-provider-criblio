@@ -55292,11 +55292,18 @@ paths:
     post:
       x-speakeasy-entity-operation: PackPipeline#create
       operationId: createPipelineByPack
-      tags: *a126
+      tags: *a135
       summary: Create Pipeline within a Pack
       description: Create Pipeline within a Pack
-      requestBody: *a129
-      responses: *a127
+      requestBody:
+        &a129
+        description: New Pipeline object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Pipeline"
+      responses: *a136
       parameters:
         - name: pack
           in: path
@@ -55309,7 +55316,7 @@ paths:
           schema:
             &a138
             type: string
-          description: group ID
+          description: group Id
   "/m/{groupId}/p/{pack}/pipeline/{id}":
     get:
       operationId: getPipelinesByPackWithId
@@ -55336,7 +55343,7 @@ paths:
           schema:
             &a138
             type: string
-          description: group ID 
+          description: group Id
     patch:
       x-speakeasy-entity-operation: PackPipeline#update
       operationId: updatePipelineByPackAndId
@@ -55344,6 +55351,14 @@ paths:
       summary: Update Pipeline within a Pack
       description: Update Pipeline within a Pack
       responses: *a127
+      requestBody:
+        &129
+        description: New Pipeline object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Pipeline"
       parameters:
         - name: id
           in: path
@@ -55373,7 +55388,6 @@ paths:
       tags: *a126
       summary: Delete Pipeline within a Pack
       description: Delete Pipeline within a Pack
-      requestBody: *a131
       responses: *a127
       parameters:
         - name: id
@@ -55422,7 +55436,13 @@ paths:
       tags: *a126
       summary: Create input source for a Pack
       description: Create input source for a Pack
-      requestBody: *a129
+      requestBody:
+        &129
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Input"
       responses: *a127
       parameters:
         - name: pack
@@ -55443,7 +55463,13 @@ paths:
       tags: *a126
       summary: Update input source a Pack
       description: Update input source a Pack
-      requestBody: *a131
+      requestBody:
+        &129
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Input"
       responses: *a127
       parameters:
         - name: pack
@@ -55470,6 +55496,13 @@ paths:
       summary: Delete input source a Pack
       description: Delete input source a Pack
       responses: *a127
+      requestBody:
+        &129
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Input"
       parameters:
         - name: pack
           in: path
@@ -55497,7 +55530,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PackRequestBody"
+              $ref: "#/components/schemas/Output"
       parameters:
         - name: pack
           in: path
@@ -55525,7 +55558,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PackRequestBody"
+              $ref: "#/components/schemas/Output"
       responses: *a127
       parameters:
         - name: pack
@@ -55552,7 +55585,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PackRequestBody"
+              $ref: "#/components/schemas/Output"
       responses: *a127
       parameters:
         - name: pack
@@ -55600,13 +55633,6 @@ paths:
       summary: Get a list of lookup objects within a Pack
       description: Get a list of lookups objects within a Pack
       responses: *a136
-      requestBody:
-        description: Pipeline object to be updated in specified Project
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LookupFile"
       parameters:
         - name: pack
           in: path
@@ -55747,8 +55773,6 @@ paths:
       description: Get a list of breakers within a Pack
       responses: *a136
       requestBody:
-        description: Pipeline object to be updated in specified Project
-        required: true
         content:
           application/json:
             schema:
@@ -55889,13 +55913,6 @@ paths:
       summary: Get a list of Routes objects within a Pack
       description: Get a list of Routes objects within a Pack
       responses: *a136
-      requestBody:
-        description: Pipeline object to be updated in specified Project
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Pack"
       parameters:
         - name: pack
           in: path
@@ -55924,7 +55941,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pack"
+              $ref: "#/components/schemas/Routes"
       parameters:
         - name: pack
           in: path
@@ -55976,7 +55993,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pack"
+              $ref: "#/components/schemas/Routes"
       parameters:
         - name: id
           in: path

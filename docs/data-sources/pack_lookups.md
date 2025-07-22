@@ -15,25 +15,7 @@ PackLookups DataSource
 ```terraform
 data "criblio_pack_lookups" "my_packlookups" {
   group_id = "...my_group_id..."
-  lookup_file_input1 = {
-    description = "...my_description..."
-    file_info = {
-      filename = "...my_filename..."
-    }
-    id   = "...my_id..."
-    mode = "disk"
-    size = 8.47
-    tags = "...my_tags..."
-  }
-  lookup_file_input2 = {
-    content     = "...my_content..."
-    description = "...my_description..."
-    id          = "...my_id..."
-    mode        = "memory"
-    size        = 5.09
-    tags        = "...my_tags..."
-  }
-  pack = "...my_pack..."
+  pack     = "...my_pack..."
 }
 ```
 
@@ -45,54 +27,9 @@ data "criblio_pack_lookups" "my_packlookups" {
 - `group_id` (String) group Id
 - `pack` (String) pack ID to GET
 
-### Optional
-
-- `lookup_file_input1` (Attributes) (see [below for nested schema](#nestedatt--lookup_file_input1))
-- `lookup_file_input2` (Attributes) (see [below for nested schema](#nestedatt--lookup_file_input2))
-
 ### Read-Only
 
 - `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--lookup_file_input1"></a>
-### Nested Schema for `lookup_file_input1`
-
-Required:
-
-- `id` (String)
-
-Optional:
-
-- `description` (String)
-- `file_info` (Attributes) (see [below for nested schema](#nestedatt--lookup_file_input1--file_info))
-- `mode` (String)
-- `size` (Number) File size. Optional.
-- `tags` (String) One or more tags related to this lookup. Optional.
-
-<a id="nestedatt--lookup_file_input1--file_info"></a>
-### Nested Schema for `lookup_file_input1.file_info`
-
-Required:
-
-- `filename` (String)
-
-
-
-<a id="nestedatt--lookup_file_input2"></a>
-### Nested Schema for `lookup_file_input2`
-
-Required:
-
-- `id` (String)
-
-Optional:
-
-- `content` (String) File content.
-- `description` (String)
-- `mode` (String)
-- `size` (Number) File size. Optional.
-- `tags` (String) One or more tags related to this lookup. Optional.
-
 
 <a id="nestedatt--items"></a>
 ### Nested Schema for `items`

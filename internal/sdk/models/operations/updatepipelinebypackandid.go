@@ -15,6 +15,8 @@ type UpdatePipelineByPackAndIDRequest struct {
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// New Pipeline object
+	Pipeline shared.Pipeline `request:"mediaType=application/json"`
 }
 
 func (o *UpdatePipelineByPackAndIDRequest) GetID() string {
@@ -43,6 +45,13 @@ func (o *UpdatePipelineByPackAndIDRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *UpdatePipelineByPackAndIDRequest) GetPipeline() shared.Pipeline {
+	if o == nil {
+		return shared.Pipeline{}
+	}
+	return o.Pipeline
 }
 
 // UpdatePipelineByPackAndIDResponseBody - a list of Pipeline objects

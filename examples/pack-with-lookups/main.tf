@@ -2,11 +2,10 @@ resource "criblio_pack_lookups" "my_packlookups" {
   group_id = "default"
   id       = "my_id"
   lookup_file_input1 = {
-    content = "fooobar"
+    content = "column1, column2, column3"
     description = "my_description"
     id   = "my_id"
-    mode = "disk"
-    size = 8.47
+    mode = "memory"
     tags = "my_tags"
   }
   pack = criblio_pack.my_pack.id

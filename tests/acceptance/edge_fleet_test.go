@@ -13,12 +13,6 @@ func TestEdgeFleet(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
-					ImportStateId:   "criblio_group.my_edge_fleet",
-					ResourceName:    "criblio_group.my_edge_fleet",
-					ImportState:     true,
-				},
-				{
 					ResourceName:    "criblio_group.my_edge_fleet",
 					ImportState:     true,
 					ImportStateId:   "criblio_group.my_edge_fleet",

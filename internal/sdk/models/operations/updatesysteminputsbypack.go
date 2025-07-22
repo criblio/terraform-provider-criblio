@@ -12,9 +12,8 @@ type UpdateSystemInputsByPackRequest struct {
 	Pack     string `pathParam:"style=simple,explode=false,name=pack"`
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 	// group Id
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// Pipeline object to be updated
-	Pipeline shared.Pipeline `request:"mediaType=application/json"`
+	GroupID string       `pathParam:"style=simple,explode=false,name=groupId"`
+	Input   shared.Input `request:"mediaType=application/json"`
 }
 
 func (o *UpdateSystemInputsByPackRequest) GetPack() string {
@@ -38,11 +37,11 @@ func (o *UpdateSystemInputsByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *UpdateSystemInputsByPackRequest) GetPipeline() shared.Pipeline {
+func (o *UpdateSystemInputsByPackRequest) GetInput() shared.Input {
 	if o == nil {
-		return shared.Pipeline{}
+		return shared.Input{}
 	}
-	return o.Pipeline
+	return o.Input
 }
 
 // UpdateSystemInputsByPackResponseBody - a list of Pipeline objects

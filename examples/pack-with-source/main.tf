@@ -1,32 +1,74 @@
 resource "criblio_pack_source" "my_packsource" {
-  conf = {
-    async_func_timeout = 6187
-    description        = "my_description"
-    functions = [
+  group_id = "default"
+  pack     = criblio_pack.my_pack.id
+
+  input_tcp = {
+    auth_type = "manual"
+    breaker_rulesets = [
+      ""
+    ]
+    connections = [
       {
-        conf = {
-          # ...
-        }
-        description = "my_description"
-        disabled    = false
-        filter      = "my_filter"
-        final       = false
-        group_id    = "my_group_id"
-        id          = "my_id"
+        output   = "my_output"
+        pipeline = "my_pipeline"
       }
     ]
-    groups = {
-      key = {
-        description = "my_description"
-        disabled    = true
-        name        = "my_name"
+    description         = "my_description"
+    disabled            = true
+    enable_header       = false
+    enable_proxy_header = true
+    environment         = "my_environment"
+    host                = "my_host"
+    id                  = "my_id"
+    max_active_cxn      = 8.41
+    metadata = [
+      {
+        name  = "my_name"
+        value = "my_value"
       }
+    ]
+    pipeline = "my_pipeline"
+    port     = 7592.47
+    pq = {
+      commit_frequency = 7.04
+      compress         = "none"
+      max_buffer_size  = 51.06
+      max_file_size    = "100"
+      max_size         = "1000"
+      mode             = "smart"
+      path             = "my_path"
     }
-    output = "my_output"
+    pq_enabled = true
+    preprocess = {
+      args = [
+        ""
+      ]
+      command  = "my_command"
+      disabled = true
+    }
+    send_to_routes         = false
+    socket_ending_max_wait = 8.02
+    socket_idle_timeout    = 5.47
+    socket_max_lifespan    = 9.38
+    stale_channel_flush_ms = 8313205.9
+    streamtags = [
+      ""
+    ]
+    tls = {
+      ca_path             = "my_ca_path"
+      cert_path           = "my_cert_path"
+      certificate_name    = "my_certificate_name"
+      common_name_regex   = "{ \"see\": \"documentation\" }"
+      disabled            = true
+      max_version         = "TLSv1.1"
+      min_version         = "TLSv1.1"
+      passphrase          = "my_passphrase"
+      priv_key_path       = "my_priv_key_path"
+      reject_unauthorized = "{ \"see\": \"documentation\" }"
+      request_cert        = false
+    }
+    type = "tcp"
   }
-  group_id = "my_group_id"
-  id       = "my_id"
-  pack     = criblio_pack.my_pack.id
 }
 
 resource "criblio_pack" "my_pack" {

@@ -12,7 +12,7 @@ type GetPipelinesByPackWithIDRequest struct {
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// group ID
+	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 

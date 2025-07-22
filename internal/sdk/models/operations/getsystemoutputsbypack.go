@@ -13,7 +13,7 @@ type GetSystemOutputsByPackRequest struct {
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// PackRequestBody object
-	PackRequestBody shared.PackRequestBody `request:"mediaType=application/json"`
+	Output shared.Output `request:"mediaType=application/json"`
 }
 
 func (o *GetSystemOutputsByPackRequest) GetPack() string {
@@ -30,11 +30,11 @@ func (o *GetSystemOutputsByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *GetSystemOutputsByPackRequest) GetPackRequestBody() shared.PackRequestBody {
+func (o *GetSystemOutputsByPackRequest) GetOutput() shared.Output {
 	if o == nil {
-		return shared.PackRequestBody{}
+		return shared.Output{}
 	}
-	return o.PackRequestBody
+	return o.Output
 }
 
 // GetSystemOutputsByPackResponseBody - a list of Routes objects

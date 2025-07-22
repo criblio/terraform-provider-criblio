@@ -15,12 +15,6 @@ func (r *PackRoutesDataSourceModel) RefreshFromOperationsGetRoutesByPackResponse
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.Description = rPriorData.Description
-		r.Disabled = rPriorData.Disabled
-		r.DisplayName = rPriorData.DisplayName
-		r.GroupID = rPriorData.GroupID
-		r.ID = rPriorData.ID
 		r.Items = []tfTypes.Routes{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
@@ -110,9 +104,6 @@ func (r *PackRoutesDataSourceModel) RefreshFromOperationsGetRoutesByPackResponse
 				r.Items[itemsCount].Routes = items.Routes
 			}
 		}
-		r.PackPathParameter = rPriorData.PackPathParameter
-		r.Source = rPriorData.Source
-		r.Version = rPriorData.Version
 	}
 
 	return diags
@@ -121,15 +112,15 @@ func (r *PackRoutesDataSourceModel) RefreshFromOperationsGetRoutesByPackResponse
 func (r *PackRoutesDataSourceModel) ToOperationsGetRoutesByPackRequest(ctx context.Context) (*operations.GetRoutesByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var packPathParameter string
-	packPathParameter = r.PackPathParameter.ValueString()
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
 	out := operations.GetRoutesByPackRequest{
-		PackPathParameter: packPathParameter,
-		GroupID:           groupID,
+		Pack:    pack,
+		GroupID: groupID,
 	}
 
 	return &out, diags

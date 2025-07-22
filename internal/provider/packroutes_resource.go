@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -40,16 +39,13 @@ type PackRoutesResource struct {
 
 // PackRoutesResourceModel describes the resource data model.
 type PackRoutesResourceModel struct {
-	Description       types.String      `tfsdk:"description"`
-	Disabled          types.Bool        `tfsdk:"disabled"`
-	DisplayName       types.String      `tfsdk:"display_name"`
-	GroupID           types.String      `tfsdk:"group_id"`
-	ID                types.String      `tfsdk:"id"`
-	Items             []tfTypes.Routes1 `tfsdk:"items"`
-	Pack              types.String      `tfsdk:"pack"`
-	PackPathParameter types.String      `tfsdk:"pack_path_parameter"`
-	Source            types.String      `tfsdk:"source"`
-	Version           types.String      `tfsdk:"version"`
+	Comments []tfTypes.Comment               `tfsdk:"comments"`
+	GroupID  types.String                    `tfsdk:"group_id"`
+	Groups   map[string]tfTypes.RoutesGroups `tfsdk:"groups"`
+	ID       types.String                    `tfsdk:"id"`
+	Items    []tfTypes.Routes1               `tfsdk:"items"`
+	Pack     types.String                    `tfsdk:"pack"`
+	Routes   []tfTypes.RoutesRoute1          `tfsdk:"routes"`
 }
 
 func (r *PackRoutesResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -60,22 +56,50 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "PackRoutes Resource",
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
+			"comments": schema.ListNestedAttribute{
 				Optional: true,
-			},
-			"disabled": schema.BoolAttribute{
-				Optional: true,
-			},
-			"display_name": schema.StringAttribute{
-				Optional: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"additional_properties": schema.StringAttribute{
+							Optional:    true,
+							Description: `Parsed as JSON.`,
+							Validators: []validator.String{
+								validators.IsValidJSON(),
+							},
+						},
+						"comment": schema.StringAttribute{
+							Optional:    true,
+							Description: `Optional, short description of this Route's purpose`,
+						},
+					},
+				},
+				Description: `Comments`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
 			},
+			"groups": schema.MapNestedAttribute{
+				Optional: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							Optional:    true,
+							Description: `Short description of this group`,
+						},
+						"disabled": schema.BoolAttribute{
+							Optional:    true,
+							Description: `Whether this group is disabled`,
+						},
+						"name": schema.StringAttribute{
+							Required: true,
+						},
+					},
+				},
+			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to PATCH for pack`,
+				Optional:    true,
+				Description: `Routes ID`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -267,22 +291,68 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,
-				Description: `pack ID to DELETE`,
-			},
-			"pack_path_parameter": schema.StringAttribute{
-				Required:    true,
 				Description: `pack inputs to POST`,
 			},
-			"source": schema.StringAttribute{
-				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.ExactlyOneOf(path.Expressions{
-						path.MatchRelative().AtParent().AtName("filename"),
-					}...),
+			"routes": schema.ListNestedAttribute{
+				Required: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"additional_properties": schema.StringAttribute{
+							Optional:    true,
+							Description: `Parsed as JSON.`,
+							Validators: []validator.String{
+								validators.IsValidJSON(),
+							},
+						},
+						"description": schema.StringAttribute{
+							Optional: true,
+						},
+						"disabled": schema.BoolAttribute{
+							Optional:    true,
+							Description: `Disable this routing rule`,
+						},
+						"enable_output_expression": schema.BoolAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
+							Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false`,
+						},
+						"filter": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`true`),
+							Description: `JavaScript expression to select data to route. Default: "true"`,
+						},
+						"final": schema.BoolAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(true),
+							Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true`,
+						},
+						"name": schema.StringAttribute{
+							Required: true,
+						},
+						"output": schema.StringAttribute{
+							Optional:    true,
+							Description: `Parsed as JSON.`,
+							Validators: []validator.String{
+								validators.IsValidJSON(),
+							},
+						},
+						"output_expression": schema.StringAttribute{
+							Optional:    true,
+							Description: `Parsed as JSON.`,
+							Validators: []validator.String{
+								validators.IsValidJSON(),
+							},
+						},
+						"pipeline": schema.StringAttribute{
+							Required:    true,
+							Description: `Pipeline to send the matching data to`,
+						},
+					},
 				},
-			},
-			"version": schema.StringAttribute{
-				Optional: true,
+				Description: `Pipeline routing rules`,
 			},
 		},
 	}
@@ -353,6 +423,43 @@ func (r *PackRoutesResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoutesByPackResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetRoutesByPackRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Routes.GetRoutesByPack(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByPackResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -477,6 +584,43 @@ func (r *PackRoutesResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetRoutesByPackRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Routes.GetRoutesByPack(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByPackResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -529,13 +673,12 @@ func (r *PackRoutesResource) ImportState(ctx context.Context, req resource.Impor
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		GroupID           string `json:"group_id"`
-		ID                string `json:"id"`
-		PackPathParameter string `json:"pack_path_parameter"`
+		GroupID string `json:"group_id"`
+		Pack    string `json:"pack"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "id": "", "pack_path_parameter": ""}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "pack": ""}': `+err.Error())
 		return
 	}
 
@@ -544,14 +687,9 @@ func (r *PackRoutesResource) ImportState(ctx context.Context, req resource.Impor
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
-	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+	if len(data.Pack) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
-	if len(data.PackPathParameter) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field pack_path_parameter is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack_path_parameter"), data.PackPathParameter)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack"), data.Pack)...)
 }

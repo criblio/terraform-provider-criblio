@@ -29,11 +29,9 @@ type PackLookupsDataSource struct {
 
 // PackLookupsDataSourceModel describes the data model.
 type PackLookupsDataSourceModel struct {
-	GroupID          types.String              `tfsdk:"group_id"`
-	Items            []tfTypes.Routes          `tfsdk:"items"`
-	LookupFileInput1 *tfTypes.LookupFileInput1 `queryParam:"inline" tfsdk:"lookup_file_input1" tfPlanOnly:"true"`
-	LookupFileInput2 *tfTypes.LookupFileInput2 `queryParam:"inline" tfsdk:"lookup_file_input2" tfPlanOnly:"true"`
-	Pack             types.String              `tfsdk:"pack"`
+	GroupID types.String     `tfsdk:"group_id"`
+	Items   []tfTypes.Routes `tfsdk:"items"`
+	Pack    types.String     `tfsdk:"pack"`
 }
 
 // Metadata returns the data source type name.
@@ -142,62 +140,6 @@ func (r *PackLookupsDataSource) Schema(ctx context.Context, req datasource.Schem
 							},
 							Description: `Pipeline routing rules`,
 						},
-					},
-				},
-			},
-			"lookup_file_input1": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Optional: true,
-					},
-					"file_info": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"filename": schema.StringAttribute{
-								Required: true,
-							},
-						},
-					},
-					"id": schema.StringAttribute{
-						Required: true,
-					},
-					"mode": schema.StringAttribute{
-						Optional: true,
-					},
-					"size": schema.Float64Attribute{
-						Optional:    true,
-						Description: `File size. Optional.`,
-					},
-					"tags": schema.StringAttribute{
-						Optional:    true,
-						Description: `One or more tags related to this lookup. Optional.`,
-					},
-				},
-			},
-			"lookup_file_input2": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"content": schema.StringAttribute{
-						Optional:    true,
-						Description: `File content.`,
-					},
-					"description": schema.StringAttribute{
-						Optional: true,
-					},
-					"id": schema.StringAttribute{
-						Required: true,
-					},
-					"mode": schema.StringAttribute{
-						Optional: true,
-					},
-					"size": schema.Float64Attribute{
-						Optional:    true,
-						Description: `File size. Optional.`,
-					},
-					"tags": schema.StringAttribute{
-						Optional:    true,
-						Description: `One or more tags related to this lookup. Optional.`,
 					},
 				},
 			},

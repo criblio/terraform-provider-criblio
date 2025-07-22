@@ -9,18 +9,18 @@ import (
 
 type CreateRoutesByPackRequest struct {
 	// pack inputs to POST
-	PackPathParameter string `pathParam:"style=simple,explode=false,name=pack"`
+	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Pipeline object to be updated in specified Project
-	Pack1 shared.Pack `request:"mediaType=application/json"`
+	Routes shared.RoutesInput `request:"mediaType=application/json"`
 }
 
-func (o *CreateRoutesByPackRequest) GetPackPathParameter() string {
+func (o *CreateRoutesByPackRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
-	return o.PackPathParameter
+	return o.Pack
 }
 
 func (o *CreateRoutesByPackRequest) GetGroupID() string {
@@ -30,11 +30,11 @@ func (o *CreateRoutesByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *CreateRoutesByPackRequest) GetPack1() shared.Pack {
+func (o *CreateRoutesByPackRequest) GetRoutes() shared.RoutesInput {
 	if o == nil {
-		return shared.Pack{}
+		return shared.RoutesInput{}
 	}
-	return o.Pack1
+	return o.Routes
 }
 
 // CreateRoutesByPackResponseBody - a list of Pipeline objects

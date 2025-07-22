@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 35635898b1e112c7f0622e0edf167b27
+  docChecksum: 0bc545bc70c299932a2fc07e5c91ef84
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.583.1
-  generationVersion: 2.658.3
+  speakeasyVersion: 1.586.0
+  generationVersion: 2.661.4
   releaseVersion: 1.0.45
   configChecksum: 2c0aa29fe4086a9aab71e43f1a9def0b
   published: true
@@ -79,7 +79,6 @@ generatedFiles:
   - examples/resources/criblio_pack/resource.tf
   - examples/resources/criblio_pack_breakers/import.sh
   - examples/resources/criblio_pack_breakers/resource.tf
-  - examples/resources/criblio_pack_destination/import.sh
   - examples/resources/criblio_pack_destination/resource.tf
   - examples/resources/criblio_pack_lookups/import.sh
   - examples/resources/criblio_pack_lookups/resource.tf
@@ -976,6 +975,7 @@ generatedFiles:
   - internal/provider/types/routes1.go
   - internal/provider/types/routes_groups.go
   - internal/provider/types/routes_route.go
+  - internal/provider/types/routes_route1.go
   - internal/provider/types/sample.go
   - internal/provider/types/services.go
   - internal/provider/types/snm_pv3_authentication.go
@@ -1878,7 +1878,7 @@ generatedFiles:
   - internal/sdk/models/shared/role.go
   - internal/sdk/models/shared/routecloneconf.go
   - internal/sdk/models/shared/routeconf.go
-  - internal/sdk/models/shared/routes.go
+  - internal/sdk/models/shared/routesinput.go
   - internal/sdk/models/shared/routesroute.go
   - internal/sdk/models/shared/routesrouteinput.go
   - internal/sdk/models/shared/runnablejob.go
@@ -5313,7 +5313,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"routes": []}
       responses:
         "200":
           application/json: {}
@@ -6692,6 +6692,8 @@ examples:
           pack: "<value>"
           id: "<id>"
           groupId: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
       responses:
         "200":
           application/json: {}
@@ -6715,7 +6717,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"type": "default", "systemFields": ["cribl_pipe"], "streamtags": [], "defaultId": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -6788,7 +6790,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+        application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 4317, "maxActiveReq": 256, "maxRequestsPerSocket": 0, "requestTimeout": 0, "socketTimeout": 0, "keepAliveTimeout": 15, "enableHealthCheck": false, "ipAllowlistRegex": "/.*/", "ipDenylistRegex": "/^$/", "protocol": "grpc", "extractSpans": false, "extractMetrics": false, "otlpVersion": "0.10.0", "authType": "none", "maxActiveCxn": 1000, "authHeaderExpr": "`Bearer ${token}`", "tokenTimeoutSecs": 3600, "extractLogs": false}
       responses:
         "200":
           application/json: {}
@@ -6800,8 +6802,9 @@ examples:
         path:
           pack: "<value>"
           groupId: "<id>"
+          id: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+        application/json: {"id": "<id>", "type": "collection", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "staleChannelFlushMs": 10000, "throttleRatePerSec": "0"}
       responses:
         "200":
           application/json: {}
@@ -6813,6 +6816,9 @@ examples:
         path:
           pack: "<value>"
           groupId: "<id>"
+          id: "<id>"
+      requestBody:
+        application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "queueName": "<value>", "queueType": "standard", "createQueue": false, "awsAuthenticationMethod": "auto", "signatureVersion": "v4", "reuseConnections": true, "rejectUnauthorized": true, "enableAssumeRole": false, "durationSeconds": 3600, "maxMessages": 10, "visibilityTimeout": 600, "pollTimeout": 10, "numReceivers": 3}
       responses:
         "200":
           application/json: {}
@@ -6825,7 +6831,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"type": "default", "systemFields": ["cribl_pipe"], "streamtags": [], "defaultId": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -6838,7 +6844,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"type": "default", "systemFields": ["cribl_pipe"], "streamtags": [], "defaultId": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -6900,7 +6906,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"routes": []}
       responses:
         "200":
           application/json: {}

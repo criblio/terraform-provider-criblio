@@ -11,9 +11,8 @@ type CreateSystemInputsByPackRequest struct {
 	// pack inputs to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
-	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// New Pipeline object
-	Pipeline shared.Pipeline `request:"mediaType=application/json"`
+	GroupID string       `pathParam:"style=simple,explode=false,name=groupId"`
+	Input   shared.Input `request:"mediaType=application/json"`
 }
 
 func (o *CreateSystemInputsByPackRequest) GetPack() string {
@@ -30,11 +29,11 @@ func (o *CreateSystemInputsByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *CreateSystemInputsByPackRequest) GetPipeline() shared.Pipeline {
+func (o *CreateSystemInputsByPackRequest) GetInput() shared.Input {
 	if o == nil {
-		return shared.Pipeline{}
+		return shared.Input{}
 	}
-	return o.Pipeline
+	return o.Input
 }
 
 // CreateSystemInputsByPackResponseBody - a list of Pipeline objects

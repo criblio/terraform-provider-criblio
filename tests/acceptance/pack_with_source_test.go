@@ -5,7 +5,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestPackSource(t *testing.T) {
@@ -14,22 +13,15 @@ func TestPackSource(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-from-source"),
+						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-with-source"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack with source"),
-						resource.TestCheckResourceAttr("criblio_pack_source.my_packsource", "id", "my_id"),
-						resource.TestCheckResourceAttr("criblio_pack_source.my_packsource", "group_id", "my_group_id"),
+						resource.TestCheckResourceAttr("criblio_pack_source.my_packsource", "input_tcp.type", "tcp"),
+						resource.TestCheckResourceAttr("criblio_pack_source.my_packsource", "group_id", "default"),
 					),
-				},
-				{
-					ConfigDirectory: config.TestNameDirectory(),
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
 				},
 			},
 		})

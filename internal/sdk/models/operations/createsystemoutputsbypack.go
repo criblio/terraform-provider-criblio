@@ -13,7 +13,7 @@ type CreateSystemOutputsByPackRequest struct {
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// PackRequestBody object
-	PackRequestBody shared.PackRequestBody `request:"mediaType=application/json"`
+	Output shared.Output `request:"mediaType=application/json"`
 }
 
 func (o *CreateSystemOutputsByPackRequest) GetPack() string {
@@ -30,11 +30,11 @@ func (o *CreateSystemOutputsByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *CreateSystemOutputsByPackRequest) GetPackRequestBody() shared.PackRequestBody {
+func (o *CreateSystemOutputsByPackRequest) GetOutput() shared.Output {
 	if o == nil {
-		return shared.PackRequestBody{}
+		return shared.Output{}
 	}
-	return o.PackRequestBody
+	return o.Output
 }
 
 // CreateSystemOutputsByPackResponseBody - a list of Pipeline objects
