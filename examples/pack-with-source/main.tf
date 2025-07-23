@@ -1,6 +1,7 @@
 resource "criblio_pack_source" "my_packsource" {
   group_id = "default"
   pack     = criblio_pack.my_pack.id
+  id       = "my_id"
 
   input_tcp = {
     auth_type = "manual"

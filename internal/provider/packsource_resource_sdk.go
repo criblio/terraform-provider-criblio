@@ -278,6 +278,9 @@ func (r *PackSourceResourceModel) ToOperationsDeleteSystemInputsByPackRequest(ct
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	input, inputDiags := r.ToSharedInput(ctx)
 	diags.Append(inputDiags...)
 
@@ -288,6 +291,7 @@ func (r *PackSourceResourceModel) ToOperationsDeleteSystemInputsByPackRequest(ct
 	out := operations.DeleteSystemInputsByPackRequest{
 		Pack:    pack,
 		GroupID: groupID,
+		ID:      id,
 		Input:   *input,
 	}
 
@@ -320,6 +324,9 @@ func (r *PackSourceResourceModel) ToOperationsUpdateSystemInputsByPackRequest(ct
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	input, inputDiags := r.ToSharedInput(ctx)
 	diags.Append(inputDiags...)
 
@@ -330,6 +337,7 @@ func (r *PackSourceResourceModel) ToOperationsUpdateSystemInputsByPackRequest(ct
 	out := operations.UpdateSystemInputsByPackRequest{
 		Pack:    pack,
 		GroupID: groupID,
+		ID:      id,
 		Input:   *input,
 	}
 

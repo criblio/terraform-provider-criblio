@@ -47,6 +47,7 @@ type PackSourceResource struct {
 // PackSourceResourceModel describes the resource data model.
 type PackSourceResourceModel struct {
 	GroupID                   types.String                       `tfsdk:"group_id"`
+	ID                        types.String                       `tfsdk:"id"`
 	InputAppscope             *tfTypes.InputAppscope             `queryParam:"inline" tfsdk:"input_appscope" tfPlanOnly:"true"`
 	InputAzureBlob            *tfTypes.InputAzureBlob            `queryParam:"inline" tfsdk:"input_azure_blob" tfPlanOnly:"true"`
 	InputCollection           *tfTypes.InputCollection           `queryParam:"inline" tfsdk:"input_collection" tfPlanOnly:"true"`
@@ -120,6 +121,10 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to DELETE for pack source`,
 			},
 			"input_appscope": schema.SingleNestedAttribute{
 				Optional: true,

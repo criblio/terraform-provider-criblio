@@ -13,6 +13,8 @@ type UpdateSystemOutputsByPackAndIDRequest struct {
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Unique ID to PATCH for pack source
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// PackRequestBody object
 	Output shared.Output `request:"mediaType=application/json"`
 }
@@ -36,6 +38,13 @@ func (o *UpdateSystemOutputsByPackAndIDRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *UpdateSystemOutputsByPackAndIDRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 func (o *UpdateSystemOutputsByPackAndIDRequest) GetOutput() shared.Output {

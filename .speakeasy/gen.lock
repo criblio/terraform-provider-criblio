@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 0bc545bc70c299932a2fc07e5c91ef84
+  docChecksum: 9e8c250929883ac94b017782d7114762
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
   speakeasyVersion: 1.586.0
   generationVersion: 2.661.4
-  releaseVersion: 1.0.58
-  configChecksum: 8605bb020e2ce0b925ea2ffce4efcf46
+  releaseVersion: 1.0.63
+  configChecksum: f27a34a37d957fcd6a0a5a6c58718c92
   published: true
 features:
   terraform:
@@ -43,7 +43,6 @@ generatedFiles:
   - examples/data-sources/criblio_pack_destination/data-source.tf
   - examples/data-sources/criblio_pack_lookups/data-source.tf
   - examples/data-sources/criblio_pack_pipeline/data-source.tf
-  - examples/data-sources/criblio_pack_routes/data-source.tf
   - examples/data-sources/criblio_pack_source/data-source.tf
   - examples/data-sources/criblio_pack_vars/data-source.tf
   - examples/data-sources/criblio_parquet_schema/data-source.tf
@@ -79,12 +78,12 @@ generatedFiles:
   - examples/resources/criblio_pack/resource.tf
   - examples/resources/criblio_pack_breakers/import.sh
   - examples/resources/criblio_pack_breakers/resource.tf
+  - examples/resources/criblio_pack_destination/import.sh
   - examples/resources/criblio_pack_destination/resource.tf
   - examples/resources/criblio_pack_lookups/import.sh
   - examples/resources/criblio_pack_lookups/resource.tf
   - examples/resources/criblio_pack_pipeline/import.sh
   - examples/resources/criblio_pack_pipeline/resource.tf
-  - examples/resources/criblio_pack_routes/import.sh
   - examples/resources/criblio_pack_routes/resource.tf
   - examples/resources/criblio_pack_source/import.sh
   - examples/resources/criblio_pack_source/resource.tf
@@ -182,8 +181,6 @@ generatedFiles:
   - internal/provider/packpipeline_data_source_sdk.go
   - internal/provider/packpipeline_resource.go
   - internal/provider/packpipeline_resource_sdk.go
-  - internal/provider/packroutes_data_source.go
-  - internal/provider/packroutes_data_source_sdk.go
   - internal/provider/packroutes_resource.go
   - internal/provider/packroutes_resource_sdk.go
   - internal/provider/packsource_data_source.go
@@ -1099,6 +1096,7 @@ generatedFiles:
   - internal/sdk/models/operations/createoutput.go
   - internal/sdk/models/operations/createoutputclickhousedescribetable.go
   - internal/sdk/models/operations/createoutputtestbyid.go
+  - internal/sdk/models/operations/createpackoutput.go
   - internal/sdk/models/operations/createpacks.go
   - internal/sdk/models/operations/createpacksclone.go
   - internal/sdk/models/operations/createpackspublishbyid.go
@@ -1117,7 +1115,6 @@ generatedFiles:
   - internal/sdk/models/operations/createrestsecret.go
   - internal/sdk/models/operations/createrole.go
   - internal/sdk/models/operations/createroutesappendbyid.go
-  - internal/sdk/models/operations/createroutesappendbypackandid.go
   - internal/sdk/models/operations/createroutesbypack.go
   - internal/sdk/models/operations/createsavedjob.go
   - internal/sdk/models/operations/createsavedquery.go
@@ -1143,7 +1140,6 @@ generatedFiles:
   - internal/sdk/models/operations/createsystemlookupsbypackandid.go
   - internal/sdk/models/operations/createsystemmetricsenum.go
   - internal/sdk/models/operations/createsystemmetricsquery.go
-  - internal/sdk/models/operations/createsystemoutputsbypack.go
   - internal/sdk/models/operations/createsystemprojectscapturebygroupidandprojectid.go
   - internal/sdk/models/operations/createsystemprojectscapturebyprojectid.go
   - internal/sdk/models/operations/createsystemprojectspipelinesbygroupidandprojectid.go
@@ -1198,7 +1194,6 @@ generatedFiles:
   - internal/sdk/models/operations/deletepacksbyid.go
   - internal/sdk/models/operations/deleteparserbyid.go
   - internal/sdk/models/operations/deletepipelinebyid.go
-  - internal/sdk/models/operations/deletepipelinebypackandid.go
   - internal/sdk/models/operations/deletepolicyrulebyid.go
   - internal/sdk/models/operations/deleteproductsuserscachebyproduct.go
   - internal/sdk/models/operations/deleteprofileritembyid.go
@@ -1206,7 +1201,6 @@ generatedFiles:
   - internal/sdk/models/operations/deleteregexlibentrybyid.go
   - internal/sdk/models/operations/deleterestsecretbyid.go
   - internal/sdk/models/operations/deleterolebyid.go
-  - internal/sdk/models/operations/deleteroutesbypackandid.go
   - internal/sdk/models/operations/deletesavedjobbyid.go
   - internal/sdk/models/operations/deletesavedquerybyid.go
   - internal/sdk/models/operations/deleteschemabyid.go
@@ -1339,7 +1333,6 @@ generatedFiles:
   - internal/sdk/models/operations/getrestsecretbyid.go
   - internal/sdk/models/operations/getrolebyid.go
   - internal/sdk/models/operations/getroutesbyid.go
-  - internal/sdk/models/operations/getroutesbypack.go
   - internal/sdk/models/operations/getsavedjobbyid.go
   - internal/sdk/models/operations/getsavedquerybyid.go
   - internal/sdk/models/operations/getschemabyid.go
@@ -1368,6 +1361,7 @@ generatedFiles:
   - internal/sdk/models/operations/getsystemdistributedupgradedownloadbyfile.go
   - internal/sdk/models/operations/getsysteminfo.go
   - internal/sdk/models/operations/getsysteminputsbypack.go
+  - internal/sdk/models/operations/getsysteminputsbypackandid.go
   - internal/sdk/models/operations/getsystemjobslogsbyidandgroupid.go
   - internal/sdk/models/operations/getsystemlogs.go
   - internal/sdk/models/operations/getsystemlogsbyid.go
@@ -1375,7 +1369,7 @@ generatedFiles:
   - internal/sdk/models/operations/getsystemlookupsbypack.go
   - internal/sdk/models/operations/getsystemlookupsbypackandid.go
   - internal/sdk/models/operations/getsystemmetrics.go
-  - internal/sdk/models/operations/getsystemoutputsbypack.go
+  - internal/sdk/models/operations/getsystemoutputsbypackandid.go
   - internal/sdk/models/operations/getsystemprocesses.go
   - internal/sdk/models/operations/getsystemprojectspipelinesbygroupidandprojectid.go
   - internal/sdk/models/operations/getsystemprojectspipelinesbygroupidandprojectidandpipelineid.go
@@ -1439,6 +1433,7 @@ generatedFiles:
   - internal/sdk/models/operations/listnotificationtarget.go
   - internal/sdk/models/operations/listoutput.go
   - internal/sdk/models/operations/listoutputstatus.go
+  - internal/sdk/models/operations/listpackoutput.go
   - internal/sdk/models/operations/listparser.go
   - internal/sdk/models/operations/listpipeline.go
   - internal/sdk/models/operations/listpolicyrule.go
@@ -1462,7 +1457,6 @@ generatedFiles:
   - internal/sdk/models/operations/login.go
   - internal/sdk/models/operations/logout.go
   - internal/sdk/models/operations/options.go
-  - internal/sdk/models/operations/readroutesbypackandid.go
   - internal/sdk/models/operations/reloadsettings.go
   - internal/sdk/models/operations/triggerrestart.go
   - internal/sdk/models/operations/undolastcommit.go
@@ -1513,7 +1507,6 @@ generatedFiles:
   - internal/sdk/models/operations/updaterestsecretbyid.go
   - internal/sdk/models/operations/updaterolebyid.go
   - internal/sdk/models/operations/updateroutesbyid.go
-  - internal/sdk/models/operations/updateroutesbypackandid.go
   - internal/sdk/models/operations/updatesavedjobbyid.go
   - internal/sdk/models/operations/updatesavedquerybyid.go
   - internal/sdk/models/operations/updateschemabyid.go
@@ -1878,7 +1871,7 @@ generatedFiles:
   - internal/sdk/models/shared/role.go
   - internal/sdk/models/shared/routecloneconf.go
   - internal/sdk/models/shared/routeconf.go
-  - internal/sdk/models/shared/routesinput.go
+  - internal/sdk/models/shared/routes.go
   - internal/sdk/models/shared/routesroute.go
   - internal/sdk/models/shared/routesrouteinput.go
   - internal/sdk/models/shared/runnablejob.go
@@ -6689,6 +6682,7 @@ examples:
         path:
           pack: "<value>"
           groupId: "<id>"
+          id: "<id>"
       requestBody:
         application/json: {"id": "<id>", "type": "collection", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "staleChannelFlushMs": 10000, "throttleRatePerSec": "0"}
       responses:
@@ -6702,6 +6696,7 @@ examples:
         path:
           pack: "<value>"
           groupId: "<id>"
+          id: "<id>"
       requestBody:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "queueName": "<value>", "queueType": "standard", "createQueue": false, "awsAuthenticationMethod": "auto", "signatureVersion": "v4", "reuseConnections": true, "rejectUnauthorized": true, "enableAssumeRole": false, "durationSeconds": 3600, "maxMessages": 10, "visibilityTimeout": 600, "pollTimeout": 10, "numReceivers": 3}
       responses:
@@ -6728,6 +6723,7 @@ examples:
         path:
           pack: "<value>"
           groupId: "<id>"
+          id: "<id>"
       requestBody:
         application/json: {"systemFields": ["cribl_pipe"], "streamtags": [], "endpoint": "ingest.lightstep.com:443", "tokenSecret": "<value>", "authTokenName": "lightstep-access-token", "otlpVersion": "1.3.1", "maxPayloadSizeKB": 2048, "protocol": "grpc", "compress": "gzip", "httpCompress": "gzip", "concurrency": 5, "timeoutSec": 30, "flushPeriodSec": 1, "failedRequestLoggingMode": "none", "connectionTimeout": 10000, "keepAliveTime": 30, "keepAlive": true, "onBackpressure": "block", "rejectUnauthorized": true, "useRoundRobinDns": false, "safeHeaders": [], "responseRetrySettings": [], "responseHonorRetryAfterHeader": false, "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
@@ -6741,6 +6737,9 @@ examples:
         path:
           pack: "<value>"
           groupId: "<id>"
+          id: "<id>"
+      requestBody:
+        application/json: {"systemFields": ["cribl_pipe"], "streamtags": [], "brokers": [], "topic": "<value>", "ack": 1, "format": "json", "compression": "gzip", "maxRecordSizeKB": 768, "flushEventCount": 1000, "flushPeriodSec": 1, "connectionTimeout": 10000, "requestTimeout": 60000, "maxRetries": 5, "maxBackOff": 30000, "initialBackoff": 300, "backoffRate": 2, "authenticationTimeout": 10000, "reauthenticationThreshold": 10000, "onBackpressure": "block", "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
         "200":
           application/json: {}
@@ -6959,6 +6958,54 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getSystemInputsByPackAndId:
+    speakeasy-default-get-system-inputs-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getSystemOutputsByPackAndId:
+    speakeasy-default-get-system-outputs-by-pack-and-id:
+      parameters:
+        path:
+          id: "<id>"
+          pack: "<value>"
+          groupId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  listPackOutput:
+    speakeasy-default-list-pack-output:
+      parameters:
+        path:
+          groupId: "<id>"
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createPackOutput:
+    speakeasy-default-create-pack-output:
+      parameters:
+        path:
+          groupId: "<id>"
+          pack: "<value>"
+      requestBody:
+        application/json: {"systemFields": ["cribl_pipe"], "streamtags": [], "brokers": ["<value 1>", "<value 2>", "<value 3>"], "topic": "<value>", "ack": 1, "format": "json", "compression": "gzip", "maxRecordSizeKB": 768, "flushEventCount": 1000, "flushPeriodSec": 1, "connectionTimeout": 10000, "requestTimeout": 60000, "maxRetries": 5, "maxBackOff": 30000, "initialBackoff": 300, "backoffRate": 2, "authenticationTimeout": 10000, "reauthenticationThreshold": 10000, "onBackpressure": "block", "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
         "200":
           application/json: {}

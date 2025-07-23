@@ -1,3 +1,18 @@
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  # Configuration options
+  server_url = "https://app.cribl-playground.cloud"
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id = "main"
+}
+
 resource "criblio_pack_pipeline" "my_packpipeline" {
   group_id = "default"
   id       = "my_id"
@@ -6,16 +21,6 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
     async_func_timeout = 9066
     description        = "my_description"
     functions = [
-      {
-        conf = {
-        }
-        description = "my_description"
-        disabled    = false
-        filter      = "my_filter"
-        final       = true
-        group_id    = "default"
-        id          = "my_id"
-      }
     ]
     groups = {
       key = {

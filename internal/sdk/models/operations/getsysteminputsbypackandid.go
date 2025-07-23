@@ -7,40 +7,49 @@ import (
 	"net/http"
 )
 
-type GetRoutesByPackRequest struct {
+type GetSystemInputsByPackAndIDRequest struct {
+	// Unique ID to GET for pack source
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetRoutesByPackRequest) GetPack() string {
+func (o *GetSystemInputsByPackAndIDRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *GetSystemInputsByPackAndIDRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
 	return o.Pack
 }
 
-func (o *GetRoutesByPackRequest) GetGroupID() string {
+func (o *GetSystemInputsByPackAndIDRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// GetRoutesByPackResponseBody - a list of Routes objects
-type GetRoutesByPackResponseBody struct {
+// GetSystemInputsByPackAndIDResponseBody - a list of Routes objects
+type GetSystemInputsByPackAndIDResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetRoutesByPackResponseBody) GetItems() []shared.Routes {
+func (o *GetSystemInputsByPackAndIDResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetRoutesByPackResponse struct {
+type GetSystemInputsByPackAndIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,40 +57,40 @@ type GetRoutesByPackResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Routes objects
-	Object *GetRoutesByPackResponseBody
+	Object *GetSystemInputsByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetRoutesByPackResponse) GetContentType() string {
+func (o *GetSystemInputsByPackAndIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetRoutesByPackResponse) GetStatusCode() int {
+func (o *GetSystemInputsByPackAndIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetRoutesByPackResponse) GetRawResponse() *http.Response {
+func (o *GetSystemInputsByPackAndIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetRoutesByPackResponse) GetObject() *GetRoutesByPackResponseBody {
+func (o *GetSystemInputsByPackAndIDResponse) GetObject() *GetSystemInputsByPackAndIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetRoutesByPackResponse) GetError() *shared.Error {
+func (o *GetSystemInputsByPackAndIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

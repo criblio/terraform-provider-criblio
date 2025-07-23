@@ -5,174 +5,24 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *PackDestinationResourceModel) RefreshFromOperationsCreateSystemOutputsByPackResponseBody(ctx context.Context, resp *operations.CreateSystemOutputsByPackResponseBody) diag.Diagnostics {
+func (r *PackDestinationResourceModel) RefreshFromOperationsCreatePackOutputResponseBody(ctx context.Context, resp *operations.CreatePackOutputResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.Routes1{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Routes1
-			itemsPriorData := items
-			items.Comments = itemsPriorData.Comments
-			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
-			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
-			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-			for functionsCount, functionsItem := range itemsItem.Conf.Functions {
-				var functions tfTypes.PipelineFunctionConf
-				functions.Description = types.StringPointerValue(functionsItem.Description)
-				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
-				functions.Filter = types.StringPointerValue(functionsItem.Filter)
-				functions.Final = types.BoolPointerValue(functionsItem.Final)
-				functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-				functions.ID = types.StringValue(functionsItem.ID)
-				if functionsCount+1 > len(items.Conf.Functions) {
-					items.Conf.Functions = append(items.Conf.Functions, functions)
-				} else {
-					items.Conf.Functions[functionsCount].Conf = functions.Conf
-					items.Conf.Functions[functionsCount].Description = functions.Description
-					items.Conf.Functions[functionsCount].Disabled = functions.Disabled
-					items.Conf.Functions[functionsCount].Filter = functions.Filter
-					items.Conf.Functions[functionsCount].Final = functions.Final
-					items.Conf.Functions[functionsCount].GroupID = functions.GroupID
-					items.Conf.Functions[functionsCount].ID = functions.ID
-				}
-			}
-			if len(itemsItem.Conf.Groups) > 0 {
-				items.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(itemsItem.Conf.Groups))
-				for pipelineGroupsKey, pipelineGroupsValue := range itemsItem.Conf.Groups {
-					var pipelineGroupsResult tfTypes.PipelineGroups
-					pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-					pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-					pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
-
-					items.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
-				}
-			}
-			items.Conf.Output = types.StringPointerValue(itemsItem.Conf.Output)
-			items.Conf.Streamtags = make([]types.String, 0, len(itemsItem.Conf.Streamtags))
-			for _, v := range itemsItem.Conf.Streamtags {
-				items.Conf.Streamtags = append(items.Conf.Streamtags, types.StringValue(v))
-			}
-			items.Groups = itemsPriorData.Groups
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Routes = itemsPriorData.Routes
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Conf = items.Conf
-				r.Items[itemsCount].ID = items.ID
-			}
-		}
 	}
 
 	return diags
 }
 
-func (r *PackDestinationResourceModel) RefreshFromOperationsGetSystemOutputsByPackResponseBody(ctx context.Context, resp *operations.GetSystemOutputsByPackResponseBody) diag.Diagnostics {
+func (r *PackDestinationResourceModel) RefreshFromOperationsListPackOutputResponseBody(ctx context.Context, resp *operations.ListPackOutputResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.Routes1{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Routes1
-			itemsPriorData := items
-			items.Comments = []tfTypes.Comment{}
-			for commentsCount, commentsItem := range itemsItem.Comments {
-				var comments tfTypes.Comment
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = types.StringNull()
-				} else {
-					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
-				}
-				if commentsCount+1 > len(items.Comments) {
-					items.Comments = append(items.Comments, comments)
-				} else {
-					items.Comments[commentsCount].Comment = comments.Comment
-					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
-				}
-			}
-			items.Conf = itemsPriorData.Conf
-			if len(itemsItem.Groups) > 0 {
-				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
-				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
-					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
-					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
-					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
-
-					items.Groups[routesGroupsKey] = routesGroupsResult
-				}
-			}
-			items.ID = types.StringPointerValue(itemsItem.ID)
-			items.Routes = []tfTypes.RoutesRoute{}
-			for routesCount, routesItem := range itemsItem.Routes {
-				var routes tfTypes.RoutesRoute
-				routes.ID = types.StringPointerValue(routesItem.ID)
-				routes.Name = types.StringValue(routesItem.Name)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
-				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
-				if routesItem.Output == nil {
-					routes.Output = types.StringNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = types.StringValue(string(outputResult))
-				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = types.StringNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
-				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = types.StringNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
-				}
-				if routesCount+1 > len(items.Routes) {
-					items.Routes = append(items.Routes, routes)
-				} else {
-					items.Routes[routesCount].ID = routes.ID
-					items.Routes[routesCount].Name = routes.Name
-					items.Routes[routesCount].Disabled = routes.Disabled
-					items.Routes[routesCount].Filter = routes.Filter
-					items.Routes[routesCount].Pipeline = routes.Pipeline
-					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
-					items.Routes[routesCount].Output = routes.Output
-					items.Routes[routesCount].OutputExpression = routes.OutputExpression
-					items.Routes[routesCount].Description = routes.Description
-					items.Routes[routesCount].Final = routes.Final
-					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
-				}
-			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Comments = items.Comments
-				r.Items[itemsCount].Groups = items.Groups
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Routes = items.Routes
-			}
-		}
 	}
 
 	return diags
@@ -182,76 +32,19 @@ func (r *PackDestinationResourceModel) RefreshFromOperationsUpdateSystemOutputsB
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.Routes1{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Routes1
-			itemsPriorData := items
-			items.Comments = itemsPriorData.Comments
-			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
-			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
-			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-			for functionsCount, functionsItem := range itemsItem.Conf.Functions {
-				var functions tfTypes.PipelineFunctionConf
-				functions.Description = types.StringPointerValue(functionsItem.Description)
-				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
-				functions.Filter = types.StringPointerValue(functionsItem.Filter)
-				functions.Final = types.BoolPointerValue(functionsItem.Final)
-				functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-				functions.ID = types.StringValue(functionsItem.ID)
-				if functionsCount+1 > len(items.Conf.Functions) {
-					items.Conf.Functions = append(items.Conf.Functions, functions)
-				} else {
-					items.Conf.Functions[functionsCount].Conf = functions.Conf
-					items.Conf.Functions[functionsCount].Description = functions.Description
-					items.Conf.Functions[functionsCount].Disabled = functions.Disabled
-					items.Conf.Functions[functionsCount].Filter = functions.Filter
-					items.Conf.Functions[functionsCount].Final = functions.Final
-					items.Conf.Functions[functionsCount].GroupID = functions.GroupID
-					items.Conf.Functions[functionsCount].ID = functions.ID
-				}
-			}
-			if len(itemsItem.Conf.Groups) > 0 {
-				items.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(itemsItem.Conf.Groups))
-				for pipelineGroupsKey, pipelineGroupsValue := range itemsItem.Conf.Groups {
-					var pipelineGroupsResult tfTypes.PipelineGroups
-					pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-					pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-					pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
-
-					items.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
-				}
-			}
-			items.Conf.Output = types.StringPointerValue(itemsItem.Conf.Output)
-			items.Conf.Streamtags = make([]types.String, 0, len(itemsItem.Conf.Streamtags))
-			for _, v := range itemsItem.Conf.Streamtags {
-				items.Conf.Streamtags = append(items.Conf.Streamtags, types.StringValue(v))
-			}
-			items.Groups = itemsPriorData.Groups
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Routes = itemsPriorData.Routes
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Conf = items.Conf
-				r.Items[itemsCount].ID = items.ID
-			}
-		}
 	}
 
 	return diags
 }
 
-func (r *PackDestinationResourceModel) ToOperationsCreateSystemOutputsByPackRequest(ctx context.Context) (*operations.CreateSystemOutputsByPackRequest, diag.Diagnostics) {
+func (r *PackDestinationResourceModel) ToOperationsCreatePackOutputRequest(ctx context.Context) (*operations.CreatePackOutputRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
-
-	var pack string
-	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
+
+	var pack string
+	pack = r.Pack.ValueString()
 
 	output, outputDiags := r.ToSharedOutput(ctx)
 	diags.Append(outputDiags...)
@@ -260,9 +53,9 @@ func (r *PackDestinationResourceModel) ToOperationsCreateSystemOutputsByPackRequ
 		return nil, diags
 	}
 
-	out := operations.CreateSystemOutputsByPackRequest{
-		Pack:    pack,
+	out := operations.CreatePackOutputRequest{
 		GroupID: groupID,
+		Pack:    pack,
 		Output:  *output,
 	}
 
@@ -278,22 +71,8 @@ func (r *PackDestinationResourceModel) ToOperationsDeleteSystemOutputsByPackAndI
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.DeleteSystemOutputsByPackAndIDRequest{
-		Pack:    pack,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *PackDestinationResourceModel) ToOperationsGetSystemOutputsByPackRequest(ctx context.Context) (*operations.GetSystemOutputsByPackRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
+	var id string
+	id = r.ID.ValueString()
 
 	output, outputDiags := r.ToSharedOutput(ctx)
 	diags.Append(outputDiags...)
@@ -302,10 +81,28 @@ func (r *PackDestinationResourceModel) ToOperationsGetSystemOutputsByPackRequest
 		return nil, diags
 	}
 
-	out := operations.GetSystemOutputsByPackRequest{
+	out := operations.DeleteSystemOutputsByPackAndIDRequest{
 		Pack:    pack,
 		GroupID: groupID,
+		ID:      id,
 		Output:  *output,
+	}
+
+	return &out, diags
+}
+
+func (r *PackDestinationResourceModel) ToOperationsListPackOutputRequest(ctx context.Context) (*operations.ListPackOutputRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	var pack string
+	pack = r.Pack.ValueString()
+
+	out := operations.ListPackOutputRequest{
+		GroupID: groupID,
+		Pack:    pack,
 	}
 
 	return &out, diags
@@ -320,6 +117,9 @@ func (r *PackDestinationResourceModel) ToOperationsUpdateSystemOutputsByPackAndI
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	output, outputDiags := r.ToSharedOutput(ctx)
 	diags.Append(outputDiags...)
 
@@ -330,6 +130,7 @@ func (r *PackDestinationResourceModel) ToOperationsUpdateSystemOutputsByPackAndI
 	out := operations.UpdateSystemOutputsByPackAndIDRequest{
 		Pack:    pack,
 		GroupID: groupID,
+		ID:      id,
 		Output:  *output,
 	}
 

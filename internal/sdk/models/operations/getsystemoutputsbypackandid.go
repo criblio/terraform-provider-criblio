@@ -7,90 +7,90 @@ import (
 	"net/http"
 )
 
-type DeletePipelineByPackAndIDRequest struct {
-	// Unique ID to DELETE for pack
+type GetSystemOutputsByPackAndIDRequest struct {
+	// Unique ID to GET for pack source
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// pack pipeline ID to DELETE
+	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeletePipelineByPackAndIDRequest) GetID() string {
+func (o *GetSystemOutputsByPackAndIDRequest) GetID() string {
 	if o == nil {
 		return ""
 	}
 	return o.ID
 }
 
-func (o *DeletePipelineByPackAndIDRequest) GetPack() string {
+func (o *GetSystemOutputsByPackAndIDRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
 	return o.Pack
 }
 
-func (o *DeletePipelineByPackAndIDRequest) GetGroupID() string {
+func (o *GetSystemOutputsByPackAndIDRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// DeletePipelineByPackAndIDResponseBody - a list of Pipeline objects
-type DeletePipelineByPackAndIDResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
+// GetSystemOutputsByPackAndIDResponseBody - a list of Routes objects
+type GetSystemOutputsByPackAndIDResponseBody struct {
+	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *DeletePipelineByPackAndIDResponseBody) GetItems() []shared.Pipeline {
+func (o *GetSystemOutputsByPackAndIDResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type DeletePipelineByPackAndIDResponse struct {
+type GetSystemOutputsByPackAndIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
-	Object *DeletePipelineByPackAndIDResponseBody
+	// a list of Routes objects
+	Object *GetSystemOutputsByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *DeletePipelineByPackAndIDResponse) GetContentType() string {
+func (o *GetSystemOutputsByPackAndIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *DeletePipelineByPackAndIDResponse) GetStatusCode() int {
+func (o *GetSystemOutputsByPackAndIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *DeletePipelineByPackAndIDResponse) GetRawResponse() *http.Response {
+func (o *GetSystemOutputsByPackAndIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *DeletePipelineByPackAndIDResponse) GetObject() *DeletePipelineByPackAndIDResponseBody {
+func (o *GetSystemOutputsByPackAndIDResponse) GetObject() *GetSystemOutputsByPackAndIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *DeletePipelineByPackAndIDResponse) GetError() *shared.Error {
+func (o *GetSystemOutputsByPackAndIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

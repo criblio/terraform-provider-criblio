@@ -15,6 +15,7 @@ import (
 	"net/http"
 )
 
+// AppscopeConfigs - Actions related to Appscope Configs
 type AppscopeConfigs struct {
 	rootSDK          *CriblIo
 	sdkConfiguration config.SDKConfiguration

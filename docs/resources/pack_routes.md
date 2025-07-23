@@ -52,15 +52,15 @@ resource "criblio_pack_routes" "my_packroutes" {
 
 ### Required
 
-- `group_id` (String) group Id
-- `pack` (String) pack inputs to POST
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--routes))
+- `group_id` (String) group Id. Requires replacement if changed.
+- `pack` (String) pack ID to GET. Requires replacement if changed.
+- `routes` (Attributes List) Pipeline routing rules. Requires replacement if changed. (see [below for nested schema](#nestedatt--routes))
 
 ### Optional
 
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--comments))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))
-- `id` (String) Routes ID
+- `comments` (Attributes List) Comments. Requires replacement if changed. (see [below for nested schema](#nestedatt--comments))
+- `groups` (Attributes Map) Requires replacement if changed. (see [below for nested schema](#nestedatt--groups))
+- `id` (String) Routes ID. Requires replacement if changed.
 
 ### Read-Only
 
@@ -71,19 +71,19 @@ resource "criblio_pack_routes" "my_packroutes" {
 
 Required:
 
-- `name` (String)
-- `pipeline` (String) Pipeline to send the matching data to
+- `name` (String) Requires replacement if changed.
+- `pipeline` (String) Pipeline to send the matching data to. Requires replacement if changed.
 
 Optional:
 
-- `additional_properties` (String) Parsed as JSON.
-- `description` (String)
-- `disabled` (Boolean) Disable this routing rule
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false
-- `filter` (String) JavaScript expression to select data to route. Default: "true"
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
+- `additional_properties` (String) Requires replacement if changed.; Parsed as JSON.
+- `description` (String) Requires replacement if changed.
+- `disabled` (Boolean) Disable this routing rule. Requires replacement if changed.
+- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false; Requires replacement if changed.
+- `filter` (String) JavaScript expression to select data to route. Default: "true"; Requires replacement if changed.
+- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true; Requires replacement if changed.
+- `output` (String) Requires replacement if changed.; Parsed as JSON.
+- `output_expression` (String) Requires replacement if changed.; Parsed as JSON.
 
 
 <a id="nestedatt--comments"></a>
@@ -91,8 +91,8 @@ Optional:
 
 Optional:
 
-- `additional_properties` (String) Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose
+- `additional_properties` (String) Requires replacement if changed.; Parsed as JSON.
+- `comment` (String) Optional, short description of this Route's purpose. Requires replacement if changed.
 
 
 <a id="nestedatt--groups"></a>
@@ -100,12 +100,12 @@ Optional:
 
 Required:
 
-- `name` (String)
+- `name` (String) Requires replacement if changed.
 
 Optional:
 
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
+- `description` (String) Short description of this group. Requires replacement if changed.
+- `disabled` (Boolean) Whether this group is disabled. Requires replacement if changed.
 
 
 <a id="nestedatt--items"></a>
@@ -114,9 +114,8 @@ Optional:
 Read-Only:
 
 - `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--items--comments))
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf))
 - `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--groups))
-- `id` (String)
+- `id` (String) Routes ID
 - `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--items--routes))
 
 <a id="nestedatt--items--comments"></a>
@@ -126,47 +125,6 @@ Read-Only:
 
 - `additional_properties` (String) Parsed as JSON.
 - `comment` (String) Optional, short description of this Route's purpose
-
-
-<a id="nestedatt--items--conf"></a>
-### Nested Schema for `items.conf`
-
-Read-Only:
-
-- `async_func_timeout` (Number) Time (in ms) to wait for an async function to complete processing of a data item
-- `description` (String)
-- `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--items--conf--functions))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--conf--groups))
-- `output` (String) The output destination for events processed by this Pipeline. Default: "default"
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-
-<a id="nestedatt--items--conf--functions"></a>
-### Nested Schema for `items.conf.functions`
-
-Read-Only:
-
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf--functions--conf))
-- `description` (String) Simple description of this step
-- `disabled` (Boolean) If true, data will not be pushed through this function
-- `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
-- `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
-- `group_id` (String) Group ID
-- `id` (String) Function ID
-
-<a id="nestedatt--items--conf--functions--conf"></a>
-### Nested Schema for `items.conf.functions.conf`
-
-
-
-<a id="nestedatt--items--conf--groups"></a>
-### Nested Schema for `items.conf.groups`
-
-Read-Only:
-
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
-- `name` (String)
-
 
 
 <a id="nestedatt--items--groups"></a>
@@ -195,11 +153,3 @@ Read-Only:
 - `output` (String) Parsed as JSON.
 - `output_expression` (String) Parsed as JSON.
 - `pipeline` (String) Pipeline to send the matching data to
-
-## Import
-
-Import is supported using the following syntax:
-
-```shell
-terraform import criblio_pack_routes.my_criblio_pack_routes '{"group_id": "", "pack": ""}'
-```

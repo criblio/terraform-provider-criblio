@@ -1,5 +1,6 @@
 resource "criblio_pack_destination" "my_packdestination" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
   output_azure_blob = {
     add_id_to_stage_path = true
     auth_type            = "manual"

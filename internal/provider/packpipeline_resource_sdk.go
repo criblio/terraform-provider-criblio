@@ -283,27 +283,6 @@ func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx 
 	return &out, diags
 }
 
-func (r *PackPipelineResourceModel) ToOperationsDeletePipelineByPackAndIDRequest(ctx context.Context) (*operations.DeletePipelineByPackAndIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeletePipelineByPackAndIDRequest{
-		ID:      id,
-		Pack:    pack,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
 func (r *PackPipelineResourceModel) ToOperationsGetPipelinesByPackRequest(ctx context.Context) (*operations.GetPipelinesByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

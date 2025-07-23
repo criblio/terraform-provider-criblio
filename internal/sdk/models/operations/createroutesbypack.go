@@ -8,11 +8,11 @@ import (
 )
 
 type CreateRoutesByPackRequest struct {
-	// pack inputs to POST
+	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// Pipeline object to be updated in specified Project
+	// Route object to be updated in specified Pack
 	Routes shared.RoutesInput `request:"mediaType=application/json"`
 }
 
@@ -37,12 +37,12 @@ func (o *CreateRoutesByPackRequest) GetRoutes() shared.RoutesInput {
 	return o.Routes
 }
 
-// CreateRoutesByPackResponseBody - a list of Pipeline objects
+// CreateRoutesByPackResponseBody - a list of Routes objects
 type CreateRoutesByPackResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
+	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *CreateRoutesByPackResponseBody) GetItems() []shared.Pipeline {
+func (o *CreateRoutesByPackResponseBody) GetItems() []shared.Routes {
 	if o == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ type CreateRoutesByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
+	// a list of Routes objects
 	Object *CreateRoutesByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

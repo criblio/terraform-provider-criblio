@@ -15,6 +15,7 @@ PackSource Resource
 ```terraform
 resource "criblio_pack_source" "my_packsource" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
   input_appscope = {
     auth_token = "...my_auth_token..."
     auth_type  = "secret"
@@ -4143,6 +4144,7 @@ resource "criblio_pack_source" "my_packsource" {
 ### Required
 
 - `group_id` (String) group Id
+- `id` (String) Unique ID to DELETE for pack source
 - `pack` (String) pack inputs to POST
 
 ### Optional

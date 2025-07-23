@@ -16,104 +16,36 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsCreateRoutesByPackRespons
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.Routes1{}
+		r.Items = []tfTypes.Routes{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
 		}
 		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Routes1
-			itemsPriorData := items
-			items.Comments = itemsPriorData.Comments
-			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
-			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
-			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-			for functionsCount, functionsItem := range itemsItem.Conf.Functions {
-				var functions tfTypes.PipelineFunctionConf
-				functions.Description = types.StringPointerValue(functionsItem.Description)
-				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
-				functions.Filter = types.StringPointerValue(functionsItem.Filter)
-				functions.Final = types.BoolPointerValue(functionsItem.Final)
-				functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-				functions.ID = types.StringValue(functionsItem.ID)
-				if functionsCount+1 > len(items.Conf.Functions) {
-					items.Conf.Functions = append(items.Conf.Functions, functions)
-				} else {
-					items.Conf.Functions[functionsCount].Conf = functions.Conf
-					items.Conf.Functions[functionsCount].Description = functions.Description
-					items.Conf.Functions[functionsCount].Disabled = functions.Disabled
-					items.Conf.Functions[functionsCount].Filter = functions.Filter
-					items.Conf.Functions[functionsCount].Final = functions.Final
-					items.Conf.Functions[functionsCount].GroupID = functions.GroupID
-					items.Conf.Functions[functionsCount].ID = functions.ID
-				}
-			}
-			if len(itemsItem.Conf.Groups) > 0 {
-				items.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(itemsItem.Conf.Groups))
-				for pipelineGroupsKey, pipelineGroupsValue := range itemsItem.Conf.Groups {
-					var pipelineGroupsResult tfTypes.PipelineGroups
-					pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-					pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-					pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
-
-					items.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
-				}
-			}
-			items.Conf.Output = types.StringPointerValue(itemsItem.Conf.Output)
-			items.Conf.Streamtags = make([]types.String, 0, len(itemsItem.Conf.Streamtags))
-			for _, v := range itemsItem.Conf.Streamtags {
-				items.Conf.Streamtags = append(items.Conf.Streamtags, types.StringValue(v))
-			}
-			items.Groups = itemsPriorData.Groups
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Routes = itemsPriorData.Routes
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Conf = items.Conf
-				r.Items[itemsCount].ID = items.ID
-			}
-		}
-	}
-
-	return diags
-}
-
-func (r *PackRoutesResourceModel) RefreshFromOperationsGetRoutesByPackResponseBody(ctx context.Context, resp *operations.GetRoutesByPackResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.Routes1{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Routes1
-			itemsPriorData := items
+			var items tfTypes.Routes
 			items.Comments = []tfTypes.Comment{}
 			for commentsCount, commentsItem := range itemsItem.Comments {
 				var comments tfTypes.Comment
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
 				if commentsItem.AdditionalProperties == nil {
 					comments.AdditionalProperties = types.StringNull()
 				} else {
 					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
 					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
 				}
+				comments.Comment = types.StringPointerValue(commentsItem.Comment)
 				if commentsCount+1 > len(items.Comments) {
 					items.Comments = append(items.Comments, comments)
 				} else {
-					items.Comments[commentsCount].Comment = comments.Comment
 					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
+					items.Comments[commentsCount].Comment = comments.Comment
 				}
 			}
-			items.Conf = itemsPriorData.Conf
 			if len(itemsItem.Groups) > 0 {
 				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
 				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
 					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
 					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
 					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
+					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
 
 					items.Groups[routesGroupsKey] = routesGroupsResult
 				}
@@ -122,12 +54,19 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsGetRoutesByPackResponseBo
 			items.Routes = []tfTypes.RoutesRoute{}
 			for routesCount, routesItem := range itemsItem.Routes {
 				var routes tfTypes.RoutesRoute
+				if routesItem.AdditionalProperties == nil {
+					routes.AdditionalProperties = types.StringNull()
+				} else {
+					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
+					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
+				}
+				routes.Description = types.StringPointerValue(routesItem.Description)
+				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
+				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
+				routes.Filter = types.StringPointerValue(routesItem.Filter)
+				routes.Final = types.BoolPointerValue(routesItem.Final)
 				routes.ID = types.StringPointerValue(routesItem.ID)
 				routes.Name = types.StringValue(routesItem.Name)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
-				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
 				if routesItem.Output == nil {
 					routes.Output = types.StringNull()
 				} else {
@@ -140,128 +79,21 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsGetRoutesByPackResponseBo
 					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
 					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
 				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = types.StringNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
-				}
-				if routesCount+1 > len(items.Routes) {
-					items.Routes = append(items.Routes, routes)
-				} else {
-					items.Routes[routesCount].ID = routes.ID
-					items.Routes[routesCount].Name = routes.Name
-					items.Routes[routesCount].Disabled = routes.Disabled
-					items.Routes[routesCount].Filter = routes.Filter
-					items.Routes[routesCount].Pipeline = routes.Pipeline
-					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
-					items.Routes[routesCount].Output = routes.Output
-					items.Routes[routesCount].OutputExpression = routes.OutputExpression
-					items.Routes[routesCount].Description = routes.Description
-					items.Routes[routesCount].Final = routes.Final
-					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
-				}
-			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Comments = items.Comments
-				r.Items[itemsCount].Groups = items.Groups
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Routes = items.Routes
-			}
-		}
-	}
-
-	return diags
-}
-
-func (r *PackRoutesResourceModel) RefreshFromOperationsUpdateRoutesByPackAndIDResponseBody(ctx context.Context, resp *operations.UpdateRoutesByPackAndIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.Routes1{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.Routes1
-			itemsPriorData := items
-			items.Comments = []tfTypes.Comment{}
-			for commentsCount, commentsItem := range itemsItem.Comments {
-				var comments tfTypes.Comment
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = types.StringNull()
-				} else {
-					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
-				}
-				if commentsCount+1 > len(items.Comments) {
-					items.Comments = append(items.Comments, comments)
-				} else {
-					items.Comments[commentsCount].Comment = comments.Comment
-					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
-				}
-			}
-			items.Conf = itemsPriorData.Conf
-			if len(itemsItem.Groups) > 0 {
-				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
-				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
-					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
-					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
-					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
-
-					items.Groups[routesGroupsKey] = routesGroupsResult
-				}
-			}
-			items.ID = types.StringPointerValue(itemsItem.ID)
-			items.Routes = []tfTypes.RoutesRoute{}
-			for routesCount, routesItem := range itemsItem.Routes {
-				var routes tfTypes.RoutesRoute
-				routes.ID = types.StringPointerValue(routesItem.ID)
-				routes.Name = types.StringValue(routesItem.Name)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
-				if routesItem.Output == nil {
-					routes.Output = types.StringNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = types.StringValue(string(outputResult))
-				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = types.StringNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
-				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = types.StringNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
-				}
 				if routesCount+1 > len(items.Routes) {
 					items.Routes = append(items.Routes, routes)
 				} else {
+					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
+					items.Routes[routesCount].Description = routes.Description
+					items.Routes[routesCount].Disabled = routes.Disabled
+					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
+					items.Routes[routesCount].Filter = routes.Filter
+					items.Routes[routesCount].Final = routes.Final
 					items.Routes[routesCount].ID = routes.ID
 					items.Routes[routesCount].Name = routes.Name
-					items.Routes[routesCount].Disabled = routes.Disabled
-					items.Routes[routesCount].Filter = routes.Filter
-					items.Routes[routesCount].Pipeline = routes.Pipeline
-					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
 					items.Routes[routesCount].Output = routes.Output
 					items.Routes[routesCount].OutputExpression = routes.OutputExpression
-					items.Routes[routesCount].Description = routes.Description
-					items.Routes[routesCount].Final = routes.Final
-					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
+					items.Routes[routesCount].Pipeline = routes.Pipeline
 				}
 			}
 			if itemsCount+1 > len(r.Items) {
@@ -296,74 +128,6 @@ func (r *PackRoutesResourceModel) ToOperationsCreateRoutesByPackRequest(ctx cont
 
 	routes := *routesPtr
 	out := operations.CreateRoutesByPackRequest{
-		Pack:    pack,
-		GroupID: groupID,
-		Routes:  routes,
-	}
-
-	return &out, diags
-}
-
-func (r *PackRoutesResourceModel) ToOperationsDeleteRoutesByPackAndIDRequest(ctx context.Context) (*operations.DeleteRoutesByPackAndIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.DeleteRoutesByPackAndIDRequest{
-		ID:      id,
-		Pack:    pack,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *PackRoutesResourceModel) ToOperationsGetRoutesByPackRequest(ctx context.Context) (*operations.GetRoutesByPackRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	out := operations.GetRoutesByPackRequest{
-		Pack:    pack,
-		GroupID: groupID,
-	}
-
-	return &out, diags
-}
-
-func (r *PackRoutesResourceModel) ToOperationsUpdateRoutesByPackAndIDRequest(ctx context.Context) (*operations.UpdateRoutesByPackAndIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
-
-	routesPtr, routesDiags := r.ToSharedRoutesInput(ctx)
-	diags.Append(routesDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	routes := *routesPtr
-	out := operations.UpdateRoutesByPackAndIDRequest{
-		ID:      id,
 		Pack:    pack,
 		GroupID: groupID,
 		Routes:  routes,

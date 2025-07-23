@@ -12,8 +12,10 @@ type UpdateSystemInputsByPackRequest struct {
 	Pack     string `pathParam:"style=simple,explode=false,name=pack"`
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 	// group Id
-	GroupID string       `pathParam:"style=simple,explode=false,name=groupId"`
-	Input   shared.Input `request:"mediaType=application/json"`
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Unique ID to PATCH for pack source
+	ID    string       `pathParam:"style=simple,explode=false,name=id"`
+	Input shared.Input `request:"mediaType=application/json"`
 }
 
 func (o *UpdateSystemInputsByPackRequest) GetPack() string {
@@ -35,6 +37,13 @@ func (o *UpdateSystemInputsByPackRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *UpdateSystemInputsByPackRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 func (o *UpdateSystemInputsByPackRequest) GetInput() shared.Input {

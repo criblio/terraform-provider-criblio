@@ -11,8 +11,10 @@ type DeleteSystemInputsByPackRequest struct {
 	// pack ID to DELETE
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
-	GroupID string       `pathParam:"style=simple,explode=false,name=groupId"`
-	Input   shared.Input `request:"mediaType=application/json"`
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Unique ID to DELETE for pack source
+	ID    string       `pathParam:"style=simple,explode=false,name=id"`
+	Input shared.Input `request:"mediaType=application/json"`
 }
 
 func (o *DeleteSystemInputsByPackRequest) GetPack() string {
@@ -27,6 +29,13 @@ func (o *DeleteSystemInputsByPackRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *DeleteSystemInputsByPackRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 func (o *DeleteSystemInputsByPackRequest) GetInput() shared.Input {

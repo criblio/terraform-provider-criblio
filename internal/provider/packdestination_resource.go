@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -45,7 +47,7 @@ type PackDestinationResource struct {
 // PackDestinationResourceModel describes the resource data model.
 type PackDestinationResourceModel struct {
 	GroupID                      types.String                          `tfsdk:"group_id"`
-	Items                        []tfTypes.Routes1                     `tfsdk:"items"`
+	ID                           types.String                          `tfsdk:"id"`
 	OutputAzureBlob              *tfTypes.OutputAzureBlob              `queryParam:"inline" tfsdk:"output_azure_blob" tfPlanOnly:"true"`
 	OutputAzureDataExplorer      *tfTypes.OutputAzureDataExplorer      `queryParam:"inline" tfsdk:"output_azure_data_explorer" tfPlanOnly:"true"`
 	OutputAzureEventhub          *tfTypes.OutputAzureEventhub          `queryParam:"inline" tfsdk:"output_azure_eventhub" tfPlanOnly:"true"`
@@ -122,195 +124,11 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `group Id`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
-							},
-							Description: `Comments`,
-						},
-						"conf": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"async_func_timeout": schema.Int64Attribute{
-									Computed:    true,
-									Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
-									Validators: []validator.Int64{
-										int64validator.AtMost(10000),
-									},
-								},
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"functions": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"conf": schema.SingleNestedAttribute{
-												Computed: true,
-											},
-											"description": schema.StringAttribute{
-												Computed:    true,
-												Description: `Simple description of this step`,
-											},
-											"disabled": schema.BoolAttribute{
-												Computed:    true,
-												Description: `If true, data will not be pushed through this function`,
-											},
-											"filter": schema.StringAttribute{
-												Computed:    true,
-												Default:     stringdefault.StaticString(`true`),
-												Description: `Filter that selects data to be fed through this Function. Default: "true"`,
-											},
-											"final": schema.BoolAttribute{
-												Computed:    true,
-												Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
-											},
-											"group_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Group ID`,
-											},
-											"id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Function ID`,
-											},
-										},
-									},
-									Description: `List of Functions to pass data through`,
-								},
-								"groups": schema.MapNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"description": schema.StringAttribute{
-												Computed:    true,
-												Description: `Short description of this group`,
-											},
-											"disabled": schema.BoolAttribute{
-												Computed:    true,
-												Description: `Whether this group is disabled`,
-											},
-											"name": schema.StringAttribute{
-												Computed: true,
-											},
-										},
-									},
-								},
-								"output": schema.StringAttribute{
-									Computed:    true,
-									Default:     stringdefault.StaticString(`default`),
-									Description: `The output destination for events processed by this Pipeline. Default: "default"`,
-								},
-								"streamtags": schema.ListAttribute{
-									Computed:    true,
-									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-									ElementType: types.StringType,
-									Description: `Tags for filtering and grouping in @{product}`,
-								},
-							},
-						},
-						"groups": schema.MapNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"routes": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
-									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Default:     stringdefault.StaticString(`true`),
-										Description: `JavaScript expression to select data to route. Default: "true"`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
-									},
-									"output_expression": schema.StringAttribute{
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
-								},
-							},
-							Description: `Pipeline routing rules`,
-						},
-					},
-				},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to PATCH for pack source`,
 			},
 			"output_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
@@ -26430,7 +26248,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,
-				Description: `pack inputs to POST`,
+				Description: `pack ID to PATCH`,
 			},
 		},
 	}
@@ -26474,13 +26292,13 @@ func (r *PackDestinationResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateSystemOutputsByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsCreatePackOutputRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.CreateSystemOutputsByPack(ctx, *request)
+	res, err := r.client.Outputs.CreatePackOutput(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -26500,44 +26318,7 @@ func (r *PackDestinationResource) Create(ctx context.Context, req resource.Creat
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateSystemOutputsByPackResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetSystemOutputsByPackRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Routes.GetSystemOutputsByPack(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemOutputsByPackResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreatePackOutputResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -26571,13 +26352,13 @@ func (r *PackDestinationResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetSystemOutputsByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsListPackOutputRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Routes.GetSystemOutputsByPack(ctx, *request)
+	res, err := r.client.Outputs.ListPackOutput(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -26601,7 +26382,7 @@ func (r *PackDestinationResource) Read(ctx context.Context, req resource.ReadReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemOutputsByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListPackOutputResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -26662,13 +26443,13 @@ func (r *PackDestinationResource) Update(ctx context.Context, req resource.Updat
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetSystemOutputsByPackRequest(ctx)
+	request1, request1Diags := data.ToOperationsListPackOutputRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Routes.GetSystemOutputsByPack(ctx, *request1)
+	res1, err := r.client.Outputs.ListPackOutput(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -26688,7 +26469,7 @@ func (r *PackDestinationResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemOutputsByPackResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListPackOutputResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -26748,14 +26529,26 @@ func (r *PackDestinationResource) Delete(ctx context.Context, req resource.Delet
 }
 
 func (r *PackDestinationResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputAzureEventhub.brokers. Reason: unhandled type array for a required field")
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputConfluentCloud.brokers. Reason: unhandled type array for a required field")
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputGrafanaCloud. Reason: unhandled type union for a required field")
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputKafka.brokers. Reason: unhandled type array for a required field")
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputMsk.brokers. Reason: unhandled type array for a required field")
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputNetflow.hosts. Reason: unhandled type array for a required field")
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputRouter.rules. Reason: unhandled type array for a required field")
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputSnmp.hosts. Reason: unhandled type array for a required field")
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource pack_destination attribute .OutputSplunkLb.hosts. Reason: unhandled type array for a required field")
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		GroupID string `json:"group_id"`
+		Pack    string `json:"pack"`
+	}
 
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "pack": ""}': `+err.Error())
+		return
+	}
+
+	if len(data.GroupID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	if len(data.Pack) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack"), data.Pack)...)
 }
