@@ -3,7 +3,6 @@ on:
   push:
     branches: 
       - 'main'
-      - 'INFRA-5630/ktraister/extend-e2e-tests'
 
 concurrency:
   group: tfprovider2
