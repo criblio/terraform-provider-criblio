@@ -1,0 +1,1 @@
+../../examples/pack-with-vars/main.tf

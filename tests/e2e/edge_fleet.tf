@@ -1,1 +1,0 @@
-../../examples/edge-fleet/main.tf

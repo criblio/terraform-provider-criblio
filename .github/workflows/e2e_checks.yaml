@@ -3,6 +3,7 @@ on:
   push:
     branches: 
       - 'main'
+      - 'INFRA-5630/ktraister/extend-e2e-tests'
 
 concurrency:
   group: tfprovider2
@@ -23,8 +24,10 @@ jobs:
 
       - name: Run e2e Tests
         env:
-          CRIBL_BEARER_TOKEN: ${{ secrets.CRIBL_BEARER_TOKEN }}
+          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
+          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
         run: | 
+
           make e2e-test
 
   speakeasy_test:

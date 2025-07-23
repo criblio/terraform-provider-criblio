@@ -8,10 +8,10 @@ resource "criblio_pack_lookups" "my_packlookups" {
     mode = "memory"
     tags = "my_tags"
   }
-  pack = criblio_pack.my_pack.id
+  pack = criblio_pack.lookups_pack.id
 }
 
-resource "criblio_pack" "my_pack" {
+resource "criblio_pack" "lookups_pack" {
   id           = "pack-with-lookups"
   group_id     = "default"
   description  = "Pack with lookups"

@@ -1,4 +1,4 @@
-resource "criblio_pack" "my_pack" {
+resource "criblio_pack" "dest_pack" {
   id           = "pack-with-dest"
   group_id     = "default"
   description  = "Pack from source with destination"
@@ -10,7 +10,7 @@ resource "criblio_pack" "my_pack" {
 
 resource "criblio_pack_destination" "my_packdest" {
   id       = "test"
-  pack  = criblio_pack.my_pack.id
+  pack  = criblio_pack.dest_pack.id
   group_id = "default"
 
   output_s3 = {

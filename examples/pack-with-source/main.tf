@@ -1,6 +1,6 @@
 resource "criblio_pack_source" "my_packsource" {
   group_id = "default"
-  pack     = criblio_pack.my_pack.id
+  pack     = criblio_pack.source_pack.id
   id       = "my_id"
 
   input_tcp = {
@@ -72,7 +72,7 @@ resource "criblio_pack_source" "my_packsource" {
   }
 }
 
-resource "criblio_pack" "my_pack" {
+resource "criblio_pack" "source_pack" {
   id           = "pack-with-source"
   group_id     = "default"
   description  = "Pack with source"
