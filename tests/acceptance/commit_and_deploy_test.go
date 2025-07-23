@@ -18,8 +18,8 @@ func TestCommitAndDeploy(t *testing.T) {
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_commit.my_commit", "message", "test"),
-						resource.TestCheckResourceAttr("criblio_commit.my_commit", "group", "syslog-workers"),
-						resource.TestCheckResourceAttr("criblio_deploy.my_deploy", "id", "syslog-workers"),
+						resource.TestCheckResourceAttr("criblio_commit.my_commit", "group", "default"),
+						resource.TestCheckResourceAttr("criblio_deploy.my_deploy", "id", "default"),
 					),
 				},
 				{
