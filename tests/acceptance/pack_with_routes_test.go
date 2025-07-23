@@ -19,8 +19,6 @@ func TestPackRoutes(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-with-routes"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack from source"),
-						//resource.TestCheckResourceAttr("criblio_pack_routes.my_packroutes", "display_name", "my_display_name"),
-						//resource.TestCheckResourceAttr("criblio_pack_routes.my_packroutes", "pack_path_parameter", "my_pack_path_parameter"),
 					),
 				},
 				{

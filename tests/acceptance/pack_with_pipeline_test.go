@@ -20,7 +20,6 @@ func TestPackPipeline(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack with pipeline"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "display_name", "Pack with pipeline"),
-						//resource.TestCheckResourceAttr("criblio_pack_pipeline.my_packpipeline", "group", "my_group_id"),
 						resource.TestCheckResourceAttr("criblio_pack_pipeline.my_packpipeline", "id", "my_id"),
 					),
 				},
