@@ -1,0 +1,1 @@
+../../examples/stream-syslog-to-lake/main.tf
