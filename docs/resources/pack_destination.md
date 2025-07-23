@@ -3906,8 +3906,8 @@ resource "criblio_pack_destination" "my_packdestination" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to PATCH for pack source
-- `pack` (String) pack ID to PATCH
+- `id` (String) Unique ID to DELETE
+- `pack` (String)
 
 ### Optional
 

@@ -28,7 +28,7 @@ func (r *PackDestinationResourceModel) RefreshFromOperationsListPackOutputRespon
 	return diags
 }
 
-func (r *PackDestinationResourceModel) RefreshFromOperationsUpdateSystemOutputsByPackAndIDResponseBody(ctx context.Context, resp *operations.UpdateSystemOutputsByPackAndIDResponseBody) diag.Diagnostics {
+func (r *PackDestinationResourceModel) RefreshFromOperationsUpdatePackOutputByIDResponseBody(ctx context.Context, resp *operations.UpdatePackOutputByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -62,30 +62,22 @@ func (r *PackDestinationResourceModel) ToOperationsCreatePackOutputRequest(ctx c
 	return &out, diags
 }
 
-func (r *PackDestinationResourceModel) ToOperationsDeleteSystemOutputsByPackAndIDRequest(ctx context.Context) (*operations.DeleteSystemOutputsByPackAndIDRequest, diag.Diagnostics) {
+func (r *PackDestinationResourceModel) ToOperationsDeletePackOutputByIDRequest(ctx context.Context) (*operations.DeletePackOutputByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
-
-	var pack string
-	pack = r.Pack.ValueString()
-
-	var groupID string
-	groupID = r.GroupID.ValueString()
 
 	var id string
 	id = r.ID.ValueString()
 
-	output, outputDiags := r.ToSharedOutput(ctx)
-	diags.Append(outputDiags...)
+	var groupID string
+	groupID = r.GroupID.ValueString()
 
-	if diags.HasError() {
-		return nil, diags
-	}
+	var pack string
+	pack = r.Pack.ValueString()
 
-	out := operations.DeleteSystemOutputsByPackAndIDRequest{
-		Pack:    pack,
-		GroupID: groupID,
+	out := operations.DeletePackOutputByIDRequest{
 		ID:      id,
-		Output:  *output,
+		GroupID: groupID,
+		Pack:    pack,
 	}
 
 	return &out, diags
@@ -108,17 +100,17 @@ func (r *PackDestinationResourceModel) ToOperationsListPackOutputRequest(ctx con
 	return &out, diags
 }
 
-func (r *PackDestinationResourceModel) ToOperationsUpdateSystemOutputsByPackAndIDRequest(ctx context.Context) (*operations.UpdateSystemOutputsByPackAndIDRequest, diag.Diagnostics) {
+func (r *PackDestinationResourceModel) ToOperationsUpdatePackOutputByIDRequest(ctx context.Context) (*operations.UpdatePackOutputByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var pack string
-	pack = r.Pack.ValueString()
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	var id string
-	id = r.ID.ValueString()
+	var pack string
+	pack = r.Pack.ValueString()
 
 	output, outputDiags := r.ToSharedOutput(ctx)
 	diags.Append(outputDiags...)
@@ -127,10 +119,10 @@ func (r *PackDestinationResourceModel) ToOperationsUpdateSystemOutputsByPackAndI
 		return nil, diags
 	}
 
-	out := operations.UpdateSystemOutputsByPackAndIDRequest{
-		Pack:    pack,
-		GroupID: groupID,
+	out := operations.UpdatePackOutputByIDRequest{
 		ID:      id,
+		GroupID: groupID,
+		Pack:    pack,
 		Output:  *output,
 	}
 

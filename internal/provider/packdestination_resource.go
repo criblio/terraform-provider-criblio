@@ -128,7 +128,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to PATCH for pack source`,
+				Description: `Unique ID to DELETE`,
 			},
 			"output_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
@@ -26247,8 +26247,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 				},
 			},
 			"pack": schema.StringAttribute{
-				Required:    true,
-				Description: `pack ID to PATCH`,
+				Required: true,
 			},
 		},
 	}
@@ -26406,13 +26405,13 @@ func (r *PackDestinationResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateSystemOutputsByPackAndIDRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdatePackOutputByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.UpdateSystemOutputsByPackAndID(ctx, *request)
+	res, err := r.client.Outputs.UpdatePackOutputByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -26432,7 +26431,7 @@ func (r *PackDestinationResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateSystemOutputsByPackAndIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePackOutputByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -26503,13 +26502,13 @@ func (r *PackDestinationResource) Delete(ctx context.Context, req resource.Delet
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteSystemOutputsByPackAndIDRequest(ctx)
+	request, requestDiags := data.ToOperationsDeletePackOutputByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.DeleteSystemOutputsByPackAndID(ctx, *request)
+	res, err := r.client.Outputs.DeletePackOutputByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

@@ -34,4 +34,4 @@ unit-test:
 	go test -v ./internal/sdk/internal/hooks
 
 test-speakeasy: 
-	speakeasy test
+	speakeasy test && speakeasy lint openapi --non-interactive -s openapi.yml

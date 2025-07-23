@@ -55601,7 +55601,7 @@ paths:
       responses: *a121
   "/m/{groupId}/p/{pack}/system/outputs/{id}":
     get:
-      operationId: getOutputById
+      operationId: getPackOutputById
       tags: *a120
       summary: Get Output by ID
       description: Get Output by ID
@@ -55627,7 +55627,7 @@ paths:
       responses: *a121
     patch:
       x-speakeasy-entity-operation: PackDestination#update
-      operationId: updateOutputById
+      operationId: updatePackOutputById
       tags: *a120
       summary: Update Output
       description: Update Output
@@ -55658,7 +55658,7 @@ paths:
       responses: *a121
     delete:
       x-speakeasy-entity-operation: PackDestination#delete
-      operationId: deleteOutputById
+      operationId: deletePackOutputById
       tags: *a120
       summary: Delete Output
       description: Delete Output
@@ -55680,99 +55680,6 @@ paths:
           schema:
             type: string
       responses: *a121
-    get:
-      operationId: getSystemOutputsByPackAndId
-      tags: *a135
-      summary: Get output destination by ID within a Pack
-      description: Get output destination by ID within a Pack
-      responses: *a136
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: *a137
-          description: Unique ID to GET for pack source
-        - name: pack
-          in: path
-          required: true
-          schema: *a138
-          description: pack ID to GET
-        - name: groupId
-          in: path
-          required: true
-          schema:
-            &a138
-            type: string
-          description: group Id
-    patch:
-      x-speakeasy-entity-operation: PackDestination#update
-      operationId: updateSystemOutputsByPackAndId
-      tags: *a126
-      summary: Update output destination by ID within a Pack
-      description: Update output destination by ID within a Pack
-      requestBody:
-        description: PackRequestBody object
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Output"
-      responses: *a127
-      parameters:
-        - name: pack
-          in: path
-          required: true
-          schema: *a138
-          description: pack ID to PATCH
-        - name: disabled
-          in: query
-          required: false
-          schema:
-            type: boolean
-        - name: groupId
-          in: path
-          required: true
-          schema:
-            &a138
-            type: string
-          description: group Id
-        - name: id
-          in: path
-          required: true
-          schema: *a137
-          description: Unique ID to PATCH for pack source
-    delete:
-      x-speakeasy-entity-operation: PackDestination#delete
-      operationId: deleteSystemOutputsByPackAndId
-      tags: *a126
-      summary: Delete input source a Pack
-      description: Delete input source a Pack
-      requestBody:
-        description: PackRequestBody object
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Output"
-      responses: *a127
-      parameters:
-        - name: pack
-          in: path
-          required: true
-          schema: *a138
-          description: pack ID to DELETE
-        - name: groupId
-          in: path
-          required: true
-          schema:
-            &a138
-            type: string
-          description: group Id
-        - name: id
-          in: path
-          required: true
-          schema: *a137
-          description: Unique ID to PATCH for pack source
   "/m/{groupId}/p/{pack}/system/lookups":
     get:
       x-speakeasy-entity-operation: PackLookups#read

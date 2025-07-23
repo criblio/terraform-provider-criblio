@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 9e8c250929883ac94b017782d7114762
+  docChecksum: 87ec960557004bb77b582947d002decf
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.586.0
-  generationVersion: 2.661.4
+  speakeasyVersion: 1.587.0
+  generationVersion: 2.662.0
   releaseVersion: 1.0.63
   configChecksum: f27a34a37d957fcd6a0a5a6c58718c92
   published: true
@@ -13,7 +13,7 @@ features:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.2.1
-    core: 3.41.16
+    core: 3.42.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
@@ -1191,6 +1191,7 @@ generatedFiles:
   - internal/sdk/models/operations/deletenotificationtargetbyid.go
   - internal/sdk/models/operations/deleteoutputbyid.go
   - internal/sdk/models/operations/deleteoutputpqbyid.go
+  - internal/sdk/models/operations/deletepackoutputbyid.go
   - internal/sdk/models/operations/deletepacksbyid.go
   - internal/sdk/models/operations/deleteparserbyid.go
   - internal/sdk/models/operations/deletepipelinebyid.go
@@ -1213,7 +1214,6 @@ generatedFiles:
   - internal/sdk/models/operations/deletesystemdiag.go
   - internal/sdk/models/operations/deletesysteminputsbypack.go
   - internal/sdk/models/operations/deletesystemlookupsbypackandid.go
-  - internal/sdk/models/operations/deletesystemoutputsbypackandid.go
   - internal/sdk/models/operations/deletesystemprojectspipelinesbygroupidandprojectidandpipelineid.go
   - internal/sdk/models/operations/deleteteambyid.go
   - internal/sdk/models/operations/deleteusagegroupbyid.go
@@ -1307,6 +1307,7 @@ generatedFiles:
   - internal/sdk/models/operations/getoutputpqbyid.go
   - internal/sdk/models/operations/getoutputsamplesbyid.go
   - internal/sdk/models/operations/getoutputstatusbyid.go
+  - internal/sdk/models/operations/getpackoutputbyid.go
   - internal/sdk/models/operations/getpacks.go
   - internal/sdk/models/operations/getpacksbygroup.go
   - internal/sdk/models/operations/getpacksexportbyid.go
@@ -1369,7 +1370,6 @@ generatedFiles:
   - internal/sdk/models/operations/getsystemlookupsbypack.go
   - internal/sdk/models/operations/getsystemlookupsbypackandid.go
   - internal/sdk/models/operations/getsystemmetrics.go
-  - internal/sdk/models/operations/getsystemoutputsbypackandid.go
   - internal/sdk/models/operations/getsystemprocesses.go
   - internal/sdk/models/operations/getsystemprojectspipelinesbygroupidandprojectid.go
   - internal/sdk/models/operations/getsystemprojectspipelinesbygroupidandprojectidandpipelineid.go
@@ -1495,6 +1495,7 @@ generatedFiles:
   - internal/sdk/models/operations/updatenotificationbyid.go
   - internal/sdk/models/operations/updatenotificationtargetbyid.go
   - internal/sdk/models/operations/updateoutputbyid.go
+  - internal/sdk/models/operations/updatepackoutputbyid.go
   - internal/sdk/models/operations/updatepacks.go
   - internal/sdk/models/operations/updatepacksbyid.go
   - internal/sdk/models/operations/updateparserbyid.go
@@ -1518,7 +1519,6 @@ generatedFiles:
   - internal/sdk/models/operations/updatesecuritykmsconfig.go
   - internal/sdk/models/operations/updatesubscriptionbyid.go
   - internal/sdk/models/operations/updatesysteminputsbypack.go
-  - internal/sdk/models/operations/updatesystemoutputsbypackandid.go
   - internal/sdk/models/operations/updatesystemprojectspipelinesbygroupidandprojectidandpipelineid.go
   - internal/sdk/models/operations/updatesystemsettings.go
   - internal/sdk/models/operations/updatesystemsettingsauth.go
@@ -7006,6 +7006,44 @@ examples:
           pack: "<value>"
       requestBody:
         application/json: {"systemFields": ["cribl_pipe"], "streamtags": [], "brokers": ["<value 1>", "<value 2>", "<value 3>"], "topic": "<value>", "ack": 1, "format": "json", "compression": "gzip", "maxRecordSizeKB": 768, "flushEventCount": 1000, "flushPeriodSec": 1, "connectionTimeout": 10000, "requestTimeout": 60000, "maxRetries": 5, "maxBackOff": 30000, "initialBackoff": 300, "backoffRate": 2, "authenticationTimeout": 10000, "reauthenticationThreshold": 10000, "onBackpressure": "block", "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getPackOutputById:
+    speakeasy-default-get-pack-output-by-id:
+      parameters:
+        path:
+          id: "<id>"
+          groupId: "<id>"
+          pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  updatePackOutputById:
+    speakeasy-default-update-pack-output-by-id:
+      parameters:
+        path:
+          id: "<id>"
+          groupId: "<id>"
+          pack: "<value>"
+      requestBody:
+        application/json: {"id": "<id>", "type": "tcpjson", "systemFields": ["cribl_pipe"], "streamtags": [], "loadBalanced": true, "compression": "gzip", "logFailedRequests": false, "throttleRatePerSec": "0", "connectionTimeout": 10000, "writeTimeout": 60000, "tokenTTLMinutes": 60, "sendHeader": true, "onBackpressure": "block", "authType": "manual", "excludeSelf": false, "dnsResolvePeriodSec": 600, "loadBalanceStatsPeriodSec": 300, "maxConcurrentSenders": 0, "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error", "authToken": ""}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deletePackOutputById:
+    speakeasy-default-delete-pack-output-by-id:
+      parameters:
+        path:
+          id: "<id>"
+          groupId: "<id>"
+          pack: "<value>"
       responses:
         "200":
           application/json: {}
