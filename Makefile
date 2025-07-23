@@ -3,9 +3,6 @@
 OS=$(shell uname | tr "[:upper:]" "[:lower:]")
 ARCH=$(shell uname -m | sed 's/aarch64/arm64/' | sed 's/x86_64/amd64/')
 e2e-test:
-	export CRIBL_SERVER_URL="https://app.cribl-playground.cloud" && \
-	export CRIBL_ORGANIZATION_ID="beautiful-nguyen-y8y4azd" &&  \
-	export CRIBL_WORKSPACE_ID="tfprovider2" 
 	@cd tests/e2e; rm -rf .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup .terraform local-plugins
 	mkdir -p tests/e2e/local-plugins/registry.terraform.io/criblio/criblio/999.99.9/$(OS)_$(ARCH)
 	go mod tidy

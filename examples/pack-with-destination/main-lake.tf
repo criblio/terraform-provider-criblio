@@ -10,7 +10,7 @@ resource "criblio_pack" "dest_pack" {
 
 resource "criblio_pack_destination" "my_packdest" {
   id       = "test"
-  pack  = criblio_pack.dest_pack.id
+  pack     = criblio_pack.dest_pack.id
   group_id = "default"
 
   output_s3 = {
@@ -54,4 +54,4 @@ resource "criblio_pack_destination" "my_packdest" {
 }
 
 
- 
+
