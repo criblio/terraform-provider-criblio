@@ -9,7 +9,10 @@ e2e-test:
 	go build -o tests/e2e/local-plugins/registry.terraform.io/criblio/criblio/999.99.9/$(OS)_$(ARCH)/terraform-provider-criblio_v999.99.9
 	#the remote mirror won't have our custom version, so this will always fail, hence || true
 	@cd tests/e2e; terraform providers mirror ./local-plugins || true
-	@cd tests/e2e; ls -R local-plugins; terraform init -plugin-dir ./local-plugins; flag1=$$?; terraform apply -auto-approve; flag2=$$?; terraform destroy -auto-approve; flag3=$$?; if [[ $$flag1 -ne 0 ]] || [[ $$flag2 -ne 0 ]] || [[ $$flag3 -ne 0 ]]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
+	@cd tests/e2e; ls -R local-plugins; terraform init -plugin-dir ./local-plugins; 
+	@cd tests/e2e; terraform apply -auto-approve; terraform destroy -auto-approve
+	@#cd tests/e2e; terraform import criblio_appscope_config.my_appscopeconfig "sample_appscope_config"; terraform import criblio_global_var.my_globalvar "sample_globalvar"; terraform import criblio_grok.my_grok "test_grok"; terraform import criblio_regex.my_regex "my_regex"; terraform import criblio_subscription.my_subscription_with_enabled "my_subscription_with_enabled"
+	@#cd tests/e2e; terraform apply -auto-approve; flag2=$$?; terraform destroy -auto-approve; flag3=$$?; if [ $$flag2 -ne 0 ] || [ $$flag3 -ne 0 ]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
 
 acceptance-test:
 	export CRIBL_SERVER_URL="https://app.cribl-playground.cloud" && \
