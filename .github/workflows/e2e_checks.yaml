@@ -57,10 +57,4 @@ jobs:
 
       - name: Run Speakeasy Tests
         run: |
-          #try to clean up runner
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "/usr/local/share/boost"
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-
           timeout 30m speakeasy run --skip-versioning --output console --minimal
