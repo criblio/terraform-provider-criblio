@@ -57,4 +57,21 @@ jobs:
 
       - name: Run Speakeasy Tests
         run: |
+          echo BEFORE
+          df -h
+
+          echo 
+          echo 
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          sudo docker builder prune -a
+
+          echo 
+          echo
+          echo AFTER
+          df -h
+
           timeout 30m speakeasy run --skip-versioning --output console --minimal
+
+      - run: df -h
+        if: always()
