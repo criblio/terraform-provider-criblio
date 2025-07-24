@@ -37,45 +37,25 @@ jobs:
     timeout-minutes: 45
     strategy:
       fail-fast: false
+      matrix:
     steps:
       - uses: actions/checkout@v4.2.2
 
       - name: Install Speakeasy
-        uses: mheap/setup-go-cli@v1
+        uses: mheap/setup-go-cli@v5
         with:
           owner: speakeasy-api
           repo: speakeasy
           cli_name: speakeasy
           package_type: zip
 
-      - name: Configure speakeasy CLI
-        run: |
-          mkdir -p ~/.speakeasy
-          echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
-
       - uses: dominikh/staticcheck-action@v1.3.1
 
       - name: Run Speakeasy Tests
-        run: |
-          echo BEFORE
-          df -h
-          echo 
-          free -h
+        uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@v15
+        with:
+          force: true
+          mode: test
+          github_repository: acme-org/acme-sdk-typescript
+          speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
 
-          echo 
-          echo 
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-          sudo docker image prune --all --force
-          sudo docker builder prune -a
-
-          echo 
-          echo
-          echo AFTER
-          df -h
-
-          speakeasy run --skip-versioning --output console --minimal
-
-      - name: check
-        if: always()
-        run: | 
-          df -h
