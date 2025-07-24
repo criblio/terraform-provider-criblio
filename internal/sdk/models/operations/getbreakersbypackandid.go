@@ -10,7 +10,7 @@ import (
 type GetBreakersByPackAndIDRequest struct {
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// pack ID to POST
+	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
@@ -37,16 +37,8 @@ func (o *GetBreakersByPackAndIDRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-// GetBreakersByPackAndIDResponseBody - a list of Routes objects
+// GetBreakersByPackAndIDResponseBody - a list of Event Breaker Ruleset objects
 type GetBreakersByPackAndIDResponseBody struct {
-	Items []shared.Routes `json:"items,omitempty"`
-}
-
-func (o *GetBreakersByPackAndIDResponseBody) GetItems() []shared.Routes {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type GetBreakersByPackAndIDResponse struct {
@@ -56,7 +48,7 @@ type GetBreakersByPackAndIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Routes objects
+	// a list of Event Breaker Ruleset objects
 	Object *GetBreakersByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error

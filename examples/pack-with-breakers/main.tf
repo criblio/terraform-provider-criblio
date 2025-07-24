@@ -1,14 +1,36 @@
-/*
 resource "criblio_pack_breakers" "my_packbreakers" {
-  description         = "my_description"
-  disabled            = true
-  display_name        = "my_display_name"
-  group_id            = "my_group_id"
-  id                  = "my_id"
-  pack                = criblio_pack.breakers_pack.id
-  pack_path_parameter = "my_pack_path_parameter"
-  source              = "my_source"
-  version             = "my_version"
+  description    = "my_description"
+  group_id       = "default"
+  id             = "my_id"
+  lib            = "custom"
+  min_raw_length = 94618.96
+  pack           = criblio_pack.breakers_pack.id
+  rules = [
+    {
+      condition           = "my_condition"
+      disabled            = true
+      event_breaker_regex = "my_event_breaker_regex"
+      fields = [
+        {
+          name  = "my_name"
+          value = "my_value"
+        }
+      ]
+      max_event_bytes     = 101343288.08
+      name                = "my_name"
+      parser_enabled      = true
+      should_use_data_raw = false
+      timestamp = {
+        format = "my_format"
+        length = 9.13
+        type   = "current"
+      }
+      timestamp_anchor_regex = "/\\s(?=\\d{10}\\s\\d{10}\\s\\w)/"
+      timestamp_timezone     = "utc"
+      type                   = "aws_vpcflow"
+    }
+  ]
+  tags = "my_tags"
 }
 
 resource "criblio_pack" "breakers_pack" {
@@ -25,4 +47,3 @@ resource "criblio_pack" "breakers_pack" {
 output "pack_breakers_details" {
   value = criblio_pack.my_pack
 }
-*/

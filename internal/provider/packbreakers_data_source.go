@@ -5,13 +5,9 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -32,15 +28,8 @@ type PackBreakersDataSource struct {
 
 // PackBreakersDataSourceModel describes the data model.
 type PackBreakersDataSourceModel struct {
-	Description       types.String     `tfsdk:"description"`
-	Disabled          types.Bool       `tfsdk:"disabled"`
-	DisplayName       types.String     `tfsdk:"display_name"`
-	GroupID           types.String     `tfsdk:"group_id"`
-	ID                types.String     `tfsdk:"id"`
-	Items             []tfTypes.Routes `tfsdk:"items"`
-	PackPathParameter types.String     `tfsdk:"pack_path_parameter"`
-	Source            types.String     `tfsdk:"source"`
-	Version           types.String     `tfsdk:"version"`
+	GroupID types.String `tfsdk:"group_id"`
+	Pack    types.String `tfsdk:"pack"`
 }
 
 // Metadata returns the data source type name.
@@ -54,130 +43,13 @@ func (r *PackBreakersDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "PackBreakers DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
-				Optional: true,
-			},
-			"disabled": schema.BoolAttribute{
-				Optional: true,
-			},
-			"display_name": schema.StringAttribute{
-				Optional: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group ID to GET`,
 			},
-			"id": schema.StringAttribute{
-				Required: true,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
-							},
-							Description: `Comments`,
-						},
-						"groups": schema.MapNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Routes ID`,
-						},
-						"routes": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
-									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Description: `JavaScript expression to select data to route`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"output_expression": schema.StringAttribute{
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
-								},
-							},
-							Description: `Pipeline routing rules`,
-						},
-					},
-				},
-			},
-			"pack_path_parameter": schema.StringAttribute{
+			"pack": schema.StringAttribute{
 				Required:    true,
 				Description: `pack ID to GET`,
-			},
-			"source": schema.StringAttribute{
-				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.ExactlyOneOf(path.Expressions{
-						path.MatchRelative().AtParent().AtName("filename"),
-					}...),
-				},
-			},
-			"version": schema.StringAttribute{
-				Optional: true,
 			},
 		},
 	}
@@ -227,7 +99,7 @@ func (r *PackBreakersDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Routes.GetBreakersByPack(ctx, *request)
+	res, err := r.client.EventBreakerRules.GetBreakersByPack(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

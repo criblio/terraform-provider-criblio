@@ -9,17 +9,16 @@ import (
 
 type GetBreakersByPackRequest struct {
 	// pack ID to GET
-	PackPathParameter string `pathParam:"style=simple,explode=false,name=pack"`
+	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group ID to GET
-	GroupID string       `pathParam:"style=simple,explode=false,name=groupId"`
-	Pack1   *shared.Pack `request:"mediaType=application/json"`
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetBreakersByPackRequest) GetPackPathParameter() string {
+func (o *GetBreakersByPackRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
-	return o.PackPathParameter
+	return o.Pack
 }
 
 func (o *GetBreakersByPackRequest) GetGroupID() string {
@@ -29,23 +28,8 @@ func (o *GetBreakersByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *GetBreakersByPackRequest) GetPack1() *shared.Pack {
-	if o == nil {
-		return nil
-	}
-	return o.Pack1
-}
-
-// GetBreakersByPackResponseBody - a list of Routes objects
+// GetBreakersByPackResponseBody - a list of Event Breaker Ruleset objects
 type GetBreakersByPackResponseBody struct {
-	Items []shared.Routes `json:"items,omitempty"`
-}
-
-func (o *GetBreakersByPackResponseBody) GetItems() []shared.Routes {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type GetBreakersByPackResponse struct {
@@ -55,7 +39,7 @@ type GetBreakersByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Routes objects
+	// a list of Event Breaker Ruleset objects
 	Object *GetBreakersByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

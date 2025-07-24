@@ -55823,15 +55823,11 @@ paths:
     get:
       x-speakeasy-entity-operation: PackBreakers#read
       operationId: getBreakersByPack
-      tags: *a135
+      tags:
+        &a99
+        - event_breaker_rules
       summary: Get a list of breakers within a Pack
       description: Get a list of breakers within a Pack
-      responses: *a136
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Pack"
       parameters:
         - name: pack
           in: path
@@ -55847,20 +55843,47 @@ paths:
             &a138
             type: string
           description: group ID to GET
+      responses:
+        &a100
+        "200":
+          description: a list of Event Breaker Ruleset objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EventBreakerRuleset"
+                    x-speakeasy-ignore: true
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     post:
       x-speakeasy-entity-operation: PackBreakers#create
       operationId: createBreakersByPack
-      tags: *a135
+      tags: *a99
       summary: Create a breaker within a Pack
       description: Get a breaker within a Pack
       responses: *a136
       requestBody:
-        description: Pipeline object to be updated in specified Project
+        description: New Event Breaker Ruleset object
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pack"
+              $ref: "#/components/schemas/EventBreakerRuleset"
+      responses: *a100
       parameters:
         - name: pack
           in: path
@@ -55879,10 +55902,10 @@ paths:
   "/m/{groupId}/p/{pack}/lib/breakers/{id}":
     get:
       operationId: getBreakersByPackAndId
-      tags: *a135
+      tags: *a99
       summary: Get list of breakers by ID within a Pack
       description: Get list of breakers by ID within a Pack
-      responses: *a136
+      responses: *a100
       parameters:
         - name: id
           in: path
@@ -55893,9 +55916,9 @@ paths:
           in: path
           required: true
           schema:
-            &a138
+            &a101
             type: string
-          description: pack ID to POST
+          description: pack ID to GET
         - name: groupId
           in: path
           required: true
@@ -55906,7 +55929,7 @@ paths:
     patch:
       x-speakeasy-entity-operation: PackBreakers#update
       operationId: updateBreakersByPackAndId
-      tags: *a135
+      tags: *a99
       summary: Update Routes within a Pack
       description: Update Routes by ID within a Pack
       requestBody:
@@ -55915,13 +55938,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pack"
-      responses: *a136
+              $ref: "#/components/schemas/EventBreakerRuleset"
+      responses: *a100
       parameters:
         - name: id
           in: path
           required: true
-          schema: *a128
+          schema: *a101
           description: Unique ID to PATCH for pack
         - name: pack
           in: path
@@ -55938,15 +55961,15 @@ paths:
     delete:
       x-speakeasy-entity-operation: PackBreakers#delete
       operationId: deleteBreakersByPackAndId
-      tags: *a126
+      tags: *a99
       summary: Delete breakers within a Pack
       description: Delete breakers within a Pack
-      responses: *a127
+      responses: *a100
       parameters:
         - name: id
           in: path
           required: true
-          schema: *a128
+          schema: *a101
           description: Unique ID to DELETE for pack
         - name: pack
           in: path
