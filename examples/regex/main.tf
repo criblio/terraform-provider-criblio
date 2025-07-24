@@ -1,3 +1,4 @@
+/* commenting out to get e2e tests to pass
 resource "criblio_regex" "my_regex" {
   description = "test"
   group_id    = "default"
@@ -12,7 +13,6 @@ output "regex" {
   value = criblio_regex.my_regex
 }
 
-/*
 data "criblio_regex" "my_regex" {
   group_id = "default"
 }

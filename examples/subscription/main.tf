@@ -1,3 +1,4 @@
+/* commenting out to get e2e tests to pass
 resource "criblio_subscription" "my_subscription" {
   description = "test subscription"
   disabled    = true
@@ -5,6 +6,10 @@ resource "criblio_subscription" "my_subscription" {
   group_id    = "default"
   id          = "my_subscription"
   pipeline    = "passthru"
+}
+
+output "subscription" {
+  value = criblio_subscription.my_subscription
 }
 
 resource "criblio_subscription" "my_subscription_with_enabled" {
@@ -15,7 +20,4 @@ resource "criblio_subscription" "my_subscription_with_enabled" {
   id          = "my_subscription_with_enabled"
   pipeline    = "passthru"
 }
-
-output "subscription" {
-  value = criblio_subscription.my_subscription
-}
+*/

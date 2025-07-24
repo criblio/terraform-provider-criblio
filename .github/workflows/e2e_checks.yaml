@@ -3,6 +3,7 @@ on:
   push:
     branches: 
       - 'main'
+      - 'INFRA-5824/ktraister/e2e-test-fixups'
 
 concurrency:
   group: tfprovider2
@@ -33,6 +34,7 @@ jobs:
 
   speakeasy_test:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -52,5 +54,6 @@ jobs:
       - uses: dominikh/staticcheck-action@v1.3.1
 
       - name: Run Speakeasy Tests
+        timeout-minutes: 30
         run: |
           timeout 30m make build-speakeasy

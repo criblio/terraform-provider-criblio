@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 87ec960557004bb77b582947d002decf
+  docChecksum: d08063080287a2551072d5c733770f78
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.587.0
-  generationVersion: 2.662.0
+  speakeasyVersion: 1.588.0
+  generationVersion: 2.663.0
   releaseVersion: 1.0.63
   configChecksum: f27a34a37d957fcd6a0a5a6c58718c92
   published: true
@@ -13,7 +13,7 @@ features:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.2.1
-    core: 3.42.0
+    core: 3.43.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
@@ -1178,6 +1178,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteglobalvariablebyid.go
   - internal/sdk/models/operations/deleteglobalvariablelibvarsbypackandid.go
   - internal/sdk/models/operations/deletegrokfilebyid.go
+  - internal/sdk/models/operations/deletegroupsbyid.go
   - internal/sdk/models/operations/deletehmacfunctionbyid.go
   - internal/sdk/models/operations/deleteinputbyid.go
   - internal/sdk/models/operations/deleteiometricsentrybyid.go

@@ -63434,6 +63434,36 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Group'
+    delete:
+      operationId: deleteGroupsById
+      tags:
+      - groups
+      summary: Delete a specific ConfigGroup object
+      description: Delete a specific ConfigGroup object
+      x-speakeasy-entity-operation: Group#delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Group id
+      responses:
+        "200":
+          description: a list of ConfigGroup objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Group"
   "/products/{product}/groups/{id}/acl/teams":
     get:
       operationId: getProductsGroupsAclTeamsByProductAndId
