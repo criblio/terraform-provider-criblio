@@ -10,6 +10,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  timeout-minutes: 30
   e2e_test:
     runs-on: ubuntu-latest
     steps:
