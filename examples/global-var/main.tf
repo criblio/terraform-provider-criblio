@@ -1,4 +1,3 @@
-/* commenting out to get e2e tests to pass
 resource "criblio_global_var" "my_globalvar" {
   description = "test"
   group_id    = "default"
@@ -12,4 +11,3 @@ resource "criblio_global_var" "my_globalvar" {
 output "global_var" {
   value = criblio_global_var.my_globalvar
 }
-*/

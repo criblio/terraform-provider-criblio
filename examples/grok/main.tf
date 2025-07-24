@@ -1,4 +1,3 @@
-/* commenting out to get e2e tests to pass
 resource "criblio_grok" "my_grok" {
   group_id = "default"
   id       = "test_grok"
@@ -26,4 +25,3 @@ EOT
 output "grok" {
   value = criblio_grok.my_grok
 }
-*/

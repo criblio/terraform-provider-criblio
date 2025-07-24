@@ -1,4 +1,4 @@
-/* comments added to get e2e tests to pass
+/*
 resource "criblio_pack_breakers" "my_packbreakers" {
   description         = "my_description"
   disabled            = true
