@@ -59,6 +59,8 @@ jobs:
         run: |
           echo BEFORE
           df -h
+          echo 
+          free -h
 
           echo 
           echo 
@@ -71,7 +73,9 @@ jobs:
           echo AFTER
           df -h
 
-          timeout 30m speakeasy run --skip-versioning --output console --minimal
+          speakeasy run --skip-versioning --output console --minimal
 
-      - run: df -h
+      - name: check
         if: always()
+        run: | 
+          df -h
