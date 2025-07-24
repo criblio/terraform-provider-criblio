@@ -11,8 +11,7 @@ e2e-test:
 	@cd tests/e2e; terraform providers mirror ./local-plugins || true; ls -R local-plugins; terraform init -plugin-dir ./local-plugins; 
 	#imports can be flakey, pass them anyway
 	@cd tests/e2e; terraform import criblio_group.syslog_worker_group "syslog-workers"; terraform import criblio_group.my_edge_fleet "my-edge-fleet"; terraform import criblio_appscope_config.my_appscopeconfig "default"; terraform import criblio_grok.my_grok "default"; terraform import criblio_global_var.my_globalvar "default"; terraform import criblio_subscription.my_subscription "default"; terraform import criblio_regex.my_regex "default"; terraform import criblio_subscription.my_subscription_with_enabled "default" || true
-	@cd tests/e2e; terraform apply -auto-approve; terraform destroy -auto-approve
-	@#cd tests/e2e; terraform apply -auto-approve; flag2=$$?; terraform destroy -auto-approve; flag3=$$?; if [ $$flag2 -ne 0 ] || [ $$flag3 -ne 0 ]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
+	@cd tests/e2e; terraform apply -auto-approve; flag2=$$?; terraform destroy -auto-approve; flag3=$$?; if [ $$flag2 -ne 0 ] || [ $$flag3 -ne 0 ]; then echo; echo "***FAILURE IN TERRAFORM OPS***"; echo; exit 1; fi
 
 acceptance-test:
 	export CRIBL_SERVER_URL="https://app.cribl-playground.cloud" && \

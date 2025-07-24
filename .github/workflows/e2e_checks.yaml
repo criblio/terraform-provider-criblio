@@ -58,5 +58,4 @@ jobs:
       - name: Run Speakeasy Tests
         timeout-minutes: 30
         run: |
-          #timeout 30m make build-speakeasy
-          speakeasy run --skip-versioning --output console --minimal
+          timeout 30m speakeasy run --skip-versioning --output console --minimal
