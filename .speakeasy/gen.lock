@@ -1,25 +1,26 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 87ec960557004bb77b582947d002decf
+  docChecksum: 93a1ce477a941950e64ddfbe540e489d
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.587.0
-  generationVersion: 2.662.0
-  releaseVersion: 1.0.63
-  configChecksum: f27a34a37d957fcd6a0a5a6c58718c92
+  speakeasyVersion: 1.589.0
+  generationVersion: 2.664.0
+  releaseVersion: 1.3.12
+  configChecksum: e56ed7360b5e4f51364be1a358e6e39b
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.2.1
-    core: 3.42.0
+    core: 3.43.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
     globalServerURLs: 2.82.2
     ignores: 2.81.1
     inputOutputModels: 2.83.0
+    nameOverrides: 2.81.3
     nullables: 0.0.0
     oauth2ClientCredentials: 0.1.5
     serverIDs: 2.81.1
@@ -30,6 +31,7 @@ generatedFiles:
   - examples/README.md
   - examples/data-sources/criblio_appscope_config/data-source.tf
   - examples/data-sources/criblio_config_version/data-source.tf
+  - examples/data-sources/criblio_cribl_lake_dataset/data-source.tf
   - examples/data-sources/criblio_database_connection/data-source.tf
   - examples/data-sources/criblio_destination/data-source.tf
   - examples/data-sources/criblio_event_breaker_ruleset/data-source.tf
@@ -38,6 +40,8 @@ generatedFiles:
   - examples/data-sources/criblio_group/data-source.tf
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
+  - examples/data-sources/criblio_notification/data-source.tf
+  - examples/data-sources/criblio_notification_target/data-source.tf
   - examples/data-sources/criblio_pack/data-source.tf
   - examples/data-sources/criblio_pack_breakers/data-source.tf
   - examples/data-sources/criblio_pack_destination/data-source.tf
@@ -51,12 +55,21 @@ generatedFiles:
   - examples/data-sources/criblio_project/data-source.tf
   - examples/data-sources/criblio_regex/data-source.tf
   - examples/data-sources/criblio_schema/data-source.tf
+  - examples/data-sources/criblio_search_dashboard/data-source.tf
+  - examples/data-sources/criblio_search_dashboard_category/data-source.tf
+  - examples/data-sources/criblio_search_dataset/data-source.tf
+  - examples/data-sources/criblio_search_dataset_provider/data-source.tf
+  - examples/data-sources/criblio_search_macro/data-source.tf
+  - examples/data-sources/criblio_search_saved_query/data-source.tf
+  - examples/data-sources/criblio_search_usage_group/data-source.tf
   - examples/data-sources/criblio_source/data-source.tf
   - examples/data-sources/criblio_subscription/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/criblio_appscope_config/import.sh
   - examples/resources/criblio_appscope_config/resource.tf
   - examples/resources/criblio_commit/resource.tf
+  - examples/resources/criblio_cribl_lake_dataset/import.sh
+  - examples/resources/criblio_cribl_lake_dataset/resource.tf
   - examples/resources/criblio_database_connection/import.sh
   - examples/resources/criblio_database_connection/resource.tf
   - examples/resources/criblio_deploy/resource.tf
@@ -74,6 +87,9 @@ generatedFiles:
   - examples/resources/criblio_hmac_function/resource.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
+  - examples/resources/criblio_notification/import.sh
+  - examples/resources/criblio_notification/resource.tf
+  - examples/resources/criblio_notification_target/resource.tf
   - examples/resources/criblio_pack/import.sh
   - examples/resources/criblio_pack/resource.tf
   - examples/resources/criblio_pack_breakers/import.sh
@@ -101,6 +117,20 @@ generatedFiles:
   - examples/resources/criblio_regex/resource.tf
   - examples/resources/criblio_schema/import.sh
   - examples/resources/criblio_schema/resource.tf
+  - examples/resources/criblio_search_dashboard/import.sh
+  - examples/resources/criblio_search_dashboard/resource.tf
+  - examples/resources/criblio_search_dashboard_category/import.sh
+  - examples/resources/criblio_search_dashboard_category/resource.tf
+  - examples/resources/criblio_search_dataset/import.sh
+  - examples/resources/criblio_search_dataset/resource.tf
+  - examples/resources/criblio_search_dataset_provider/import.sh
+  - examples/resources/criblio_search_dataset_provider/resource.tf
+  - examples/resources/criblio_search_macro/import.sh
+  - examples/resources/criblio_search_macro/resource.tf
+  - examples/resources/criblio_search_saved_query/import.sh
+  - examples/resources/criblio_search_saved_query/resource.tf
+  - examples/resources/criblio_search_usage_group/import.sh
+  - examples/resources/criblio_search_usage_group/resource.tf
   - examples/resources/criblio_source/import.sh
   - examples/resources/criblio_source/resource.tf
   - examples/resources/criblio_subscription/import.sh
@@ -127,6 +157,10 @@ generatedFiles:
   - internal/provider/commit_resource_sdk.go
   - internal/provider/configversion_data_source.go
   - internal/provider/configversion_data_source_sdk.go
+  - internal/provider/cribllakedataset_data_source.go
+  - internal/provider/cribllakedataset_data_source_sdk.go
+  - internal/provider/cribllakedataset_resource.go
+  - internal/provider/cribllakedataset_resource_sdk.go
   - internal/provider/databaseconnection_data_source.go
   - internal/provider/databaseconnection_data_source_sdk.go
   - internal/provider/databaseconnection_resource.go
@@ -161,6 +195,14 @@ generatedFiles:
   - internal/provider/lookupfile_data_source_sdk.go
   - internal/provider/lookupfile_resource.go
   - internal/provider/lookupfile_resource_sdk.go
+  - internal/provider/notification_data_source.go
+  - internal/provider/notification_data_source_sdk.go
+  - internal/provider/notification_resource.go
+  - internal/provider/notification_resource_sdk.go
+  - internal/provider/notificationtarget_data_source.go
+  - internal/provider/notificationtarget_data_source_sdk.go
+  - internal/provider/notificationtarget_resource.go
+  - internal/provider/notificationtarget_resource_sdk.go
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
   - internal/provider/pack_resource.go
@@ -230,6 +272,34 @@ generatedFiles:
   - internal/provider/schema_data_source_sdk.go
   - internal/provider/schema_resource.go
   - internal/provider/schema_resource_sdk.go
+  - internal/provider/searchdashboard_data_source.go
+  - internal/provider/searchdashboard_data_source_sdk.go
+  - internal/provider/searchdashboard_resource.go
+  - internal/provider/searchdashboard_resource_sdk.go
+  - internal/provider/searchdashboardcategory_data_source.go
+  - internal/provider/searchdashboardcategory_data_source_sdk.go
+  - internal/provider/searchdashboardcategory_resource.go
+  - internal/provider/searchdashboardcategory_resource_sdk.go
+  - internal/provider/searchdataset_data_source.go
+  - internal/provider/searchdataset_data_source_sdk.go
+  - internal/provider/searchdataset_resource.go
+  - internal/provider/searchdataset_resource_sdk.go
+  - internal/provider/searchdatasetprovider_data_source.go
+  - internal/provider/searchdatasetprovider_data_source_sdk.go
+  - internal/provider/searchdatasetprovider_resource.go
+  - internal/provider/searchdatasetprovider_resource_sdk.go
+  - internal/provider/searchmacro_data_source.go
+  - internal/provider/searchmacro_data_source_sdk.go
+  - internal/provider/searchmacro_resource.go
+  - internal/provider/searchmacro_resource_sdk.go
+  - internal/provider/searchsavedquery_data_source.go
+  - internal/provider/searchsavedquery_data_source_sdk.go
+  - internal/provider/searchsavedquery_resource.go
+  - internal/provider/searchsavedquery_resource_sdk.go
+  - internal/provider/searchusagegroup_data_source.go
+  - internal/provider/searchusagegroup_data_source_sdk.go
+  - internal/provider/searchusagegroup_resource.go
+  - internal/provider/searchusagegroup_resource_sdk.go
   - internal/provider/source_data_source.go
   - internal/provider/source_data_source_sdk.go
   - internal/provider/source_resource.go
@@ -243,6 +313,30 @@ generatedFiles:
   - internal/provider/typeconvert/int.go
   - internal/provider/types/additional_property.go
   - internal/provider/types/allow.go
+  - internal/provider/types/api_aws_dataset.go
+  - internal/provider/types/api_aws_provider.go
+  - internal/provider/types/api_azure_data_explorer_dataset.go
+  - internal/provider/types/api_azure_data_explorer_provider.go
+  - internal/provider/types/api_azure_dataset.go
+  - internal/provider/types/api_azure_provider.go
+  - internal/provider/types/api_elastic_search_dataset.go
+  - internal/provider/types/api_elastic_search_provider.go
+  - internal/provider/types/api_gcp_dataset.go
+  - internal/provider/types/api_gcp_provider.go
+  - internal/provider/types/api_google_workspace_dataset.go
+  - internal/provider/types/api_google_workspace_provider.go
+  - internal/provider/types/api_ms_graph_dataset.go
+  - internal/provider/types/api_ms_graph_provider.go
+  - internal/provider/types/api_okta_dataset.go
+  - internal/provider/types/api_okta_provider.go
+  - internal/provider/types/api_open_search_dataset.go
+  - internal/provider/types/api_open_search_provider.go
+  - internal/provider/types/api_tailscale_dataset.go
+  - internal/provider/types/api_tailscale_provider.go
+  - internal/provider/types/api_zoom_dataset.go
+  - internal/provider/types/api_zoom_provider.go
+  - internal/provider/types/apihttp_dataset.go
+  - internal/provider/types/apihttp_provider.go
   - internal/provider/types/appscope_config.go
   - internal/provider/types/appscope_config_cribl.go
   - internal/provider/types/appscope_config_event.go
@@ -273,19 +367,48 @@ generatedFiles:
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/author.go
+  - internal/provider/types/aws_account_config.go
+  - internal/provider/types/aws_security_lake_dataset.go
+  - internal/provider/types/aws_security_lake_provider.go
+  - internal/provider/types/axis.go
+  - internal/provider/types/azure_account_config.go
+  - internal/provider/types/azure_blob_dataset.go
+  - internal/provider/types/azure_blob_dataset_extra_path.go
+  - internal/provider/types/azure_blob_provider.go
+  - internal/provider/types/cache_connection.go
   - internal/provider/types/cert_options.go
+  - internal/provider/types/chart_config.go
+  - internal/provider/types/chart_data.go
+  - internal/provider/types/chart_series.go
+  - internal/provider/types/click_house_dataset.go
+  - internal/provider/types/click_house_provider.go
   - internal/provider/types/cloud.go
   - internal/provider/types/collectors.go
+  - internal/provider/types/color_thresholds.go
   - internal/provider/types/comment.go
   - internal/provider/types/commit.go
+  - internal/provider/types/condition_specific_configs.go
   - internal/provider/types/config_group.go
   - internal/provider/types/config_group_cloud.go
   - internal/provider/types/config_group_git.go
   - internal/provider/types/config_group_lookups.go
   - internal/provider/types/consumers.go
+  - internal/provider/types/cribl_leader_dataset.go
+  - internal/provider/types/cribl_leader_dataset_extra_path.go
+  - internal/provider/types/cribl_leader_provider.go
+  - internal/provider/types/custom_data.go
+  - internal/provider/types/custom_data_point_scale.go
   - internal/provider/types/custom_label.go
+  - internal/provider/types/dashboard_layout.go
+  - internal/provider/types/dataset_metadata.go
   - internal/provider/types/disks_and_file_systems.go
   - internal/provider/types/dns.go
+  - internal/provider/types/edge_dataset.go
+  - internal/provider/types/edge_provider.go
+  - internal/provider/types/element.go
+  - internal/provider/types/element_markdown.go
+  - internal/provider/types/element_union.go
+  - internal/provider/types/email_recipient.go
   - internal/provider/types/endpoint_header.go
   - internal/provider/types/endpoint_param.go
   - internal/provider/types/event_breaker_ruleset_rule.go
@@ -296,11 +419,19 @@ generatedFiles:
   - internal/provider/types/file_info.go
   - internal/provider/types/firewall.go
   - internal/provider/types/function_specific_configs.go
+  - internal/provider/types/gcp_account_config.go
+  - internal/provider/types/gcp_endpoint_config.go
+  - internal/provider/types/gcs_dataset.go
+  - internal/provider/types/gcs_dataset_extra_path.go
+  - internal/provider/types/gcs_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
+  - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/group.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
+  - internal/provider/types/http_endpoint.go
+  - internal/provider/types/http_header.go
   - internal/provider/types/indexer_discovery_configs.go
   - internal/provider/types/ingest_if_not_exist.go
   - internal/provider/types/input_appscope.go
@@ -664,6 +795,8 @@ generatedFiles:
   - internal/provider/types/input_zscaler_hec_pq.go
   - internal/provider/types/input_zscaler_hec_tls_settings_server_side.go
   - internal/provider/types/interfaces.go
+  - internal/provider/types/lake_dataset_search_config.go
+  - internal/provider/types/legend.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -677,7 +810,18 @@ generatedFiles:
   - internal/provider/types/lookup_file_input1.go
   - internal/provider/types/lookup_file_input2.go
   - internal/provider/types/lookup_file_union.go
+  - internal/provider/types/map_details.go
+  - internal/provider/types/map_details_point_scale.go
+  - internal/provider/types/meta_dataset.go
+  - internal/provider/types/meta_provider.go
+  - internal/provider/types/metadata_item.go
+  - internal/provider/types/ms_graph_account_config.go
   - internal/provider/types/mtls_settings.go
+  - internal/provider/types/notification.go
+  - internal/provider/types/notification_target_config.go
+  - internal/provider/types/notifications.go
+  - internal/provider/types/okta_account_config.go
+  - internal/provider/types/on_click_action.go
   - internal/provider/types/output_azure_blob.go
   - internal/provider/types/output_azure_blob_certificate.go
   - internal/provider/types/output_azure_blob_key_value_metadatum.go
@@ -957,6 +1101,7 @@ generatedFiles:
   - internal/provider/types/pack_info1.go
   - internal/provider/types/pack_info_tags.go
   - internal/provider/types/pack_request_body_tags.go
+  - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pending_task1.go
   - internal/provider/types/pending_task2.go
   - internal/provider/types/pipeline_conf.go
@@ -967,20 +1112,47 @@ generatedFiles:
   - internal/provider/types/prometheus_auth_oauth_header2.go
   - internal/provider/types/prometheus_auth_oauth_param1.go
   - internal/provider/types/prometheus_auth_oauth_param2.go
+  - internal/provider/types/prometheus_dataset.go
+  - internal/provider/types/prometheus_provider.go
   - internal/provider/types/resource_type_label.go
   - internal/provider/types/routes.go
   - internal/provider/types/routes1.go
   - internal/provider/types/routes_groups.go
   - internal/provider/types/routes_route.go
   - internal/provider/types/routes_route1.go
+  - internal/provider/types/s3_bucket.go
+  - internal/provider/types/s3_dataset.go
+  - internal/provider/types/s3_dataset_extra_path.go
+  - internal/provider/types/s3_provider.go
   - internal/provider/types/sample.go
+  - internal/provider/types/sas_config.go
+  - internal/provider/types/saved_query_schedule.go
+  - internal/provider/types/search_query.go
+  - internal/provider/types/search_query_earliest.go
+  - internal/provider/types/search_query_inline.go
+  - internal/provider/types/search_query_latest.go
+  - internal/provider/types/search_query_saved.go
+  - internal/provider/types/search_query_values.go
   - internal/provider/types/services.go
+  - internal/provider/types/slack_target.go
+  - internal/provider/types/smtp_target.go
+  - internal/provider/types/smtp_target_config.go
   - internal/provider/types/snm_pv3_authentication.go
+  - internal/provider/types/snowflake_dataset.go
+  - internal/provider/types/snowflake_provider.go
+  - internal/provider/types/sns_target.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
+  - internal/provider/types/tailscale_account_config.go
   - internal/provider/types/target.go
+  - internal/provider/types/threshold.go
+  - internal/provider/types/tls_configuration.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
+  - internal/provider/types/webhook_target.go
+  - internal/provider/types/x_axis.go
+  - internal/provider/types/y_axis.go
+  - internal/provider/types/zoom_account_config.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
   - internal/sdk/aisettings.go
@@ -1548,8 +1720,10 @@ generatedFiles:
   - internal/sdk/models/shared/authpolicyentry.go
   - internal/sdk/models/shared/authprovider.go
   - internal/sdk/models/shared/authtoken.go
+  - internal/sdk/models/shared/awsaccountconfig.go
   - internal/sdk/models/shared/awskmsserviceconfig.go
   - internal/sdk/models/shared/awsmetadata.go
+  - internal/sdk/models/shared/azureaccountconfig.go
   - internal/sdk/models/shared/bannermessage.go
   - internal/sdk/models/shared/bulletinmessage.go
   - internal/sdk/models/shared/cacheconnection.go
@@ -1601,7 +1775,6 @@ generatedFiles:
   - internal/sdk/models/shared/databaseconnectiontype.go
   - internal/sdk/models/shared/datasample.go
   - internal/sdk/models/shared/datasetmetadata.go
-  - internal/sdk/models/shared/datasetmetadataruninfo.go
   - internal/sdk/models/shared/datasetorigin.go
   - internal/sdk/models/shared/datasetprovidertype.go
   - internal/sdk/models/shared/datatypeoverrides.go
@@ -1619,6 +1792,7 @@ generatedFiles:
   - internal/sdk/models/shared/edgefileinspectresponse.go
   - internal/sdk/models/shared/edgeheartbeatmetricsmode.go
   - internal/sdk/models/shared/edgemapqueryresult.go
+  - internal/sdk/models/shared/emailrecipient.go
   - internal/sdk/models/shared/envmetadata.go
   - internal/sdk/models/shared/error.go
   - internal/sdk/models/shared/eventbreakerrule.go
@@ -1632,6 +1806,10 @@ generatedFiles:
   - internal/sdk/models/shared/filesystementry.go
   - internal/sdk/models/shared/formatenum.go
   - internal/sdk/models/shared/function.go
+  - internal/sdk/models/shared/gcpaccountconfig.go
+  - internal/sdk/models/shared/gcpendpointconfig.go
+  - internal/sdk/models/shared/genericdataset.go
+  - internal/sdk/models/shared/genericprovider.go
   - internal/sdk/models/shared/gitcommitparams.go
   - internal/sdk/models/shared/gitcommitsummary.go
   - internal/sdk/models/shared/gitfile.go
@@ -1643,6 +1821,7 @@ generatedFiles:
   - internal/sdk/models/shared/gitsettings.go
   - internal/sdk/models/shared/gitstatusresult.go
   - internal/sdk/models/shared/globalvar.go
+  - internal/sdk/models/shared/googleworkspaceaccountconfig.go
   - internal/sdk/models/shared/grokfile.go
   - internal/sdk/models/shared/group.go
   - internal/sdk/models/shared/hbcriblinfo.go
@@ -1650,6 +1829,8 @@ generatedFiles:
   - internal/sdk/models/shared/healthstatus.go
   - internal/sdk/models/shared/heartbeatmetadata.go
   - internal/sdk/models/shared/hmacfunction.go
+  - internal/sdk/models/shared/httpendpoint.go
+  - internal/sdk/models/shared/httpheader.go
   - internal/sdk/models/shared/httpoutauthconfig.go
   - internal/sdk/models/shared/httpoutextraparamconfig.go
   - internal/sdk/models/shared/httpoutresponseretryconfig.go
@@ -1743,9 +1924,11 @@ generatedFiles:
   - internal/sdk/models/shared/masterworkerentry.go
   - internal/sdk/models/shared/membershipschema.go
   - internal/sdk/models/shared/metadata.go
+  - internal/sdk/models/shared/metadataitem.go
   - internal/sdk/models/shared/metricnameinfo.go
   - internal/sdk/models/shared/metricsaggopts.go
   - internal/sdk/models/shared/metricsstore.go
+  - internal/sdk/models/shared/msgraphaccountconfig.go
   - internal/sdk/models/shared/multifactorauthschema.go
   - internal/sdk/models/shared/namevalue.go
   - internal/sdk/models/shared/networkinterfaces.go
@@ -1757,6 +1940,8 @@ generatedFiles:
   - internal/sdk/models/shared/nodeupgradestatus.go
   - internal/sdk/models/shared/notification.go
   - internal/sdk/models/shared/notificationtarget.go
+  - internal/sdk/models/shared/notificationtargetconfig.go
+  - internal/sdk/models/shared/oktaaccountconfig.go
   - internal/sdk/models/shared/originconfig.go
   - internal/sdk/models/shared/osmetadata.go
   - internal/sdk/models/shared/output.go
@@ -1832,6 +2017,7 @@ generatedFiles:
   - internal/sdk/models/shared/packinfo.go
   - internal/sdk/models/shared/packinstallinfo.go
   - internal/sdk/models/shared/packrequestbody.go
+  - internal/sdk/models/shared/pagerdutytarget.go
   - internal/sdk/models/shared/parserlibentry.go
   - internal/sdk/models/shared/parsermode.go
   - internal/sdk/models/shared/pipeline.go
@@ -1911,6 +2097,10 @@ generatedFiles:
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/senddiagbundle.go
   - internal/sdk/models/shared/serviceslimits.go
+  - internal/sdk/models/shared/slacktarget.go
+  - internal/sdk/models/shared/smtptarget.go
+  - internal/sdk/models/shared/smtptargetconfig.go
+  - internal/sdk/models/shared/snstarget.go
   - internal/sdk/models/shared/sortbyfield.go
   - internal/sdk/models/shared/stagedependency.go
   - internal/sdk/models/shared/stagedependencytype.go
@@ -1922,6 +2112,7 @@ generatedFiles:
   - internal/sdk/models/shared/systemsettings.go
   - internal/sdk/models/shared/systemsettingsconf.go
   - internal/sdk/models/shared/tableviewsettings.go
+  - internal/sdk/models/shared/tailscaleaccountconfig.go
   - internal/sdk/models/shared/team.go
   - internal/sdk/models/shared/teamaccesscontrollist.go
   - internal/sdk/models/shared/tlsclientparams.go
@@ -1940,6 +2131,8 @@ generatedFiles:
   - internal/sdk/models/shared/userprofile.go
   - internal/sdk/models/shared/vaultkmstlsclientconfig.go
   - internal/sdk/models/shared/versioninfo.go
+  - internal/sdk/models/shared/webhooktarget.go
+  - internal/sdk/models/shared/zoomaccountconfig.go
   - internal/sdk/notifications.go
   - internal/sdk/notificationtargets.go
   - internal/sdk/onlyonprem.go
@@ -3177,7 +3370,7 @@ examples:
   createNotificationTarget:
     speakeasy-default-create-notification-target:
       requestBody:
-        application/json: {"id": "<id>", "type": "<value>"}
+        application/json: {"id": "<id>", "type": "webhook", "systemFields": ["cribl_host"], "url": "https://physical-plumber.info/", "format": "json_array", "method": "PUT", "authType": "none"}
       responses:
         "200":
           application/json: {}
@@ -3199,7 +3392,7 @@ examples:
         path:
           id: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "type": "<value>"}
+        application/json: {"id": "<id>", "type": "sns", "systemFields": ["cribl_host"], "region": "<value>", "allowlist": [], "destinationType": "topic", "topicType": "fifo"}
       responses:
         "200":
           application/json: {}
@@ -3806,6 +3999,9 @@ examples:
           application/json: {}
   listDatasetProvider:
     speakeasy-default-list-dataset-provider:
+      parameters:
+        path:
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -3813,8 +4009,11 @@ examples:
           application/json: {}
   createDatasetProvider:
     speakeasy-default-create-dataset-provider:
+      parameters:
+        path:
+          groupId: "<id>"
       requestBody:
-        application/json: "<value>"
+        application/json: {"id": "amazon_security_lake", "type": "<value>", "accountConfigs": []}
       responses:
         "200":
           application/json: {}
@@ -3825,6 +4024,7 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -3835,8 +4035,9 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "<id>"
       requestBody:
-        application/json: "<value>"
+        application/json: {"id": "api_elasticsearch", "type": "<value>", "endpoint": "<value>", "authType": "none", "maxConcurrency": 3}
       responses:
         "200":
           application/json: {}
@@ -3847,6 +4048,7 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -3854,6 +4056,9 @@ examples:
           application/json: {}
   listDataset:
     speakeasy-default-list-dataset:
+      parameters:
+        path:
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -3861,8 +4066,11 @@ examples:
           application/json: {}
   createDataset:
     speakeasy-default-create-dataset:
+      parameters:
+        path:
+          groupId: "<id>"
       requestBody:
-        application/json: "<value>"
+        application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "enabledEndpoints": []}
       responses:
         "200":
           application/json: {}
@@ -3873,6 +4081,7 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}
@@ -3883,8 +4092,9 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "<id>"
       requestBody:
-        application/json: "<value>"
+        application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "table": "<value>"}
       responses:
         "200":
           application/json: {}
@@ -3895,6 +4105,7 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "<id>"
       responses:
         "200":
           application/json: {}

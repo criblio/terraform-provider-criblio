@@ -2,21 +2,137 @@
 
 package shared
 
+import (
+	"errors"
+	"fmt"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
+type NotificationTargetType string
+
+const (
+	NotificationTargetTypeWebhookTarget   NotificationTargetType = "WebhookTarget"
+	NotificationTargetTypePagerDutyTarget NotificationTargetType = "PagerDutyTarget"
+	NotificationTargetTypeSlackTarget     NotificationTargetType = "SlackTarget"
+	NotificationTargetTypeSnsTarget       NotificationTargetType = "SnsTarget"
+	NotificationTargetTypeSMTPTarget      NotificationTargetType = "SmtpTarget"
+)
+
 type NotificationTarget struct {
-	ID   string `json:"id"`
-	Type string `json:"type"`
+	WebhookTarget   *WebhookTarget   `queryParam:"inline"`
+	PagerDutyTarget *PagerDutyTarget `queryParam:"inline"`
+	SlackTarget     *SlackTarget     `queryParam:"inline"`
+	SnsTarget       *SnsTarget       `queryParam:"inline"`
+	SMTPTarget      *SMTPTarget      `queryParam:"inline"`
+
+	Type NotificationTargetType
 }
 
-func (o *NotificationTarget) GetID() string {
-	if o == nil {
-		return ""
+func CreateNotificationTargetWebhookTarget(webhookTarget WebhookTarget) NotificationTarget {
+	typ := NotificationTargetTypeWebhookTarget
+
+	return NotificationTarget{
+		WebhookTarget: &webhookTarget,
+		Type:          typ,
 	}
-	return o.ID
 }
 
-func (o *NotificationTarget) GetType() string {
-	if o == nil {
-		return ""
+func CreateNotificationTargetPagerDutyTarget(pagerDutyTarget PagerDutyTarget) NotificationTarget {
+	typ := NotificationTargetTypePagerDutyTarget
+
+	return NotificationTarget{
+		PagerDutyTarget: &pagerDutyTarget,
+		Type:            typ,
 	}
-	return o.Type
+}
+
+func CreateNotificationTargetSlackTarget(slackTarget SlackTarget) NotificationTarget {
+	typ := NotificationTargetTypeSlackTarget
+
+	return NotificationTarget{
+		SlackTarget: &slackTarget,
+		Type:        typ,
+	}
+}
+
+func CreateNotificationTargetSnsTarget(snsTarget SnsTarget) NotificationTarget {
+	typ := NotificationTargetTypeSnsTarget
+
+	return NotificationTarget{
+		SnsTarget: &snsTarget,
+		Type:      typ,
+	}
+}
+
+func CreateNotificationTargetSMTPTarget(smtpTarget SMTPTarget) NotificationTarget {
+	typ := NotificationTargetTypeSMTPTarget
+
+	return NotificationTarget{
+		SMTPTarget: &smtpTarget,
+		Type:       typ,
+	}
+}
+
+func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
+
+	var slackTarget SlackTarget = SlackTarget{}
+	if err := utils.UnmarshalJSON(data, &slackTarget, "", true, true); err == nil {
+		u.SlackTarget = &slackTarget
+		u.Type = NotificationTargetTypeSlackTarget
+		return nil
+	}
+
+	var pagerDutyTarget PagerDutyTarget = PagerDutyTarget{}
+	if err := utils.UnmarshalJSON(data, &pagerDutyTarget, "", true, true); err == nil {
+		u.PagerDutyTarget = &pagerDutyTarget
+		u.Type = NotificationTargetTypePagerDutyTarget
+		return nil
+	}
+
+	var webhookTarget WebhookTarget = WebhookTarget{}
+	if err := utils.UnmarshalJSON(data, &webhookTarget, "", true, true); err == nil {
+		u.WebhookTarget = &webhookTarget
+		u.Type = NotificationTargetTypeWebhookTarget
+		return nil
+	}
+
+	var smtpTarget SMTPTarget = SMTPTarget{}
+	if err := utils.UnmarshalJSON(data, &smtpTarget, "", true, true); err == nil {
+		u.SMTPTarget = &smtpTarget
+		u.Type = NotificationTargetTypeSMTPTarget
+		return nil
+	}
+
+	var snsTarget SnsTarget = SnsTarget{}
+	if err := utils.UnmarshalJSON(data, &snsTarget, "", true, true); err == nil {
+		u.SnsTarget = &snsTarget
+		u.Type = NotificationTargetTypeSnsTarget
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for NotificationTarget", string(data))
+}
+
+func (u NotificationTarget) MarshalJSON() ([]byte, error) {
+	if u.WebhookTarget != nil {
+		return utils.MarshalJSON(u.WebhookTarget, "", true)
+	}
+
+	if u.PagerDutyTarget != nil {
+		return utils.MarshalJSON(u.PagerDutyTarget, "", true)
+	}
+
+	if u.SlackTarget != nil {
+		return utils.MarshalJSON(u.SlackTarget, "", true)
+	}
+
+	if u.SnsTarget != nil {
+		return utils.MarshalJSON(u.SnsTarget, "", true)
+	}
+
+	if u.SMTPTarget != nil {
+		return utils.MarshalJSON(u.SMTPTarget, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type NotificationTarget: all fields are null")
 }

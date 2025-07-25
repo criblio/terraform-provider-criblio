@@ -9,10 +9,10 @@ import (
 
 // CreateDatasetProviderResponseBody - a list of DatasetProvider objects
 type CreateDatasetProviderResponseBody struct {
-	Items []any `json:"items,omitempty"`
+	Items []shared.GenericProvider `json:"items,omitempty"`
 }
 
-func (o *CreateDatasetProviderResponseBody) GetItems() []any {
+func (o *CreateDatasetProviderResponseBody) GetItems() []shared.GenericProvider {
 	if o == nil {
 		return nil
 	}

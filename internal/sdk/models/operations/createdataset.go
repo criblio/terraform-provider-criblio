@@ -9,10 +9,10 @@ import (
 
 // CreateDatasetResponseBody - a list of Dataset objects
 type CreateDatasetResponseBody struct {
-	Items []any `json:"items,omitempty"`
+	Items []shared.GenericDataset `json:"items,omitempty"`
 }
 
-func (o *CreateDatasetResponseBody) GetItems() []any {
+func (o *CreateDatasetResponseBody) GetItems() []shared.GenericDataset {
 	if o == nil {
 		return nil
 	}

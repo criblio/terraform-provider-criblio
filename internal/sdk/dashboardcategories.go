@@ -51,7 +51,7 @@ func (s *DashboardCategories) ListDashboardCategory(ctx context.Context, opts ..
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/dashboard-categories")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/dashboard-categories")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -203,7 +203,7 @@ func (s *DashboardCategories) CreateDashboardCategory(ctx context.Context, reque
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/dashboard-categories")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/dashboard-categories")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

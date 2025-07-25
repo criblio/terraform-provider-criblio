@@ -51,7 +51,7 @@ func (s *Dashboards) ListSearchDashboard(ctx context.Context, opts ...operations
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/dashboards")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/dashboards")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -203,7 +203,7 @@ func (s *Dashboards) CreateSearchDashboard(ctx context.Context, request shared.S
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/dashboards")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/dashboards")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

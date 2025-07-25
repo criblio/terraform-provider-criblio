@@ -11,7 +11,7 @@ type UpdateDatasetByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Dataset object to be updated
-	RequestBody any `request:"mediaType=application/json"`
+	GenericDataset shared.GenericDataset `request:"mediaType=application/json"`
 }
 
 func (o *UpdateDatasetByIDRequest) GetID() string {
@@ -21,19 +21,19 @@ func (o *UpdateDatasetByIDRequest) GetID() string {
 	return o.ID
 }
 
-func (o *UpdateDatasetByIDRequest) GetRequestBody() any {
+func (o *UpdateDatasetByIDRequest) GetGenericDataset() shared.GenericDataset {
 	if o == nil {
-		return nil
+		return shared.GenericDataset{}
 	}
-	return o.RequestBody
+	return o.GenericDataset
 }
 
 // UpdateDatasetByIDResponseBody - a list of Dataset objects
 type UpdateDatasetByIDResponseBody struct {
-	Items []any `json:"items,omitempty"`
+	Items []shared.GenericDataset `json:"items,omitempty"`
 }
 
-func (o *UpdateDatasetByIDResponseBody) GetItems() []any {
+func (o *UpdateDatasetByIDResponseBody) GetItems() []shared.GenericDataset {
 	if o == nil {
 		return nil
 	}

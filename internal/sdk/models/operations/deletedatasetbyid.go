@@ -21,10 +21,10 @@ func (o *DeleteDatasetByIDRequest) GetID() string {
 
 // DeleteDatasetByIDResponseBody - a list of Dataset objects
 type DeleteDatasetByIDResponseBody struct {
-	Items []any `json:"items,omitempty"`
+	Items []shared.GenericDataset `json:"items,omitempty"`
 }
 
-func (o *DeleteDatasetByIDResponseBody) GetItems() []any {
+func (o *DeleteDatasetByIDResponseBody) GetItems() []shared.GenericDataset {
 	if o == nil {
 		return nil
 	}

@@ -51,7 +51,7 @@ func (s *Macros) ListSearchMacro(ctx context.Context, opts ...operations.Option)
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/macros")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/macros")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -203,7 +203,7 @@ func (s *Macros) CreateSearchMacro(ctx context.Context, request shared.SearchMac
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/macros")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/macros")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

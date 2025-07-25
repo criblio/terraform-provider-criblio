@@ -51,7 +51,7 @@ func (s *UsageGroups) ListUsageGroup(ctx context.Context, opts ...operations.Opt
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/usage-groups")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/usage-groups")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -203,7 +203,7 @@ func (s *UsageGroups) CreateUsageGroup(ctx context.Context, request shared.Usage
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/usage-groups")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/usage-groups")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

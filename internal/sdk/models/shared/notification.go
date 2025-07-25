@@ -3,163 +3,30 @@
 package shared
 
 import (
-	"errors"
-	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type EmailRecipient struct {
-	// Recipients' email addresses
-	To string `json:"to"`
-	// Cc: Recipients' email addresses
-	Cc *string `json:"cc,omitempty"`
-	// Bcc: Recipients' email addresses
-	Bcc *string `json:"bcc,omitempty"`
-}
-
-func (o *EmailRecipient) GetTo() string {
-	if o == nil {
-		return ""
-	}
-	return o.To
-}
-
-func (o *EmailRecipient) GetCc() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Cc
-}
-
-func (o *EmailRecipient) GetBcc() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Bcc
-}
-
-type NotificationConfigForSMTPTarget struct {
-	// Email subject
-	Subject *string `json:"subject,omitempty"`
-	// Email body
-	Body           *string         `json:"body,omitempty"`
-	EmailRecipient *EmailRecipient `json:"emailRecipient,omitempty"`
-}
-
-func (o *NotificationConfigForSMTPTarget) GetSubject() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Subject
-}
-
-func (o *NotificationConfigForSMTPTarget) GetBody() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Body
-}
-
-func (o *NotificationConfigForSMTPTarget) GetEmailRecipient() *EmailRecipient {
-	if o == nil {
-		return nil
-	}
-	return o.EmailRecipient
-}
-
-type TargetConfig struct {
-	Conf *NotificationConfigForSMTPTarget `json:"conf,omitempty"`
-	ID   string                           `json:"id"`
-}
-
-func (o *TargetConfig) GetConf() *NotificationConfigForSMTPTarget {
-	if o == nil {
-		return nil
-	}
-	return o.Conf
-}
-
-func (o *TargetConfig) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
-}
-
-type TargetConfigUnionType string
-
-const (
-	TargetConfigUnionTypeTargetConfig TargetConfigUnionType = "targetConfig"
-)
-
-type TargetConfigUnion struct {
-	TargetConfig *TargetConfig `queryParam:"inline"`
-
-	Type TargetConfigUnionType
-}
-
-func CreateTargetConfigUnionTargetConfig(targetConfig TargetConfig) TargetConfigUnion {
-	typ := TargetConfigUnionTypeTargetConfig
-
-	return TargetConfigUnion{
-		TargetConfig: &targetConfig,
-		Type:         typ,
-	}
-}
-
-func (u *TargetConfigUnion) UnmarshalJSON(data []byte) error {
-
-	var targetConfig TargetConfig = TargetConfig{}
-	if err := utils.UnmarshalJSON(data, &targetConfig, "", true, true); err == nil {
-		u.TargetConfig = &targetConfig
-		u.Type = TargetConfigUnionTypeTargetConfig
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for TargetConfigUnion", string(data))
-}
-
-func (u TargetConfigUnion) MarshalJSON() ([]byte, error) {
-	if u.TargetConfig != nil {
-		return utils.MarshalJSON(u.TargetConfig, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type TargetConfigUnion: all fields are null")
-}
-
+// ConditionSpecificConfigs - Configuration specific to the notification condition
 type ConditionSpecificConfigs struct {
 }
 
-type NotificationMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (o *NotificationMetadatum) GetName() string {
-	if o == nil {
-		return ""
-	}
-	return o.Name
-}
-
-func (o *NotificationMetadatum) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
 type Notification struct {
-	ID        string `json:"id"`
-	Disabled  *bool  `default:"false" json:"disabled"`
+	// Unique identifier for the notification
+	ID string `json:"id"`
+	// Whether the notification is disabled
+	Disabled *bool `default:"false" json:"disabled"`
+	// The condition that triggers this notification
 	Condition string `json:"condition"`
-	// Targets to send any Notifications to
-	Targets       []string                  `json:"targets,omitempty"`
-	TargetConfigs []TargetConfigUnion       `json:"targetConfigs,omitempty"`
-	Conf          *ConditionSpecificConfigs `json:"conf,omitempty"`
-	// Fields to add to events from this input
-	Metadata []NotificationMetadatum `json:"metadata,omitempty"`
+	// Targets to send any notifications to
+	Targets []string `json:"targets,omitempty"`
+	// Configuration for notification targets
+	TargetConfigs []NotificationTargetConfig `json:"targetConfigs,omitempty"`
+	// Configuration specific to the notification condition
+	Conf *ConditionSpecificConfigs `json:"conf,omitempty"`
+	// Additional metadata for the notification
+	Metadata []MetadataItem `json:"metadata,omitempty"`
+	// Group identifier for the notification
+	Group *string `json:"group,omitempty"`
 }
 
 func (n Notification) MarshalJSON() ([]byte, error) {
@@ -201,7 +68,7 @@ func (o *Notification) GetTargets() []string {
 	return o.Targets
 }
 
-func (o *Notification) GetTargetConfigs() []TargetConfigUnion {
+func (o *Notification) GetTargetConfigs() []NotificationTargetConfig {
 	if o == nil {
 		return nil
 	}
@@ -215,9 +82,16 @@ func (o *Notification) GetConf() *ConditionSpecificConfigs {
 	return o.Conf
 }
 
-func (o *Notification) GetMetadata() []NotificationMetadatum {
+func (o *Notification) GetMetadata() []MetadataItem {
 	if o == nil {
 		return nil
 	}
 	return o.Metadata
+}
+
+func (o *Notification) GetGroup() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Group
 }

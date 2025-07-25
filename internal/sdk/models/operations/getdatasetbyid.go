@@ -21,10 +21,10 @@ func (o *GetDatasetByIDRequest) GetID() string {
 
 // GetDatasetByIDResponseBody - a list of Dataset objects
 type GetDatasetByIDResponseBody struct {
-	Items []any `json:"items,omitempty"`
+	Items []shared.GenericDataset `json:"items,omitempty"`
 }
 
-func (o *GetDatasetByIDResponseBody) GetItems() []any {
+func (o *GetDatasetByIDResponseBody) GetItems() []shared.GenericDataset {
 	if o == nil {
 		return nil
 	}
