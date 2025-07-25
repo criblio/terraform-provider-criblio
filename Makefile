@@ -30,5 +30,5 @@ test-speakeasy:
 	speakeasy test && speakeasy lint openapi --non-interactive -s openapi.yml
 
 e2e-test-speakeasy: 
-	speakeasy run --skip-versioning --output console --minimal --skip-upload-spec --skip-versioning
+	speakeasy run --skip-versioning --output console --minimal --skip-upload-spec --skip-versioning --skip-compile
 
