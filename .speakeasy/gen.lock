@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 87ec960557004bb77b582947d002decf
+  docChecksum: 98c86dae224af29030374b710b22b0a6
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.587.0
-  generationVersion: 2.662.0
+  speakeasyVersion: 1.589.0
+  generationVersion: 2.664.0
   releaseVersion: 1.0.63
   configChecksum: f27a34a37d957fcd6a0a5a6c58718c92
   published: true
@@ -13,9 +13,8 @@ features:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.2.1
-    core: 3.42.0
+    core: 3.43.0
     deprecations: 2.82.0
-    getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
     globalServerURLs: 2.82.2
     ignores: 2.81.1
@@ -1178,6 +1177,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteglobalvariablebyid.go
   - internal/sdk/models/operations/deleteglobalvariablelibvarsbypackandid.go
   - internal/sdk/models/operations/deletegrokfilebyid.go
+  - internal/sdk/models/operations/deletegroupsbyid.go
   - internal/sdk/models/operations/deletehmacfunctionbyid.go
   - internal/sdk/models/operations/deleteinputbyid.go
   - internal/sdk/models/operations/deleteiometricsentrybyid.go
@@ -1827,7 +1827,6 @@ generatedFiles:
   - internal/sdk/models/shared/outputwavefront.go
   - internal/sdk/models/shared/outputwebhook.go
   - internal/sdk/models/shared/outputxsiam.go
-  - internal/sdk/models/shared/pack.go
   - internal/sdk/models/shared/packclone.go
   - internal/sdk/models/shared/packinfo.go
   - internal/sdk/models/shared/packinstallinfo.go
@@ -6909,7 +6908,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
         "200":
           application/json: {}
@@ -6935,7 +6934,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
         "200":
           application/json: {}

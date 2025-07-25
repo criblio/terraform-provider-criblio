@@ -37,16 +37,8 @@ func (o *DeleteBreakersByPackAndIDRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-// DeleteBreakersByPackAndIDResponseBody - a list of Pipeline objects
+// DeleteBreakersByPackAndIDResponseBody - a list of Event Breaker Ruleset objects
 type DeleteBreakersByPackAndIDResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
-}
-
-func (o *DeleteBreakersByPackAndIDResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type DeleteBreakersByPackAndIDResponse struct {
@@ -56,7 +48,7 @@ type DeleteBreakersByPackAndIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
+	// a list of Event Breaker Ruleset objects
 	Object *DeleteBreakersByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error

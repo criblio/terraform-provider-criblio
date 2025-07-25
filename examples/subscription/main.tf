@@ -7,6 +7,10 @@ resource "criblio_subscription" "my_subscription" {
   pipeline    = "passthru"
 }
 
+output "subscription" {
+  value = criblio_subscription.my_subscription
+}
+
 resource "criblio_subscription" "my_subscription_with_enabled" {
   description = "test subscription with enabled"
   disabled    = false
@@ -14,8 +18,4 @@ resource "criblio_subscription" "my_subscription_with_enabled" {
   group_id    = "default"
   id          = "my_subscription_with_enabled"
   pipeline    = "passthru"
-}
-
-output "subscription" {
-  value = criblio_subscription.my_subscription
 }

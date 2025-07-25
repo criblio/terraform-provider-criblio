@@ -14,14 +14,8 @@ PackBreakers DataSource
 
 ```terraform
 data "criblio_pack_breakers" "my_packbreakers" {
-  description         = "...my_description..."
-  disabled            = true
-  display_name        = "...my_display_name..."
-  group_id            = "...my_group_id..."
-  id                  = "...my_id..."
-  pack_path_parameter = "...my_pack_path_parameter..."
-  source              = "...my_source..."
-  version             = "...my_version..."
+  group_id = "...my_group_id..."
+  pack     = "...my_pack..."
 }
 ```
 
@@ -31,63 +25,4 @@ data "criblio_pack_breakers" "my_packbreakers" {
 ### Required
 
 - `group_id` (String) group ID to GET
-- `pack_path_parameter` (String) pack ID to GET
-
-### Optional
-
-- `description` (String)
-- `disabled` (Boolean)
-- `display_name` (String)
-- `source` (String)
-- `version` (String)
-
-### Read-Only
-
-- `id` (String) The ID of this resource.
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--items--comments))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--groups))
-- `id` (String) Routes ID
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--items--routes))
-
-<a id="nestedatt--items--comments"></a>
-### Nested Schema for `items.comments`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose
-
-
-<a id="nestedatt--items--groups"></a>
-### Nested Schema for `items.groups`
-
-Read-Only:
-
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
-- `name` (String)
-
-
-<a id="nestedatt--items--routes"></a>
-### Nested Schema for `items.routes`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `description` (String)
-- `disabled` (Boolean) Disable this routing rule
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below
-- `filter` (String) JavaScript expression to select data to route
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it
-- `id` (String)
-- `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
-- `pipeline` (String) Pipeline to send the matching data to
+- `pack` (String) pack ID to GET

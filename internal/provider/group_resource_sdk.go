@@ -171,6 +171,19 @@ func (r *GroupResourceModel) ToOperationsCreateProductsGroupsByProductRequest(ct
 	return &out, diags
 }
 
+func (r *GroupResourceModel) ToOperationsDeleteGroupsByIDRequest(ctx context.Context) (*operations.DeleteGroupsByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.DeleteGroupsByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
+}
+
 func (r *GroupResourceModel) ToOperationsGetGroupsByIDRequest(ctx context.Context) (*operations.GetGroupsByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
