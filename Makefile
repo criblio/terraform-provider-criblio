@@ -23,11 +23,12 @@ acceptance-test:
 test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
 
-build-speakeasy: 
-	speakeasy run --skip-versioning --output console --minimal
-
 unit-test: 
 	go test -v ./internal/sdk/internal/hooks
 
 test-speakeasy: 
 	speakeasy test && speakeasy lint openapi --non-interactive -s openapi.yml
+
+e2e-test-speakeasy: 
+	speakeasy run --skip-versioning --output console --minimal --skip-upload-spec --skip-versioning
+
