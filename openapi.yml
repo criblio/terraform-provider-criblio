@@ -55905,7 +55905,32 @@ paths:
       tags: *a99
       summary: Get list of breakers by ID within a Pack
       description: Get list of breakers by ID within a Pack
-      responses: *a100
+      responses:
+        &a100
+        "200":
+          description: a list of Event Breaker Ruleset objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EventBreakerRuleset"
+                    x-speakeasy-ignore: true
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: id
           in: path
@@ -59562,7 +59587,7 @@ paths:
       deprecated: false
       responses:
         "200":
-          description: a list of PackInfo objects
+          description: update a single pack
           content:
             application/json:
               schema:
@@ -59620,6 +59645,40 @@ paths:
           required: false
           schema:
             type: boolean
+    get:
+      operationId: getPacksById
+      tags:
+        - packs
+      summary: Read single pack by PackId
+      deprecated: false
+      responses:
+        "200":
+          description: update a single pack
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackInstallInfo"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Pack name
+        - name: groupId
+          in: path
+          required: true
+          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          schema:
+            type: string
   "/m/{groupId}/packs/__clone__":
     post:
       parameters:

@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.12.2-4b17c8d4-TFProvider-manual and generator version 2.664.0
+// Generated from OpenAPI doc version 4.12.2-4b17c8d4-TFProvider-manual and generator version 2.667.0
 
 import (
 	"context"
@@ -393,7 +393,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
 		SDKVersion: "1.0.63",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.0.63 2.664.0 4.12.2-4b17c8d4-TFProvider-manual github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.0.63 2.667.0 4.12.2-4b17c8d4-TFProvider-manual github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {

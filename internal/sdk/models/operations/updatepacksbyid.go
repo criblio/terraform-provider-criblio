@@ -63,7 +63,7 @@ func (o *UpdatePacksByIDRequest) GetDisabled() *bool {
 	return o.Disabled
 }
 
-// UpdatePacksByIDResponseBody - a list of PackInfo objects
+// UpdatePacksByIDResponseBody - update a single pack
 type UpdatePacksByIDResponseBody struct {
 	Items []shared.PackInfo `json:"items,omitempty"`
 }
@@ -82,7 +82,7 @@ type UpdatePacksByIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of PackInfo objects
+	// update a single pack
 	Object *UpdatePacksByIDResponseBody
 	// Unexpected error
 	Error *shared.Error
