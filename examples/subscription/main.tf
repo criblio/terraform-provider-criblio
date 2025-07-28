@@ -1,14 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  # Configuration options
-}
 
 resource "criblio_subscription" "my_subscription" {
   description = "test subscription"

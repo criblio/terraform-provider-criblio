@@ -1,15 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  # Configuration options
-}
-
 resource "criblio_database_connection" "my_databaseconnection" {
   # Required fields according to OpenAPI schema
   auth_type     = "connectionString"

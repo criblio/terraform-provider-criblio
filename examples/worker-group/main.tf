@@ -11,9 +11,12 @@ provider "criblio" {
 }
 
 resource "criblio_group" "my_group" {
+  #
   cloud = {
-    provider = "azure"
-    region   = "eastus"
+      # options: aws, azure
+      # region: us-west-2, eastus, etc.
+    provider = "aws"
+    region   = "us-east-2"
   }
   estimated_ingest_rate = 1024
   id                    = "my-group"

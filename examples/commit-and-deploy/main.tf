@@ -1,14 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  # Configuration options
-}
 
 data "criblio_config_version" "my_configversion" {
   id = "syslog-workers"

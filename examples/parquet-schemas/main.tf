@@ -1,14 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  # Configuration options
-}
 
 resource "criblio_parquet_schema" "my_parquet_schema" {
   description           = "test parquest"
