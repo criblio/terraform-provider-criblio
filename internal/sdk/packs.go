@@ -921,12 +921,12 @@ func (s *Packs) GetPacksByID(ctx context.Context, request operations.GetPacksByI
 				return nil, err
 			}
 
-			var out shared.PackInstallInfo
+			var out shared.PackInfo
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.PackInstallInfo = &out
+			res.PackInfo = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

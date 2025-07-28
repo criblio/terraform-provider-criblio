@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: ed78b4fe6eed35e34b025c10c3f6d11b
+  docChecksum: 6ea0a136793dfc7bcddd96c11650831d
   docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.592.0
+  speakeasyVersion: 1.592.1
   generationVersion: 2.667.0
   releaseVersion: 1.0.63
   configChecksum: f27a34a37d957fcd6a0a5a6c58718c92
@@ -7057,7 +7057,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "warnings": "<value>"}
+          application/json: {"id": "<id>"}
         "500":
           application/json: {}
 examplesVersion: 1.0.2

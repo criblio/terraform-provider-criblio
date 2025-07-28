@@ -36,7 +36,7 @@ type GetPacksByIDResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// update a single pack
-	PackInstallInfo *shared.PackInstallInfo
+	PackInfo *shared.PackInfo
 	// Unexpected error
 	Error *shared.Error
 }
@@ -62,11 +62,11 @@ func (o *GetPacksByIDResponse) GetRawResponse() *http.Response {
 	return o.RawResponse
 }
 
-func (o *GetPacksByIDResponse) GetPackInstallInfo() *shared.PackInstallInfo {
+func (o *GetPacksByIDResponse) GetPackInfo() *shared.PackInfo {
 	if o == nil {
 		return nil
 	}
-	return o.PackInstallInfo
+	return o.PackInfo
 }
 
 func (o *GetPacksByIDResponse) GetError() *shared.Error {

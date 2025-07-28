@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 if [[ ! `echo "$PWD"| rev | cut -d '/' -f 1 | rev` == terraform-provider-criblio ]]; then
     echo "Script must be run from project root directory"
