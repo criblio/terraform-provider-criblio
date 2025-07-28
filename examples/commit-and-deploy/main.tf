@@ -1,3 +1,4 @@
+
 data "criblio_config_version" "my_configversion" {
   id         = "default"
   depends_on = [criblio_commit.my_commit]
