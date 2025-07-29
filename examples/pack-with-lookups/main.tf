@@ -6,7 +6,6 @@ resource "criblio_pack" "lookups_pack" {
   display_name = "Pack from source"
   source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
   version      = "1.0.0"
-
 }
 
 
@@ -17,4 +16,5 @@ resource "criblio_pack_lookups" "my_packlookups" {
   id          = "my_id"
   mode        = "memory"
   tags        = "my_tags"
+  pack_id     = criblio_pack.lookups_pack.id
 }
