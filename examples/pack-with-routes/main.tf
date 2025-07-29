@@ -1,6 +1,6 @@
 resource "criblio_pack_routes" "my_packroutes" {
   group_id = "default"
-  pack     = criblio_pack.my_pack.id
+  pack     = criblio_pack.routes_pack.id
   routes = [
     {
       name     = "my_name"
@@ -9,7 +9,7 @@ resource "criblio_pack_routes" "my_packroutes" {
   ]
 }
 
-resource "criblio_pack" "my_pack" {
+resource "criblio_pack" "routes_pack" {
   id           = "pack-with-routes"
   group_id     = "default"
   description  = "Pack from source"

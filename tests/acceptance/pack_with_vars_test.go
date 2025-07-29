@@ -16,8 +16,8 @@ func TestPackVars(t *testing.T) {
 					ConfigDirectory:    config.TestNameDirectory(),
 					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-with-vars"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_pack.vars_pack", "id", "pack-with-vars"),
+						resource.TestCheckResourceAttr("criblio_pack.vars_pack", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_pack_vars.my_packvars", "id", "my_id"),
 						resource.TestCheckResourceAttr("criblio_pack_vars.my_packvars", "value", "my_value"),
 					),

@@ -1,0 +1,1 @@
+../../examples/pack-with-destination/main-lake.tf

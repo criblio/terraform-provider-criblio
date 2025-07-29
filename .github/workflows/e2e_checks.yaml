@@ -23,7 +23,11 @@ jobs:
 
       - name: Run e2e Tests
         env:
-          CRIBL_BEARER_TOKEN: ${{ secrets.CRIBL_BEARER_TOKEN }}
+          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
+          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
+          CRIBL_SERVER_URL: "https://app.cribl-playground.cloud"
+          CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
+          CRIBL_WORKSPACE_ID: "tfprovider2"
         run: | 
           make e2e-test
 

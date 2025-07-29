@@ -16,9 +16,9 @@ func TestPackLookups(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-with-lookups"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack with lookups"),
+						resource.TestCheckResourceAttr("criblio_pack.lookups_pack", "id", "pack-with-lookups"),
+						resource.TestCheckResourceAttr("criblio_pack.lookups_pack", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_pack.lookups_pack", "description", "Pack with lookups"),
 						resource.TestCheckResourceAttr("criblio_pack_lookups.my_packlookups", "id", "my_id"),
 						resource.TestCheckResourceAttr("criblio_pack_lookups.my_packlookups", "group_id", "default"),
 					),

@@ -3,13 +3,13 @@ resource "criblio_pack_vars" "my_packvars" {
   group_id    = "default"
   id          = "my_id"
   lib         = "my_lib"
-  pack        = criblio_pack.my_pack.id
+  pack        = criblio_pack.vars_pack.id
   tags        = "my_tags"
   type        = "object"
   value       = "my_value"
 }
 
-resource "criblio_pack" "my_pack" {
+resource "criblio_pack" "vars_pack" {
   id           = "pack-with-vars"
   group_id     = "default"
   description  = "Pack from source"

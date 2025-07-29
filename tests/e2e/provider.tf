@@ -1,1 +1,7 @@
-../../examples/provider/provider.tf
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}

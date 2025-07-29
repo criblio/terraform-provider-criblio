@@ -16,9 +16,10 @@ func TestPackRoutes(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-with-routes"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack from source"),
+						resource.TestCheckResourceAttr("criblio_pack.routes_pack", "id", "pack-with-routes"),
+						resource.TestCheckResourceAttr("criblio_pack.routes_pack", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_pack.routes_pack", "description", "Pack from source"),
+						resource.TestCheckResourceAttr("criblio_pack_routes.my_packroutes", "group_id", "default"),
 					),
 				},
 				{

@@ -1,4 +1,4 @@
-resource "criblio_pack" "my_pack" {
+resource "criblio_pack" "lookups_pack" {
   id           = "pack-with-lookups"
   group_id     = "default"
   description  = "Pack with lookups"

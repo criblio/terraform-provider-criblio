@@ -16,9 +16,9 @@ func TestPackSource(t *testing.T) {
 					ConfigDirectory:    config.TestNameDirectory(),
 					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-with-source"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack with source"),
+						resource.TestCheckResourceAttr("criblio_pack.source_pack", "id", "pack-with-source"),
+						resource.TestCheckResourceAttr("criblio_pack.source_pack", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_pack.source_pack", "description", "Pack with source"),
 						resource.TestCheckResourceAttr("criblio_pack_source.my_packsource", "input_tcp.type", "tcp"),
 						resource.TestCheckResourceAttr("criblio_pack_source.my_packsource", "group_id", "default"),
 					),

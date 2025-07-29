@@ -16,10 +16,10 @@ func TestPackPipeline(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "id", "pack-with-pipeline"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack with pipeline"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "display_name", "Pack with pipeline"),
+						resource.TestCheckResourceAttr("criblio_pack.pipeline_pack", "id", "pack-with-pipeline"),
+						resource.TestCheckResourceAttr("criblio_pack.pipeline_pack", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_pack.pipeline_pack", "description", "Pack with pipeline"),
+						resource.TestCheckResourceAttr("criblio_pack.pipeline_pack", "display_name", "Pack with pipeline"),
 						resource.TestCheckResourceAttr("criblio_pack_pipeline.my_packpipeline", "id", "my_id"),
 					),
 				},

@@ -12,6 +12,8 @@ output "regex" {
   value = criblio_regex.my_regex
 }
 
+/*
 data "criblio_regex" "my_regex" {
   group_id = "default"
 }
+*/

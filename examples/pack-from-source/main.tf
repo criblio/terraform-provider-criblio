@@ -9,6 +9,6 @@ resource "criblio_pack" "my_pack" {
 }
 
 # Output the pack details to see the read-only attributes
-output "pack_details" {
+output "pack_source_details" {
   value = criblio_pack.my_pack
 }
