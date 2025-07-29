@@ -55709,7 +55709,6 @@ paths:
               $ref: "#/components/schemas/DatabaseConnectionTest"
   "/m/{groupId}/lib/breakers":
     get:
-      #x-speakeasy-entity-operation: EventBreakerRuleset#read
       parameters:
         - name: groupId
           in: path
@@ -56253,7 +56252,6 @@ paths:
       responses: *a112
   "/m/{groupId}/system/inputs":
     get:
-      #x-speakeasy-entity-operation: Source#read
       parameters:
         - name: groupId
           in: path
@@ -56580,7 +56578,6 @@ paths:
       responses: *a118
   "/m/{groupId}/system/outputs":
     get:
-      #x-speakeasy-entity-operation: Destination#read
       parameters:
         - name: groupId
           in: path
@@ -57501,7 +57498,6 @@ paths:
           description: group Id
   "/m/{groupId}/p/{pack}/system/inputs":
     get:
-      #x-speakeasy-entity-operation: PackSource#read
       operationId: getSystemInputsByPack
       tags: *a135
       summary: Get a list of inputs within a Pack
@@ -57805,7 +57801,6 @@ paths:
       responses: *a121
   "/m/{groupId}/p/{pack}/system/lookups":
     get:
-      #x-speakeasy-entity-operation: PackLookups#read
       operationId: getSystemLookupsByPack
       tags: *a135
       summary: Get a list of lookup objects within a Pack
@@ -61508,7 +61503,6 @@ paths:
             schema:
               $ref: "#/components/schemas/PackRequestBody"
     get:
-      #x-speakeasy-entity-operation: Pack#read
       operationId: getPacksByGroup
       tags:
         - packs
