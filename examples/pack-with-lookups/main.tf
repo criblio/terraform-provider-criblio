@@ -16,5 +16,5 @@ resource "criblio_pack_lookups" "my_packlookups" {
   id          = "my_id"
   mode        = "memory"
   tags        = "my_tags"
-  pack_id     = criblio_pack.lookups_pack.id
+  pack        = criblio_pack.lookups_pack.id
 }
