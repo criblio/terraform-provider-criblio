@@ -51,7 +51,7 @@ func (s *SavedQueries) ListSavedQuery(ctx context.Context, opts ...operations.Op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/saved")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/saved")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -203,7 +203,7 @@ func (s *SavedQueries) CreateSavedQuery(ctx context.Context, request shared.Save
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/saved")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/saved")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -362,7 +362,7 @@ func (s *SavedQueries) GetSavedQueryByID(ctx context.Context, request operations
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/saved/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/saved/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -514,7 +514,7 @@ func (s *SavedQueries) UpdateSavedQueryByID(ctx context.Context, request operati
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/saved/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/saved/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -673,7 +673,7 @@ func (s *SavedQueries) DeleteSavedQueryByID(ctx context.Context, request operati
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/saved/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/saved/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

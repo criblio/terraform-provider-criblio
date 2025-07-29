@@ -9,14 +9,6 @@ import (
 
 // CreateNotificationTargetResponseBody - a list of NotificationTarget objects
 type CreateNotificationTargetResponseBody struct {
-	Items []shared.NotificationTarget `json:"items,omitempty"`
-}
-
-func (o *CreateNotificationTargetResponseBody) GetItems() []shared.NotificationTarget {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type CreateNotificationTargetResponse struct {

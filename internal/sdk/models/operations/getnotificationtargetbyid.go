@@ -21,14 +21,6 @@ func (o *GetNotificationTargetByIDRequest) GetID() string {
 
 // GetNotificationTargetByIDResponseBody - a list of NotificationTarget objects
 type GetNotificationTargetByIDResponseBody struct {
-	Items []shared.NotificationTarget `json:"items,omitempty"`
-}
-
-func (o *GetNotificationTargetByIDResponseBody) GetItems() []shared.NotificationTarget {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type GetNotificationTargetByIDResponse struct {

@@ -13,7 +13,7 @@ type UpdateLookupFileByIDRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// LookupFile object to be updated
-	LookupFile shared.LookupFileInputUnion `request:"mediaType=application/json"`
+	LookupFile shared.LookupFile `request:"mediaType=application/json"`
 }
 
 func (o *UpdateLookupFileByIDRequest) GetID() string {
@@ -30,23 +30,15 @@ func (o *UpdateLookupFileByIDRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *UpdateLookupFileByIDRequest) GetLookupFile() shared.LookupFileInputUnion {
+func (o *UpdateLookupFileByIDRequest) GetLookupFile() shared.LookupFile {
 	if o == nil {
-		return shared.LookupFileInputUnion{}
+		return shared.LookupFile{}
 	}
 	return o.LookupFile
 }
 
 // UpdateLookupFileByIDResponseBody - a list of LookupFile objects
 type UpdateLookupFileByIDResponseBody struct {
-	Items []shared.LookupFileUnion `json:"items,omitempty"`
-}
-
-func (o *UpdateLookupFileByIDResponseBody) GetItems() []shared.LookupFileUnion {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type UpdateLookupFileByIDResponse struct {

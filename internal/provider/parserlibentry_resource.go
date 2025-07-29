@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -32,13 +31,12 @@ type ParserLibEntryResource struct {
 
 // ParserLibEntryResourceModel describes the resource data model.
 type ParserLibEntryResourceModel struct {
-	AdditionalProperties types.String `tfsdk:"additional_properties"`
-	Description          types.String `tfsdk:"description"`
-	GroupID              types.String `tfsdk:"group_id"`
-	ID                   types.String `tfsdk:"id"`
-	Lib                  types.String `tfsdk:"lib"`
-	Tags                 types.String `tfsdk:"tags"`
-	Type                 types.String `tfsdk:"type"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Lib         types.String `tfsdk:"lib"`
+	Tags        types.String `tfsdk:"tags"`
+	Type        types.String `tfsdk:"type"`
 }
 
 func (r *ParserLibEntryResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -49,14 +47,6 @@ func (r *ParserLibEntryResource) Schema(ctx context.Context, req resource.Schema
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "ParserLibEntry Resource",
 		Attributes: map[string]schema.Attribute{
-			"additional_properties": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
-			},
 			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -312,7 +302,29 @@ func (r *ParserLibEntryResource) Delete(ctx context.Context, req resource.Delete
 		return
 	}
 
-	// Not Implemented; entity does not have a configured DELETE operation
+	request, requestDiags := data.ToOperationsDeleteParserByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Parsers.DeleteParserByID(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+
 }
 
 func (r *ParserLibEntryResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

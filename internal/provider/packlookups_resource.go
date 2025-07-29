@@ -10,7 +10,6 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
-	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -39,12 +38,14 @@ type PackLookupsResource struct {
 
 // PackLookupsResourceModel describes the resource data model.
 type PackLookupsResourceModel struct {
-	GroupID          types.String              `tfsdk:"group_id"`
-	ID               types.String              `tfsdk:"id"`
-	Items            []tfTypes.Routes          `tfsdk:"items"`
-	LookupFileInput1 *tfTypes.LookupFileInput1 `queryParam:"inline" tfsdk:"lookup_file_input1" tfPlanOnly:"true"`
-	LookupFileInput2 *tfTypes.LookupFileInput2 `queryParam:"inline" tfsdk:"lookup_file_input2" tfPlanOnly:"true"`
-	Pack             types.String              `tfsdk:"pack"`
+	Content     types.String     `tfsdk:"content"`
+	Description types.String     `tfsdk:"description"`
+	GroupID     types.String     `tfsdk:"group_id"`
+	ID          types.String     `tfsdk:"id"`
+	Items       []tfTypes.Routes `tfsdk:"items"`
+	Mode        types.String     `tfsdk:"mode"`
+	Pack        types.String     `tfsdk:"pack"`
+	Tags        types.String     `tfsdk:"tags"`
 }
 
 func (r *PackLookupsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -55,13 +56,23 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "PackLookups Resource",
 		Attributes: map[string]schema.Attribute{
+			"content": schema.StringAttribute{
+				Optional:    true,
+				Description: `File content.`,
+			},
+			"description": schema.StringAttribute{
+				Optional: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to DELETE for pack`,
+				Description: `Unique ID to PATCH for pack`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
+				},
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -172,102 +183,25 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 				},
 			},
-			"lookup_file_input1": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Optional: true,
-					},
-					"file_info": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"filename": schema.StringAttribute{
-								Required: true,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w .-]+$`), "must match pattern "+regexp.MustCompile(`^\w[\w .-]+$`).String()),
-								},
-							},
-						},
-					},
-					"id": schema.StringAttribute{
-						Required: true,
-						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
-						},
-					},
-					"mode": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`memory`),
-						Description: `Default: "memory"; must be one of ["memory", "disk"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"memory",
-								"disk",
-							),
-						},
-					},
-					"size": schema.Float64Attribute{
-						Optional:    true,
-						Description: `File size. Optional.`,
-					},
-					"tags": schema.StringAttribute{
-						Optional:    true,
-						Description: `One or more tags related to this lookup. Optional.`,
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("lookup_file_input2"),
-					}...),
-				},
-			},
-			"lookup_file_input2": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"content": schema.StringAttribute{
-						Optional:    true,
-						Description: `File content.`,
-					},
-					"description": schema.StringAttribute{
-						Optional: true,
-					},
-					"id": schema.StringAttribute{
-						Required: true,
-						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
-						},
-					},
-					"mode": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`memory`),
-						Description: `Default: "memory"; must be one of ["memory", "disk"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"memory",
-								"disk",
-							),
-						},
-					},
-					"size": schema.Float64Attribute{
-						Optional:    true,
-						Description: `File size. Optional.`,
-					},
-					"tags": schema.StringAttribute{
-						Optional:    true,
-						Description: `One or more tags related to this lookup. Optional.`,
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("lookup_file_input1"),
-					}...),
+			"mode": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(`memory`),
+				Description: `Default: "memory"; must be one of ["memory", "disk"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"memory",
+						"disk",
+					),
 				},
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,
 				Description: `pack ID to GET`,
+			},
+			"tags": schema.StringAttribute{
+				Optional:    true,
+				Description: `One or more tags related to this lookup. Optional.`,
 			},
 		},
 	}
@@ -338,6 +272,43 @@ func (r *PackLookupsResource) Create(ctx context.Context, req resource.CreateReq
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsCreateSystemLookupsByPackResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetSystemLookupsByPackRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Routes.GetSystemLookupsByPack(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemLookupsByPackResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

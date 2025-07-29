@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -14,12 +13,6 @@ import (
 func (r *ParserLibEntryResourceModel) RefreshFromSharedParserLibEntry(ctx context.Context, resp *shared.ParserLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp.AdditionalProperties == nil {
-		r.AdditionalProperties = types.StringNull()
-	} else {
-		additionalPropertiesResult, _ := json.Marshal(resp.AdditionalProperties)
-		r.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
-	}
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
 	r.Lib = types.StringPointerValue(resp.Lib)
@@ -49,6 +42,23 @@ func (r *ParserLibEntryResourceModel) ToOperationsCreateParserRequest(ctx contex
 	out := operations.CreateParserRequest{
 		GroupID:        groupID,
 		ParserLibEntry: *parserLibEntry,
+	}
+
+	return &out, diags
+}
+
+func (r *ParserLibEntryResourceModel) ToOperationsDeleteParserByIDRequest(ctx context.Context) (*operations.DeleteParserByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.DeleteParserByIDRequest{
+		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -122,17 +132,12 @@ func (r *ParserLibEntryResourceModel) ToSharedParserLibEntry(ctx context.Context
 	} else {
 		typeVar = nil
 	}
-	var additionalProperties interface{}
-	if !r.AdditionalProperties.IsUnknown() && !r.AdditionalProperties.IsNull() {
-		_ = json.Unmarshal([]byte(r.AdditionalProperties.ValueString()), &additionalProperties)
-	}
 	out := shared.ParserLibEntry{
-		ID:                   id,
-		Lib:                  lib,
-		Description:          description,
-		Tags:                 tags,
-		Type:                 typeVar,
-		AdditionalProperties: additionalProperties,
+		ID:          id,
+		Lib:         lib,
+		Description: description,
+		Tags:        tags,
+		Type:        typeVar,
 	}
 
 	return &out, diags

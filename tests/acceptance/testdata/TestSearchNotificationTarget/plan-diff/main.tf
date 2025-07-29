@@ -1,0 +1,1 @@
+../../../../../examples/search-notification-target/main.tf

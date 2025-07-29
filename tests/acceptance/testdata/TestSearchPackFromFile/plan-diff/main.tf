@@ -1,0 +1,1 @@
+../../../../../examples/search-pack-with-file/main.tf

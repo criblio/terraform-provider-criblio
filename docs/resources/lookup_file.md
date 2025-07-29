@@ -14,26 +14,12 @@ LookupFile Resource
 
 ```terraform
 resource "criblio_lookup_file" "my_lookupfile" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
-  lookup_file_input1 = {
-    description = "...my_description..."
-    file_info = {
-      filename = "...my_filename..."
-    }
-    id   = "...my_id..."
-    mode = "disk"
-    size = 3.57
-    tags = "...my_tags..."
-  }
-  lookup_file_input2 = {
-    content     = "...my_content..."
-    description = "...my_description..."
-    id          = "...my_id..."
-    mode        = "disk"
-    size        = 5.1
-    tags        = "...my_tags..."
-  }
+  content     = "...my_content..."
+  description = "...my_description..."
+  group_id    = "...my_group_id..."
+  id          = "...my_id..."
+  mode        = "disk"
+  tags        = "...my_tags..."
 }
 ```
 
@@ -43,120 +29,14 @@ resource "criblio_lookup_file" "my_lookupfile" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to DELETE
+- `id` (String) Unique ID to PATCH
 
 ### Optional
 
-- `lookup_file_input1` (Attributes) (see [below for nested schema](#nestedatt--lookup_file_input1))
-- `lookup_file_input2` (Attributes) (see [below for nested schema](#nestedatt--lookup_file_input2))
-
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--lookup_file_input1"></a>
-### Nested Schema for `lookup_file_input1`
-
-Required:
-
-- `id` (String)
-
-Optional:
-
-- `description` (String)
-- `file_info` (Attributes) (see [below for nested schema](#nestedatt--lookup_file_input1--file_info))
-- `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
-- `size` (Number) File size. Optional.
-- `tags` (String) One or more tags related to this lookup. Optional.
-
-<a id="nestedatt--lookup_file_input1--file_info"></a>
-### Nested Schema for `lookup_file_input1.file_info`
-
-Required:
-
-- `filename` (String)
-
-
-
-<a id="nestedatt--lookup_file_input2"></a>
-### Nested Schema for `lookup_file_input2`
-
-Required:
-
-- `id` (String)
-
-Optional:
-
 - `content` (String) File content.
 - `description` (String)
 - `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
-- `size` (Number) File size. Optional.
 - `tags` (String) One or more tags related to this lookup. Optional.
-
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `lookup_file1` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file1))
-- `lookup_file2` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file2))
-
-<a id="nestedatt--items--lookup_file1"></a>
-### Nested Schema for `items.lookup_file1`
-
-Read-Only:
-
-- `description` (String)
-- `file_info` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file1--file_info))
-- `id` (String)
-- `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
-- `pending_task` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file1--pending_task))
-- `size` (Number) File size. Optional.
-- `tags` (String) One or more tags related to this lookup. Optional.
-- `version` (String) Unique string generated for each modification of this lookup
-
-<a id="nestedatt--items--lookup_file1--file_info"></a>
-### Nested Schema for `items.lookup_file1.file_info`
-
-Read-Only:
-
-- `filename` (String)
-
-
-<a id="nestedatt--items--lookup_file1--pending_task"></a>
-### Nested Schema for `items.lookup_file1.pending_task`
-
-Read-Only:
-
-- `error` (String) Error message if task has failed
-- `id` (String) Task ID (generated).
-- `type` (String) Task type. must be one of ["IMPORT", "INDEX"]
-
-
-
-<a id="nestedatt--items--lookup_file2"></a>
-### Nested Schema for `items.lookup_file2`
-
-Read-Only:
-
-- `content` (String) File content.
-- `description` (String)
-- `id` (String)
-- `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
-- `pending_task` (Attributes) (see [below for nested schema](#nestedatt--items--lookup_file2--pending_task))
-- `size` (Number) File size. Optional.
-- `tags` (String) One or more tags related to this lookup. Optional.
-- `version` (String) Unique string generated for each modification of this lookup
-
-<a id="nestedatt--items--lookup_file2--pending_task"></a>
-### Nested Schema for `items.lookup_file2.pending_task`
-
-Read-Only:
-
-- `error` (String) Error message if task has failed
-- `id` (String) Task ID (generated).
-- `type` (String) Task type. must be one of ["IMPORT", "INDEX"]
 
 ## Import
 

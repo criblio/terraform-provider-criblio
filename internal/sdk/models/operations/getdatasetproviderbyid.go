@@ -21,10 +21,10 @@ func (o *GetDatasetProviderByIDRequest) GetID() string {
 
 // GetDatasetProviderByIDResponseBody - a list of DatasetProvider objects
 type GetDatasetProviderByIDResponseBody struct {
-	Items []any `json:"items,omitempty"`
+	Items []shared.GenericProvider `json:"items,omitempty"`
 }
 
-func (o *GetDatasetProviderByIDResponseBody) GetItems() []any {
+func (o *GetDatasetProviderByIDResponseBody) GetItems() []shared.GenericProvider {
 	if o == nil {
 		return nil
 	}

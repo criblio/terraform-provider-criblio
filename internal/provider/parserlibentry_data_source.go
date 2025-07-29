@@ -27,13 +27,12 @@ type ParserLibEntryDataSource struct {
 
 // ParserLibEntryDataSourceModel describes the data model.
 type ParserLibEntryDataSourceModel struct {
-	AdditionalProperties types.String `tfsdk:"additional_properties"`
-	Description          types.String `tfsdk:"description"`
-	GroupID              types.String `tfsdk:"group_id"`
-	ID                   types.String `tfsdk:"id"`
-	Lib                  types.String `tfsdk:"lib"`
-	Tags                 types.String `tfsdk:"tags"`
-	Type                 types.String `tfsdk:"type"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Lib         types.String `tfsdk:"lib"`
+	Tags        types.String `tfsdk:"tags"`
+	Type        types.String `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -47,10 +46,6 @@ func (r *ParserLibEntryDataSource) Schema(ctx context.Context, req datasource.Sc
 		MarkdownDescription: "ParserLibEntry DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"additional_properties": schema.StringAttribute{
-				Computed:    true,
-				Description: `Parsed as JSON.`,
-			},
 			"description": schema.StringAttribute{
 				Computed: true,
 			},

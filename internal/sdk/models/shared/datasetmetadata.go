@@ -3,75 +3,56 @@
 package shared
 
 import (
-	"encoding/json"
-	"fmt"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+	"time"
 )
-
-type ScanMode string
-
-const (
-	ScanModeDetailed ScanMode = "detailed"
-	ScanModeQuick    ScanMode = "quick"
-)
-
-func (e ScanMode) ToPointer() *ScanMode {
-	return &e
-}
-func (e *ScanMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "detailed":
-		fallthrough
-	case "quick":
-		*e = ScanMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ScanMode: %v", v)
-	}
-}
 
 type DatasetMetadata struct {
-	Earliest           string                  `json:"earliest"`
-	EnableAcceleration bool                    `json:"enableAcceleration"`
-	FieldList          []string                `json:"fieldList"`
-	LatestRunInfo      *DatasetMetadataRunInfo `json:"latestRunInfo,omitempty"`
-	ScanMode           ScanMode                `json:"scanMode"`
+	// Creation timestamp
+	Created *time.Time `json:"created,omitempty"`
+	// Last modification timestamp
+	Modified *time.Time `json:"modified,omitempty"`
+	// Tags associated with the dataset
+	Tags []string `json:"tags,omitempty"`
+	// Whether acceleration is enabled for this dataset
+	EnableAcceleration *bool `default:"false" json:"enableAcceleration"`
 }
 
-func (o *DatasetMetadata) GetEarliest() string {
-	if o == nil {
-		return ""
+func (d DatasetMetadata) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DatasetMetadata) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+		return err
 	}
-	return o.Earliest
+	return nil
 }
 
-func (o *DatasetMetadata) GetEnableAcceleration() bool {
-	if o == nil {
-		return false
-	}
-	return o.EnableAcceleration
-}
-
-func (o *DatasetMetadata) GetFieldList() []string {
-	if o == nil {
-		return []string{}
-	}
-	return o.FieldList
-}
-
-func (o *DatasetMetadata) GetLatestRunInfo() *DatasetMetadataRunInfo {
+func (o *DatasetMetadata) GetCreated() *time.Time {
 	if o == nil {
 		return nil
 	}
-	return o.LatestRunInfo
+	return o.Created
 }
 
-func (o *DatasetMetadata) GetScanMode() ScanMode {
+func (o *DatasetMetadata) GetModified() *time.Time {
 	if o == nil {
-		return ScanMode("")
+		return nil
 	}
-	return o.ScanMode
+	return o.Modified
+}
+
+func (o *DatasetMetadata) GetTags() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Tags
+}
+
+func (o *DatasetMetadata) GetEnableAcceleration() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EnableAcceleration
 }

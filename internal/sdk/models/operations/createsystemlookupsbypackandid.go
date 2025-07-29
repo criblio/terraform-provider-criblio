@@ -16,7 +16,7 @@ type CreateSystemLookupsByPackAndIDRequest struct {
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Pipeline object to be updated in specified Project
-	LookupFile shared.LookupFileInputUnion `request:"mediaType=application/json"`
+	LookupFile shared.LookupFile `request:"mediaType=application/json"`
 }
 
 func (o *CreateSystemLookupsByPackAndIDRequest) GetID() string {
@@ -47,9 +47,9 @@ func (o *CreateSystemLookupsByPackAndIDRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *CreateSystemLookupsByPackAndIDRequest) GetLookupFile() shared.LookupFileInputUnion {
+func (o *CreateSystemLookupsByPackAndIDRequest) GetLookupFile() shared.LookupFile {
 	if o == nil {
-		return shared.LookupFileInputUnion{}
+		return shared.LookupFile{}
 	}
 	return o.LookupFile
 }

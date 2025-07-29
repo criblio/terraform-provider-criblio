@@ -825,7 +825,7 @@ func (s *Datasets) ListDatasetProvider(ctx context.Context, opts ...operations.O
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/dataset-providers")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/dataset-providers")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -959,7 +959,7 @@ func (s *Datasets) ListDatasetProvider(ctx context.Context, opts ...operations.O
 
 // CreateDatasetProvider - Create DatasetProvider
 // Create DatasetProvider
-func (s *Datasets) CreateDatasetProvider(ctx context.Context, request any, opts ...operations.Option) (*operations.CreateDatasetProviderResponse, error) {
+func (s *Datasets) CreateDatasetProvider(ctx context.Context, request shared.GenericProvider, opts ...operations.Option) (*operations.CreateDatasetProviderResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -977,7 +977,7 @@ func (s *Datasets) CreateDatasetProvider(ctx context.Context, request any, opts 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/dataset-providers")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/dataset-providers")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1136,7 +1136,7 @@ func (s *Datasets) GetDatasetProviderByID(ctx context.Context, request operation
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/dataset-providers/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/dataset-providers/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1288,7 +1288,7 @@ func (s *Datasets) UpdateDatasetProviderByID(ctx context.Context, request operat
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/dataset-providers/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/dataset-providers/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1302,7 +1302,7 @@ func (s *Datasets) UpdateDatasetProviderByID(ctx context.Context, request operat
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "RequestBody", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "GenericProvider", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -1447,7 +1447,7 @@ func (s *Datasets) DeleteDatasetProviderByID(ctx context.Context, request operat
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/dataset-providers/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/dataset-providers/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1599,7 +1599,7 @@ func (s *Datasets) ListDataset(ctx context.Context, opts ...operations.Option) (
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/datasets")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/datasets")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1733,7 +1733,7 @@ func (s *Datasets) ListDataset(ctx context.Context, opts ...operations.Option) (
 
 // CreateDataset - Create Dataset
 // Create Dataset
-func (s *Datasets) CreateDataset(ctx context.Context, request any, opts ...operations.Option) (*operations.CreateDatasetResponse, error) {
+func (s *Datasets) CreateDataset(ctx context.Context, request shared.GenericDataset, opts ...operations.Option) (*operations.CreateDatasetResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1751,7 +1751,7 @@ func (s *Datasets) CreateDataset(ctx context.Context, request any, opts ...opera
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/search/datasets")
+	opURL, err := url.JoinPath(baseURL, "/m/default_search/search/datasets")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1910,7 +1910,7 @@ func (s *Datasets) GetDatasetByID(ctx context.Context, request operations.GetDat
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/datasets/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/datasets/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2062,7 +2062,7 @@ func (s *Datasets) UpdateDatasetByID(ctx context.Context, request operations.Upd
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/datasets/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/datasets/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2076,7 +2076,7 @@ func (s *Datasets) UpdateDatasetByID(ctx context.Context, request operations.Upd
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "RequestBody", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "GenericDataset", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -2221,7 +2221,7 @@ func (s *Datasets) DeleteDatasetByID(ctx context.Context, request operations.Del
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/datasets/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/datasets/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
