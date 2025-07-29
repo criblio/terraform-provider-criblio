@@ -4,7 +4,7 @@ resource "criblio_pack_breakers" "my_packbreakers" {
   id             = "test_packbreakers"
   lib            = "custom"
   min_raw_length = 256
-  pack           = criblio_pack.my_pack.id
+  pack           = criblio_pack.my_pack_breakers.id
   rules = [
     {
       condition           = "PASS_THROUGH_SOURCE_TYPE"
@@ -31,7 +31,7 @@ resource "criblio_pack_breakers" "my_packbreakers" {
 
 
 
-resource "criblio_pack" "my_pack" {
+resource "criblio_pack" "my_pack_breakers" {
   id           = "pack-breakers"
   group_id     = "default"
   description  = "Pack breakers"
@@ -43,5 +43,5 @@ resource "criblio_pack" "my_pack" {
 
 # Output the pack details to see the read-only attributes
 output "pack_breakers_details" {
-  value = criblio_pack.my_pack
+  value = criblio_pack.my_pack_breakers
 }
