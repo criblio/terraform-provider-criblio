@@ -129,3 +129,9 @@ jobs:
         run: | 
           make test-speakeasy
 
+
+  staticcheck_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: dominikh/staticcheck-action@v1.3.1
