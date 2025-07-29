@@ -362,7 +362,7 @@ func (s *UsageGroups) GetUsageGroupByID(ctx context.Context, request operations.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/usage-groups/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/usage-groups/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -514,7 +514,7 @@ func (s *UsageGroups) UpdateUsageGroupByID(ctx context.Context, request operatio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/usage-groups/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/usage-groups/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -673,7 +673,7 @@ func (s *UsageGroups) DeleteUsageGroupByID(ctx context.Context, request operatio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/usage-groups/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/usage-groups/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

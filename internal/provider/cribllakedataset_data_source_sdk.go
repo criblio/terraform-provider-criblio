@@ -19,21 +19,7 @@ func (r *CriblLakeDatasetDataSourceModel) RefreshFromSharedCriblLakeDataset(ctx 
 	for _, v := range resp.AcceleratedFields {
 		r.AcceleratedFields = append(r.AcceleratedFields, types.StringValue(v))
 	}
-	r.BucketName = types.StringValue(resp.BucketName)
-	if resp.CacheConnection == nil {
-		r.CacheConnection = nil
-	} else {
-		r.CacheConnection = &tfTypes.CacheConnection{}
-		r.CacheConnection.AcceleratedFields = make([]types.String, 0, len(resp.CacheConnection.AcceleratedFields))
-		for _, v := range resp.CacheConnection.AcceleratedFields {
-			r.CacheConnection.AcceleratedFields = append(r.CacheConnection.AcceleratedFields, types.StringValue(v))
-		}
-		r.CacheConnection.CacheRef = types.StringValue(resp.CacheConnection.CacheRef)
-		r.CacheConnection.CreatedAt = types.Float64Value(resp.CacheConnection.CreatedAt)
-		r.CacheConnection.MigrationQueryID = types.StringPointerValue(resp.CacheConnection.MigrationQueryID)
-		r.CacheConnection.RetentionInDays = types.Float64Value(resp.CacheConnection.RetentionInDays)
-	}
-	r.DeletionStartedAt = types.Float64PointerValue(resp.DeletionStartedAt)
+	r.BucketName = types.StringPointerValue(resp.BucketName)
 	r.Description = types.StringPointerValue(resp.Description)
 	if resp.Format != nil {
 		r.Format = types.StringValue(string(*resp.Format))
@@ -63,7 +49,6 @@ func (r *CriblLakeDatasetDataSourceModel) RefreshFromSharedCriblLakeDataset(ctx 
 			}
 		}
 	}
-	r.ViewName = types.StringPointerValue(resp.ViewName)
 
 	return diags
 }

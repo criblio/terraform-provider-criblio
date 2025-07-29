@@ -4,86 +4,14 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func (r *LookupFileDataSourceModel) RefreshFromOperationsListLookupFileResponseBody(ctx context.Context, resp *operations.ListLookupFileResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.LookupFileUnion{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.LookupFileUnion
-			if itemsItem.LookupFile1 != nil {
-				items.LookupFile1 = &tfTypes.LookupFile1{}
-				items.LookupFile1.Description = types.StringPointerValue(itemsItem.LookupFile1.Description)
-				if itemsItem.LookupFile1.FileInfo == nil {
-					items.LookupFile1.FileInfo = nil
-				} else {
-					items.LookupFile1.FileInfo = &tfTypes.FileInfo{}
-					items.LookupFile1.FileInfo.Filename = types.StringValue(itemsItem.LookupFile1.FileInfo.Filename)
-				}
-				items.LookupFile1.ID = types.StringValue(itemsItem.LookupFile1.ID)
-				if itemsItem.LookupFile1.Mode != nil {
-					items.LookupFile1.Mode = types.StringValue(string(*itemsItem.LookupFile1.Mode))
-				} else {
-					items.LookupFile1.Mode = types.StringNull()
-				}
-				if itemsItem.LookupFile1.PendingTask == nil {
-					items.LookupFile1.PendingTask = nil
-				} else {
-					items.LookupFile1.PendingTask = &tfTypes.PendingTask1{}
-					items.LookupFile1.PendingTask.Error = types.StringPointerValue(itemsItem.LookupFile1.PendingTask.Error)
-					items.LookupFile1.PendingTask.ID = types.StringPointerValue(itemsItem.LookupFile1.PendingTask.ID)
-					if itemsItem.LookupFile1.PendingTask.Type != nil {
-						items.LookupFile1.PendingTask.Type = types.StringValue(string(*itemsItem.LookupFile1.PendingTask.Type))
-					} else {
-						items.LookupFile1.PendingTask.Type = types.StringNull()
-					}
-				}
-				items.LookupFile1.Size = types.Float64PointerValue(itemsItem.LookupFile1.Size)
-				items.LookupFile1.Tags = types.StringPointerValue(itemsItem.LookupFile1.Tags)
-				items.LookupFile1.Version = types.StringPointerValue(itemsItem.LookupFile1.Version)
-			}
-			if itemsItem.LookupFile2 != nil {
-				items.LookupFile2 = &tfTypes.LookupFile2{}
-				items.LookupFile2.Content = types.StringPointerValue(itemsItem.LookupFile2.Content)
-				items.LookupFile2.Description = types.StringPointerValue(itemsItem.LookupFile2.Description)
-				items.LookupFile2.ID = types.StringValue(itemsItem.LookupFile2.ID)
-				if itemsItem.LookupFile2.Mode != nil {
-					items.LookupFile2.Mode = types.StringValue(string(*itemsItem.LookupFile2.Mode))
-				} else {
-					items.LookupFile2.Mode = types.StringNull()
-				}
-				if itemsItem.LookupFile2.PendingTask == nil {
-					items.LookupFile2.PendingTask = nil
-				} else {
-					items.LookupFile2.PendingTask = &tfTypes.PendingTask2{}
-					items.LookupFile2.PendingTask.Error = types.StringPointerValue(itemsItem.LookupFile2.PendingTask.Error)
-					items.LookupFile2.PendingTask.ID = types.StringPointerValue(itemsItem.LookupFile2.PendingTask.ID)
-					if itemsItem.LookupFile2.PendingTask.Type != nil {
-						items.LookupFile2.PendingTask.Type = types.StringValue(string(*itemsItem.LookupFile2.PendingTask.Type))
-					} else {
-						items.LookupFile2.PendingTask.Type = types.StringNull()
-					}
-				}
-				items.LookupFile2.Size = types.Float64PointerValue(itemsItem.LookupFile2.Size)
-				items.LookupFile2.Tags = types.StringPointerValue(itemsItem.LookupFile2.Tags)
-				items.LookupFile2.Version = types.StringPointerValue(itemsItem.LookupFile2.Version)
-			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].LookupFile1 = items.LookupFile1
-				r.Items[itemsCount].LookupFile2 = items.LookupFile2
-			}
-		}
 	}
 
 	return diags

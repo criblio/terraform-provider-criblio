@@ -1,0 +1,33 @@
+package tests
+
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestSearchSavedQuery(t *testing.T) {
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					ConfigDirectory: config.TestNameDirectory(),
+					ExpectNonEmptyPlan: true,
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery", "id", "test_saved_query"),
+						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery", "name", "test"),
+						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery", "description", "test"),
+						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery", "is_private", "true"),
+						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery_with_notifications", "id", "test_saved_query_with_notifications_2"),
+						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery_with_notifications", "name", "test_with_notifications"),
+						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery_with_notifications", "description", "test with notifications"),
+						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery_with_notifications", "is_private", "true"),
+					),
+				},
+			},
+		})
+	})
+}

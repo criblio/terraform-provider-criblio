@@ -34,19 +34,6 @@ func (r *SearchDashboardCategoryResourceModel) ToOperationsDeleteDashboardCatego
 	return &out, diags
 }
 
-func (r *SearchDashboardCategoryResourceModel) ToOperationsGetDashboardCategoryByIDRequest(ctx context.Context) (*operations.GetDashboardCategoryByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetDashboardCategoryByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
-}
-
 func (r *SearchDashboardCategoryResourceModel) ToOperationsUpdateDashboardCategoryByIDRequest(ctx context.Context) (*operations.UpdateDashboardCategoryByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

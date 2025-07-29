@@ -362,7 +362,7 @@ func (s *Dashboards) GetSearchDashboardByID(ctx context.Context, request operati
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/dashboards/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/dashboards/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -514,7 +514,7 @@ func (s *Dashboards) UpdateSearchDashboardByID(ctx context.Context, request oper
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/dashboards/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/dashboards/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -673,7 +673,7 @@ func (s *Dashboards) DeleteSearchDashboardByID(ctx context.Context, request oper
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/dashboards/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/dashboards/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

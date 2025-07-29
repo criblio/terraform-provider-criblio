@@ -38,19 +38,6 @@ func (r *SearchUsageGroupResourceModel) ToOperationsDeleteUsageGroupByIDRequest(
 	return &out, diags
 }
 
-func (r *SearchUsageGroupResourceModel) ToOperationsGetUsageGroupByIDRequest(ctx context.Context) (*operations.GetUsageGroupByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetUsageGroupByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
-}
-
 func (r *SearchUsageGroupResourceModel) ToOperationsUpdateUsageGroupByIDRequest(ctx context.Context) (*operations.UpdateUsageGroupByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

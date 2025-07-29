@@ -60,8 +60,7 @@ type ParserLibEntry struct {
 	// Optionally, add tags that you can use for filtering
 	Tags *string `json:"tags,omitempty"`
 	// Parser or formatter type to use
-	Type                 *ParserLibEntryType `default:"csv" json:"type"`
-	AdditionalProperties any                 `additionalProperties:"true" json:"-"`
+	Type *ParserLibEntryType `default:"csv" json:"type"`
 }
 
 func (p ParserLibEntry) MarshalJSON() ([]byte, error) {
@@ -108,11 +107,4 @@ func (o *ParserLibEntry) GetType() *ParserLibEntryType {
 		return nil
 	}
 	return o.Type
-}
-
-func (o *ParserLibEntry) GetAdditionalProperties() any {
-	if o == nil {
-		return nil
-	}
-	return o.AdditionalProperties
 }

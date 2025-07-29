@@ -33,11 +33,3 @@ resource "criblio_search_dashboard_category" "my_searchdashboardcategory" {
 
 - `description` (String)
 - `is_pack` (Boolean)
-
-## Import
-
-Import is supported using the following syntax:
-
-```shell
-terraform import criblio_search_dashboard_category.my_criblio_search_dashboard_category ""
-```

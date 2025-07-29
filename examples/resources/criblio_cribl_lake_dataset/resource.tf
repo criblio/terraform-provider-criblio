@@ -2,17 +2,7 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
   accelerated_fields = [
     "..."
   ]
-  bucket_name = "...my_bucket_name..."
-  cache_connection = {
-    accelerated_fields = [
-      "..."
-    ]
-    cache_ref          = "...my_cache_ref..."
-    created_at         = 3.92
-    migration_query_id = "...my_migration_query_id..."
-    retention_in_days  = 8.82
-  }
-  deletion_started_at      = 5.22
+  bucket_name              = "...my_bucket_name..."
   description              = "...my_description..."
   format                   = "json"
   id                       = "...my_id..."
@@ -31,5 +21,4 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
       ]
     }
   }
-  view_name = "...my_view_name..."
 }

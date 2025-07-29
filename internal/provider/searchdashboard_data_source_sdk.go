@@ -6,7 +6,6 @@ import (
 	"context"
 	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -218,17 +217,4 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 	}
 
 	return diags
-}
-
-func (r *SearchDashboardDataSourceModel) ToOperationsGetSearchDashboardByIDRequest(ctx context.Context) (*operations.GetSearchDashboardByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetSearchDashboardByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
 }

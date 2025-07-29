@@ -37,19 +37,6 @@ func (r *SearchMacroResourceModel) ToOperationsDeleteSearchMacroByIDRequest(ctx 
 	return &out, diags
 }
 
-func (r *SearchMacroResourceModel) ToOperationsGetSearchMacroByIDRequest(ctx context.Context) (*operations.GetSearchMacroByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetSearchMacroByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
-}
-
 func (r *SearchMacroResourceModel) ToOperationsUpdateSearchMacroByIDRequest(ctx context.Context) (*operations.UpdateSearchMacroByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

@@ -57,8 +57,7 @@ func (r *SearchUsageGroupDataSource) Schema(ctx context.Context, req datasource.
 				Computed: true,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to GET`,
+				Computed: true,
 			},
 			"rules": schema.StringAttribute{
 				Computed:    true,
@@ -109,13 +108,7 @@ func (r *SearchUsageGroupDataSource) Read(ctx context.Context, req datasource.Re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetUsageGroupByIDRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.UsageGroups.GetUsageGroupByID(ctx, *request)
+	res, err := r.client.UsageGroups.ListUsageGroup(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

@@ -1,0 +1,1 @@
+../../../../../examples/search-lookups/main.tf

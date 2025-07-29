@@ -31,25 +31,10 @@ data "criblio_cribl_lake_dataset" "my_cribllakedataset" {
 
 - `accelerated_fields` (List of String)
 - `bucket_name` (String)
-- `cache_connection` (Attributes) (see [below for nested schema](#nestedatt--cache_connection))
-- `deletion_started_at` (Number)
 - `description` (String)
 - `format` (String)
 - `retention_period_in_days` (Number)
 - `search_config` (Attributes) (see [below for nested schema](#nestedatt--search_config))
-- `view_name` (String)
-
-<a id="nestedatt--cache_connection"></a>
-### Nested Schema for `cache_connection`
-
-Read-Only:
-
-- `accelerated_fields` (List of String)
-- `cache_ref` (String)
-- `created_at` (Number)
-- `migration_query_id` (String)
-- `retention_in_days` (Number)
-
 
 <a id="nestedatt--search_config"></a>
 ### Nested Schema for `search_config`

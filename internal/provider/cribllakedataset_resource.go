@@ -10,13 +10,12 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
-	speakeasy_float64validators "github.com/criblio/terraform-provider-criblio/internal/validators/float64validators"
-	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -40,15 +39,12 @@ type CriblLakeDatasetResource struct {
 type CriblLakeDatasetResourceModel struct {
 	AcceleratedFields     []types.String                   `tfsdk:"accelerated_fields"`
 	BucketName            types.String                     `tfsdk:"bucket_name"`
-	CacheConnection       *tfTypes.CacheConnection         `tfsdk:"cache_connection"`
-	DeletionStartedAt     types.Float64                    `tfsdk:"deletion_started_at"`
 	Description           types.String                     `tfsdk:"description"`
 	Format                types.String                     `tfsdk:"format"`
 	ID                    types.String                     `tfsdk:"id"`
 	LakeID                types.String                     `tfsdk:"lake_id"`
 	RetentionPeriodInDays types.Float64                    `tfsdk:"retention_period_in_days"`
 	SearchConfig          *tfTypes.LakeDatasetSearchConfig `tfsdk:"search_config"`
-	ViewName              types.String                     `tfsdk:"view_name"`
 }
 
 func (r *CriblLakeDatasetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,50 +61,10 @@ func (r *CriblLakeDatasetResource) Schema(ctx context.Context, req resource.Sche
 				ElementType: types.StringType,
 			},
 			"bucket_name": schema.StringAttribute{
-				Required: true,
-			},
-			"cache_connection": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"accelerated_fields": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						ElementType: types.StringType,
-					},
-					"cache_ref": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-					"created_at": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
-						},
-					},
-					"migration_query_id": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"retention_in_days": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
-						},
-					},
-				},
-			},
-			"deletion_started_at": schema.Float64Attribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(`lake-${workspaceName}-${organizationId}`),
+				Description: `Default: "lake-${workspaceName}-${organizationId}"`,
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
@@ -182,10 +138,6 @@ func (r *CriblLakeDatasetResource) Schema(ctx context.Context, req resource.Sche
 						},
 					},
 				},
-			},
-			"view_name": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
 			},
 		},
 	}

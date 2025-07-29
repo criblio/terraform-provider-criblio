@@ -233,19 +233,6 @@ func (r *SearchDashboardResourceModel) ToOperationsDeleteSearchDashboardByIDRequ
 	return &out, diags
 }
 
-func (r *SearchDashboardResourceModel) ToOperationsGetSearchDashboardByIDRequest(ctx context.Context) (*operations.GetSearchDashboardByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetSearchDashboardByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
-}
-
 func (r *SearchDashboardResourceModel) ToOperationsUpdateSearchDashboardByIDRequest(ctx context.Context) (*operations.UpdateSearchDashboardByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

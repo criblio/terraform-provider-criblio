@@ -362,7 +362,7 @@ func (s *Macros) GetSearchMacroByID(ctx context.Context, request operations.GetS
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/macros/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/macros/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -514,7 +514,7 @@ func (s *Macros) UpdateSearchMacroByID(ctx context.Context, request operations.U
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/macros/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/macros/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -673,7 +673,7 @@ func (s *Macros) DeleteSearchMacroByID(ctx context.Context, request operations.D
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/search/macros/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/default_search/search/macros/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

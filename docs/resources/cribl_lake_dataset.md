@@ -17,17 +17,7 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
   accelerated_fields = [
     "..."
   ]
-  bucket_name = "...my_bucket_name..."
-  cache_connection = {
-    accelerated_fields = [
-      "..."
-    ]
-    cache_ref          = "...my_cache_ref..."
-    created_at         = 3.92
-    migration_query_id = "...my_migration_query_id..."
-    retention_in_days  = 8.82
-  }
-  deletion_started_at      = 5.22
+  bucket_name              = "...my_bucket_name..."
   description              = "...my_description..."
   format                   = "json"
   id                       = "...my_id..."
@@ -46,7 +36,6 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
       ]
     }
   }
-  view_name = "...my_view_name..."
 }
 ```
 
@@ -55,32 +44,17 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
 
 ### Required
 
-- `bucket_name` (String)
 - `id` (String) dataset id to update
 - `lake_id` (String) lake id that contains the Datasets
 
 ### Optional
 
 - `accelerated_fields` (List of String)
-- `cache_connection` (Attributes) (see [below for nested schema](#nestedatt--cache_connection))
-- `deletion_started_at` (Number)
+- `bucket_name` (String) Default: "lake-${workspaceName}-${organizationId}"
 - `description` (String)
 - `format` (String) must be one of ["json", "ddss", "parquet"]
 - `retention_period_in_days` (Number)
 - `search_config` (Attributes) (see [below for nested schema](#nestedatt--search_config))
-- `view_name` (String)
-
-<a id="nestedatt--cache_connection"></a>
-### Nested Schema for `cache_connection`
-
-Optional:
-
-- `accelerated_fields` (List of String)
-- `cache_ref` (String) Not Null
-- `created_at` (Number) Not Null
-- `migration_query_id` (String)
-- `retention_in_days` (Number) Not Null
-
 
 <a id="nestedatt--search_config"></a>
 ### Nested Schema for `search_config`

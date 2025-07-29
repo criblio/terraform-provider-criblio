@@ -27,7 +27,6 @@ data "criblio_parser_lib_entry" "my_parserlibentry" {
 
 ### Read-Only
 
-- `additional_properties` (String) Parsed as JSON.
 - `description` (String)
 - `id` (String) The ID of this resource.
 - `lib` (String)

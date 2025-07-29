@@ -30,14 +30,6 @@ func (o *DeleteLookupFileByIDRequest) GetGroupID() string {
 
 // DeleteLookupFileByIDResponseBody - a list of LookupFile objects
 type DeleteLookupFileByIDResponseBody struct {
-	Items []shared.LookupFileUnion `json:"items,omitempty"`
-}
-
-func (o *DeleteLookupFileByIDResponseBody) GetItems() []shared.LookupFileUnion {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type DeleteLookupFileByIDResponse struct {

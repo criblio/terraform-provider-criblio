@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -19,17 +18,4 @@ func (r *SearchDashboardCategoryDataSourceModel) RefreshFromSharedDashboardCateg
 	r.Name = types.StringValue(resp.Name)
 
 	return diags
-}
-
-func (r *SearchDashboardCategoryDataSourceModel) ToOperationsGetDashboardCategoryByIDRequest(ctx context.Context) (*operations.GetDashboardCategoryByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetDashboardCategoryByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
 }

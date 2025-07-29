@@ -1,0 +1,1 @@
+../../../../../examples/search-dashboard-categories/main.tf

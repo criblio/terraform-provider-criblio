@@ -1,17 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  server_url = "https://app.cribl-playground.cloud"
-  organization_id = "determined-gian-gkh6kzw"
-  workspace_id = "main"
-}
-
 resource "criblio_search_saved_query" "my_searchsavedquery" {
   name        = "test"
   description = "test"
@@ -34,7 +20,7 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
   name        = "test_with_notifications"
   description = "test with notifications"
   is_private  = true
-  id          = "test_saved_query_with_notifications"
+  id          = "test_saved_query_with_notifications_2"
   query       = "cribl dataset=\"cribl_internal_logs\" source=*searches.log message=\"search finished\" | summarize count(), elapsedMS=sum(stats.elapsedMs), eventsFound=sum(stats.eventsFound) by user=stats.user"
   schedule = {
     enabled       = true
@@ -50,7 +36,7 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
             trigger_type        = "resultsCount"
             trigger_comparator  = ">"
             trigger_count       = 10
-            saved_query_id      = "test_saved_query_with_notifications"
+            saved_query_id      = "test_saved_query_with_notifications_2"
           }
           disabled = false
           id       = "test_notification"

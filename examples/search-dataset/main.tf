@@ -1,56 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  server_url = "https://app.cribl-playground.cloud"
-  organization_id = "determined-gian-gkh6kzw"
-  workspace_id = "main"
-}
-
-resource "criblio_search_dataset" "my_searchdataset" {
-  apihttp_dataset = {
-    description = "test"
-    enabled_endpoints = [
-      "http://localhost"
-    ]
-    id = "test_http_dataset"
-    metadata = {
-      created             = "2021-07-10T14:32:53.487Z"
-      enable_acceleration = false
-      modified            = "2022-07-12T22:13:15.898Z"
-      tags = [
-        "test"
-      ]
-    }
-    provider_id = "test_http"
-    type        = "api_http"
-  }
-}
-
-resource "criblio_search_dataset" "my_elastic_search_dataset" {
-  api_elastic_search_dataset = {
-    description = "test"
-    id          = "test_elastic_dataset"
-    index       = "test"
-    metadata = {
-      created             = "2021-06-28T12:13:39.681Z"
-      enable_acceleration = false
-      modified            = "2022-04-18T23:19:36.636Z"
-      tags = [
-        "test"
-      ]
-    }
-    provider_id     = "test_elastic"
-    timestamp_field = "test"
-    type            = "api_elasticsearch"
-  }
-}
-
 resource "criblio_search_dataset" "my_s3_dataset" {
   s3_dataset = {
     auto_detect_region = false
@@ -66,7 +13,7 @@ resource "criblio_search_dataset" "my_s3_dataset" {
       }
     ]
     filter = "test"
-    id     = "test_s3_dataset"
+    id     = "S3"
     metadata = {
       created             = "2021-10-01T19:20:31.326Z"
       enable_acceleration = false

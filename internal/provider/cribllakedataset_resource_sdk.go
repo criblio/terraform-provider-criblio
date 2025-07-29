@@ -20,21 +20,7 @@ func (r *CriblLakeDatasetResourceModel) RefreshFromSharedCriblLakeDataset(ctx co
 	for _, v := range resp.AcceleratedFields {
 		r.AcceleratedFields = append(r.AcceleratedFields, types.StringValue(v))
 	}
-	r.BucketName = types.StringValue(resp.BucketName)
-	if resp.CacheConnection == nil {
-		r.CacheConnection = nil
-	} else {
-		r.CacheConnection = &tfTypes.CacheConnection{}
-		r.CacheConnection.AcceleratedFields = make([]types.String, 0, len(resp.CacheConnection.AcceleratedFields))
-		for _, v := range resp.CacheConnection.AcceleratedFields {
-			r.CacheConnection.AcceleratedFields = append(r.CacheConnection.AcceleratedFields, types.StringValue(v))
-		}
-		r.CacheConnection.CacheRef = types.StringValue(resp.CacheConnection.CacheRef)
-		r.CacheConnection.CreatedAt = types.Float64Value(resp.CacheConnection.CreatedAt)
-		r.CacheConnection.MigrationQueryID = types.StringPointerValue(resp.CacheConnection.MigrationQueryID)
-		r.CacheConnection.RetentionInDays = types.Float64Value(resp.CacheConnection.RetentionInDays)
-	}
-	r.DeletionStartedAt = types.Float64PointerValue(resp.DeletionStartedAt)
+	r.BucketName = types.StringPointerValue(resp.BucketName)
 	r.Description = types.StringPointerValue(resp.Description)
 	if resp.Format != nil {
 		r.Format = types.StringValue(string(*resp.Format))
@@ -64,7 +50,6 @@ func (r *CriblLakeDatasetResourceModel) RefreshFromSharedCriblLakeDataset(ctx co
 			}
 		}
 	}
-	r.ViewName = types.StringPointerValue(resp.ViewName)
 
 	return diags
 }
@@ -156,43 +141,11 @@ func (r *CriblLakeDatasetResourceModel) ToSharedCriblLakeDataset(ctx context.Con
 	for _, acceleratedFieldsItem := range r.AcceleratedFields {
 		acceleratedFields = append(acceleratedFields, acceleratedFieldsItem.ValueString())
 	}
-	var bucketName string
-	bucketName = r.BucketName.ValueString()
-
-	var cacheConnection *shared.CacheConnection
-	if r.CacheConnection != nil {
-		acceleratedFields1 := make([]string, 0, len(r.CacheConnection.AcceleratedFields))
-		for _, acceleratedFieldsItem1 := range r.CacheConnection.AcceleratedFields {
-			acceleratedFields1 = append(acceleratedFields1, acceleratedFieldsItem1.ValueString())
-		}
-		var cacheRef string
-		cacheRef = r.CacheConnection.CacheRef.ValueString()
-
-		var createdAt float64
-		createdAt = r.CacheConnection.CreatedAt.ValueFloat64()
-
-		migrationQueryID := new(string)
-		if !r.CacheConnection.MigrationQueryID.IsUnknown() && !r.CacheConnection.MigrationQueryID.IsNull() {
-			*migrationQueryID = r.CacheConnection.MigrationQueryID.ValueString()
-		} else {
-			migrationQueryID = nil
-		}
-		var retentionInDays float64
-		retentionInDays = r.CacheConnection.RetentionInDays.ValueFloat64()
-
-		cacheConnection = &shared.CacheConnection{
-			AcceleratedFields: acceleratedFields1,
-			CacheRef:          cacheRef,
-			CreatedAt:         createdAt,
-			MigrationQueryID:  migrationQueryID,
-			RetentionInDays:   retentionInDays,
-		}
-	}
-	deletionStartedAt := new(float64)
-	if !r.DeletionStartedAt.IsUnknown() && !r.DeletionStartedAt.IsNull() {
-		*deletionStartedAt = r.DeletionStartedAt.ValueFloat64()
+	bucketName := new(string)
+	if !r.BucketName.IsUnknown() && !r.BucketName.IsNull() {
+		*bucketName = r.BucketName.ValueString()
 	} else {
-		deletionStartedAt = nil
+		bucketName = nil
 	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
@@ -257,23 +210,14 @@ func (r *CriblLakeDatasetResourceModel) ToSharedCriblLakeDataset(ctx context.Con
 			Metadata:  metadata,
 		}
 	}
-	viewName := new(string)
-	if !r.ViewName.IsUnknown() && !r.ViewName.IsNull() {
-		*viewName = r.ViewName.ValueString()
-	} else {
-		viewName = nil
-	}
 	out := shared.CriblLakeDataset{
 		AcceleratedFields:     acceleratedFields,
 		BucketName:            bucketName,
-		CacheConnection:       cacheConnection,
-		DeletionStartedAt:     deletionStartedAt,
 		Description:           description,
 		Format:                format,
 		ID:                    id,
 		RetentionPeriodInDays: retentionPeriodInDays,
 		SearchConfig:          searchConfig,
-		ViewName:              viewName,
 	}
 
 	return &out, diags

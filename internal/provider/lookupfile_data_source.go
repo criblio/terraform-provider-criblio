@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,8 +28,7 @@ type LookupFileDataSource struct {
 
 // LookupFileDataSourceModel describes the data model.
 type LookupFileDataSourceModel struct {
-	GroupID types.String              `tfsdk:"group_id"`
-	Items   []tfTypes.LookupFileUnion `tfsdk:"items"`
+	GroupID types.String `tfsdk:"group_id"`
 }
 
 // Metadata returns the data source type name.
@@ -47,111 +45,6 @@ func (r *LookupFileDataSource) Schema(ctx context.Context, req datasource.Schema
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"lookup_file1": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"file_info": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"filename": schema.StringAttribute{
-											Computed: true,
-										},
-									},
-								},
-								"id": schema.StringAttribute{
-									Computed: true,
-								},
-								"mode": schema.StringAttribute{
-									Computed: true,
-								},
-								"pending_task": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"error": schema.StringAttribute{
-											Computed:    true,
-											Description: `Error message if task has failed`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Task ID (generated).`,
-										},
-										"type": schema.StringAttribute{
-											Computed:    true,
-											Description: `Task type`,
-										},
-									},
-								},
-								"size": schema.Float64Attribute{
-									Computed:    true,
-									Description: `File size. Optional.`,
-								},
-								"tags": schema.StringAttribute{
-									Computed:    true,
-									Description: `One or more tags related to this lookup. Optional.`,
-								},
-								"version": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique string generated for each modification of this lookup`,
-								},
-							},
-						},
-						"lookup_file2": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"content": schema.StringAttribute{
-									Computed:    true,
-									Description: `File content.`,
-								},
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"id": schema.StringAttribute{
-									Computed: true,
-								},
-								"mode": schema.StringAttribute{
-									Computed: true,
-								},
-								"pending_task": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"error": schema.StringAttribute{
-											Computed:    true,
-											Description: `Error message if task has failed`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Task ID (generated).`,
-										},
-										"type": schema.StringAttribute{
-											Computed:    true,
-											Description: `Task type`,
-										},
-									},
-								},
-								"size": schema.Float64Attribute{
-									Computed:    true,
-									Description: `File size. Optional.`,
-								},
-								"tags": schema.StringAttribute{
-									Computed:    true,
-									Description: `One or more tags related to this lookup. Optional.`,
-								},
-								"version": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique string generated for each modification of this lookup`,
-								},
-							},
-						},
-					},
-				},
 			},
 		},
 	}

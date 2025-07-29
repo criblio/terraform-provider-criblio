@@ -1,17 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  server_url = "https://app.cribl-playground.cloud"
-  organization_id = "determined-gian-gkh6kzw"
-  workspace_id = "main"
-}
-
 resource "criblio_search_dashboard" "my_searchdashboard" {
   id          = "sample_test_dashboard"
   name        = "Sample Test Dashboard"

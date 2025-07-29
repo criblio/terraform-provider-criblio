@@ -4,87 +4,15 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func (r *LookupFileResourceModel) RefreshFromOperationsCreateLookupFileResponseBody(ctx context.Context, resp *operations.CreateLookupFileResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.LookupFileUnion{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.LookupFileUnion
-			if itemsItem.LookupFile1 != nil {
-				items.LookupFile1 = &tfTypes.LookupFile1{}
-				items.LookupFile1.Description = types.StringPointerValue(itemsItem.LookupFile1.Description)
-				if itemsItem.LookupFile1.FileInfo == nil {
-					items.LookupFile1.FileInfo = nil
-				} else {
-					items.LookupFile1.FileInfo = &tfTypes.FileInfo{}
-					items.LookupFile1.FileInfo.Filename = types.StringValue(itemsItem.LookupFile1.FileInfo.Filename)
-				}
-				items.LookupFile1.ID = types.StringValue(itemsItem.LookupFile1.ID)
-				if itemsItem.LookupFile1.Mode != nil {
-					items.LookupFile1.Mode = types.StringValue(string(*itemsItem.LookupFile1.Mode))
-				} else {
-					items.LookupFile1.Mode = types.StringNull()
-				}
-				if itemsItem.LookupFile1.PendingTask == nil {
-					items.LookupFile1.PendingTask = nil
-				} else {
-					items.LookupFile1.PendingTask = &tfTypes.PendingTask1{}
-					items.LookupFile1.PendingTask.Error = types.StringPointerValue(itemsItem.LookupFile1.PendingTask.Error)
-					items.LookupFile1.PendingTask.ID = types.StringPointerValue(itemsItem.LookupFile1.PendingTask.ID)
-					if itemsItem.LookupFile1.PendingTask.Type != nil {
-						items.LookupFile1.PendingTask.Type = types.StringValue(string(*itemsItem.LookupFile1.PendingTask.Type))
-					} else {
-						items.LookupFile1.PendingTask.Type = types.StringNull()
-					}
-				}
-				items.LookupFile1.Size = types.Float64PointerValue(itemsItem.LookupFile1.Size)
-				items.LookupFile1.Tags = types.StringPointerValue(itemsItem.LookupFile1.Tags)
-				items.LookupFile1.Version = types.StringPointerValue(itemsItem.LookupFile1.Version)
-			}
-			if itemsItem.LookupFile2 != nil {
-				items.LookupFile2 = &tfTypes.LookupFile2{}
-				items.LookupFile2.Content = types.StringPointerValue(itemsItem.LookupFile2.Content)
-				items.LookupFile2.Description = types.StringPointerValue(itemsItem.LookupFile2.Description)
-				items.LookupFile2.ID = types.StringValue(itemsItem.LookupFile2.ID)
-				if itemsItem.LookupFile2.Mode != nil {
-					items.LookupFile2.Mode = types.StringValue(string(*itemsItem.LookupFile2.Mode))
-				} else {
-					items.LookupFile2.Mode = types.StringNull()
-				}
-				if itemsItem.LookupFile2.PendingTask == nil {
-					items.LookupFile2.PendingTask = nil
-				} else {
-					items.LookupFile2.PendingTask = &tfTypes.PendingTask2{}
-					items.LookupFile2.PendingTask.Error = types.StringPointerValue(itemsItem.LookupFile2.PendingTask.Error)
-					items.LookupFile2.PendingTask.ID = types.StringPointerValue(itemsItem.LookupFile2.PendingTask.ID)
-					if itemsItem.LookupFile2.PendingTask.Type != nil {
-						items.LookupFile2.PendingTask.Type = types.StringValue(string(*itemsItem.LookupFile2.PendingTask.Type))
-					} else {
-						items.LookupFile2.PendingTask.Type = types.StringNull()
-					}
-				}
-				items.LookupFile2.Size = types.Float64PointerValue(itemsItem.LookupFile2.Size)
-				items.LookupFile2.Tags = types.StringPointerValue(itemsItem.LookupFile2.Tags)
-				items.LookupFile2.Version = types.StringPointerValue(itemsItem.LookupFile2.Version)
-			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].LookupFile1 = items.LookupFile1
-				r.Items[itemsCount].LookupFile2 = items.LookupFile2
-			}
-		}
 	}
 
 	return diags
@@ -94,76 +22,6 @@ func (r *LookupFileResourceModel) RefreshFromOperationsListLookupFileResponseBod
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.LookupFileUnion{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.LookupFileUnion
-			if itemsItem.LookupFile1 != nil {
-				items.LookupFile1 = &tfTypes.LookupFile1{}
-				items.LookupFile1.Description = types.StringPointerValue(itemsItem.LookupFile1.Description)
-				if itemsItem.LookupFile1.FileInfo == nil {
-					items.LookupFile1.FileInfo = nil
-				} else {
-					items.LookupFile1.FileInfo = &tfTypes.FileInfo{}
-					items.LookupFile1.FileInfo.Filename = types.StringValue(itemsItem.LookupFile1.FileInfo.Filename)
-				}
-				items.LookupFile1.ID = types.StringValue(itemsItem.LookupFile1.ID)
-				if itemsItem.LookupFile1.Mode != nil {
-					items.LookupFile1.Mode = types.StringValue(string(*itemsItem.LookupFile1.Mode))
-				} else {
-					items.LookupFile1.Mode = types.StringNull()
-				}
-				if itemsItem.LookupFile1.PendingTask == nil {
-					items.LookupFile1.PendingTask = nil
-				} else {
-					items.LookupFile1.PendingTask = &tfTypes.PendingTask1{}
-					items.LookupFile1.PendingTask.Error = types.StringPointerValue(itemsItem.LookupFile1.PendingTask.Error)
-					items.LookupFile1.PendingTask.ID = types.StringPointerValue(itemsItem.LookupFile1.PendingTask.ID)
-					if itemsItem.LookupFile1.PendingTask.Type != nil {
-						items.LookupFile1.PendingTask.Type = types.StringValue(string(*itemsItem.LookupFile1.PendingTask.Type))
-					} else {
-						items.LookupFile1.PendingTask.Type = types.StringNull()
-					}
-				}
-				items.LookupFile1.Size = types.Float64PointerValue(itemsItem.LookupFile1.Size)
-				items.LookupFile1.Tags = types.StringPointerValue(itemsItem.LookupFile1.Tags)
-				items.LookupFile1.Version = types.StringPointerValue(itemsItem.LookupFile1.Version)
-			}
-			if itemsItem.LookupFile2 != nil {
-				items.LookupFile2 = &tfTypes.LookupFile2{}
-				items.LookupFile2.Content = types.StringPointerValue(itemsItem.LookupFile2.Content)
-				items.LookupFile2.Description = types.StringPointerValue(itemsItem.LookupFile2.Description)
-				items.LookupFile2.ID = types.StringValue(itemsItem.LookupFile2.ID)
-				if itemsItem.LookupFile2.Mode != nil {
-					items.LookupFile2.Mode = types.StringValue(string(*itemsItem.LookupFile2.Mode))
-				} else {
-					items.LookupFile2.Mode = types.StringNull()
-				}
-				if itemsItem.LookupFile2.PendingTask == nil {
-					items.LookupFile2.PendingTask = nil
-				} else {
-					items.LookupFile2.PendingTask = &tfTypes.PendingTask2{}
-					items.LookupFile2.PendingTask.Error = types.StringPointerValue(itemsItem.LookupFile2.PendingTask.Error)
-					items.LookupFile2.PendingTask.ID = types.StringPointerValue(itemsItem.LookupFile2.PendingTask.ID)
-					if itemsItem.LookupFile2.PendingTask.Type != nil {
-						items.LookupFile2.PendingTask.Type = types.StringValue(string(*itemsItem.LookupFile2.PendingTask.Type))
-					} else {
-						items.LookupFile2.PendingTask.Type = types.StringNull()
-					}
-				}
-				items.LookupFile2.Size = types.Float64PointerValue(itemsItem.LookupFile2.Size)
-				items.LookupFile2.Tags = types.StringPointerValue(itemsItem.LookupFile2.Tags)
-				items.LookupFile2.Version = types.StringPointerValue(itemsItem.LookupFile2.Version)
-			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].LookupFile1 = items.LookupFile1
-				r.Items[itemsCount].LookupFile2 = items.LookupFile2
-			}
-		}
 	}
 
 	return diags
@@ -173,76 +31,6 @@ func (r *LookupFileResourceModel) RefreshFromOperationsUpdateLookupFileByIDRespo
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.LookupFileUnion{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.LookupFileUnion
-			if itemsItem.LookupFile1 != nil {
-				items.LookupFile1 = &tfTypes.LookupFile1{}
-				items.LookupFile1.Description = types.StringPointerValue(itemsItem.LookupFile1.Description)
-				if itemsItem.LookupFile1.FileInfo == nil {
-					items.LookupFile1.FileInfo = nil
-				} else {
-					items.LookupFile1.FileInfo = &tfTypes.FileInfo{}
-					items.LookupFile1.FileInfo.Filename = types.StringValue(itemsItem.LookupFile1.FileInfo.Filename)
-				}
-				items.LookupFile1.ID = types.StringValue(itemsItem.LookupFile1.ID)
-				if itemsItem.LookupFile1.Mode != nil {
-					items.LookupFile1.Mode = types.StringValue(string(*itemsItem.LookupFile1.Mode))
-				} else {
-					items.LookupFile1.Mode = types.StringNull()
-				}
-				if itemsItem.LookupFile1.PendingTask == nil {
-					items.LookupFile1.PendingTask = nil
-				} else {
-					items.LookupFile1.PendingTask = &tfTypes.PendingTask1{}
-					items.LookupFile1.PendingTask.Error = types.StringPointerValue(itemsItem.LookupFile1.PendingTask.Error)
-					items.LookupFile1.PendingTask.ID = types.StringPointerValue(itemsItem.LookupFile1.PendingTask.ID)
-					if itemsItem.LookupFile1.PendingTask.Type != nil {
-						items.LookupFile1.PendingTask.Type = types.StringValue(string(*itemsItem.LookupFile1.PendingTask.Type))
-					} else {
-						items.LookupFile1.PendingTask.Type = types.StringNull()
-					}
-				}
-				items.LookupFile1.Size = types.Float64PointerValue(itemsItem.LookupFile1.Size)
-				items.LookupFile1.Tags = types.StringPointerValue(itemsItem.LookupFile1.Tags)
-				items.LookupFile1.Version = types.StringPointerValue(itemsItem.LookupFile1.Version)
-			}
-			if itemsItem.LookupFile2 != nil {
-				items.LookupFile2 = &tfTypes.LookupFile2{}
-				items.LookupFile2.Content = types.StringPointerValue(itemsItem.LookupFile2.Content)
-				items.LookupFile2.Description = types.StringPointerValue(itemsItem.LookupFile2.Description)
-				items.LookupFile2.ID = types.StringValue(itemsItem.LookupFile2.ID)
-				if itemsItem.LookupFile2.Mode != nil {
-					items.LookupFile2.Mode = types.StringValue(string(*itemsItem.LookupFile2.Mode))
-				} else {
-					items.LookupFile2.Mode = types.StringNull()
-				}
-				if itemsItem.LookupFile2.PendingTask == nil {
-					items.LookupFile2.PendingTask = nil
-				} else {
-					items.LookupFile2.PendingTask = &tfTypes.PendingTask2{}
-					items.LookupFile2.PendingTask.Error = types.StringPointerValue(itemsItem.LookupFile2.PendingTask.Error)
-					items.LookupFile2.PendingTask.ID = types.StringPointerValue(itemsItem.LookupFile2.PendingTask.ID)
-					if itemsItem.LookupFile2.PendingTask.Type != nil {
-						items.LookupFile2.PendingTask.Type = types.StringValue(string(*itemsItem.LookupFile2.PendingTask.Type))
-					} else {
-						items.LookupFile2.PendingTask.Type = types.StringNull()
-					}
-				}
-				items.LookupFile2.Size = types.Float64PointerValue(itemsItem.LookupFile2.Size)
-				items.LookupFile2.Tags = types.StringPointerValue(itemsItem.LookupFile2.Tags)
-				items.LookupFile2.Version = types.StringPointerValue(itemsItem.LookupFile2.Version)
-			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].LookupFile1 = items.LookupFile1
-				r.Items[itemsCount].LookupFile2 = items.LookupFile2
-			}
-		}
 	}
 
 	return diags
@@ -254,7 +42,7 @@ func (r *LookupFileResourceModel) ToOperationsCreateLookupFileRequest(ctx contex
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	lookupFile, lookupFileDiags := r.ToSharedLookupFileInputUnion(ctx)
+	lookupFile, lookupFileDiags := r.ToSharedLookupFile(ctx)
 	diags.Append(lookupFileDiags...)
 
 	if diags.HasError() {
@@ -308,7 +96,7 @@ func (r *LookupFileResourceModel) ToOperationsUpdateLookupFileByIDRequest(ctx co
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	lookupFile, lookupFileDiags := r.ToSharedLookupFileInputUnion(ctx)
+	lookupFile, lookupFileDiags := r.ToSharedLookupFile(ctx)
 	diags.Append(lookupFileDiags...)
 
 	if diags.HasError() {
@@ -324,110 +112,42 @@ func (r *LookupFileResourceModel) ToOperationsUpdateLookupFileByIDRequest(ctx co
 	return &out, diags
 }
 
-func (r *LookupFileResourceModel) ToSharedLookupFileInputUnion(ctx context.Context) (*shared.LookupFileInputUnion, diag.Diagnostics) {
+func (r *LookupFileResourceModel) ToSharedLookupFile(ctx context.Context) (*shared.LookupFile, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var out shared.LookupFileInputUnion
-	var lookupFileInput1 *shared.LookupFileInput1
-	if r.LookupFileInput1 != nil {
-		var fileInfo *shared.FileInfo
-		if r.LookupFileInput1.FileInfo != nil {
-			var filename string
-			filename = r.LookupFileInput1.FileInfo.Filename.ValueString()
+	var id string
+	id = r.ID.ValueString()
 
-			fileInfo = &shared.FileInfo{
-				Filename: filename,
-			}
-		}
-		var id string
-		id = r.LookupFileInput1.ID.ValueString()
-
-		description := new(string)
-		if !r.LookupFileInput1.Description.IsUnknown() && !r.LookupFileInput1.Description.IsNull() {
-			*description = r.LookupFileInput1.Description.ValueString()
-		} else {
-			description = nil
-		}
-		tags := new(string)
-		if !r.LookupFileInput1.Tags.IsUnknown() && !r.LookupFileInput1.Tags.IsNull() {
-			*tags = r.LookupFileInput1.Tags.ValueString()
-		} else {
-			tags = nil
-		}
-		size := new(float64)
-		if !r.LookupFileInput1.Size.IsUnknown() && !r.LookupFileInput1.Size.IsNull() {
-			*size = r.LookupFileInput1.Size.ValueFloat64()
-		} else {
-			size = nil
-		}
-		mode := new(shared.LookupFileMode1)
-		if !r.LookupFileInput1.Mode.IsUnknown() && !r.LookupFileInput1.Mode.IsNull() {
-			*mode = shared.LookupFileMode1(r.LookupFileInput1.Mode.ValueString())
-		} else {
-			mode = nil
-		}
-		lookupFileInput1 = &shared.LookupFileInput1{
-			FileInfo:    fileInfo,
-			ID:          id,
-			Description: description,
-			Tags:        tags,
-			Size:        size,
-			Mode:        mode,
-		}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
 	}
-	if lookupFileInput1 != nil {
-		out = shared.LookupFileInputUnion{
-			LookupFileInput1: lookupFileInput1,
-		}
+	tags := new(string)
+	if !r.Tags.IsUnknown() && !r.Tags.IsNull() {
+		*tags = r.Tags.ValueString()
+	} else {
+		tags = nil
 	}
-	var lookupFileInput2 *shared.LookupFileInput2
-	if r.LookupFileInput2 != nil {
-		content := new(string)
-		if !r.LookupFileInput2.Content.IsUnknown() && !r.LookupFileInput2.Content.IsNull() {
-			*content = r.LookupFileInput2.Content.ValueString()
-		} else {
-			content = nil
-		}
-		var id1 string
-		id1 = r.LookupFileInput2.ID.ValueString()
-
-		description1 := new(string)
-		if !r.LookupFileInput2.Description.IsUnknown() && !r.LookupFileInput2.Description.IsNull() {
-			*description1 = r.LookupFileInput2.Description.ValueString()
-		} else {
-			description1 = nil
-		}
-		tags1 := new(string)
-		if !r.LookupFileInput2.Tags.IsUnknown() && !r.LookupFileInput2.Tags.IsNull() {
-			*tags1 = r.LookupFileInput2.Tags.ValueString()
-		} else {
-			tags1 = nil
-		}
-		size1 := new(float64)
-		if !r.LookupFileInput2.Size.IsUnknown() && !r.LookupFileInput2.Size.IsNull() {
-			*size1 = r.LookupFileInput2.Size.ValueFloat64()
-		} else {
-			size1 = nil
-		}
-		mode1 := new(shared.LookupFileMode2)
-		if !r.LookupFileInput2.Mode.IsUnknown() && !r.LookupFileInput2.Mode.IsNull() {
-			*mode1 = shared.LookupFileMode2(r.LookupFileInput2.Mode.ValueString())
-		} else {
-			mode1 = nil
-		}
-		lookupFileInput2 = &shared.LookupFileInput2{
-			Content:     content,
-			ID:          id1,
-			Description: description1,
-			Tags:        tags1,
-			Size:        size1,
-			Mode:        mode1,
-		}
+	content := new(string)
+	if !r.Content.IsUnknown() && !r.Content.IsNull() {
+		*content = r.Content.ValueString()
+	} else {
+		content = nil
 	}
-	if lookupFileInput2 != nil {
-		out = shared.LookupFileInputUnion{
-			LookupFileInput2: lookupFileInput2,
-		}
+	mode := new(shared.LookupFileMode)
+	if !r.Mode.IsUnknown() && !r.Mode.IsNull() {
+		*mode = shared.LookupFileMode(r.Mode.ValueString())
+	} else {
+		mode = nil
+	}
+	out := shared.LookupFile{
+		ID:          id,
+		Description: description,
+		Tags:        tags,
+		Content:     content,
+		Mode:        mode,
 	}
 
 	return &out, diags

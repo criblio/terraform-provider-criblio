@@ -1,19 +1,5 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  server_url = "https://app.cribl-playground.cloud"
-  organization_id = "determined-gian-gkh6kzw"
-  workspace_id = "main"
-}
-
 resource "criblio_notification_target" "my_notificationtarget" {
-  id = "test_notification_target"
+  id = "test_notification_target_1"
   sns_target = {
     allowlist = [
       "test"
@@ -23,7 +9,7 @@ resource "criblio_notification_target" "my_notificationtarget" {
     aws_authentication_method = "auto"
     destination_type          = "topic"
     endpoint                  = "https://example.com/test"
-    id                        = "test_notification_target"
+    id                        = "test_notification_target_1"
     message_group_id          = "test"
     region                    = "us-east-1"
     system_fields = [

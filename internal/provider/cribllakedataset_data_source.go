@@ -31,15 +31,12 @@ type CriblLakeDatasetDataSource struct {
 type CriblLakeDatasetDataSourceModel struct {
 	AcceleratedFields     []types.String                   `tfsdk:"accelerated_fields"`
 	BucketName            types.String                     `tfsdk:"bucket_name"`
-	CacheConnection       *tfTypes.CacheConnection         `tfsdk:"cache_connection"`
-	DeletionStartedAt     types.Float64                    `tfsdk:"deletion_started_at"`
 	Description           types.String                     `tfsdk:"description"`
 	Format                types.String                     `tfsdk:"format"`
 	ID                    types.String                     `tfsdk:"id"`
 	LakeID                types.String                     `tfsdk:"lake_id"`
 	RetentionPeriodInDays types.Float64                    `tfsdk:"retention_period_in_days"`
 	SearchConfig          *tfTypes.LakeDatasetSearchConfig `tfsdk:"search_config"`
-	ViewName              types.String                     `tfsdk:"view_name"`
 }
 
 // Metadata returns the data source type name.
@@ -58,30 +55,6 @@ func (r *CriblLakeDatasetDataSource) Schema(ctx context.Context, req datasource.
 				ElementType: types.StringType,
 			},
 			"bucket_name": schema.StringAttribute{
-				Computed: true,
-			},
-			"cache_connection": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"accelerated_fields": schema.ListAttribute{
-						Computed:    true,
-						ElementType: types.StringType,
-					},
-					"cache_ref": schema.StringAttribute{
-						Computed: true,
-					},
-					"created_at": schema.Float64Attribute{
-						Computed: true,
-					},
-					"migration_query_id": schema.StringAttribute{
-						Computed: true,
-					},
-					"retention_in_days": schema.Float64Attribute{
-						Computed: true,
-					},
-				},
-			},
-			"deletion_started_at": schema.Float64Attribute{
 				Computed: true,
 			},
 			"description": schema.StringAttribute{
@@ -131,9 +104,6 @@ func (r *CriblLakeDatasetDataSource) Schema(ctx context.Context, req datasource.
 						},
 					},
 				},
-			},
-			"view_name": schema.StringAttribute{
-				Computed: true,
 			},
 		},
 	}

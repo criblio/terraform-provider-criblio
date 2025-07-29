@@ -5,9 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -35,11 +33,12 @@ type LookupFileResource struct {
 
 // LookupFileResourceModel describes the resource data model.
 type LookupFileResourceModel struct {
-	GroupID          types.String              `tfsdk:"group_id"`
-	ID               types.String              `tfsdk:"id"`
-	Items            []tfTypes.LookupFileUnion `tfsdk:"items"`
-	LookupFileInput1 *tfTypes.LookupFileInput1 `queryParam:"inline" tfsdk:"lookup_file_input1" tfPlanOnly:"true"`
-	LookupFileInput2 *tfTypes.LookupFileInput2 `queryParam:"inline" tfsdk:"lookup_file_input2" tfPlanOnly:"true"`
+	Content     types.String `tfsdk:"content"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Mode        types.String `tfsdk:"mode"`
+	Tags        types.String `tfsdk:"tags"`
 }
 
 func (r *LookupFileResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -50,258 +49,39 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "LookupFile Resource",
 		Attributes: map[string]schema.Attribute{
+			"content": schema.StringAttribute{
+				Optional:    true,
+				Description: `File content.`,
+			},
+			"description": schema.StringAttribute{
+				Optional: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to DELETE`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"lookup_file1": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"file_info": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"filename": schema.StringAttribute{
-											Computed: true,
-											Validators: []validator.String{
-												stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w .-]+$`), "must match pattern "+regexp.MustCompile(`^\w[\w .-]+$`).String()),
-											},
-										},
-									},
-								},
-								"id": schema.StringAttribute{
-									Computed: true,
-									Validators: []validator.String{
-										stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
-									},
-								},
-								"mode": schema.StringAttribute{
-									Computed:    true,
-									Default:     stringdefault.StaticString(`memory`),
-									Description: `Default: "memory"; must be one of ["memory", "disk"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"memory",
-											"disk",
-										),
-									},
-								},
-								"pending_task": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"error": schema.StringAttribute{
-											Computed:    true,
-											Description: `Error message if task has failed`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Task ID (generated).`,
-										},
-										"type": schema.StringAttribute{
-											Computed:    true,
-											Description: `Task type. must be one of ["IMPORT", "INDEX"]`,
-											Validators: []validator.String{
-												stringvalidator.OneOf(
-													"IMPORT",
-													"INDEX",
-												),
-											},
-										},
-									},
-								},
-								"size": schema.Float64Attribute{
-									Computed:    true,
-									Description: `File size. Optional.`,
-								},
-								"tags": schema.StringAttribute{
-									Computed:    true,
-									Description: `One or more tags related to this lookup. Optional.`,
-								},
-								"version": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique string generated for each modification of this lookup`,
-								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("lookup_file2"),
-								}...),
-							},
-						},
-						"lookup_file2": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"content": schema.StringAttribute{
-									Computed:    true,
-									Description: `File content.`,
-								},
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"id": schema.StringAttribute{
-									Computed: true,
-									Validators: []validator.String{
-										stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
-									},
-								},
-								"mode": schema.StringAttribute{
-									Computed:    true,
-									Default:     stringdefault.StaticString(`memory`),
-									Description: `Default: "memory"; must be one of ["memory", "disk"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"memory",
-											"disk",
-										),
-									},
-								},
-								"pending_task": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"error": schema.StringAttribute{
-											Computed:    true,
-											Description: `Error message if task has failed`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Task ID (generated).`,
-										},
-										"type": schema.StringAttribute{
-											Computed:    true,
-											Description: `Task type. must be one of ["IMPORT", "INDEX"]`,
-											Validators: []validator.String{
-												stringvalidator.OneOf(
-													"IMPORT",
-													"INDEX",
-												),
-											},
-										},
-									},
-								},
-								"size": schema.Float64Attribute{
-									Computed:    true,
-									Description: `File size. Optional.`,
-								},
-								"tags": schema.StringAttribute{
-									Computed:    true,
-									Description: `One or more tags related to this lookup. Optional.`,
-								},
-								"version": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique string generated for each modification of this lookup`,
-								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("lookup_file1"),
-								}...),
-							},
-						},
-					},
+				Description: `Unique ID to PATCH`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
 				},
 			},
-			"lookup_file_input1": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Optional: true,
-					},
-					"file_info": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"filename": schema.StringAttribute{
-								Required: true,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w .-]+$`), "must match pattern "+regexp.MustCompile(`^\w[\w .-]+$`).String()),
-								},
-							},
-						},
-					},
-					"id": schema.StringAttribute{
-						Required: true,
-						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
-						},
-					},
-					"mode": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`memory`),
-						Description: `Default: "memory"; must be one of ["memory", "disk"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"memory",
-								"disk",
-							),
-						},
-					},
-					"size": schema.Float64Attribute{
-						Optional:    true,
-						Description: `File size. Optional.`,
-					},
-					"tags": schema.StringAttribute{
-						Optional:    true,
-						Description: `One or more tags related to this lookup. Optional.`,
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("lookup_file_input2"),
-					}...),
+			"mode": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(`memory`),
+				Description: `Default: "memory"; must be one of ["memory", "disk"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"memory",
+						"disk",
+					),
 				},
 			},
-			"lookup_file_input2": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"content": schema.StringAttribute{
-						Optional:    true,
-						Description: `File content.`,
-					},
-					"description": schema.StringAttribute{
-						Optional: true,
-					},
-					"id": schema.StringAttribute{
-						Required: true,
-						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
-						},
-					},
-					"mode": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`memory`),
-						Description: `Default: "memory"; must be one of ["memory", "disk"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"memory",
-								"disk",
-							),
-						},
-					},
-					"size": schema.Float64Attribute{
-						Optional:    true,
-						Description: `File size. Optional.`,
-					},
-					"tags": schema.StringAttribute{
-						Optional:    true,
-						Description: `One or more tags related to this lookup. Optional.`,
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("lookup_file_input1"),
-					}...),
-				},
+			"tags": schema.StringAttribute{
+				Optional:    true,
+				Description: `One or more tags related to this lookup. Optional.`,
 			},
 		},
 	}
@@ -372,6 +152,43 @@ func (r *LookupFileResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsCreateLookupFileResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsListLookupFileRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Lookups.ListLookupFile(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsListLookupFileResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

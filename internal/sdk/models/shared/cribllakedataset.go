@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
 type CriblLakeDatasetFormat string
@@ -38,15 +39,23 @@ func (e *CriblLakeDatasetFormat) UnmarshalJSON(data []byte) error {
 
 type CriblLakeDataset struct {
 	AcceleratedFields     []string                 `json:"acceleratedFields,omitempty"`
-	BucketName            string                   `json:"bucketName"`
-	CacheConnection       *CacheConnection         `json:"cacheConnection,omitempty"`
-	DeletionStartedAt     *float64                 `json:"deletionStartedAt,omitempty"`
+	BucketName            *string                  `default:"lake-\\${workspaceName}-\\${organizationId}" json:"bucketName"`
 	Description           *string                  `json:"description,omitempty"`
 	Format                *CriblLakeDatasetFormat  `json:"format,omitempty"`
 	ID                    string                   `json:"id"`
 	RetentionPeriodInDays *float64                 `json:"retentionPeriodInDays,omitempty"`
 	SearchConfig          *LakeDatasetSearchConfig `json:"searchConfig,omitempty"`
-	ViewName              *string                  `json:"viewName,omitempty"`
+}
+
+func (c CriblLakeDataset) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CriblLakeDataset) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *CriblLakeDataset) GetAcceleratedFields() []string {
@@ -56,25 +65,11 @@ func (o *CriblLakeDataset) GetAcceleratedFields() []string {
 	return o.AcceleratedFields
 }
 
-func (o *CriblLakeDataset) GetBucketName() string {
+func (o *CriblLakeDataset) GetBucketName() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.BucketName
-}
-
-func (o *CriblLakeDataset) GetCacheConnection() *CacheConnection {
-	if o == nil {
-		return nil
-	}
-	return o.CacheConnection
-}
-
-func (o *CriblLakeDataset) GetDeletionStartedAt() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.DeletionStartedAt
 }
 
 func (o *CriblLakeDataset) GetDescription() *string {
@@ -110,11 +105,4 @@ func (o *CriblLakeDataset) GetSearchConfig() *LakeDatasetSearchConfig {
 		return nil
 	}
 	return o.SearchConfig
-}
-
-func (o *CriblLakeDataset) GetViewName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ViewName
 }

@@ -850,13 +850,7 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetSearchDashboardByIDRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.Dashboards.GetSearchDashboardByID(ctx, *request)
+	res, err := r.client.Dashboards.ListSearchDashboard(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -990,5 +984,5 @@ func (r *SearchDashboardResource) Delete(ctx context.Context, req resource.Delet
 }
 
 func (r *SearchDashboardResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
+	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource search_dashboard.")
 }

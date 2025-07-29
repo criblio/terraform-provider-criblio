@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 93a1ce477a941950e64ddfbe540e489d
-  docVersion: 4.12.2-4b17c8d4-TFProvider-manual
-  speakeasyVersion: 1.589.0
-  generationVersion: 2.664.0
-  releaseVersion: 1.3.12
-  configChecksum: e56ed7360b5e4f51364be1a358e6e39b
+  docChecksum: 191abc1bf483475201ac9172dedc6f90
+  docVersion: 4.12.2-4b17c8d4
+  speakeasyVersion: 1.592.1
+  generationVersion: 2.667.0
+  releaseVersion: 1.3.25
+  configChecksum: b1754c78838cdf43935ee69db68f124d
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.2.1
-    core: 3.43.0
+    core: 3.43.1
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
@@ -40,7 +40,6 @@ generatedFiles:
   - examples/data-sources/criblio_group/data-source.tf
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
-  - examples/data-sources/criblio_notification/data-source.tf
   - examples/data-sources/criblio_notification_target/data-source.tf
   - examples/data-sources/criblio_pack/data-source.tf
   - examples/data-sources/criblio_pack_breakers/data-source.tf
@@ -87,8 +86,6 @@ generatedFiles:
   - examples/resources/criblio_hmac_function/resource.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
-  - examples/resources/criblio_notification/import.sh
-  - examples/resources/criblio_notification/resource.tf
   - examples/resources/criblio_notification_target/resource.tf
   - examples/resources/criblio_pack/import.sh
   - examples/resources/criblio_pack/resource.tf
@@ -117,19 +114,15 @@ generatedFiles:
   - examples/resources/criblio_regex/resource.tf
   - examples/resources/criblio_schema/import.sh
   - examples/resources/criblio_schema/resource.tf
-  - examples/resources/criblio_search_dashboard/import.sh
   - examples/resources/criblio_search_dashboard/resource.tf
-  - examples/resources/criblio_search_dashboard_category/import.sh
   - examples/resources/criblio_search_dashboard_category/resource.tf
   - examples/resources/criblio_search_dataset/import.sh
   - examples/resources/criblio_search_dataset/resource.tf
   - examples/resources/criblio_search_dataset_provider/import.sh
   - examples/resources/criblio_search_dataset_provider/resource.tf
-  - examples/resources/criblio_search_macro/import.sh
   - examples/resources/criblio_search_macro/resource.tf
   - examples/resources/criblio_search_saved_query/import.sh
   - examples/resources/criblio_search_saved_query/resource.tf
-  - examples/resources/criblio_search_usage_group/import.sh
   - examples/resources/criblio_search_usage_group/resource.tf
   - examples/resources/criblio_source/import.sh
   - examples/resources/criblio_source/resource.tf
@@ -195,10 +188,6 @@ generatedFiles:
   - internal/provider/lookupfile_data_source_sdk.go
   - internal/provider/lookupfile_resource.go
   - internal/provider/lookupfile_resource_sdk.go
-  - internal/provider/notification_data_source.go
-  - internal/provider/notification_data_source_sdk.go
-  - internal/provider/notification_resource.go
-  - internal/provider/notification_resource_sdk.go
   - internal/provider/notificationtarget_data_source.go
   - internal/provider/notificationtarget_data_source_sdk.go
   - internal/provider/notificationtarget_resource.go
@@ -375,7 +364,6 @@ generatedFiles:
   - internal/provider/types/azure_blob_dataset.go
   - internal/provider/types/azure_blob_dataset_extra_path.go
   - internal/provider/types/azure_blob_provider.go
-  - internal/provider/types/cache_connection.go
   - internal/provider/types/cert_options.go
   - internal/provider/types/chart_config.go
   - internal/provider/types/chart_data.go
@@ -416,7 +404,6 @@ generatedFiles:
   - internal/provider/types/extent_tag.go
   - internal/provider/types/extra_log_type.go
   - internal/provider/types/field.go
-  - internal/provider/types/file_info.go
   - internal/provider/types/firewall.go
   - internal/provider/types/function_specific_configs.go
   - internal/provider/types/gcp_account_config.go
@@ -805,11 +792,6 @@ generatedFiles:
   - internal/provider/types/loki_auth_oauth_param1.go
   - internal/provider/types/loki_auth_oauth_param2.go
   - internal/provider/types/lookup.go
-  - internal/provider/types/lookup_file1.go
-  - internal/provider/types/lookup_file2.go
-  - internal/provider/types/lookup_file_input1.go
-  - internal/provider/types/lookup_file_input2.go
-  - internal/provider/types/lookup_file_union.go
   - internal/provider/types/map_details.go
   - internal/provider/types/map_details_point_scale.go
   - internal/provider/types/meta_dataset.go
@@ -1102,8 +1084,6 @@ generatedFiles:
   - internal/provider/types/pack_info_tags.go
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
-  - internal/provider/types/pending_task1.go
-  - internal/provider/types/pending_task2.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1662,7 +1642,6 @@ generatedFiles:
   - internal/sdk/models/operations/updatekeymetadataentitybyid.go
   - internal/sdk/models/operations/updatelibschemasbyid.go
   - internal/sdk/models/operations/updateloggerconfigbyid.go
-  - internal/sdk/models/operations/updatelookupfile.go
   - internal/sdk/models/operations/updatelookupfilebyid.go
   - internal/sdk/models/operations/updatenotificationbyid.go
   - internal/sdk/models/operations/updatenotificationtargetbyid.go
@@ -1726,7 +1705,6 @@ generatedFiles:
   - internal/sdk/models/shared/azureaccountconfig.go
   - internal/sdk/models/shared/bannermessage.go
   - internal/sdk/models/shared/bulletinmessage.go
-  - internal/sdk/models/shared/cacheconnection.go
   - internal/sdk/models/shared/captureparams.go
   - internal/sdk/models/shared/certificate.go
   - internal/sdk/models/shared/changelogstate.go
@@ -1917,8 +1895,7 @@ generatedFiles:
   - internal/sdk/models/shared/loggerconfig.go
   - internal/sdk/models/shared/loggerentry.go
   - internal/sdk/models/shared/logininfo.go
-  - internal/sdk/models/shared/lookupfileinforesponse.go
-  - internal/sdk/models/shared/lookupfileinputunion.go
+  - internal/sdk/models/shared/lookupfile.go
   - internal/sdk/models/shared/lookupversions.go
   - internal/sdk/models/shared/mappingtype.go
   - internal/sdk/models/shared/masterworkerentry.go
@@ -3802,7 +3779,7 @@ examples:
         path:
           lakeId: "<id>"
       requestBody:
-        application/json: {"bucketName": "<value>", "id": "<id>"}
+        application/json: {"bucketName": "lake-${workspaceName}-${organizationId}", "id": "<id>"}
       responses:
         "200":
           application/json: {}
@@ -3847,7 +3824,7 @@ examples:
           lakeId: "<id>"
           id: "<id>"
       requestBody:
-        application/json: {"bucketName": "<value>", "id": "<id>"}
+        application/json: {"bucketName": "lake-${workspaceName}-${organizationId}", "id": "<id>"}
       responses:
         "200":
           application/json: {}

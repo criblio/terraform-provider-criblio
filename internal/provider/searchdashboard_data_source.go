@@ -268,8 +268,7 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 				},
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to GET`,
+				Computed: true,
 			},
 			"modified": schema.Float64Attribute{
 				Computed: true,
@@ -453,13 +452,7 @@ func (r *SearchDashboardDataSource) Read(ctx context.Context, req datasource.Rea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetSearchDashboardByIDRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.Dashboards.GetSearchDashboardByID(ctx, *request)
+	res, err := r.client.Dashboards.ListSearchDashboard(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

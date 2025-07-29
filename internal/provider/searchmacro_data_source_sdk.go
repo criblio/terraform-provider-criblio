@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -22,17 +21,4 @@ func (r *SearchMacroDataSourceModel) RefreshFromSharedSearchMacro(ctx context.Co
 	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags
-}
-
-func (r *SearchMacroDataSourceModel) ToOperationsGetSearchMacroByIDRequest(ctx context.Context) (*operations.GetSearchMacroByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetSearchMacroByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
 }
