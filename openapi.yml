@@ -57923,7 +57923,6 @@ paths:
           description: group Id
   "/m/{groupId}/p/{pack}/lib/breakers":
     get:
-      x-speakeasy-entity-operation: PackBreakers#read
       operationId: getBreakersByPack
       tags: *a135
       summary: Get a list of breakers within a Pack
@@ -57933,7 +57932,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pack"
+              $ref: "#/components/schemas/EventBreakerRuleset"
       parameters:
         - name: pack
           in: path
@@ -57962,7 +57961,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pack"
+              $ref: "#/components/schemas/EventBreakerRuleset"
       parameters:
         - name: pack
           in: path
@@ -57984,6 +57983,7 @@ paths:
       tags: *a135
       summary: Get list of breakers by ID within a Pack
       description: Get list of breakers by ID within a Pack
+      x-speakeasy-entity-operation: PackBreakers#get
       responses: *a136
       parameters:
         - name: id
@@ -58017,7 +58017,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pack"
+              $ref: "#/components/schemas/EventBreakerRuleset"
       responses: *a136
       parameters:
         - name: id

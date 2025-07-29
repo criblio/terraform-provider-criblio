@@ -9,18 +9,18 @@ import (
 
 type CreateBreakersByPackRequest struct {
 	// pack ID to POST
-	PackPathParameter string `pathParam:"style=simple,explode=false,name=pack"`
+	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group ID to GET
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Pipeline object to be updated in specified Project
-	Pack1 shared.Pack `request:"mediaType=application/json"`
+	EventBreakerRuleset shared.EventBreakerRuleset `request:"mediaType=application/json"`
 }
 
-func (o *CreateBreakersByPackRequest) GetPackPathParameter() string {
+func (o *CreateBreakersByPackRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
-	return o.PackPathParameter
+	return o.Pack
 }
 
 func (o *CreateBreakersByPackRequest) GetGroupID() string {
@@ -30,11 +30,11 @@ func (o *CreateBreakersByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *CreateBreakersByPackRequest) GetPack1() shared.Pack {
+func (o *CreateBreakersByPackRequest) GetEventBreakerRuleset() shared.EventBreakerRuleset {
 	if o == nil {
-		return shared.Pack{}
+		return shared.EventBreakerRuleset{}
 	}
-	return o.Pack1
+	return o.EventBreakerRuleset
 }
 
 // CreateBreakersByPackResponseBody - a list of Routes objects

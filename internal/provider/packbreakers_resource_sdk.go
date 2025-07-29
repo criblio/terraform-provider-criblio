@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -15,12 +16,6 @@ func (r *PackBreakersResourceModel) RefreshFromOperationsCreateBreakersByPackRes
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.Description = rPriorData.Description
-		r.Disabled = rPriorData.Disabled
-		r.DisplayName = rPriorData.DisplayName
-		r.GroupID = rPriorData.GroupID
-		r.ID = rPriorData.ID
 		r.Items = []tfTypes.Routes{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
@@ -110,25 +105,15 @@ func (r *PackBreakersResourceModel) RefreshFromOperationsCreateBreakersByPackRes
 				r.Items[itemsCount].Routes = items.Routes
 			}
 		}
-		r.Pack = rPriorData.Pack
-		r.PackPathParameter = rPriorData.PackPathParameter
-		r.Source = rPriorData.Source
-		r.Version = rPriorData.Version
 	}
 
 	return diags
 }
 
-func (r *PackBreakersResourceModel) RefreshFromOperationsGetBreakersByPackResponseBody(ctx context.Context, resp *operations.GetBreakersByPackResponseBody) diag.Diagnostics {
+func (r *PackBreakersResourceModel) RefreshFromOperationsGetBreakersByPackAndIDResponseBody(ctx context.Context, resp *operations.GetBreakersByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.Description = rPriorData.Description
-		r.Disabled = rPriorData.Disabled
-		r.DisplayName = rPriorData.DisplayName
-		r.GroupID = rPriorData.GroupID
-		r.ID = rPriorData.ID
 		r.Items = []tfTypes.Routes{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
@@ -218,10 +203,6 @@ func (r *PackBreakersResourceModel) RefreshFromOperationsGetBreakersByPackRespon
 				r.Items[itemsCount].Routes = items.Routes
 			}
 		}
-		r.Pack = rPriorData.Pack
-		r.PackPathParameter = rPriorData.PackPathParameter
-		r.Source = rPriorData.Source
-		r.Version = rPriorData.Version
 	}
 
 	return diags
@@ -231,12 +212,6 @@ func (r *PackBreakersResourceModel) RefreshFromOperationsUpdateBreakersByPackAnd
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.Description = rPriorData.Description
-		r.Disabled = rPriorData.Disabled
-		r.DisplayName = rPriorData.DisplayName
-		r.GroupID = rPriorData.GroupID
-		r.ID = rPriorData.ID
 		r.Items = []tfTypes.Routes{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
@@ -326,10 +301,6 @@ func (r *PackBreakersResourceModel) RefreshFromOperationsUpdateBreakersByPackAnd
 				r.Items[itemsCount].Routes = items.Routes
 			}
 		}
-		r.Pack = rPriorData.Pack
-		r.PackPathParameter = rPriorData.PackPathParameter
-		r.Source = rPriorData.Source
-		r.Version = rPriorData.Version
 	}
 
 	return diags
@@ -338,15 +309,23 @@ func (r *PackBreakersResourceModel) RefreshFromOperationsUpdateBreakersByPackAnd
 func (r *PackBreakersResourceModel) ToOperationsCreateBreakersByPackRequest(ctx context.Context) (*operations.CreateBreakersByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var packPathParameter string
-	packPathParameter = r.PackPathParameter.ValueString()
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	eventBreakerRuleset, eventBreakerRulesetDiags := r.ToSharedEventBreakerRuleset(ctx)
+	diags.Append(eventBreakerRulesetDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := operations.CreateBreakersByPackRequest{
-		PackPathParameter: packPathParameter,
-		GroupID:           groupID,
+		Pack:                pack,
+		GroupID:             groupID,
+		EventBreakerRuleset: *eventBreakerRuleset,
 	}
 
 	return &out, diags
@@ -373,18 +352,22 @@ func (r *PackBreakersResourceModel) ToOperationsDeleteBreakersByPackAndIDRequest
 	return &out, diags
 }
 
-func (r *PackBreakersResourceModel) ToOperationsGetBreakersByPackRequest(ctx context.Context) (*operations.GetBreakersByPackRequest, diag.Diagnostics) {
+func (r *PackBreakersResourceModel) ToOperationsGetBreakersByPackAndIDRequest(ctx context.Context) (*operations.GetBreakersByPackAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var packPathParameter string
-	packPathParameter = r.PackPathParameter.ValueString()
+	var id string
+	id = r.ID.ValueString()
+
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetBreakersByPackRequest{
-		PackPathParameter: packPathParameter,
-		GroupID:           groupID,
+	out := operations.GetBreakersByPackAndIDRequest{
+		ID:      id,
+		Pack:    pack,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -396,16 +379,193 @@ func (r *PackBreakersResourceModel) ToOperationsUpdateBreakersByPackAndIDRequest
 	var id string
 	id = r.ID.ValueString()
 
-	var packPathParameter string
-	packPathParameter = r.PackPathParameter.ValueString()
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	eventBreakerRuleset, eventBreakerRulesetDiags := r.ToSharedEventBreakerRuleset(ctx)
+	diags.Append(eventBreakerRulesetDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := operations.UpdateBreakersByPackAndIDRequest{
-		ID:                id,
-		PackPathParameter: packPathParameter,
-		GroupID:           groupID,
+		ID:                  id,
+		Pack:                pack,
+		GroupID:             groupID,
+		EventBreakerRuleset: *eventBreakerRuleset,
+	}
+
+	return &out, diags
+}
+
+func (r *PackBreakersResourceModel) ToSharedEventBreakerRuleset(ctx context.Context) (*shared.EventBreakerRuleset, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	lib := new(shared.Library)
+	if !r.Lib.IsUnknown() && !r.Lib.IsNull() {
+		*lib = shared.Library(r.Lib.ValueString())
+	} else {
+		lib = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	tags := new(string)
+	if !r.Tags.IsUnknown() && !r.Tags.IsNull() {
+		*tags = r.Tags.ValueString()
+	} else {
+		tags = nil
+	}
+	minRawLength := new(float64)
+	if !r.MinRawLength.IsUnknown() && !r.MinRawLength.IsNull() {
+		*minRawLength = r.MinRawLength.ValueFloat64()
+	} else {
+		minRawLength = nil
+	}
+	rules := make([]shared.EventBreakerRulesetRule, 0, len(r.Rules))
+	for _, rulesItem := range r.Rules {
+		var name string
+		name = rulesItem.Name.ValueString()
+
+		condition := new(string)
+		if !rulesItem.Condition.IsUnknown() && !rulesItem.Condition.IsNull() {
+			*condition = rulesItem.Condition.ValueString()
+		} else {
+			condition = nil
+		}
+		typeVar := new(shared.EventBreakerType)
+		if !rulesItem.Type.IsUnknown() && !rulesItem.Type.IsNull() {
+			*typeVar = shared.EventBreakerType(rulesItem.Type.ValueString())
+		} else {
+			typeVar = nil
+		}
+		timestampAnchorRegex := new(string)
+		if !rulesItem.TimestampAnchorRegex.IsUnknown() && !rulesItem.TimestampAnchorRegex.IsNull() {
+			*timestampAnchorRegex = rulesItem.TimestampAnchorRegex.ValueString()
+		} else {
+			timestampAnchorRegex = nil
+		}
+		eventBreakerRegex := new(string)
+		if !rulesItem.EventBreakerRegex.IsUnknown() && !rulesItem.EventBreakerRegex.IsNull() {
+			*eventBreakerRegex = rulesItem.EventBreakerRegex.ValueString()
+		} else {
+			eventBreakerRegex = nil
+		}
+		typeVar1 := new(shared.EventBreakerRulesetRuleTimestampTypeTimestampType)
+		if !rulesItem.Timestamp.Type.IsUnknown() && !rulesItem.Timestamp.Type.IsNull() {
+			*typeVar1 = shared.EventBreakerRulesetRuleTimestampTypeTimestampType(rulesItem.Timestamp.Type.ValueString())
+		} else {
+			typeVar1 = nil
+		}
+		length := new(float64)
+		if !rulesItem.Timestamp.Length.IsUnknown() && !rulesItem.Timestamp.Length.IsNull() {
+			*length = rulesItem.Timestamp.Length.ValueFloat64()
+		} else {
+			length = nil
+		}
+		format := new(string)
+		if !rulesItem.Timestamp.Format.IsUnknown() && !rulesItem.Timestamp.Format.IsNull() {
+			*format = rulesItem.Timestamp.Format.ValueString()
+		} else {
+			format = nil
+		}
+		timestamp := shared.EventBreakerRulesetTimestampFormat{
+			Type:   typeVar1,
+			Length: length,
+			Format: format,
+		}
+		timestampTimezone := new(string)
+		if !rulesItem.TimestampTimezone.IsUnknown() && !rulesItem.TimestampTimezone.IsNull() {
+			*timestampTimezone = rulesItem.TimestampTimezone.ValueString()
+		} else {
+			timestampTimezone = nil
+		}
+		timestampEarliest := new(string)
+		if !rulesItem.TimestampEarliest.IsUnknown() && !rulesItem.TimestampEarliest.IsNull() {
+			*timestampEarliest = rulesItem.TimestampEarliest.ValueString()
+		} else {
+			timestampEarliest = nil
+		}
+		timestampLatest := new(string)
+		if !rulesItem.TimestampLatest.IsUnknown() && !rulesItem.TimestampLatest.IsNull() {
+			*timestampLatest = rulesItem.TimestampLatest.ValueString()
+		} else {
+			timestampLatest = nil
+		}
+		maxEventBytes := new(float64)
+		if !rulesItem.MaxEventBytes.IsUnknown() && !rulesItem.MaxEventBytes.IsNull() {
+			*maxEventBytes = rulesItem.MaxEventBytes.ValueFloat64()
+		} else {
+			maxEventBytes = nil
+		}
+		fields := make([]shared.Field, 0, len(rulesItem.Fields))
+		for _, fieldsItem := range rulesItem.Fields {
+			name1 := new(string)
+			if !fieldsItem.Name.IsUnknown() && !fieldsItem.Name.IsNull() {
+				*name1 = fieldsItem.Name.ValueString()
+			} else {
+				name1 = nil
+			}
+			var value string
+			value = fieldsItem.Value.ValueString()
+
+			fields = append(fields, shared.Field{
+				Name:  name1,
+				Value: value,
+			})
+		}
+		disabled := new(bool)
+		if !rulesItem.Disabled.IsUnknown() && !rulesItem.Disabled.IsNull() {
+			*disabled = rulesItem.Disabled.ValueBool()
+		} else {
+			disabled = nil
+		}
+		parserEnabled := new(bool)
+		if !rulesItem.ParserEnabled.IsUnknown() && !rulesItem.ParserEnabled.IsNull() {
+			*parserEnabled = rulesItem.ParserEnabled.ValueBool()
+		} else {
+			parserEnabled = nil
+		}
+		shouldUseDataRaw := new(bool)
+		if !rulesItem.ShouldUseDataRaw.IsUnknown() && !rulesItem.ShouldUseDataRaw.IsNull() {
+			*shouldUseDataRaw = rulesItem.ShouldUseDataRaw.ValueBool()
+		} else {
+			shouldUseDataRaw = nil
+		}
+		rules = append(rules, shared.EventBreakerRulesetRule{
+			Name:                 name,
+			Condition:            condition,
+			Type:                 typeVar,
+			TimestampAnchorRegex: timestampAnchorRegex,
+			EventBreakerRegex:    eventBreakerRegex,
+			Timestamp:            timestamp,
+			TimestampTimezone:    timestampTimezone,
+			TimestampEarliest:    timestampEarliest,
+			TimestampLatest:      timestampLatest,
+			MaxEventBytes:        maxEventBytes,
+			Fields:               fields,
+			Disabled:             disabled,
+			ParserEnabled:        parserEnabled,
+			ShouldUseDataRaw:     shouldUseDataRaw,
+		})
+	}
+	out := shared.EventBreakerRuleset{
+		ID:           id,
+		Lib:          lib,
+		Description:  description,
+		Tags:         tags,
+		MinRawLength: minRawLength,
+		Rules:        rules,
 	}
 
 	return &out, diags

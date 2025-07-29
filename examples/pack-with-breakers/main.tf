@@ -1,21 +1,42 @@
 resource "criblio_pack_breakers" "my_packbreakers" {
-  description         = "my_description"
-  disabled            = true
-  display_name        = "my_display_name"
-  group_id            = "my_group_id"
-  id                  = "my_id"
-  pack                = criblio_pack.breakers_pack.id
-  pack_path_parameter = "my_pack_path_parameter"
-  source              = "my_source"
-  version             = "my_version"
+  description    = "test"
+  group_id       = "default"
+  id             = "test_packbreakers"
+  lib            = "custom"
+  min_raw_length = 256
+  pack           = criblio_pack.my_pack.id
+  rules = [
+    {
+      condition           = "PASS_THROUGH_SOURCE_TYPE"
+      disabled            = false
+      fields              = []
+      max_event_bytes     = 51200
+      name                = "test"
+      parser_enabled      = false
+      should_use_data_raw = false
+      event_breaker_regex = "/[\\n\\r]+(?!\\s)/"
+      timestamp = {
+        length = 150
+        type   = "auto"
+      }
+      timestamp_anchor_regex = "/^/"
+      timestamp_earliest     = "-420weeks"
+      timestamp_latest       = "+1week"
+      timestamp_timezone     = "local"
+      type                   = "regex"
+    }
+  ]
+  tags = "test"
 }
 
-resource "criblio_pack" "breakers_pack" {
-  id           = "pack-with-breakers"
+
+
+resource "criblio_pack" "my_pack" {
+  id           = "pack-breakers"
   group_id     = "default"
-  description  = "Pack from source"
+  description  = "Pack breakers"
   disabled     = true
-  display_name = "Pack from source"
+  display_name = "Pack breakers"
   source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
   version      = "1.0.0"
 }

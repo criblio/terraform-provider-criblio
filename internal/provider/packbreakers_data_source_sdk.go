@@ -11,16 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *PackBreakersDataSourceModel) RefreshFromOperationsGetBreakersByPackResponseBody(ctx context.Context, resp *operations.GetBreakersByPackResponseBody) diag.Diagnostics {
+func (r *PackBreakersDataSourceModel) RefreshFromOperationsGetBreakersByPackAndIDResponseBody(ctx context.Context, resp *operations.GetBreakersByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.Description = rPriorData.Description
-		r.Disabled = rPriorData.Disabled
-		r.DisplayName = rPriorData.DisplayName
-		r.GroupID = rPriorData.GroupID
-		r.ID = rPriorData.ID
 		r.Items = []tfTypes.Routes{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
@@ -110,26 +104,27 @@ func (r *PackBreakersDataSourceModel) RefreshFromOperationsGetBreakersByPackResp
 				r.Items[itemsCount].Routes = items.Routes
 			}
 		}
-		r.PackPathParameter = rPriorData.PackPathParameter
-		r.Source = rPriorData.Source
-		r.Version = rPriorData.Version
 	}
 
 	return diags
 }
 
-func (r *PackBreakersDataSourceModel) ToOperationsGetBreakersByPackRequest(ctx context.Context) (*operations.GetBreakersByPackRequest, diag.Diagnostics) {
+func (r *PackBreakersDataSourceModel) ToOperationsGetBreakersByPackAndIDRequest(ctx context.Context) (*operations.GetBreakersByPackAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var packPathParameter string
-	packPathParameter = r.PackPathParameter.ValueString()
+	var id string
+	id = r.ID.ValueString()
+
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetBreakersByPackRequest{
-		PackPathParameter: packPathParameter,
-		GroupID:           groupID,
+	out := operations.GetBreakersByPackAndIDRequest{
+		ID:      id,
+		Pack:    pack,
+		GroupID: groupID,
 	}
 
 	return &out, diags
