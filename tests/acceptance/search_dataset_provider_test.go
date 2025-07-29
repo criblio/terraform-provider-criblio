@@ -14,7 +14,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
 					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_searchdatasetprovider", "id", "test_http"),

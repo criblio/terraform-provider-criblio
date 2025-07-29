@@ -13,7 +13,7 @@ func TestSearchDataTypes(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					//ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_search_eventbreakerruleset", "id", "test_eventbreakerruleset"),

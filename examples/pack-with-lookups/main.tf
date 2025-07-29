@@ -16,6 +16,5 @@ resource "criblio_pack_lookups" "my_packlookups" {
   group_id    = "default"
   id          = "my_id"
   mode        = "memory"
-  size        = 7
   tags        = "my_tags"
 }
