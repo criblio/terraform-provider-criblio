@@ -5,3 +5,4 @@
 **/.speakeasy/temp/
 **/.speakeasy/logs/
 terraform-provider-criblio
+*.idea
