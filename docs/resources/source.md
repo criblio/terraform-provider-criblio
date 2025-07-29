@@ -3916,7 +3916,7 @@ resource "criblio_source" "my_source" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to DELETE
+- `id` (String) The id of this source instance
 
 ### Optional
 
@@ -10334,5 +10334,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_source.my_criblio_source ""
+terraform import criblio_source.my_criblio_source '{"group_id": "", "id": ""}'
 ```

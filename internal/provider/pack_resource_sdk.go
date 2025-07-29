@@ -16,12 +16,12 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.PackInfo{}
+		r.Items = []tfTypes.PackInstallInfo{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
 		}
 		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.PackInfo
+			var items tfTypes.PackInstallInfo
 			items.Author = types.StringPointerValue(itemsItem.Author)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.DisplayName = types.StringPointerValue(itemsItem.DisplayName)
@@ -46,7 +46,7 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 			if itemsItem.Tags == nil {
 				items.Tags = nil
 			} else {
-				items.Tags = &tfTypes.PackInfoTags{}
+				items.Tags = &tfTypes.PackInstallInfoTags{}
 				items.Tags.DataType = make([]types.String, 0, len(itemsItem.Tags.DataType))
 				for _, v := range itemsItem.Tags.DataType {
 					items.Tags.DataType = append(items.Tags.DataType, types.StringValue(v))
@@ -92,17 +92,16 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 	return diags
 }
 
-func (r *PackResourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(ctx context.Context, resp *operations.GetPacksByGroupResponseBody) diag.Diagnostics {
+func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx context.Context, resp *operations.GetPacksByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.PackInfo{}
+		r.Items = []tfTypes.PackInstallInfo{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
 		}
 		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.PackInfo
-			itemsPriorData := items
+			var items tfTypes.PackInstallInfo
 			items.Author = types.StringPointerValue(itemsItem.Author)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.DisplayName = types.StringPointerValue(itemsItem.DisplayName)
@@ -127,7 +126,7 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(ctx
 			if itemsItem.Tags == nil {
 				items.Tags = nil
 			} else {
-				items.Tags = &tfTypes.PackInfoTags{}
+				items.Tags = &tfTypes.PackInstallInfoTags{}
 				items.Tags.DataType = make([]types.String, 0, len(itemsItem.Tags.DataType))
 				for _, v := range itemsItem.Tags.DataType {
 					items.Tags.DataType = append(items.Tags.DataType, types.StringValue(v))
@@ -146,7 +145,8 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(ctx
 				}
 			}
 			items.Version = types.StringPointerValue(itemsItem.Version)
-			items.Warnings = itemsPriorData.Warnings
+			warningsResult, _ := json.Marshal(itemsItem.Warnings)
+			items.Warnings = types.StringValue(string(warningsResult))
 			if itemsCount+1 > len(r.Items) {
 				r.Items = append(r.Items, items)
 			} else {
@@ -164,6 +164,7 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(ctx
 				r.Items[itemsCount].Spec = items.Spec
 				r.Items[itemsCount].Tags = items.Tags
 				r.Items[itemsCount].Version = items.Version
+				r.Items[itemsCount].Warnings = items.Warnings
 			}
 		}
 	}
@@ -175,13 +176,12 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.PackInfo{}
+		r.Items = []tfTypes.PackInstallInfo{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
 		}
 		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.PackInfo
-			itemsPriorData := items
+			var items tfTypes.PackInstallInfo
 			items.Author = types.StringPointerValue(itemsItem.Author)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.DisplayName = types.StringPointerValue(itemsItem.DisplayName)
@@ -206,7 +206,7 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 			if itemsItem.Tags == nil {
 				items.Tags = nil
 			} else {
-				items.Tags = &tfTypes.PackInfoTags{}
+				items.Tags = &tfTypes.PackInstallInfoTags{}
 				items.Tags.DataType = make([]types.String, 0, len(itemsItem.Tags.DataType))
 				for _, v := range itemsItem.Tags.DataType {
 					items.Tags.DataType = append(items.Tags.DataType, types.StringValue(v))
@@ -225,7 +225,8 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 				}
 			}
 			items.Version = types.StringPointerValue(itemsItem.Version)
-			items.Warnings = itemsPriorData.Warnings
+			warningsResult, _ := json.Marshal(itemsItem.Warnings)
+			items.Warnings = types.StringValue(string(warningsResult))
 			if itemsCount+1 > len(r.Items) {
 				r.Items = append(r.Items, items)
 			} else {
@@ -243,6 +244,7 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 				r.Items[itemsCount].Spec = items.Spec
 				r.Items[itemsCount].Tags = items.Tags
 				r.Items[itemsCount].Version = items.Version
+				r.Items[itemsCount].Warnings = items.Warnings
 			}
 		}
 	}
@@ -309,7 +311,7 @@ func (r *PackResourceModel) ToOperationsDeletePacksByIDRequest(ctx context.Conte
 	return &out, diags
 }
 
-func (r *PackResourceModel) ToOperationsGetPacksByGroupRequest(ctx context.Context) (*operations.GetPacksByGroupRequest, diag.Diagnostics) {
+func (r *PackResourceModel) ToOperationsGetPacksByIDRequest(ctx context.Context) (*operations.GetPacksByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var groupID string
@@ -321,9 +323,13 @@ func (r *PackResourceModel) ToOperationsGetPacksByGroupRequest(ctx context.Conte
 	} else {
 		disabled = nil
 	}
-	out := operations.GetPacksByGroupRequest{
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetPacksByIDRequest{
 		GroupID:  groupID,
 		Disabled: disabled,
+		ID:       id,
 	}
 
 	return &out, diags

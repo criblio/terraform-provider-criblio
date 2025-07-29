@@ -28,6 +28,7 @@ type SourceDataSource struct {
 // SourceDataSourceModel describes the data model.
 type SourceDataSourceModel struct {
 	GroupID types.String `tfsdk:"group_id"`
+	ID      types.String `tfsdk:"id"`
 }
 
 // Metadata returns the data source type name.
@@ -44,6 +45,10 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 		},
 	}
@@ -87,13 +92,13 @@ func (r *SourceDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListInputRequest(ctx)
+	request, requestDiags := data.ToOperationsGetInputByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Inputs.ListInput(ctx, *request)
+	res, err := r.client.Inputs.GetInputByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -113,7 +118,7 @@ func (r *SourceDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListInputResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetInputByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

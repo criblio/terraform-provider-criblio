@@ -20,31 +20,29 @@ echo
 } 
 
 test_imports() {
-#terraform import -no-color criblio_commit.my_commit "default"
-echo
 terraform import -no-color criblio_pack_vars.my_packvars '{"group_id": "default", "pack": "pack-with-vars"}'
 echo
-terraform import -no-color criblio_pack_lookups.my_packlookups '{"group_id": "default", "pack": "pack-with-lookups"}'
+terraform import -no-color criblio_pack_lookups.my_packlookups '{"group_id": "default", "id": "my_id"}'
 echo
-terraform import -no-color criblio_pack.my_pack "default"
+terraform import -no-color criblio_pack.my_pack '{"group_id": "default", "id": "pack-from-source"}'
 echo
-terraform import -no-color criblio_pack.breakers_pack "default"
+terraform import -no-color criblio_pack.breakers_pack '{"group_id": "default", "id": "pack-breakers"}'
 echo
-terraform import -no-color criblio_pack.dest_pack "default"
+terraform import -no-color criblio_pack.dest_pack '{"group_id": "default", "id": "pack-with-dest"}'
 echo
-terraform import -no-color criblio_pack.lookups_pack "default"
+terraform import -no-color criblio_pack.lookups_pack '{"group_id": "default", "id": "pack-with-lookups"}'
 echo
-terraform import -no-color criblio_pack.pipeline_pack "default"
+terraform import -no-color criblio_pack.pipeline_pack '{"group_id": "default", "id": "pack-with-pipeline"}'
 echo
-terraform import -no-color criblio_pack.routes_pack "default"
+terraform import -no-color criblio_pack.routes_pack '{"group_id": "default", "id": "pack-with-routes"}'
 echo
-terraform import -no-color criblio_pack.source_pack "default"
+terraform import -no-color criblio_pack.source_pack '{"group_id": "default", "id": "pack-with-source"}'
 echo
-terraform import -no-color criblio_pack.vars_pack "default"
+terraform import -no-color criblio_pack.vars_pack '{"group_id": "default", "id": "pack-with-vars"}'
 echo
-terraform import -no-color criblio_pack.syslog_pack "syslog-input"
+terraform import -no-color criblio_pack.syslog_pack '{"group_id": "syslog-workers", "id": "syslog-processing"}'
 echo
-terraform import -no-color criblio_pack_breakers.my_packbreakers '{"group_id": "default", "pack": "pack-with-breakers"}'
+terraform import -no-color criblio_pack_breakers.my_packbreakers '{"group_id": "default", "pack": "pack-breakers", "id": "test_packbreakers"}'
 echo
 terraform import -no-color criblio_database_connection.my_databaseconnection "default"
 echo
@@ -52,15 +50,17 @@ terraform import -no-color criblio_destination.cribl_lake "default"
 echo
 terraform import -no-color criblio_parquet_schema.my_parquet_schema "default"
 echo
-terraform import -no-color criblio_source.syslog_source "default"
+terraform import -no-color criblio_source.syslog_source '{"groupId": "syslog-workers", "id": "syslog-input"}'
 echo
-terraform import -no-color criblio_event_breaker_ruleset.my_eventbreakerruleset "default"
+terraform import -no-color criblio_event_breaker_ruleset.my_eventbreakerruleset '{"group_id": "default", "id": "test_eventbreakerruleset"}'
 echo
 terraform import -no-color criblio_pack_source.my_packsource '{"group_id": "default", "pack": "pack-with-source"}'
 echo
 terraform import -no-color criblio_schema.my_schema "default"
 echo
-terraform import -no-color criblio_pack_destination.my_packdest '{"group_id": "default", "pack": "pack-with-dest"}'
+terraform import -no-color criblio_pack_destination.my_packdest '{"group_id": "default", "id": "test"}'
+echo
+terraform import -no-color criblio_pack_routes.my_packroutes '{"group_id": "default", "pack": "pack-with-routes"}'
 echo
 terraform import -no-color criblio_project.my_project "default"
 echo

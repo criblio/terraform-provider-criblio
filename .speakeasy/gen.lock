@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 8535342705a192838f46a1f4c7ac0980
+  docChecksum: 6bc5108f555867de15dbb63361aba259
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.592.1
   generationVersion: 2.667.0
@@ -1079,9 +1079,8 @@ generatedFiles:
   - internal/provider/types/output_xsiam_response_retry_setting.go
   - internal/provider/types/output_xsiam_timeout_retry_settings.go
   - internal/provider/types/output_xsiam_url.go
-  - internal/provider/types/pack_info.go
-  - internal/provider/types/pack_info1.go
-  - internal/provider/types/pack_info_tags.go
+  - internal/provider/types/pack_install_info.go
+  - internal/provider/types/pack_install_info_tags.go
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pipeline_conf.go
@@ -1330,6 +1329,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteglobalvariablebyid.go
   - internal/sdk/models/operations/deleteglobalvariablelibvarsbypackandid.go
   - internal/sdk/models/operations/deletegrokfilebyid.go
+  - internal/sdk/models/operations/deletegroupsbyid.go
   - internal/sdk/models/operations/deletehmacfunctionbyid.go
   - internal/sdk/models/operations/deleteinputbyid.go
   - internal/sdk/models/operations/deleteiometricsentrybyid.go
@@ -1462,6 +1462,7 @@ generatedFiles:
   - internal/sdk/models/operations/getpackoutputbyid.go
   - internal/sdk/models/operations/getpacks.go
   - internal/sdk/models/operations/getpacksbygroup.go
+  - internal/sdk/models/operations/getpacksbyid.go
   - internal/sdk/models/operations/getpacksexportbyid.go
   - internal/sdk/models/operations/getpacksrefsbyid.go
   - internal/sdk/models/operations/getparserbyid.go
@@ -1990,7 +1991,6 @@ generatedFiles:
   - internal/sdk/models/shared/outputwebhook.go
   - internal/sdk/models/shared/outputxsiam.go
   - internal/sdk/models/shared/packclone.go
-  - internal/sdk/models/shared/packinfo.go
   - internal/sdk/models/shared/packinstallinfo.go
   - internal/sdk/models/shared/packrequestbody.go
   - internal/sdk/models/shared/pagerdutytarget.go
@@ -5107,6 +5107,8 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+        query:
+          id: "<id>"
       requestBody:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 301.76, "ipWhitelistRegex": "/.*/", "maxActiveCxn": 1000, "socketIdleTimeout": 0, "socketEndingMaxWait": 30, "socketMaxLifespan": 0, "enableProxyHeader": false, "staleChannelFlushMs": 10000, "enableHeader": false, "authType": "manual"}
       responses:
@@ -5208,6 +5210,8 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+        query:
+          id: "<id>"
       requestBody:
         application/json: {"type": "elastic", "systemFields": ["cribl_pipe"], "streamtags": [], "loadBalanced": true, "index": "<value>", "concurrency": 5, "maxPayloadSizeKB": 4096, "maxPayloadEvents": 0, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 1, "failedRequestLoggingMode": "none", "safeHeaders": [], "responseRetrySettings": [], "responseHonorRetryAfterHeader": false, "extraParams": [{"name": "filter_path", "value": "errors,items.*.error,items.*._index,items.*.status"}], "elasticVersion": "auto", "includeDocId": false, "writeAction": "create", "retryPartialErrors": false, "onBackpressure": "block", "useRoundRobinDns": false, "excludeSelf": false, "dnsResolvePeriodSec": 600, "loadBalanceStatsPeriodSec": 300, "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
@@ -6856,6 +6860,8 @@ examples:
         path:
           pack: "<value>"
           groupId: "<id>"
+        query:
+          id: "<id>"
       requestBody:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 4317, "maxActiveReq": 256, "maxRequestsPerSocket": 0, "requestTimeout": 0, "socketTimeout": 0, "keepAliveTimeout": 15, "enableHealthCheck": false, "ipAllowlistRegex": "/.*/", "ipDenylistRegex": "/^$/", "protocol": "grpc", "extractSpans": false, "extractMetrics": false, "otlpVersion": "0.10.0", "authType": "none", "maxActiveCxn": 1000, "authHeaderExpr": "`Bearer ${token}`", "tokenTimeoutSecs": 3600, "extractLogs": false}
       responses:
@@ -7231,6 +7237,17 @@ examples:
           id: "<id>"
           groupId: "<id>"
           pack: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getPacksByID:
+    speakeasy-default-get-packs-by-ID:
+      parameters:
+        path:
+          groupId: "<id>"
+          id: "<id>"
       responses:
         "200":
           application/json: {}

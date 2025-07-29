@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -50,7 +52,7 @@ type PackResourceModel struct {
 	ID                   types.String                 `tfsdk:"id"`
 	Inputs               types.Float64                `tfsdk:"inputs"`
 	IsDisabled           types.Bool                   `tfsdk:"is_disabled"`
-	Items                []tfTypes.PackInfo           `tfsdk:"items"`
+	Items                []tfTypes.PackInstallInfo    `tfsdk:"items"`
 	MinLogStreamVersion  types.String                 `tfsdk:"min_log_stream_version"`
 	Outputs              types.Float64                `tfsdk:"outputs"`
 	Source               types.String                 `tfsdk:"source"`
@@ -370,13 +372,13 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetPacksByGroupRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetPacksByIDRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Packs.GetPacksByGroup(ctx, *request1)
+	res1, err := r.client.Packs.GetPacksByID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -396,7 +398,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByGroupResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -430,13 +432,13 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetPacksByGroupRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Packs.GetPacksByGroup(ctx, *request)
+	res, err := r.client.Packs.GetPacksByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -460,7 +462,7 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByGroupResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -521,13 +523,13 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetPacksByGroupRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetPacksByIDRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Packs.GetPacksByGroup(ctx, *request1)
+	res1, err := r.client.Packs.GetPacksByID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -547,7 +549,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByGroupResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -607,5 +609,26 @@ func (r *PackResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 }
 
 func (r *PackResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), req.ID)...)
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		GroupID string `json:"group_id"`
+		ID      string `json:"id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "id": ""}': `+err.Error())
+		return
+	}
+
+	if len(data.GroupID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	if len(data.ID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 }

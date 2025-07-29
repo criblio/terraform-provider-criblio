@@ -30,6 +30,7 @@ type PackLookupsDataSource struct {
 // PackLookupsDataSourceModel describes the data model.
 type PackLookupsDataSourceModel struct {
 	GroupID types.String     `tfsdk:"group_id"`
+	ID      types.String     `tfsdk:"id"`
 	Items   []tfTypes.Routes `tfsdk:"items"`
 	Pack    types.String     `tfsdk:"pack"`
 }
@@ -48,6 +49,10 @@ func (r *PackLookupsDataSource) Schema(ctx context.Context, req datasource.Schem
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET for pack`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -189,13 +194,13 @@ func (r *PackLookupsDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetSystemLookupsByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsGetSystemLookupsByPackAndIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Routes.GetSystemLookupsByPack(ctx, *request)
+	res, err := r.client.Routes.GetSystemLookupsByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -215,7 +220,7 @@ func (r *PackLookupsDataSource) Read(ctx context.Context, req datasource.ReadReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemLookupsByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemLookupsByPackAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

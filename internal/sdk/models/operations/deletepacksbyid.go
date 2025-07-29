@@ -36,12 +36,12 @@ func (o *DeletePacksByIDRequest) GetDisabled() *bool {
 	return o.Disabled
 }
 
-// DeletePacksByIDResponseBody - a list of PackInstallInfo objects
+// DeletePacksByIDResponseBody - a list of Pipeline objects
 type DeletePacksByIDResponseBody struct {
-	Items []shared.PackInstallInfo `json:"items,omitempty"`
+	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *DeletePacksByIDResponseBody) GetItems() []shared.PackInstallInfo {
+func (o *DeletePacksByIDResponseBody) GetItems() []shared.Pipeline {
 	if o == nil {
 		return nil
 	}
@@ -55,7 +55,7 @@ type DeletePacksByIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of PackInstallInfo objects
+	// a list of Pipeline objects
 	Object *DeletePacksByIDResponseBody
 	// Unexpected error
 	Error *shared.Error

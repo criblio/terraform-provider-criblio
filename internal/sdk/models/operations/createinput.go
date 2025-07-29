@@ -10,6 +10,8 @@ import (
 type CreateInputRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// The id of this source instance
+	ID string `queryParam:"style=form,explode=true,name=id"`
 	// New Input object
 	Input shared.Input `request:"mediaType=application/json"`
 }
@@ -19,6 +21,13 @@ func (o *CreateInputRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *CreateInputRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 func (o *CreateInputRequest) GetInput() shared.Input {

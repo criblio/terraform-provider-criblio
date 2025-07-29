@@ -10,6 +10,8 @@ import (
 type CreateOutputRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// The consumer group id to create
+	ID string `queryParam:"style=form,explode=true,name=id"`
 	// New Output object
 	Output shared.Output `request:"mediaType=application/json"`
 }
@@ -19,6 +21,13 @@ func (o *CreateOutputRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *CreateOutputRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 func (o *CreateOutputRequest) GetOutput() shared.Output {

@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type PackInfoTags struct {
+type PackInstallInfoTags struct {
 	DataType   []types.String `tfsdk:"data_type"`
 	Domain     []types.String `tfsdk:"domain"`
 	Streamtags []types.String `tfsdk:"streamtags"`

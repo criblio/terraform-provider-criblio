@@ -16,6 +16,7 @@ Pack DataSource
 data "criblio_pack" "my_pack" {
   disabled = true
   group_id = "...my_group_id..."
+  id       = "...my_id..."
   with     = "...my_with..."
 }
 ```
@@ -26,6 +27,7 @@ data "criblio_pack" "my_pack" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Pack name
 
 ### Optional
 
@@ -55,6 +57,7 @@ Read-Only:
 - `spec` (String)
 - `tags` (Attributes) (see [below for nested schema](#nestedatt--items--tags))
 - `version` (String)
+- `warnings` (String) Parsed as JSON.
 
 <a id="nestedatt--items--tags"></a>
 ### Nested Schema for `items.tags`

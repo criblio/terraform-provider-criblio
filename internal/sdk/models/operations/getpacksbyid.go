@@ -7,48 +7,57 @@ import (
 	"net/http"
 )
 
-type GetPacksByGroupRequest struct {
+type GetPacksByIDRequest struct {
 	// Comma separated list of entities, "outputs", "inputs"
 	With *string `queryParam:"style=form,explode=true,name=with"`
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID  string `pathParam:"style=simple,explode=false,name=groupId"`
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
+	// Pack name
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetPacksByGroupRequest) GetWith() *string {
+func (o *GetPacksByIDRequest) GetWith() *string {
 	if o == nil {
 		return nil
 	}
 	return o.With
 }
 
-func (o *GetPacksByGroupRequest) GetGroupID() string {
+func (o *GetPacksByIDRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-func (o *GetPacksByGroupRequest) GetDisabled() *bool {
+func (o *GetPacksByIDRequest) GetDisabled() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Disabled
 }
 
-// GetPacksByGroupResponseBody - a list of PackInfo objects
-type GetPacksByGroupResponseBody struct {
+func (o *GetPacksByIDRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+// GetPacksByIDResponseBody - a list of PackInfo objects
+type GetPacksByIDResponseBody struct {
 	Items []shared.PackInstallInfo `json:"items,omitempty"`
 }
 
-func (o *GetPacksByGroupResponseBody) GetItems() []shared.PackInstallInfo {
+func (o *GetPacksByIDResponseBody) GetItems() []shared.PackInstallInfo {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetPacksByGroupResponse struct {
+type GetPacksByIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -56,40 +65,40 @@ type GetPacksByGroupResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of PackInfo objects
-	Object *GetPacksByGroupResponseBody
+	Object *GetPacksByIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetPacksByGroupResponse) GetContentType() string {
+func (o *GetPacksByIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetPacksByGroupResponse) GetStatusCode() int {
+func (o *GetPacksByIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetPacksByGroupResponse) GetRawResponse() *http.Response {
+func (o *GetPacksByIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetPacksByGroupResponse) GetObject() *GetPacksByGroupResponseBody {
+func (o *GetPacksByIDResponse) GetObject() *GetPacksByIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetPacksByGroupResponse) GetError() *shared.Error {
+func (o *GetPacksByIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

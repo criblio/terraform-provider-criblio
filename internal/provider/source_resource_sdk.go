@@ -19,7 +19,7 @@ func (r *SourceResourceModel) RefreshFromOperationsCreateInputResponseBody(ctx c
 	return diags
 }
 
-func (r *SourceResourceModel) RefreshFromOperationsListInputResponseBody(ctx context.Context, resp *operations.ListInputResponseBody) diag.Diagnostics {
+func (r *SourceResourceModel) RefreshFromOperationsGetInputByIDResponseBody(ctx context.Context, resp *operations.GetInputByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -43,6 +43,9 @@ func (r *SourceResourceModel) ToOperationsCreateInputRequest(ctx context.Context
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	input, inputDiags := r.ToSharedInput(ctx)
 	diags.Append(inputDiags...)
 
@@ -52,6 +55,7 @@ func (r *SourceResourceModel) ToOperationsCreateInputRequest(ctx context.Context
 
 	out := operations.CreateInputRequest{
 		GroupID: groupID,
+		ID:      id,
 		Input:   *input,
 	}
 
@@ -75,13 +79,17 @@ func (r *SourceResourceModel) ToOperationsDeleteInputByIDRequest(ctx context.Con
 	return &out, diags
 }
 
-func (r *SourceResourceModel) ToOperationsListInputRequest(ctx context.Context) (*operations.ListInputRequest, diag.Diagnostics) {
+func (r *SourceResourceModel) ToOperationsGetInputByIDRequest(ctx context.Context) (*operations.GetInputByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListInputRequest{
+	out := operations.GetInputByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

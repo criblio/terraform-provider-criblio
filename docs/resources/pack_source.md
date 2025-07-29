@@ -4144,7 +4144,7 @@ resource "criblio_pack_source" "my_packsource" {
 ### Required
 
 - `group_id` (String) group Id
-- `id` (String) Unique ID to DELETE for pack source
+- `id` (String) Unique ID to create pack source
 - `pack` (String) pack inputs to POST
 
 ### Optional
@@ -10657,5 +10657,5 @@ Read-Only:
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_pack_source.my_criblio_pack_source '{"group_id": "", "pack": ""}'
+terraform import criblio_pack_source.my_criblio_pack_source '{"group_id": "", "id": "", "pack": ""}'
 ```

@@ -28,10 +28,11 @@ type PackDataSource struct {
 
 // PackDataSourceModel describes the data model.
 type PackDataSourceModel struct {
-	Disabled types.Bool          `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
-	GroupID  types.String        `tfsdk:"group_id"`
-	Items    []tfTypes.PackInfo1 `tfsdk:"items"`
-	With     types.String        `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
+	Disabled types.Bool                `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
+	GroupID  types.String              `tfsdk:"group_id"`
+	ID       types.String              `tfsdk:"id"`
+	Items    []tfTypes.PackInstallInfo `tfsdk:"items"`
+	With     types.String              `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
 }
 
 // Metadata returns the data source type name.
@@ -51,6 +52,10 @@ func (r *PackDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Pack name`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -118,6 +123,10 @@ func (r *PackDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 						"version": schema.StringAttribute{
 							Computed: true,
 						},
+						"warnings": schema.StringAttribute{
+							Computed:    true,
+							Description: `Parsed as JSON.`,
+						},
 					},
 				},
 			},
@@ -167,13 +176,13 @@ func (r *PackDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetPacksByGroupRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Packs.GetPacksByGroup(ctx, *request)
+	res, err := r.client.Packs.GetPacksByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -193,7 +202,7 @@ func (r *PackDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByGroupResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

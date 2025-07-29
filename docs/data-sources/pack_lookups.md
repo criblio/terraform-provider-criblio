@@ -15,6 +15,7 @@ PackLookups DataSource
 ```terraform
 data "criblio_pack_lookups" "my_packlookups" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
   pack     = "...my_pack..."
 }
 ```
@@ -25,6 +26,7 @@ data "criblio_pack_lookups" "my_packlookups" {
 ### Required
 
 - `group_id` (String) group Id
+- `id` (String) Unique ID to GET for pack
 - `pack` (String) pack ID to GET
 
 ### Read-Only

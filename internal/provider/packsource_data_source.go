@@ -30,6 +30,7 @@ type PackSourceDataSource struct {
 // PackSourceDataSourceModel describes the data model.
 type PackSourceDataSourceModel struct {
 	GroupID types.String     `tfsdk:"group_id"`
+	ID      types.String     `tfsdk:"id"`
 	Items   []tfTypes.Routes `tfsdk:"items"`
 	Pack    types.String     `tfsdk:"pack"`
 }
@@ -48,6 +49,10 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET for pack source`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -145,7 +150,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,
-				Description: `pack inputs to GET`,
+				Description: `pack ID to GET`,
 			},
 		},
 	}
@@ -189,13 +194,13 @@ func (r *PackSourceDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetSystemInputsByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsGetSystemInputsByPackAndIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Routes.GetSystemInputsByPack(ctx, *request)
+	res, err := r.client.Routes.GetSystemInputsByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -215,7 +220,7 @@ func (r *PackSourceDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

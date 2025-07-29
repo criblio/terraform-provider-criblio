@@ -55709,7 +55709,7 @@ paths:
               $ref: "#/components/schemas/DatabaseConnectionTest"
   "/m/{groupId}/lib/breakers":
     get:
-      x-speakeasy-entity-operation: EventBreakerRuleset#read
+      #x-speakeasy-entity-operation: EventBreakerRuleset#read
       parameters:
         - name: groupId
           in: path
@@ -55772,6 +55772,7 @@ paths:
       responses: *a100
   "/m/{groupId}/lib/breakers/{id}":
     get:
+      x-speakeasy-entity-operation: EventBreakerRuleset#read
       operationId: getEventBreakerRulesetById
       tags: *a99
       summary: Get Event Breaker Ruleset by ID
@@ -56252,7 +56253,7 @@ paths:
       responses: *a112
   "/m/{groupId}/system/inputs":
     get:
-      x-speakeasy-entity-operation: Source#read
+      #x-speakeasy-entity-operation: Source#read
       parameters:
         - name: groupId
           in: path
@@ -56301,6 +56302,12 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: id
+          in: query
+          required: true
+          description: The id of this source instance
+          schema:
+            type: string
       operationId: createInput
       tags: *a114
       summary: Create Input
@@ -56315,6 +56322,7 @@ paths:
       responses: *a115
   "/m/{groupId}/system/inputs/{id}":
     get:
+      x-speakeasy-entity-operation: Source#read
       operationId: getInputById
       tags: *a114
       summary: Get Input by ID
@@ -56572,7 +56580,7 @@ paths:
       responses: *a118
   "/m/{groupId}/system/outputs":
     get:
-      x-speakeasy-entity-operation: Destination#read
+      #x-speakeasy-entity-operation: Destination#read
       parameters:
         - name: groupId
           in: path
@@ -56621,6 +56629,12 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+        - name: id
+          in: query
+          required: true
+          description: The consumer group id to create
+          schema:
+            type: string
       operationId: createOutput
       tags: *a120
       summary: Create Output
@@ -56635,6 +56649,7 @@ paths:
       responses: *a121
   "/m/{groupId}/system/outputs/{id}":
     get:
+      x-speakeasy-entity-operation: Destination#read
       operationId: getOutputById
       tags: *a120
       summary: Get Output by ID
@@ -57486,7 +57501,7 @@ paths:
           description: group Id
   "/m/{groupId}/p/{pack}/system/inputs":
     get:
-      x-speakeasy-entity-operation: PackSource#read
+      #x-speakeasy-entity-operation: PackSource#read
       operationId: getSystemInputsByPack
       tags: *a135
       summary: Get a list of inputs within a Pack
@@ -57534,8 +57549,14 @@ paths:
             &a138
             type: string
           description: group Id
+        - name: id
+          in: query
+          required: true
+          schema: *a137
+          description: Unique ID to create pack source
   "/m/{groupId}/p/{pack}/system/inputs/{id}":
     get:
+      x-speakeasy-entity-operation: PackSource#read
       operationId: getSystemInputsByPackAndId
       tags: *a135
       summary: Get input source by ID within a Pack
@@ -57784,7 +57805,7 @@ paths:
       responses: *a121
   "/m/{groupId}/p/{pack}/system/lookups":
     get:
-      x-speakeasy-entity-operation: PackLookups#read
+      #x-speakeasy-entity-operation: PackLookups#read
       operationId: getSystemLookupsByPack
       tags: *a135
       summary: Get a list of lookup objects within a Pack
@@ -57836,6 +57857,7 @@ paths:
           description: group Id
   "/m/{groupId}/p/{pack}/system/lookups/{id}":
     get:
+      x-speakeasy-entity-operation: PackLookups#read
       operationId: getSystemLookupsByPackAndId
       tags: *a135
       summary: Get list of lookups by ID within a Pack
@@ -61486,7 +61508,7 @@ paths:
             schema:
               $ref: "#/components/schemas/PackRequestBody"
     get:
-      x-speakeasy-entity-operation: Pack#read
+      #x-speakeasy-entity-operation: Pack#read
       operationId: getPacksByGroup
       tags:
         - packs
@@ -61508,7 +61530,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/PackInfo"
+                      $ref: "#/components/schemas/PackInstallInfo"
         "401":
           description: Unauthorized
         "500":
@@ -61581,17 +61603,17 @@ paths:
           schema:
             type: string
   "/m/{groupId}/packs/{id}":
-    delete:
-      x-speakeasy-entity-operation: Pack#delete
-      operationId: deletePacksById
+    get:
+      x-speakeasy-entity-operation: Pack#read
+      operationId: getPacksByID
       tags:
         - packs
-      summary: Uninstall Pack from the system
-      description: Uninstall Pack from the system
+      summary: Get info on pack
+      description: Get info on pack
       deprecated: false
       responses:
         "200":
-          description: a list of PackInstallInfo objects
+          description: a list of PackInfo objects
           content:
             application/json:
               schema:
@@ -61613,6 +61635,39 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      parameters:
+        - name: with
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Comma separated list of entities, "outputs", "inputs"
+        - name: groupId
+          in: path
+          required: true
+          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          schema:
+            type: string
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Pack name
+    delete:
+      x-speakeasy-entity-operation: Pack#delete
+      operationId: deletePacksById
+      responses: *a127
+      tags:
+        - packs
+      summary: Uninstall Pack from the system
+      description: Uninstall Pack from the system
+      deprecated: false
       parameters:
         - name: id
           in: path
@@ -61654,7 +61709,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/PackInfo"
+                      $ref: "#/components/schemas/PackInstallInfo"
         "401":
           description: Unauthorized
         "500":
@@ -65536,6 +65591,36 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Group'
+    delete:
+      operationId: deleteGroupsById
+      tags:
+      - groups
+      summary: Delete a specific ConfigGroup object
+      description: Delete a specific ConfigGroup object
+      x-speakeasy-entity-operation: Group#delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Group id
+      responses:
+        "200":
+          description: a list of ConfigGroup objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Group"
   "/products/{product}/groups/{id}/acl/teams":
     get:
       operationId: getProductsGroupsAclTeamsByProductAndId

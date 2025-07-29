@@ -11,16 +11,16 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *PackDataSourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(ctx context.Context, resp *operations.GetPacksByGroupResponseBody) diag.Diagnostics {
+func (r *PackDataSourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx context.Context, resp *operations.GetPacksByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.PackInfo1{}
+		r.Items = []tfTypes.PackInstallInfo{}
 		if len(r.Items) > len(resp.Items) {
 			r.Items = r.Items[:len(resp.Items)]
 		}
 		for itemsCount, itemsItem := range resp.Items {
-			var items tfTypes.PackInfo1
+			var items tfTypes.PackInstallInfo
 			items.Author = types.StringPointerValue(itemsItem.Author)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.DisplayName = types.StringPointerValue(itemsItem.DisplayName)
@@ -45,7 +45,7 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(c
 			if itemsItem.Tags == nil {
 				items.Tags = nil
 			} else {
-				items.Tags = &tfTypes.PackInfoTags{}
+				items.Tags = &tfTypes.PackInstallInfoTags{}
 				items.Tags.DataType = make([]types.String, 0, len(itemsItem.Tags.DataType))
 				for _, v := range itemsItem.Tags.DataType {
 					items.Tags.DataType = append(items.Tags.DataType, types.StringValue(v))
@@ -64,6 +64,8 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(c
 				}
 			}
 			items.Version = types.StringPointerValue(itemsItem.Version)
+			warningsResult, _ := json.Marshal(itemsItem.Warnings)
+			items.Warnings = types.StringValue(string(warningsResult))
 			if itemsCount+1 > len(r.Items) {
 				r.Items = append(r.Items, items)
 			} else {
@@ -81,6 +83,7 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(c
 				r.Items[itemsCount].Spec = items.Spec
 				r.Items[itemsCount].Tags = items.Tags
 				r.Items[itemsCount].Version = items.Version
+				r.Items[itemsCount].Warnings = items.Warnings
 			}
 		}
 	}
@@ -88,7 +91,7 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksByGroupResponseBody(c
 	return diags
 }
 
-func (r *PackDataSourceModel) ToOperationsGetPacksByGroupRequest(ctx context.Context) (*operations.GetPacksByGroupRequest, diag.Diagnostics) {
+func (r *PackDataSourceModel) ToOperationsGetPacksByIDRequest(ctx context.Context) (*operations.GetPacksByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	with := new(string)
@@ -106,10 +109,14 @@ func (r *PackDataSourceModel) ToOperationsGetPacksByGroupRequest(ctx context.Con
 	} else {
 		disabled = nil
 	}
-	out := operations.GetPacksByGroupRequest{
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetPacksByIDRequest{
 		With:     with,
 		GroupID:  groupID,
 		Disabled: disabled,
+		ID:       id,
 	}
 
 	return &out, diags

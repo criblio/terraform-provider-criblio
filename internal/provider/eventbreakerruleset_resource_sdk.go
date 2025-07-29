@@ -18,7 +18,7 @@ func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsCreateEventBreak
 	return diags
 }
 
-func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.ListEventBreakerRulesetResponseBody) diag.Diagnostics {
+func (r *EventBreakerRulesetResourceModel) RefreshFromOperationsGetEventBreakerRulesetByIDResponseBody(ctx context.Context, resp *operations.GetEventBreakerRulesetByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -74,13 +74,17 @@ func (r *EventBreakerRulesetResourceModel) ToOperationsDeleteEventBreakerRuleset
 	return &out, diags
 }
 
-func (r *EventBreakerRulesetResourceModel) ToOperationsListEventBreakerRulesetRequest(ctx context.Context) (*operations.ListEventBreakerRulesetRequest, diag.Diagnostics) {
+func (r *EventBreakerRulesetResourceModel) ToOperationsGetEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.GetEventBreakerRulesetByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListEventBreakerRulesetRequest{
+	out := operations.GetEventBreakerRulesetByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

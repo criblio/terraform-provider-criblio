@@ -28,6 +28,7 @@ type EventBreakerRulesetDataSource struct {
 // EventBreakerRulesetDataSourceModel describes the data model.
 type EventBreakerRulesetDataSourceModel struct {
 	GroupID types.String `tfsdk:"group_id"`
+	ID      types.String `tfsdk:"id"`
 }
 
 // Metadata returns the data source type name.
@@ -44,6 +45,10 @@ func (r *EventBreakerRulesetDataSource) Schema(ctx context.Context, req datasour
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 		},
 	}
@@ -87,13 +92,13 @@ func (r *EventBreakerRulesetDataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListEventBreakerRulesetRequest(ctx)
+	request, requestDiags := data.ToOperationsGetEventBreakerRulesetByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.EventBreakerRules.ListEventBreakerRuleset(ctx, *request)
+	res, err := r.client.EventBreakerRules.GetEventBreakerRulesetByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -113,7 +118,7 @@ func (r *EventBreakerRulesetDataSource) Read(ctx context.Context, req datasource
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetEventBreakerRulesetByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type PackInfo struct {
+type PackInstallInfo struct {
 	Author              types.String            `tfsdk:"author"`
 	Description         types.String            `tfsdk:"description"`
 	DisplayName         types.String            `tfsdk:"display_name"`
@@ -19,7 +19,7 @@ type PackInfo struct {
 	Settings            map[string]types.String `tfsdk:"settings"`
 	Source              types.String            `tfsdk:"source"`
 	Spec                types.String            `tfsdk:"spec"`
-	Tags                *PackInfoTags           `tfsdk:"tags"`
+	Tags                *PackInstallInfoTags    `tfsdk:"tags"`
 	Version             types.String            `tfsdk:"version"`
 	Warnings            types.String            `tfsdk:"warnings"`
 }

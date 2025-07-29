@@ -128,5 +128,5 @@ Read-Only:
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_pack.my_criblio_pack ""
+terraform import criblio_pack.my_criblio_pack '{"group_id": "", "id": ""}'
 ```

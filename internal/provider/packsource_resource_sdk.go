@@ -78,7 +78,7 @@ func (r *PackSourceResourceModel) RefreshFromOperationsCreateSystemInputsByPackR
 	return diags
 }
 
-func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackResponseBody(ctx context.Context, resp *operations.GetSystemInputsByPackResponseBody) diag.Diagnostics {
+func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndIDResponseBody(ctx context.Context, resp *operations.GetSystemInputsByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -253,6 +253,9 @@ func (r *PackSourceResourceModel) ToOperationsCreateSystemInputsByPackRequest(ct
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	input, inputDiags := r.ToSharedInput(ctx)
 	diags.Append(inputDiags...)
 
@@ -263,6 +266,7 @@ func (r *PackSourceResourceModel) ToOperationsCreateSystemInputsByPackRequest(ct
 	out := operations.CreateSystemInputsByPackRequest{
 		Pack:    pack,
 		GroupID: groupID,
+		ID:      id,
 		Input:   *input,
 	}
 
@@ -298,8 +302,11 @@ func (r *PackSourceResourceModel) ToOperationsDeleteSystemInputsByPackRequest(ct
 	return &out, diags
 }
 
-func (r *PackSourceResourceModel) ToOperationsGetSystemInputsByPackRequest(ctx context.Context) (*operations.GetSystemInputsByPackRequest, diag.Diagnostics) {
+func (r *PackSourceResourceModel) ToOperationsGetSystemInputsByPackAndIDRequest(ctx context.Context) (*operations.GetSystemInputsByPackAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var pack string
 	pack = r.Pack.ValueString()
@@ -307,7 +314,8 @@ func (r *PackSourceResourceModel) ToOperationsGetSystemInputsByPackRequest(ctx c
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetSystemInputsByPackRequest{
+	out := operations.GetSystemInputsByPackAndIDRequest{
+		ID:      id,
 		Pack:    pack,
 		GroupID: groupID,
 	}

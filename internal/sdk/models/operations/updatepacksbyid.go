@@ -65,10 +65,10 @@ func (o *UpdatePacksByIDRequest) GetDisabled() *bool {
 
 // UpdatePacksByIDResponseBody - a list of PackInfo objects
 type UpdatePacksByIDResponseBody struct {
-	Items []shared.PackInfo `json:"items,omitempty"`
+	Items []shared.PackInstallInfo `json:"items,omitempty"`
 }
 
-func (o *UpdatePacksByIDResponseBody) GetItems() []shared.PackInfo {
+func (o *UpdatePacksByIDResponseBody) GetItems() []shared.PackInstallInfo {
 	if o == nil {
 		return nil
 	}

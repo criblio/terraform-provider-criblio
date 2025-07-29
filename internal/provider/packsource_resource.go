@@ -47,7 +47,7 @@ type PackSourceResource struct {
 // PackSourceResourceModel describes the resource data model.
 type PackSourceResourceModel struct {
 	GroupID                   types.String                       `tfsdk:"group_id"`
-	ID                        types.String                       `tfsdk:"id"`
+	ID                        types.String                       `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
 	InputAppscope             *tfTypes.InputAppscope             `queryParam:"inline" tfsdk:"input_appscope" tfPlanOnly:"true"`
 	InputAzureBlob            *tfTypes.InputAzureBlob            `queryParam:"inline" tfsdk:"input_azure_blob" tfPlanOnly:"true"`
 	InputCollection           *tfTypes.InputCollection           `queryParam:"inline" tfsdk:"input_collection" tfPlanOnly:"true"`
@@ -124,7 +124,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to DELETE for pack source`,
+				Description: `Unique ID to create pack source`,
 			},
 			"input_appscope": schema.SingleNestedAttribute{
 				Optional: true,
@@ -24934,13 +24934,13 @@ func (r *PackSourceResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetSystemInputsByPackRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetSystemInputsByPackAndIDRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Routes.GetSystemInputsByPack(ctx, *request1)
+	res1, err := r.client.Routes.GetSystemInputsByPackAndID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -24960,7 +24960,7 @@ func (r *PackSourceResource) Create(ctx context.Context, req resource.CreateRequ
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackAndIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -24994,13 +24994,13 @@ func (r *PackSourceResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetSystemInputsByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsGetSystemInputsByPackAndIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Routes.GetSystemInputsByPack(ctx, *request)
+	res, err := r.client.Routes.GetSystemInputsByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -25024,7 +25024,7 @@ func (r *PackSourceResource) Read(ctx context.Context, req resource.ReadRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -25085,13 +25085,13 @@ func (r *PackSourceResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetSystemInputsByPackRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetSystemInputsByPackAndIDRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Routes.GetSystemInputsByPack(ctx, *request1)
+	res1, err := r.client.Routes.GetSystemInputsByPackAndID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -25111,7 +25111,7 @@ func (r *PackSourceResource) Update(ctx context.Context, req resource.UpdateRequ
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackAndIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -25175,11 +25175,12 @@ func (r *PackSourceResource) ImportState(ctx context.Context, req resource.Impor
 	dec.DisallowUnknownFields()
 	var data struct {
 		GroupID string `json:"group_id"`
+		ID      string `json:"id"`
 		Pack    string `json:"pack"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "pack": ""}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "id": "", "pack": ""}': `+err.Error())
 		return
 	}
 
@@ -25188,6 +25189,11 @@ func (r *PackSourceResource) ImportState(ctx context.Context, req resource.Impor
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	if len(data.ID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Pack) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return

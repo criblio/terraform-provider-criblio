@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *EventBreakerRulesetDataSourceModel) RefreshFromOperationsListEventBreakerRulesetResponseBody(ctx context.Context, resp *operations.ListEventBreakerRulesetResponseBody) diag.Diagnostics {
+func (r *EventBreakerRulesetDataSourceModel) RefreshFromOperationsGetEventBreakerRulesetByIDResponseBody(ctx context.Context, resp *operations.GetEventBreakerRulesetByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -17,13 +17,17 @@ func (r *EventBreakerRulesetDataSourceModel) RefreshFromOperationsListEventBreak
 	return diags
 }
 
-func (r *EventBreakerRulesetDataSourceModel) ToOperationsListEventBreakerRulesetRequest(ctx context.Context) (*operations.ListEventBreakerRulesetRequest, diag.Diagnostics) {
+func (r *EventBreakerRulesetDataSourceModel) ToOperationsGetEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.GetEventBreakerRulesetByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListEventBreakerRulesetRequest{
+	out := operations.GetEventBreakerRulesetByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

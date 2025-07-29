@@ -136,7 +136,7 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 	return diags
 }
 
-func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackResponseBody(ctx context.Context, resp *operations.GetSystemLookupsByPackResponseBody) diag.Diagnostics {
+func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackAndIDResponseBody(ctx context.Context, resp *operations.GetSystemLookupsByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -309,8 +309,11 @@ func (r *PackLookupsResourceModel) ToOperationsDeleteSystemLookupsByPackAndIDReq
 	return &out, diags
 }
 
-func (r *PackLookupsResourceModel) ToOperationsGetSystemLookupsByPackRequest(ctx context.Context) (*operations.GetSystemLookupsByPackRequest, diag.Diagnostics) {
+func (r *PackLookupsResourceModel) ToOperationsGetSystemLookupsByPackAndIDRequest(ctx context.Context) (*operations.GetSystemLookupsByPackAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var pack string
 	pack = r.Pack.ValueString()
@@ -318,7 +321,8 @@ func (r *PackLookupsResourceModel) ToOperationsGetSystemLookupsByPackRequest(ctx
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetSystemLookupsByPackRequest{
+	out := operations.GetSystemLookupsByPackAndIDRequest{
+		ID:      id,
 		Pack:    pack,
 		GroupID: groupID,
 	}

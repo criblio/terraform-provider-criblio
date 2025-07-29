@@ -3905,7 +3905,7 @@ resource "criblio_destination" "my_destination" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to DELETE
+- `id` (String) The consumer group id to create
 
 ### Optional
 
@@ -9402,5 +9402,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_destination.my_criblio_destination ""
+terraform import criblio_destination.my_criblio_destination '{"group_id": "", "id": ""}'
 ```

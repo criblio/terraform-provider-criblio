@@ -15,6 +15,7 @@ EventBreakerRuleset DataSource
 ```terraform
 data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -24,3 +25,4 @@ data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET

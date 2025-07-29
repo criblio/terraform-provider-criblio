@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *PackLookupsDataSourceModel) RefreshFromOperationsGetSystemLookupsByPackResponseBody(ctx context.Context, resp *operations.GetSystemLookupsByPackResponseBody) diag.Diagnostics {
+func (r *PackLookupsDataSourceModel) RefreshFromOperationsGetSystemLookupsByPackAndIDResponseBody(ctx context.Context, resp *operations.GetSystemLookupsByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -109,8 +109,11 @@ func (r *PackLookupsDataSourceModel) RefreshFromOperationsGetSystemLookupsByPack
 	return diags
 }
 
-func (r *PackLookupsDataSourceModel) ToOperationsGetSystemLookupsByPackRequest(ctx context.Context) (*operations.GetSystemLookupsByPackRequest, diag.Diagnostics) {
+func (r *PackLookupsDataSourceModel) ToOperationsGetSystemLookupsByPackAndIDRequest(ctx context.Context) (*operations.GetSystemLookupsByPackAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var pack string
 	pack = r.Pack.ValueString()
@@ -118,7 +121,8 @@ func (r *PackLookupsDataSourceModel) ToOperationsGetSystemLookupsByPackRequest(c
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetSystemLookupsByPackRequest{
+	out := operations.GetSystemLookupsByPackAndIDRequest{
+		ID:      id,
 		Pack:    pack,
 		GroupID: groupID,
 	}

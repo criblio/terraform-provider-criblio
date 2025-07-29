@@ -15,6 +15,7 @@ PackSource DataSource
 ```terraform
 data "criblio_pack_source" "my_packsource" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
   pack     = "...my_pack..."
 }
 ```
@@ -25,7 +26,8 @@ data "criblio_pack_source" "my_packsource" {
 ### Required
 
 - `group_id` (String) group Id
-- `pack` (String) pack inputs to GET
+- `id` (String) Unique ID to GET for pack source
+- `pack` (String) pack ID to GET
 
 ### Read-Only
 

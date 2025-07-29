@@ -11,8 +11,10 @@ type CreateSystemInputsByPackRequest struct {
 	// pack inputs to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
-	GroupID string       `pathParam:"style=simple,explode=false,name=groupId"`
-	Input   shared.Input `request:"mediaType=application/json"`
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Unique ID to create pack source
+	ID    string       `queryParam:"style=form,explode=true,name=id"`
+	Input shared.Input `request:"mediaType=application/json"`
 }
 
 func (o *CreateSystemInputsByPackRequest) GetPack() string {
@@ -27,6 +29,13 @@ func (o *CreateSystemInputsByPackRequest) GetGroupID() string {
 		return ""
 	}
 	return o.GroupID
+}
+
+func (o *CreateSystemInputsByPackRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 func (o *CreateSystemInputsByPackRequest) GetInput() shared.Input {

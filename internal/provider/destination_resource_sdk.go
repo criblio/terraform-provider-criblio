@@ -19,7 +19,7 @@ func (r *DestinationResourceModel) RefreshFromOperationsCreateOutputResponseBody
 	return diags
 }
 
-func (r *DestinationResourceModel) RefreshFromOperationsListOutputResponseBody(ctx context.Context, resp *operations.ListOutputResponseBody) diag.Diagnostics {
+func (r *DestinationResourceModel) RefreshFromOperationsGetOutputByIDResponseBody(ctx context.Context, resp *operations.GetOutputByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -43,6 +43,9 @@ func (r *DestinationResourceModel) ToOperationsCreateOutputRequest(ctx context.C
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	output, outputDiags := r.ToSharedOutput(ctx)
 	diags.Append(outputDiags...)
 
@@ -52,6 +55,7 @@ func (r *DestinationResourceModel) ToOperationsCreateOutputRequest(ctx context.C
 
 	out := operations.CreateOutputRequest{
 		GroupID: groupID,
+		ID:      id,
 		Output:  *output,
 	}
 
@@ -75,13 +79,17 @@ func (r *DestinationResourceModel) ToOperationsDeleteOutputByIDRequest(ctx conte
 	return &out, diags
 }
 
-func (r *DestinationResourceModel) ToOperationsListOutputRequest(ctx context.Context) (*operations.ListOutputRequest, diag.Diagnostics) {
+func (r *DestinationResourceModel) ToOperationsGetOutputByIDRequest(ctx context.Context) (*operations.GetOutputByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListOutputRequest{
+	out := operations.GetOutputByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 
