@@ -10,15 +10,18 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -37,16 +40,15 @@ type PackBreakersResource struct {
 
 // PackBreakersResourceModel describes the resource data model.
 type PackBreakersResourceModel struct {
-	Description       types.String     `tfsdk:"description"`
-	Disabled          types.Bool       `tfsdk:"disabled"`
-	DisplayName       types.String     `tfsdk:"display_name"`
-	GroupID           types.String     `tfsdk:"group_id"`
-	ID                types.String     `tfsdk:"id"`
-	Items             []tfTypes.Routes `tfsdk:"items"`
-	Pack              types.String     `tfsdk:"pack"`
-	PackPathParameter types.String     `tfsdk:"pack_path_parameter"`
-	Source            types.String     `tfsdk:"source"`
-	Version           types.String     `tfsdk:"version"`
+	Description  types.String                      `tfsdk:"description"`
+	GroupID      types.String                      `tfsdk:"group_id"`
+	ID           types.String                      `tfsdk:"id"`
+	Items        []tfTypes.Routes                  `tfsdk:"items"`
+	Lib          types.String                      `tfsdk:"lib"`
+	MinRawLength types.Float64                     `tfsdk:"min_raw_length"`
+	Pack         types.String                      `tfsdk:"pack"`
+	Rules        []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
+	Tags         types.String                      `tfsdk:"tags"`
 }
 
 func (r *PackBreakersResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -60,12 +62,6 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 			"description": schema.StringAttribute{
 				Optional: true,
 			},
-			"disabled": schema.BoolAttribute{
-				Optional: true,
-			},
-			"display_name": schema.StringAttribute{
-				Optional: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group ID to GET`,
@@ -73,6 +69,9 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to PATCH for pack`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`).String()),
+				},
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -183,23 +182,170 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 					},
 				},
 			},
-			"pack": schema.StringAttribute{
-				Required:    true,
-				Description: `pack ID to DELETE`,
+			"lib": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(`custom`),
+				Description: `Default: "custom"; must be one of ["custom", "cribl-custom"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"custom",
+						"cribl-custom",
+					),
+				},
 			},
-			"pack_path_parameter": schema.StringAttribute{
+			"min_raw_length": schema.Float64Attribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     float64default.StaticFloat64(256),
+				Description: `The  minimum number of characters in _raw to determine which rule to use. Default: 256`,
+				Validators: []validator.Float64{
+					float64validator.Between(50, 100000),
+				},
+			},
+			"pack": schema.StringAttribute{
 				Required:    true,
 				Description: `pack ID to POST`,
 			},
-			"source": schema.StringAttribute{
+			"rules": schema.ListNestedAttribute{
 				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.ExactlyOneOf(path.Expressions{
-						path.MatchRelative().AtParent().AtName("filename"),
-					}...),
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"condition": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`true`),
+							Description: `JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events. Default: "true"`,
+						},
+						"disabled": schema.BoolAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
+							Description: `Disable this breaker rule (enabled by default). Default: false`,
+						},
+						"event_breaker_regex": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`/[\\n\\r]+(?!\\s)/`),
+							Description: `The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"`,
+						},
+						"fields": schema.ListNestedAttribute{
+							Optional: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										Optional: true,
+									},
+									"value": schema.StringAttribute{
+										Required:    true,
+										Description: `The JavaScript expression used to compute the field's value (can be constant)`,
+									},
+								},
+							},
+							Description: `Key-value pairs to be added to each event`,
+						},
+						"max_event_bytes": schema.Float64Attribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     float64default.StaticFloat64(51200),
+							Description: `The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200`,
+							Validators: []validator.Float64{
+								float64validator.Between(1, 134217728),
+							},
+						},
+						"name": schema.StringAttribute{
+							Required: true,
+						},
+						"parser_enabled": schema.BoolAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
+							Description: `Default: false`,
+						},
+						"should_use_data_raw": schema.BoolAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
+							Description: `Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event. Default: false`,
+						},
+						"timestamp": schema.SingleNestedAttribute{
+							Required: true,
+							Attributes: map[string]schema.Attribute{
+								"format": schema.StringAttribute{
+									Optional: true,
+								},
+								"length": schema.Float64Attribute{
+									Computed:    true,
+									Optional:    true,
+									Default:     float64default.StaticFloat64(150),
+									Description: `Default: 150`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(2),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Default:     stringdefault.StaticString(`auto`),
+									Description: `Default: "auto"; must be one of ["auto", "format", "current"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf(
+											"auto",
+											"format",
+											"current",
+										),
+									},
+								},
+							},
+							Description: `Auto, manual format (strptime), or current time`,
+						},
+						"timestamp_anchor_regex": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`/^/`),
+							Description: `The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/^/"`,
+						},
+						"timestamp_earliest": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`-420weeks`),
+							Description: `The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time. Default: "-420weeks"`,
+						},
+						"timestamp_latest": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`+1week`),
+							Description: `The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time. Default: "+1week"`,
+						},
+						"timestamp_timezone": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`local`),
+							Description: `Timezone to assign to timestamps without timezone info. Default: "local"`,
+						},
+						"type": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`regex`),
+							Description: `Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow"]`,
+							Validators: []validator.String{
+								stringvalidator.OneOf(
+									"regex",
+									"json",
+									"json_array",
+									"header",
+									"timestamp",
+									"csv",
+									"aws_cloudtrail",
+									"aws_vpcflow",
+								),
+							},
+						},
+					},
 				},
+				Description: `A list of rules that will be applied, in order, to the input data stream`,
 			},
-			"version": schema.StringAttribute{
+			"tags": schema.StringAttribute{
 				Optional: true,
 			},
 		},
@@ -281,6 +427,43 @@ func (r *PackBreakersResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetBreakersByPackAndIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Routes.GetBreakersByPackAndID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetBreakersByPackAndIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -304,13 +487,13 @@ func (r *PackBreakersResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetBreakersByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsGetBreakersByPackAndIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Routes.GetBreakersByPack(ctx, *request)
+	res, err := r.client.Routes.GetBreakersByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -334,7 +517,7 @@ func (r *PackBreakersResource) Read(ctx context.Context, req resource.ReadReques
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBreakersByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetBreakersByPackAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -385,6 +568,43 @@ func (r *PackBreakersResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateBreakersByPackAndIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetBreakersByPackAndIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Routes.GetBreakersByPackAndID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetBreakersByPackAndIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -447,13 +667,13 @@ func (r *PackBreakersResource) ImportState(ctx context.Context, req resource.Imp
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		GroupID           string `json:"group_id"`
-		ID                string `json:"id"`
-		PackPathParameter string `json:"pack_path_parameter"`
+		GroupID string `json:"group_id"`
+		ID      string `json:"id"`
+		Pack    string `json:"pack"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "id": "", "pack_path_parameter": ""}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "id": "", "pack": ""}': `+err.Error())
 		return
 	}
 
@@ -467,9 +687,9 @@ func (r *PackBreakersResource) ImportState(ctx context.Context, req resource.Imp
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
-	if len(data.PackPathParameter) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field pack_path_parameter is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+	if len(data.Pack) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack_path_parameter"), data.PackPathParameter)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack"), data.Pack)...)
 }

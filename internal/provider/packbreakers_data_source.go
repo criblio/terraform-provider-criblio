@@ -7,11 +7,8 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -32,15 +29,10 @@ type PackBreakersDataSource struct {
 
 // PackBreakersDataSourceModel describes the data model.
 type PackBreakersDataSourceModel struct {
-	Description       types.String     `tfsdk:"description"`
-	Disabled          types.Bool       `tfsdk:"disabled"`
-	DisplayName       types.String     `tfsdk:"display_name"`
-	GroupID           types.String     `tfsdk:"group_id"`
-	ID                types.String     `tfsdk:"id"`
-	Items             []tfTypes.Routes `tfsdk:"items"`
-	PackPathParameter types.String     `tfsdk:"pack_path_parameter"`
-	Source            types.String     `tfsdk:"source"`
-	Version           types.String     `tfsdk:"version"`
+	GroupID types.String     `tfsdk:"group_id"`
+	ID      types.String     `tfsdk:"id"`
+	Items   []tfTypes.Routes `tfsdk:"items"`
+	Pack    types.String     `tfsdk:"pack"`
 }
 
 // Metadata returns the data source type name.
@@ -54,21 +46,13 @@ func (r *PackBreakersDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "PackBreakers DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
-				Optional: true,
-			},
-			"disabled": schema.BoolAttribute{
-				Optional: true,
-			},
-			"display_name": schema.StringAttribute{
-				Optional: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `group ID to GET`,
+				Description: `group Id`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique ID to GET for pack`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -164,20 +148,9 @@ func (r *PackBreakersDataSource) Schema(ctx context.Context, req datasource.Sche
 					},
 				},
 			},
-			"pack_path_parameter": schema.StringAttribute{
+			"pack": schema.StringAttribute{
 				Required:    true,
-				Description: `pack ID to GET`,
-			},
-			"source": schema.StringAttribute{
-				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.ExactlyOneOf(path.Expressions{
-						path.MatchRelative().AtParent().AtName("filename"),
-					}...),
-				},
-			},
-			"version": schema.StringAttribute{
-				Optional: true,
+				Description: `pack ID to POST`,
 			},
 		},
 	}
@@ -221,13 +194,13 @@ func (r *PackBreakersDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetBreakersByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsGetBreakersByPackAndIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Routes.GetBreakersByPack(ctx, *request)
+	res, err := r.client.Routes.GetBreakersByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -247,7 +220,7 @@ func (r *PackBreakersDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBreakersByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetBreakersByPackAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -9,17 +9,17 @@ import (
 
 type GetBreakersByPackRequest struct {
 	// pack ID to GET
-	PackPathParameter string `pathParam:"style=simple,explode=false,name=pack"`
+	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group ID to GET
-	GroupID string       `pathParam:"style=simple,explode=false,name=groupId"`
-	Pack1   *shared.Pack `request:"mediaType=application/json"`
+	GroupID             string                      `pathParam:"style=simple,explode=false,name=groupId"`
+	EventBreakerRuleset *shared.EventBreakerRuleset `request:"mediaType=application/json"`
 }
 
-func (o *GetBreakersByPackRequest) GetPackPathParameter() string {
+func (o *GetBreakersByPackRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
-	return o.PackPathParameter
+	return o.Pack
 }
 
 func (o *GetBreakersByPackRequest) GetGroupID() string {
@@ -29,11 +29,11 @@ func (o *GetBreakersByPackRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *GetBreakersByPackRequest) GetPack1() *shared.Pack {
+func (o *GetBreakersByPackRequest) GetEventBreakerRuleset() *shared.EventBreakerRuleset {
 	if o == nil {
 		return nil
 	}
-	return o.Pack1
+	return o.EventBreakerRuleset
 }
 
 // GetBreakersByPackResponseBody - a list of Routes objects

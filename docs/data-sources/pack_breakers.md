@@ -14,14 +14,9 @@ PackBreakers DataSource
 
 ```terraform
 data "criblio_pack_breakers" "my_packbreakers" {
-  description         = "...my_description..."
-  disabled            = true
-  display_name        = "...my_display_name..."
-  group_id            = "...my_group_id..."
-  id                  = "...my_id..."
-  pack_path_parameter = "...my_pack_path_parameter..."
-  source              = "...my_source..."
-  version             = "...my_version..."
+  group_id = "...my_group_id..."
+  id       = "...my_id..."
+  pack     = "...my_pack..."
 }
 ```
 
@@ -30,20 +25,12 @@ data "criblio_pack_breakers" "my_packbreakers" {
 
 ### Required
 
-- `group_id` (String) group ID to GET
-- `pack_path_parameter` (String) pack ID to GET
-
-### Optional
-
-- `description` (String)
-- `disabled` (Boolean)
-- `display_name` (String)
-- `source` (String)
-- `version` (String)
+- `group_id` (String) group Id
+- `id` (String) Unique ID to GET for pack
+- `pack` (String) pack ID to POST
 
 ### Read-Only
 
-- `id` (String) The ID of this resource.
 - `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
 
 <a id="nestedatt--items"></a>

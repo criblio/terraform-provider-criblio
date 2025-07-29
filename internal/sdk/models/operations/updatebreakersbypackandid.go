@@ -11,11 +11,11 @@ type UpdateBreakersByPackAndIDRequest struct {
 	// Unique ID to PATCH for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// pack ID to POST
-	PackPathParameter string `pathParam:"style=simple,explode=false,name=pack"`
+	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Pipeline object to be updated in specified Project
-	Pack1 shared.Pack `request:"mediaType=application/json"`
+	EventBreakerRuleset shared.EventBreakerRuleset `request:"mediaType=application/json"`
 }
 
 func (o *UpdateBreakersByPackAndIDRequest) GetID() string {
@@ -25,11 +25,11 @@ func (o *UpdateBreakersByPackAndIDRequest) GetID() string {
 	return o.ID
 }
 
-func (o *UpdateBreakersByPackAndIDRequest) GetPackPathParameter() string {
+func (o *UpdateBreakersByPackAndIDRequest) GetPack() string {
 	if o == nil {
 		return ""
 	}
-	return o.PackPathParameter
+	return o.Pack
 }
 
 func (o *UpdateBreakersByPackAndIDRequest) GetGroupID() string {
@@ -39,11 +39,11 @@ func (o *UpdateBreakersByPackAndIDRequest) GetGroupID() string {
 	return o.GroupID
 }
 
-func (o *UpdateBreakersByPackAndIDRequest) GetPack1() shared.Pack {
+func (o *UpdateBreakersByPackAndIDRequest) GetEventBreakerRuleset() shared.EventBreakerRuleset {
 	if o == nil {
-		return shared.Pack{}
+		return shared.EventBreakerRuleset{}
 	}
-	return o.Pack1
+	return o.EventBreakerRuleset
 }
 
 // UpdateBreakersByPackAndIDResponseBody - a list of Routes objects

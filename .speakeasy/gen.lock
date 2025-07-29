@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 191abc1bf483475201ac9172dedc6f90
+  docChecksum: 8535342705a192838f46a1f4c7ac0980
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.592.1
   generationVersion: 2.667.0
-  releaseVersion: 1.3.25
-  configChecksum: b1754c78838cdf43935ee69db68f124d
+  releaseVersion: 1.3.27
+  configChecksum: 0291d09f220f7c41f4fef9e457c1a272
   published: true
 features:
   terraform:
@@ -1989,7 +1989,6 @@ generatedFiles:
   - internal/sdk/models/shared/outputwavefront.go
   - internal/sdk/models/shared/outputwebhook.go
   - internal/sdk/models/shared/outputxsiam.go
-  - internal/sdk/models/shared/pack.go
   - internal/sdk/models/shared/packclone.go
   - internal/sdk/models/shared/packinfo.go
   - internal/sdk/models/shared/packinstallinfo.go
@@ -7097,7 +7096,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
         "200":
           application/json: {}
@@ -7123,7 +7122,7 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>"}
+        application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
         "200":
           application/json: {}
