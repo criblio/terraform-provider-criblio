@@ -8,8 +8,6 @@ echo
 test_imports() {
 terraform import -no-color criblio_group.syslog_worker_group "syslog-workers" 
 echo
-terraform import -no-color criblio_global_var.my_globalvar '{"group_id": "default", "id": "sample_globalvar"}'
-echo
 terraform import -no-color criblio_subscription.my_subscription '{"group_id": "default", "id": "my_subscription"}'
 echo
 terraform import -no-color criblio_subscription.my_subscription_with_enabled '{"group_id": "default", "id": "my_subscription_with_enabled"}'
