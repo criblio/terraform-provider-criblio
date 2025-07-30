@@ -13,7 +13,7 @@ func TestSchemas(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ExpectNonEmptyPlan: true,
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_schema.my_schema", "description", "test schema"),
 						resource.TestCheckResourceAttr("criblio_schema.my_schema", "id", "my_schema"),

@@ -14,7 +14,7 @@ func TestRegex(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_regex.my_regex", "description", "test"),
 						resource.TestCheckResourceAttr("criblio_regex.my_regex", "group_id", "default"),

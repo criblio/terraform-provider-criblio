@@ -13,7 +13,7 @@ func TestSubscription(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "id", "my_subscription"),
 						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "description", "test subscription"),

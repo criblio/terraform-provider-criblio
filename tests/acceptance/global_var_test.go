@@ -3,7 +3,6 @@ package tests
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -14,8 +13,7 @@ func TestGlobalVar(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ExpectNonEmptyPlan: true,
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "id", "sample_globalvar"),
 						resource.TestCheckResourceAttr("criblio_global_var.my_globalvar", "group_id", "default"),
