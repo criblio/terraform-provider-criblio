@@ -14,7 +14,6 @@ func TestSubscription(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "id", "my_subscription"),
 						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "description", "test subscription"),

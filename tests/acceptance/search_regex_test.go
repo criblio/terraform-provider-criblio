@@ -15,7 +15,6 @@ func TestSearchRegex(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_regex.my_search_regex", "id", "test_regex"),
 						resource.TestCheckResourceAttr("criblio_regex.my_search_regex", "group_id", "default_search"),
