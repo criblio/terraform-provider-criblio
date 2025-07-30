@@ -153,3 +153,11 @@ Read-Only:
 - `output` (String) Parsed as JSON.
 - `output_expression` (String) Parsed as JSON.
 - `pipeline` (String) Pipeline to send the matching data to
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+terraform import criblio_pack_routes.my_criblio_pack_routes '{"group_id": "", "pack": ""}'
+```

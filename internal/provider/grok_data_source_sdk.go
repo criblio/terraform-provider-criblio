@@ -21,13 +21,17 @@ func (r *GrokDataSourceModel) RefreshFromSharedGrokFile(ctx context.Context, res
 	return diags
 }
 
-func (r *GrokDataSourceModel) ToOperationsListGrokFileRequest(ctx context.Context) (*operations.ListGrokFileRequest, diag.Diagnostics) {
+func (r *GrokDataSourceModel) ToOperationsGetGrokFileByIDRequest(ctx context.Context) (*operations.GetGrokFileByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListGrokFileRequest{
+	out := operations.GetGrokFileByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

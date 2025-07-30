@@ -43,5 +43,5 @@ resource "criblio_subscription" "my_subscription" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_subscription.my_criblio_subscription ""
+terraform import criblio_subscription.my_criblio_subscription '{"group_id": "", "id": ""}'
 ```

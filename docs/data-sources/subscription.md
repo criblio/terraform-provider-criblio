@@ -14,11 +14,8 @@ Subscription DataSource
 
 ```terraform
 data "criblio_subscription" "my_subscription" {
-  description = "...my_description..."
-  disabled    = true
-  filter      = "...my_filter..."
-  group_id    = "...my_group_id..."
-  pipeline    = "...my_pipeline..."
+  group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -28,14 +25,11 @@ data "criblio_subscription" "my_subscription" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-
-### Optional
-
-- `description` (String) Project description
-- `disabled` (Boolean) Project enabled
-- `filter` (String) filter
-- `pipeline` (String) pipeline to be used
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
-- `id` (String) The ID of this resource.
+- `description` (String)
+- `disabled` (Boolean)
+- `filter` (String)
+- `pipeline` (String)

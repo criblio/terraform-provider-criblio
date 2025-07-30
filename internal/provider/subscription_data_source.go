@@ -27,12 +27,12 @@ type SubscriptionDataSource struct {
 
 // SubscriptionDataSourceModel describes the data model.
 type SubscriptionDataSourceModel struct {
-	Description types.String `queryParam:"style=form,explode=true,name=description" tfsdk:"description"`
-	Disabled    types.Bool   `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
-	Filter      types.String `queryParam:"style=form,explode=true,name=filter" tfsdk:"filter"`
+	Description types.String `tfsdk:"description"`
+	Disabled    types.Bool   `tfsdk:"disabled"`
+	Filter      types.String `tfsdk:"filter"`
 	GroupID     types.String `tfsdk:"group_id"`
 	ID          types.String `tfsdk:"id"`
-	Pipeline    types.String `queryParam:"style=form,explode=true,name=pipeline" tfsdk:"pipeline"`
+	Pipeline    types.String `tfsdk:"pipeline"`
 }
 
 // Metadata returns the data source type name.
@@ -47,31 +47,24 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Project description`,
+				Computed: true,
 			},
 			"disabled": schema.BoolAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Project enabled`,
+				Computed: true,
 			},
 			"filter": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `filter`,
+				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"pipeline": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `pipeline to be used`,
+				Computed: true,
 			},
 		},
 	}
@@ -115,13 +108,13 @@ func (r *SubscriptionDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListSubscriptionRequest(ctx)
+	request, requestDiags := data.ToOperationsGetSubscriptionByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Subscriptions.ListSubscription(ctx, *request)
+	res, err := r.client.Subscriptions.GetSubscriptionByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

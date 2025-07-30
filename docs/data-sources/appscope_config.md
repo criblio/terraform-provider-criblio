@@ -15,6 +15,7 @@ AppscopeConfig DataSource
 ```terraform
 data "criblio_appscope_config" "my_appscopeconfig" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -24,12 +25,12 @@ data "criblio_appscope_config" "my_appscopeconfig" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `config` (Attributes) (see [below for nested schema](#nestedatt--config))
 - `description` (String)
-- `id` (String) The ID of this resource.
 - `lib` (String)
 - `tags` (String)
 

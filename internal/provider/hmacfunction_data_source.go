@@ -62,7 +62,8 @@ func (r *HmacFunctionDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed: true,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"lib": schema.StringAttribute{
 				Computed: true,
@@ -116,13 +117,13 @@ func (r *HmacFunctionDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListHmacFunctionRequest(ctx)
+	request, requestDiags := data.ToOperationsGetHmacFunctionByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.HmacFunctions.ListHmacFunction(ctx, *request)
+	res, err := r.client.HmacFunctions.GetHmacFunctionByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

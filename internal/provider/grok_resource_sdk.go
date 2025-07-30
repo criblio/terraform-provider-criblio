@@ -59,13 +59,17 @@ func (r *GrokResourceModel) ToOperationsDeleteGrokFileByIDRequest(ctx context.Co
 	return &out, diags
 }
 
-func (r *GrokResourceModel) ToOperationsListGrokFileRequest(ctx context.Context) (*operations.ListGrokFileRequest, diag.Diagnostics) {
+func (r *GrokResourceModel) ToOperationsGetGrokFileByIDRequest(ctx context.Context) (*operations.GetGrokFileByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListGrokFileRequest{
+	out := operations.GetGrokFileByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

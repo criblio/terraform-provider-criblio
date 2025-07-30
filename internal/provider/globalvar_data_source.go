@@ -6,10 +6,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -34,7 +37,6 @@ type GlobalVarDataSourceModel struct {
 	Tags        types.String `tfsdk:"tags"`
 	Type        types.String `tfsdk:"type"`
 	Value       types.String `tfsdk:"value"`
-	With        types.String `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
 }
 
 // Metadata returns the data source type name.
@@ -57,8 +59,11 @@ func (r *GlobalVarDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Global variable name.`,
+				Required:    true,
+				Description: `Unique ID to GET`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
+				},
 			},
 			"lib": schema.StringAttribute{
 				Computed: true,
@@ -74,10 +79,6 @@ func (r *GlobalVarDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			"value": schema.StringAttribute{
 				Computed:    true,
 				Description: `Value of variable`,
-			},
-			"with": schema.StringAttribute{
-				Optional:    true,
-				Description: `Pass "refs" to include references to fields the variable is used in`,
 			},
 		},
 	}
@@ -121,13 +122,13 @@ func (r *GlobalVarDataSource) Read(ctx context.Context, req datasource.ReadReque
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetGlobalVariableRequest(ctx)
+	request, requestDiags := data.ToOperationsGetGlobalVariableByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.GlobalVariables.GetGlobalVariable(ctx, *request)
+	res, err := r.client.GlobalVariables.GetGlobalVariableByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

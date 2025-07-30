@@ -29,6 +29,7 @@ type PackDestinationDataSource struct {
 // PackDestinationDataSourceModel describes the data model.
 type PackDestinationDataSourceModel struct {
 	GroupID types.String `tfsdk:"group_id"`
+	ID      types.String `tfsdk:"id"`
 	Pack    types.String `tfsdk:"pack"`
 }
 
@@ -46,6 +47,10 @@ func (r *PackDestinationDataSource) Schema(ctx context.Context, req datasource.S
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"pack": schema.StringAttribute{
 				Required: true,
@@ -92,13 +97,13 @@ func (r *PackDestinationDataSource) Read(ctx context.Context, req datasource.Rea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListPackOutputRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPackOutputByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Outputs.ListPackOutput(ctx, *request)
+	res, err := r.client.Outputs.GetPackOutputByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -118,7 +123,7 @@ func (r *PackDestinationDataSource) Read(ctx context.Context, req datasource.Rea
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListPackOutputResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPackOutputByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

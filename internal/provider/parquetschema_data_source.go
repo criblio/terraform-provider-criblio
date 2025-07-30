@@ -52,7 +52,8 @@ func (r *ParquetSchemaDataSource) Schema(ctx context.Context, req datasource.Sch
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,
@@ -100,13 +101,13 @@ func (r *ParquetSchemaDataSource) Read(ctx context.Context, req datasource.ReadR
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListSchemaRequest(ctx)
+	request, requestDiags := data.ToOperationsGetSchemaByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Parquetschemas.ListSchema(ctx, *request)
+	res, err := r.client.Parquetschemas.GetSchemaByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

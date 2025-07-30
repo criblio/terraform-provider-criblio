@@ -61,13 +61,17 @@ func (r *RegexResourceModel) ToOperationsDeleteRegexLibEntryByIDRequest(ctx cont
 	return &out, diags
 }
 
-func (r *RegexResourceModel) ToOperationsListRegexLibEntryRequest(ctx context.Context) (*operations.ListRegexLibEntryRequest, diag.Diagnostics) {
+func (r *RegexResourceModel) ToOperationsGetRegexLibEntryByIDRequest(ctx context.Context) (*operations.GetRegexLibEntryByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListRegexLibEntryRequest{
+	out := operations.GetRegexLibEntryByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

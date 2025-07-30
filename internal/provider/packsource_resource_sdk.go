@@ -285,18 +285,10 @@ func (r *PackSourceResourceModel) ToOperationsDeleteSystemInputsByPackRequest(ct
 	var id string
 	id = r.ID.ValueString()
 
-	input, inputDiags := r.ToSharedInput(ctx)
-	diags.Append(inputDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
 	out := operations.DeleteSystemInputsByPackRequest{
 		Pack:    pack,
 		GroupID: groupID,
 		ID:      id,
-		Input:   *input,
 	}
 
 	return &out, diags

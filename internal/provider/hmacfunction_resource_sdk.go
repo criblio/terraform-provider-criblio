@@ -65,13 +65,17 @@ func (r *HmacFunctionResourceModel) ToOperationsDeleteHmacFunctionByIDRequest(ct
 	return &out, diags
 }
 
-func (r *HmacFunctionResourceModel) ToOperationsListHmacFunctionRequest(ctx context.Context) (*operations.ListHmacFunctionRequest, diag.Diagnostics) {
+func (r *HmacFunctionResourceModel) ToOperationsGetHmacFunctionByIDRequest(ctx context.Context) (*operations.GetHmacFunctionByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListHmacFunctionRequest{
+	out := operations.GetHmacFunctionByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

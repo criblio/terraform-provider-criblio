@@ -20,13 +20,17 @@ func (r *ParquetSchemaDataSourceModel) RefreshFromSharedSchemaLibEntry(ctx conte
 	return diags
 }
 
-func (r *ParquetSchemaDataSourceModel) ToOperationsListSchemaRequest(ctx context.Context) (*operations.ListSchemaRequest, diag.Diagnostics) {
+func (r *ParquetSchemaDataSourceModel) ToOperationsGetSchemaByIDRequest(ctx context.Context) (*operations.GetSchemaByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListSchemaRequest{
+	out := operations.GetSchemaByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

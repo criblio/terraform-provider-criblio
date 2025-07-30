@@ -11,6 +11,7 @@ type CreatePackOutputRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	Pack    string `pathParam:"style=simple,explode=false,name=pack"`
+	ID      string `queryParam:"style=form,explode=true,name=id"`
 	// New Output object
 	Output shared.Output `request:"mediaType=application/json"`
 }
@@ -27,6 +28,13 @@ func (o *CreatePackOutputRequest) GetPack() string {
 		return ""
 	}
 	return o.Pack
+}
+
+func (o *CreatePackOutputRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }
 
 func (o *CreatePackOutputRequest) GetOutput() shared.Output {

@@ -15,6 +15,7 @@ Regex DataSource
 ```terraform
 data "criblio_regex" "my_regex" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -24,11 +25,11 @@ data "criblio_regex" "my_regex" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `description` (String)
-- `id` (String) The ID of this resource.
 - `lib` (String)
 - `regex` (String)
 - `sample_data` (String) Optionally, paste in sample data to match against this regex

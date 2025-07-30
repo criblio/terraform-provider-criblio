@@ -39,5 +39,5 @@ resource "criblio_parquet_schema" "my_parquetschema" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_parquet_schema.my_criblio_parquet_schema ""
+terraform import criblio_parquet_schema.my_criblio_parquet_schema '{"group_id": "", "id": ""}'
 ```

@@ -31,7 +31,7 @@ type DatabaseConnectionDataSourceModel struct {
 	ConfigObj         types.String  `tfsdk:"config_obj"`
 	ConnectionString  types.String  `tfsdk:"connection_string"`
 	ConnectionTimeout types.Float64 `tfsdk:"connection_timeout"`
-	DatabaseType      types.String  `queryParam:"style=form,explode=true,name=databaseType" tfsdk:"database_type"`
+	DatabaseType      types.String  `tfsdk:"database_type"`
 	Description       types.String  `tfsdk:"description"`
 	GroupID           types.String  `tfsdk:"group_id"`
 	ID                types.String  `tfsdk:"id"`
@@ -65,9 +65,7 @@ func (r *DatabaseConnectionDataSource) Schema(ctx context.Context, req datasourc
 				Computed: true,
 			},
 			"database_type": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `type of database connection`,
+				Computed: true,
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
@@ -77,7 +75,8 @@ func (r *DatabaseConnectionDataSource) Schema(ctx context.Context, req datasourc
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"password": schema.StringAttribute{
 				Computed: true,
@@ -133,13 +132,13 @@ func (r *DatabaseConnectionDataSource) Read(ctx context.Context, req datasource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetDatabaseConnectionConfigRequest(ctx)
+	request, requestDiags := data.ToOperationsGetDatabaseConnectionConfigByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DatabaseConnections.GetDatabaseConnectionConfig(ctx, *request)
+	res, err := r.client.DatabaseConnections.GetDatabaseConnectionConfigByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

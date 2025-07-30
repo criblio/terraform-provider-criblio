@@ -16,9 +16,9 @@ func TestPackBreakers(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_pack.my_pack_breakers", "id", "pack-breakers"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack_breakers", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack_breakers", "description", "Pack breakers"),
+						resource.TestCheckResourceAttr("criblio_pack.breakers_pack", "id", "pack-breakers"),
+						resource.TestCheckResourceAttr("criblio_pack.breakers_pack", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_pack.breakers_pack", "description", "Pack breakers"),
 						resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "id", "test_packbreakers"),
 						resource.TestCheckResourceAttr("criblio_pack_breakers.my_packbreakers", "group_id", "default"),
 					),

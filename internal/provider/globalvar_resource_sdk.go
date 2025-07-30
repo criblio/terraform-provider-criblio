@@ -65,13 +65,17 @@ func (r *GlobalVarResourceModel) ToOperationsDeleteGlobalVariableByIDRequest(ctx
 	return &out, diags
 }
 
-func (r *GlobalVarResourceModel) ToOperationsGetGlobalVariableRequest(ctx context.Context) (*operations.GetGlobalVariableRequest, diag.Diagnostics) {
+func (r *GlobalVarResourceModel) ToOperationsGetGlobalVariableByIDRequest(ctx context.Context) (*operations.GetGlobalVariableByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetGlobalVariableRequest{
+	out := operations.GetGlobalVariableByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

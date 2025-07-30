@@ -14,8 +14,8 @@ DatabaseConnection DataSource
 
 ```terraform
 data "criblio_database_connection" "my_databaseconnection" {
-  database_type = "...my_database_type..."
-  group_id      = "...my_group_id..."
+  group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -25,10 +25,7 @@ data "criblio_database_connection" "my_databaseconnection" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-
-### Optional
-
-- `database_type` (String) type of database connection
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
@@ -36,8 +33,8 @@ data "criblio_database_connection" "my_databaseconnection" {
 - `config_obj` (String)
 - `connection_string` (String)
 - `connection_timeout` (Number)
+- `database_type` (String)
 - `description` (String)
-- `id` (String) The ID of this resource.
 - `password` (String)
 - `request_timeout` (Number)
 - `tags` (String)

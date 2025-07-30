@@ -58,13 +58,17 @@ func (r *ParquetSchemaResourceModel) ToOperationsDeleteSchemaByIDRequest(ctx con
 	return &out, diags
 }
 
-func (r *ParquetSchemaResourceModel) ToOperationsListSchemaRequest(ctx context.Context) (*operations.ListSchemaRequest, diag.Diagnostics) {
+func (r *ParquetSchemaResourceModel) ToOperationsGetSchemaByIDRequest(ctx context.Context) (*operations.GetSchemaByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListSchemaRequest{
+	out := operations.GetSchemaByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

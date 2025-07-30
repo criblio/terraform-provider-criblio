@@ -19,7 +19,7 @@ func (r *PackDestinationResourceModel) RefreshFromOperationsCreatePackOutputResp
 	return diags
 }
 
-func (r *PackDestinationResourceModel) RefreshFromOperationsListPackOutputResponseBody(ctx context.Context, resp *operations.ListPackOutputResponseBody) diag.Diagnostics {
+func (r *PackDestinationResourceModel) RefreshFromOperationsGetPackOutputByIDResponseBody(ctx context.Context, resp *operations.GetPackOutputByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -46,6 +46,9 @@ func (r *PackDestinationResourceModel) ToOperationsCreatePackOutputRequest(ctx c
 	var pack string
 	pack = r.Pack.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	output, outputDiags := r.ToSharedOutput(ctx)
 	diags.Append(outputDiags...)
 
@@ -56,6 +59,7 @@ func (r *PackDestinationResourceModel) ToOperationsCreatePackOutputRequest(ctx c
 	out := operations.CreatePackOutputRequest{
 		GroupID: groupID,
 		Pack:    pack,
+		ID:      id,
 		Output:  *output,
 	}
 
@@ -83,8 +87,11 @@ func (r *PackDestinationResourceModel) ToOperationsDeletePackOutputByIDRequest(c
 	return &out, diags
 }
 
-func (r *PackDestinationResourceModel) ToOperationsListPackOutputRequest(ctx context.Context) (*operations.ListPackOutputRequest, diag.Diagnostics) {
+func (r *PackDestinationResourceModel) ToOperationsGetPackOutputByIDRequest(ctx context.Context) (*operations.GetPackOutputByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -92,7 +99,8 @@ func (r *PackDestinationResourceModel) ToOperationsListPackOutputRequest(ctx con
 	var pack string
 	pack = r.Pack.ValueString()
 
-	out := operations.ListPackOutputRequest{
+	out := operations.GetPackOutputByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 		Pack:    pack,
 	}

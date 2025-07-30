@@ -429,13 +429,17 @@ func (r *AppscopeConfigDataSourceModel) RefreshFromSharedAppscopeLibEntry(ctx co
 	return diags
 }
 
-func (r *AppscopeConfigDataSourceModel) ToOperationsListAppscopeLibEntryRequest(ctx context.Context) (*operations.ListAppscopeLibEntryRequest, diag.Diagnostics) {
+func (r *AppscopeConfigDataSourceModel) ToOperationsGetAppscopeLibEntryByIDRequest(ctx context.Context) (*operations.GetAppscopeLibEntryByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListAppscopeLibEntryRequest{
+	out := operations.GetAppscopeLibEntryByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

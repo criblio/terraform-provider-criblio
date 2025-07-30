@@ -210,6 +210,7 @@ terraform plan
 * [criblio_pack_destination](docs/data-sources/pack_destination.md)
 * [criblio_pack_lookups](docs/data-sources/pack_lookups.md)
 * [criblio_pack_pipeline](docs/data-sources/pack_pipeline.md)
+* [criblio_pack_routes](docs/data-sources/pack_routes.md)
 * [criblio_pack_source](docs/data-sources/pack_source.md)
 * [criblio_pack_vars](docs/data-sources/pack_vars.md)
 * [criblio_parquet_schema](docs/data-sources/parquet_schema.md)

@@ -467,13 +467,17 @@ func (r *AppscopeConfigResourceModel) ToOperationsDeleteAppscopeLibEntryByIDRequ
 	return &out, diags
 }
 
-func (r *AppscopeConfigResourceModel) ToOperationsListAppscopeLibEntryRequest(ctx context.Context) (*operations.ListAppscopeLibEntryRequest, diag.Diagnostics) {
+func (r *AppscopeConfigResourceModel) ToOperationsGetAppscopeLibEntryByIDRequest(ctx context.Context) (*operations.GetAppscopeLibEntryByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListAppscopeLibEntryRequest{
+	out := operations.GetAppscopeLibEntryByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

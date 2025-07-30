@@ -15,6 +15,7 @@ PackDestination DataSource
 ```terraform
 data "criblio_pack_destination" "my_packdestination" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
   pack     = "...my_pack..."
 }
 ```
@@ -25,4 +26,5 @@ data "criblio_pack_destination" "my_packdestination" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 - `pack` (String)

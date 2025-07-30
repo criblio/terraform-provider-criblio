@@ -55,7 +55,8 @@ func (r *RegexDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"lib": schema.StringAttribute{
 				Computed: true,
@@ -112,13 +113,13 @@ func (r *RegexDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListRegexLibEntryRequest(ctx)
+	request, requestDiags := data.ToOperationsGetRegexLibEntryByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Regexes.ListRegexLibEntry(ctx, *request)
+	res, err := r.client.Regexes.GetRegexLibEntryByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

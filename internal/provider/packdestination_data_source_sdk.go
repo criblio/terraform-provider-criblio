@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *PackDestinationDataSourceModel) RefreshFromOperationsListPackOutputResponseBody(ctx context.Context, resp *operations.ListPackOutputResponseBody) diag.Diagnostics {
+func (r *PackDestinationDataSourceModel) RefreshFromOperationsGetPackOutputByIDResponseBody(ctx context.Context, resp *operations.GetPackOutputByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -17,8 +17,11 @@ func (r *PackDestinationDataSourceModel) RefreshFromOperationsListPackOutputResp
 	return diags
 }
 
-func (r *PackDestinationDataSourceModel) ToOperationsListPackOutputRequest(ctx context.Context) (*operations.ListPackOutputRequest, diag.Diagnostics) {
+func (r *PackDestinationDataSourceModel) ToOperationsGetPackOutputByIDRequest(ctx context.Context) (*operations.GetPackOutputByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -26,7 +29,8 @@ func (r *PackDestinationDataSourceModel) ToOperationsListPackOutputRequest(ctx c
 	var pack string
 	pack = r.Pack.ValueString()
 
-	out := operations.ListPackOutputRequest{
+	out := operations.GetPackOutputByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 		Pack:    pack,
 	}

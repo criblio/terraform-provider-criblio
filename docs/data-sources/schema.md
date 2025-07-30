@@ -15,6 +15,7 @@ Schema DataSource
 ```terraform
 data "criblio_schema" "my_schema" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -24,9 +25,9 @@ data "criblio_schema" "my_schema" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `description` (String)
-- `id` (String) The ID of this resource.
 - `schema` (String) JSON schema matching standards of draft version 2019-09

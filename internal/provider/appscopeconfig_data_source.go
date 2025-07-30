@@ -696,7 +696,8 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"lib": schema.StringAttribute{
 				Computed: true,
@@ -746,13 +747,13 @@ func (r *AppscopeConfigDataSource) Read(ctx context.Context, req datasource.Read
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListAppscopeLibEntryRequest(ctx)
+	request, requestDiags := data.ToOperationsGetAppscopeLibEntryByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.AppscopeConfigs.ListAppscopeLibEntry(ctx, *request)
+	res, err := r.client.AppscopeConfigs.GetAppscopeLibEntryByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

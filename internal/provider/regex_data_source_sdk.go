@@ -23,13 +23,17 @@ func (r *RegexDataSourceModel) RefreshFromSharedRegexLibEntry(ctx context.Contex
 	return diags
 }
 
-func (r *RegexDataSourceModel) ToOperationsListRegexLibEntryRequest(ctx context.Context) (*operations.ListRegexLibEntryRequest, diag.Diagnostics) {
+func (r *RegexDataSourceModel) ToOperationsGetRegexLibEntryByIDRequest(ctx context.Context) (*operations.GetRegexLibEntryByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListRegexLibEntryRequest{
+	out := operations.GetRegexLibEntryByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

@@ -13,8 +13,7 @@ type DeleteSystemInputsByPackRequest struct {
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to DELETE for pack source
-	ID    string       `pathParam:"style=simple,explode=false,name=id"`
-	Input shared.Input `request:"mediaType=application/json"`
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
 func (o *DeleteSystemInputsByPackRequest) GetPack() string {
@@ -36,13 +35,6 @@ func (o *DeleteSystemInputsByPackRequest) GetID() string {
 		return ""
 	}
 	return o.ID
-}
-
-func (o *DeleteSystemInputsByPackRequest) GetInput() shared.Input {
-	if o == nil {
-		return shared.Input{}
-	}
-	return o.Input
 }
 
 // DeleteSystemInputsByPackResponseBody - a list of Pipeline objects

@@ -15,6 +15,7 @@ Grok DataSource
 ```terraform
 data "criblio_grok" "my_grok" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -24,10 +25,10 @@ data "criblio_grok" "my_grok" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `content` (String)
-- `id` (String) The ID of this resource.
 - `size` (Number)
 - `tags` (String)

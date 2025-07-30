@@ -62,7 +62,8 @@ func (r *ProjectDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"subscriptions": schema.ListAttribute{
 				Computed:    true,
@@ -110,13 +111,13 @@ func (r *ProjectDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListProjectRequest(ctx)
+	request, requestDiags := data.ToOperationsGetProjectByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Projects.ListProject(ctx, *request)
+	res, err := r.client.Projects.GetProjectByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

@@ -49,5 +49,5 @@ resource "criblio_hmac_function" "my_hmacfunction" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_hmac_function.my_criblio_hmac_function ""
+terraform import criblio_hmac_function.my_criblio_hmac_function '{"group_id": "", "id": ""}'
 ```

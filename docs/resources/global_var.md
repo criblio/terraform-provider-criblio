@@ -45,5 +45,5 @@ resource "criblio_global_var" "my_globalvar" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_global_var.my_criblio_global_var ""
+terraform import criblio_global_var.my_criblio_global_var '{"group_id": "", "id": ""}'
 ```

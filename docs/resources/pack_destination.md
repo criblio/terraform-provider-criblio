@@ -3906,7 +3906,7 @@ resource "criblio_pack_destination" "my_packdestination" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to DELETE
+- `id` (String) Unique ID to PATCH
 - `pack` (String)
 
 ### Optional
@@ -9404,5 +9404,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_pack_destination.my_criblio_pack_destination '{"group_id": "", "pack": ""}'
+terraform import criblio_pack_destination.my_criblio_pack_destination '{"group_id": "", "id": "", "pack": ""}'
 ```

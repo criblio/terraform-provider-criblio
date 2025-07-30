@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 6bc5108f555867de15dbb63361aba259
+  docChecksum: 742d93dd50d23eb9b042ff8ae8b2cbfa
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.592.1
   generationVersion: 2.667.0
@@ -46,6 +46,7 @@ generatedFiles:
   - examples/data-sources/criblio_pack_destination/data-source.tf
   - examples/data-sources/criblio_pack_lookups/data-source.tf
   - examples/data-sources/criblio_pack_pipeline/data-source.tf
+  - examples/data-sources/criblio_pack_routes/data-source.tf
   - examples/data-sources/criblio_pack_source/data-source.tf
   - examples/data-sources/criblio_pack_vars/data-source.tf
   - examples/data-sources/criblio_parquet_schema/data-source.tf
@@ -97,6 +98,7 @@ generatedFiles:
   - examples/resources/criblio_pack_lookups/resource.tf
   - examples/resources/criblio_pack_pipeline/import.sh
   - examples/resources/criblio_pack_pipeline/resource.tf
+  - examples/resources/criblio_pack_routes/import.sh
   - examples/resources/criblio_pack_routes/resource.tf
   - examples/resources/criblio_pack_source/import.sh
   - examples/resources/criblio_pack_source/resource.tf
@@ -212,6 +214,8 @@ generatedFiles:
   - internal/provider/packpipeline_data_source_sdk.go
   - internal/provider/packpipeline_resource.go
   - internal/provider/packpipeline_resource_sdk.go
+  - internal/provider/packroutes_data_source.go
+  - internal/provider/packroutes_data_source_sdk.go
   - internal/provider/packroutes_resource.go
   - internal/provider/packroutes_resource_sdk.go
   - internal/provider/packsource_data_source.go
@@ -1487,6 +1491,7 @@ generatedFiles:
   - internal/sdk/models/operations/getrestsecretbyid.go
   - internal/sdk/models/operations/getrolebyid.go
   - internal/sdk/models/operations/getroutesbyid.go
+  - internal/sdk/models/operations/getroutesbypack.go
   - internal/sdk/models/operations/getsavedjobbyid.go
   - internal/sdk/models/operations/getsavedquerybyid.go
   - internal/sdk/models/operations/getschemabyid.go
@@ -7197,6 +7202,8 @@ examples:
         path:
           groupId: "<id>"
           pack: "<value>"
+        query:
+          id: "<id>"
       requestBody:
         application/json: {"systemFields": ["cribl_pipe"], "streamtags": [], "brokers": ["<value 1>", "<value 2>", "<value 3>"], "topic": "<value>", "ack": 1, "format": "json", "compression": "gzip", "maxRecordSizeKB": 768, "flushEventCount": 1000, "flushPeriodSec": 1, "connectionTimeout": 10000, "requestTimeout": 60000, "maxRetries": 5, "maxBackOff": 30000, "initialBackoff": 300, "backoffRate": 2, "authenticationTimeout": 10000, "reauthenticationThreshold": 10000, "onBackpressure": "block", "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:

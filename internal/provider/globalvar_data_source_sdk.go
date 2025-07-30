@@ -27,20 +27,17 @@ func (r *GlobalVarDataSourceModel) RefreshFromSharedGlobalVar(ctx context.Contex
 	return diags
 }
 
-func (r *GlobalVarDataSourceModel) ToOperationsGetGlobalVariableRequest(ctx context.Context) (*operations.GetGlobalVariableRequest, diag.Diagnostics) {
+func (r *GlobalVarDataSourceModel) ToOperationsGetGlobalVariableByIDRequest(ctx context.Context) (*operations.GetGlobalVariableByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	with := new(string)
-	if !r.With.IsUnknown() && !r.With.IsNull() {
-		*with = r.With.ValueString()
-	} else {
-		with = nil
-	}
+	var id string
+	id = r.ID.ValueString()
+
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetGlobalVariableRequest{
-		With:    with,
+	out := operations.GetGlobalVariableByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

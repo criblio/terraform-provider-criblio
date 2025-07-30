@@ -66,21 +66,18 @@ func (r *DatabaseConnectionResourceModel) ToOperationsDeleteDatabaseConnectionCo
 	return &out, diags
 }
 
-func (r *DatabaseConnectionResourceModel) ToOperationsGetDatabaseConnectionConfigRequest(ctx context.Context) (*operations.GetDatabaseConnectionConfigRequest, diag.Diagnostics) {
+func (r *DatabaseConnectionResourceModel) ToOperationsGetDatabaseConnectionConfigByIDRequest(ctx context.Context) (*operations.GetDatabaseConnectionConfigByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	databaseType := new(string)
-	if !r.DatabaseType.IsUnknown() && !r.DatabaseType.IsNull() {
-		*databaseType = r.DatabaseType.ValueString()
-	} else {
-		databaseType = nil
-	}
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetDatabaseConnectionConfigRequest{
-		DatabaseType: databaseType,
-		GroupID:      groupID,
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetDatabaseConnectionConfigByIDRequest{
+		GroupID: groupID,
+		ID:      id,
 	}
 
 	return &out, diags

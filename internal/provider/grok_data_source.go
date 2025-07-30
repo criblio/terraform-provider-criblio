@@ -53,7 +53,8 @@ func (r *GrokDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"size": schema.Float64Attribute{
 				Computed: true,
@@ -103,13 +104,13 @@ func (r *GrokDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListGrokFileRequest(ctx)
+	request, requestDiags := data.ToOperationsGetGrokFileByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Grokfiles.ListGrokFile(ctx, *request)
+	res, err := r.client.Grokfiles.GetGrokFileByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

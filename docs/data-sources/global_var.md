@@ -15,7 +15,7 @@ GlobalVar DataSource
 ```terraform
 data "criblio_global_var" "my_globalvar" {
   group_id = "...my_group_id..."
-  with     = "...my_with..."
+  id       = "...my_id..."
 }
 ```
 
@@ -25,15 +25,11 @@ data "criblio_global_var" "my_globalvar" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-
-### Optional
-
-- `with` (String) Pass "refs" to include references to fields the variable is used in
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `description` (String) Brief description of this variable. Optional.
-- `id` (String) Global variable name.
 - `lib` (String)
 - `tags` (String) One or more tags related to this variable. Optional.
 - `type` (String) Type of variable

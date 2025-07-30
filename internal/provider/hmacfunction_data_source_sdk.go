@@ -27,13 +27,17 @@ func (r *HmacFunctionDataSourceModel) RefreshFromSharedHmacFunction(ctx context.
 	return diags
 }
 
-func (r *HmacFunctionDataSourceModel) ToOperationsListHmacFunctionRequest(ctx context.Context) (*operations.ListHmacFunctionRequest, diag.Diagnostics) {
+func (r *HmacFunctionDataSourceModel) ToOperationsGetHmacFunctionByIDRequest(ctx context.Context) (*operations.GetHmacFunctionByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListHmacFunctionRequest{
+	out := operations.GetHmacFunctionByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

@@ -224,6 +224,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewPackDestinationDataSource,
 		NewPackLookupsDataSource,
 		NewPackPipelineDataSource,
+		NewPackRoutesDataSource,
 		NewPackSourceDataSource,
 		NewPackVarsDataSource,
 		NewParquetSchemaDataSource,

@@ -20,13 +20,17 @@ func (r *SchemaDataSourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Cont
 	return diags
 }
 
-func (r *SchemaDataSourceModel) ToOperationsListLibSchemasRequest(ctx context.Context) (*operations.ListLibSchemasRequest, diag.Diagnostics) {
+func (r *SchemaDataSourceModel) ToOperationsGetLibSchemasByIDRequest(ctx context.Context) (*operations.GetLibSchemasByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListLibSchemasRequest{
+	out := operations.GetLibSchemasByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

@@ -39,5 +39,5 @@ resource "criblio_schema" "my_schema" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import criblio_schema.my_criblio_schema ""
+terraform import criblio_schema.my_criblio_schema '{"group_id": "", "id": ""}'
 ```

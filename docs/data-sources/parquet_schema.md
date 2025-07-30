@@ -15,6 +15,7 @@ ParquetSchema DataSource
 ```terraform
 data "criblio_parquet_schema" "my_parquetschema" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -24,9 +25,9 @@ data "criblio_parquet_schema" "my_parquetschema" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `description` (String)
-- `id` (String) The ID of this resource.
 - `schema` (String) JSON schema matching standards of draft version 2019-09

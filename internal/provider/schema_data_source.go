@@ -52,7 +52,8 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,
@@ -100,13 +101,13 @@ func (r *SchemaDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListLibSchemasRequest(ctx)
+	request, requestDiags := data.ToOperationsGetLibSchemasByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Schemas.ListLibSchemas(ctx, *request)
+	res, err := r.client.Schemas.GetLibSchemasByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

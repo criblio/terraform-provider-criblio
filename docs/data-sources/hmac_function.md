@@ -15,6 +15,7 @@ HmacFunction DataSource
 ```terraform
 data "criblio_hmac_function" "my_hmacfunction" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -24,13 +25,13 @@ data "criblio_hmac_function" "my_hmacfunction" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `description` (String)
 - `header_expression` (String)
 - `header_name` (String)
-- `id` (String) The ID of this resource.
 - `lib` (String)
 - `string_builders` (List of String)
 - `string_delim` (String)

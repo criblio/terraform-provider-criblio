@@ -47,7 +47,7 @@ type PackDestinationResource struct {
 // PackDestinationResourceModel describes the resource data model.
 type PackDestinationResourceModel struct {
 	GroupID                      types.String                          `tfsdk:"group_id"`
-	ID                           types.String                          `tfsdk:"id"`
+	ID                           types.String                          `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
 	OutputAzureBlob              *tfTypes.OutputAzureBlob              `queryParam:"inline" tfsdk:"output_azure_blob" tfPlanOnly:"true"`
 	OutputAzureDataExplorer      *tfTypes.OutputAzureDataExplorer      `queryParam:"inline" tfsdk:"output_azure_data_explorer" tfPlanOnly:"true"`
 	OutputAzureEventhub          *tfTypes.OutputAzureEventhub          `queryParam:"inline" tfsdk:"output_azure_eventhub" tfPlanOnly:"true"`
@@ -128,7 +128,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to DELETE`,
+				Description: `Unique ID to PATCH`,
 			},
 			"output_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
@@ -26351,13 +26351,13 @@ func (r *PackDestinationResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListPackOutputRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPackOutputByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Outputs.ListPackOutput(ctx, *request)
+	res, err := r.client.Outputs.GetPackOutputByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -26381,7 +26381,7 @@ func (r *PackDestinationResource) Read(ctx context.Context, req resource.ReadReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListPackOutputResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPackOutputByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -26432,43 +26432,6 @@ func (r *PackDestinationResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePackOutputByIDResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsListPackOutputRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Outputs.ListPackOutput(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListPackOutputResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -26532,11 +26495,12 @@ func (r *PackDestinationResource) ImportState(ctx context.Context, req resource.
 	dec.DisallowUnknownFields()
 	var data struct {
 		GroupID string `json:"group_id"`
+		ID      string `json:"id"`
 		Pack    string `json:"pack"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "pack": ""}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "id": "", "pack": ""}': `+err.Error())
 		return
 	}
 
@@ -26545,6 +26509,11 @@ func (r *PackDestinationResource) ImportState(ctx context.Context, req resource.
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	if len(data.ID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Pack) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return

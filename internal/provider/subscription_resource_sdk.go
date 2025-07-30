@@ -89,42 +89,18 @@ func (r *SubscriptionResourceModel) ToOperationsDeleteSubscriptionByIDRequest(ct
 	return &out, diags
 }
 
-func (r *SubscriptionResourceModel) ToOperationsListSubscriptionRequest(ctx context.Context) (*operations.ListSubscriptionRequest, diag.Diagnostics) {
+func (r *SubscriptionResourceModel) ToOperationsGetSubscriptionByIDRequest(ctx context.Context) (*operations.GetSubscriptionByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	disabled := new(bool)
-	if !r.Disabled.IsUnknown() && !r.Disabled.IsNull() {
-		*disabled = r.Disabled.ValueBool()
-	} else {
-		disabled = nil
-	}
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	filter := new(string)
-	if !r.Filter.IsUnknown() && !r.Filter.IsNull() {
-		*filter = r.Filter.ValueString()
-	} else {
-		filter = nil
-	}
-	pipeline := new(string)
-	if !r.Pipeline.IsUnknown() && !r.Pipeline.IsNull() {
-		*pipeline = r.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
-	out := operations.ListSubscriptionRequest{
-		GroupID:     groupID,
-		Disabled:    disabled,
-		Description: description,
-		Filter:      filter,
-		Pipeline:    pipeline,
+	out := operations.GetSubscriptionByIDRequest{
+		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags
