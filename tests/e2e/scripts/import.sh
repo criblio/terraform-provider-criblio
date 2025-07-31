@@ -1,11 +1,7 @@
 #!/bin/bash
 
-init_imports() {
 terraform import -no-color criblio_group.my_edge_fleet "my-edge-fleet" 
 echo
-} 
-
-test_imports() {
 terraform import -no-color criblio_group.syslog_worker_group "syslog-workers" 
 echo
 terraform import -no-color criblio_subscription.my_subscription '{"group_id": "default", "id": "my_subscription"}'
@@ -54,29 +50,17 @@ terraform import -no-color criblio_pack.syslog_pack '{"group_id": "syslog-worker
 echo
 terraform import -no-color criblio_pack_breakers.my_packbreakers '{"group_id": "default", "pack": "pack-breakers", "id": "test_packbreakers"}'
 echo
-terraform import -no-color criblio_destination.cribl_lake "default"
+terraform import -no-color criblio_destination.cribl_lake '{"group_id": "syslog-workers", "id": "cribl-lake-2"}'
 echo
-terraform import -no-color criblio_source.syslog_source '{"groupId": "syslog-workers", "id": "syslog-input"}'
+terraform import -no-color criblio_source.syslog_source '{"group_id": "syslog-workers", "id": "syslog-input"}'
 echo
 terraform import -no-color criblio_event_breaker_ruleset.my_eventbreakerruleset '{"group_id": "default", "id": "test_eventbreakerruleset"}'
 echo
 terraform import -no-color criblio_pack_source.my_packsource '{"group_id": "default", "pack": "pack-with-source", "id": "my_id"}'
 echo
-terraform import -no-color criblio_pack_destination.my_packdest '{"group_id": "default", "pack": "pack-with-dest", "id": "test"}' #NOT RIGHT< NEEDS ID
+terraform import -no-color criblio_pack_destination.my_packdest '{"group_id": "default", "pack": "pack-with-dest", "id": "test"}' 
 echo
-terraform import -no-color criblio_pack_routes.my_packroutes '{"group_id": "default", "pack": "pack-with-routes"}' #NOT IMPLEMENTED
+terraform import -no-color criblio_pack_routes.my_packroutes '{"group_id": "default", "pack": "pack-with-routes"}' 
 echo
 terraform import -no-color criblio_pack_pipeline.my_packpipeline '{"group_id": "default", "pack": "pack-with-pipeline"}'
 echo
-}
-
-if [[ $1 == "init" ]]; then 
-    init_imports 2> /dev/null
-    exit 0
-elif [[ $1 == "refresh_state" ]]; then
-    init_imports 2> /dev/null
-    test_imports 2> /dev/null
-    exit $?
-else
-    echo "Ha ha I need instructions"
-fi

@@ -16,8 +16,6 @@ echo " Done!"
 terraform providers mirror ./local-plugins || true
 terraform init -plugin-dir ./local-plugins
 
-./scripts/import.sh init
-
 terraform apply -auto-approve 
 tfApply=$? 
 
@@ -28,7 +26,7 @@ terraform init -plugin-dir ./local-plugins
 
 #because imports leverage the data sources to read in state files, 
 #this will exersize both import and data functionality
-./scripts/import.sh refresh_state
+./scripts/import.sh 
 
 #make sure we didn't break something
 terraform refresh
