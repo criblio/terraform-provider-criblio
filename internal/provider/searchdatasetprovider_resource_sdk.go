@@ -17,25 +17,17 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 	if resp.APIAwsProvider != nil {
 		r.APIAwsProvider = &tfTypes.APIAwsProvider{}
 		r.APIAwsProvider.AccountConfigs = []tfTypes.AwsAccountConfig{}
-		if len(r.APIAwsProvider.AccountConfigs) > len(resp.APIAwsProvider.AccountConfigs) {
-			r.APIAwsProvider.AccountConfigs = r.APIAwsProvider.AccountConfigs[:len(resp.APIAwsProvider.AccountConfigs)]
-		}
-		for accountConfigsCount, accountConfigsItem := range resp.APIAwsProvider.AccountConfigs {
+
+		for _, accountConfigsItem := range resp.APIAwsProvider.AccountConfigs {
 			var accountConfigs tfTypes.AwsAccountConfig
+
 			accountConfigs.AssumeRoleArn = types.StringPointerValue(accountConfigsItem.AssumeRoleArn)
 			accountConfigs.AssumeRoleExternalID = types.StringPointerValue(accountConfigsItem.AssumeRoleExternalID)
 			accountConfigs.AwsAPIKey = types.StringPointerValue(accountConfigsItem.AwsAPIKey)
 			accountConfigs.AwsSecretKey = types.StringPointerValue(accountConfigsItem.AwsSecretKey)
 			accountConfigs.Name = types.StringValue(accountConfigsItem.Name)
-			if accountConfigsCount+1 > len(r.APIAwsProvider.AccountConfigs) {
-				r.APIAwsProvider.AccountConfigs = append(r.APIAwsProvider.AccountConfigs, accountConfigs)
-			} else {
-				r.APIAwsProvider.AccountConfigs[accountConfigsCount].AssumeRoleArn = accountConfigs.AssumeRoleArn
-				r.APIAwsProvider.AccountConfigs[accountConfigsCount].AssumeRoleExternalID = accountConfigs.AssumeRoleExternalID
-				r.APIAwsProvider.AccountConfigs[accountConfigsCount].AwsAPIKey = accountConfigs.AwsAPIKey
-				r.APIAwsProvider.AccountConfigs[accountConfigsCount].AwsSecretKey = accountConfigs.AwsSecretKey
-				r.APIAwsProvider.AccountConfigs[accountConfigsCount].Name = accountConfigs.Name
-			}
+
+			r.APIAwsProvider.AccountConfigs = append(r.APIAwsProvider.AccountConfigs, accountConfigs)
 		}
 		r.APIAwsProvider.Description = types.StringPointerValue(resp.APIAwsProvider.Description)
 		r.Description = r.APIAwsProvider.Description
@@ -59,23 +51,16 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 	if resp.APIAzureProvider != nil {
 		r.APIAzureProvider = &tfTypes.APIAzureProvider{}
 		r.APIAzureProvider.AccountConfigs = []tfTypes.AzureAccountConfig{}
-		if len(r.APIAzureProvider.AccountConfigs) > len(resp.APIAzureProvider.AccountConfigs) {
-			r.APIAzureProvider.AccountConfigs = r.APIAzureProvider.AccountConfigs[:len(resp.APIAzureProvider.AccountConfigs)]
-		}
-		for accountConfigsCount1, accountConfigsItem1 := range resp.APIAzureProvider.AccountConfigs {
+
+		for _, accountConfigsItem1 := range resp.APIAzureProvider.AccountConfigs {
 			var accountConfigs1 tfTypes.AzureAccountConfig
+
 			accountConfigs1.ClientID = types.StringValue(accountConfigsItem1.ClientID)
 			accountConfigs1.ClientSecret = types.StringValue(accountConfigsItem1.ClientSecret)
 			accountConfigs1.Name = types.StringValue(accountConfigsItem1.Name)
 			accountConfigs1.TenantID = types.StringValue(accountConfigsItem1.TenantID)
-			if accountConfigsCount1+1 > len(r.APIAzureProvider.AccountConfigs) {
-				r.APIAzureProvider.AccountConfigs = append(r.APIAzureProvider.AccountConfigs, accountConfigs1)
-			} else {
-				r.APIAzureProvider.AccountConfigs[accountConfigsCount1].ClientID = accountConfigs1.ClientID
-				r.APIAzureProvider.AccountConfigs[accountConfigsCount1].ClientSecret = accountConfigs1.ClientSecret
-				r.APIAzureProvider.AccountConfigs[accountConfigsCount1].Name = accountConfigs1.Name
-				r.APIAzureProvider.AccountConfigs[accountConfigsCount1].TenantID = accountConfigs1.TenantID
-			}
+
+			r.APIAzureProvider.AccountConfigs = append(r.APIAzureProvider.AccountConfigs, accountConfigs1)
 		}
 		r.APIAzureProvider.Description = types.StringPointerValue(resp.APIAzureProvider.Description)
 		r.Description = r.APIAzureProvider.Description
@@ -99,19 +84,14 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 	if resp.APIGcpProvider != nil {
 		r.APIGcpProvider = &tfTypes.APIGcpProvider{}
 		r.APIGcpProvider.AccountConfigs = []tfTypes.GcpAccountConfig{}
-		if len(r.APIGcpProvider.AccountConfigs) > len(resp.APIGcpProvider.AccountConfigs) {
-			r.APIGcpProvider.AccountConfigs = r.APIGcpProvider.AccountConfigs[:len(resp.APIGcpProvider.AccountConfigs)]
-		}
-		for accountConfigsCount2, accountConfigsItem2 := range resp.APIGcpProvider.AccountConfigs {
+
+		for _, accountConfigsItem2 := range resp.APIGcpProvider.AccountConfigs {
 			var accountConfigs2 tfTypes.GcpAccountConfig
+
 			accountConfigs2.Name = types.StringValue(accountConfigsItem2.Name)
 			accountConfigs2.ServiceAccountCredentials = types.StringValue(accountConfigsItem2.ServiceAccountCredentials)
-			if accountConfigsCount2+1 > len(r.APIGcpProvider.AccountConfigs) {
-				r.APIGcpProvider.AccountConfigs = append(r.APIGcpProvider.AccountConfigs, accountConfigs2)
-			} else {
-				r.APIGcpProvider.AccountConfigs[accountConfigsCount2].Name = accountConfigs2.Name
-				r.APIGcpProvider.AccountConfigs[accountConfigsCount2].ServiceAccountCredentials = accountConfigs2.ServiceAccountCredentials
-			}
+
+			r.APIGcpProvider.AccountConfigs = append(r.APIGcpProvider.AccountConfigs, accountConfigs2)
 		}
 		r.APIGcpProvider.Description = types.StringPointerValue(resp.APIGcpProvider.Description)
 		r.Description = r.APIGcpProvider.Description
@@ -123,21 +103,15 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 	if resp.APIGoogleWorkspaceProvider != nil {
 		r.APIGoogleWorkspaceProvider = &tfTypes.APIGoogleWorkspaceProvider{}
 		r.APIGoogleWorkspaceProvider.AccountConfigs = []tfTypes.GoogleWorkspaceAccountConfig{}
-		if len(r.APIGoogleWorkspaceProvider.AccountConfigs) > len(resp.APIGoogleWorkspaceProvider.AccountConfigs) {
-			r.APIGoogleWorkspaceProvider.AccountConfigs = r.APIGoogleWorkspaceProvider.AccountConfigs[:len(resp.APIGoogleWorkspaceProvider.AccountConfigs)]
-		}
-		for accountConfigsCount3, accountConfigsItem3 := range resp.APIGoogleWorkspaceProvider.AccountConfigs {
+
+		for _, accountConfigsItem3 := range resp.APIGoogleWorkspaceProvider.AccountConfigs {
 			var accountConfigs3 tfTypes.GoogleWorkspaceAccountConfig
+
 			accountConfigs3.Name = types.StringValue(accountConfigsItem3.Name)
 			accountConfigs3.ServiceAccountCredentials = types.StringValue(accountConfigsItem3.ServiceAccountCredentials)
 			accountConfigs3.Subject = types.StringValue(accountConfigsItem3.Subject)
-			if accountConfigsCount3+1 > len(r.APIGoogleWorkspaceProvider.AccountConfigs) {
-				r.APIGoogleWorkspaceProvider.AccountConfigs = append(r.APIGoogleWorkspaceProvider.AccountConfigs, accountConfigs3)
-			} else {
-				r.APIGoogleWorkspaceProvider.AccountConfigs[accountConfigsCount3].Name = accountConfigs3.Name
-				r.APIGoogleWorkspaceProvider.AccountConfigs[accountConfigsCount3].ServiceAccountCredentials = accountConfigs3.ServiceAccountCredentials
-				r.APIGoogleWorkspaceProvider.AccountConfigs[accountConfigsCount3].Subject = accountConfigs3.Subject
-			}
+
+			r.APIGoogleWorkspaceProvider.AccountConfigs = append(r.APIGoogleWorkspaceProvider.AccountConfigs, accountConfigs3)
 		}
 		r.APIGoogleWorkspaceProvider.Description = types.StringPointerValue(resp.APIGoogleWorkspaceProvider.Description)
 		r.Description = r.APIGoogleWorkspaceProvider.Description
@@ -154,23 +128,20 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 			r.APIHTTPProvider.AuthenticationMethod = types.StringNull()
 		}
 		r.APIHTTPProvider.AvailableEndpoints = []tfTypes.HTTPEndpoint{}
-		if len(r.APIHTTPProvider.AvailableEndpoints) > len(resp.APIHTTPProvider.AvailableEndpoints) {
-			r.APIHTTPProvider.AvailableEndpoints = r.APIHTTPProvider.AvailableEndpoints[:len(resp.APIHTTPProvider.AvailableEndpoints)]
-		}
-		for availableEndpointsCount, availableEndpointsItem := range resp.APIHTTPProvider.AvailableEndpoints {
+
+		for _, availableEndpointsItem := range resp.APIHTTPProvider.AvailableEndpoints {
 			var availableEndpoints tfTypes.HTTPEndpoint
+
 			availableEndpoints.DataField = types.StringPointerValue(availableEndpointsItem.DataField)
 			availableEndpoints.Headers = []tfTypes.HTTPHeader{}
-			for headersCount, headersItem := range availableEndpointsItem.Headers {
+
+			for _, headersItem := range availableEndpointsItem.Headers {
 				var headers tfTypes.HTTPHeader
+
 				headers.Name = types.StringValue(headersItem.Name)
 				headers.Value = types.StringValue(headersItem.Value)
-				if headersCount+1 > len(availableEndpoints.Headers) {
-					availableEndpoints.Headers = append(availableEndpoints.Headers, headers)
-				} else {
-					availableEndpoints.Headers[headersCount].Name = headers.Name
-					availableEndpoints.Headers[headersCount].Value = headers.Value
-				}
+
+				availableEndpoints.Headers = append(availableEndpoints.Headers, headers)
 			}
 			if availableEndpointsItem.Method != nil {
 				availableEndpoints.Method = types.StringValue(string(*availableEndpointsItem.Method))
@@ -179,15 +150,8 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 			}
 			availableEndpoints.Name = types.StringValue(availableEndpointsItem.Name)
 			availableEndpoints.URL = types.StringValue(availableEndpointsItem.URL)
-			if availableEndpointsCount+1 > len(r.APIHTTPProvider.AvailableEndpoints) {
-				r.APIHTTPProvider.AvailableEndpoints = append(r.APIHTTPProvider.AvailableEndpoints, availableEndpoints)
-			} else {
-				r.APIHTTPProvider.AvailableEndpoints[availableEndpointsCount].DataField = availableEndpoints.DataField
-				r.APIHTTPProvider.AvailableEndpoints[availableEndpointsCount].Headers = availableEndpoints.Headers
-				r.APIHTTPProvider.AvailableEndpoints[availableEndpointsCount].Method = availableEndpoints.Method
-				r.APIHTTPProvider.AvailableEndpoints[availableEndpointsCount].Name = availableEndpoints.Name
-				r.APIHTTPProvider.AvailableEndpoints[availableEndpointsCount].URL = availableEndpoints.URL
-			}
+
+			r.APIHTTPProvider.AvailableEndpoints = append(r.APIHTTPProvider.AvailableEndpoints, availableEndpoints)
 		}
 		r.APIHTTPProvider.Description = types.StringPointerValue(resp.APIHTTPProvider.Description)
 		r.Description = r.APIHTTPProvider.Description
@@ -199,23 +163,16 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 	if resp.APIMsGraphProvider != nil {
 		r.APIMsGraphProvider = &tfTypes.APIMsGraphProvider{}
 		r.APIMsGraphProvider.AccountConfigs = []tfTypes.MsGraphAccountConfig{}
-		if len(r.APIMsGraphProvider.AccountConfigs) > len(resp.APIMsGraphProvider.AccountConfigs) {
-			r.APIMsGraphProvider.AccountConfigs = r.APIMsGraphProvider.AccountConfigs[:len(resp.APIMsGraphProvider.AccountConfigs)]
-		}
-		for accountConfigsCount4, accountConfigsItem4 := range resp.APIMsGraphProvider.AccountConfigs {
+
+		for _, accountConfigsItem4 := range resp.APIMsGraphProvider.AccountConfigs {
 			var accountConfigs4 tfTypes.MsGraphAccountConfig
+
 			accountConfigs4.ClientID = types.StringValue(accountConfigsItem4.ClientID)
 			accountConfigs4.ClientSecret = types.StringValue(accountConfigsItem4.ClientSecret)
 			accountConfigs4.Name = types.StringValue(accountConfigsItem4.Name)
 			accountConfigs4.TenantID = types.StringValue(accountConfigsItem4.TenantID)
-			if accountConfigsCount4+1 > len(r.APIMsGraphProvider.AccountConfigs) {
-				r.APIMsGraphProvider.AccountConfigs = append(r.APIMsGraphProvider.AccountConfigs, accountConfigs4)
-			} else {
-				r.APIMsGraphProvider.AccountConfigs[accountConfigsCount4].ClientID = accountConfigs4.ClientID
-				r.APIMsGraphProvider.AccountConfigs[accountConfigsCount4].ClientSecret = accountConfigs4.ClientSecret
-				r.APIMsGraphProvider.AccountConfigs[accountConfigsCount4].Name = accountConfigs4.Name
-				r.APIMsGraphProvider.AccountConfigs[accountConfigsCount4].TenantID = accountConfigs4.TenantID
-			}
+
+			r.APIMsGraphProvider.AccountConfigs = append(r.APIMsGraphProvider.AccountConfigs, accountConfigs4)
 		}
 		r.APIMsGraphProvider.Description = types.StringPointerValue(resp.APIMsGraphProvider.Description)
 		r.Description = r.APIMsGraphProvider.Description
@@ -227,21 +184,15 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 	if resp.APIOktaProvider != nil {
 		r.APIOktaProvider = &tfTypes.APIOktaProvider{}
 		r.APIOktaProvider.AccountConfigs = []tfTypes.OktaAccountConfig{}
-		if len(r.APIOktaProvider.AccountConfigs) > len(resp.APIOktaProvider.AccountConfigs) {
-			r.APIOktaProvider.AccountConfigs = r.APIOktaProvider.AccountConfigs[:len(resp.APIOktaProvider.AccountConfigs)]
-		}
-		for accountConfigsCount5, accountConfigsItem5 := range resp.APIOktaProvider.AccountConfigs {
+
+		for _, accountConfigsItem5 := range resp.APIOktaProvider.AccountConfigs {
 			var accountConfigs5 tfTypes.OktaAccountConfig
+
 			accountConfigs5.APIToken = types.StringValue(accountConfigsItem5.APIToken)
 			accountConfigs5.DomainEndpoint = types.StringValue(accountConfigsItem5.DomainEndpoint)
 			accountConfigs5.Name = types.StringValue(accountConfigsItem5.Name)
-			if accountConfigsCount5+1 > len(r.APIOktaProvider.AccountConfigs) {
-				r.APIOktaProvider.AccountConfigs = append(r.APIOktaProvider.AccountConfigs, accountConfigs5)
-			} else {
-				r.APIOktaProvider.AccountConfigs[accountConfigsCount5].APIToken = accountConfigs5.APIToken
-				r.APIOktaProvider.AccountConfigs[accountConfigsCount5].DomainEndpoint = accountConfigs5.DomainEndpoint
-				r.APIOktaProvider.AccountConfigs[accountConfigsCount5].Name = accountConfigs5.Name
-			}
+
+			r.APIOktaProvider.AccountConfigs = append(r.APIOktaProvider.AccountConfigs, accountConfigs5)
 		}
 		r.APIOktaProvider.Description = types.StringPointerValue(resp.APIOktaProvider.Description)
 		r.Description = r.APIOktaProvider.Description
@@ -265,21 +216,15 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 	if resp.APITailscaleProvider != nil {
 		r.APITailscaleProvider = &tfTypes.APITailscaleProvider{}
 		r.APITailscaleProvider.AccountConfigs = []tfTypes.TailscaleAccountConfig{}
-		if len(r.APITailscaleProvider.AccountConfigs) > len(resp.APITailscaleProvider.AccountConfigs) {
-			r.APITailscaleProvider.AccountConfigs = r.APITailscaleProvider.AccountConfigs[:len(resp.APITailscaleProvider.AccountConfigs)]
-		}
-		for accountConfigsCount6, accountConfigsItem6 := range resp.APITailscaleProvider.AccountConfigs {
+
+		for _, accountConfigsItem6 := range resp.APITailscaleProvider.AccountConfigs {
 			var accountConfigs6 tfTypes.TailscaleAccountConfig
+
 			accountConfigs6.ClientID = types.StringValue(accountConfigsItem6.ClientID)
 			accountConfigs6.ClientSecret = types.StringValue(accountConfigsItem6.ClientSecret)
 			accountConfigs6.Name = types.StringValue(accountConfigsItem6.Name)
-			if accountConfigsCount6+1 > len(r.APITailscaleProvider.AccountConfigs) {
-				r.APITailscaleProvider.AccountConfigs = append(r.APITailscaleProvider.AccountConfigs, accountConfigs6)
-			} else {
-				r.APITailscaleProvider.AccountConfigs[accountConfigsCount6].ClientID = accountConfigs6.ClientID
-				r.APITailscaleProvider.AccountConfigs[accountConfigsCount6].ClientSecret = accountConfigs6.ClientSecret
-				r.APITailscaleProvider.AccountConfigs[accountConfigsCount6].Name = accountConfigs6.Name
-			}
+
+			r.APITailscaleProvider.AccountConfigs = append(r.APITailscaleProvider.AccountConfigs, accountConfigs6)
 		}
 		r.APITailscaleProvider.Description = types.StringPointerValue(resp.APITailscaleProvider.Description)
 		r.Description = r.APITailscaleProvider.Description
@@ -291,23 +236,16 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 	if resp.APIZoomProvider != nil {
 		r.APIZoomProvider = &tfTypes.APIZoomProvider{}
 		r.APIZoomProvider.AccountConfigs = []tfTypes.ZoomAccountConfig{}
-		if len(r.APIZoomProvider.AccountConfigs) > len(resp.APIZoomProvider.AccountConfigs) {
-			r.APIZoomProvider.AccountConfigs = r.APIZoomProvider.AccountConfigs[:len(resp.APIZoomProvider.AccountConfigs)]
-		}
-		for accountConfigsCount7, accountConfigsItem7 := range resp.APIZoomProvider.AccountConfigs {
+
+		for _, accountConfigsItem7 := range resp.APIZoomProvider.AccountConfigs {
 			var accountConfigs7 tfTypes.ZoomAccountConfig
+
 			accountConfigs7.AccountID = types.StringValue(accountConfigsItem7.AccountID)
 			accountConfigs7.ClientID = types.StringValue(accountConfigsItem7.ClientID)
 			accountConfigs7.ClientSecret = types.StringValue(accountConfigsItem7.ClientSecret)
 			accountConfigs7.Name = types.StringValue(accountConfigsItem7.Name)
-			if accountConfigsCount7+1 > len(r.APIZoomProvider.AccountConfigs) {
-				r.APIZoomProvider.AccountConfigs = append(r.APIZoomProvider.AccountConfigs, accountConfigs7)
-			} else {
-				r.APIZoomProvider.AccountConfigs[accountConfigsCount7].AccountID = accountConfigs7.AccountID
-				r.APIZoomProvider.AccountConfigs[accountConfigsCount7].ClientID = accountConfigs7.ClientID
-				r.APIZoomProvider.AccountConfigs[accountConfigsCount7].ClientSecret = accountConfigs7.ClientSecret
-				r.APIZoomProvider.AccountConfigs[accountConfigsCount7].Name = accountConfigs7.Name
-			}
+
+			r.APIZoomProvider.AccountConfigs = append(r.APIZoomProvider.AccountConfigs, accountConfigs7)
 		}
 		r.APIZoomProvider.Description = types.StringPointerValue(resp.APIZoomProvider.Description)
 		r.Description = r.APIZoomProvider.Description
@@ -341,19 +279,14 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.ID = r.AzureBlobProvider.ID
 		r.AzureBlobProvider.Location = types.StringValue(resp.AzureBlobProvider.Location)
 		r.AzureBlobProvider.SasConfigs = []tfTypes.SasConfig{}
-		if len(r.AzureBlobProvider.SasConfigs) > len(resp.AzureBlobProvider.SasConfigs) {
-			r.AzureBlobProvider.SasConfigs = r.AzureBlobProvider.SasConfigs[:len(resp.AzureBlobProvider.SasConfigs)]
-		}
-		for sasConfigsCount, sasConfigsItem := range resp.AzureBlobProvider.SasConfigs {
+
+		for _, sasConfigsItem := range resp.AzureBlobProvider.SasConfigs {
 			var sasConfigs tfTypes.SasConfig
+
 			sasConfigs.BlobSasURL = types.StringValue(sasConfigsItem.BlobSasURL)
 			sasConfigs.ContainerName = types.StringValue(sasConfigsItem.ContainerName)
-			if sasConfigsCount+1 > len(r.AzureBlobProvider.SasConfigs) {
-				r.AzureBlobProvider.SasConfigs = append(r.AzureBlobProvider.SasConfigs, sasConfigs)
-			} else {
-				r.AzureBlobProvider.SasConfigs[sasConfigsCount].BlobSasURL = sasConfigs.BlobSasURL
-				r.AzureBlobProvider.SasConfigs[sasConfigsCount].ContainerName = sasConfigs.ContainerName
-			}
+
+			r.AzureBlobProvider.SasConfigs = append(r.AzureBlobProvider.SasConfigs, sasConfigs)
 		}
 		r.AzureBlobProvider.StorageAccountName = types.StringPointerValue(resp.AzureBlobProvider.StorageAccountName)
 		r.AzureBlobProvider.TenantID = types.StringPointerValue(resp.AzureBlobProvider.TenantID)

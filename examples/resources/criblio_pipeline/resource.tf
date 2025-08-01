@@ -5,7 +5,7 @@ resource "criblio_pipeline" "my_pipeline" {
     functions = [
       {
         conf = {
-          # ...
+          key = jsonencode("value")
         }
         description = "...my_description..."
         disabled    = true

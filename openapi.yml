@@ -45421,7 +45421,7 @@ components:
         conf:
           type: object
           title: Function-specific configs
-          properties: {}
+          additionalProperties: true
         groupId:
           title: Group ID
           description: Group ID

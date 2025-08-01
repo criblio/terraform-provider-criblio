@@ -10601,17 +10601,13 @@ Read-Only:
 
 Read-Only:
 
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf--functions--conf))
+- `conf` (Map of String)
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
 - `group_id` (String) Group ID
 - `id` (String) Function ID
-
-<a id="nestedatt--items--conf--functions--conf"></a>
-### Nested Schema for `items.conf.functions.conf`
-
 
 
 <a id="nestedatt--items--conf--groups"></a>

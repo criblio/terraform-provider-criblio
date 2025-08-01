@@ -41,19 +41,14 @@ func (r *SearchSavedQueryResourceModel) RefreshFromSharedSavedQuery(ctx context.
 		} else {
 			r.ChartConfig.ColorThresholds = &tfTypes.ColorThresholds{}
 			r.ChartConfig.ColorThresholds.Thresholds = []tfTypes.Threshold{}
-			if len(r.ChartConfig.ColorThresholds.Thresholds) > len(resp.ChartConfig.ColorThresholds.Thresholds) {
-				r.ChartConfig.ColorThresholds.Thresholds = r.ChartConfig.ColorThresholds.Thresholds[:len(resp.ChartConfig.ColorThresholds.Thresholds)]
-			}
-			for thresholdsCount, thresholdsItem := range resp.ChartConfig.ColorThresholds.Thresholds {
+
+			for _, thresholdsItem := range resp.ChartConfig.ColorThresholds.Thresholds {
 				var thresholds tfTypes.Threshold
+
 				thresholds.Color = types.StringValue(thresholdsItem.Color)
 				thresholds.Threshold = types.Float64Value(thresholdsItem.Threshold)
-				if thresholdsCount+1 > len(r.ChartConfig.ColorThresholds.Thresholds) {
-					r.ChartConfig.ColorThresholds.Thresholds = append(r.ChartConfig.ColorThresholds.Thresholds, thresholds)
-				} else {
-					r.ChartConfig.ColorThresholds.Thresholds[thresholdsCount].Color = thresholds.Color
-					r.ChartConfig.ColorThresholds.Thresholds[thresholdsCount].Threshold = thresholds.Threshold
-				}
+
+				r.ChartConfig.ColorThresholds.Thresholds = append(r.ChartConfig.ColorThresholds.Thresholds, thresholds)
 			}
 		}
 		if resp.ChartConfig.CustomData == nil {
@@ -130,11 +125,10 @@ func (r *SearchSavedQueryResourceModel) RefreshFromSharedSavedQuery(ctx context.
 		r.ChartConfig.Prefix = types.StringPointerValue(resp.ChartConfig.Prefix)
 		r.ChartConfig.Separator = types.BoolPointerValue(resp.ChartConfig.Separator)
 		r.ChartConfig.Series = []tfTypes.ChartSeries{}
-		if len(r.ChartConfig.Series) > len(resp.ChartConfig.Series) {
-			r.ChartConfig.Series = r.ChartConfig.Series[:len(resp.ChartConfig.Series)]
-		}
-		for seriesCount, seriesItem := range resp.ChartConfig.Series {
+
+		for _, seriesItem := range resp.ChartConfig.Series {
 			var series tfTypes.ChartSeries
+
 			series.Color = types.StringPointerValue(seriesItem.Color)
 			series.Map = types.StringPointerValue(seriesItem.Map)
 			series.Name = types.StringValue(seriesItem.Name)
@@ -144,16 +138,8 @@ func (r *SearchSavedQueryResourceModel) RefreshFromSharedSavedQuery(ctx context.
 				series.Type = types.StringNull()
 			}
 			series.YAxisField = types.StringPointerValue(seriesItem.YAxisField)
-			if seriesCount+1 > len(r.ChartConfig.Series) {
-				r.ChartConfig.Series = append(r.ChartConfig.Series, series)
-			} else {
-				r.ChartConfig.Series[seriesCount].Color = series.Color
-				r.ChartConfig.Series[seriesCount].Data = series.Data
-				r.ChartConfig.Series[seriesCount].Map = series.Map
-				r.ChartConfig.Series[seriesCount].Name = series.Name
-				r.ChartConfig.Series[seriesCount].Type = series.Type
-				r.ChartConfig.Series[seriesCount].YAxisField = series.YAxisField
-			}
+
+			r.ChartConfig.Series = append(r.ChartConfig.Series, series)
 		}
 		r.ChartConfig.ShouldApplyUserChartSettings = types.BoolPointerValue(resp.ChartConfig.ShouldApplyUserChartSettings)
 		r.ChartConfig.Style = types.BoolPointerValue(resp.ChartConfig.Style)
@@ -217,11 +203,10 @@ func (r *SearchSavedQueryResourceModel) RefreshFromSharedSavedQuery(ctx context.
 		r.Schedule.KeepLastN = types.Float64Value(resp.Schedule.KeepLastN)
 		r.Schedule.Notifications.Disabled = types.BoolValue(resp.Schedule.Notifications.Disabled)
 		r.Schedule.Notifications.Items = []tfTypes.Notification{}
-		if len(r.Schedule.Notifications.Items) > len(resp.Schedule.Notifications.Items) {
-			r.Schedule.Notifications.Items = r.Schedule.Notifications.Items[:len(resp.Schedule.Notifications.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Schedule.Notifications.Items {
+
+		for _, itemsItem := range resp.Schedule.Notifications.Items {
 			var items tfTypes.Notification
+
 			items.Condition = types.StringValue(itemsItem.Condition)
 			if itemsItem.Conf == nil {
 				items.Conf = nil
@@ -232,20 +217,20 @@ func (r *SearchSavedQueryResourceModel) RefreshFromSharedSavedQuery(ctx context.
 			items.Group = types.StringPointerValue(itemsItem.Group)
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Metadata = []tfTypes.MetadataItem{}
-			for metadataCount, metadataItem := range itemsItem.Metadata {
+
+			for _, metadataItem := range itemsItem.Metadata {
 				var metadata tfTypes.MetadataItem
+
 				metadata.Name = types.StringValue(metadataItem.Name)
 				metadata.Value = types.StringValue(metadataItem.Value)
-				if metadataCount+1 > len(items.Metadata) {
-					items.Metadata = append(items.Metadata, metadata)
-				} else {
-					items.Metadata[metadataCount].Name = metadata.Name
-					items.Metadata[metadataCount].Value = metadata.Value
-				}
+
+				items.Metadata = append(items.Metadata, metadata)
 			}
 			items.TargetConfigs = []tfTypes.NotificationTargetConfig{}
-			for targetConfigsCount, targetConfigsItem := range itemsItem.TargetConfigs {
+
+			for _, targetConfigsItem := range itemsItem.TargetConfigs {
 				var targetConfigs tfTypes.NotificationTargetConfig
+
 				if targetConfigsItem.Conf == nil {
 					targetConfigs.Conf = nil
 				} else {
@@ -262,29 +247,15 @@ func (r *SearchSavedQueryResourceModel) RefreshFromSharedSavedQuery(ctx context.
 					targetConfigs.Conf.Subject = types.StringPointerValue(targetConfigsItem.Conf.Subject)
 				}
 				targetConfigs.ID = types.StringValue(targetConfigsItem.ID)
-				if targetConfigsCount+1 > len(items.TargetConfigs) {
-					items.TargetConfigs = append(items.TargetConfigs, targetConfigs)
-				} else {
-					items.TargetConfigs[targetConfigsCount].Conf = targetConfigs.Conf
-					items.TargetConfigs[targetConfigsCount].ID = targetConfigs.ID
-				}
+
+				items.TargetConfigs = append(items.TargetConfigs, targetConfigs)
 			}
 			items.Targets = make([]types.String, 0, len(itemsItem.Targets))
 			for _, v := range itemsItem.Targets {
 				items.Targets = append(items.Targets, types.StringValue(v))
 			}
-			if itemsCount+1 > len(r.Schedule.Notifications.Items) {
-				r.Schedule.Notifications.Items = append(r.Schedule.Notifications.Items, items)
-			} else {
-				r.Schedule.Notifications.Items[itemsCount].Condition = items.Condition
-				r.Schedule.Notifications.Items[itemsCount].Conf = items.Conf
-				r.Schedule.Notifications.Items[itemsCount].Disabled = items.Disabled
-				r.Schedule.Notifications.Items[itemsCount].Group = items.Group
-				r.Schedule.Notifications.Items[itemsCount].ID = items.ID
-				r.Schedule.Notifications.Items[itemsCount].Metadata = items.Metadata
-				r.Schedule.Notifications.Items[itemsCount].TargetConfigs = items.TargetConfigs
-				r.Schedule.Notifications.Items[itemsCount].Targets = items.Targets
-			}
+
+			r.Schedule.Notifications.Items = append(r.Schedule.Notifications.Items, items)
 		}
 		r.Schedule.ResumeMissed = types.BoolPointerValue(resp.Schedule.ResumeMissed)
 		r.Schedule.ResumeOnBoot = types.BoolPointerValue(resp.Schedule.ResumeOnBoot)

@@ -20,7 +20,7 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
     functions = [
       {
         conf = {
-          # ...
+          key = jsonencode("value")
         }
         description = "...my_description..."
         disabled    = false
@@ -79,7 +79,7 @@ Optional:
 
 Required:
 
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--conf--functions--conf))
+- `conf` (Map of String)
 - `id` (String) Function ID
 
 Optional:
@@ -89,10 +89,6 @@ Optional:
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
 - `group_id` (String) Group ID
-
-<a id="nestedatt--conf--functions--conf"></a>
-### Nested Schema for `conf.functions.conf`
-
 
 
 <a id="nestedatt--conf--groups"></a>

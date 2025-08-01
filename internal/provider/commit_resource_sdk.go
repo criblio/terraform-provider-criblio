@@ -16,11 +16,10 @@ func (r *CommitResourceModel) RefreshFromOperationsCreateVersionCommitResponseBo
 
 	if resp != nil {
 		r.Items = []tfTypes.GitCommitSummary{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.GitCommitSummary
+
 			items.Author.Email = types.StringValue(itemsItem.Author.Email)
 			items.Author.Name = types.StringValue(itemsItem.Author.Name)
 			items.Branch = types.StringValue(itemsItem.Branch)
@@ -44,15 +43,8 @@ func (r *CommitResourceModel) RefreshFromOperationsCreateVersionCommitResponseBo
 			items.Summary.Changes = types.Float64Value(itemsItem.Summary.Changes)
 			items.Summary.Deletions = types.Float64Value(itemsItem.Summary.Deletions)
 			items.Summary.Insertions = types.Float64Value(itemsItem.Summary.Insertions)
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Author = items.Author
-				r.Items[itemsCount].Branch = items.Branch
-				r.Items[itemsCount].Commit = items.Commit
-				r.Items[itemsCount].Files = items.Files
-				r.Items[itemsCount].Summary = items.Summary
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 

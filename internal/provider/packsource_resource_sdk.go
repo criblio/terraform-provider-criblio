@@ -17,35 +17,34 @@ func (r *PackSourceResourceModel) RefreshFromOperationsCreateSystemInputsByPackR
 
 	if resp != nil {
 		r.Items = []tfTypes.Routes1{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Routes1
+
 			itemsPriorData := items
 			items.Comments = itemsPriorData.Comments
 			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
 			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
 			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-			for functionsCount, functionsItem := range itemsItem.Conf.Functions {
+
+			for _, functionsItem := range itemsItem.Conf.Functions {
 				var functions tfTypes.PipelineFunctionConf
+
+				if len(functionsItem.Conf) > 0 {
+					functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
+					for key, value := range functionsItem.Conf {
+						result, _ := json.Marshal(value)
+						functions.Conf[key] = types.StringValue(string(result))
+					}
+				}
 				functions.Description = types.StringPointerValue(functionsItem.Description)
 				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 				functions.Filter = types.StringPointerValue(functionsItem.Filter)
 				functions.Final = types.BoolPointerValue(functionsItem.Final)
 				functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
 				functions.ID = types.StringValue(functionsItem.ID)
-				if functionsCount+1 > len(items.Conf.Functions) {
-					items.Conf.Functions = append(items.Conf.Functions, functions)
-				} else {
-					items.Conf.Functions[functionsCount].Conf = functions.Conf
-					items.Conf.Functions[functionsCount].Description = functions.Description
-					items.Conf.Functions[functionsCount].Disabled = functions.Disabled
-					items.Conf.Functions[functionsCount].Filter = functions.Filter
-					items.Conf.Functions[functionsCount].Final = functions.Final
-					items.Conf.Functions[functionsCount].GroupID = functions.GroupID
-					items.Conf.Functions[functionsCount].ID = functions.ID
-				}
+
+				items.Conf.Functions = append(items.Conf.Functions, functions)
 			}
 			if len(itemsItem.Conf.Groups) > 0 {
 				items.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(itemsItem.Conf.Groups))
@@ -66,12 +65,8 @@ func (r *PackSourceResourceModel) RefreshFromOperationsCreateSystemInputsByPackR
 			items.Groups = itemsPriorData.Groups
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Routes = itemsPriorData.Routes
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Conf = items.Conf
-				r.Items[itemsCount].ID = items.ID
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
@@ -83,15 +78,16 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 
 	if resp != nil {
 		r.Items = []tfTypes.Routes1{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Routes1
+
 			itemsPriorData := items
 			items.Comments = []tfTypes.Comment{}
-			for commentsCount, commentsItem := range itemsItem.Comments {
+
+			for _, commentsItem := range itemsItem.Comments {
 				var comments tfTypes.Comment
+
 				comments.Comment = types.StringPointerValue(commentsItem.Comment)
 				if commentsItem.AdditionalProperties == nil {
 					comments.AdditionalProperties = types.StringNull()
@@ -99,12 +95,8 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
 					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
 				}
-				if commentsCount+1 > len(items.Comments) {
-					items.Comments = append(items.Comments, comments)
-				} else {
-					items.Comments[commentsCount].Comment = comments.Comment
-					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
-				}
+
+				items.Comments = append(items.Comments, comments)
 			}
 			items.Conf = itemsPriorData.Conf
 			if len(itemsItem.Groups) > 0 {
@@ -120,8 +112,10 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 			}
 			items.ID = types.StringPointerValue(itemsItem.ID)
 			items.Routes = []tfTypes.RoutesRoute{}
-			for routesCount, routesItem := range itemsItem.Routes {
+
+			for _, routesItem := range itemsItem.Routes {
 				var routes tfTypes.RoutesRoute
+
 				routes.ID = types.StringPointerValue(routesItem.ID)
 				routes.Name = types.StringValue(routesItem.Name)
 				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
@@ -148,30 +142,11 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
 					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
 				}
-				if routesCount+1 > len(items.Routes) {
-					items.Routes = append(items.Routes, routes)
-				} else {
-					items.Routes[routesCount].ID = routes.ID
-					items.Routes[routesCount].Name = routes.Name
-					items.Routes[routesCount].Disabled = routes.Disabled
-					items.Routes[routesCount].Filter = routes.Filter
-					items.Routes[routesCount].Pipeline = routes.Pipeline
-					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
-					items.Routes[routesCount].Output = routes.Output
-					items.Routes[routesCount].OutputExpression = routes.OutputExpression
-					items.Routes[routesCount].Description = routes.Description
-					items.Routes[routesCount].Final = routes.Final
-					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
-				}
+
+				items.Routes = append(items.Routes, routes)
 			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Comments = items.Comments
-				r.Items[itemsCount].Groups = items.Groups
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Routes = items.Routes
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
@@ -183,35 +158,34 @@ func (r *PackSourceResourceModel) RefreshFromOperationsUpdateSystemInputsByPackR
 
 	if resp != nil {
 		r.Items = []tfTypes.Routes1{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Routes1
+
 			itemsPriorData := items
 			items.Comments = itemsPriorData.Comments
 			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
 			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
 			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-			for functionsCount, functionsItem := range itemsItem.Conf.Functions {
+
+			for _, functionsItem := range itemsItem.Conf.Functions {
 				var functions tfTypes.PipelineFunctionConf
+
+				if len(functionsItem.Conf) > 0 {
+					functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
+					for key, value := range functionsItem.Conf {
+						result, _ := json.Marshal(value)
+						functions.Conf[key] = types.StringValue(string(result))
+					}
+				}
 				functions.Description = types.StringPointerValue(functionsItem.Description)
 				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 				functions.Filter = types.StringPointerValue(functionsItem.Filter)
 				functions.Final = types.BoolPointerValue(functionsItem.Final)
 				functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
 				functions.ID = types.StringValue(functionsItem.ID)
-				if functionsCount+1 > len(items.Conf.Functions) {
-					items.Conf.Functions = append(items.Conf.Functions, functions)
-				} else {
-					items.Conf.Functions[functionsCount].Conf = functions.Conf
-					items.Conf.Functions[functionsCount].Description = functions.Description
-					items.Conf.Functions[functionsCount].Disabled = functions.Disabled
-					items.Conf.Functions[functionsCount].Filter = functions.Filter
-					items.Conf.Functions[functionsCount].Final = functions.Final
-					items.Conf.Functions[functionsCount].GroupID = functions.GroupID
-					items.Conf.Functions[functionsCount].ID = functions.ID
-				}
+
+				items.Conf.Functions = append(items.Conf.Functions, functions)
 			}
 			if len(itemsItem.Conf.Groups) > 0 {
 				items.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(itemsItem.Conf.Groups))
@@ -232,12 +206,8 @@ func (r *PackSourceResourceModel) RefreshFromOperationsUpdateSystemInputsByPackR
 			items.Groups = itemsPriorData.Groups
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Routes = itemsPriorData.Routes
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Conf = items.Conf
-				r.Items[itemsCount].ID = items.ID
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 

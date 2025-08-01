@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -17,28 +18,25 @@ func (r *PipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, r
 	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(resp.Conf.AsyncFuncTimeout)
 	r.Conf.Description = types.StringPointerValue(resp.Conf.Description)
 	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-	if len(r.Conf.Functions) > len(resp.Conf.Functions) {
-		r.Conf.Functions = r.Conf.Functions[:len(resp.Conf.Functions)]
-	}
-	for functionsCount, functionsItem := range resp.Conf.Functions {
+
+	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
+
+		if len(functionsItem.Conf) > 0 {
+			functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
+			for key, value := range functionsItem.Conf {
+				result, _ := json.Marshal(value)
+				functions.Conf[key] = types.StringValue(string(result))
+			}
+		}
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)
 		functions.Final = types.BoolPointerValue(functionsItem.Final)
 		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
 		functions.ID = types.StringValue(functionsItem.ID)
-		if functionsCount+1 > len(r.Conf.Functions) {
-			r.Conf.Functions = append(r.Conf.Functions, functions)
-		} else {
-			r.Conf.Functions[functionsCount].Conf = functions.Conf
-			r.Conf.Functions[functionsCount].Description = functions.Description
-			r.Conf.Functions[functionsCount].Disabled = functions.Disabled
-			r.Conf.Functions[functionsCount].Filter = functions.Filter
-			r.Conf.Functions[functionsCount].Final = functions.Final
-			r.Conf.Functions[functionsCount].GroupID = functions.GroupID
-			r.Conf.Functions[functionsCount].ID = functions.ID
-		}
+
+		r.Conf.Functions = append(r.Conf.Functions, functions)
 	}
 	if len(resp.Conf.Groups) > 0 {
 		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
@@ -194,7 +192,12 @@ func (r *PipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shared.P
 		} else {
 			final = nil
 		}
-		conf1 := shared.FunctionSpecificConfigs{}
+		conf1 := make(map[string]interface{})
+		for confKey, confValue := range functionsItem.Conf {
+			var confInst interface{}
+			_ = json.Unmarshal([]byte(confValue.ValueString()), &confInst)
+			conf1[confKey] = confInst
+		}
 		groupID := new(string)
 		if !functionsItem.GroupID.IsUnknown() && !functionsItem.GroupID.IsNull() {
 			*groupID = functionsItem.GroupID.ValueString()

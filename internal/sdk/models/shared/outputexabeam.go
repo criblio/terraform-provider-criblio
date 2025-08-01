@@ -201,7 +201,7 @@ type OutputExabeam struct {
 	// Region where the bucket is located
 	Region string `json:"region"`
 	// Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
-	StagePath *string `default:"\\$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
+	StagePath *string `default:"$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
 	// Google Cloud Storage service endpoint
 	Endpoint *string `default:"https://storage.googleapis.com" json:"endpoint"`
 	// Signature version to use for signing Google Cloud Storage requests
@@ -250,7 +250,7 @@ type OutputExabeam struct {
 	// How frequently, in seconds, to clean up empty directories
 	EmptyDirCleanupSec *float64 `default:"300" json:"emptyDirCleanupSec"`
 	// Storage location for files that fail to reach their final destination after maximum retries are exceeded
-	DeadletterPath *string `default:"\\$CRIBL_HOME/state/outputs/dead-letter" json:"deadletterPath"`
+	DeadletterPath *string `default:"$CRIBL_HOME/state/outputs/dead-letter" json:"deadletterPath"`
 	// The maximum number of times a file will attempt to move to its final destination before being dead-lettered
 	MaxRetryNum *float64 `default:"20" json:"maxRetryNum"`
 }
