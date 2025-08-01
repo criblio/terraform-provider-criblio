@@ -116,7 +116,7 @@ type InputAppscopePq struct {
 	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 	MaxSize *string `default:"5GB" json:"maxSize"`
 	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"\\$CRIBL_HOME/state/queues" json:"path"`
+	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
 	// Codec to use to compress the persisted data
 	Compress *InputAppscopeCompression `default:"none" json:"compress"`
 }
@@ -289,7 +289,7 @@ type InputAppscopePersistence struct {
 	MaxDataTime *string                             `default:"24h" json:"maxDataTime"`
 	Compress    *InputAppscopeDataCompressionFormat `default:"gzip" json:"compress"`
 	// Path to use to write metrics. Defaults to $CRIBL_HOME/state/appscope
-	DestPath *string `default:"\\$CRIBL_HOME/state/appscope" json:"destPath"`
+	DestPath *string `default:"$CRIBL_HOME/state/appscope" json:"destPath"`
 }
 
 func (i InputAppscopePersistence) MarshalJSON() ([]byte, error) {
@@ -593,7 +593,7 @@ type InputAppscope struct {
 	Port *float64                            `json:"port,omitempty"`
 	TLS  *InputAppscopeTLSSettingsServerSide `json:"tls,omitempty"`
 	// Path to the UNIX domain socket to listen on.
-	UnixSocketPath *string `default:"\\$CRIBL_HOME/state/appscope.sock" json:"unixSocketPath"`
+	UnixSocketPath *string `default:"$CRIBL_HOME/state/appscope.sock" json:"unixSocketPath"`
 	// Permissions to set for socket e.g., 777. If empty, falls back to the runtime user's default permissions.
 	UnixSocketPerms *string `json:"unixSocketPerms,omitempty"`
 	// Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.

@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -24703,8 +24704,12 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
-											"conf": schema.SingleNestedAttribute{
-												Computed: true,
+											"conf": schema.MapAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"description": schema.StringAttribute{
 												Computed:    true,

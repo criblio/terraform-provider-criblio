@@ -7,7 +7,7 @@ import (
 )
 
 type PipelineFunctionConf struct {
-	Conf        FunctionSpecificConfigs `tfsdk:"conf"`
+	Conf        map[string]types.String `tfsdk:"conf"`
 	Description types.String            `tfsdk:"description"`
 	Disabled    types.Bool              `tfsdk:"disabled"`
 	Filter      types.String            `tfsdk:"filter"`

@@ -22,11 +22,10 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 	r.DisplayCreatedBy = types.StringPointerValue(resp.DisplayCreatedBy)
 	r.DisplayModifiedBy = types.StringPointerValue(resp.DisplayModifiedBy)
 	r.Elements = []tfTypes.ElementUnion{}
-	if len(r.Elements) > len(resp.Elements) {
-		r.Elements = r.Elements[:len(resp.Elements)]
-	}
-	for elementsCount, elementsItem := range resp.Elements {
+
+	for _, elementsItem := range resp.Elements {
 		var elements tfTypes.ElementUnion
+
 		if elementsItem.Element != nil {
 			elements.Element = &tfTypes.Element{}
 			elements.Element.Description = types.StringPointerValue(elementsItem.Element.Description)
@@ -116,12 +115,8 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 			elements.ElementMarkdown.Value = types.StringPointerValue(elementsItem.ElementMarkdown.Value)
 			elements.ElementMarkdown.Variant = types.StringValue(string(elementsItem.ElementMarkdown.Variant))
 		}
-		if elementsCount+1 > len(r.Elements) {
-			r.Elements = append(r.Elements, elements)
-		} else {
-			r.Elements[elementsCount].Element = elements.Element
-			r.Elements[elementsCount].ElementMarkdown = elements.ElementMarkdown
-		}
+
+		r.Elements = append(r.Elements, elements)
 	}
 	r.ID = types.StringValue(resp.ID)
 	r.Modified = types.Float64Value(resp.Modified)
@@ -142,11 +137,10 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 		r.Schedule.KeepLastN = types.Float64Value(resp.Schedule.KeepLastN)
 		r.Schedule.Notifications.Disabled = types.BoolValue(resp.Schedule.Notifications.Disabled)
 		r.Schedule.Notifications.Items = []tfTypes.Notification{}
-		if len(r.Schedule.Notifications.Items) > len(resp.Schedule.Notifications.Items) {
-			r.Schedule.Notifications.Items = r.Schedule.Notifications.Items[:len(resp.Schedule.Notifications.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Schedule.Notifications.Items {
+
+		for _, itemsItem := range resp.Schedule.Notifications.Items {
 			var items tfTypes.Notification
+
 			items.Condition = types.StringValue(itemsItem.Condition)
 			if itemsItem.Conf == nil {
 				items.Conf = nil
@@ -157,20 +151,20 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 			items.Group = types.StringPointerValue(itemsItem.Group)
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Metadata = []tfTypes.MetadataItem{}
-			for metadataCount, metadataItem := range itemsItem.Metadata {
+
+			for _, metadataItem := range itemsItem.Metadata {
 				var metadata tfTypes.MetadataItem
+
 				metadata.Name = types.StringValue(metadataItem.Name)
 				metadata.Value = types.StringValue(metadataItem.Value)
-				if metadataCount+1 > len(items.Metadata) {
-					items.Metadata = append(items.Metadata, metadata)
-				} else {
-					items.Metadata[metadataCount].Name = metadata.Name
-					items.Metadata[metadataCount].Value = metadata.Value
-				}
+
+				items.Metadata = append(items.Metadata, metadata)
 			}
 			items.TargetConfigs = []tfTypes.NotificationTargetConfig{}
-			for targetConfigsCount, targetConfigsItem := range itemsItem.TargetConfigs {
+
+			for _, targetConfigsItem := range itemsItem.TargetConfigs {
 				var targetConfigs tfTypes.NotificationTargetConfig
+
 				if targetConfigsItem.Conf == nil {
 					targetConfigs.Conf = nil
 				} else {
@@ -187,29 +181,15 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 					targetConfigs.Conf.Subject = types.StringPointerValue(targetConfigsItem.Conf.Subject)
 				}
 				targetConfigs.ID = types.StringValue(targetConfigsItem.ID)
-				if targetConfigsCount+1 > len(items.TargetConfigs) {
-					items.TargetConfigs = append(items.TargetConfigs, targetConfigs)
-				} else {
-					items.TargetConfigs[targetConfigsCount].Conf = targetConfigs.Conf
-					items.TargetConfigs[targetConfigsCount].ID = targetConfigs.ID
-				}
+
+				items.TargetConfigs = append(items.TargetConfigs, targetConfigs)
 			}
 			items.Targets = make([]types.String, 0, len(itemsItem.Targets))
 			for _, v := range itemsItem.Targets {
 				items.Targets = append(items.Targets, types.StringValue(v))
 			}
-			if itemsCount+1 > len(r.Schedule.Notifications.Items) {
-				r.Schedule.Notifications.Items = append(r.Schedule.Notifications.Items, items)
-			} else {
-				r.Schedule.Notifications.Items[itemsCount].Condition = items.Condition
-				r.Schedule.Notifications.Items[itemsCount].Conf = items.Conf
-				r.Schedule.Notifications.Items[itemsCount].Disabled = items.Disabled
-				r.Schedule.Notifications.Items[itemsCount].Group = items.Group
-				r.Schedule.Notifications.Items[itemsCount].ID = items.ID
-				r.Schedule.Notifications.Items[itemsCount].Metadata = items.Metadata
-				r.Schedule.Notifications.Items[itemsCount].TargetConfigs = items.TargetConfigs
-				r.Schedule.Notifications.Items[itemsCount].Targets = items.Targets
-			}
+
+			r.Schedule.Notifications.Items = append(r.Schedule.Notifications.Items, items)
 		}
 		r.Schedule.ResumeMissed = types.BoolPointerValue(resp.Schedule.ResumeMissed)
 		r.Schedule.ResumeOnBoot = types.BoolPointerValue(resp.Schedule.ResumeOnBoot)

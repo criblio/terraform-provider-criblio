@@ -137,19 +137,14 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 		r.APIGcpDataset.Description = types.StringPointerValue(resp.APIGcpDataset.Description)
 		r.Description = r.APIGcpDataset.Description
 		r.APIGcpDataset.EndpointConfigs = []tfTypes.GcpEndpointConfig{}
-		if len(r.APIGcpDataset.EndpointConfigs) > len(resp.APIGcpDataset.EndpointConfigs) {
-			r.APIGcpDataset.EndpointConfigs = r.APIGcpDataset.EndpointConfigs[:len(resp.APIGcpDataset.EndpointConfigs)]
-		}
-		for endpointConfigsCount, endpointConfigsItem := range resp.APIGcpDataset.EndpointConfigs {
+
+		for _, endpointConfigsItem := range resp.APIGcpDataset.EndpointConfigs {
 			var endpointConfigs tfTypes.GcpEndpointConfig
+
 			endpointConfigs.EndpointName = types.StringValue(endpointConfigsItem.EndpointName)
 			endpointConfigs.Region = types.StringPointerValue(endpointConfigsItem.Region)
-			if endpointConfigsCount+1 > len(r.APIGcpDataset.EndpointConfigs) {
-				r.APIGcpDataset.EndpointConfigs = append(r.APIGcpDataset.EndpointConfigs, endpointConfigs)
-			} else {
-				r.APIGcpDataset.EndpointConfigs[endpointConfigsCount].EndpointName = endpointConfigs.EndpointName
-				r.APIGcpDataset.EndpointConfigs[endpointConfigsCount].Region = endpointConfigs.Region
-			}
+
+			r.APIGcpDataset.EndpointConfigs = append(r.APIGcpDataset.EndpointConfigs, endpointConfigs)
 		}
 		r.APIGcpDataset.ID = types.StringValue(resp.APIGcpDataset.ID)
 		r.ID = r.APIGcpDataset.ID
@@ -380,19 +375,14 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 		r.AwsSecurityLakeDataset.ProviderID = types.StringValue(resp.AwsSecurityLakeDataset.ProviderID)
 		r.ProviderID = r.AwsSecurityLakeDataset.ProviderID
 		r.AwsSecurityLakeDataset.SelectedBuckets = []tfTypes.S3Bucket{}
-		if len(r.AwsSecurityLakeDataset.SelectedBuckets) > len(resp.AwsSecurityLakeDataset.SelectedBuckets) {
-			r.AwsSecurityLakeDataset.SelectedBuckets = r.AwsSecurityLakeDataset.SelectedBuckets[:len(resp.AwsSecurityLakeDataset.SelectedBuckets)]
-		}
-		for selectedBucketsCount, selectedBucketsItem := range resp.AwsSecurityLakeDataset.SelectedBuckets {
+
+		for _, selectedBucketsItem := range resp.AwsSecurityLakeDataset.SelectedBuckets {
 			var selectedBuckets tfTypes.S3Bucket
+
 			selectedBuckets.Name = types.StringPointerValue(selectedBucketsItem.Name)
 			selectedBuckets.Region = types.StringPointerValue(selectedBucketsItem.Region)
-			if selectedBucketsCount+1 > len(r.AwsSecurityLakeDataset.SelectedBuckets) {
-				r.AwsSecurityLakeDataset.SelectedBuckets = append(r.AwsSecurityLakeDataset.SelectedBuckets, selectedBuckets)
-			} else {
-				r.AwsSecurityLakeDataset.SelectedBuckets[selectedBucketsCount].Name = selectedBuckets.Name
-				r.AwsSecurityLakeDataset.SelectedBuckets[selectedBucketsCount].Region = selectedBuckets.Region
-			}
+
+			r.AwsSecurityLakeDataset.SelectedBuckets = append(r.AwsSecurityLakeDataset.SelectedBuckets, selectedBuckets)
 		}
 		r.AwsSecurityLakeDataset.Type = types.StringValue(resp.AwsSecurityLakeDataset.Type)
 		r.Type = r.AwsSecurityLakeDataset.Type
@@ -403,21 +393,15 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 		r.AzureBlobDataset.Description = types.StringPointerValue(resp.AzureBlobDataset.Description)
 		r.Description = r.AzureBlobDataset.Description
 		r.AzureBlobDataset.ExtraPaths = []tfTypes.AzureBlobDatasetExtraPath{}
-		if len(r.AzureBlobDataset.ExtraPaths) > len(resp.AzureBlobDataset.ExtraPaths) {
-			r.AzureBlobDataset.ExtraPaths = r.AzureBlobDataset.ExtraPaths[:len(resp.AzureBlobDataset.ExtraPaths)]
-		}
-		for extraPathsCount, extraPathsItem := range resp.AzureBlobDataset.ExtraPaths {
+
+		for _, extraPathsItem := range resp.AzureBlobDataset.ExtraPaths {
 			var extraPaths tfTypes.AzureBlobDatasetExtraPath
+
 			extraPaths.ContainerName = types.StringValue(extraPathsItem.ContainerName)
 			extraPaths.Filter = types.StringPointerValue(extraPathsItem.Filter)
 			extraPaths.Path = types.StringPointerValue(extraPathsItem.Path)
-			if extraPathsCount+1 > len(r.AzureBlobDataset.ExtraPaths) {
-				r.AzureBlobDataset.ExtraPaths = append(r.AzureBlobDataset.ExtraPaths, extraPaths)
-			} else {
-				r.AzureBlobDataset.ExtraPaths[extraPathsCount].ContainerName = extraPaths.ContainerName
-				r.AzureBlobDataset.ExtraPaths[extraPathsCount].Filter = extraPaths.Filter
-				r.AzureBlobDataset.ExtraPaths[extraPathsCount].Path = extraPaths.Path
-			}
+
+			r.AzureBlobDataset.ExtraPaths = append(r.AzureBlobDataset.ExtraPaths, extraPaths)
 		}
 		r.AzureBlobDataset.Filter = types.StringPointerValue(resp.AzureBlobDataset.Filter)
 		r.AzureBlobDataset.ID = types.StringValue(resp.AzureBlobDataset.ID)
@@ -476,19 +460,14 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 		r.CriblLeaderDataset.Description = types.StringPointerValue(resp.CriblLeaderDataset.Description)
 		r.Description = r.CriblLeaderDataset.Description
 		r.CriblLeaderDataset.ExtraPaths = []tfTypes.CriblLeaderDatasetExtraPath{}
-		if len(r.CriblLeaderDataset.ExtraPaths) > len(resp.CriblLeaderDataset.ExtraPaths) {
-			r.CriblLeaderDataset.ExtraPaths = r.CriblLeaderDataset.ExtraPaths[:len(resp.CriblLeaderDataset.ExtraPaths)]
-		}
-		for extraPathsCount1, extraPathsItem1 := range resp.CriblLeaderDataset.ExtraPaths {
+
+		for _, extraPathsItem1 := range resp.CriblLeaderDataset.ExtraPaths {
 			var extraPaths1 tfTypes.CriblLeaderDatasetExtraPath
+
 			extraPaths1.Filter = types.StringPointerValue(extraPathsItem1.Filter)
 			extraPaths1.Path = types.StringValue(extraPathsItem1.Path)
-			if extraPathsCount1+1 > len(r.CriblLeaderDataset.ExtraPaths) {
-				r.CriblLeaderDataset.ExtraPaths = append(r.CriblLeaderDataset.ExtraPaths, extraPaths1)
-			} else {
-				r.CriblLeaderDataset.ExtraPaths[extraPathsCount1].Filter = extraPaths1.Filter
-				r.CriblLeaderDataset.ExtraPaths[extraPathsCount1].Path = extraPaths1.Path
-			}
+
+			r.CriblLeaderDataset.ExtraPaths = append(r.CriblLeaderDataset.ExtraPaths, extraPaths1)
 		}
 		r.CriblLeaderDataset.Filter = types.StringPointerValue(resp.CriblLeaderDataset.Filter)
 		r.CriblLeaderDataset.ID = types.StringValue(resp.CriblLeaderDataset.ID)
@@ -546,21 +525,15 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 		r.GcsDataset.Description = types.StringPointerValue(resp.GcsDataset.Description)
 		r.Description = r.GcsDataset.Description
 		r.GcsDataset.ExtraPaths = []tfTypes.GcsDatasetExtraPath{}
-		if len(r.GcsDataset.ExtraPaths) > len(resp.GcsDataset.ExtraPaths) {
-			r.GcsDataset.ExtraPaths = r.GcsDataset.ExtraPaths[:len(resp.GcsDataset.ExtraPaths)]
-		}
-		for extraPathsCount2, extraPathsItem2 := range resp.GcsDataset.ExtraPaths {
+
+		for _, extraPathsItem2 := range resp.GcsDataset.ExtraPaths {
 			var extraPaths2 tfTypes.GcsDatasetExtraPath
+
 			extraPaths2.Bucket = types.StringValue(extraPathsItem2.Bucket)
 			extraPaths2.Filter = types.StringPointerValue(extraPathsItem2.Filter)
 			extraPaths2.Region = types.StringPointerValue(extraPathsItem2.Region)
-			if extraPathsCount2+1 > len(r.GcsDataset.ExtraPaths) {
-				r.GcsDataset.ExtraPaths = append(r.GcsDataset.ExtraPaths, extraPaths2)
-			} else {
-				r.GcsDataset.ExtraPaths[extraPathsCount2].Bucket = extraPaths2.Bucket
-				r.GcsDataset.ExtraPaths[extraPathsCount2].Filter = extraPaths2.Filter
-				r.GcsDataset.ExtraPaths[extraPathsCount2].Region = extraPaths2.Region
-			}
+
+			r.GcsDataset.ExtraPaths = append(r.GcsDataset.ExtraPaths, extraPaths2)
 		}
 		r.GcsDataset.Filter = types.StringPointerValue(resp.GcsDataset.Filter)
 		r.GcsDataset.ID = types.StringValue(resp.GcsDataset.ID)
@@ -652,25 +625,17 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 		r.S3Dataset.Description = types.StringPointerValue(resp.S3Dataset.Description)
 		r.Description = r.S3Dataset.Description
 		r.S3Dataset.ExtraPaths = []tfTypes.S3DatasetExtraPath{}
-		if len(r.S3Dataset.ExtraPaths) > len(resp.S3Dataset.ExtraPaths) {
-			r.S3Dataset.ExtraPaths = r.S3Dataset.ExtraPaths[:len(resp.S3Dataset.ExtraPaths)]
-		}
-		for extraPathsCount3, extraPathsItem3 := range resp.S3Dataset.ExtraPaths {
+
+		for _, extraPathsItem3 := range resp.S3Dataset.ExtraPaths {
 			var extraPaths3 tfTypes.S3DatasetExtraPath
+
 			extraPaths3.AutoDetectRegion = types.BoolPointerValue(extraPathsItem3.AutoDetectRegion)
 			extraPaths3.Bucket = types.StringValue(extraPathsItem3.Bucket)
 			extraPaths3.Filter = types.StringPointerValue(extraPathsItem3.Filter)
 			extraPaths3.Path = types.StringPointerValue(extraPathsItem3.Path)
 			extraPaths3.Region = types.StringPointerValue(extraPathsItem3.Region)
-			if extraPathsCount3+1 > len(r.S3Dataset.ExtraPaths) {
-				r.S3Dataset.ExtraPaths = append(r.S3Dataset.ExtraPaths, extraPaths3)
-			} else {
-				r.S3Dataset.ExtraPaths[extraPathsCount3].AutoDetectRegion = extraPaths3.AutoDetectRegion
-				r.S3Dataset.ExtraPaths[extraPathsCount3].Bucket = extraPaths3.Bucket
-				r.S3Dataset.ExtraPaths[extraPathsCount3].Filter = extraPaths3.Filter
-				r.S3Dataset.ExtraPaths[extraPathsCount3].Path = extraPaths3.Path
-				r.S3Dataset.ExtraPaths[extraPathsCount3].Region = extraPaths3.Region
-			}
+
+			r.S3Dataset.ExtraPaths = append(r.S3Dataset.ExtraPaths, extraPaths3)
 		}
 		r.S3Dataset.Filter = types.StringPointerValue(resp.S3Dataset.Filter)
 		r.S3Dataset.ID = types.StringValue(resp.S3Dataset.ID)

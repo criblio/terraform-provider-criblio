@@ -116,7 +116,7 @@ type InputSystemStatePq struct {
 	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 	MaxSize *string `default:"5GB" json:"maxSize"`
 	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"\\$CRIBL_HOME/state/queues" json:"path"`
+	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
 	// Codec to use to compress the persisted data
 	Compress *InputSystemStateCompression `default:"none" json:"compress"`
 }
@@ -593,7 +593,7 @@ type InputSystemStatePersistence struct {
 	MaxDataTime *string                                `default:"24h" json:"maxDataTime"`
 	Compress    *InputSystemStateDataCompressionFormat `default:"none" json:"compress"`
 	// Path to use to write metrics. Defaults to $CRIBL_HOME/state/system_state
-	DestPath *string `default:"\\$CRIBL_HOME/state/system_state" json:"destPath"`
+	DestPath *string `default:"$CRIBL_HOME/state/system_state" json:"destPath"`
 }
 
 func (i InputSystemStatePersistence) MarshalJSON() ([]byte, error) {

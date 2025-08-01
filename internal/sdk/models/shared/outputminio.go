@@ -432,7 +432,7 @@ type OutputMinio struct {
 	// Region where the MinIO service/cluster is located
 	Region *string `json:"region,omitempty"`
 	// Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
-	StagePath *string `default:"\\$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
+	StagePath *string `default:"$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
 	// Add the Output ID value to staging location
 	AddIDToStagePath *bool `default:"true" json:"addIdToStagePath"`
 	// Root directory to prepend to path before uploading. Enter a constant, or a JavaScript expression enclosed in quotes or backticks.
@@ -513,7 +513,7 @@ type OutputMinio struct {
 	// How frequently, in seconds, to clean up empty directories
 	EmptyDirCleanupSec *float64 `default:"300" json:"emptyDirCleanupSec"`
 	// Storage location for files that fail to reach their final destination after maximum retries are exceeded
-	DeadletterPath *string `default:"\\$CRIBL_HOME/state/outputs/dead-letter" json:"deadletterPath"`
+	DeadletterPath *string `default:"$CRIBL_HOME/state/outputs/dead-letter" json:"deadletterPath"`
 	// The maximum number of times a file will attempt to move to its final destination before being dead-lettered
 	MaxRetryNum *float64 `default:"20" json:"maxRetryNum"`
 }

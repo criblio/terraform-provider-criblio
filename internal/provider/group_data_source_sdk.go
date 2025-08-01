@@ -15,11 +15,10 @@ func (r *GroupDataSourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ct
 
 	if resp != nil {
 		r.Items = []tfTypes.Group{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Group
+
 			if itemsItem.Cloud == nil {
 				items.Cloud = nil
 			} else {
@@ -38,19 +37,8 @@ func (r *GroupDataSourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ct
 				items.Streamtags = append(items.Streamtags, types.StringValue(v))
 			}
 			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Cloud = items.Cloud
-				r.Items[itemsCount].EstimatedIngestRate = items.EstimatedIngestRate
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].IsFleet = items.IsFleet
-				r.Items[itemsCount].Name = items.Name
-				r.Items[itemsCount].OnPrem = items.OnPrem
-				r.Items[itemsCount].Provisioned = items.Provisioned
-				r.Items[itemsCount].Streamtags = items.Streamtags
-				r.Items[itemsCount].WorkerRemoteAccess = items.WorkerRemoteAccess
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 

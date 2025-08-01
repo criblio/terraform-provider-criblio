@@ -59,8 +59,9 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.SingleNestedAttribute{
-									Computed: true,
+								"conf": schema.MapAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,

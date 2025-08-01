@@ -610,7 +610,7 @@ type OutputAzureDataExplorer struct {
 	// Format of the output data
 	Format *OutputAzureDataExplorerDataFormat `default:"json" json:"format"`
 	// Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage.
-	StagePath *string `default:"\\$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
+	StagePath *string `default:"$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
 	// JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
 	FileNameSuffix *string `default:".\\${C.env[\"CRIBL_WORKER_ID\"]}.\\${__format}\\${__compression === \"gzip\" ? \".gz\" : \"\"}" json:"fileNameSuffix"`
 	// Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
@@ -677,7 +677,7 @@ type OutputAzureDataExplorer struct {
 	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
 	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"\\$CRIBL_HOME/state/queues" json:"pqPath"`
+	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
 	// Codec to use to compress the persisted data
 	PqCompress *OutputAzureDataExplorerPqCompressCompression `default:"none" json:"pqCompress"`
 	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.

@@ -17,21 +17,17 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 
 	if resp != nil {
 		r.Items = []tfTypes.Routes{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Routes
+
 			itemsPriorData := items
 			items.Comments = itemsPriorData.Comments
 			items.Groups = itemsPriorData.Groups
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Routes = itemsPriorData.Routes
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].ID = items.ID
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
@@ -43,14 +39,15 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 
 	if resp != nil {
 		r.Items = []tfTypes.Routes{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Routes
+
 			items.Comments = []tfTypes.Comment{}
-			for commentsCount, commentsItem := range itemsItem.Comments {
+
+			for _, commentsItem := range itemsItem.Comments {
 				var comments tfTypes.Comment
+
 				if commentsItem.AdditionalProperties == nil {
 					comments.AdditionalProperties = types.StringNull()
 				} else {
@@ -58,12 +55,8 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
 				}
 				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-				if commentsCount+1 > len(items.Comments) {
-					items.Comments = append(items.Comments, comments)
-				} else {
-					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
-					items.Comments[commentsCount].Comment = comments.Comment
-				}
+
+				items.Comments = append(items.Comments, comments)
 			}
 			if len(itemsItem.Groups) > 0 {
 				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
@@ -78,8 +71,10 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 			}
 			items.ID = types.StringPointerValue(itemsItem.ID)
 			items.Routes = []tfTypes.RoutesRoute{}
-			for routesCount, routesItem := range itemsItem.Routes {
+
+			for _, routesItem := range itemsItem.Routes {
 				var routes tfTypes.RoutesRoute
+
 				if routesItem.AdditionalProperties == nil {
 					routes.AdditionalProperties = types.StringNull()
 				} else {
@@ -106,30 +101,11 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
 				}
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-				if routesCount+1 > len(items.Routes) {
-					items.Routes = append(items.Routes, routes)
-				} else {
-					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
-					items.Routes[routesCount].Description = routes.Description
-					items.Routes[routesCount].Disabled = routes.Disabled
-					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
-					items.Routes[routesCount].Filter = routes.Filter
-					items.Routes[routesCount].Final = routes.Final
-					items.Routes[routesCount].ID = routes.ID
-					items.Routes[routesCount].Name = routes.Name
-					items.Routes[routesCount].Output = routes.Output
-					items.Routes[routesCount].OutputExpression = routes.OutputExpression
-					items.Routes[routesCount].Pipeline = routes.Pipeline
-				}
+
+				items.Routes = append(items.Routes, routes)
 			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Comments = items.Comments
-				r.Items[itemsCount].Groups = items.Groups
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Routes = items.Routes
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
@@ -141,14 +117,15 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackAn
 
 	if resp != nil {
 		r.Items = []tfTypes.Routes{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Routes
+
 			items.Comments = []tfTypes.Comment{}
-			for commentsCount, commentsItem := range itemsItem.Comments {
+
+			for _, commentsItem := range itemsItem.Comments {
 				var comments tfTypes.Comment
+
 				if commentsItem.AdditionalProperties == nil {
 					comments.AdditionalProperties = types.StringNull()
 				} else {
@@ -156,12 +133,8 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackAn
 					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
 				}
 				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-				if commentsCount+1 > len(items.Comments) {
-					items.Comments = append(items.Comments, comments)
-				} else {
-					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
-					items.Comments[commentsCount].Comment = comments.Comment
-				}
+
+				items.Comments = append(items.Comments, comments)
 			}
 			if len(itemsItem.Groups) > 0 {
 				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
@@ -176,8 +149,10 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackAn
 			}
 			items.ID = types.StringPointerValue(itemsItem.ID)
 			items.Routes = []tfTypes.RoutesRoute{}
-			for routesCount, routesItem := range itemsItem.Routes {
+
+			for _, routesItem := range itemsItem.Routes {
 				var routes tfTypes.RoutesRoute
+
 				if routesItem.AdditionalProperties == nil {
 					routes.AdditionalProperties = types.StringNull()
 				} else {
@@ -204,30 +179,11 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackAn
 					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
 				}
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-				if routesCount+1 > len(items.Routes) {
-					items.Routes = append(items.Routes, routes)
-				} else {
-					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
-					items.Routes[routesCount].Description = routes.Description
-					items.Routes[routesCount].Disabled = routes.Disabled
-					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
-					items.Routes[routesCount].Filter = routes.Filter
-					items.Routes[routesCount].Final = routes.Final
-					items.Routes[routesCount].ID = routes.ID
-					items.Routes[routesCount].Name = routes.Name
-					items.Routes[routesCount].Output = routes.Output
-					items.Routes[routesCount].OutputExpression = routes.OutputExpression
-					items.Routes[routesCount].Pipeline = routes.Pipeline
-				}
+
+				items.Routes = append(items.Routes, routes)
 			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Comments = items.Comments
-				r.Items[itemsCount].Groups = items.Groups
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Routes = items.Routes
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 

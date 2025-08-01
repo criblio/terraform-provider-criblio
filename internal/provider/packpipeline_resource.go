@@ -11,6 +11,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -71,8 +72,12 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.SingleNestedAttribute{
-									Required: true,
+								"conf": schema.MapAttribute{
+									Required:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"description": schema.StringAttribute{
 									Optional:    true,

@@ -17,14 +17,15 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackRes
 
 	if resp != nil {
 		r.Items = []tfTypes.Routes{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Routes
+
 			items.Comments = []tfTypes.Comment{}
-			for commentsCount, commentsItem := range itemsItem.Comments {
+
+			for _, commentsItem := range itemsItem.Comments {
 				var comments tfTypes.Comment
+
 				if commentsItem.AdditionalProperties == nil {
 					comments.AdditionalProperties = types.StringNull()
 				} else {
@@ -32,12 +33,8 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackRes
 					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
 				}
 				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-				if commentsCount+1 > len(items.Comments) {
-					items.Comments = append(items.Comments, comments)
-				} else {
-					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
-					items.Comments[commentsCount].Comment = comments.Comment
-				}
+
+				items.Comments = append(items.Comments, comments)
 			}
 			if len(itemsItem.Groups) > 0 {
 				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
@@ -52,8 +49,10 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackRes
 			}
 			items.ID = types.StringPointerValue(itemsItem.ID)
 			items.Routes = []tfTypes.RoutesRoute{}
-			for routesCount, routesItem := range itemsItem.Routes {
+
+			for _, routesItem := range itemsItem.Routes {
 				var routes tfTypes.RoutesRoute
+
 				if routesItem.AdditionalProperties == nil {
 					routes.AdditionalProperties = types.StringNull()
 				} else {
@@ -80,30 +79,11 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackRes
 					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
 				}
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-				if routesCount+1 > len(items.Routes) {
-					items.Routes = append(items.Routes, routes)
-				} else {
-					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
-					items.Routes[routesCount].Description = routes.Description
-					items.Routes[routesCount].Disabled = routes.Disabled
-					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
-					items.Routes[routesCount].Filter = routes.Filter
-					items.Routes[routesCount].Final = routes.Final
-					items.Routes[routesCount].ID = routes.ID
-					items.Routes[routesCount].Name = routes.Name
-					items.Routes[routesCount].Output = routes.Output
-					items.Routes[routesCount].OutputExpression = routes.OutputExpression
-					items.Routes[routesCount].Pipeline = routes.Pipeline
-				}
+
+				items.Routes = append(items.Routes, routes)
 			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Comments = items.Comments
-				r.Items[itemsCount].Groups = items.Groups
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Routes = items.Routes
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
@@ -115,14 +95,15 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackRespo
 
 	if resp != nil {
 		r.Items = []tfTypes.Routes{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.Routes
+
 			items.Comments = []tfTypes.Comment{}
-			for commentsCount, commentsItem := range itemsItem.Comments {
+
+			for _, commentsItem := range itemsItem.Comments {
 				var comments tfTypes.Comment
+
 				if commentsItem.AdditionalProperties == nil {
 					comments.AdditionalProperties = types.StringNull()
 				} else {
@@ -130,12 +111,8 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackRespo
 					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
 				}
 				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-				if commentsCount+1 > len(items.Comments) {
-					items.Comments = append(items.Comments, comments)
-				} else {
-					items.Comments[commentsCount].AdditionalProperties = comments.AdditionalProperties
-					items.Comments[commentsCount].Comment = comments.Comment
-				}
+
+				items.Comments = append(items.Comments, comments)
 			}
 			if len(itemsItem.Groups) > 0 {
 				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
@@ -150,8 +127,10 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackRespo
 			}
 			items.ID = types.StringPointerValue(itemsItem.ID)
 			items.Routes = []tfTypes.RoutesRoute{}
-			for routesCount, routesItem := range itemsItem.Routes {
+
+			for _, routesItem := range itemsItem.Routes {
 				var routes tfTypes.RoutesRoute
+
 				if routesItem.AdditionalProperties == nil {
 					routes.AdditionalProperties = types.StringNull()
 				} else {
@@ -178,30 +157,11 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackRespo
 					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
 				}
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-				if routesCount+1 > len(items.Routes) {
-					items.Routes = append(items.Routes, routes)
-				} else {
-					items.Routes[routesCount].AdditionalProperties = routes.AdditionalProperties
-					items.Routes[routesCount].Description = routes.Description
-					items.Routes[routesCount].Disabled = routes.Disabled
-					items.Routes[routesCount].EnableOutputExpression = routes.EnableOutputExpression
-					items.Routes[routesCount].Filter = routes.Filter
-					items.Routes[routesCount].Final = routes.Final
-					items.Routes[routesCount].ID = routes.ID
-					items.Routes[routesCount].Name = routes.Name
-					items.Routes[routesCount].Output = routes.Output
-					items.Routes[routesCount].OutputExpression = routes.OutputExpression
-					items.Routes[routesCount].Pipeline = routes.Pipeline
-				}
+
+				items.Routes = append(items.Routes, routes)
 			}
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Comments = items.Comments
-				r.Items[itemsCount].Groups = items.Groups
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Routes = items.Routes
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
@@ -214,28 +174,25 @@ func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Contex
 	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(resp.Conf.AsyncFuncTimeout)
 	r.Conf.Description = types.StringPointerValue(resp.Conf.Description)
 	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-	if len(r.Conf.Functions) > len(resp.Conf.Functions) {
-		r.Conf.Functions = r.Conf.Functions[:len(resp.Conf.Functions)]
-	}
-	for functionsCount, functionsItem := range resp.Conf.Functions {
+
+	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
+
+		if len(functionsItem.Conf) > 0 {
+			functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
+			for key, value := range functionsItem.Conf {
+				result, _ := json.Marshal(value)
+				functions.Conf[key] = types.StringValue(string(result))
+			}
+		}
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)
 		functions.Final = types.BoolPointerValue(functionsItem.Final)
 		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
 		functions.ID = types.StringValue(functionsItem.ID)
-		if functionsCount+1 > len(r.Conf.Functions) {
-			r.Conf.Functions = append(r.Conf.Functions, functions)
-		} else {
-			r.Conf.Functions[functionsCount].Conf = functions.Conf
-			r.Conf.Functions[functionsCount].Description = functions.Description
-			r.Conf.Functions[functionsCount].Disabled = functions.Disabled
-			r.Conf.Functions[functionsCount].Filter = functions.Filter
-			r.Conf.Functions[functionsCount].Final = functions.Final
-			r.Conf.Functions[functionsCount].GroupID = functions.GroupID
-			r.Conf.Functions[functionsCount].ID = functions.ID
-		}
+
+		r.Conf.Functions = append(r.Conf.Functions, functions)
 	}
 	if len(resp.Conf.Groups) > 0 {
 		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
@@ -386,7 +343,12 @@ func (r *PackPipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shar
 		} else {
 			final = nil
 		}
-		conf1 := shared.FunctionSpecificConfigs{}
+		conf1 := make(map[string]interface{})
+		for confKey, confValue := range functionsItem.Conf {
+			var confInst interface{}
+			_ = json.Unmarshal([]byte(confValue.ValueString()), &confInst)
+			conf1[confKey] = confInst
+		}
 		groupID := new(string)
 		if !functionsItem.GroupID.IsUnknown() && !functionsItem.GroupID.IsNull() {
 			*groupID = functionsItem.GroupID.ValueString()

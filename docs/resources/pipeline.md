@@ -20,7 +20,7 @@ resource "criblio_pipeline" "my_pipeline" {
     functions = [
       {
         conf = {
-          # ...
+          key = jsonencode("value")
         }
         description = "...my_description..."
         disabled    = true
@@ -73,17 +73,13 @@ Optional:
 
 Optional:
 
-- `conf` (Attributes) Not Null (see [below for nested schema](#nestedatt--conf--functions--conf))
+- `conf` (Map of String) Not Null
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
 - `group_id` (String) Group ID
 - `id` (String) Function ID. Not Null
-
-<a id="nestedatt--conf--functions--conf"></a>
-### Nested Schema for `conf.functions.conf`
-
 
 
 <a id="nestedatt--conf--groups"></a>

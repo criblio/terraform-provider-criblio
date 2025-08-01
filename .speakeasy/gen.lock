@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 742d93dd50d23eb9b042ff8ae8b2cbfa
+  docChecksum: 75c419b2b97f266bb58f760cd9e45be1
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.592.1
-  generationVersion: 2.667.0
-  releaseVersion: 1.3.27
-  configChecksum: 0291d09f220f7c41f4fef9e457c1a272
+  speakeasyVersion: 1.595.1
+  generationVersion: 2.670.3
+  releaseVersion: 1.3.28
+  configChecksum: 2a793c5d10b2d4977f62a236f6d3d178
   published: true
 features:
   terraform:
@@ -409,7 +409,6 @@ generatedFiles:
   - internal/provider/types/extra_log_type.go
   - internal/provider/types/field.go
   - internal/provider/types/firewall.go
-  - internal/provider/types/function_specific_configs.go
   - internal/provider/types/gcp_account_config.go
   - internal/provider/types/gcp_endpoint_config.go
   - internal/provider/types/gcs_dataset.go

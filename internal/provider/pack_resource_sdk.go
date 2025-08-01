@@ -17,11 +17,10 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 
 	if resp != nil {
 		r.Items = []tfTypes.PackInstallInfo{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.PackInstallInfo
+
 			items.Author = types.StringPointerValue(itemsItem.Author)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.DisplayName = types.StringPointerValue(itemsItem.DisplayName)
@@ -67,25 +66,8 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 			items.Version = types.StringPointerValue(itemsItem.Version)
 			warningsResult, _ := json.Marshal(itemsItem.Warnings)
 			items.Warnings = types.StringValue(string(warningsResult))
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Author = items.Author
-				r.Items[itemsCount].Description = items.Description
-				r.Items[itemsCount].DisplayName = items.DisplayName
-				r.Items[itemsCount].Exports = items.Exports
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Inputs = items.Inputs
-				r.Items[itemsCount].IsDisabled = items.IsDisabled
-				r.Items[itemsCount].MinLogStreamVersion = items.MinLogStreamVersion
-				r.Items[itemsCount].Outputs = items.Outputs
-				r.Items[itemsCount].Settings = items.Settings
-				r.Items[itemsCount].Source = items.Source
-				r.Items[itemsCount].Spec = items.Spec
-				r.Items[itemsCount].Tags = items.Tags
-				r.Items[itemsCount].Version = items.Version
-				r.Items[itemsCount].Warnings = items.Warnings
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
@@ -97,11 +79,10 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx co
 
 	if resp != nil {
 		r.Items = []tfTypes.PackInstallInfo{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.PackInstallInfo
+
 			items.Author = types.StringPointerValue(itemsItem.Author)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.DisplayName = types.StringPointerValue(itemsItem.DisplayName)
@@ -147,25 +128,8 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx co
 			items.Version = types.StringPointerValue(itemsItem.Version)
 			warningsResult, _ := json.Marshal(itemsItem.Warnings)
 			items.Warnings = types.StringValue(string(warningsResult))
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Author = items.Author
-				r.Items[itemsCount].Description = items.Description
-				r.Items[itemsCount].DisplayName = items.DisplayName
-				r.Items[itemsCount].Exports = items.Exports
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Inputs = items.Inputs
-				r.Items[itemsCount].IsDisabled = items.IsDisabled
-				r.Items[itemsCount].MinLogStreamVersion = items.MinLogStreamVersion
-				r.Items[itemsCount].Outputs = items.Outputs
-				r.Items[itemsCount].Settings = items.Settings
-				r.Items[itemsCount].Source = items.Source
-				r.Items[itemsCount].Spec = items.Spec
-				r.Items[itemsCount].Tags = items.Tags
-				r.Items[itemsCount].Version = items.Version
-				r.Items[itemsCount].Warnings = items.Warnings
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
@@ -177,11 +141,10 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 
 	if resp != nil {
 		r.Items = []tfTypes.PackInstallInfo{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.PackInstallInfo
+
 			items.Author = types.StringPointerValue(itemsItem.Author)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.DisplayName = types.StringPointerValue(itemsItem.DisplayName)
@@ -227,25 +190,8 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 			items.Version = types.StringPointerValue(itemsItem.Version)
 			warningsResult, _ := json.Marshal(itemsItem.Warnings)
 			items.Warnings = types.StringValue(string(warningsResult))
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Author = items.Author
-				r.Items[itemsCount].Description = items.Description
-				r.Items[itemsCount].DisplayName = items.DisplayName
-				r.Items[itemsCount].Exports = items.Exports
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].Inputs = items.Inputs
-				r.Items[itemsCount].IsDisabled = items.IsDisabled
-				r.Items[itemsCount].MinLogStreamVersion = items.MinLogStreamVersion
-				r.Items[itemsCount].Outputs = items.Outputs
-				r.Items[itemsCount].Settings = items.Settings
-				r.Items[itemsCount].Source = items.Source
-				r.Items[itemsCount].Spec = items.Spec
-				r.Items[itemsCount].Tags = items.Tags
-				r.Items[itemsCount].Version = items.Version
-				r.Items[itemsCount].Warnings = items.Warnings
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 

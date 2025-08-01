@@ -16,11 +16,10 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 
 	if resp != nil {
 		r.Items = []tfTypes.ConfigGroup{}
-		if len(r.Items) > len(resp.Items) {
-			r.Items = r.Items[:len(resp.Items)]
-		}
-		for itemsCount, itemsItem := range resp.Items {
+
+		for _, itemsItem := range resp.Items {
 			var items tfTypes.ConfigGroup
+
 			if itemsItem.Cloud == nil {
 				items.Cloud = nil
 			} else {
@@ -43,24 +42,18 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 				items.Git.Commit = types.StringPointerValue(itemsItem.Git.Commit)
 				items.Git.LocalChanges = types.Float64PointerValue(itemsItem.Git.LocalChanges)
 				items.Git.Log = []tfTypes.Commit{}
-				for logCount, logItem := range itemsItem.Git.Log {
+
+				for _, logItem := range itemsItem.Git.Log {
 					var log tfTypes.Commit
+
 					log.AuthorEmail = types.StringPointerValue(logItem.AuthorEmail)
 					log.AuthorName = types.StringPointerValue(logItem.AuthorName)
 					log.Date = types.StringValue(logItem.Date)
 					log.Hash = types.StringValue(logItem.Hash)
 					log.Message = types.StringValue(logItem.Message)
 					log.Short = types.StringValue(logItem.Short)
-					if logCount+1 > len(items.Git.Log) {
-						items.Git.Log = append(items.Git.Log, log)
-					} else {
-						items.Git.Log[logCount].AuthorEmail = log.AuthorEmail
-						items.Git.Log[logCount].AuthorName = log.AuthorName
-						items.Git.Log[logCount].Date = log.Date
-						items.Git.Log[logCount].Hash = log.Hash
-						items.Git.Log[logCount].Message = log.Message
-						items.Git.Log[logCount].Short = log.Short
-					}
+
+					items.Git.Log = append(items.Git.Log, log)
 				}
 			}
 			items.ID = types.StringValue(itemsItem.ID)
@@ -69,29 +62,24 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
 			items.IsSearch = types.BoolPointerValue(itemsItem.IsSearch)
 			items.LookupDeployments = []tfTypes.ConfigGroupLookups{}
-			for lookupDeploymentsCount, lookupDeploymentsItem := range itemsItem.LookupDeployments {
+
+			for _, lookupDeploymentsItem := range itemsItem.LookupDeployments {
 				var lookupDeployments tfTypes.ConfigGroupLookups
+
 				lookupDeployments.Context = types.StringValue(lookupDeploymentsItem.Context)
 				lookupDeployments.Lookups = []tfTypes.Lookup{}
-				for lookupsCount, lookupsItem := range lookupDeploymentsItem.Lookups {
+
+				for _, lookupsItem := range lookupDeploymentsItem.Lookups {
 					var lookups tfTypes.Lookup
+
 					lookups.DeployedVersion = types.StringPointerValue(lookupsItem.DeployedVersion)
 					lookups.File = types.StringValue(lookupsItem.File)
 					lookups.Version = types.StringPointerValue(lookupsItem.Version)
-					if lookupsCount+1 > len(lookupDeployments.Lookups) {
-						lookupDeployments.Lookups = append(lookupDeployments.Lookups, lookups)
-					} else {
-						lookupDeployments.Lookups[lookupsCount].DeployedVersion = lookups.DeployedVersion
-						lookupDeployments.Lookups[lookupsCount].File = lookups.File
-						lookupDeployments.Lookups[lookupsCount].Version = lookups.Version
-					}
+
+					lookupDeployments.Lookups = append(lookupDeployments.Lookups, lookups)
 				}
-				if lookupDeploymentsCount+1 > len(items.LookupDeployments) {
-					items.LookupDeployments = append(items.LookupDeployments, lookupDeployments)
-				} else {
-					items.LookupDeployments[lookupDeploymentsCount].Context = lookupDeployments.Context
-					items.LookupDeployments[lookupDeploymentsCount].Lookups = lookupDeployments.Lookups
-				}
+
+				items.LookupDeployments = append(items.LookupDeployments, lookupDeployments)
 			}
 			items.Name = types.StringPointerValue(itemsItem.Name)
 			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
@@ -109,31 +97,8 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 			items.UpgradeVersion = types.StringPointerValue(itemsItem.UpgradeVersion)
 			items.WorkerCount = types.Float64PointerValue(itemsItem.WorkerCount)
 			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
-			if itemsCount+1 > len(r.Items) {
-				r.Items = append(r.Items, items)
-			} else {
-				r.Items[itemsCount].Cloud = items.Cloud
-				r.Items[itemsCount].ConfigVersion = items.ConfigVersion
-				r.Items[itemsCount].DeployingWorkerCount = items.DeployingWorkerCount
-				r.Items[itemsCount].Description = items.Description
-				r.Items[itemsCount].EstimatedIngestRate = items.EstimatedIngestRate
-				r.Items[itemsCount].Git = items.Git
-				r.Items[itemsCount].ID = items.ID
-				r.Items[itemsCount].IncompatibleWorkerCount = items.IncompatibleWorkerCount
-				r.Items[itemsCount].Inherits = items.Inherits
-				r.Items[itemsCount].IsFleet = items.IsFleet
-				r.Items[itemsCount].IsSearch = items.IsSearch
-				r.Items[itemsCount].LookupDeployments = items.LookupDeployments
-				r.Items[itemsCount].Name = items.Name
-				r.Items[itemsCount].OnPrem = items.OnPrem
-				r.Items[itemsCount].Provisioned = items.Provisioned
-				r.Items[itemsCount].Streamtags = items.Streamtags
-				r.Items[itemsCount].Tags = items.Tags
-				r.Items[itemsCount].Type = items.Type
-				r.Items[itemsCount].UpgradeVersion = items.UpgradeVersion
-				r.Items[itemsCount].WorkerCount = items.WorkerCount
-				r.Items[itemsCount].WorkerRemoteAccess = items.WorkerRemoteAccess
-			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 
