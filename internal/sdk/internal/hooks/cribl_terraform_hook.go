@@ -155,24 +155,12 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 	// If we have org and workspace IDs from security context or config, use them
 	if orgID != "" && workspaceID != "" {
-		var newURL string
-
-		// Check if this is a search resource - if so, use workspace-specific hostname
-		if strings.Contains(path, "search/") {
-			// For search resources, use the workspace-specific hostname format
-			workspaceHostname := fmt.Sprintf("%s-%s.cribl-playground.cloud", workspaceID, orgID)
-			newURL = fmt.Sprintf("https://%s/api/v1/%s",
-				workspaceHostname,
-				path,
-			)
-		} else {
-			newURL = fmt.Sprintf("%s/organizations/%s/workspaces/%s/app/api/v1/%s",
-				serverURL,
-				orgID,
-				workspaceID,
-				path,
-			)
-		}
+		newURL := fmt.Sprintf("%s/organizations/%s/workspaces/%s/app/api/v1/%s",
+			serverURL,
+			orgID,
+			workspaceID,
+			path,
+		)
 
 		parsedURL, err := url.Parse(newURL)
 		if err != nil {
