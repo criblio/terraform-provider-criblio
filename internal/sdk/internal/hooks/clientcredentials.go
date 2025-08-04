@@ -34,9 +34,10 @@ type tokenResponse struct {
 }
 
 type credentials struct {
-	ClientID     string
-	ClientSecret string
-	TokenURL     string
+	ClientID             string
+	ClientSecret         string
+	TokenURL             string
+	AdditionalProperties map[string]string
 }
 
 type clientCredentialsHook struct {
@@ -127,6 +128,10 @@ func (c *clientCredentialsHook) doTokenRequest(ctx HookContext, credentials *cre
 		values.Set("scope", strings.Join(scopes, " "))
 	}
 
+	for key, value := range credentials.AdditionalProperties {
+		values.Set(key, value)
+	}
+
 	tokenURL := credentials.TokenURL
 	u, err := url.Parse(tokenURL)
 	if err != nil {
@@ -203,11 +208,16 @@ func (c *clientCredentialsHook) getCredentialsGlobal(sec any) (*credentials, err
 	if security.ClientOauth == nil {
 		return nil, nil
 	}
+	secType := reflect.TypeOf(security.ClientOauth)
+	if secType.Kind() == reflect.Ptr {
+		secType = secType.Elem()
+	}
+	secValue := reflect.ValueOf(security.ClientOauth)
+	if secValue.Kind() == reflect.Ptr {
+		secValue = secValue.Elem()
+	}
 	if security.ClientOauth.TokenURL == "" {
-		secType := reflect.TypeOf(security.ClientOauth)
-		if secType.Kind() == reflect.Ptr {
-			secType = secType.Elem()
-		}
+
 		tokenURLField, ok := secType.FieldByName("TokenURL")
 		if !ok {
 			return nil, fmt.Errorf("TokenURL is required for security type %s", secType.Name())
@@ -216,10 +226,30 @@ func (c *clientCredentialsHook) getCredentialsGlobal(sec any) (*credentials, err
 		security.ClientOauth.TokenURL = tokenURLDefault
 	}
 
+	additionalProperties := make(map[string]string)
+	for i := 0; i < secType.NumField(); i++ {
+		field := secType.Field(i)
+		if field.Name != "TokenURL" && field.Name != "ClientID" && field.Name != "ClientSecret" {
+			// Get the field value using reflection
+			fieldValue := secValue.Field(i)
+			if fieldValue.IsValid() {
+				tag := field.Tag.Get("security")
+				parts := strings.Split(tag, ",")
+				for _, part := range parts {
+					if strings.HasPrefix(part, "name=") {
+						additionalProperties[strings.TrimPrefix(part, "name=")] = fieldValue.String()
+						break
+					}
+				}
+			}
+		}
+	}
+
 	return &credentials{
-		ClientID:     security.ClientOauth.ClientID,
-		ClientSecret: security.ClientOauth.ClientSecret,
-		TokenURL:     security.ClientOauth.TokenURL,
+		ClientID:             security.ClientOauth.ClientID,
+		ClientSecret:         security.ClientOauth.ClientSecret,
+		TokenURL:             security.ClientOauth.TokenURL,
+		AdditionalProperties: additionalProperties,
 	}, nil
 }
 
