@@ -11,10 +11,10 @@ import (
 )
 
 type CriblConfig struct {
-	ClientID       string `json:"client_id"`
-	ClientSecret   string `json:"client_secret"`
-	OrganizationID string `json:"organization_id"`
-	Workspace      string `json:"workspace"`
+	ClientID       string `json:"client_id" ini:"client_id"`
+	ClientSecret   string `json:"client_secret" ini:"client_secret"`
+	OrganizationID string `json:"organization_id" ini:"organization_id"`
+	Workspace      string `json:"workspace" ini:"workspace"`
 }
 
 type CriblConfigFile struct {
@@ -104,10 +104,11 @@ func parseIniConfig(file []byte) (*CriblConfig, error) {
 		return nil, fmt.Errorf("failed to parse config file: %v", err)
 	}
 
-	config.ClientID = cfg.Section(profileName).Key("client_id").String()
-	config.ClientSecret = cfg.Section(profileName).Key("client_secret").String()
-	config.OrganizationID = cfg.Section(profileName).Key("organization_id").String()
-	config.Workspace = cfg.Section(profileName).Key("workspace").String()
+	err = cfg.Section(profileName).MapTo(&config)
+	if err != nil {
+		log.Printf("[ERROR] Failed to parse config file profile: %v", err)
+		return nil, fmt.Errorf("failed to parse config file profile: %v", err)
+	}
 
 	log.Printf("[DEBUG] Selected profile values - clientID=%s, orgID=%s, workspace=%s",
 		config.ClientID, config.OrganizationID, config.Workspace)
