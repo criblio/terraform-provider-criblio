@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 type CriblConfig struct {
@@ -91,80 +90,28 @@ func parseJSONConfig(file []byte) (*CriblConfig, error) {
 }
 
 func parseIniConfig(file []byte) (*CriblConfig, error) {
-	// Try to parse as INI format first
-	config := &CriblConfigFile{
-		Profiles: make(map[string]CriblConfig),
-	}
+	config := CriblConfig{}
 
-	// Read the file line by line
-	lines := strings.Split(string(file), "\n")
-	currentProfile := "default"
-
-	log.Printf("[DEBUG] Parsing credentials file, starting with profile: %s", currentProfile)
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
-		}
-
-		if strings.HasPrefix(line, "[") && strings.HasSuffix(line, "]") {
-			currentProfile = strings.Trim(line, "[]")
-			log.Printf("[DEBUG] Found profile section: %s", currentProfile)
-			continue
-		}
-
-		parts := strings.SplitN(line, "=", 2)
-		if len(parts) != 2 {
-			continue
-		}
-
-		key := strings.TrimSpace(parts[0])
-		value := strings.TrimSpace(parts[1])
-
-		profile := config.Profiles[currentProfile]
-		switch key {
-		case "client_id":
-			profile.ClientID = value
-		case "client_secret":
-			profile.ClientSecret = value
-		case "organization_id":
-			profile.OrganizationID = value
-			log.Printf("[DEBUG] Set organization_id=%s for profile %s", value, currentProfile)
-		case "workspace":
-			profile.Workspace = value
-			log.Printf("[DEBUG] Set workspace=%s for profile %s", value, currentProfile)
-		}
-		config.Profiles[currentProfile] = profile
-	}
-
-	// Get the profile from environment variable or use default
 	profileName := os.Getenv("CRIBL_PROFILE")
 	if profileName == "" {
 		profileName = "default"
 	}
 	log.Printf("[DEBUG] Using profile: %s", profileName)
 
-	// Get the specified profile
-	profile, ok := config.Profiles[profileName]
-	if !ok {
-		if profileName == "default" {
-			// If default profile is not found, use the first available profile
-			for _, p := range config.Profiles {
-				profile = p
-				break
-			}
-			log.Printf("[DEBUG] Default profile not found, using first available profile")
-		} else {
-			// If a specific profile was requested but not found, return an error
-			log.Printf("[ERROR] Profile '%s' not found in credentials file", profileName)
-			return nil, fmt.Errorf("profile '%s' not found in credentials file", profileName)
-		}
+	cfg, err := ini.Load(file)
+	if err != nil {
+		log.Printf("[ERROR] Failed to parse config file: %v", err)
+		return nil, fmt.Errorf("failed to parse config file: %v", err)
 	}
 
-	log.Printf("[DEBUG] Selected profile values - clientID=%s, orgID=%s, workspace=%s",
-		profile.ClientID, profile.OrganizationID, profile.Workspace)
-	return &profile, nil
+	config.ClientID = cfg.Section(profileName).Key("client_id").String()
+	config.ClientSecret = cfg.Section(profileName).Key("client_secret").String()
+	config.OrganizationID = cfg.Section(profileName).Key("organization_id").String()
+	config.Workspace = cfg.Section(profileName).Key("workspace").String()
 
+	log.Printf("[DEBUG] Selected profile values - clientID=%s, orgID=%s, workspace=%s",
+		config.ClientID, config.OrganizationID, config.Workspace)
+	return &config, nil
 }
 
 // GetCredentials reads credentials from environment variables or credentials file
