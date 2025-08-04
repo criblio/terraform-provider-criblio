@@ -309,3 +309,33 @@ func TestParseIniConfig(t *testing.T) {
 		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace)
 	}
 }
+
+func TestParseIniConfigMultiProfile(t *testing.T) {
+	os.Setenv("CRIBL_PROFILE", "secondary")
+	creds := `[default]
+		  client_id = your-client-id
+		  client_secret = your-client-secret
+		  organization_id = your-organization-id
+		  workspace = your-workspace-id
+                  [secondary]
+		  client_id = your-secondary-id
+		  client_secret = your-secondary-secret
+		  organization_id = your-secondary-id
+		  workspace = your-secondary-id
+		  `
+
+	cfg, err := parseIniConfig([]byte(creds))
+	if err != nil {
+		t.Errorf("parseIniConfig threw an error in operation: %s", err)
+	}
+
+	if cfg.ClientID != "your-secondary-id" {
+		t.Errorf("parseIniConfig returned incorrect ClientID, expected %s got %s", "your-secondary-id", cfg.ClientID)
+	} else if cfg.ClientSecret != "your-secondary-secret" {
+		t.Errorf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "your-secondary-secret", cfg.ClientSecret)
+	} else if cfg.OrganizationID != "your-secondary-id" {
+		t.Errorf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "your-secondary-id", cfg.OrganizationID)
+	} else if cfg.Workspace != "your-secondary-id" {
+		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-secondary-id", cfg.Workspace)
+	}
+}
