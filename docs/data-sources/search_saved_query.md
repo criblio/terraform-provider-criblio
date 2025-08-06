@@ -259,6 +259,14 @@ Read-Only:
 <a id="nestedatt--schedule--notifications--items--conf"></a>
 ### Nested Schema for `schedule.notifications.items.conf`
 
+Read-Only:
+
+- `message` (String) Message template for the notification
+- `saved_query_id` (String) ID of the saved query this notification is associated with
+- `trigger_comparator` (String) Comparison operator (e.g., >, <, =)
+- `trigger_count` (Number) Threshold count for the trigger
+- `trigger_type` (String) Type of trigger (e.g., resultsCount)
+
 
 <a id="nestedatt--schedule--notifications--items--metadata"></a>
 ### Nested Schema for `schedule.notifications.items.metadata`
@@ -282,15 +290,5 @@ Read-Only:
 
 Read-Only:
 
-- `body` (String) Email body
-- `email_recipient` (Attributes) (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs--conf--email_recipient))
-- `subject` (String) Email subject
-
-<a id="nestedatt--schedule--notifications--items--target_configs--conf--email_recipient"></a>
-### Nested Schema for `schedule.notifications.items.target_configs.conf.email_recipient`
-
-Read-Only:
-
-- `bcc` (String) Bcc: Recipients' email addresses
-- `cc` (String) Cc: Recipients' email addresses
-- `to` (String) Recipients' email addresses
+- `attachment_type` (String) Type of attachment for the notification
+- `include_results` (Boolean) Whether to include search results in the notification

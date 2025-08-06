@@ -2,20 +2,20 @@
 
 package shared
 
-type NotificationTargetConfig struct {
+type TargetConfig struct {
 	// ID of the notification target
 	ID   string            `json:"id"`
-	Conf *SMTPTargetConfig `json:"conf,omitempty"`
+	Conf *TargetConfigConf `json:"conf,omitempty"`
 }
 
-func (o *NotificationTargetConfig) GetID() string {
+func (o *TargetConfig) GetID() string {
 	if o == nil {
 		return ""
 	}
 	return o.ID
 }
 
-func (o *NotificationTargetConfig) GetConf() *SMTPTargetConfig {
+func (o *TargetConfig) GetConf() *TargetConfigConf {
 	if o == nil {
 		return nil
 	}

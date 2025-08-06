@@ -7,12 +7,12 @@ import (
 )
 
 type Notification struct {
-	Condition     types.String               `tfsdk:"condition"`
-	Conf          *ConditionSpecificConfigs  `tfsdk:"conf"`
-	Disabled      types.Bool                 `tfsdk:"disabled"`
-	Group         types.String               `tfsdk:"group"`
-	ID            types.String               `tfsdk:"id"`
-	Metadata      []MetadataItem             `tfsdk:"metadata"`
-	TargetConfigs []NotificationTargetConfig `tfsdk:"target_configs"`
-	Targets       []types.String             `tfsdk:"targets"`
+	Condition     types.String              `tfsdk:"condition"`
+	Conf          *ConditionSpecificConfigs `tfsdk:"conf"`
+	Disabled      types.Bool                `tfsdk:"disabled"`
+	Group         types.String              `tfsdk:"group"`
+	ID            types.String              `tfsdk:"id"`
+	Metadata      []MetadataItem            `tfsdk:"metadata"`
+	TargetConfigs []TargetConfig            `tfsdk:"target_configs"`
+	Targets       []types.String            `tfsdk:"targets"`
 }

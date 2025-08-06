@@ -146,6 +146,11 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 				items.Conf = nil
 			} else {
 				items.Conf = &tfTypes.ConditionSpecificConfigs{}
+				items.Conf.Message = types.StringValue(itemsItem.Conf.Message)
+				items.Conf.SavedQueryID = types.StringValue(itemsItem.Conf.SavedQueryID)
+				items.Conf.TriggerComparator = types.StringPointerValue(itemsItem.Conf.TriggerComparator)
+				items.Conf.TriggerCount = types.Float64PointerValue(itemsItem.Conf.TriggerCount)
+				items.Conf.TriggerType = types.StringPointerValue(itemsItem.Conf.TriggerType)
 			}
 			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
 			items.Group = types.StringPointerValue(itemsItem.Group)
@@ -160,25 +165,21 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 
 				items.Metadata = append(items.Metadata, metadata)
 			}
-			items.TargetConfigs = []tfTypes.NotificationTargetConfig{}
+			items.TargetConfigs = []tfTypes.TargetConfig{}
 
 			for _, targetConfigsItem := range itemsItem.TargetConfigs {
-				var targetConfigs tfTypes.NotificationTargetConfig
+				var targetConfigs tfTypes.TargetConfig
 
 				if targetConfigsItem.Conf == nil {
 					targetConfigs.Conf = nil
 				} else {
-					targetConfigs.Conf = &tfTypes.SMTPTargetConfig{}
-					targetConfigs.Conf.Body = types.StringPointerValue(targetConfigsItem.Conf.Body)
-					if targetConfigsItem.Conf.EmailRecipient == nil {
-						targetConfigs.Conf.EmailRecipient = nil
+					targetConfigs.Conf = &tfTypes.TargetConfigConf{}
+					if targetConfigsItem.Conf.AttachmentType != nil {
+						targetConfigs.Conf.AttachmentType = types.StringValue(string(*targetConfigsItem.Conf.AttachmentType))
 					} else {
-						targetConfigs.Conf.EmailRecipient = &tfTypes.EmailRecipient{}
-						targetConfigs.Conf.EmailRecipient.Bcc = types.StringPointerValue(targetConfigsItem.Conf.EmailRecipient.Bcc)
-						targetConfigs.Conf.EmailRecipient.Cc = types.StringPointerValue(targetConfigsItem.Conf.EmailRecipient.Cc)
-						targetConfigs.Conf.EmailRecipient.To = types.StringValue(targetConfigsItem.Conf.EmailRecipient.To)
+						targetConfigs.Conf.AttachmentType = types.StringNull()
 					}
-					targetConfigs.Conf.Subject = types.StringPointerValue(targetConfigsItem.Conf.Subject)
+					targetConfigs.Conf.IncludeResults = types.BoolPointerValue(targetConfigsItem.Conf.IncludeResults)
 				}
 				targetConfigs.ID = types.StringValue(targetConfigsItem.ID)
 

@@ -8,6 +8,51 @@ import (
 
 // ConditionSpecificConfigs - Configuration specific to the notification condition
 type ConditionSpecificConfigs struct {
+	// ID of the saved query this notification is associated with
+	SavedQueryID string `json:"savedQueryId"`
+	// Message template for the notification
+	Message string `json:"message"`
+	// Type of trigger (e.g., resultsCount)
+	TriggerType *string `json:"triggerType,omitempty"`
+	// Comparison operator (e.g., >, <, =)
+	TriggerComparator *string `json:"triggerComparator,omitempty"`
+	// Threshold count for the trigger
+	TriggerCount *float64 `json:"triggerCount,omitempty"`
+}
+
+func (o *ConditionSpecificConfigs) GetSavedQueryID() string {
+	if o == nil {
+		return ""
+	}
+	return o.SavedQueryID
+}
+
+func (o *ConditionSpecificConfigs) GetMessage() string {
+	if o == nil {
+		return ""
+	}
+	return o.Message
+}
+
+func (o *ConditionSpecificConfigs) GetTriggerType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TriggerType
+}
+
+func (o *ConditionSpecificConfigs) GetTriggerComparator() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TriggerComparator
+}
+
+func (o *ConditionSpecificConfigs) GetTriggerCount() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.TriggerCount
 }
 
 type Notification struct {
@@ -20,13 +65,13 @@ type Notification struct {
 	// Targets to send any notifications to
 	Targets []string `json:"targets,omitempty"`
 	// Configuration for notification targets
-	TargetConfigs []NotificationTargetConfig `json:"targetConfigs,omitempty"`
+	TargetConfigs []TargetConfig `json:"targetConfigs,omitempty"`
 	// Configuration specific to the notification condition
 	Conf *ConditionSpecificConfigs `json:"conf,omitempty"`
 	// Additional metadata for the notification
 	Metadata []MetadataItem `json:"metadata,omitempty"`
 	// Group identifier for the notification
-	Group *string `json:"group,omitempty"`
+	Group *string `default:"default_search" json:"group"`
 }
 
 func (n Notification) MarshalJSON() ([]byte, error) {
@@ -68,7 +113,7 @@ func (o *Notification) GetTargets() []string {
 	return o.Targets
 }
 
-func (o *Notification) GetTargetConfigs() []NotificationTargetConfig {
+func (o *Notification) GetTargetConfigs() []TargetConfig {
 	if o == nil {
 		return nil
 	}

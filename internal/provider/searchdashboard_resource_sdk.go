@@ -147,6 +147,11 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 				items.Conf = nil
 			} else {
 				items.Conf = &tfTypes.ConditionSpecificConfigs{}
+				items.Conf.Message = types.StringValue(itemsItem.Conf.Message)
+				items.Conf.SavedQueryID = types.StringValue(itemsItem.Conf.SavedQueryID)
+				items.Conf.TriggerComparator = types.StringPointerValue(itemsItem.Conf.TriggerComparator)
+				items.Conf.TriggerCount = types.Float64PointerValue(itemsItem.Conf.TriggerCount)
+				items.Conf.TriggerType = types.StringPointerValue(itemsItem.Conf.TriggerType)
 			}
 			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
 			items.Group = types.StringPointerValue(itemsItem.Group)
@@ -161,25 +166,21 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 				items.Metadata = append(items.Metadata, metadata)
 			}
-			items.TargetConfigs = []tfTypes.NotificationTargetConfig{}
+			items.TargetConfigs = []tfTypes.TargetConfig{}
 
 			for _, targetConfigsItem := range itemsItem.TargetConfigs {
-				var targetConfigs tfTypes.NotificationTargetConfig
+				var targetConfigs tfTypes.TargetConfig
 
 				if targetConfigsItem.Conf == nil {
 					targetConfigs.Conf = nil
 				} else {
-					targetConfigs.Conf = &tfTypes.SMTPTargetConfig{}
-					targetConfigs.Conf.Body = types.StringPointerValue(targetConfigsItem.Conf.Body)
-					if targetConfigsItem.Conf.EmailRecipient == nil {
-						targetConfigs.Conf.EmailRecipient = nil
+					targetConfigs.Conf = &tfTypes.TargetConfigConf{}
+					if targetConfigsItem.Conf.AttachmentType != nil {
+						targetConfigs.Conf.AttachmentType = types.StringValue(string(*targetConfigsItem.Conf.AttachmentType))
 					} else {
-						targetConfigs.Conf.EmailRecipient = &tfTypes.EmailRecipient{}
-						targetConfigs.Conf.EmailRecipient.Bcc = types.StringPointerValue(targetConfigsItem.Conf.EmailRecipient.Bcc)
-						targetConfigs.Conf.EmailRecipient.Cc = types.StringPointerValue(targetConfigsItem.Conf.EmailRecipient.Cc)
-						targetConfigs.Conf.EmailRecipient.To = types.StringValue(targetConfigsItem.Conf.EmailRecipient.To)
+						targetConfigs.Conf.AttachmentType = types.StringNull()
 					}
-					targetConfigs.Conf.Subject = types.StringPointerValue(targetConfigsItem.Conf.Subject)
+					targetConfigs.Conf.IncludeResults = types.BoolPointerValue(targetConfigsItem.Conf.IncludeResults)
 				}
 				targetConfigs.ID = types.StringValue(targetConfigsItem.ID)
 
@@ -651,62 +652,68 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			for _, targetsItem := range itemsItem.Targets {
 				targets = append(targets, targetsItem.ValueString())
 			}
-			targetConfigs := make([]shared.NotificationTargetConfig, 0, len(itemsItem.TargetConfigs))
+			targetConfigs := make([]shared.TargetConfig, 0, len(itemsItem.TargetConfigs))
 			for _, targetConfigsItem := range itemsItem.TargetConfigs {
 				var id4 string
 				id4 = targetConfigsItem.ID.ValueString()
 
-				var conf *shared.SMTPTargetConfig
+				var conf *shared.TargetConfigConf
 				if targetConfigsItem.Conf != nil {
-					subject := new(string)
-					if !targetConfigsItem.Conf.Subject.IsUnknown() && !targetConfigsItem.Conf.Subject.IsNull() {
-						*subject = targetConfigsItem.Conf.Subject.ValueString()
+					includeResults := new(bool)
+					if !targetConfigsItem.Conf.IncludeResults.IsUnknown() && !targetConfigsItem.Conf.IncludeResults.IsNull() {
+						*includeResults = targetConfigsItem.Conf.IncludeResults.ValueBool()
 					} else {
-						subject = nil
+						includeResults = nil
 					}
-					body := new(string)
-					if !targetConfigsItem.Conf.Body.IsUnknown() && !targetConfigsItem.Conf.Body.IsNull() {
-						*body = targetConfigsItem.Conf.Body.ValueString()
+					attachmentType := new(shared.AttachmentType)
+					if !targetConfigsItem.Conf.AttachmentType.IsUnknown() && !targetConfigsItem.Conf.AttachmentType.IsNull() {
+						*attachmentType = shared.AttachmentType(targetConfigsItem.Conf.AttachmentType.ValueString())
 					} else {
-						body = nil
+						attachmentType = nil
 					}
-					var emailRecipient *shared.EmailRecipient
-					if targetConfigsItem.Conf.EmailRecipient != nil {
-						var to string
-						to = targetConfigsItem.Conf.EmailRecipient.To.ValueString()
-
-						cc := new(string)
-						if !targetConfigsItem.Conf.EmailRecipient.Cc.IsUnknown() && !targetConfigsItem.Conf.EmailRecipient.Cc.IsNull() {
-							*cc = targetConfigsItem.Conf.EmailRecipient.Cc.ValueString()
-						} else {
-							cc = nil
-						}
-						bcc := new(string)
-						if !targetConfigsItem.Conf.EmailRecipient.Bcc.IsUnknown() && !targetConfigsItem.Conf.EmailRecipient.Bcc.IsNull() {
-							*bcc = targetConfigsItem.Conf.EmailRecipient.Bcc.ValueString()
-						} else {
-							bcc = nil
-						}
-						emailRecipient = &shared.EmailRecipient{
-							To:  to,
-							Cc:  cc,
-							Bcc: bcc,
-						}
-					}
-					conf = &shared.SMTPTargetConfig{
-						Subject:        subject,
-						Body:           body,
-						EmailRecipient: emailRecipient,
+					conf = &shared.TargetConfigConf{
+						IncludeResults: includeResults,
+						AttachmentType: attachmentType,
 					}
 				}
-				targetConfigs = append(targetConfigs, shared.NotificationTargetConfig{
+				targetConfigs = append(targetConfigs, shared.TargetConfig{
 					ID:   id4,
 					Conf: conf,
 				})
 			}
 			var conf1 *shared.ConditionSpecificConfigs
 			if itemsItem.Conf != nil {
-				conf1 = &shared.ConditionSpecificConfigs{}
+				var savedQueryID string
+				savedQueryID = itemsItem.Conf.SavedQueryID.ValueString()
+
+				var message string
+				message = itemsItem.Conf.Message.ValueString()
+
+				triggerType := new(string)
+				if !itemsItem.Conf.TriggerType.IsUnknown() && !itemsItem.Conf.TriggerType.IsNull() {
+					*triggerType = itemsItem.Conf.TriggerType.ValueString()
+				} else {
+					triggerType = nil
+				}
+				triggerComparator := new(string)
+				if !itemsItem.Conf.TriggerComparator.IsUnknown() && !itemsItem.Conf.TriggerComparator.IsNull() {
+					*triggerComparator = itemsItem.Conf.TriggerComparator.ValueString()
+				} else {
+					triggerComparator = nil
+				}
+				triggerCount := new(float64)
+				if !itemsItem.Conf.TriggerCount.IsUnknown() && !itemsItem.Conf.TriggerCount.IsNull() {
+					*triggerCount = itemsItem.Conf.TriggerCount.ValueFloat64()
+				} else {
+					triggerCount = nil
+				}
+				conf1 = &shared.ConditionSpecificConfigs{
+					SavedQueryID:      savedQueryID,
+					Message:           message,
+					TriggerType:       triggerType,
+					TriggerComparator: triggerComparator,
+					TriggerCount:      triggerCount,
+				}
 			}
 			metadata := make([]shared.MetadataItem, 0, len(itemsItem.Metadata))
 			for _, metadataItem := range itemsItem.Metadata {

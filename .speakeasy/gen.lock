@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 75c419b2b97f266bb58f760cd9e45be1
+  docChecksum: 1c7e33bf853b755b7cde4d52ef0982c5
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.596.0
-  generationVersion: 2.672.0
-  releaseVersion: 1.3.31
-  configChecksum: d1b0397e2d8b023ceb2933a88618fec0
+  speakeasyVersion: 1.598.0
+  generationVersion: 2.674.1
+  releaseVersion: 1.4.5
+  configChecksum: 7aa65338ef5ad83a1b71d7e1169bde30
   published: true
 features:
   terraform:
@@ -17,7 +17,7 @@ features:
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
-    globalServerURLs: 2.82.2
+    globalServerURLs: 2.83.0
     ignores: 2.81.1
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
@@ -40,6 +40,7 @@ generatedFiles:
   - examples/data-sources/criblio_group/data-source.tf
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
+  - examples/data-sources/criblio_notification/data-source.tf
   - examples/data-sources/criblio_notification_target/data-source.tf
   - examples/data-sources/criblio_pack/data-source.tf
   - examples/data-sources/criblio_pack_breakers/data-source.tf
@@ -87,6 +88,8 @@ generatedFiles:
   - examples/resources/criblio_hmac_function/resource.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
+  - examples/resources/criblio_notification/import.sh
+  - examples/resources/criblio_notification/resource.tf
   - examples/resources/criblio_notification_target/resource.tf
   - examples/resources/criblio_pack/import.sh
   - examples/resources/criblio_pack/resource.tf
@@ -190,6 +193,10 @@ generatedFiles:
   - internal/provider/lookupfile_data_source_sdk.go
   - internal/provider/lookupfile_resource.go
   - internal/provider/lookupfile_resource_sdk.go
+  - internal/provider/notification_data_source.go
+  - internal/provider/notification_data_source_sdk.go
+  - internal/provider/notification_resource.go
+  - internal/provider/notification_resource_sdk.go
   - internal/provider/notificationtarget_data_source.go
   - internal/provider/notificationtarget_data_source_sdk.go
   - internal/provider/notificationtarget_resource.go
@@ -400,7 +407,6 @@ generatedFiles:
   - internal/provider/types/element.go
   - internal/provider/types/element_markdown.go
   - internal/provider/types/element_union.go
-  - internal/provider/types/email_recipient.go
   - internal/provider/types/endpoint_header.go
   - internal/provider/types/endpoint_param.go
   - internal/provider/types/event_breaker_ruleset_rule.go
@@ -803,7 +809,6 @@ generatedFiles:
   - internal/provider/types/ms_graph_account_config.go
   - internal/provider/types/mtls_settings.go
   - internal/provider/types/notification.go
-  - internal/provider/types/notification_target_config.go
   - internal/provider/types/notifications.go
   - internal/provider/types/okta_account_config.go
   - internal/provider/types/on_click_action.go
@@ -1118,7 +1123,6 @@ generatedFiles:
   - internal/provider/types/services.go
   - internal/provider/types/slack_target.go
   - internal/provider/types/smtp_target.go
-  - internal/provider/types/smtp_target_config.go
   - internal/provider/types/snm_pv3_authentication.go
   - internal/provider/types/snowflake_dataset.go
   - internal/provider/types/snowflake_provider.go
@@ -1127,6 +1131,8 @@ generatedFiles:
   - internal/provider/types/summary.go
   - internal/provider/types/tailscale_account_config.go
   - internal/provider/types/target.go
+  - internal/provider/types/target_config.go
+  - internal/provider/types/target_config_conf.go
   - internal/provider/types/threshold.go
   - internal/provider/types/tls_configuration.go
   - internal/provider/types/users_and_groups.go
@@ -1775,7 +1781,6 @@ generatedFiles:
   - internal/sdk/models/shared/edgefileinspectresponse.go
   - internal/sdk/models/shared/edgeheartbeatmetricsmode.go
   - internal/sdk/models/shared/edgemapqueryresult.go
-  - internal/sdk/models/shared/emailrecipient.go
   - internal/sdk/models/shared/envmetadata.go
   - internal/sdk/models/shared/error.go
   - internal/sdk/models/shared/eventbreakerrule.go
@@ -1922,7 +1927,6 @@ generatedFiles:
   - internal/sdk/models/shared/nodeupgradestatus.go
   - internal/sdk/models/shared/notification.go
   - internal/sdk/models/shared/notificationtarget.go
-  - internal/sdk/models/shared/notificationtargetconfig.go
   - internal/sdk/models/shared/oktaaccountconfig.go
   - internal/sdk/models/shared/originconfig.go
   - internal/sdk/models/shared/osmetadata.go
@@ -2079,7 +2083,6 @@ generatedFiles:
   - internal/sdk/models/shared/serviceslimits.go
   - internal/sdk/models/shared/slacktarget.go
   - internal/sdk/models/shared/smtptarget.go
-  - internal/sdk/models/shared/smtptargetconfig.go
   - internal/sdk/models/shared/snstarget.go
   - internal/sdk/models/shared/sortbyfield.go
   - internal/sdk/models/shared/stagedependency.go
@@ -2093,6 +2096,8 @@ generatedFiles:
   - internal/sdk/models/shared/systemsettingsconf.go
   - internal/sdk/models/shared/tableviewsettings.go
   - internal/sdk/models/shared/tailscaleaccountconfig.go
+  - internal/sdk/models/shared/targetconfig.go
+  - internal/sdk/models/shared/targetconfigconf.go
   - internal/sdk/models/shared/team.go
   - internal/sdk/models/shared/teamaccesscontrollist.go
   - internal/sdk/models/shared/tlsclientparams.go
@@ -3398,7 +3403,7 @@ examples:
   createNotification:
     speakeasy-default-create-notification:
       requestBody:
-        application/json: {"id": "<id>", "disabled": false, "condition": "<value>", "targets": []}
+        application/json: {"id": "<id>", "disabled": false, "condition": "<value>", "targets": [], "group": "default_search"}
       responses:
         "200":
           application/json: {}
@@ -3420,7 +3425,7 @@ examples:
         path:
           id: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "disabled": false, "condition": "<value>", "targets": []}
+        application/json: {"id": "<id>", "disabled": false, "condition": "<value>", "targets": [], "group": "default_search"}
       responses:
         "200":
           application/json: {}

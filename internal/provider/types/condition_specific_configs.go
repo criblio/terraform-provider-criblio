@@ -2,5 +2,14 @@
 
 package types
 
+import (
+	"github.com/hashicorp/terraform-plugin-framework/types"
+)
+
 type ConditionSpecificConfigs struct {
+	Message           types.String  `tfsdk:"message"`
+	SavedQueryID      types.String  `tfsdk:"saved_query_id"`
+	TriggerComparator types.String  `tfsdk:"trigger_comparator"`
+	TriggerCount      types.Float64 `tfsdk:"trigger_count"`
+	TriggerType       types.String  `tfsdk:"trigger_type"`
 }

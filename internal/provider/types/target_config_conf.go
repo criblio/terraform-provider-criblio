@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type NotificationTargetConfig struct {
-	Conf *SMTPTargetConfig `tfsdk:"conf"`
-	ID   types.String      `tfsdk:"id"`
+type TargetConfigConf struct {
+	AttachmentType types.String `tfsdk:"attachment_type"`
+	IncludeResults types.Bool   `tfsdk:"include_results"`
 }

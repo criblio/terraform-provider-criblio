@@ -20,6 +20,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -623,8 +624,41 @@ func (r *SearchSavedQueryResource) Schema(ctx context.Context, req resource.Sche
 											},
 										},
 										"conf": schema.SingleNestedAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											Attributes: map[string]schema.Attribute{
+												"message": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Message template for the notification. Not Null`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+													},
+												},
+												"saved_query_id": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `ID of the saved query this notification is associated with. Not Null`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+													},
+												},
+												"trigger_comparator": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Comparison operator (e.g., >, <, =)`,
+												},
+												"trigger_count": schema.Float64Attribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Threshold count for the trigger`,
+												},
+												"trigger_type": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Type of trigger (e.g., resultsCount)`,
+												},
+											},
 											Description: `Configuration specific to the notification condition`,
 										},
 										"disabled": schema.BoolAttribute{
@@ -636,7 +670,8 @@ func (r *SearchSavedQueryResource) Schema(ctx context.Context, req resource.Sche
 										"group": schema.StringAttribute{
 											Computed:    true,
 											Optional:    true,
-											Description: `Group identifier for the notification`,
+											Default:     stringdefault.StaticString(`default_search`),
+											Description: `Group identifier for the notification. Default: "default_search"`,
 										},
 										"id": schema.StringAttribute{
 											Computed:    true,
@@ -688,39 +723,23 @@ func (r *SearchSavedQueryResource) Schema(ctx context.Context, req resource.Sche
 														Computed: true,
 														Optional: true,
 														Attributes: map[string]schema.Attribute{
-															"body": schema.StringAttribute{
+															"attachment_type": schema.StringAttribute{
 																Computed:    true,
 																Optional:    true,
-																Description: `Email body`,
-															},
-															"email_recipient": schema.SingleNestedAttribute{
-																Computed: true,
-																Optional: true,
-																Attributes: map[string]schema.Attribute{
-																	"bcc": schema.StringAttribute{
-																		Computed:    true,
-																		Optional:    true,
-																		Description: `Bcc: Recipients' email addresses`,
-																	},
-																	"cc": schema.StringAttribute{
-																		Computed:    true,
-																		Optional:    true,
-																		Description: `Cc: Recipients' email addresses`,
-																	},
-																	"to": schema.StringAttribute{
-																		Computed:    true,
-																		Optional:    true,
-																		Description: `Recipients' email addresses. Not Null`,
-																		Validators: []validator.String{
-																			speakeasy_stringvalidators.NotNull(),
-																		},
-																	},
+																Default:     stringdefault.StaticString(`inline`),
+																Description: `Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]`,
+																Validators: []validator.String{
+																	stringvalidator.OneOf(
+																		"inline",
+																		"attachment",
+																	),
 																},
 															},
-															"subject": schema.StringAttribute{
+															"include_results": schema.BoolAttribute{
 																Computed:    true,
 																Optional:    true,
-																Description: `Email subject`,
+																Default:     booldefault.StaticBool(false),
+																Description: `Whether to include search results in the notification. Default: false`,
 															},
 														},
 													},
@@ -730,7 +749,6 @@ func (r *SearchSavedQueryResource) Schema(ctx context.Context, req resource.Sche
 														Description: `ID of the notification target. Not Null`,
 														Validators: []validator.String{
 															speakeasy_stringvalidators.NotNull(),
-															stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 														},
 													},
 												},

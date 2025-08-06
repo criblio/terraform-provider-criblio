@@ -10,7 +10,7 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
     tz            = "UTC"
     keep_last_n   = 2
     notifications = {
-      disabled = true
+      disabled = false
       items = []
     }
   }
@@ -29,32 +29,45 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
     keep_last_n   = 2
     notifications = {
       disabled = false
-      items = [
-        {
-          condition = "count() > 100"
-          conf = {
-            trigger_type        = "resultsCount"
-            trigger_comparator  = ">"
-            trigger_count       = 10
-            saved_query_id      = "test_saved_query_with_notifications_2"
-          }
-          disabled = false
-          id       = "test_notification"
-          metadata = [
-            {
-              name  = "test_metadata"
-              value = "test_value"
-            }
-          ]
-          targets = [
-            criblio_notification_target.my_notificationtarget.id
-          ]
-        }
-      ]
     }
   }
+  depends_on = [
+    criblio_notification_target.my_notificationtarget
+  ]
 }
 
+resource "criblio_notification" "my_notification" {
+  id       = "test_notification"
+  condition = "search"
+  conf = {
+    trigger_type        = "resultsCount"
+    trigger_comparator  = ">"
+    trigger_count       = 10
+    saved_query_id      = criblio_search_saved_query.my_searchsavedquery_with_notifications.id
+    message             = "Date: {{timestamp}}\n\nA notification was triggered for the scheduled search: {{searchId}},\nTenant ID: {{tenantId}}\nSearch ID: {{savedQueryId}}.\nNotification: {{notificationId}}"
+  }
+  disabled = false
+  group    = "default_search"
+  metadata = [
+    {
+      name  = "test_metadata"
+      value = "test_value"
+    }
+  ]
+  targets = [criblio_notification_target.my_notificationtarget.id]
+  depends_on = [
+    criblio_notification_target.my_notificationtarget
+  ]
+  target_configs = [
+    {
+      id = criblio_notification_target.my_notificationtarget.id
+      conf = {
+        include_results = true
+        attachment_type = "inline"
+      }
+    }
+  ]
+}
 
 resource "criblio_notification_target" "my_notificationtarget" {
   id = "test_slack_target_2"
