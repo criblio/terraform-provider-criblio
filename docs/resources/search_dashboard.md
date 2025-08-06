@@ -80,7 +80,11 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
         {
           condition = "...my_condition..."
           conf = {
-            # ...
+            message            = "...my_message..."
+            saved_query_id     = "...my_saved_query_id..."
+            trigger_comparator = "...my_trigger_comparator..."
+            trigger_count      = 0.28
+            trigger_type       = "...my_trigger_type..."
           }
           disabled = false
           group    = "...my_group..."
@@ -94,13 +98,8 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           target_configs = [
             {
               conf = {
-                body = "...my_body..."
-                email_recipient = {
-                  bcc = "Lillian95@gmail.com"
-                  cc  = "Maud.Dickens@hotmail.com"
-                  to  = "Hillard.Feeney@yahoo.com"
-                }
-                subject = "...my_subject..."
+                attachment_type = "attachment"
+                include_results = false
               }
               id = "...my_id..."
             }
@@ -302,7 +301,7 @@ Optional:
 - `condition` (String) The condition that triggers this notification. Not Null
 - `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--schedule--notifications--items--conf))
 - `disabled` (Boolean) Whether the notification is disabled. Default: false
-- `group` (String) Group identifier for the notification
+- `group` (String) Group identifier for the notification. Default: "default_search"
 - `id` (String) Unique identifier for the notification. Not Null
 - `metadata` (Attributes List) Additional metadata for the notification (see [below for nested schema](#nestedatt--schedule--notifications--items--metadata))
 - `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs))
@@ -310,6 +309,14 @@ Optional:
 
 <a id="nestedatt--schedule--notifications--items--conf"></a>
 ### Nested Schema for `schedule.notifications.items.conf`
+
+Optional:
+
+- `message` (String) Message template for the notification. Not Null
+- `saved_query_id` (String) ID of the saved query this notification is associated with. Not Null
+- `trigger_comparator` (String) Comparison operator (e.g., >, <, =)
+- `trigger_count` (Number) Threshold count for the trigger
+- `trigger_type` (String) Type of trigger (e.g., resultsCount)
 
 
 <a id="nestedatt--schedule--notifications--items--metadata"></a>
@@ -334,15 +341,5 @@ Optional:
 
 Optional:
 
-- `body` (String) Email body
-- `email_recipient` (Attributes) (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs--conf--email_recipient))
-- `subject` (String) Email subject
-
-<a id="nestedatt--schedule--notifications--items--target_configs--conf--email_recipient"></a>
-### Nested Schema for `schedule.notifications.items.target_configs.conf.email_recipient`
-
-Optional:
-
-- `bcc` (String) Bcc: Recipients' email addresses
-- `cc` (String) Cc: Recipients' email addresses
-- `to` (String) Recipients' email addresses. Not Null
+- `attachment_type` (String) Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]
+- `include_results` (Boolean) Whether to include search results in the notification. Default: false

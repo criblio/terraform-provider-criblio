@@ -31,10 +31,15 @@ type CriblioProviderModel struct {
 	BearerAuth     types.String `tfsdk:"bearer_auth"`
 	ClientID       types.String `tfsdk:"client_id"`
 	ClientSecret   types.String `tfsdk:"client_secret"`
+	CloudDomain    types.String `tfsdk:"cloud_domain"`
+	GroupName      types.String `tfsdk:"group_name"`
+	Hostname       types.String `tfsdk:"hostname"`
 	OrganizationID types.String `tfsdk:"organization_id"`
+	Port           types.String `tfsdk:"port"`
 	ServerURL      types.String `tfsdk:"server_url"`
 	TokenURL       types.String `tfsdk:"token_url"`
 	WorkspaceID    types.String `tfsdk:"workspace_id"`
+	WorkspaceName  types.String `tfsdk:"workspace_name"`
 }
 
 func (p *CriblioProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -57,9 +62,25 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 				Optional:  true,
 				Sensitive: true,
 			},
+			"cloud_domain": schema.StringAttribute{
+				MarkdownDescription: `Cribl Cloud domain name (defaults to cribl.cloud)`,
+				Optional:            true,
+			},
+			"group_name": schema.StringAttribute{
+				MarkdownDescription: `The name of the Worker Group or Fleet (defaults to default)`,
+				Optional:            true,
+			},
+			"hostname": schema.StringAttribute{
+				MarkdownDescription: `The hostname of the managed API server (defaults to localhost)`,
+				Optional:            true,
+			},
 			"organization_id": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `The Organization ID (defaults to ian)`,
+				Optional:            true,
+			},
+			"port": schema.StringAttribute{
+				MarkdownDescription: `The port of the managed API server (defaults to 9000)`,
+				Optional:            true,
 			},
 			"server_url": schema.StringAttribute{
 				Description: `Server URL (defaults to https://app.cribl.cloud)`,
@@ -72,6 +93,10 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 			"workspace_id": schema.StringAttribute{
 				Optional:  true,
 				Sensitive: true,
+			},
+			"workspace_name": schema.StringAttribute{
+				MarkdownDescription: `The Workspace name (defaults to main)`,
+				Optional:            true,
 			},
 		},
 		MarkdownDescription: `Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).`,
@@ -87,13 +112,68 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		return
 	}
 
-	ServerURL := data.ServerURL.ValueString()
+	serverUrl := data.ServerURL.ValueString()
 
-	if ServerURL == "" && len(os.Getenv("CRIBL_SERVER_URL")) > 0 {
-		ServerURL = os.Getenv("CRIBL_SERVER_URL")
+	if serverUrl == "" && os.Getenv("CRIBL_SERVER_URL") != "" {
+		serverUrl = os.Getenv("CRIBL_SERVER_URL")
 	}
-	if ServerURL == "" {
-		ServerURL = "https://app.cribl.cloud"
+
+	if serverUrl == "" {
+		serverUrl = "https://app.cribl.cloud"
+	}
+
+	serverUrlParams := make(map[string]string)
+
+	if data.WorkspaceName.ValueString() != "" {
+		serverUrlParams["workspaceName"] = data.WorkspaceName.ValueString()
+	}
+
+	if _, ok := serverUrlParams["workspaceName"]; !ok {
+		serverUrlParams["workspaceName"] = "main"
+	}
+
+	if data.OrganizationID.ValueString() != "" {
+		serverUrlParams["organizationId"] = data.OrganizationID.ValueString()
+	}
+
+	if _, ok := serverUrlParams["organizationId"]; !ok && os.Getenv("CRIBL_ORGANIZATION_ID") != "" {
+		serverUrlParams["organizationId"] = os.Getenv("CRIBL_ORGANIZATION_ID")
+	}
+
+	if _, ok := serverUrlParams["organizationId"]; !ok {
+		serverUrlParams["organizationId"] = "ian"
+	}
+
+	if data.CloudDomain.ValueString() != "" {
+		serverUrlParams["cloudDomain"] = data.CloudDomain.ValueString()
+	}
+
+	if _, ok := serverUrlParams["cloudDomain"]; !ok {
+		serverUrlParams["cloudDomain"] = "cribl.cloud"
+	}
+
+	if data.GroupName.ValueString() != "" {
+		serverUrlParams["groupName"] = data.GroupName.ValueString()
+	}
+
+	if _, ok := serverUrlParams["groupName"]; !ok {
+		serverUrlParams["groupName"] = "default"
+	}
+
+	if data.Hostname.ValueString() != "" {
+		serverUrlParams["hostname"] = data.Hostname.ValueString()
+	}
+
+	if _, ok := serverUrlParams["hostname"]; !ok {
+		serverUrlParams["hostname"] = "localhost"
+	}
+
+	if data.Port.ValueString() != "" {
+		serverUrlParams["port"] = data.Port.ValueString()
+	}
+
+	if _, ok := serverUrlParams["port"]; !ok {
+		serverUrlParams["port"] = "9000"
 	}
 
 	security := shared.Security{}
@@ -153,7 +233,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
 
 	opts := []sdk.SDKOption{
-		sdk.WithServerURL(ServerURL),
+		sdk.WithTemplatedServerURL(serverUrl, serverUrlParams),
 		sdk.WithSecurity(security),
 		sdk.WithClient(httpClient),
 	}
@@ -178,6 +258,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewGroupResource,
 		NewHmacFunctionResource,
 		NewLookupFileResource,
+		NewNotificationResource,
 		NewNotificationTargetResource,
 		NewPackResource,
 		NewPackBreakersResource,
@@ -218,6 +299,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewGroupDataSource,
 		NewHmacFunctionDataSource,
 		NewLookupFileDataSource,
+		NewNotificationDataSource,
 		NewNotificationTargetDataSource,
 		NewPackDataSource,
 		NewPackBreakersDataSource,

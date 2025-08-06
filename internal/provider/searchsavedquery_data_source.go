@@ -412,7 +412,29 @@ func (r *SearchSavedQueryDataSource) Schema(ctx context.Context, req datasource.
 											Description: `The condition that triggers this notification`,
 										},
 										"conf": schema.SingleNestedAttribute{
-											Computed:    true,
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"message": schema.StringAttribute{
+													Computed:    true,
+													Description: `Message template for the notification`,
+												},
+												"saved_query_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `ID of the saved query this notification is associated with`,
+												},
+												"trigger_comparator": schema.StringAttribute{
+													Computed:    true,
+													Description: `Comparison operator (e.g., >, <, =)`,
+												},
+												"trigger_count": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Threshold count for the trigger`,
+												},
+												"trigger_type": schema.StringAttribute{
+													Computed:    true,
+													Description: `Type of trigger (e.g., resultsCount)`,
+												},
+											},
 											Description: `Configuration specific to the notification condition`,
 										},
 										"disabled": schema.BoolAttribute{
@@ -450,30 +472,13 @@ func (r *SearchSavedQueryDataSource) Schema(ctx context.Context, req datasource.
 													"conf": schema.SingleNestedAttribute{
 														Computed: true,
 														Attributes: map[string]schema.Attribute{
-															"body": schema.StringAttribute{
+															"attachment_type": schema.StringAttribute{
 																Computed:    true,
-																Description: `Email body`,
+																Description: `Type of attachment for the notification`,
 															},
-															"email_recipient": schema.SingleNestedAttribute{
-																Computed: true,
-																Attributes: map[string]schema.Attribute{
-																	"bcc": schema.StringAttribute{
-																		Computed:    true,
-																		Description: `Bcc: Recipients' email addresses`,
-																	},
-																	"cc": schema.StringAttribute{
-																		Computed:    true,
-																		Description: `Cc: Recipients' email addresses`,
-																	},
-																	"to": schema.StringAttribute{
-																		Computed:    true,
-																		Description: `Recipients' email addresses`,
-																	},
-																},
-															},
-															"subject": schema.StringAttribute{
+															"include_results": schema.BoolAttribute{
 																Computed:    true,
-																Description: `Email subject`,
+																Description: `Whether to include search results in the notification`,
 															},
 														},
 													},

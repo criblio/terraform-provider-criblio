@@ -6,8 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type EmailRecipient struct {
-	Bcc types.String `tfsdk:"bcc"`
-	Cc  types.String `tfsdk:"cc"`
-	To  types.String `tfsdk:"to"`
+type TargetConfig struct {
+	Conf *TargetConfigConf `tfsdk:"conf"`
+	ID   types.String      `tfsdk:"id"`
 }

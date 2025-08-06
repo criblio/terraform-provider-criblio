@@ -10,6 +10,9 @@ description: |-
 
 Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).
 
+> **⚠️ WARNING: This provider is currently in BETA. Use at your own risk in production environments. Features and APIs may change without notice.**
+
+
 ## Example Usage
 
 ```terraform
@@ -17,7 +20,7 @@ terraform {
   required_providers {
     criblio = {
       source  = "criblio/criblio"
-      version = "1.3.31"
+      version = "1.4.5"
     }
   }
 }
@@ -35,7 +38,12 @@ provider "criblio" {
 - `bearer_auth` (String, Sensitive)
 - `client_id` (String, Sensitive)
 - `client_secret` (String, Sensitive)
-- `organization_id` (String, Sensitive)
+- `cloud_domain` (String) Cribl Cloud domain name (defaults to cribl.cloud)
+- `group_name` (String) The name of the Worker Group or Fleet (defaults to default)
+- `hostname` (String) The hostname of the managed API server (defaults to localhost)
+- `organization_id` (String) The Organization ID (defaults to ian)
+- `port` (String) The port of the managed API server (defaults to 9000)
 - `server_url` (String) Server URL (defaults to https://app.cribl.cloud)
 - `token_url` (String, Sensitive)
 - `workspace_id` (String, Sensitive)
+- `workspace_name` (String) The Workspace name (defaults to main)

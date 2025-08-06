@@ -65,7 +65,11 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
         {
           condition = "...my_condition..."
           conf = {
-            # ...
+            message            = "...my_message..."
+            saved_query_id     = "...my_saved_query_id..."
+            trigger_comparator = "...my_trigger_comparator..."
+            trigger_count      = 0.28
+            trigger_type       = "...my_trigger_type..."
           }
           disabled = false
           group    = "...my_group..."
@@ -79,13 +83,8 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           target_configs = [
             {
               conf = {
-                body = "...my_body..."
-                email_recipient = {
-                  bcc = "Lillian95@gmail.com"
-                  cc  = "Maud.Dickens@hotmail.com"
-                  to  = "Hillard.Feeney@yahoo.com"
-                }
-                subject = "...my_subject..."
+                attachment_type = "attachment"
+                include_results = false
               }
               id = "...my_id..."
             }
