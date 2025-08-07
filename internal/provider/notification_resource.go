@@ -44,7 +44,6 @@ type NotificationResourceModel struct {
 	Disabled      types.Bool                        `tfsdk:"disabled"`
 	Group         types.String                      `tfsdk:"group"`
 	ID            types.String                      `tfsdk:"id"`
-	Metadata      []tfTypes.MetadataItem            `tfsdk:"metadata"`
 	TargetConfigs []tfTypes.TargetConfig            `tfsdk:"target_configs"`
 	Targets       []types.String                    `tfsdk:"targets"`
 }
@@ -118,34 +117,6 @@ func (r *NotificationResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringvalidator.UTF8LengthAtMost(512),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
-			},
-			"metadata": schema.ListNestedAttribute{
-				Computed: true,
-				Optional: true,
-				NestedObject: schema.NestedAttributeObject{
-					Validators: []validator.Object{
-						speakeasy_objectvalidators.NotNull(),
-					},
-					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Metadata field name. Not Null`,
-							Validators: []validator.String{
-								speakeasy_stringvalidators.NotNull(),
-							},
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Metadata field value. Not Null`,
-							Validators: []validator.String{
-								speakeasy_stringvalidators.NotNull(),
-							},
-						},
-					},
-				},
-				Description: `Additional metadata for the notification`,
 			},
 			"target_configs": schema.ListNestedAttribute{
 				Computed: true,

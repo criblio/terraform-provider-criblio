@@ -22,6 +22,8 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
   is_private  = true
   id          = "test_saved_query_with_notifications_2"
   query       = "cribl dataset=\"cribl_internal_logs\" source=*searches.log message=\"search finished\" | summarize count(), elapsedMS=sum(stats.elapsedMs), eventsFound=sum(stats.eventsFound) by user=stats.user"
+  earliest    = "-2h"
+  latest      = "now"
   schedule = {
     enabled       = true
     cron_schedule = "0 0 * * *"
@@ -48,12 +50,6 @@ resource "criblio_notification" "my_notification" {
   }
   disabled = false
   group    = "default_search"
-  metadata = [
-    {
-      name  = "test_metadata"
-      value = "test_value"
-    }
-  ]
   targets = [criblio_notification_target.my_notificationtarget.id]
   depends_on = [
     criblio_notification_target.my_notificationtarget

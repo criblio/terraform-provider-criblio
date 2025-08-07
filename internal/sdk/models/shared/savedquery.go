@@ -3,85 +3,25 @@
 package shared
 
 type SavedQuery struct {
-	ChartConfig        *ChartConfig        `json:"chartConfig,omitempty"`
-	Description        *string             `json:"description,omitempty"`
-	DisplayUsername    *string             `json:"displayUsername,omitempty"`
-	Earliest           *string             `json:"earliest,omitempty"`
-	ID                 string              `json:"id"`
-	IsPrivate          *bool               `json:"isPrivate,omitempty"`
-	IsSystem           *bool               `json:"isSystem,omitempty"`
-	Latest             *string             `json:"latest,omitempty"`
-	Lib                *CriblLib           `json:"lib,omitempty"`
-	Name               string              `json:"name"`
-	Query              string              `json:"query"`
-	ResolvedDatasetIds []string            `json:"resolvedDatasetIds,omitempty"`
-	SampleRate         *float64            `json:"sampleRate,omitempty"`
-	Schedule           *SavedQuerySchedule `json:"schedule,omitempty"`
-	TableConfig        *string             `json:"tableConfig,omitempty"`
-	User               *string             `json:"user,omitempty"`
-}
-
-func (o *SavedQuery) GetChartConfig() *ChartConfig {
-	if o == nil {
-		return nil
-	}
-	return o.ChartConfig
-}
-
-func (o *SavedQuery) GetDescription() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Description
-}
-
-func (o *SavedQuery) GetDisplayUsername() *string {
-	if o == nil {
-		return nil
-	}
-	return o.DisplayUsername
-}
-
-func (o *SavedQuery) GetEarliest() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Earliest
-}
-
-func (o *SavedQuery) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
-}
-
-func (o *SavedQuery) GetIsPrivate() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.IsPrivate
-}
-
-func (o *SavedQuery) GetIsSystem() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.IsSystem
-}
-
-func (o *SavedQuery) GetLatest() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Latest
-}
-
-func (o *SavedQuery) GetLib() *CriblLib {
-	if o == nil {
-		return nil
-	}
-	return o.Lib
+	// Name of the saved query
+	Name string `json:"name"`
+	// Whether the saved query is private
+	IsPrivate *bool `json:"isPrivate,omitempty"`
+	// The search query string
+	Query string `json:"query"`
+	// Earliest time for the search range
+	Earliest *string `json:"earliest,omitempty"`
+	// Latest time for the search range
+	Latest *string `json:"latest,omitempty"`
+	// Description of the saved query
+	Description *string             `json:"description,omitempty"`
+	Schedule    *SavedQuerySchedule `json:"schedule,omitempty"`
+	// User ID who created the saved query
+	User *string `json:"user,omitempty"`
+	// Display name of the user
+	DisplayUsername *string `json:"displayUsername,omitempty"`
+	// Unique identifier for the saved query
+	ID string `json:"id"`
 }
 
 func (o *SavedQuery) GetName() string {
@@ -91,6 +31,13 @@ func (o *SavedQuery) GetName() string {
 	return o.Name
 }
 
+func (o *SavedQuery) GetIsPrivate() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IsPrivate
+}
+
 func (o *SavedQuery) GetQuery() string {
 	if o == nil {
 		return ""
@@ -98,18 +45,25 @@ func (o *SavedQuery) GetQuery() string {
 	return o.Query
 }
 
-func (o *SavedQuery) GetResolvedDatasetIds() []string {
+func (o *SavedQuery) GetEarliest() *string {
 	if o == nil {
 		return nil
 	}
-	return o.ResolvedDatasetIds
+	return o.Earliest
 }
 
-func (o *SavedQuery) GetSampleRate() *float64 {
+func (o *SavedQuery) GetLatest() *string {
 	if o == nil {
 		return nil
 	}
-	return o.SampleRate
+	return o.Latest
+}
+
+func (o *SavedQuery) GetDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Description
 }
 
 func (o *SavedQuery) GetSchedule() *SavedQuerySchedule {
@@ -119,16 +73,23 @@ func (o *SavedQuery) GetSchedule() *SavedQuerySchedule {
 	return o.Schedule
 }
 
-func (o *SavedQuery) GetTableConfig() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TableConfig
-}
-
 func (o *SavedQuery) GetUser() *string {
 	if o == nil {
 		return nil
 	}
 	return o.User
+}
+
+func (o *SavedQuery) GetDisplayUsername() *string {
+	if o == nil {
+		return nil
+	}
+	return o.DisplayUsername
+}
+
+func (o *SavedQuery) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
 }

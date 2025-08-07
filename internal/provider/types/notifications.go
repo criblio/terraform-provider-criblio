@@ -7,6 +7,5 @@ import (
 )
 
 type Notifications struct {
-	Disabled types.Bool     `tfsdk:"disabled"`
-	Items    []Notification `tfsdk:"items"`
+	Disabled types.Bool `tfsdk:"disabled"`
 }

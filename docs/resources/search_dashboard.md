@@ -76,43 +76,8 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
     keep_last_n   = 5.1
     notifications = {
       disabled = false
-      items = [
-        {
-          condition = "...my_condition..."
-          conf = {
-            message            = "...my_message..."
-            saved_query_id     = "...my_saved_query_id..."
-            trigger_comparator = "...my_trigger_comparator..."
-            trigger_count      = 0.28
-            trigger_type       = "...my_trigger_type..."
-          }
-          disabled = false
-          group    = "...my_group..."
-          id       = "...my_id..."
-          metadata = [
-            {
-              name  = "...my_name..."
-              value = "...my_value..."
-            }
-          ]
-          target_configs = [
-            {
-              conf = {
-                attachment_type = "attachment"
-                include_results = false
-              }
-              id = "...my_id..."
-            }
-          ]
-          targets = [
-            "..."
-          ]
-        }
-      ]
     }
-    resume_missed  = true
-    resume_on_boot = false
-    tz             = "...my_tz..."
+    tz = "...my_tz..."
   }
 }
 ```
@@ -281,8 +246,6 @@ Optional:
 - `enabled` (Boolean) Not Null
 - `keep_last_n` (Number) Not Null
 - `notifications` (Attributes) Not Null (see [below for nested schema](#nestedatt--schedule--notifications))
-- `resume_missed` (Boolean)
-- `resume_on_boot` (Boolean)
 - `tz` (String) Not Null
 
 <a id="nestedatt--schedule--notifications"></a>
@@ -291,55 +254,3 @@ Optional:
 Optional:
 
 - `disabled` (Boolean) Not Null
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--schedule--notifications--items))
-
-<a id="nestedatt--schedule--notifications--items"></a>
-### Nested Schema for `schedule.notifications.items`
-
-Optional:
-
-- `condition` (String) The condition that triggers this notification. Not Null
-- `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--schedule--notifications--items--conf))
-- `disabled` (Boolean) Whether the notification is disabled. Default: false
-- `group` (String) Group identifier for the notification. Default: "default_search"
-- `id` (String) Unique identifier for the notification. Not Null
-- `metadata` (Attributes List) Additional metadata for the notification (see [below for nested schema](#nestedatt--schedule--notifications--items--metadata))
-- `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs))
-- `targets` (List of String) Targets to send any notifications to
-
-<a id="nestedatt--schedule--notifications--items--conf"></a>
-### Nested Schema for `schedule.notifications.items.conf`
-
-Optional:
-
-- `message` (String) Message template for the notification. Not Null
-- `saved_query_id` (String) ID of the saved query this notification is associated with. Not Null
-- `trigger_comparator` (String) Comparison operator (e.g., >, <, =)
-- `trigger_count` (Number) Threshold count for the trigger
-- `trigger_type` (String) Type of trigger (e.g., resultsCount)
-
-
-<a id="nestedatt--schedule--notifications--items--metadata"></a>
-### Nested Schema for `schedule.notifications.items.metadata`
-
-Optional:
-
-- `name` (String) Metadata field name. Not Null
-- `value` (String) Metadata field value. Not Null
-
-
-<a id="nestedatt--schedule--notifications--items--target_configs"></a>
-### Nested Schema for `schedule.notifications.items.target_configs`
-
-Optional:
-
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs--conf))
-- `id` (String) ID of the notification target. Not Null
-
-<a id="nestedatt--schedule--notifications--items--target_configs--conf"></a>
-### Nested Schema for `schedule.notifications.items.target_configs.conf`
-
-Optional:
-
-- `attachment_type` (String) Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]
-- `include_results` (Boolean) Whether to include search results in the notification. Default: false

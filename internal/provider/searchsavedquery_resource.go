@@ -9,22 +9,14 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_boolvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/boolvalidators"
 	speakeasy_float64validators "github.com/criblio/terraform-provider-criblio/internal/validators/float64validators"
-	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
-	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -43,22 +35,14 @@ type SearchSavedQueryResource struct {
 
 // SearchSavedQueryResourceModel describes the resource data model.
 type SearchSavedQueryResourceModel struct {
-	ChartConfig        *tfTypes.ChartConfig        `tfsdk:"chart_config"`
-	Description        types.String                `tfsdk:"description"`
-	DisplayUsername    types.String                `tfsdk:"display_username"`
-	Earliest           types.String                `tfsdk:"earliest"`
-	ID                 types.String                `tfsdk:"id"`
-	IsPrivate          types.Bool                  `tfsdk:"is_private"`
-	IsSystem           types.Bool                  `tfsdk:"is_system"`
-	Latest             types.String                `tfsdk:"latest"`
-	Lib                types.String                `tfsdk:"lib"`
-	Name               types.String                `tfsdk:"name"`
-	Query              types.String                `tfsdk:"query"`
-	ResolvedDatasetIds []types.String              `tfsdk:"resolved_dataset_ids"`
-	SampleRate         types.Float64               `tfsdk:"sample_rate"`
-	Schedule           *tfTypes.SavedQuerySchedule `tfsdk:"schedule"`
-	TableConfig        types.String                `tfsdk:"table_config"`
-	User               types.String                `tfsdk:"user"`
+	Description types.String                `tfsdk:"description"`
+	Earliest    types.String                `tfsdk:"earliest"`
+	ID          types.String                `tfsdk:"id"`
+	IsPrivate   types.Bool                  `tfsdk:"is_private"`
+	Latest      types.String                `tfsdk:"latest"`
+	Name        types.String                `tfsdk:"name"`
+	Query       types.String                `tfsdk:"query"`
+	Schedule    *tfTypes.SavedQuerySchedule `tfsdk:"schedule"`
 }
 
 func (r *SearchSavedQueryResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,503 +53,37 @@ func (r *SearchSavedQueryResource) Schema(ctx context.Context, req resource.Sche
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "SearchSavedQuery Resource",
 		Attributes: map[string]schema.Attribute{
-			"chart_config": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"apply_threshold": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"axis": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"x_axis": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"y_axis": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-							},
-							"y_axis_excluded": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-							},
-						},
-					},
-					"color": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"color_palette": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
-						},
-					},
-					"color_palette_reversed": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"color_thresholds": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"thresholds": schema.ListNestedAttribute{
-								Computed: true,
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
-									Attributes: map[string]schema.Attribute{
-										"color": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
-										},
-										"threshold": schema.Float64Attribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.Float64{
-												speakeasy_float64validators.NotNull(),
-											},
-										},
-									},
-								},
-								Description: `Not Null`,
-								Validators: []validator.List{
-									speakeasy_listvalidators.NotNull(),
-								},
-							},
-						},
-					},
-					"custom_data": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"connect_nulls": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"data_fields": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-							},
-							"is_point_color": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"limit_to_top_n": schema.Float64Attribute{
-								Computed: true,
-								Optional: true,
-							},
-							"lines": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"name_field": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"point_color_palette": schema.Float64Attribute{
-								Computed: true,
-								Optional: true,
-							},
-							"point_color_palette_reversed": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"point_scale": schema.SingleNestedAttribute{
-								Computed: true,
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"number": schema.Float64Attribute{
-										Computed: true,
-										Optional: true,
-										Validators: []validator.Float64{
-											float64validator.ConflictsWith(path.Expressions{
-												path.MatchRelative().AtParent().AtName("str"),
-											}...),
-										},
-									},
-									"str": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										Validators: []validator.String{
-											stringvalidator.ConflictsWith(path.Expressions{
-												path.MatchRelative().AtParent().AtName("number"),
-											}...),
-										},
-									},
-								},
-							},
-							"point_scale_data_field": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"series_count": schema.Float64Attribute{
-								Computed: true,
-								Optional: true,
-							},
-							"split_by": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"stack": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"summarize_others": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"trellis": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
-					"decimals": schema.Float64Attribute{
-						Computed: true,
-						Optional: true,
-					},
-					"label": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"legend": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"position": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"truncate": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
-					"map_details": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"latitude_field": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"longitude_field": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"map_source_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"map_type": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"name_field": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"point_scale": schema.SingleNestedAttribute{
-								Computed: true,
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"number": schema.Float64Attribute{
-										Computed: true,
-										Optional: true,
-										Validators: []validator.Float64{
-											float64validator.ConflictsWith(path.Expressions{
-												path.MatchRelative().AtParent().AtName("str"),
-											}...),
-										},
-									},
-									"str": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										Validators: []validator.String{
-											stringvalidator.ConflictsWith(path.Expressions{
-												path.MatchRelative().AtParent().AtName("number"),
-											}...),
-										},
-									},
-								},
-							},
-							"value_field": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
-					"on_click_action": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"search": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"selected_dashboard_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"selected_input_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"selected_link_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"selected_timerange_input_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"type": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
-					"prefix": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"separator": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"series": schema.ListNestedAttribute{
-						Computed: true,
-						Optional: true,
-						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
-							Attributes: map[string]schema.Attribute{
-								"color": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-								},
-								"data": schema.ListNestedAttribute{
-									Computed: true,
-									Optional: true,
-									NestedObject: schema.NestedAttributeObject{
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
-										Attributes: map[string]schema.Attribute{},
-									},
-								},
-								"map": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-								},
-								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `must be one of ["area", "column", "events", "funnel", "gauge", "horizontalBar", "line", "map", "pie", "scatter", "single", "table"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"area",
-											"column",
-											"events",
-											"funnel",
-											"gauge",
-											"horizontalBar",
-											"line",
-											"map",
-											"pie",
-											"scatter",
-											"single",
-											"table",
-										),
-									},
-								},
-								"y_axis_field": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-								},
-							},
-						},
-					},
-					"should_apply_user_chart_settings": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"style": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"suffix": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-					"x_axis": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"data_field": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"inverse": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"label_interval": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"label_orientation": schema.Float64Attribute{
-								Computed: true,
-								Optional: true,
-							},
-							"name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"offset": schema.Float64Attribute{
-								Computed: true,
-								Optional: true,
-							},
-							"position": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"type": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
-					"y_axis": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"data_field": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-							},
-							"interval": schema.Float64Attribute{
-								Computed: true,
-								Optional: true,
-							},
-							"max": schema.Float64Attribute{
-								Computed: true,
-								Optional: true,
-							},
-							"min": schema.Float64Attribute{
-								Computed: true,
-								Optional: true,
-							},
-							"position": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"scale": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"split_line": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"type": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
-				},
-			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"display_username": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Description of the saved query`,
 			},
 			"earliest": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Earliest time for the search range`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to PATCH`,
+				Description: `Unique identifier for the saved query`,
 			},
 			"is_private": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"is_system": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Whether the saved query is private`,
 			},
 			"latest": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"lib": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `must be one of ["cribl", "cribl-custom", "custom"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"cribl",
-						"cribl-custom",
-						"custom",
-					),
-				},
+				Description: `Latest time for the search range`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Name of the saved query`,
 			},
 			"query": schema.StringAttribute{
-				Required: true,
-			},
-			"resolved_dataset_ids": schema.ListAttribute{
-				Computed:    true,
-				Optional:    true,
-				ElementType: types.StringType,
-			},
-			"sample_rate": schema.Float64Attribute{
-				Computed: true,
-				Optional: true,
+				Required:    true,
+				Description: `The search query string`,
 			},
 			"schedule": schema.SingleNestedAttribute{
 				Computed: true,
@@ -607,177 +125,11 @@ func (r *SearchSavedQueryResource) Schema(ctx context.Context, req resource.Sche
 									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"items": schema.ListNestedAttribute{
-								Computed: true,
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
-									Attributes: map[string]schema.Attribute{
-										"condition": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `The condition that triggers this notification. Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
-										},
-										"conf": schema.SingleNestedAttribute{
-											Computed: true,
-											Optional: true,
-											Attributes: map[string]schema.Attribute{
-												"message": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Message template for the notification. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
-												},
-												"saved_query_id": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `ID of the saved query this notification is associated with. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
-												},
-												"trigger_comparator": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Comparison operator (e.g., >, <, =)`,
-												},
-												"trigger_count": schema.Float64Attribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Threshold count for the trigger`,
-												},
-												"trigger_type": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Type of trigger (e.g., resultsCount)`,
-												},
-											},
-											Description: `Configuration specific to the notification condition`,
-										},
-										"disabled": schema.BoolAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     booldefault.StaticBool(false),
-											Description: `Whether the notification is disabled. Default: false`,
-										},
-										"group": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     stringdefault.StaticString(`default_search`),
-											Description: `Group identifier for the notification. Default: "default_search"`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Unique identifier for the notification. Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-												stringvalidator.UTF8LengthAtMost(512),
-												stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-											},
-										},
-										"metadata": schema.ListNestedAttribute{
-											Computed: true,
-											Optional: true,
-											NestedObject: schema.NestedAttributeObject{
-												Validators: []validator.Object{
-													speakeasy_objectvalidators.NotNull(),
-												},
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `Metadata field name. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `Metadata field value. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-												},
-											},
-											Description: `Additional metadata for the notification`,
-										},
-										"target_configs": schema.ListNestedAttribute{
-											Computed: true,
-											Optional: true,
-											NestedObject: schema.NestedAttributeObject{
-												Validators: []validator.Object{
-													speakeasy_objectvalidators.NotNull(),
-												},
-												Attributes: map[string]schema.Attribute{
-													"conf": schema.SingleNestedAttribute{
-														Computed: true,
-														Optional: true,
-														Attributes: map[string]schema.Attribute{
-															"attachment_type": schema.StringAttribute{
-																Computed:    true,
-																Optional:    true,
-																Default:     stringdefault.StaticString(`inline`),
-																Description: `Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]`,
-																Validators: []validator.String{
-																	stringvalidator.OneOf(
-																		"inline",
-																		"attachment",
-																	),
-																},
-															},
-															"include_results": schema.BoolAttribute{
-																Computed:    true,
-																Optional:    true,
-																Default:     booldefault.StaticBool(false),
-																Description: `Whether to include search results in the notification. Default: false`,
-															},
-														},
-													},
-													"id": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `ID of the notification target. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-												},
-											},
-											Description: `Configuration for notification targets`,
-										},
-										"targets": schema.ListAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-											ElementType: types.StringType,
-											Description: `Targets to send any notifications to`,
-										},
-									},
-								},
-							},
 						},
 						Description: `Not Null`,
 						Validators: []validator.Object{
 							speakeasy_objectvalidators.NotNull(),
 						},
-					},
-					"resume_missed": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"resume_on_boot": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
 					},
 					"tz": schema.StringAttribute{
 						Computed:    true,
@@ -788,14 +140,6 @@ func (r *SearchSavedQueryResource) Schema(ctx context.Context, req resource.Sche
 						},
 					},
 				},
-			},
-			"table_config": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"user": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
 			},
 		},
 	}

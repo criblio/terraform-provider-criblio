@@ -1003,6 +1003,7 @@ components:
           description: "Additional metadata for the notification"
           items:
             $ref: '#/components/schemas/MetadataItem'
+          x-speakeasy-terraform-ignore: true
         group:
           type: string
           title: "Group"
@@ -4388,14 +4389,17 @@ components:
               type: boolean
             items:
               type: array
+              x-speakeasy-terraform-ignore: true
               items:
                 $ref: "#/components/schemas/Notification"
           required:
             - disabled
         resumeMissed:
           type: boolean
+          x-speakeasy-terraform-ignore: true
         resumeOnBoot:
           type: boolean
+          x-speakeasy-terraform-ignore: true
         tz:
           type: string
       required:
@@ -4758,40 +4762,46 @@ components:
     SavedQuery:
       type: object
       properties:
-        chartConfig:
-          $ref: "#/components/schemas/ChartConfig"
-        description:
-          type: string
-        displayUsername:
-          type: string
-        earliest:
-          type: string
-        id:
-          type: string
-        isPrivate:
-          type: boolean
-        isSystem:
-          type: boolean
-        latest:
-          type: string
-        lib:
-          $ref: "#/components/schemas/CriblLib"
         name:
           type: string
+          description: Name of the saved query
+          example: "test_saved"
+        isPrivate:
+          type: boolean
+          description: Whether the saved query is private
+          example: true
         query:
           type: string
-        resolvedDatasetIds:
-          type: array
-          items:
-            type: string
-        sampleRate:
-          type: number
+          description: The search query string
+          example: "dataset=\"cribl_edge_appscope_metrics\" | limit 1000"
+        earliest:
+          type: string
+          description: Earliest time for the search range
+          example: "-1h"
+        latest:
+          type: string
+          description: Latest time for the search range
+          example: "now"
+        description:
+          type: string
+          description: Description of the saved query
+          example: "test saved query"
         schedule:
-          $ref: "#/components/schemas/SavedQuerySchedule"
-        tableConfig:
-          $ref: "#/components/schemas/object"
+          $ref: '#/components/schemas/SavedQuerySchedule'
         user:
           type: string
+          description: User ID who created the saved query
+          example: "google-oauth2|115928590796700585084"
+          x-speakeasy-terraform-ignore: true
+        displayUsername:
+          type: string
+          description: Display name of the user
+          example: "First Last"
+          x-speakeasy-terraform-ignore: true
+        id:
+          type: string
+          description: Unique identifier for the saved query
+          example: "test_saved"
       required:
         - id
         - name

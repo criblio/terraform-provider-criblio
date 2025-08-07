@@ -61,42 +61,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
     keep_last_n   = 5.1
     notifications = {
       disabled = false
-      items = [
-        {
-          condition = "...my_condition..."
-          conf = {
-            message            = "...my_message..."
-            saved_query_id     = "...my_saved_query_id..."
-            trigger_comparator = "...my_trigger_comparator..."
-            trigger_count      = 0.28
-            trigger_type       = "...my_trigger_type..."
-          }
-          disabled = false
-          group    = "...my_group..."
-          id       = "...my_id..."
-          metadata = [
-            {
-              name  = "...my_name..."
-              value = "...my_value..."
-            }
-          ]
-          target_configs = [
-            {
-              conf = {
-                attachment_type = "attachment"
-                include_results = false
-              }
-              id = "...my_id..."
-            }
-          ]
-          targets = [
-            "..."
-          ]
-        }
-      ]
     }
-    resume_missed  = true
-    resume_on_boot = false
-    tz             = "...my_tz..."
+    tz = "...my_tz..."
   }
 }

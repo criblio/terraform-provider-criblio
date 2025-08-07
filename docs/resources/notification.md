@@ -25,12 +25,6 @@ resource "criblio_notification" "my_notification" {
   disabled = false
   group    = "...my_group..."
   id       = "...my_id..."
-  metadata = [
-    {
-      name  = "...my_name..."
-      value = "...my_value..."
-    }
-  ]
   target_configs = [
     {
       conf = {
@@ -59,7 +53,6 @@ resource "criblio_notification" "my_notification" {
 - `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--conf))
 - `disabled` (Boolean) Whether the notification is disabled. Default: false
 - `group` (String) Group identifier for the notification. Default: "default_search"
-- `metadata` (Attributes List) Additional metadata for the notification (see [below for nested schema](#nestedatt--metadata))
 - `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--target_configs))
 - `targets` (List of String) Targets to send any notifications to
 
@@ -73,15 +66,6 @@ Optional:
 - `trigger_comparator` (String) Comparison operator (e.g., >, <, =)
 - `trigger_count` (Number) Threshold count for the trigger
 - `trigger_type` (String) Type of trigger (e.g., resultsCount)
-
-
-<a id="nestedatt--metadata"></a>
-### Nested Schema for `metadata`
-
-Optional:
-
-- `name` (String) Metadata field name. Not Null
-- `value` (String) Metadata field value. Not Null
 
 
 <a id="nestedatt--target_configs"></a>

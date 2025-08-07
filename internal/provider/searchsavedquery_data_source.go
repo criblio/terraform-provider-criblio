@@ -29,22 +29,14 @@ type SearchSavedQueryDataSource struct {
 
 // SearchSavedQueryDataSourceModel describes the data model.
 type SearchSavedQueryDataSourceModel struct {
-	ChartConfig        *tfTypes.ChartConfig        `tfsdk:"chart_config"`
-	Description        types.String                `tfsdk:"description"`
-	DisplayUsername    types.String                `tfsdk:"display_username"`
-	Earliest           types.String                `tfsdk:"earliest"`
-	ID                 types.String                `tfsdk:"id"`
-	IsPrivate          types.Bool                  `tfsdk:"is_private"`
-	IsSystem           types.Bool                  `tfsdk:"is_system"`
-	Latest             types.String                `tfsdk:"latest"`
-	Lib                types.String                `tfsdk:"lib"`
-	Name               types.String                `tfsdk:"name"`
-	Query              types.String                `tfsdk:"query"`
-	ResolvedDatasetIds []types.String              `tfsdk:"resolved_dataset_ids"`
-	SampleRate         types.Float64               `tfsdk:"sample_rate"`
-	Schedule           *tfTypes.SavedQuerySchedule `tfsdk:"schedule"`
-	TableConfig        types.String                `tfsdk:"table_config"`
-	User               types.String                `tfsdk:"user"`
+	Description types.String                `tfsdk:"description"`
+	Earliest    types.String                `tfsdk:"earliest"`
+	ID          types.String                `tfsdk:"id"`
+	IsPrivate   types.Bool                  `tfsdk:"is_private"`
+	Latest      types.String                `tfsdk:"latest"`
+	Name        types.String                `tfsdk:"name"`
+	Query       types.String                `tfsdk:"query"`
+	Schedule    *tfTypes.SavedQuerySchedule `tfsdk:"schedule"`
 }
 
 // Metadata returns the data source type name.
@@ -58,332 +50,33 @@ func (r *SearchSavedQueryDataSource) Schema(ctx context.Context, req datasource.
 		MarkdownDescription: "SearchSavedQuery DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"chart_config": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"apply_threshold": schema.BoolAttribute{
-						Computed: true,
-					},
-					"axis": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"x_axis": schema.StringAttribute{
-								Computed: true,
-							},
-							"y_axis": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-							"y_axis_excluded": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-						},
-					},
-					"color": schema.StringAttribute{
-						Computed: true,
-					},
-					"color_palette": schema.Float64Attribute{
-						Computed: true,
-					},
-					"color_palette_reversed": schema.BoolAttribute{
-						Computed: true,
-					},
-					"color_thresholds": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"thresholds": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"color": schema.StringAttribute{
-											Computed: true,
-										},
-										"threshold": schema.Float64Attribute{
-											Computed: true,
-										},
-									},
-								},
-							},
-						},
-					},
-					"custom_data": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"connect_nulls": schema.StringAttribute{
-								Computed: true,
-							},
-							"data_fields": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-							"is_point_color": schema.BoolAttribute{
-								Computed: true,
-							},
-							"limit_to_top_n": schema.Float64Attribute{
-								Computed: true,
-							},
-							"lines": schema.BoolAttribute{
-								Computed: true,
-							},
-							"name_field": schema.StringAttribute{
-								Computed: true,
-							},
-							"point_color_palette": schema.Float64Attribute{
-								Computed: true,
-							},
-							"point_color_palette_reversed": schema.BoolAttribute{
-								Computed: true,
-							},
-							"point_scale": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"number": schema.Float64Attribute{
-										Computed: true,
-									},
-									"str": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-							"point_scale_data_field": schema.StringAttribute{
-								Computed: true,
-							},
-							"series_count": schema.Float64Attribute{
-								Computed: true,
-							},
-							"split_by": schema.StringAttribute{
-								Computed: true,
-							},
-							"stack": schema.BoolAttribute{
-								Computed: true,
-							},
-							"summarize_others": schema.BoolAttribute{
-								Computed: true,
-							},
-							"trellis": schema.BoolAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"decimals": schema.Float64Attribute{
-						Computed: true,
-					},
-					"label": schema.StringAttribute{
-						Computed: true,
-					},
-					"legend": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"position": schema.StringAttribute{
-								Computed: true,
-							},
-							"truncate": schema.BoolAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"map_details": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"latitude_field": schema.StringAttribute{
-								Computed: true,
-							},
-							"longitude_field": schema.StringAttribute{
-								Computed: true,
-							},
-							"map_source_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"map_type": schema.StringAttribute{
-								Computed: true,
-							},
-							"name_field": schema.StringAttribute{
-								Computed: true,
-							},
-							"point_scale": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"number": schema.Float64Attribute{
-										Computed: true,
-									},
-									"str": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-							"value_field": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"on_click_action": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"search": schema.StringAttribute{
-								Computed: true,
-							},
-							"selected_dashboard_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"selected_input_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"selected_link_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"selected_timerange_input_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"type": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"prefix": schema.StringAttribute{
-						Computed: true,
-					},
-					"separator": schema.BoolAttribute{
-						Computed: true,
-					},
-					"series": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"color": schema.StringAttribute{
-									Computed: true,
-								},
-								"data": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{},
-									},
-								},
-								"map": schema.StringAttribute{
-									Computed: true,
-								},
-								"name": schema.StringAttribute{
-									Computed: true,
-								},
-								"type": schema.StringAttribute{
-									Computed: true,
-								},
-								"y_axis_field": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-					},
-					"should_apply_user_chart_settings": schema.BoolAttribute{
-						Computed: true,
-					},
-					"style": schema.BoolAttribute{
-						Computed: true,
-					},
-					"suffix": schema.StringAttribute{
-						Computed: true,
-					},
-					"type": schema.StringAttribute{
-						Computed: true,
-					},
-					"x_axis": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"data_field": schema.StringAttribute{
-								Computed: true,
-							},
-							"inverse": schema.BoolAttribute{
-								Computed: true,
-							},
-							"label_interval": schema.StringAttribute{
-								Computed: true,
-							},
-							"label_orientation": schema.Float64Attribute{
-								Computed: true,
-							},
-							"name": schema.StringAttribute{
-								Computed: true,
-							},
-							"offset": schema.Float64Attribute{
-								Computed: true,
-							},
-							"position": schema.StringAttribute{
-								Computed: true,
-							},
-							"type": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"y_axis": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"data_field": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-							"interval": schema.Float64Attribute{
-								Computed: true,
-							},
-							"max": schema.Float64Attribute{
-								Computed: true,
-							},
-							"min": schema.Float64Attribute{
-								Computed: true,
-							},
-							"position": schema.StringAttribute{
-								Computed: true,
-							},
-							"scale": schema.StringAttribute{
-								Computed: true,
-							},
-							"split_line": schema.BoolAttribute{
-								Computed: true,
-							},
-							"type": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-				},
-			},
 			"description": schema.StringAttribute{
-				Computed: true,
-			},
-			"display_username": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Description of the saved query`,
 			},
 			"earliest": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Earliest time for the search range`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
 			"is_private": schema.BoolAttribute{
-				Computed: true,
-			},
-			"is_system": schema.BoolAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Whether the saved query is private`,
 			},
 			"latest": schema.StringAttribute{
-				Computed: true,
-			},
-			"lib": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Latest time for the search range`,
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Name of the saved query`,
 			},
 			"query": schema.StringAttribute{
-				Computed: true,
-			},
-			"resolved_dataset_ids": schema.ListAttribute{
 				Computed:    true,
-				ElementType: types.StringType,
-			},
-			"sample_rate": schema.Float64Attribute{
-				Computed: true,
+				Description: `The search query string`,
 			},
 			"schedule": schema.SingleNestedAttribute{
 				Computed: true,
@@ -403,119 +96,12 @@ func (r *SearchSavedQueryDataSource) Schema(ctx context.Context, req datasource.
 							"disabled": schema.BoolAttribute{
 								Computed: true,
 							},
-							"items": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"condition": schema.StringAttribute{
-											Computed:    true,
-											Description: `The condition that triggers this notification`,
-										},
-										"conf": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"message": schema.StringAttribute{
-													Computed:    true,
-													Description: `Message template for the notification`,
-												},
-												"saved_query_id": schema.StringAttribute{
-													Computed:    true,
-													Description: `ID of the saved query this notification is associated with`,
-												},
-												"trigger_comparator": schema.StringAttribute{
-													Computed:    true,
-													Description: `Comparison operator (e.g., >, <, =)`,
-												},
-												"trigger_count": schema.Float64Attribute{
-													Computed:    true,
-													Description: `Threshold count for the trigger`,
-												},
-												"trigger_type": schema.StringAttribute{
-													Computed:    true,
-													Description: `Type of trigger (e.g., resultsCount)`,
-												},
-											},
-											Description: `Configuration specific to the notification condition`,
-										},
-										"disabled": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether the notification is disabled`,
-										},
-										"group": schema.StringAttribute{
-											Computed:    true,
-											Description: `Group identifier for the notification`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Unique identifier for the notification`,
-										},
-										"metadata": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed:    true,
-														Description: `Metadata field name`,
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Description: `Metadata field value`,
-													},
-												},
-											},
-											Description: `Additional metadata for the notification`,
-										},
-										"target_configs": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"conf": schema.SingleNestedAttribute{
-														Computed: true,
-														Attributes: map[string]schema.Attribute{
-															"attachment_type": schema.StringAttribute{
-																Computed:    true,
-																Description: `Type of attachment for the notification`,
-															},
-															"include_results": schema.BoolAttribute{
-																Computed:    true,
-																Description: `Whether to include search results in the notification`,
-															},
-														},
-													},
-													"id": schema.StringAttribute{
-														Computed:    true,
-														Description: `ID of the notification target`,
-													},
-												},
-											},
-											Description: `Configuration for notification targets`,
-										},
-										"targets": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Targets to send any notifications to`,
-										},
-									},
-								},
-							},
 						},
-					},
-					"resume_missed": schema.BoolAttribute{
-						Computed: true,
-					},
-					"resume_on_boot": schema.BoolAttribute{
-						Computed: true,
 					},
 					"tz": schema.StringAttribute{
 						Computed: true,
 					},
 				},
-			},
-			"table_config": schema.StringAttribute{
-				Computed: true,
-			},
-			"user": schema.StringAttribute{
-				Computed: true,
 			},
 		},
 	}
