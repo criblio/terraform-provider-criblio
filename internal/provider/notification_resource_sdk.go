@@ -28,16 +28,6 @@ func (r *NotificationResourceModel) RefreshFromSharedNotification(ctx context.Co
 	r.Disabled = types.BoolPointerValue(resp.Disabled)
 	r.Group = types.StringPointerValue(resp.Group)
 	r.ID = types.StringValue(resp.ID)
-	r.Metadata = []tfTypes.MetadataItem{}
-
-	for _, metadataItem := range resp.Metadata {
-		var metadata tfTypes.MetadataItem
-
-		metadata.Name = types.StringValue(metadataItem.Name)
-		metadata.Value = types.StringValue(metadataItem.Value)
-
-		r.Metadata = append(r.Metadata, metadata)
-	}
 	r.TargetConfigs = []tfTypes.TargetConfig{}
 
 	for _, targetConfigsItem := range resp.TargetConfigs {
@@ -195,19 +185,6 @@ func (r *NotificationResourceModel) ToSharedNotification(ctx context.Context) (*
 			TriggerCount:      triggerCount,
 		}
 	}
-	metadata := make([]shared.MetadataItem, 0, len(r.Metadata))
-	for _, metadataItem := range r.Metadata {
-		var name string
-		name = metadataItem.Name.ValueString()
-
-		var value string
-		value = metadataItem.Value.ValueString()
-
-		metadata = append(metadata, shared.MetadataItem{
-			Name:  name,
-			Value: value,
-		})
-	}
 	group := new(string)
 	if !r.Group.IsUnknown() && !r.Group.IsNull() {
 		*group = r.Group.ValueString()
@@ -221,7 +198,6 @@ func (r *NotificationResourceModel) ToSharedNotification(ctx context.Context) (*
 		Targets:       targets,
 		TargetConfigs: targetConfigs,
 		Conf:          conf1,
-		Metadata:      metadata,
 		Group:         group,
 	}
 

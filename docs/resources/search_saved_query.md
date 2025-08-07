@@ -14,177 +14,22 @@ SearchSavedQuery Resource
 
 ```terraform
 resource "criblio_search_saved_query" "my_searchsavedquery" {
-  chart_config = {
-    apply_threshold = false
-    axis = {
-      x_axis = "...my_x_axis..."
-      y_axis = [
-        "..."
-      ]
-      y_axis_excluded = [
-        "..."
-      ]
-    }
-    color                  = "...my_color..."
-    color_palette          = 0.59
-    color_palette_reversed = true
-    color_thresholds = {
-      thresholds = [
-        {
-          color     = "...my_color..."
-          threshold = 4.62
-        }
-      ]
-    }
-    custom_data = {
-      connect_nulls = "...my_connect_nulls..."
-      data_fields = [
-        "..."
-      ]
-      is_point_color               = false
-      limit_to_top_n               = 0.73
-      lines                        = false
-      name_field                   = "...my_name_field..."
-      point_color_palette          = 8.61
-      point_color_palette_reversed = false
-      point_scale = {
-        str = "...my_str..."
-      }
-      point_scale_data_field = "...my_point_scale_data_field..."
-      series_count           = 0.84
-      split_by               = "...my_split_by..."
-      stack                  = true
-      summarize_others       = true
-      trellis                = true
-    }
-    decimals = 4.21
-    label    = "...my_label..."
-    legend = {
-      position = "...my_position..."
-      truncate = false
-    }
-    map_details = {
-      latitude_field  = "...my_latitude_field..."
-      longitude_field = "...my_longitude_field..."
-      map_source_id   = "...my_map_source_id..."
-      map_type        = "...my_map_type..."
-      name_field      = "...my_name_field..."
-      point_scale = {
-        number = 9.31
-      }
-      value_field = "...my_value_field..."
-    }
-    on_click_action = {
-      search                      = "...my_search..."
-      selected_dashboard_id       = "...my_selected_dashboard_id..."
-      selected_input_id           = "...my_selected_input_id..."
-      selected_link_id            = "...my_selected_link_id..."
-      selected_timerange_input_id = "...my_selected_timerange_input_id..."
-      type                        = "...my_type..."
-    }
-    prefix    = "...my_prefix..."
-    separator = false
-    series = [
-      {
-        color = "...my_color..."
-        data = [
-          {
-            # ...
-          }
-        ]
-        map          = "...my_map..."
-        name         = "...my_name..."
-        type         = "gauge"
-        y_axis_field = "...my_y_axis_field..."
-      }
-    ]
-    should_apply_user_chart_settings = true
-    style                            = false
-    suffix                           = "...my_suffix..."
-    type                             = "...my_type..."
-    x_axis = {
-      data_field        = "...my_data_field..."
-      inverse           = false
-      label_interval    = "...my_label_interval..."
-      label_orientation = 0.15
-      name              = "...my_name..."
-      offset            = 1.03
-      position          = "...my_position..."
-      type              = "...my_type..."
-    }
-    y_axis = {
-      data_field = [
-        "..."
-      ]
-      interval   = 3.09
-      max        = 0.68
-      min        = 6.09
-      position   = "...my_position..."
-      scale      = "...my_scale..."
-      split_line = false
-      type       = "...my_type..."
-    }
-  }
-  description      = "...my_description..."
-  display_username = "...my_display_username..."
-  earliest         = "...my_earliest..."
-  id               = "...my_id..."
-  is_private       = true
-  is_system        = true
-  latest           = "...my_latest..."
-  lib              = "custom"
-  name             = "...my_name..."
-  query            = "...my_query..."
-  resolved_dataset_ids = [
-    "..."
-  ]
-  sample_rate = 2.25
+  description = "test saved query"
+  earliest    = "-1h"
+  id          = "test_saved"
+  is_private  = true
+  latest      = "now"
+  name        = "test_saved"
+  query       = "dataset=\"cribl_edge_appscope_metrics\" | limit 1000"
   schedule = {
     cron_schedule = "...my_cron_schedule..."
     enabled       = true
     keep_last_n   = 7.78
     notifications = {
       disabled = false
-      items = [
-        {
-          condition = "...my_condition..."
-          conf = {
-            message            = "...my_message..."
-            saved_query_id     = "...my_saved_query_id..."
-            trigger_comparator = "...my_trigger_comparator..."
-            trigger_count      = 6.25
-            trigger_type       = "...my_trigger_type..."
-          }
-          disabled = false
-          group    = "...my_group..."
-          id       = "...my_id..."
-          metadata = [
-            {
-              name  = "...my_name..."
-              value = "...my_value..."
-            }
-          ]
-          target_configs = [
-            {
-              conf = {
-                attachment_type = "inline"
-                include_results = false
-              }
-              id = "...my_id..."
-            }
-          ]
-          targets = [
-            "..."
-          ]
-        }
-      ]
     }
-    resume_missed  = false
-    resume_on_boot = true
-    tz             = "...my_tz..."
+    tz = "...my_tz..."
   }
-  table_config = "...my_table_config..."
-  user         = "...my_user..."
 }
 ```
 
@@ -193,203 +38,17 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
 
 ### Required
 
-- `id` (String) Unique ID to PATCH
-- `name` (String)
-- `query` (String)
+- `id` (String) Unique identifier for the saved query
+- `name` (String) Name of the saved query
+- `query` (String) The search query string
 
 ### Optional
 
-- `chart_config` (Attributes) (see [below for nested schema](#nestedatt--chart_config))
-- `description` (String)
-- `display_username` (String)
-- `earliest` (String)
-- `is_private` (Boolean)
-- `is_system` (Boolean)
-- `latest` (String)
-- `lib` (String) must be one of ["cribl", "cribl-custom", "custom"]
-- `resolved_dataset_ids` (List of String)
-- `sample_rate` (Number)
+- `description` (String) Description of the saved query
+- `earliest` (String) Earliest time for the search range
+- `is_private` (Boolean) Whether the saved query is private
+- `latest` (String) Latest time for the search range
 - `schedule` (Attributes) (see [below for nested schema](#nestedatt--schedule))
-- `table_config` (String)
-- `user` (String)
-
-<a id="nestedatt--chart_config"></a>
-### Nested Schema for `chart_config`
-
-Optional:
-
-- `apply_threshold` (Boolean)
-- `axis` (Attributes) (see [below for nested schema](#nestedatt--chart_config--axis))
-- `color` (String)
-- `color_palette` (Number) Not Null
-- `color_palette_reversed` (Boolean)
-- `color_thresholds` (Attributes) (see [below for nested schema](#nestedatt--chart_config--color_thresholds))
-- `custom_data` (Attributes) (see [below for nested schema](#nestedatt--chart_config--custom_data))
-- `decimals` (Number)
-- `label` (String)
-- `legend` (Attributes) (see [below for nested schema](#nestedatt--chart_config--legend))
-- `map_details` (Attributes) (see [below for nested schema](#nestedatt--chart_config--map_details))
-- `on_click_action` (Attributes) (see [below for nested schema](#nestedatt--chart_config--on_click_action))
-- `prefix` (String)
-- `separator` (Boolean)
-- `series` (Attributes List) (see [below for nested schema](#nestedatt--chart_config--series))
-- `should_apply_user_chart_settings` (Boolean)
-- `style` (Boolean)
-- `suffix` (String)
-- `type` (String) Not Null
-- `x_axis` (Attributes) (see [below for nested schema](#nestedatt--chart_config--x_axis))
-- `y_axis` (Attributes) (see [below for nested schema](#nestedatt--chart_config--y_axis))
-
-<a id="nestedatt--chart_config--axis"></a>
-### Nested Schema for `chart_config.axis`
-
-Optional:
-
-- `x_axis` (String)
-- `y_axis` (List of String)
-- `y_axis_excluded` (List of String)
-
-
-<a id="nestedatt--chart_config--color_thresholds"></a>
-### Nested Schema for `chart_config.color_thresholds`
-
-Optional:
-
-- `thresholds` (Attributes List) Not Null (see [below for nested schema](#nestedatt--chart_config--color_thresholds--thresholds))
-
-<a id="nestedatt--chart_config--color_thresholds--thresholds"></a>
-### Nested Schema for `chart_config.color_thresholds.thresholds`
-
-Optional:
-
-- `color` (String) Not Null
-- `threshold` (Number) Not Null
-
-
-
-<a id="nestedatt--chart_config--custom_data"></a>
-### Nested Schema for `chart_config.custom_data`
-
-Optional:
-
-- `connect_nulls` (String)
-- `data_fields` (List of String)
-- `is_point_color` (Boolean)
-- `limit_to_top_n` (Number)
-- `lines` (Boolean)
-- `name_field` (String)
-- `point_color_palette` (Number)
-- `point_color_palette_reversed` (Boolean)
-- `point_scale` (Attributes) (see [below for nested schema](#nestedatt--chart_config--custom_data--point_scale))
-- `point_scale_data_field` (String)
-- `series_count` (Number)
-- `split_by` (String)
-- `stack` (Boolean)
-- `summarize_others` (Boolean)
-- `trellis` (Boolean)
-
-<a id="nestedatt--chart_config--custom_data--point_scale"></a>
-### Nested Schema for `chart_config.custom_data.point_scale`
-
-Optional:
-
-- `number` (Number)
-- `str` (String)
-
-
-
-<a id="nestedatt--chart_config--legend"></a>
-### Nested Schema for `chart_config.legend`
-
-Optional:
-
-- `position` (String)
-- `truncate` (Boolean)
-
-
-<a id="nestedatt--chart_config--map_details"></a>
-### Nested Schema for `chart_config.map_details`
-
-Optional:
-
-- `latitude_field` (String)
-- `longitude_field` (String)
-- `map_source_id` (String)
-- `map_type` (String)
-- `name_field` (String)
-- `point_scale` (Attributes) (see [below for nested schema](#nestedatt--chart_config--map_details--point_scale))
-- `value_field` (String)
-
-<a id="nestedatt--chart_config--map_details--point_scale"></a>
-### Nested Schema for `chart_config.map_details.point_scale`
-
-Optional:
-
-- `number` (Number)
-- `str` (String)
-
-
-
-<a id="nestedatt--chart_config--on_click_action"></a>
-### Nested Schema for `chart_config.on_click_action`
-
-Optional:
-
-- `search` (String)
-- `selected_dashboard_id` (String)
-- `selected_input_id` (String)
-- `selected_link_id` (String)
-- `selected_timerange_input_id` (String)
-- `type` (String)
-
-
-<a id="nestedatt--chart_config--series"></a>
-### Nested Schema for `chart_config.series`
-
-Optional:
-
-- `color` (String)
-- `data` (Attributes List) (see [below for nested schema](#nestedatt--chart_config--series--data))
-- `map` (String)
-- `name` (String) Not Null
-- `type` (String) must be one of ["area", "column", "events", "funnel", "gauge", "horizontalBar", "line", "map", "pie", "scatter", "single", "table"]
-- `y_axis_field` (String)
-
-<a id="nestedatt--chart_config--series--data"></a>
-### Nested Schema for `chart_config.series.data`
-
-
-
-<a id="nestedatt--chart_config--x_axis"></a>
-### Nested Schema for `chart_config.x_axis`
-
-Optional:
-
-- `data_field` (String)
-- `inverse` (Boolean)
-- `label_interval` (String)
-- `label_orientation` (Number)
-- `name` (String)
-- `offset` (Number)
-- `position` (String)
-- `type` (String)
-
-
-<a id="nestedatt--chart_config--y_axis"></a>
-### Nested Schema for `chart_config.y_axis`
-
-Optional:
-
-- `data_field` (List of String)
-- `interval` (Number)
-- `max` (Number)
-- `min` (Number)
-- `position` (String)
-- `scale` (String)
-- `split_line` (Boolean)
-- `type` (String)
-
-
 
 <a id="nestedatt--schedule"></a>
 ### Nested Schema for `schedule`
@@ -400,8 +59,6 @@ Optional:
 - `enabled` (Boolean) Not Null
 - `keep_last_n` (Number) Not Null
 - `notifications` (Attributes) Not Null (see [below for nested schema](#nestedatt--schedule--notifications))
-- `resume_missed` (Boolean)
-- `resume_on_boot` (Boolean)
 - `tz` (String) Not Null
 
 <a id="nestedatt--schedule--notifications"></a>
@@ -410,58 +67,6 @@ Optional:
 Optional:
 
 - `disabled` (Boolean) Not Null
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--schedule--notifications--items))
-
-<a id="nestedatt--schedule--notifications--items"></a>
-### Nested Schema for `schedule.notifications.items`
-
-Optional:
-
-- `condition` (String) The condition that triggers this notification. Not Null
-- `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--schedule--notifications--items--conf))
-- `disabled` (Boolean) Whether the notification is disabled. Default: false
-- `group` (String) Group identifier for the notification. Default: "default_search"
-- `id` (String) Unique identifier for the notification. Not Null
-- `metadata` (Attributes List) Additional metadata for the notification (see [below for nested schema](#nestedatt--schedule--notifications--items--metadata))
-- `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs))
-- `targets` (List of String) Targets to send any notifications to
-
-<a id="nestedatt--schedule--notifications--items--conf"></a>
-### Nested Schema for `schedule.notifications.items.conf`
-
-Optional:
-
-- `message` (String) Message template for the notification. Not Null
-- `saved_query_id` (String) ID of the saved query this notification is associated with. Not Null
-- `trigger_comparator` (String) Comparison operator (e.g., >, <, =)
-- `trigger_count` (Number) Threshold count for the trigger
-- `trigger_type` (String) Type of trigger (e.g., resultsCount)
-
-
-<a id="nestedatt--schedule--notifications--items--metadata"></a>
-### Nested Schema for `schedule.notifications.items.metadata`
-
-Optional:
-
-- `name` (String) Metadata field name. Not Null
-- `value` (String) Metadata field value. Not Null
-
-
-<a id="nestedatt--schedule--notifications--items--target_configs"></a>
-### Nested Schema for `schedule.notifications.items.target_configs`
-
-Optional:
-
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--schedule--notifications--items--target_configs--conf))
-- `id` (String) ID of the notification target. Not Null
-
-<a id="nestedatt--schedule--notifications--items--target_configs--conf"></a>
-### Nested Schema for `schedule.notifications.items.target_configs.conf`
-
-Optional:
-
-- `attachment_type` (String) Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]
-- `include_results` (Boolean) Whether to include search results in the notification. Default: false
 
 ## Import
 

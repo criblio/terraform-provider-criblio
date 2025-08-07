@@ -136,64 +136,6 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 		r.Schedule.Enabled = types.BoolValue(resp.Schedule.Enabled)
 		r.Schedule.KeepLastN = types.Float64Value(resp.Schedule.KeepLastN)
 		r.Schedule.Notifications.Disabled = types.BoolValue(resp.Schedule.Notifications.Disabled)
-		r.Schedule.Notifications.Items = []tfTypes.Notification{}
-
-		for _, itemsItem := range resp.Schedule.Notifications.Items {
-			var items tfTypes.Notification
-
-			items.Condition = types.StringValue(itemsItem.Condition)
-			if itemsItem.Conf == nil {
-				items.Conf = nil
-			} else {
-				items.Conf = &tfTypes.ConditionSpecificConfigs{}
-				items.Conf.Message = types.StringValue(itemsItem.Conf.Message)
-				items.Conf.SavedQueryID = types.StringValue(itemsItem.Conf.SavedQueryID)
-				items.Conf.TriggerComparator = types.StringPointerValue(itemsItem.Conf.TriggerComparator)
-				items.Conf.TriggerCount = types.Float64PointerValue(itemsItem.Conf.TriggerCount)
-				items.Conf.TriggerType = types.StringPointerValue(itemsItem.Conf.TriggerType)
-			}
-			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
-			items.Group = types.StringPointerValue(itemsItem.Group)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Metadata = []tfTypes.MetadataItem{}
-
-			for _, metadataItem := range itemsItem.Metadata {
-				var metadata tfTypes.MetadataItem
-
-				metadata.Name = types.StringValue(metadataItem.Name)
-				metadata.Value = types.StringValue(metadataItem.Value)
-
-				items.Metadata = append(items.Metadata, metadata)
-			}
-			items.TargetConfigs = []tfTypes.TargetConfig{}
-
-			for _, targetConfigsItem := range itemsItem.TargetConfigs {
-				var targetConfigs tfTypes.TargetConfig
-
-				if targetConfigsItem.Conf == nil {
-					targetConfigs.Conf = nil
-				} else {
-					targetConfigs.Conf = &tfTypes.TargetConfigConf{}
-					if targetConfigsItem.Conf.AttachmentType != nil {
-						targetConfigs.Conf.AttachmentType = types.StringValue(string(*targetConfigsItem.Conf.AttachmentType))
-					} else {
-						targetConfigs.Conf.AttachmentType = types.StringNull()
-					}
-					targetConfigs.Conf.IncludeResults = types.BoolPointerValue(targetConfigsItem.Conf.IncludeResults)
-				}
-				targetConfigs.ID = types.StringValue(targetConfigsItem.ID)
-
-				items.TargetConfigs = append(items.TargetConfigs, targetConfigs)
-			}
-			items.Targets = make([]types.String, 0, len(itemsItem.Targets))
-			for _, v := range itemsItem.Targets {
-				items.Targets = append(items.Targets, types.StringValue(v))
-			}
-
-			r.Schedule.Notifications.Items = append(r.Schedule.Notifications.Items, items)
-		}
-		r.Schedule.ResumeMissed = types.BoolPointerValue(resp.Schedule.ResumeMissed)
-		r.Schedule.ResumeOnBoot = types.BoolPointerValue(resp.Schedule.ResumeOnBoot)
 		r.Schedule.Tz = types.StringValue(resp.Schedule.Tz)
 	}
 

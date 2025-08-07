@@ -1,3 +1,3 @@
 data "criblio_search_saved_query" "my_searchsavedquery" {
-  id = "...my_id..."
+  id = "test_saved"
 }

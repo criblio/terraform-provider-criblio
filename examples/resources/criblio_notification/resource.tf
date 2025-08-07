@@ -10,12 +10,6 @@ resource "criblio_notification" "my_notification" {
   disabled = false
   group    = "...my_group..."
   id       = "...my_id..."
-  metadata = [
-    {
-      name  = "...my_name..."
-      value = "...my_value..."
-    }
-  ]
   target_configs = [
     {
       conf = {

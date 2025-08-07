@@ -11,7 +11,5 @@ type SavedQuerySchedule struct {
 	Enabled       types.Bool    `tfsdk:"enabled"`
 	KeepLastN     types.Float64 `tfsdk:"keep_last_n"`
 	Notifications Notifications `tfsdk:"notifications"`
-	ResumeMissed  types.Bool    `tfsdk:"resume_missed"`
-	ResumeOnBoot  types.Bool    `tfsdk:"resume_on_boot"`
 	Tz            types.String  `tfsdk:"tz"`
 }

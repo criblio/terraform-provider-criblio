@@ -17,17 +17,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -584,177 +579,11 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"items": schema.ListNestedAttribute{
-								Computed: true,
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
-									Attributes: map[string]schema.Attribute{
-										"condition": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `The condition that triggers this notification. Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
-										},
-										"conf": schema.SingleNestedAttribute{
-											Computed: true,
-											Optional: true,
-											Attributes: map[string]schema.Attribute{
-												"message": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Message template for the notification. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
-												},
-												"saved_query_id": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `ID of the saved query this notification is associated with. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
-												},
-												"trigger_comparator": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Comparison operator (e.g., >, <, =)`,
-												},
-												"trigger_count": schema.Float64Attribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Threshold count for the trigger`,
-												},
-												"trigger_type": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Type of trigger (e.g., resultsCount)`,
-												},
-											},
-											Description: `Configuration specific to the notification condition`,
-										},
-										"disabled": schema.BoolAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     booldefault.StaticBool(false),
-											Description: `Whether the notification is disabled. Default: false`,
-										},
-										"group": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     stringdefault.StaticString(`default_search`),
-											Description: `Group identifier for the notification. Default: "default_search"`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Unique identifier for the notification. Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-												stringvalidator.UTF8LengthAtMost(512),
-												stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-											},
-										},
-										"metadata": schema.ListNestedAttribute{
-											Computed: true,
-											Optional: true,
-											NestedObject: schema.NestedAttributeObject{
-												Validators: []validator.Object{
-													speakeasy_objectvalidators.NotNull(),
-												},
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `Metadata field name. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `Metadata field value. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-												},
-											},
-											Description: `Additional metadata for the notification`,
-										},
-										"target_configs": schema.ListNestedAttribute{
-											Computed: true,
-											Optional: true,
-											NestedObject: schema.NestedAttributeObject{
-												Validators: []validator.Object{
-													speakeasy_objectvalidators.NotNull(),
-												},
-												Attributes: map[string]schema.Attribute{
-													"conf": schema.SingleNestedAttribute{
-														Computed: true,
-														Optional: true,
-														Attributes: map[string]schema.Attribute{
-															"attachment_type": schema.StringAttribute{
-																Computed:    true,
-																Optional:    true,
-																Default:     stringdefault.StaticString(`inline`),
-																Description: `Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]`,
-																Validators: []validator.String{
-																	stringvalidator.OneOf(
-																		"inline",
-																		"attachment",
-																	),
-																},
-															},
-															"include_results": schema.BoolAttribute{
-																Computed:    true,
-																Optional:    true,
-																Default:     booldefault.StaticBool(false),
-																Description: `Whether to include search results in the notification. Default: false`,
-															},
-														},
-													},
-													"id": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `ID of the notification target. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-												},
-											},
-											Description: `Configuration for notification targets`,
-										},
-										"targets": schema.ListAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-											ElementType: types.StringType,
-											Description: `Targets to send any notifications to`,
-										},
-									},
-								},
-							},
 						},
 						Description: `Not Null`,
 						Validators: []validator.Object{
 							speakeasy_objectvalidators.NotNull(),
 						},
-					},
-					"resume_missed": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"resume_on_boot": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
 					},
 					"tz": schema.StringAttribute{
 						Computed:    true,

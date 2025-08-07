@@ -37,7 +37,6 @@ type NotificationDataSourceModel struct {
 	Disabled      types.Bool                        `tfsdk:"disabled"`
 	Group         types.String                      `tfsdk:"group"`
 	ID            types.String                      `tfsdk:"id"`
-	Metadata      []tfTypes.MetadataItem            `tfsdk:"metadata"`
 	TargetConfigs []tfTypes.TargetConfig            `tfsdk:"target_configs"`
 	Targets       []types.String                    `tfsdk:"targets"`
 }
@@ -98,22 +97,6 @@ func (r *NotificationDataSource) Schema(ctx context.Context, req datasource.Sche
 					stringvalidator.UTF8LengthAtMost(512),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
-			},
-			"metadata": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Metadata field name`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Metadata field value`,
-						},
-					},
-				},
-				Description: `Additional metadata for the notification`,
 			},
 			"target_configs": schema.ListNestedAttribute{
 				Computed: true,

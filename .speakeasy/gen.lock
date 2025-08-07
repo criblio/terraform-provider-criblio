@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 1c7e33bf853b755b7cde4d52ef0982c5
+  docChecksum: 9ce8b463c915c0441b613a6f962b90be
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.598.0
-  generationVersion: 2.674.1
-  releaseVersion: 1.4.5
-  configChecksum: 7aa65338ef5ad83a1b71d7e1169bde30
+  speakeasyVersion: 1.598.3
+  generationVersion: 2.674.3
+  releaseVersion: 1.4.10
+  configChecksum: 964d5bed30ec1c9248add80f5f4ef9a1
   published: true
 features:
   terraform:
@@ -370,20 +370,15 @@ generatedFiles:
   - internal/provider/types/aws_account_config.go
   - internal/provider/types/aws_security_lake_dataset.go
   - internal/provider/types/aws_security_lake_provider.go
-  - internal/provider/types/axis.go
   - internal/provider/types/azure_account_config.go
   - internal/provider/types/azure_blob_dataset.go
   - internal/provider/types/azure_blob_dataset_extra_path.go
   - internal/provider/types/azure_blob_provider.go
   - internal/provider/types/cert_options.go
-  - internal/provider/types/chart_config.go
-  - internal/provider/types/chart_data.go
-  - internal/provider/types/chart_series.go
   - internal/provider/types/click_house_dataset.go
   - internal/provider/types/click_house_provider.go
   - internal/provider/types/cloud.go
   - internal/provider/types/collectors.go
-  - internal/provider/types/color_thresholds.go
   - internal/provider/types/comment.go
   - internal/provider/types/commit.go
   - internal/provider/types/condition_specific_configs.go
@@ -395,8 +390,6 @@ generatedFiles:
   - internal/provider/types/cribl_leader_dataset.go
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
-  - internal/provider/types/custom_data.go
-  - internal/provider/types/custom_data_point_scale.go
   - internal/provider/types/custom_label.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
@@ -792,7 +785,6 @@ generatedFiles:
   - internal/provider/types/input_zscaler_hec_tls_settings_server_side.go
   - internal/provider/types/interfaces.go
   - internal/provider/types/lake_dataset_search_config.go
-  - internal/provider/types/legend.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -801,17 +793,12 @@ generatedFiles:
   - internal/provider/types/loki_auth_oauth_param1.go
   - internal/provider/types/loki_auth_oauth_param2.go
   - internal/provider/types/lookup.go
-  - internal/provider/types/map_details.go
-  - internal/provider/types/map_details_point_scale.go
   - internal/provider/types/meta_dataset.go
   - internal/provider/types/meta_provider.go
-  - internal/provider/types/metadata_item.go
   - internal/provider/types/ms_graph_account_config.go
   - internal/provider/types/mtls_settings.go
-  - internal/provider/types/notification.go
   - internal/provider/types/notifications.go
   - internal/provider/types/okta_account_config.go
-  - internal/provider/types/on_click_action.go
   - internal/provider/types/output_azure_blob.go
   - internal/provider/types/output_azure_blob_certificate.go
   - internal/provider/types/output_azure_blob_key_value_metadatum.go
@@ -1133,13 +1120,10 @@ generatedFiles:
   - internal/provider/types/target.go
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
-  - internal/provider/types/threshold.go
   - internal/provider/types/tls_configuration.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/webhook_target.go
-  - internal/provider/types/x_axis.go
-  - internal/provider/types/y_axis.go
   - internal/provider/types/zoom_account_config.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
@@ -1719,10 +1703,6 @@ generatedFiles:
   - internal/sdk/models/shared/captureparams.go
   - internal/sdk/models/shared/certificate.go
   - internal/sdk/models/shared/changelogstate.go
-  - internal/sdk/models/shared/chartconfig.go
-  - internal/sdk/models/shared/chartdata.go
-  - internal/sdk/models/shared/chartseries.go
-  - internal/sdk/models/shared/charttype.go
   - internal/sdk/models/shared/choutconfig.go
   - internal/sdk/models/shared/clickhousedescriptioncolumn.go
   - internal/sdk/models/shared/clickhousedescriptionresult.go
@@ -4625,16 +4605,16 @@ examples:
     speakeasy-default-list-saved-query:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
           application/json: {}
   createSavedQuery:
     speakeasy-default-create-saved-query:
       requestBody:
-        application/json: {"id": "<id>", "name": "<value>", "query": "<value>"}
+        application/json: {"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "description": "test saved query", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
           application/json: {}
   getSavedQueryById:
@@ -4644,7 +4624,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
           application/json: {}
   updateSavedQueryById:
@@ -4653,10 +4633,10 @@ examples:
         path:
           id: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "name": "<value>", "query": "<value>"}
+        application/json: {"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "description": "test saved query", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
           application/json: {}
   deleteSavedQueryById:
@@ -4666,7 +4646,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
           application/json: {}
   listSearchJob:
