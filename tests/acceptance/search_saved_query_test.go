@@ -15,7 +15,6 @@ func TestSearchSavedQuery(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						// Test criblio_search_saved_query resources
 						resource.TestCheckResourceAttr("criblio_search_saved_query.my_searchsavedquery", "id", "test_saved_query"),
