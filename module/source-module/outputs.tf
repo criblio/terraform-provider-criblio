@@ -1,4 +1,3 @@
-# modules/cribl-source/outputs.tf (or source-module/outputs.tf in your case)
 output "source_id" {
   description = "The ID of the created source"
   value       = criblio_source.this.id

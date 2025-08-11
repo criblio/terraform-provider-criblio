@@ -1,24 +1,11 @@
-# modules/cribl-source/main.tf - CORRECTED
-terraform {
-  # required_version = ">= 1.0"
-  
-  required_providers {
-    criblio = {
-      source  = "criblio/criblio"
-      # version = "~> 1.0"
-    }
-  }
-}
-
 resource "criblio_source" "this" {
   id       = var.source_id
   group_id = var.group_id
   
-  # For syslog - direct assignment with conditional
+  # Syslog
   input_syslog = var.source_type == "syslog" ? {
     input_syslog_syslog1 = merge(
       {
-        # Required fields
         id             = var.source_id
         host           = "0.0.0.0"
         tcp_port       = var.port
@@ -28,20 +15,17 @@ resource "criblio_source" "this" {
         pq_enabled     = var.pq_enabled
         send_to_routes = length(var.connections) == 0
       },
-      # Optional fields only if they have values
       var.description != "" ? { description = var.description } : {},
       length(var.connections) > 0 ? { connections = var.connections } : {},
       var.pipeline != null ? { pipeline = var.pipeline } : {},
       length(var.streamtags) > 0 ? { streamtags = var.streamtags } : {},
-      # Custom overrides
       var.custom_config
     )
   } : null
   
-  # For HTTP - direct assignment with conditional
+  # Cribl HTTP
   input_cribl_http = var.source_type == "cribl_http" ? merge(
     {
-      # Required fields
       id                       = var.source_id
       port                     = var.port
       activity_log_sample_rate = 100
@@ -62,11 +46,21 @@ resource "criblio_source" "this" {
         priv_key_path = "$CRIBL_CLOUD_KEY"
       }
     },
-    # Optional fields
     var.description != "" ? { description = var.description } : {},
     length(var.connections) > 0 ? { connections = var.connections } : {},
     var.pipeline != null ? { pipeline = var.pipeline } : {},
-    # Custom overrides
     var.custom_config
   ) : null
+  
+  # Regular HTTP
+  input_http = var.source_type == "http" ? local.http_source_config : null
+  
+  # Regular TCP  
+  input_tcp = var.source_type == "tcp" ? local.tcp_source_config : null
+  
+  # Cribl TCP
+  input_cribl_tcp = var.source_type == "cribl_tcp" ? local.tcp_config : null
+  
+  # OpenTelemetry
+  input_open_telemetry = var.source_type == "otlp" ? local.otlp_config : null
 }

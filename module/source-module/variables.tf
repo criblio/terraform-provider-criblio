@@ -1,4 +1,3 @@
-# modules/cribl-source/variables.tf - COMPLETE FILE
 variable "source_id" {
   description = "Unique identifier for the source"
   type        = string
@@ -10,27 +9,36 @@ variable "group_id" {
 }
 
 variable "source_type" {
-  description = "Type of source (syslog, cribl_http, tcp, etc.)"
+  description = "Type of source"
   type        = string
   validation {
     condition = contains([
       "syslog",
-      "cribl_http",
+      "cribl_http",    # Cribl HTTP receiver
+      "cribl_tcp",     # Cribl TCP receiver  
+      "http",          # Regular HTTP source
+      "tcp",           # Regular TCP source
+      "otlp",          # OpenTelemetry
       # Add more as needed
     ], var.source_type)
-    error_message = "Invalid source type."
+    error_message = "Invalid source type. Must be one of: syslog, cribl_http, cribl_tcp, http, tcp, otlp"
   }
 }
 
 variable "port" {
-  description = "Port number (required) - For syslog, this sets both TCP and UDP ports. Cannot use default ports (9514 for syslog, 10200 for HTTP)"
+  description = "Port number (required) - Cannot use default ports"
   type        = number
   validation {
     condition = (
-      var.port != 10200 && # HTTP default
-      var.port != 9514     # Syslog default
+      var.port != 10200 && # cribl_http default
+      var.port != 9514  && # syslog default
+      var.port != 10001 && # cribl_tcp default
+      var.port != 10080 && # http default (assumed)
+      var.port != 10060 && # tcp default (assumed)
+      var.port != 4317  && # OTLP gRPC default
+      var.port != 4318     # OTLP HTTP default
     )
-    error_message = "Port cannot be the default port (10200 for HTTP, 9514 for syslog). Please choose a different port."
+    error_message = "Port cannot be a default port. Please choose a different port."
   }
 }
 
