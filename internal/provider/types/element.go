@@ -3,21 +3,22 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type Element struct {
-	Description     types.String            `tfsdk:"description"`
-	Empty           types.Bool              `tfsdk:"empty"`
-	HidePanel       types.Bool              `tfsdk:"hide_panel"`
-	HorizontalChart types.Bool              `tfsdk:"horizontal_chart"`
-	ID              types.String            `tfsdk:"id"`
-	Index           types.Float64           `tfsdk:"index"`
-	InputID         types.String            `tfsdk:"input_id"`
-	Layout          DashboardLayout         `tfsdk:"layout"`
-	Search          SearchQuery             `tfsdk:"search"`
-	Title           types.String            `tfsdk:"title"`
-	Type            types.String            `tfsdk:"type"`
-	Value           map[string]types.String `tfsdk:"value"`
-	Variant         types.String            `tfsdk:"variant"`
+	Description     types.String                    `tfsdk:"description"`
+	Empty           types.Bool                      `tfsdk:"empty"`
+	HidePanel       types.Bool                      `tfsdk:"hide_panel"`
+	HorizontalChart types.Bool                      `tfsdk:"horizontal_chart"`
+	ID              types.String                    `tfsdk:"id"`
+	Index           types.Float64                   `tfsdk:"index"`
+	InputID         types.String                    `tfsdk:"input_id"`
+	Layout          DashboardLayout                 `tfsdk:"layout"`
+	Search          SearchQuery                     `tfsdk:"search"`
+	Title           types.String                    `tfsdk:"title"`
+	Type            types.String                    `tfsdk:"type"`
+	Value           map[string]jsontypes.Normalized `tfsdk:"value"`
+	Variant         types.String                    `tfsdk:"variant"`
 }

@@ -3,23 +3,24 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type PackInstallInfo struct {
-	Author              types.String            `tfsdk:"author"`
-	Description         types.String            `tfsdk:"description"`
-	DisplayName         types.String            `tfsdk:"display_name"`
-	Exports             []types.String          `tfsdk:"exports"`
-	ID                  types.String            `tfsdk:"id"`
-	Inputs              types.Float64           `tfsdk:"inputs"`
-	IsDisabled          types.Bool              `tfsdk:"is_disabled"`
-	MinLogStreamVersion types.String            `tfsdk:"min_log_stream_version"`
-	Outputs             types.Float64           `tfsdk:"outputs"`
-	Settings            map[string]types.String `tfsdk:"settings"`
-	Source              types.String            `tfsdk:"source"`
-	Spec                types.String            `tfsdk:"spec"`
-	Tags                *PackInstallInfoTags    `tfsdk:"tags"`
-	Version             types.String            `tfsdk:"version"`
-	Warnings            types.String            `tfsdk:"warnings"`
+	Author              types.String                    `tfsdk:"author"`
+	Description         types.String                    `tfsdk:"description"`
+	DisplayName         types.String                    `tfsdk:"display_name"`
+	Exports             []types.String                  `tfsdk:"exports"`
+	ID                  types.String                    `tfsdk:"id"`
+	Inputs              types.Float64                   `tfsdk:"inputs"`
+	IsDisabled          types.Bool                      `tfsdk:"is_disabled"`
+	MinLogStreamVersion types.String                    `tfsdk:"min_log_stream_version"`
+	Outputs             types.Float64                   `tfsdk:"outputs"`
+	Settings            map[string]jsontypes.Normalized `tfsdk:"settings"`
+	Source              types.String                    `tfsdk:"source"`
+	Spec                types.String                    `tfsdk:"spec"`
+	Tags                *PackInstallInfoTags            `tfsdk:"tags"`
+	Version             types.String                    `tfsdk:"version"`
+	Warnings            jsontypes.Normalized            `tfsdk:"warnings"`
 }

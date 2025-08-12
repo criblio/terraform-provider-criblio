@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -87,10 +88,10 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 			elements.Element.Title = types.StringPointerValue(elementsItem.Element.Title)
 			elements.Element.Type = types.StringValue(string(elementsItem.Element.Type))
 			if len(elementsItem.Element.Value) > 0 {
-				elements.Element.Value = make(map[string]types.String, len(elementsItem.Element.Value))
+				elements.Element.Value = make(map[string]jsontypes.Normalized, len(elementsItem.Element.Value))
 				for key, value := range elementsItem.Element.Value {
 					result, _ := json.Marshal(value)
-					elements.Element.Value[key] = types.StringValue(string(result))
+					elements.Element.Value[key] = jsontypes.NewNormalizedValue(string(result))
 				}
 			}
 			if elementsItem.Element.Variant != nil {

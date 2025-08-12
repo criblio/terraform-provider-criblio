@@ -11,6 +11,7 @@ import (
 	speakeasy_mapvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -78,7 +79,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 								"conf": schema.MapAttribute{
 									Computed:    true,
 									Optional:    true,
-									ElementType: types.StringType,
+									ElementType: jsontypes.NormalizedType{},
 									Description: `Not Null`,
 									Validators: []validator.Map{
 										speakeasy_mapvalidators.NotNull(),

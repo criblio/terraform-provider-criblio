@@ -13,6 +13,7 @@ import (
 	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
@@ -380,7 +381,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"value": schema.MapAttribute{
 									Computed:    true,
 									Optional:    true,
-									ElementType: types.StringType,
+									ElementType: jsontypes.NormalizedType{},
 									Validators: []validator.Map{
 										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 									},

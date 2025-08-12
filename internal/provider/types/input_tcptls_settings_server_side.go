@@ -3,19 +3,20 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type InputTCPTLSSettingsServerSide struct {
-	CaPath             types.String `tfsdk:"ca_path"`
-	CertificateName    types.String `tfsdk:"certificate_name"`
-	CertPath           types.String `tfsdk:"cert_path"`
-	CommonNameRegex    types.String `tfsdk:"common_name_regex"`
-	Disabled           types.Bool   `tfsdk:"disabled"`
-	MaxVersion         types.String `tfsdk:"max_version"`
-	MinVersion         types.String `tfsdk:"min_version"`
-	Passphrase         types.String `tfsdk:"passphrase"`
-	PrivKeyPath        types.String `tfsdk:"priv_key_path"`
-	RejectUnauthorized types.String `tfsdk:"reject_unauthorized"`
-	RequestCert        types.Bool   `tfsdk:"request_cert"`
+	CaPath             types.String         `tfsdk:"ca_path"`
+	CertificateName    types.String         `tfsdk:"certificate_name"`
+	CertPath           types.String         `tfsdk:"cert_path"`
+	CommonNameRegex    jsontypes.Normalized `tfsdk:"common_name_regex"`
+	Disabled           types.Bool           `tfsdk:"disabled"`
+	MaxVersion         types.String         `tfsdk:"max_version"`
+	MinVersion         types.String         `tfsdk:"min_version"`
+	Passphrase         types.String         `tfsdk:"passphrase"`
+	PrivKeyPath        types.String         `tfsdk:"priv_key_path"`
+	RejectUnauthorized jsontypes.Normalized `tfsdk:"reject_unauthorized"`
+	RequestCert        types.Bool           `tfsdk:"request_cert"`
 }

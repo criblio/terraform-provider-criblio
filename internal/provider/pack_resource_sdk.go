@@ -8,6 +8,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -34,10 +35,10 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
-				items.Settings = make(map[string]types.String, len(itemsItem.Settings))
+				items.Settings = make(map[string]jsontypes.Normalized, len(itemsItem.Settings))
 				for key, value := range itemsItem.Settings {
 					result, _ := json.Marshal(value)
-					items.Settings[key] = types.StringValue(string(result))
+					items.Settings[key] = jsontypes.NewNormalizedValue(string(result))
 				}
 			}
 			items.Source = types.StringPointerValue(itemsItem.Source)
@@ -65,7 +66,7 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 			}
 			items.Version = types.StringPointerValue(itemsItem.Version)
 			warningsResult, _ := json.Marshal(itemsItem.Warnings)
-			items.Warnings = types.StringValue(string(warningsResult))
+			items.Warnings = jsontypes.NewNormalizedValue(string(warningsResult))
 
 			r.Items = append(r.Items, items)
 		}
@@ -96,10 +97,10 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx co
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
-				items.Settings = make(map[string]types.String, len(itemsItem.Settings))
+				items.Settings = make(map[string]jsontypes.Normalized, len(itemsItem.Settings))
 				for key, value := range itemsItem.Settings {
 					result, _ := json.Marshal(value)
-					items.Settings[key] = types.StringValue(string(result))
+					items.Settings[key] = jsontypes.NewNormalizedValue(string(result))
 				}
 			}
 			items.Source = types.StringPointerValue(itemsItem.Source)
@@ -127,7 +128,7 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx co
 			}
 			items.Version = types.StringPointerValue(itemsItem.Version)
 			warningsResult, _ := json.Marshal(itemsItem.Warnings)
-			items.Warnings = types.StringValue(string(warningsResult))
+			items.Warnings = jsontypes.NewNormalizedValue(string(warningsResult))
 
 			r.Items = append(r.Items, items)
 		}
@@ -158,10 +159,10 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
-				items.Settings = make(map[string]types.String, len(itemsItem.Settings))
+				items.Settings = make(map[string]jsontypes.Normalized, len(itemsItem.Settings))
 				for key, value := range itemsItem.Settings {
 					result, _ := json.Marshal(value)
-					items.Settings[key] = types.StringValue(string(result))
+					items.Settings[key] = jsontypes.NewNormalizedValue(string(result))
 				}
 			}
 			items.Source = types.StringPointerValue(itemsItem.Source)
@@ -189,7 +190,7 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 			}
 			items.Version = types.StringPointerValue(itemsItem.Version)
 			warningsResult, _ := json.Marshal(itemsItem.Warnings)
-			items.Warnings = types.StringValue(string(warningsResult))
+			items.Warnings = jsontypes.NewNormalizedValue(string(warningsResult))
 
 			r.Items = append(r.Items, items)
 		}

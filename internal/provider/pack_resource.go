@@ -10,6 +10,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -178,7 +179,7 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						},
 						"settings": schema.MapAttribute{
 							Computed:    true,
-							ElementType: types.StringType,
+							ElementType: jsontypes.NormalizedType{},
 							Validators: []validator.Map{
 								mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 							},
@@ -214,11 +215,9 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Computed: true,
 						},
 						"warnings": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
 							Description: `Parsed as JSON.`,
-							Validators: []validator.String{
-								validators.IsValidJSON(),
-							},
 						},
 					},
 				},
