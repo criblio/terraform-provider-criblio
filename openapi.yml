@@ -3597,6 +3597,9 @@ components:
         description:
           type: string
           description: Description of the lakehouse
+        status:
+          type: string
+          description: Status of the lakehouse
         tierSize:
           type: string
           description: Size of the lakehouse tier
@@ -53562,6 +53565,123 @@ paths:
           schema:
             type: string
           description: lake id that contains the Datasets
+  "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections":
+    post:
+      tags:
+        - lakehouse-dataset-connections
+      summary: Create lakehouse dataset connections
+      description: Create connections for a specific dataset within a lakehouse
+      operationId: createLakehouseDatasetConnections
+      x-speakeasy-entity-operation: LakehouseDatasetConnection#create
+      parameters:
+        - name: lakehouse_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the lakehouse
+        - name: lake_dataset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the dataset within the lakehouse
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Successfully created dataset connections
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request - invalid parameters
+        '404':
+          description: Lakehouse or dataset not found
+        '500':
+          description: Internal server error
+
+    patch:
+      tags:
+        - lakehouse-dataset-connections
+      summary: Update lakehouse dataset connections
+      description: Update connections for a specific dataset within a lakehouse
+      operationId: updateLakehouseDatasetConnections
+      x-speakeasy-entity-operation: LakehouseDatasetConnection#update
+      parameters:
+        - name: lakehouse_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the lakehouse
+        - name: lake_dataset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the dataset within the lakehouse
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Successfully updated dataset connections
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request - invalid parameters
+        '404':
+          description: Lakehouse or dataset not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - lakehouse-dataset-connections
+      summary: Delete lakehouse dataset connections
+      description: Delete all connections for a specific dataset within a lakehouse
+      operationId: deleteLakehouseDatasetConnections
+      x-speakeasy-entity-operation: LakehouseDatasetConnection#delete
+      parameters:
+        - name: lakehouse_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the lakehouse
+        - name: lake_dataset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the dataset within the lakehouse
+      responses:
+        "200":
+          description: a list of Connection objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
   "/products/lake/lakes/{lakeId}/datasets/{id}":
     delete:
       operationId: deleteCriblLakeDatasetByLakeIdAndId

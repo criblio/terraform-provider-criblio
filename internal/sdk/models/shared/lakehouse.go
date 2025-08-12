@@ -55,6 +55,8 @@ type Lakehouse struct {
 	ID string `json:"id"`
 	// Description of the lakehouse
 	Description *string `json:"description,omitempty"`
+	// Status of the lakehouse
+	Status *string `json:"status,omitempty"`
 	// Size of the lakehouse tier
 	TierSize *TierSize `default:"small" json:"tierSize"`
 }
@@ -82,6 +84,13 @@ func (o *Lakehouse) GetDescription() *string {
 		return nil
 	}
 	return o.Description
+}
+
+func (o *Lakehouse) GetStatus() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Status
 }
 
 func (o *Lakehouse) GetTierSize() *TierSize {

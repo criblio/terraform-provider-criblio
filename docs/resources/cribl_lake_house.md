@@ -16,6 +16,7 @@ CriblLakeHouse Resource
 resource "criblio_cribl_lake_house" "my_cribllakehouse" {
   description = "...my_description..."
   id          = "...my_id..."
+  status      = "...my_status..."
   tier_size   = "3xlarge"
 }
 ```
@@ -30,6 +31,7 @@ resource "criblio_cribl_lake_house" "my_cribllakehouse" {
 ### Optional
 
 - `description` (String) Description of the lakehouse
+- `status` (String) Status of the lakehouse
 - `tier_size` (String) Size of the lakehouse tier. Default: "small"; must be one of ["small", "medium", "large", "xlarge", "2xlarge", "3xlarge", "6xlarge"]
 
 ## Import

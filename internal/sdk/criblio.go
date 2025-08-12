@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.680.0
+// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.681.1
 
 import (
 	"context"
@@ -101,7 +101,8 @@ type CriblIo struct {
 	OnlyOnPrem *OnlyOnPrem
 	LakeHouse  *LakeHouse
 	// Actions related to Lake
-	Lake *Lake
+	Lake                        *Lake
+	LakehouseDatasetConnections *LakehouseDatasetConnections
 	// Actions related to DashboardCategories
 	DashboardCategories *DashboardCategories
 	// Actions related to Usage Groups
@@ -392,9 +393,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.5.4",
+		SDKVersion: "1.9.2",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.5.4 2.680.0 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.9.2 2.681.1 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
@@ -456,6 +457,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.OnlyOnPrem = newOnlyOnPrem(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.LakeHouse = newLakeHouse(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Lake = newLake(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.LakehouseDatasetConnections = newLakehouseDatasetConnections(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DashboardCategories = newDashboardCategories(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.UsageGroups = newUsageGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Datasets = newDatasets(sdk, sdk.sdkConfiguration, sdk.hooks)
