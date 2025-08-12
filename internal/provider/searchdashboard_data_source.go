@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -208,7 +209,7 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 								},
 								"value": schema.MapAttribute{
 									Computed:    true,
-									ElementType: types.StringType,
+									ElementType: jsontypes.NormalizedType{},
 								},
 								"variant": schema.StringAttribute{
 									Computed: true,

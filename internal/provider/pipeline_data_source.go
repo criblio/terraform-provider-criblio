@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -61,7 +62,7 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"conf": schema.MapAttribute{
 									Computed:    true,
-									ElementType: types.StringType,
+									ElementType: jsontypes.NormalizedType{},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,

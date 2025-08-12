@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -28,12 +29,12 @@ type SearchUsageGroupDataSource struct {
 
 // SearchUsageGroupDataSourceModel describes the data model.
 type SearchUsageGroupDataSourceModel struct {
-	CoordinatorHeapMemoryLimit types.Float64 `tfsdk:"coordinator_heap_memory_limit"`
-	Description                types.String  `tfsdk:"description"`
-	Enabled                    types.Bool    `tfsdk:"enabled"`
-	ID                         types.String  `tfsdk:"id"`
-	Rules                      types.String  `tfsdk:"rules"`
-	UsersCount                 types.Float64 `tfsdk:"users_count"`
+	CoordinatorHeapMemoryLimit types.Float64        `tfsdk:"coordinator_heap_memory_limit"`
+	Description                types.String         `tfsdk:"description"`
+	Enabled                    types.Bool           `tfsdk:"enabled"`
+	ID                         types.String         `tfsdk:"id"`
+	Rules                      jsontypes.Normalized `tfsdk:"rules"`
+	UsersCount                 types.Float64        `tfsdk:"users_count"`
 }
 
 // Metadata returns the data source type name.
@@ -60,6 +61,7 @@ func (r *SearchUsageGroupDataSource) Schema(ctx context.Context, req datasource.
 				Computed: true,
 			},
 			"rules": schema.StringAttribute{
+				CustomType:  jsontypes.NormalizedType{},
 				Computed:    true,
 				Description: `Parsed as JSON.`,
 			},

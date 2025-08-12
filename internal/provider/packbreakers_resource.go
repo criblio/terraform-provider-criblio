@@ -9,7 +9,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -82,11 +82,9 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"additional_properties": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"comment": schema.StringAttribute{
 										Computed:    true,
@@ -123,11 +121,9 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"additional_properties": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -158,18 +154,14 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 										Computed: true,
 									},
 									"output": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"output_expression": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"pipeline": schema.StringAttribute{
 										Computed:    true,

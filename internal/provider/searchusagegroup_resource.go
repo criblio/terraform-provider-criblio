@@ -6,10 +6,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -30,12 +29,12 @@ type SearchUsageGroupResource struct {
 
 // SearchUsageGroupResourceModel describes the resource data model.
 type SearchUsageGroupResourceModel struct {
-	CoordinatorHeapMemoryLimit types.Float64 `tfsdk:"coordinator_heap_memory_limit"`
-	Description                types.String  `tfsdk:"description"`
-	Enabled                    types.Bool    `tfsdk:"enabled"`
-	ID                         types.String  `tfsdk:"id"`
-	Rules                      types.String  `tfsdk:"rules"`
-	UsersCount                 types.Float64 `tfsdk:"users_count"`
+	CoordinatorHeapMemoryLimit types.Float64        `tfsdk:"coordinator_heap_memory_limit"`
+	Description                types.String         `tfsdk:"description"`
+	Enabled                    types.Bool           `tfsdk:"enabled"`
+	ID                         types.String         `tfsdk:"id"`
+	Rules                      jsontypes.Normalized `tfsdk:"rules"`
+	UsersCount                 types.Float64        `tfsdk:"users_count"`
 }
 
 func (r *SearchUsageGroupResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -63,11 +62,9 @@ func (r *SearchUsageGroupResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Unique ID to PATCH`,
 			},
 			"rules": schema.StringAttribute{
+				CustomType:  jsontypes.NormalizedType{},
 				Required:    true,
 				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
 			},
 			"users_count": schema.Float64Attribute{
 				Computed: true,

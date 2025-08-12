@@ -1,4 +1,4 @@
-speakeasyVersion: 1.598.3
+speakeasyVersion: 1.601.0
 sources:
     Cribl Control Plane and Management API:
         sourceNamespace: cribl-control-plane-and-management-api

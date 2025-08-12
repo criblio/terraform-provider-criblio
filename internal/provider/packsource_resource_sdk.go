@@ -8,6 +8,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -31,10 +32,10 @@ func (r *PackSourceResourceModel) RefreshFromOperationsCreateSystemInputsByPackR
 				var functions tfTypes.PipelineFunctionConf
 
 				if len(functionsItem.Conf) > 0 {
-					functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
+					functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
 					for key, value := range functionsItem.Conf {
 						result, _ := json.Marshal(value)
-						functions.Conf[key] = types.StringValue(string(result))
+						functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
 					}
 				}
 				functions.Description = types.StringPointerValue(functionsItem.Description)
@@ -90,10 +91,10 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 
 				comments.Comment = types.StringPointerValue(commentsItem.Comment)
 				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = types.StringNull()
+					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
 				} else {
 					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
+					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
 				}
 
 				items.Comments = append(items.Comments, comments)
@@ -123,24 +124,24 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
 				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
 				if routesItem.Output == nil {
-					routes.Output = types.StringNull()
+					routes.Output = jsontypes.NewNormalizedNull()
 				} else {
 					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = types.StringValue(string(outputResult))
+					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
 				}
 				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = types.StringNull()
+					routes.OutputExpression = jsontypes.NewNormalizedNull()
 				} else {
 					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
+					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
 				}
 				routes.Description = types.StringPointerValue(routesItem.Description)
 				routes.Final = types.BoolPointerValue(routesItem.Final)
 				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = types.StringNull()
+					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
 				} else {
 					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
+					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
 				}
 
 				items.Routes = append(items.Routes, routes)
@@ -172,10 +173,10 @@ func (r *PackSourceResourceModel) RefreshFromOperationsUpdateSystemInputsByPackR
 				var functions tfTypes.PipelineFunctionConf
 
 				if len(functionsItem.Conf) > 0 {
-					functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
+					functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
 					for key, value := range functionsItem.Conf {
 						result, _ := json.Marshal(value)
-						functions.Conf[key] = types.StringValue(string(result))
+						functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
 					}
 				}
 				functions.Description = types.StringPointerValue(functionsItem.Description)

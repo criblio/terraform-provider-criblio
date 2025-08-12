@@ -9,7 +9,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
@@ -454,11 +454,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -499,11 +497,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -2289,11 +2285,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -2334,11 +2328,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -2669,11 +2661,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -2714,11 +2704,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -3235,11 +3223,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -3280,11 +3266,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -4074,11 +4058,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -4119,11 +4101,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -5370,11 +5350,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -5415,11 +5393,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -6774,11 +6750,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -6819,11 +6793,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -7671,11 +7643,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `The name of the predefined certificate`,
 									},
 									"common_name_regex": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Optional:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -7716,11 +7686,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"reject_unauthorized": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Optional:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"request_cert": schema.BoolAttribute{
 										Computed:    true,
@@ -8216,11 +8184,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `The name of the predefined certificate`,
 									},
 									"common_name_regex": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Optional:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -8261,11 +8227,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"reject_unauthorized": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Optional:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"request_cert": schema.BoolAttribute{
 										Computed:    true,
@@ -8664,11 +8628,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -8709,11 +8671,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -9096,11 +9056,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -9141,11 +9099,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -11647,11 +11603,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -11692,11 +11646,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -11986,11 +11938,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -12031,11 +11981,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -12318,11 +12266,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -12359,11 +12305,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -14721,11 +14665,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"activity_log_sample_rate": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Optional:    true,
 						Description: `Parsed as JSON.`,
-						Validators: []validator.String{
-							validators.IsValidJSON(),
-						},
 					},
 					"auth_header_expr": schema.StringAttribute{
 						Computed:    true,
@@ -14750,11 +14692,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"capture_headers": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Optional:    true,
 						Description: `Parsed as JSON.`,
-						Validators: []validator.String{
-							validators.IsValidJSON(),
-						},
 					},
 					"connections": schema.ListNestedAttribute{
 						Optional: true,
@@ -14790,11 +14730,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Optional:    true,
 						Description: `Parsed as JSON.`,
-						Validators: []validator.String{
-							validators.IsValidJSON(),
-						},
 					},
 					"environment": schema.StringAttribute{
 						Optional:    true,
@@ -15091,11 +15029,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -15136,11 +15072,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -16057,11 +15991,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -16102,11 +16034,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -18042,11 +17972,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"auth_key": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Optional:    true,
 											Description: `Parsed as JSON.`,
-											Validators: []validator.String{
-												validators.IsValidJSON(),
-											},
 										},
 										"auth_protocol": schema.StringAttribute{
 											Computed:    true,
@@ -18072,13 +18000,11 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 										},
 										"priv_protocol": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
 											Optional:    true,
 											Default:     stringdefault.StaticString(`none`),
 											Description: `Default: "none"; Parsed as JSON.`,
-											Validators: []validator.String{
-												validators.IsValidJSON(),
-											},
 										},
 									},
 								},
@@ -18451,11 +18377,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -18496,11 +18420,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -18660,18 +18582,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Description: `Fields to add to events referencing this token`,
 								},
 								"token": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Required:    true,
 									Description: `Parsed as JSON.`,
-									Validators: []validator.String{
-										validators.IsValidJSON(),
-									},
 								},
 								"token_secret": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Optional:    true,
 									Description: `Parsed as JSON.`,
-									Validators: []validator.String{
-										validators.IsValidJSON(),
-									},
 								},
 							},
 						},
@@ -18724,11 +18642,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
 					"enable_health_check": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Optional:    true,
 						Description: `Parsed as JSON.`,
-						Validators: []validator.String{
-							validators.IsValidJSON(),
-						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -18957,11 +18873,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -19002,11 +18916,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -20273,11 +20185,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `The name of the predefined certificate`,
 									},
 									"common_name_regex": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Optional:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -20318,11 +20228,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"reject_unauthorized": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Optional:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"request_cert": schema.BoolAttribute{
 										Computed:    true,
@@ -20627,11 +20535,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `The name of the predefined certificate`,
 									},
 									"common_name_regex": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Optional:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -20672,11 +20578,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 									},
 									"reject_unauthorized": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Optional:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"request_cert": schema.BoolAttribute{
 										Computed:    true,
@@ -22018,11 +21922,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -22063,11 +21965,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -22383,11 +22283,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -22428,11 +22326,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,
@@ -22892,11 +22788,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Enable TLS. Default: false`,
 							},
 							"keytab": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"max_version": schema.StringAttribute{
 								Optional:    true,
@@ -22939,11 +22833,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"principal": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"priv_key_path": schema.StringAttribute{
 								Required:    true,
@@ -24259,18 +24151,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Description: `Fields to add to events referencing this token`,
 								},
 								"token": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Required:    true,
 									Description: `Parsed as JSON.`,
-									Validators: []validator.String{
-										validators.IsValidJSON(),
-									},
 								},
 								"token_secret": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Optional:    true,
 									Description: `Parsed as JSON.`,
-									Validators: []validator.String{
-										validators.IsValidJSON(),
-									},
 								},
 							},
 						},
@@ -24312,11 +24200,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
 					"enable_health_check": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Optional:    true,
 						Description: `Parsed as JSON.`,
-						Validators: []validator.String{
-							validators.IsValidJSON(),
-						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -24530,11 +24416,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `The name of the predefined certificate`,
 							},
 							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -24575,11 +24459,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Optional:    true,
 								Description: `Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"request_cert": schema.BoolAttribute{
 								Computed:    true,

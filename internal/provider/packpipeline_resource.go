@@ -10,6 +10,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -74,7 +75,7 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 							Attributes: map[string]schema.Attribute{
 								"conf": schema.MapAttribute{
 									Required:    true,
-									ElementType: types.StringType,
+									ElementType: jsontypes.NormalizedType{},
 									Validators: []validator.Map{
 										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 									},
@@ -159,11 +160,9 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"additional_properties": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"comment": schema.StringAttribute{
 										Computed:    true,
@@ -200,11 +199,9 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"additional_properties": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -235,18 +232,14 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 										Computed: true,
 									},
 									"output": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"output_expression": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"pipeline": schema.StringAttribute{
 										Computed:    true,

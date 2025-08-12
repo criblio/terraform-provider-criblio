@@ -3,19 +3,20 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type RoutesRoute struct {
-	AdditionalProperties   types.String `tfsdk:"additional_properties"`
-	Description            types.String `tfsdk:"description"`
-	Disabled               types.Bool   `tfsdk:"disabled"`
-	EnableOutputExpression types.Bool   `tfsdk:"enable_output_expression"`
-	Filter                 types.String `tfsdk:"filter"`
-	Final                  types.Bool   `tfsdk:"final"`
-	ID                     types.String `tfsdk:"id"`
-	Name                   types.String `tfsdk:"name"`
-	Output                 types.String `tfsdk:"output"`
-	OutputExpression       types.String `tfsdk:"output_expression"`
-	Pipeline               types.String `tfsdk:"pipeline"`
+	AdditionalProperties   jsontypes.Normalized `tfsdk:"additional_properties"`
+	Description            types.String         `tfsdk:"description"`
+	Disabled               types.Bool           `tfsdk:"disabled"`
+	EnableOutputExpression types.Bool           `tfsdk:"enable_output_expression"`
+	Filter                 types.String         `tfsdk:"filter"`
+	Final                  types.Bool           `tfsdk:"final"`
+	ID                     types.String         `tfsdk:"id"`
+	Name                   types.String         `tfsdk:"name"`
+	Output                 jsontypes.Normalized `tfsdk:"output"`
+	OutputExpression       jsontypes.Normalized `tfsdk:"output_expression"`
+	Pipeline               types.String         `tfsdk:"pipeline"`
 }

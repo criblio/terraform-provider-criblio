@@ -3,23 +3,24 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type MTLSSettings struct {
-	CaPath             types.String `tfsdk:"ca_path"`
-	CertificateName    types.String `tfsdk:"certificate_name"`
-	CertPath           types.String `tfsdk:"cert_path"`
-	CommonNameRegex    types.String `tfsdk:"common_name_regex"`
-	Disabled           types.Bool   `tfsdk:"disabled"`
-	Keytab             types.String `tfsdk:"keytab"`
-	MaxVersion         types.String `tfsdk:"max_version"`
-	MinVersion         types.String `tfsdk:"min_version"`
-	OcspCheck          types.Bool   `tfsdk:"ocsp_check"`
-	OcspCheckFailClose types.Bool   `tfsdk:"ocsp_check_fail_close"`
-	Passphrase         types.String `tfsdk:"passphrase"`
-	Principal          types.String `tfsdk:"principal"`
-	PrivKeyPath        types.String `tfsdk:"priv_key_path"`
-	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized"`
-	RequestCert        types.Bool   `tfsdk:"request_cert"`
+	CaPath             types.String         `tfsdk:"ca_path"`
+	CertificateName    types.String         `tfsdk:"certificate_name"`
+	CertPath           types.String         `tfsdk:"cert_path"`
+	CommonNameRegex    types.String         `tfsdk:"common_name_regex"`
+	Disabled           types.Bool           `tfsdk:"disabled"`
+	Keytab             jsontypes.Normalized `tfsdk:"keytab"`
+	MaxVersion         types.String         `tfsdk:"max_version"`
+	MinVersion         types.String         `tfsdk:"min_version"`
+	OcspCheck          types.Bool           `tfsdk:"ocsp_check"`
+	OcspCheckFailClose types.Bool           `tfsdk:"ocsp_check_fail_close"`
+	Passphrase         types.String         `tfsdk:"passphrase"`
+	Principal          jsontypes.Normalized `tfsdk:"principal"`
+	PrivKeyPath        types.String         `tfsdk:"priv_key_path"`
+	RejectUnauthorized types.Bool           `tfsdk:"reject_unauthorized"`
+	RequestCert        types.Bool           `tfsdk:"request_cert"`
 }

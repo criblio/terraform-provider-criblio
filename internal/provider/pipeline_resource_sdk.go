@@ -8,6 +8,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -23,10 +24,10 @@ func (r *PipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, r
 		var functions tfTypes.PipelineFunctionConf
 
 		if len(functionsItem.Conf) > 0 {
-			functions.Conf = make(map[string]types.String, len(functionsItem.Conf))
+			functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
 			for key, value := range functionsItem.Conf {
 				result, _ := json.Marshal(value)
-				functions.Conf[key] = types.StringValue(string(result))
+				functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
 			}
 		}
 		functions.Description = types.StringPointerValue(functionsItem.Description)

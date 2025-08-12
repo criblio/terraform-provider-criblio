@@ -3,10 +3,11 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type OutputXsiamURL struct {
-	URL    types.String  `tfsdk:"url"`
-	Weight types.Float64 `tfsdk:"weight"`
+	URL    jsontypes.Normalized `tfsdk:"url"`
+	Weight types.Float64        `tfsdk:"weight"`
 }

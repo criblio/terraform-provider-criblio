@@ -1,0 +1,1 @@
+../../../../../examples/lakehouse/main.tf

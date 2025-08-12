@@ -9,9 +9,7 @@ description: |-
 # criblio Provider
 
 Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).
-
-> **⚠️ WARNING: This provider is currently in BETA. Use at your own risk in production environments. Features and APIs may change without notice.**
-
+**⚠️ WARNING: This provider is currently in BETA. Use at your own risk in production environments. Features and APIs may change without notice.**
 
 ## Example Usage
 
@@ -20,7 +18,7 @@ terraform {
   required_providers {
     criblio = {
       source  = "criblio/criblio"
-      version = "1.4.10"
+      version = "1.5.4"
     }
   }
 }

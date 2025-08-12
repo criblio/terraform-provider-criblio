@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -92,7 +93,7 @@ func (r *PackDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 						},
 						"settings": schema.MapAttribute{
 							Computed:    true,
-							ElementType: types.StringType,
+							ElementType: jsontypes.NormalizedType{},
 						},
 						"source": schema.StringAttribute{
 							Computed: true,
@@ -125,6 +126,7 @@ func (r *PackDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed: true,
 						},
 						"warnings": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
 							Description: `Parsed as JSON.`,
 						},

@@ -3588,6 +3588,31 @@ components:
             description:
               type: string
               description: Description of the Amazon Security Lake provider
+    Lakehouse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the lakehouse
+        description:
+          type: string
+          description: Description of the lakehouse
+        tierSize:
+          type: string
+          description: Size of the lakehouse tier
+          default: "small"
+          enum:
+            - small
+            - medium
+            - large
+            - xlarge
+            - 2xlarge
+            - 3xlarge
+            - 6xlarge
+      required:
+        - id
+        - tierSize
+
     UserAccessControlList:
       type: object
       properties:
@@ -53268,6 +53293,188 @@ paths:
           schema:
             type: string
           description: User Id
+
+  "/products/lake/lakes/default/lakehouses":
+    get:
+      tags:
+        - LakeHouse
+      summary: List lakehouses for default lake
+      description: Retrieves a list of lakehouses associated with the default lake
+      operationId: listDefaultLakeLakehouses
+      responses:
+        "200":
+          description: a list of CriblLakeDataset objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Lakehouse"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - LakeHouse
+      summary: Create a new lakehouse in default lake
+      description: Creates a new lakehouse in the default lake
+      operationId: createDefaultLakeLakehouse
+      x-speakeasy-entity-operation: CriblLakeHouse#create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lakehouse'
+      responses:
+        "200":
+          description: a list of CriblLakeHouse objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Lakehouse"
+  "/products/lake/lakes/default/lakehouses/{id}":
+    get:
+      tags:
+        - LakeHouse
+      summary: Get lakehouse by ID
+      description: Retrieves a specific lakehouse by its ID from the default lake
+      operationId: getDefaultLakeLakehouseById
+      x-speakeasy-entity-operation: CriblLakeHouse#get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the lakehouse to retrieve
+      responses:
+        "200":
+          description: a list of Lakehouse objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Lakehouse"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags:
+        - LakeHouse
+      summary: Update lakehouse by ID
+      description: Updates a specific lakehouse by its ID in the default lake
+      operationId: updateDefaultLakeLakehouseById
+      x-speakeasy-entity-operation: CriblLakeHouse#update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the lakehouse to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lakehouse'
+      responses:
+        "200":
+          description: a list of Lakehouse objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Lakehouse"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - LakeHouse
+      summary: Delete lakehouse by ID
+      description: Deletes a specific lakehouse by its ID from the default lake
+      operationId: deleteDefaultLakeLakehouseById
+      x-speakeasy-entity-operation: CriblLakeHouse#delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the lakehouse to delete
+      responses:
+        "200":
+          description: a list of Lakehouse objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Lakehouse"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   "/products/lake/lakes/{lakeId}/datasets":
     post:
       operationId: createCriblLakeDatasetByLakeId

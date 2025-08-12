@@ -8,6 +8,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -49,10 +50,10 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 				var comments tfTypes.Comment
 
 				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = types.StringNull()
+					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
 				} else {
 					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
+					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
 				}
 				comments.Comment = types.StringPointerValue(commentsItem.Comment)
 
@@ -76,10 +77,10 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 				var routes tfTypes.RoutesRoute
 
 				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = types.StringNull()
+					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
 				} else {
 					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
+					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
 				}
 				routes.Description = types.StringPointerValue(routesItem.Description)
 				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
@@ -89,16 +90,16 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 				routes.ID = types.StringPointerValue(routesItem.ID)
 				routes.Name = types.StringValue(routesItem.Name)
 				if routesItem.Output == nil {
-					routes.Output = types.StringNull()
+					routes.Output = jsontypes.NewNormalizedNull()
 				} else {
 					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = types.StringValue(string(outputResult))
+					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
 				}
 				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = types.StringNull()
+					routes.OutputExpression = jsontypes.NewNormalizedNull()
 				} else {
 					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
+					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
 				}
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
 
@@ -127,10 +128,10 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackAn
 				var comments tfTypes.Comment
 
 				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = types.StringNull()
+					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
 				} else {
 					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
+					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
 				}
 				comments.Comment = types.StringPointerValue(commentsItem.Comment)
 
@@ -154,10 +155,10 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackAn
 				var routes tfTypes.RoutesRoute
 
 				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = types.StringNull()
+					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
 				} else {
 					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = types.StringValue(string(additionalPropertiesResult1))
+					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
 				}
 				routes.Description = types.StringPointerValue(routesItem.Description)
 				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
@@ -167,16 +168,16 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsGetSystemLookupsByPackAn
 				routes.ID = types.StringPointerValue(routesItem.ID)
 				routes.Name = types.StringValue(routesItem.Name)
 				if routesItem.Output == nil {
-					routes.Output = types.StringNull()
+					routes.Output = jsontypes.NewNormalizedNull()
 				} else {
 					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = types.StringValue(string(outputResult))
+					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
 				}
 				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = types.StringNull()
+					routes.OutputExpression = jsontypes.NewNormalizedNull()
 				} else {
 					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = types.StringValue(string(outputExpressionResult))
+					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
 				}
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
 

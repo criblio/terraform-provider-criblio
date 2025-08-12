@@ -3,20 +3,21 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type InputOpenTelemetry struct {
-	ActivityLogSampleRate types.String                             `tfsdk:"activity_log_sample_rate"`
+	ActivityLogSampleRate jsontypes.Normalized                     `tfsdk:"activity_log_sample_rate"`
 	AuthHeaderExpr        types.String                             `tfsdk:"auth_header_expr"`
 	AuthType              types.String                             `tfsdk:"auth_type"`
-	CaptureHeaders        types.String                             `tfsdk:"capture_headers"`
+	CaptureHeaders        jsontypes.Normalized                     `tfsdk:"capture_headers"`
 	Connections           []InputOpenTelemetryConnection           `tfsdk:"connections"`
 	CredentialsSecret     types.String                             `tfsdk:"credentials_secret"`
 	Description           types.String                             `tfsdk:"description"`
 	Disabled              types.Bool                               `tfsdk:"disabled"`
 	EnableHealthCheck     types.Bool                               `tfsdk:"enable_health_check"`
-	EnableProxyHeader     types.String                             `tfsdk:"enable_proxy_header"`
+	EnableProxyHeader     jsontypes.Normalized                     `tfsdk:"enable_proxy_header"`
 	Environment           types.String                             `tfsdk:"environment"`
 	ExtractLogs           types.Bool                               `tfsdk:"extract_logs"`
 	ExtractMetrics        types.Bool                               `tfsdk:"extract_metrics"`

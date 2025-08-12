@@ -9,7 +9,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
@@ -10948,11 +10948,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"flush_period_sec": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Optional:    true,
 						Description: `Maximum time to wait before sending a batch (when batch size limit is not reached). Parsed as JSON.`,
-						Validators: []validator.String{
-							validators.IsValidJSON(),
-						},
 					},
 					"google_auth_method": schema.StringAttribute{
 						Computed:    true,
@@ -26153,11 +26151,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Required:    true,
 									Description: `Parsed as JSON.`,
-									Validators: []validator.String{
-										validators.IsValidJSON(),
-									},
 								},
 								"weight": schema.Float64Attribute{
 									Computed:    true,

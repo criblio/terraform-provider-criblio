@@ -9,7 +9,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -21,7 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -70,14 +69,12 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					Attributes: map[string]schema.Attribute{
 						"additional_properties": schema.StringAttribute{
-							Optional: true,
+							CustomType: jsontypes.NormalizedType{},
+							Optional:   true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplaceIfConfigured(),
 							},
 							Description: `Requires replacement if changed.; Parsed as JSON.`,
-							Validators: []validator.String{
-								validators.IsValidJSON(),
-							},
 						},
 						"comment": schema.StringAttribute{
 							Optional: true,
@@ -148,11 +145,9 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"additional_properties": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"comment": schema.StringAttribute{
 										Computed:    true,
@@ -189,11 +184,9 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"additional_properties": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -224,18 +217,14 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Computed: true,
 									},
 									"output": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"output_expression": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"pipeline": schema.StringAttribute{
 										Computed:    true,
@@ -266,14 +255,12 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					Attributes: map[string]schema.Attribute{
 						"additional_properties": schema.StringAttribute{
-							Optional: true,
+							CustomType: jsontypes.NormalizedType{},
+							Optional:   true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplaceIfConfigured(),
 							},
 							Description: `Requires replacement if changed.; Parsed as JSON.`,
-							Validators: []validator.String{
-								validators.IsValidJSON(),
-							},
 						},
 						"description": schema.StringAttribute{
 							Optional: true,
@@ -324,24 +311,20 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Description: `Requires replacement if changed.`,
 						},
 						"output": schema.StringAttribute{
-							Optional: true,
+							CustomType: jsontypes.NormalizedType{},
+							Optional:   true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplaceIfConfigured(),
 							},
 							Description: `Requires replacement if changed.; Parsed as JSON.`,
-							Validators: []validator.String{
-								validators.IsValidJSON(),
-							},
 						},
 						"output_expression": schema.StringAttribute{
-							Optional: true,
+							CustomType: jsontypes.NormalizedType{},
+							Optional:   true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplaceIfConfigured(),
 							},
 							Description: `Requires replacement if changed.; Parsed as JSON.`,
-							Validators: []validator.String{
-								validators.IsValidJSON(),
-							},
 						},
 						"pipeline": schema.StringAttribute{
 							Required: true,

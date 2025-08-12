@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 9ce8b463c915c0441b613a6f962b90be
+  docChecksum: 2e06d70ed5079f601728020367ee922e
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.598.3
-  generationVersion: 2.674.3
-  releaseVersion: 1.4.10
-  configChecksum: 964d5bed30ec1c9248add80f5f4ef9a1
+  speakeasyVersion: 1.601.0
+  generationVersion: 2.680.0
+  releaseVersion: 1.5.4
+  configChecksum: d18708b80f6fccaeb1b820a715002952
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.2.1
-    core: 3.43.1
+    core: 3.44.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
@@ -32,6 +32,7 @@ generatedFiles:
   - examples/data-sources/criblio_appscope_config/data-source.tf
   - examples/data-sources/criblio_config_version/data-source.tf
   - examples/data-sources/criblio_cribl_lake_dataset/data-source.tf
+  - examples/data-sources/criblio_cribl_lake_house/data-source.tf
   - examples/data-sources/criblio_database_connection/data-source.tf
   - examples/data-sources/criblio_destination/data-source.tf
   - examples/data-sources/criblio_event_breaker_ruleset/data-source.tf
@@ -71,6 +72,8 @@ generatedFiles:
   - examples/resources/criblio_commit/resource.tf
   - examples/resources/criblio_cribl_lake_dataset/import.sh
   - examples/resources/criblio_cribl_lake_dataset/resource.tf
+  - examples/resources/criblio_cribl_lake_house/import.sh
+  - examples/resources/criblio_cribl_lake_house/resource.tf
   - examples/resources/criblio_database_connection/import.sh
   - examples/resources/criblio_database_connection/resource.tf
   - examples/resources/criblio_deploy/resource.tf
@@ -159,6 +162,10 @@ generatedFiles:
   - internal/provider/cribllakedataset_data_source_sdk.go
   - internal/provider/cribllakedataset_resource.go
   - internal/provider/cribllakedataset_resource_sdk.go
+  - internal/provider/cribllakehouse_data_source.go
+  - internal/provider/cribllakehouse_data_source_sdk.go
+  - internal/provider/cribllakehouse_resource.go
+  - internal/provider/cribllakehouse_resource_sdk.go
   - internal/provider/databaseconnection_data_source.go
   - internal/provider/databaseconnection_data_source_sdk.go
   - internal/provider/databaseconnection_resource.go
@@ -1191,6 +1198,7 @@ generatedFiles:
   - internal/sdk/kubelogs.go
   - internal/sdk/kubeproxy.go
   - internal/sdk/lake.go
+  - internal/sdk/lakehouse.go
   - internal/sdk/licenses.go
   - internal/sdk/logger.go
   - internal/sdk/logging.go
@@ -1218,6 +1226,7 @@ generatedFiles:
   - internal/sdk/models/operations/createdatasetaclteamsapplybyid.go
   - internal/sdk/models/operations/createdatasetprovider.go
   - internal/sdk/models/operations/createdatasetprovidertype.go
+  - internal/sdk/models/operations/createdefaultlakelakehouse.go
   - internal/sdk/models/operations/createedgeappscopeprocesses.go
   - internal/sdk/models/operations/createedgefileingest.go
   - internal/sdk/models/operations/createedgekubelogs.go
@@ -1317,6 +1326,7 @@ generatedFiles:
   - internal/sdk/models/operations/deletedatasetbyid.go
   - internal/sdk/models/operations/deletedatasetproviderbyid.go
   - internal/sdk/models/operations/deletedatasetprovidertypebyid.go
+  - internal/sdk/models/operations/deletedefaultlakelakehousebyid.go
   - internal/sdk/models/operations/deleteedgeappscopeprocessesbypid.go
   - internal/sdk/models/operations/deleteeventbreakerrulesetbyid.go
   - internal/sdk/models/operations/deleteglobalvariablebyid.go
@@ -1399,6 +1409,7 @@ generatedFiles:
   - internal/sdk/models/operations/getdatasetbyid.go
   - internal/sdk/models/operations/getdatasetproviderbyid.go
   - internal/sdk/models/operations/getdatasetprovidertypebyid.go
+  - internal/sdk/models/operations/getdefaultlakelakehousebyid.go
   - internal/sdk/models/operations/getdiagbundle.go
   - internal/sdk/models/operations/getedgeappscopeprocesses.go
   - internal/sdk/models/operations/getedgeappscopeprocessesbypid.go
@@ -1563,6 +1574,7 @@ generatedFiles:
   - internal/sdk/models/operations/listdataset.go
   - internal/sdk/models/operations/listdatasetprovider.go
   - internal/sdk/models/operations/listdatasetprovidertype.go
+  - internal/sdk/models/operations/listdefaultlakelakehouses.go
   - internal/sdk/models/operations/listeventbreakerruleset.go
   - internal/sdk/models/operations/listexecutor.go
   - internal/sdk/models/operations/listfunction.go
@@ -1619,6 +1631,7 @@ generatedFiles:
   - internal/sdk/models/operations/updatedatasetbyid.go
   - internal/sdk/models/operations/updatedatasetproviderbyid.go
   - internal/sdk/models/operations/updatedatasetprovidertypebyid.go
+  - internal/sdk/models/operations/updatedefaultlakelakehousebyid.go
   - internal/sdk/models/operations/updateedgeappscopeprocessesbypid.go
   - internal/sdk/models/operations/updateeventbreakerrulesetbyid.go
   - internal/sdk/models/operations/updateglobalvariablebyid.go
@@ -1876,6 +1889,7 @@ generatedFiles:
   - internal/sdk/models/shared/kmsproviderconfig.go
   - internal/sdk/models/shared/kubemetadata.go
   - internal/sdk/models/shared/lakedatasetsearchconfig.go
+  - internal/sdk/models/shared/lakehouse.go
   - internal/sdk/models/shared/license.go
   - internal/sdk/models/shared/licenseinfo.go
   - internal/sdk/models/shared/licenselimits.go
@@ -7243,6 +7257,70 @@ examples:
         "200":
           application/json: {}
         "500":
+          application/json: {}
+  listDefaultLakeLakehouses:
+    speakeasy-default-list-default-lake-lakehouses:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+        "500":
+          application/json: {}
+        "201":
+          application/json: {"id": "<id>", "tierSize": "small"}
+  createDefaultLakeLakehouse:
+    speakeasy-default-create-default-lake-lakehouse:
+      requestBody:
+        application/json: {"id": "<id>", "tierSize": "small"}
+      responses:
+        "201":
+          application/json: {"id": "<id>", "tierSize": "small"}
+        "400":
+          application/json: {}
+        "500":
+          application/json: {}
+        "200":
+          application/json: {}
+  getDefaultLakeLakehouseById:
+    speakeasy-default-get-default-lake-lakehouse-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+        "500":
+          application/json: {}
+        "201":
+          application/json: {"id": "<id>", "tierSize": "small"}
+  updateDefaultLakeLakehouseById:
+    speakeasy-default-update-default-lake-lakehouse-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"id": "<id>", "tierSize": "small"}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteDefaultLakeLakehouseById:
+    speakeasy-default-delete-default-lake-lakehouse-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "400":
+          application/json: {}
+        "500":
+          application/json: {}
+        "200":
           application/json: {}
 examplesVersion: 1.0.2
 generatedTests: {}

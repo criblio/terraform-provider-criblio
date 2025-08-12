@@ -3,6 +3,7 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -12,6 +13,6 @@ type InputZscalerHecAuthToken struct {
 	Description           types.String                        `tfsdk:"description"`
 	Enabled               types.Bool                          `tfsdk:"enabled"`
 	Metadata              []InputZscalerHecAuthTokenMetadatum `tfsdk:"metadata"`
-	Token                 types.String                        `tfsdk:"token"`
-	TokenSecret           types.String                        `tfsdk:"token_secret"`
+	Token                 jsontypes.Normalized                `tfsdk:"token"`
+	TokenSecret           jsontypes.Normalized                `tfsdk:"token_secret"`
 }

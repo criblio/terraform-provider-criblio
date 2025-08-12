@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -58,6 +59,7 @@ func (r *PackPipelineDataSource) Schema(ctx context.Context, req datasource.Sche
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"additional_properties": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
 									},
@@ -96,6 +98,7 @@ func (r *PackPipelineDataSource) Schema(ctx context.Context, req datasource.Sche
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"additional_properties": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
 									},
@@ -125,10 +128,12 @@ func (r *PackPipelineDataSource) Schema(ctx context.Context, req datasource.Sche
 										Computed: true,
 									},
 									"output": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
 									},
 									"output_expression": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
 									},

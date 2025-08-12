@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.674.3
+// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.680.0
 
 import (
 	"context"
@@ -99,6 +99,7 @@ type CriblIo struct {
 	// Actions related to users. The <code>/system/users</code> endpoints do not apply to Cribl.Cloud deployments. Instead use <code>/products/{product}/users</code>
 	Users      *Users
 	OnlyOnPrem *OnlyOnPrem
+	LakeHouse  *LakeHouse
 	// Actions related to Lake
 	Lake *Lake
 	// Actions related to DashboardCategories
@@ -391,9 +392,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.4.10",
+		SDKVersion: "1.5.4",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.4.10 2.674.3 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.5.4 2.680.0 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
@@ -453,6 +454,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.OnlyOnPrem = newOnlyOnPrem(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.LakeHouse = newLakeHouse(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Lake = newLake(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DashboardCategories = newDashboardCategories(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.UsageGroups = newUsageGroups(sdk, sdk.sdkConfiguration, sdk.hooks)

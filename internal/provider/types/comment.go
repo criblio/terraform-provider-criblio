@@ -3,10 +3,11 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type Comment struct {
-	AdditionalProperties types.String `tfsdk:"additional_properties"`
-	Comment              types.String `tfsdk:"comment"`
+	AdditionalProperties jsontypes.Normalized `tfsdk:"additional_properties"`
+	Comment              types.String         `tfsdk:"comment"`
 }

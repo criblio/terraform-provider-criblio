@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -18,7 +19,7 @@ func (r *SearchUsageGroupDataSourceModel) RefreshFromSharedUsageGroup(ctx contex
 	r.Enabled = types.BoolPointerValue(resp.Enabled)
 	r.ID = types.StringValue(resp.ID)
 	rulesResult, _ := json.Marshal(resp.Rules)
-	r.Rules = types.StringValue(string(rulesResult))
+	r.Rules = jsontypes.NewNormalizedValue(string(rulesResult))
 	r.UsersCount = types.Float64PointerValue(resp.UsersCount)
 
 	return diags
