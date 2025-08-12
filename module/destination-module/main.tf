@@ -32,6 +32,12 @@ resource "criblio_destination" "this" {
   # Webhook
   output_webhook = var.destination_type == "webhook" ? local.webhook_config : null
   
+  # Open Telemetry
+  output_open_telemetry = var.destination_type == "open_telemetry" ? local.open_telemetry_config : null
+  
+  # CrowdStrike Next-Gen SIEM
+  output_crowdstrike_next_gen_siem = var.destination_type == "crowdstrike_next_gen_siem" ? local.crowdstrike_next_gen_siem_config : null
+  
   lifecycle {
     create_before_destroy = true
   }

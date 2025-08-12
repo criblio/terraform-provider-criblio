@@ -317,4 +317,77 @@ locals {
     for k, v in merge(local.base_webhook_config, var.custom_config) : k => v
     if v != null
   } : null
+  
+  # Base Open Telemetry configuration
+  base_open_telemetry_config = {
+    id          = var.destination_id
+    type        = "open_telemetry"
+    description = var.description != "" ? var.description : null
+    disabled    = var.disabled
+    streamtags  = var.streamtags
+    pipeline    = var.pipeline
+    
+    # Open Telemetry specific settings
+    endpoint                        = var.url
+    protocol                        = "http"
+    otlp_version                    = "1.3.1"
+    auth_type                       = "none"
+    compress                        = var.compress == "gzip" ? "gzip" : "none"
+    http_compress                   = var.compress == "gzip" ? "gzip" : "none"
+    concurrency                     = 5
+    flush_period_sec                = 1
+    max_payload_size_kb             = 4096
+    timeout_sec                     = 30
+    keep_alive                      = true
+    keep_alive_time                 = 30
+    connection_timeout              = 10
+    on_backpressure                 = "block"
+    reject_unauthorized             = true
+    response_honor_retry_after_header = false
+    failed_request_logging_mode     = "none"
+    metadata                        = []
+    extra_http_headers              = []
+    response_retry_settings         = []
+    safe_headers                    = []
+  }
+  
+  # Base CrowdStrike Next-Gen SIEM configuration
+  base_crowdstrike_next_gen_siem_config = {
+    id          = var.destination_id
+    type        = "crowdstrike_next_gen_siem"
+    description = var.description != "" ? var.description : null
+    disabled    = var.disabled
+    streamtags  = var.streamtags
+    pipeline    = var.pipeline
+    
+    # CrowdStrike Next-Gen SIEM specific settings
+    url                     = var.url
+    token                   = var.token
+    auth_type               = "manual"
+    format                  = "JSON"
+    compress                = var.compress == "gzip" ? true : false
+    concurrency             = 5
+    flush_period_sec        = 1
+    max_payload_events      = 0
+    max_payload_size_kb     = 4096
+    on_backpressure         = "block"
+    reject_unauthorized     = true
+    response_honor_retry_after_header = false
+    failed_request_logging_mode = "none"
+    timeout_sec             = 30
+    use_round_robin_dns     = false
+    extra_http_headers      = []
+    response_retry_settings = []
+    safe_headers            = []
+  }
+  
+  open_telemetry_config = var.destination_type == "open_telemetry" ? {
+    for k, v in merge(local.base_open_telemetry_config, var.custom_config) : k => v
+    if v != null
+  } : null
+  
+  crowdstrike_next_gen_siem_config = var.destination_type == "crowdstrike_next_gen_siem" ? {
+    for k, v in merge(local.base_crowdstrike_next_gen_siem_config, var.custom_config) : k => v
+    if v != null
+  } : null
 }
