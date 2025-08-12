@@ -104,78 +104,58 @@ locals {
   }
   
   # OpenTelemetry configuration
+# In locals.tf, update the base_otlp_config:
+# In locals.tf, update the base_otlp_config:
 base_otlp_config = {
-  id             = var.source_id
-  host           = "0.0.0.0"
-  port           = var.port
-  type           = "open_telemetry"  # Changed from "otlp" to "open_telemetry"
-  disabled       = var.disabled
-  pq_enabled     = var.pq_enabled
+  id               = var.source_id
+  type             = "open_telemetry"
+  protocol         = "grpc"  # or "http"
+  port             = var.port
+  otlp_version     = "1.3.1"
+  host             = "0.0.0.0"
+  
+  # Authentication
+  auth_type        = "none"  # or "basic" if using credentials
+  auth_header_expr = "true"
+  
+  # Connection settings
   send_to_routes = length(var.connections) == 0
+  connections    = length(var.connections) > 0 ? var.connections : null
   
-  description = var.description != "" ? var.description : null
-  connections = length(var.connections) > 0 ? var.connections : null
-  pipeline    = var.pipeline
-  streamtags  = length(var.streamtags) > 0 ? var.streamtags : null
+  # OTLP specific settings - snake_case!
+  extract_logs    = false
+  extract_metrics = true
+  extract_spans   = true
+  enable_health_check = false
   
-  enable_metrics = true
-  enable_traces  = true
-  enable_logs    = true
+  # Network settings
+  ip_allowlist_regex      = "/.*/"
+  ip_denylist_regex       = "/^$/"
+  keep_alive_timeout      = 15
+  max_active_cxn          = 1000
+  max_active_req          = 256
+  max_requests_per_socket = 0
+  request_timeout         = 0
+  socket_timeout          = 0
+  
+  # Other settings
+  disabled           = var.disabled
+  description        = var.description != "" ? var.description : null
+  pipeline           = var.pipeline
+  streamtags         = var.streamtags
+  token_timeout_secs = 3600
+  
+  # TLS (if needed)
+  # tls = {
+  #   disabled = true
+  # }
 }
 
   
   # REST Collector configuration  
 # In locals.tf, update the base_rest_collector_config:
 # Update locals.tf for collection
-base_rest_collector_config = {
-  id             = var.source_id
-  type           = "collection"
-  disabled       = var.disabled
-  
-  # Collection-specific fields
-  ttl = "4h"
-  schedule = {}
-  streamtags = var.streamtags
-  send_to_routes = true
-  stale_channel_flush_ms = 10000
-  
-  # The collector configuration
-  collector = {
-    type = "rest"
-    destructive = false
-    encoding = "utf8"
-    conf = {
-      discovery = {
-        discoverType = "none"
-      }
-      collectMethod = "get"
-      authentication = "none"
-      timeout = 0
-      useRoundRobinDns = false
-      disableTimeFilter = false
-      decodeUrl = false
-      rejectUnauthorized = true
-      captureHeaders = false
-      safeHeaders = []
-      pagination = {
-        type = "none"
-      }
-      retryRules = {
-        type = "backoff"
-        interval = 1000
-        limit = 5
-        multiplier = 2
-        maxIntervalMs = 20000
-        codes = [429, 503]
-        enableHeader = true
-        retryConnectTimeout = false
-        retryConnectReset = false
-        retryHeaderName = "retry-after"
-      }
-    }
-  }
-}
-  
+
   # Transform configs - remove nulls and merge with custom
   syslog_config = var.source_type == "syslog" ? {
     for k, v in merge(local.base_syslog_config, var.custom_config) : k => v
@@ -207,8 +187,5 @@ base_rest_collector_config = {
     if v != null
   } : null
   
-  rest_collector_config = var.source_type == "rest_collector" ? {
-    for k, v in merge(local.base_rest_collector_config, var.custom_config) : k => v
-    if v != null
-  } : null
+
 }
