@@ -28,7 +28,7 @@ resource "criblio_cribl_lake_house" "my_cribllakehouse" {
   id          = "test-lakehouse-4"
 }
 
-/*
+
 # Add a 15-minute delay before creating the dataset connection, this is to ensure the lakehouse is ready
 resource "null_resource" "delay_before_connection" {
   provisioner "local-exec" {
