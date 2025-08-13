@@ -30,6 +30,7 @@ type CriblLakeHouseDataSource struct {
 type CriblLakeHouseDataSourceModel struct {
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
+	Status      types.String `tfsdk:"status"`
 	TierSize    types.String `tfsdk:"tier_size"`
 }
 
@@ -51,6 +52,10 @@ func (r *CriblLakeHouseDataSource) Schema(ctx context.Context, req datasource.Sc
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `The ID of the lakehouse to retrieve`,
+			},
+			"status": schema.StringAttribute{
+				Computed:    true,
+				Description: `Status of the lakehouse`,
 			},
 			"tier_size": schema.StringAttribute{
 				Computed:    true,

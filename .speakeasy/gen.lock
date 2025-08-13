@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 2e06d70ed5079f601728020367ee922e
+  docChecksum: 37ceb130a95783bb431ab956c8772b05
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.601.0
-  generationVersion: 2.680.0
-  releaseVersion: 1.5.4
-  configChecksum: d18708b80f6fccaeb1b820a715002952
+  speakeasyVersion: 1.603.0
+  generationVersion: 2.681.1
+  releaseVersion: 1.9.2
+  configChecksum: 9d2d3205b20aa997a3acf7ad0d2dd6dc
   published: true
 features:
   terraform:
@@ -89,6 +89,7 @@ generatedFiles:
   - examples/resources/criblio_group/resource.tf
   - examples/resources/criblio_hmac_function/import.sh
   - examples/resources/criblio_hmac_function/resource.tf
+  - examples/resources/criblio_lakehouse_dataset_connection/resource.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
   - examples/resources/criblio_notification/import.sh
@@ -196,6 +197,8 @@ generatedFiles:
   - internal/provider/hmacfunction_data_source_sdk.go
   - internal/provider/hmacfunction_resource.go
   - internal/provider/hmacfunction_resource_sdk.go
+  - internal/provider/lakehousedatasetconnection_resource.go
+  - internal/provider/lakehousedatasetconnection_resource_sdk.go
   - internal/provider/lookupfile_data_source.go
   - internal/provider/lookupfile_data_source_sdk.go
   - internal/provider/lookupfile_resource.go
@@ -394,6 +397,7 @@ generatedFiles:
   - internal/provider/types/config_group_git.go
   - internal/provider/types/config_group_lookups.go
   - internal/provider/types/consumers.go
+  - internal/provider/types/create_lakehouse_dataset_connections_request_body.go
   - internal/provider/types/cribl_leader_dataset.go
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
@@ -1199,6 +1203,7 @@ generatedFiles:
   - internal/sdk/kubeproxy.go
   - internal/sdk/lake.go
   - internal/sdk/lakehouse.go
+  - internal/sdk/lakehousedatasetconnections.go
   - internal/sdk/licenses.go
   - internal/sdk/logger.go
   - internal/sdk/logging.go
@@ -1239,6 +1244,7 @@ generatedFiles:
   - internal/sdk/models/operations/createinputhectokenbyid.go
   - internal/sdk/models/operations/createjobs.go
   - internal/sdk/models/operations/createkeymetadataentity.go
+  - internal/sdk/models/operations/createlakehousedatasetconnections.go
   - internal/sdk/models/operations/createlibdatabaseconnectionstest.go
   - internal/sdk/models/operations/createlibexpression.go
   - internal/sdk/models/operations/createlibschemas.go
@@ -1338,6 +1344,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteiometricsentrybyid.go
   - internal/sdk/models/operations/deletejobsbyid.go
   - internal/sdk/models/operations/deletekeymetadataentitybyid.go
+  - internal/sdk/models/operations/deletelakehousedatasetconnections.go
   - internal/sdk/models/operations/deletelibschemasbyid.go
   - internal/sdk/models/operations/deletelicensebyid.go
   - internal/sdk/models/operations/deleteloggerconfigbyid.go
@@ -1648,6 +1655,7 @@ generatedFiles:
   - internal/sdk/models/operations/updatejobspausebyid.go
   - internal/sdk/models/operations/updatejobsresumebyid.go
   - internal/sdk/models/operations/updatekeymetadataentitybyid.go
+  - internal/sdk/models/operations/updatelakehousedatasetconnections.go
   - internal/sdk/models/operations/updatelibschemasbyid.go
   - internal/sdk/models/operations/updateloggerconfigbyid.go
   - internal/sdk/models/operations/updatelookupfilebyid.go
@@ -7320,6 +7328,42 @@ examples:
           application/json: {}
         "500":
           application/json: {}
+        "200":
+          application/json: {}
+  getLakehouseDatasetConnections:
+    speakeasy-default-get-lakehouse-dataset-connections:
+      parameters:
+        path:
+          lakehouse_id: "<id>"
+          lake_dataset_id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+  createLakehouseDatasetConnections:
+    speakeasy-default-create-lakehouse-dataset-connections:
+      parameters:
+        path:
+          lakehouse_id: "<id>"
+          lake_dataset_id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+  updateLakehouseDatasetConnections:
+    speakeasy-default-update-lakehouse-dataset-connections:
+      parameters:
+        path:
+          lakehouse_id: "<id>"
+          lake_dataset_id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+  deleteLakehouseDatasetConnections:
+    speakeasy-default-delete-lakehouse-dataset-connections:
+      parameters:
+        path:
+          lakehouse_id: "<id>"
+          lake_dataset_id: "<id>"
+      responses:
         "200":
           application/json: {}
 examplesVersion: 1.0.2

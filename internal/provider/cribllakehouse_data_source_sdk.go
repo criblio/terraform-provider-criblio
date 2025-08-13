@@ -15,6 +15,7 @@ func (r *CriblLakeHouseDataSourceModel) RefreshFromSharedLakehouse(ctx context.C
 
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
+	r.Status = types.StringPointerValue(resp.Status)
 	if resp.TierSize != nil {
 		r.TierSize = types.StringValue(string(*resp.TierSize))
 	} else {

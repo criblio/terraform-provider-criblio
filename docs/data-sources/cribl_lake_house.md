@@ -28,4 +28,5 @@ data "criblio_cribl_lake_house" "my_cribllakehouse" {
 ### Read-Only
 
 - `description` (String) Description of the lakehouse
+- `status` (String) Status of the lakehouse
 - `tier_size` (String) Size of the lakehouse tier

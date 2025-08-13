@@ -34,6 +34,7 @@ type CriblLakeHouseResource struct {
 type CriblLakeHouseResourceModel struct {
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
+	Status      types.String `tfsdk:"status"`
 	TierSize    types.String `tfsdk:"tier_size"`
 }
 
@@ -53,6 +54,11 @@ func (r *CriblLakeHouseResource) Schema(ctx context.Context, req resource.Schema
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique identifier for the lakehouse`,
+			},
+			"status": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Status of the lakehouse`,
 			},
 			"tier_size": schema.StringAttribute{
 				Computed:    true,

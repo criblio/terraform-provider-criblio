@@ -258,6 +258,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewGrokResource,
 		NewGroupResource,
 		NewHmacFunctionResource,
+		NewLakehouseDatasetConnectionResource,
 		NewLookupFileResource,
 		NewNotificationResource,
 		NewNotificationTargetResource,

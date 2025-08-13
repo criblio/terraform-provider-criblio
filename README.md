@@ -167,6 +167,7 @@ terraform plan
 * [criblio_grok](docs/resources/grok.md)
 * [criblio_group](docs/resources/group.md)
 * [criblio_hmac_function](docs/resources/hmac_function.md)
+* [criblio_lakehouse_dataset_connection](docs/resources/lakehouse_dataset_connection.md)
 * [criblio_lookup_file](docs/resources/lookup_file.md)
 * [criblio_notification](docs/resources/notification.md)
 * [criblio_notification_target](docs/resources/notification_target.md)

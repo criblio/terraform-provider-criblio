@@ -15,6 +15,7 @@ func (r *CriblLakeHouseResourceModel) RefreshFromSharedLakehouse(ctx context.Con
 
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
+	r.Status = types.StringPointerValue(resp.Status)
 	if resp.TierSize != nil {
 		r.TierSize = types.StringValue(string(*resp.TierSize))
 	} else {
@@ -83,6 +84,12 @@ func (r *CriblLakeHouseResourceModel) ToSharedLakehouse(ctx context.Context) (*s
 	} else {
 		description = nil
 	}
+	status := new(string)
+	if !r.Status.IsUnknown() && !r.Status.IsNull() {
+		*status = r.Status.ValueString()
+	} else {
+		status = nil
+	}
 	tierSize := new(shared.TierSize)
 	if !r.TierSize.IsUnknown() && !r.TierSize.IsNull() {
 		*tierSize = shared.TierSize(r.TierSize.ValueString())
@@ -92,6 +99,7 @@ func (r *CriblLakeHouseResourceModel) ToSharedLakehouse(ctx context.Context) (*s
 	out := shared.Lakehouse{
 		ID:          id,
 		Description: description,
+		Status:      status,
 		TierSize:    tierSize,
 	}
 
