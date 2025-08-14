@@ -25,9 +25,10 @@ variable "destination_type" {
       "webhook",
       "open_telemetry",
       "crowdstrike_next_gen_siem",
+      "prometheus",
       # Add more as needed
     ], var.destination_type)
-    error_message = "Invalid destination type. Must be one of: cribl_lake, s3, splunk_hec, cribl_http, cribl_tcp, syslog, kafka, kinesis, elasticsearch, webhook, open_telemetry, crowdstrike_next_gen_siem"
+    error_message = "Invalid destination type. Must be one of: cribl_lake, s3, splunk_hec, cribl_http, cribl_tcp, syslog, kafka, kinesis, elasticsearch, webhook, open_telemetry, crowdstrike_next_gen_siem, prometheus"
   }
 }
 

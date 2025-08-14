@@ -38,6 +38,9 @@ resource "criblio_destination" "this" {
   # CrowdStrike Next-Gen SIEM
   output_crowdstrike_next_gen_siem = var.destination_type == "crowdstrike_next_gen_siem" ? local.crowdstrike_next_gen_siem_config : null
   
+  # Prometheus
+  output_prometheus = var.destination_type == "prometheus" ? local.prometheus_config : null
+  
   lifecycle {
     create_before_destroy = true
   }

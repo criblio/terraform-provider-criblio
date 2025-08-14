@@ -390,4 +390,35 @@ locals {
     for k, v in merge(local.base_crowdstrike_next_gen_siem_config, var.custom_config) : k => v
     if v != null
   } : null
+  
+  # Base Prometheus configuration
+  base_prometheus_config = {
+    id          = var.destination_id
+    type        = "prometheus"
+    description = var.description != "" ? var.description : null
+    disabled    = var.disabled
+    streamtags  = var.streamtags
+    pipeline    = var.pipeline
+    
+    # Prometheus specific settings
+    url                     = var.url
+    auth_type              = "none"
+    concurrency            = 5
+    flush_period_sec       = 10
+    max_payload_size_kb    = 1024
+    max_payload_events     = 1000
+    compress               = "none"
+    timeout_sec            = 30
+    on_backpressure        = "queue"
+    use_round_robin_dns    = false
+    keep_alive             = true
+    add_timestamp          = true
+    write_timestamp_precision = "ms"
+  }
+  
+  # Merge custom config for Prometheus
+  prometheus_config = var.destination_type == "prometheus" ? {
+    for k, v in merge(local.base_prometheus_config, var.custom_config) : k => v
+    if v != null
+  } : null
 }
