@@ -1,7 +1,6 @@
 variable "cloud_tenant" {
   description = "Cribl Cloud organization ID"
   type        = string
-  # default     = "eloquent-williams-38gispk"
   default     = "zamora-berries-wild8"
 }
 
@@ -80,21 +79,3 @@ variable "cribl_client_secret" {
   # No default - must be provided
 }
 
-variable "aws_key_name" {
-  description = "AWS key pair name for EC2 instances"
-  type        = string
-  default     = "tearingupmyheart"
-}
-
-variable "aws_profile" {
-  description = "AWS profile to use"
-  type        = string
-  default     = ""
-}
-
-# AMI pinning to exact AMI ID
-# variable "ami_id" {
-#   description = "Exact AMI ID to pin to prevent recreation"
-#   type        = string
-#   default     = "ami-09ac47f9dcb88f998"  # Pin to the exact AMI that was being used
-# }
