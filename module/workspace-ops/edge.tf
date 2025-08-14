@@ -151,6 +151,63 @@ resource "criblio_pipeline" "edge_main_pipeline" {
 ################################
 ### Edge Sources ###
 ################################
+# Use data sources to reference the automatically created Edge sources
+
+# File Monitor source (automatically created by Edge)
+data "criblio_source" "edge_file_monitor" {
+  id       = "in_file_varlog"
+  group_id = var.edge_group
+  
+  depends_on = [time_sleep.wait_for_edge_nodes]
+}
+
+# Journal Files source (automatically created by Edge)
+data "criblio_source" "edge_journal" {
+  id       = "in_journal_local"
+  group_id = var.edge_group
+  
+  depends_on = [time_sleep.wait_for_edge_nodes]
+}
+
+# System Metrics source (automatically created by Edge)
+data "criblio_source" "edge_system_metrics" {
+  id       = "in_system_metrics"
+  group_id = var.edge_group
+  
+  depends_on = [time_sleep.wait_for_edge_nodes]
+}
+
+# System State source (automatically created by Edge)
+data "criblio_source" "edge_system_state" {
+  id       = "in_system_state"
+  group_id = var.edge_group
+  
+  depends_on = [time_sleep.wait_for_edge_nodes]
+}
+
+# Kubernetes Events source (automatically created by Edge)
+data "criblio_source" "edge_kube_events" {
+  id       = "in_kube_events"
+  group_id = var.edge_group
+  
+  depends_on = [time_sleep.wait_for_edge_nodes]
+}
+
+# Kubernetes Logs source (automatically created by Edge)
+data "criblio_source" "edge_kube_logs" {
+  id       = "in_kube_logs"
+  group_id = var.edge_group
+  
+  depends_on = [time_sleep.wait_for_edge_nodes]
+}
+
+# Kubernetes Metrics source (automatically created by Edge)
+data "criblio_source" "edge_kube_metrics" {
+  id       = "in_kube_metrics"
+  group_id = var.edge_group
+  
+  depends_on = [time_sleep.wait_for_edge_nodes]
+}
 
 # Syslog source
 module "edge_syslog_source" {
@@ -176,6 +233,10 @@ module "edge_syslog_source" {
   connections = [
     {
       output   = module.edge_s3_dest.destination_id
+      pipeline = criblio_pipeline.edge_main_pipeline.id
+    },
+    {
+      output   = module.edge_cribl_http_dest.destination_id
       pipeline = criblio_pipeline.edge_main_pipeline.id
     }
   ]
@@ -210,6 +271,12 @@ module "edge_http_source" {
     pipelines = ["edge-main-processing"]
   }
   
+  connections = [
+    {
+      output   = module.edge_cribl_http_dest.destination_id
+      pipeline = criblio_pipeline.edge_main_pipeline.id
+    }
+  ]
   streamtags = ["http", "edge"]
   
   depends_on = [criblio_pipeline.edge_main_pipeline]
@@ -231,6 +298,12 @@ module "edge_tcp_source" {
     pipelines  = ["edge-main-processing"]
   }
   
+  connections = [
+    {
+      output   = module.edge_cribl_http_dest.destination_id
+      pipeline = criblio_pipeline.edge_main_pipeline.id
+    }
+  ]
   streamtags = ["metrics", "edge"]
   
   depends_on = [criblio_pipeline.edge_main_pipeline]
@@ -298,6 +371,14 @@ module "edge_cribl_http_dest" {
   
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
+
+################################
+### Edge Connections (Drag & Drop) ###
+################################
+# Note: For built-in Edge sources, connections need to be configured manually in the UI
+# or by importing existing sources and updating them. The provider doesn't support
+# criblio_connection resources. Data sources above allow you to reference them for
+# outputs or other use cases.
 
 ################################
 ### Edge Commit and Deploy ###
@@ -478,6 +559,109 @@ output "edge_master_url" {
   value       = local.edge_master_url
   sensitive   = true
   description = "Complete master URL for Edge nodes"
+}
+
+# Outputs for existing Edge sources - just the basic info
+output "edge_sources_info" {
+  value = {
+    file_monitor = {
+      id       = data.criblio_source.edge_file_monitor.id
+      group_id = data.criblio_source.edge_file_monitor.group_id
+    }
+    journal = {
+      id       = data.criblio_source.edge_journal.id
+      group_id = data.criblio_source.edge_journal.group_id
+    }
+    system_metrics = {
+      id       = data.criblio_source.edge_system_metrics.id
+      group_id = data.criblio_source.edge_system_metrics.group_id
+    }
+    system_state = {
+      id       = data.criblio_source.edge_system_state.id
+      group_id = data.criblio_source.edge_system_state.group_id
+    }
+  }
+  description = "Basic info for Edge data sources"
+}
+
+# Output all available attributes for the File Monitor source
+output "edge_file_monitor_all_attributes" {
+  value       = data.criblio_source.edge_file_monitor
+  description = "All available attributes for the File Monitor source"
+}
+
+# Output all available attributes for the System Metrics source
+output "edge_system_metrics_all_attributes" {
+  value       = data.criblio_source.edge_system_metrics
+  description = "All available attributes for the System Metrics source"
+}
+
+# Output all available attributes for the Journal source
+output "edge_journal_all_attributes" {
+  value       = data.criblio_source.edge_journal
+  description = "All available attributes for the Journal source"
+}
+
+# Output all available attributes for the System State source
+output "edge_system_state_all_attributes" {
+  value       = data.criblio_source.edge_system_state
+  description = "All available attributes for the System State source"
+}
+
+# output "edge_kube_events_source" {
+#   value = {
+#     id          = data.criblio_source.edge_kube_events.id
+#     group_id    = data.criblio_source.edge_kube_events.group_id
+#     type        = try(data.criblio_source.edge_kube_events.input_k8s_events, "Not available until nodes connect")
+#     description = "Kubernetes Events source"
+#   }
+#   description = "Edge Kubernetes Events source details"
+# }
+
+# output "edge_kube_logs_source" {
+#   value = {
+#     id          = data.criblio_source.edge_kube_logs.id
+#     group_id    = data.criblio_source.edge_kube_logs.group_id
+#     type        = try(data.criblio_source.edge_kube_logs.input_k8s_logs, "Not available until nodes connect")
+#     description = "Kubernetes Logs source"
+#   }
+#   description = "Edge Kubernetes Logs source details"
+# }
+
+# output "edge_kube_metrics_source" {
+#   value = {
+#     id          = data.criblio_source.edge_kube_metrics.id
+#     group_id    = data.criblio_source.edge_kube_metrics.group_id
+#     type        = try(data.criblio_source.edge_kube_metrics.input_k8s_metrics, "Not available until nodes connect")
+#     description = "Kubernetes Metrics source"
+#   }
+#   description = "Edge Kubernetes Metrics source details"
+# }
+
+# Output all Edge sources as a map for easier reference
+output "edge_sources_map" {
+  value = {
+    file_monitor    = data.criblio_source.edge_file_monitor.id
+    journal         = data.criblio_source.edge_journal.id
+    system_metrics  = data.criblio_source.edge_system_metrics.id
+    system_state    = data.criblio_source.edge_system_state.id
+    # kube_events     = data.criblio_source.edge_kube_events.id
+    # kube_logs       = data.criblio_source.edge_kube_logs.id
+    # kube_metrics    = data.criblio_source.edge_kube_metrics.id
+    syslog_custom   = module.edge_syslog_source.source_id
+    http_custom     = module.edge_http_source.source_id
+    tcp_custom      = module.edge_tcp_source.source_id
+  }
+  description = "Map of all Edge source IDs for easy reference"
+}
+
+# Output destinations for reference
+output "edge_destinations_map" {
+  value = {
+    s3_archive   = module.edge_s3_dest.destination_id
+    cribl_http   = module.edge_cribl_http_dest.destination_id
+  }
+  description = "Map of all Edge destination IDs for easy reference"
 }
 
 output "edge_deployment_instructions" {
