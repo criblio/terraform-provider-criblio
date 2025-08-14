@@ -373,12 +373,35 @@ module "edge_cribl_http_dest" {
 }
 
 ################################
-### Edge Connections (Drag & Drop) ###
+### Import Existing Edge Sources ###
 ################################
-# Note: For built-in Edge sources, connections need to be configured manually in the UI
-# or by importing existing sources and updating them. The provider doesn't support
-# criblio_connection resources. Data sources above allow you to reference them for
-# outputs or other use cases.
+
+# Import blocks for system sources (commented out as placeholders)
+# These sources are automatically created by Edge and cannot be managed via Terraform
+
+# import {
+#   to = criblio_source.file_monitor_managed
+#   id = "{\"group_id\":\"${var.edge_group}\",\"id\":\"in_file_varlog\"}"
+# }
+
+# import {
+#   to = criblio_source.journal_managed
+#   id = "{\"group_id\":\"${var.edge_group}\",\"id\":\"in_journal_local\"}"
+# }
+
+# import {
+#   to = criblio_source.system_metrics_managed
+#   id = "{\"group_id\":\"${var.edge_group}\",\"id\":\"in_system_metrics\"}"
+# }
+
+# import {
+#   to = criblio_source.system_state_managed
+#   id = "{\"group_id\":\"${var.edge_group}\",\"id\":\"in_system_state\"}"
+# }
+
+# Note: System sources are automatically created by Edge and cannot be managed via Terraform
+# The import blocks above are placeholders for future use when/if the provider supports it
+# For now, use the UI to manually connect these sources to destinations
 
 ################################
 ### Edge Commit and Deploy ###
@@ -608,35 +631,8 @@ output "edge_system_state_all_attributes" {
   description = "All available attributes for the System State source"
 }
 
-# output "edge_kube_events_source" {
-#   value = {
-#     id          = data.criblio_source.edge_kube_events.id
-#     group_id    = data.criblio_source.edge_kube_events.group_id
-#     type        = try(data.criblio_source.edge_kube_events.input_k8s_events, "Not available until nodes connect")
-#     description = "Kubernetes Events source"
-#   }
-#   description = "Edge Kubernetes Events source details"
-# }
 
-# output "edge_kube_logs_source" {
-#   value = {
-#     id          = data.criblio_source.edge_kube_logs.id
-#     group_id    = data.criblio_source.edge_kube_logs.group_id
-#     type        = try(data.criblio_source.edge_kube_logs.input_k8s_logs, "Not available until nodes connect")
-#     description = "Kubernetes Logs source"
-#   }
-#   description = "Edge Kubernetes Logs source details"
-# }
 
-# output "edge_kube_metrics_source" {
-#   value = {
-#     id          = data.criblio_source.edge_kube_metrics.id
-#     group_id    = data.criblio_source.edge_kube_metrics.group_id
-#     type        = try(data.criblio_source.edge_kube_metrics.input_k8s_metrics, "Not available until nodes connect")
-#     description = "Kubernetes Metrics source"
-#   }
-#   description = "Edge Kubernetes Metrics source details"
-# }
 
 # Output all Edge sources as a map for easier reference
 output "edge_sources_map" {

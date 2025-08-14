@@ -1,5 +1,5 @@
 resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
-  id                       = "my_lake_dataset_tf4"
+  id                       = "my_lake_dataset_tf5"
   description              = "My Cribl Lake Dataset"
   lake_id                  = "default"
   bucket_name              = "lake-${var.workspace}-${var.cloud_tenant}"
@@ -20,11 +20,11 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
 }
 
 resource "criblio_destination" "cribl_lake" {
-  id       = "cribl-lake-2"
+  id       = "cribl-lake-3"
 #   group_id = criblio_group.syslog_worker_group.id
     group_id = "default"
   output_cribl_lake = {
-    id          = "cribl-lake-2"
+    id          = "cribl-lake-3"
     type        = "cribl_lake"
     description = "Cribl Lake destination for syslog data"
     disabled    = false
@@ -60,7 +60,7 @@ resource "criblio_destination" "cribl_lake" {
 resource "criblio_cribl_lake_house" "my_cribllakehouse" {
   description = "My Lakehouse for dataset"
   tier_size   = "medium"
-  id          = "test-lakehouse-4"
+  id          = "test-lakehouse-5"
 }
 
 # Check lakehouse status periodically

@@ -109,7 +109,7 @@ module "http_source" {
 ### Pipelines ###
 #################
 resource "criblio_pipeline" "my_pipeline" {
-  id = "my-first-tf-pipeline"
+  id = "my-first-tf-pipeline2"
   group_id = var.group-cloud
   conf = {
     description = "Test pipeline for Terraform provider"
