@@ -609,7 +609,6 @@ resource "criblio_destination" "my_destination" {
     enable_assume_role                = false
     endpoint                          = "...my_endpoint..."
     environment                       = "...my_environment..."
-    file_name_suffix                  = "...my_file_name_suffix..."
     format                            = "json"
     header_line                       = "...my_header_line..."
     id                                = "...my_id..."

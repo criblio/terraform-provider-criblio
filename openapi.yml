@@ -43420,6 +43420,7 @@ components:
             to the kind of compression being used (`none` or `gzip`).
           default: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ?
             ".gz" : ""}`'
+          x-speakeasy-terraform-ignore: true
         maxFileSizeMB:
           type: number
           title: File size limit (MB)

@@ -624,7 +624,6 @@ resource "criblio_destination" "my_destination" {
     enable_assume_role                = false
     endpoint                          = "...my_endpoint..."
     environment                       = "...my_environment..."
-    file_name_suffix                  = "...my_file_name_suffix..."
     format                            = "json"
     header_line                       = "...my_header_line..."
     id                                = "...my_id..."
@@ -4824,7 +4823,6 @@ Optional:
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3. Default: false
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`). Default: "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
 - `format` (String) must be one of ["json", "parquet", "ddss"]
 - `header_line` (String) If set, this line will be written to the beginning of each output file. Default: ""
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption

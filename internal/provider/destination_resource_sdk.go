@@ -18635,12 +18635,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			baseFileName7 = nil
 		}
-		fileNameSuffix7 := new(string)
-		if !r.OutputCriblLake.FileNameSuffix.IsUnknown() && !r.OutputCriblLake.FileNameSuffix.IsNull() {
-			*fileNameSuffix7 = r.OutputCriblLake.FileNameSuffix.ValueString()
-		} else {
-			fileNameSuffix7 = nil
-		}
 		maxFileSizeMb9 := new(float64)
 		if !r.OutputCriblLake.MaxFileSizeMB.IsUnknown() && !r.OutputCriblLake.MaxFileSizeMB.IsNull() {
 			*maxFileSizeMb9 = r.OutputCriblLake.MaxFileSizeMB.ValueFloat64()
@@ -18776,7 +18770,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			KmsKeyID:                      kmsKeyId3,
 			RemoveEmptyDirs:               removeEmptyDirs9,
 			BaseFileName:                  baseFileName7,
-			FileNameSuffix:                fileNameSuffix7,
 			MaxFileSizeMB:                 maxFileSizeMb9,
 			MaxOpenFiles:                  maxOpenFiles9,
 			HeaderLine:                    headerLine7,

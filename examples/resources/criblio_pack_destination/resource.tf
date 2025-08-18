@@ -609,7 +609,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     enable_assume_role                = false
     endpoint                          = "...my_endpoint..."
     environment                       = "...my_environment..."
-    file_name_suffix                  = "...my_file_name_suffix..."
     format                            = "ddss"
     header_line                       = "...my_header_line..."
     id                                = "...my_id..."
