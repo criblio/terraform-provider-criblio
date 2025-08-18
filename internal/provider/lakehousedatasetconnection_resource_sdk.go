@@ -17,6 +17,15 @@ func (r *LakehouseDatasetConnectionResourceModel) RefreshFromOperationsCreateLak
 	return diags
 }
 
+func (r *LakehouseDatasetConnectionResourceModel) RefreshFromOperationsGetLakehouseDatasetConnectionsResponseBody(ctx context.Context, resp *operations.GetLakehouseDatasetConnectionsResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
 func (r *LakehouseDatasetConnectionResourceModel) RefreshFromOperationsUpdateLakehouseDatasetConnectionsResponseBody(ctx context.Context, resp *operations.UpdateLakehouseDatasetConnectionsResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -69,6 +78,23 @@ func (r *LakehouseDatasetConnectionResourceModel) ToOperationsDeleteLakehouseDat
 	lakeDatasetID = r.LakeDatasetID.ValueString()
 
 	out := operations.DeleteLakehouseDatasetConnectionsRequest{
+		LakehouseID:   lakehouseID,
+		LakeDatasetID: lakeDatasetID,
+	}
+
+	return &out, diags
+}
+
+func (r *LakehouseDatasetConnectionResourceModel) ToOperationsGetLakehouseDatasetConnectionsRequest(ctx context.Context) (*operations.GetLakehouseDatasetConnectionsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var lakehouseID string
+	lakehouseID = r.LakehouseID.ValueString()
+
+	var lakeDatasetID string
+	lakeDatasetID = r.LakeDatasetID.ValueString()
+
+	out := operations.GetLakehouseDatasetConnectionsRequest{
 		LakehouseID:   lakehouseID,
 		LakeDatasetID: lakeDatasetID,
 	}

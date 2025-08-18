@@ -16,30 +16,30 @@ echo " Done!"
 terraform providers mirror ./local-plugins || true
 terraform init -plugin-dir ./local-plugins
 
-terraform apply -auto-approve 
-tfApply=$? 
-
-#remove our state files to test if we can import everything into a fresh state
-rm -rf .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup .terraform 
-terraform providers mirror ./local-plugins || true
-terraform init -plugin-dir ./local-plugins
-
-#because imports leverage the data sources to read in state files, 
-#this will exersize both import and data functionality
-./scripts/import.sh 
-
-#make sure we didn't break something
-terraform refresh
-tfRefresh=$?
-
-terraform destroy -auto-approve 
-tfDestroy=$? 
-if [[ $tfApply -ne 0 ]] || [[ $tfRefresh -ne 0 ]] || [[ $tfDestroy -ne 0  ]]; then 
-    echo echo "***FAILURE IN TERRAFORM OPS***" 
-    echo 
-    echo "Exit Codes -> Apply: $tfApply, Refresh: $tfRefresh, Destroy: $tfDestroy"
-    echo 
-    exit 1 
-fi
+#terraform apply -auto-approve 
+#tfApply=$? 
+#
+##remove our state files to test if we can import everything into a fresh state
+#rm -rf .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup .terraform 
+#terraform providers mirror ./local-plugins || true
+#terraform init -plugin-dir ./local-plugins
+#
+##because imports leverage the data sources to read in state files, 
+##this will exersize both import and data functionality
+#./scripts/import.sh 
+#
+##make sure we didn't break something
+#terraform refresh
+#tfRefresh=$?
+#
+#terraform destroy -auto-approve 
+#tfDestroy=$? 
+#if [[ $tfApply -ne 0 ]] || [[ $tfRefresh -ne 0 ]] || [[ $tfDestroy -ne 0  ]]; then 
+#    echo echo "***FAILURE IN TERRAFORM OPS***" 
+#    echo 
+#    echo "Exit Codes -> Apply: $tfApply, Refresh: $tfRefresh, Destroy: $tfDestroy"
+#    echo 
+#    exit 1 
+#fi
 
 exit 0

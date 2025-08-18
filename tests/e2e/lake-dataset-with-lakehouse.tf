@@ -1,0 +1,1 @@
+../../examples/lake-dataset-with-lakehouse/main.tf

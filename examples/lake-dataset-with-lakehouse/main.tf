@@ -1,5 +1,5 @@
 resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
-  bucket_name = "lake-tfprovider-beautiful-nguyen-y8y4azd"
+  bucket_name              = "test-lakehouse-4"
   description              = "my_description"
   format                   = "json"
   id                       = "my_lake_dataset_with_lakehouse_11"

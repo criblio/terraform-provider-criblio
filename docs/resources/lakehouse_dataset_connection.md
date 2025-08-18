@@ -36,3 +36,11 @@ resource "criblio_lakehouse_dataset_connection" "my_lakehousedatasetconnection" 
 
 <a id="nestedatt--request_body"></a>
 ### Nested Schema for `request_body`
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+terraform import criblio_lakehouse_dataset_connection.my_criblio_lakehouse_dataset_connection '{"lake_dataset_id": "", "lakehouse_id": ""}'
+```

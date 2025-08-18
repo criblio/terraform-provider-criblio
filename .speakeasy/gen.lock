@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 5eb61439f2f3eb3265501fa10788b170
+  docChecksum: 57c464e06a94bfeaabbb563aaf361dfe
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.605.1
+  speakeasyVersion: 1.605.5
   generationVersion: 2.684.0
   releaseVersion: 1.9.4
   configChecksum: 4fd10eb2d838f079e6ee74f3cccb6f9a
@@ -23,6 +23,7 @@ features:
     nameOverrides: 2.81.3
     nullables: 0.0.0
     oauth2ClientCredentials: 0.1.5
+    retries: 2.81.4
     serverIDs: 2.81.1
     unions: 2.81.17
 generatedFiles:
@@ -40,6 +41,7 @@ generatedFiles:
   - examples/data-sources/criblio_grok/data-source.tf
   - examples/data-sources/criblio_group/data-source.tf
   - examples/data-sources/criblio_hmac_function/data-source.tf
+  - examples/data-sources/criblio_lakehouse_dataset_connection/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
   - examples/data-sources/criblio_notification/data-source.tf
   - examples/data-sources/criblio_notification_target/data-source.tf
@@ -89,6 +91,7 @@ generatedFiles:
   - examples/resources/criblio_group/resource.tf
   - examples/resources/criblio_hmac_function/import.sh
   - examples/resources/criblio_hmac_function/resource.tf
+  - examples/resources/criblio_lakehouse_dataset_connection/import.sh
   - examples/resources/criblio_lakehouse_dataset_connection/resource.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
@@ -197,6 +200,8 @@ generatedFiles:
   - internal/provider/hmacfunction_data_source_sdk.go
   - internal/provider/hmacfunction_resource.go
   - internal/provider/hmacfunction_resource_sdk.go
+  - internal/provider/lakehousedatasetconnection_data_source.go
+  - internal/provider/lakehousedatasetconnection_data_source_sdk.go
   - internal/provider/lakehousedatasetconnection_resource.go
   - internal/provider/lakehousedatasetconnection_resource_sdk.go
   - internal/provider/lookupfile_data_source.go
@@ -1157,6 +1162,7 @@ generatedFiles:
   - internal/sdk/datasets.go
   - internal/sdk/diag.go
   - internal/sdk/distributed.go
+  - internal/sdk/docs/models/operations/option.md
   - internal/sdk/edge.go
   - internal/sdk/edgeappscopeprocesses.go
   - internal/sdk/edgecontainers.go
@@ -1459,6 +1465,7 @@ generatedFiles:
   - internal/sdk/models/operations/getjobserrorsbyidandgroup.go
   - internal/sdk/models/operations/getjobsresultsbyidandgroup.go
   - internal/sdk/models/operations/getkeymetadataentitybyid.go
+  - internal/sdk/models/operations/getlakehousedatasetconnections.go
   - internal/sdk/models/operations/getlibschemasbyid.go
   - internal/sdk/models/operations/getlicense.go
   - internal/sdk/models/operations/getlicensebyid.go
