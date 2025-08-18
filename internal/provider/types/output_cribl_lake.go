@@ -23,7 +23,6 @@ type OutputCriblLake struct {
 	EnableAssumeRole              types.Bool     `tfsdk:"enable_assume_role"`
 	Endpoint                      types.String   `tfsdk:"endpoint"`
 	Environment                   types.String   `tfsdk:"environment"`
-	FileNameSuffix                types.String   `tfsdk:"file_name_suffix"`
 	Format                        types.String   `tfsdk:"format"`
 	HeaderLine                    types.String   `tfsdk:"header_line"`
 	ID                            types.String   `tfsdk:"id"`

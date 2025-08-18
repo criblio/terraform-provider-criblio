@@ -1,0 +1,1 @@
+../../../../../examples/lake-destination/main.tf

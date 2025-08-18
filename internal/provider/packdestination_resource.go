@@ -4073,12 +4073,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
-					"file_name_suffix": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`` + "`" + `.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ? ".gz" : ""}` + "`" + ``),
-						Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `). Default: "` + "`" + `.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}` + "`" + `"`,
-					},
 					"format": schema.StringAttribute{
 						Optional:    true,
 						Description: `must be one of ["json", "parquet", "ddss"]`,

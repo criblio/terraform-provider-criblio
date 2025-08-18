@@ -1021,6 +1021,13 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
+	var outputCriblLake OutputCriblLake = OutputCriblLake{}
+	if err := utils.UnmarshalJSON(data, &outputCriblLake, "", true, true); err == nil {
+		u.OutputCriblLake = &outputCriblLake
+		u.Type = OutputTypeOutputCriblLake
+		return nil
+	}
+
 	var outputElastic OutputElastic = OutputElastic{}
 	if err := utils.UnmarshalJSON(data, &outputElastic, "", true, true); err == nil {
 		u.OutputElastic = &outputElastic
@@ -1032,13 +1039,6 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &outputDatadog, "", true, true); err == nil {
 		u.OutputDatadog = &outputDatadog
 		u.Type = OutputTypeOutputDatadog
-		return nil
-	}
-
-	var outputCriblLake OutputCriblLake = OutputCriblLake{}
-	if err := utils.UnmarshalJSON(data, &outputCriblLake, "", true, true); err == nil {
-		u.OutputCriblLake = &outputCriblLake
-		u.Type = OutputTypeOutputCriblLake
 		return nil
 	}
 
