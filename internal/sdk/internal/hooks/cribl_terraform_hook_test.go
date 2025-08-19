@@ -140,7 +140,7 @@ func TestTerraformBeforeRequestMultiUse(t *testing.T) {
 	if finalCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook finalCtx.Method returned %s, expected %s", finalCtx.Method, "GET")
 	}
-        if finalCtx.URL.String() != expectedUrlString {
+	if finalCtx.URL.String() != expectedUrlString {
 		t.Errorf("*CriblTerraformHook after retry finalCtx.URL returned %s, expected %s", finalCtx.URL.String(), expectedUrlString)
 	}
 	if fmt.Sprintf("%+v", finalCtx.Header) != expectedHeaderString {
@@ -249,7 +249,7 @@ func TestTerraformBeforeRequestWithSecuritySourceMultiUse(t *testing.T) {
 	if finalCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook finalCtx.Method returned %s, expected %s", finalCtx.Method, "GET")
 	}
-        if finalCtx.URL.String() != expectedUrlString {
+	if finalCtx.URL.String() != expectedUrlString {
 		t.Errorf("*CriblTerraformHook after retry finalCtx.URL returned %s, expected %s", finalCtx.URL.String(), expectedUrlString)
 	}
 	if fmt.Sprintf("%+v", finalCtx.Header) != expectedHeaderString {
@@ -351,7 +351,6 @@ func TestTerraformBeforeRequestWithoutBearerTokenMultiUse(t *testing.T) {
 		t.Errorf("*getBearerToken output.Token returned %s, expected %s", fmt.Sprintf("%s", finalReq.Header), "map[Authorization:[Bearer my-access-token]]")
 	}
 }
-
 
 func TestTerraformGetBearerToken(t *testing.T) {
 	os.Setenv("CRIBL_CLIENT_ID", "foo")
@@ -466,7 +465,6 @@ func TestTerraformAfterErrorMultiUse(t *testing.T) {
 	test := NewCriblTerraformHook()
 	_, _ = test.SDKInit(myUrl, myClient)
 
-
 	test = NewCriblTerraformHook()
 	_, _ = test.SDKInit(myUrl, myClient)
 
@@ -481,4 +479,3 @@ func TestTerraformAfterErrorMultiUse(t *testing.T) {
 		t.Errorf("test.AfterError returned unexpected error, got '%s', expected '%s'", err.Error(), expectedErrorString)
 	}
 }
-
