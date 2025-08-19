@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: e3590fd86f27f7a93cc8a4554bad3f95
+  docChecksum: 49b9357037b7815316d1e20749d12ad0
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.606.0
   generationVersion: 2.686.7
-  releaseVersion: 1.9.6
-  configChecksum: 01d2461780544c05a35f5fb4e21267a8
+  releaseVersion: 1.9.7
+  configChecksum: 11158cc57e50e6329b924acaf598537d
   published: true
 features:
   terraform:
@@ -4964,19 +4964,19 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   createGlobalVariable:
     speakeasy-default-create-global-variable:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "default"
       requestBody:
-        application/json: {"id": "<id>", "type": "any"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   getGlobalVariableById:
@@ -4984,10 +4984,10 @@ examples:
       parameters:
         path:
           id: "<id>"
-          groupId: "<id>"
+          groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   updateGlobalVariableById:
@@ -4997,10 +4997,10 @@ examples:
           id: "<id>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "type": "any"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   deleteGlobalVariableById:
@@ -5011,7 +5011,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   getGlobalVariableLibVarsByPack:
@@ -5023,7 +5023,7 @@ examples:
         query: {}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   createGlobalVariableLibVarsByPack:
@@ -5033,10 +5033,10 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "type": "any"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   getGlobalVariableLibVarsByPackAndId:
@@ -5048,7 +5048,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   updateGlobalVariableLibVarsByPackAndId:
@@ -5059,10 +5059,10 @@ examples:
           pack: "<value>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "type": "any"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   deleteGlobalVariableLibVarsByPackAndId:
@@ -5074,7 +5074,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {}
   listHmacFunction:

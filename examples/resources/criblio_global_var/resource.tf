@@ -1,9 +1,9 @@
 resource "criblio_global_var" "my_globalvar" {
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
-  lib         = "...my_lib..."
-  tags        = "...my_tags..."
+  description = "This is a test var."
+  group_id    = "default"
+  id          = "test_var"
+  lib         = "custom"
+  tags        = "test"
   type        = "number"
-  value       = "...my_value..."
+  value       = 100
 }
