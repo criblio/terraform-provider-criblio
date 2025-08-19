@@ -20,7 +20,14 @@ Create a new Terraform configuration that references this module:
 ```hcl
 # main.tf
 module "cribl_workspace" {
-  source = "github.com/your-org/terraform-provider-criblio//module/workspace-ops"
+  # For GitHub repository via SSH
+  source = "git::ssh://git@github.com/cribl/terraform-provider-criblio.git//module/workspace-ops?ref=main"
+  
+  # Or for GitHub via HTTPS
+  # source = "git::https://github.com/cribl/terraform-provider-criblio.git//module/workspace-ops?ref=main"
+  
+  # Or for local development
+  # source = "../terraform-provider-criblio/module/workspace-ops"
   
   # Required variables
   cribl_client_id     = var.cribl_client_id
@@ -30,10 +37,12 @@ module "cribl_workspace" {
   
   # Optional: Override defaults
   group-cloud         = "production-stream"
+  group-hybrid        = "production-hybrid"
   edge_group          = "production-edge"
   cloud_region        = "us-east-1"
   instance_type       = "t3.large"
   edge_instance_count = 5
+  edge_instance_type  = "t3.medium"
 }
 
 # variables.tf
@@ -103,11 +112,14 @@ terraform apply
 | `group-cloud` | Stream worker group | `notdefault` |
 | `group-hybrid` | Hybrid worker group | `notdefaulthybrid` |
 | `edge_group` | Edge fleet group | `edge-fleet-tf2` |
+| `edge_instance_count` | Edge fleet size | `3` |
+| `edge_instance_type` | Instance type for Edge nodes | `t3.small` |
 | `cribl_version` | Cribl software version | `4.12.0` |
 | `cloud_region` | AWS region | `ca-central-1` |
 | `instance_type` | EC2 instance type | `t3.medium` |
 | `instance_count` | Number of instances | `2` |
-| `edge_instance_count` | Edge fleet size | `3` |
+| `environment` | Environment name | N/A |
+| `estimated_ingest_rate` | Estimated data ingest rate | N/A |
 
 ## 📁 Module Structure
 
@@ -119,9 +131,10 @@ workspace-ops/
 ├── edge.tf                 # Edge fleet configuration
 ├── lake.tf                 # Lake storage setup
 ├── search.tf               # Search configuration
-├── *.crbl                  # Pack files
-├── edge-docker-compose.yml # Generated Docker config
-└── deploy-edge-fleet.sh    # Generated deployment script
+├── README.md               # This documentation
+├── agent.md                # Agent documentation
+├── *.crbl                  # Pack files (Palo Alto, VPC Flow Logs)
+└── edge-docker-compose.yml # Generated Docker config
 ```
 
 ## 🔄 Data Flow Architecture
@@ -245,8 +258,8 @@ docker-compose -f edge-docker-compose.yml logs -f
 # Test connectivity
 curl -k https://your-workspace-tenant.cribl.cloud:9000/api/v1/health
 
-# Manual bootstrap token retrieval
-./edge_get_bootstrap_token.sh
+# Run the deployment script
+./deploy-edge-fleet.sh
 ```
 
 ## 🔐 Security Considerations
