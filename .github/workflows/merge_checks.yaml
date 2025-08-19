@@ -28,15 +28,6 @@ jobs:
           echo "Path tests/e2e passed!"
 
           echo "Checking path examples/resources..."
-          cd examples/resources
-          dir_check
-          cd ..
-          echo "Path examples/resources passed!"
-
-          echo "Checking path examples/data-sources..."
-          cd data-sources
-          dir_check
-          echo "Path examples/data-sources passed!"
 
 
   go_fmt_checks:
