@@ -465,9 +465,6 @@ func TestTerraformAfterErrorMultiUse(t *testing.T) {
 	test := NewCriblTerraformHook()
 	_, _ = test.SDKInit(myUrl, myClient)
 
-	test = NewCriblTerraformHook()
-	_, _ = test.SDKInit(myUrl, myClient)
-
 	myResp := http.Response{StatusCode: http.StatusUnauthorized}
 	_, err := test.AfterError(afterCtx, &myResp, errors.New("Testing error for AfterError"))
 	if err == nil {
