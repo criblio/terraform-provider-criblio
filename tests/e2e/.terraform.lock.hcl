@@ -5,7 +5,7 @@ provider "registry.terraform.io/criblio/criblio" {
   version     = "999.99.9"
   constraints = "999.99.9"
   hashes = [
-    "h1:SaT7NNFrp9hy6aTI0o4Dam0ogd6NvUjeyGjUDbCHCJc=",
+    "h1:wRjcnjU+ZoCfZub6s8neQy8ZPIcOuQoHl9c6ehwCw+s=",
   ]
 }
 
