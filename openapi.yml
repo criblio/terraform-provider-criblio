@@ -5534,13 +5534,16 @@ components:
           title: Name
           pattern: ^[a-zA-Z0-9_-]+$
           description: Global variable name.
+          example: "test_var"
         lib:
           type: string
           title: Library
+          example: "custom"
         description:
           type: string
           title: Description
           description: Brief description of this variable. Optional.
+          example: "This is a test var."
         type:
           type: string
           title: Type
@@ -5555,14 +5558,17 @@ components:
             - any
           default: any
           description: Type of variable
+          example: number
         value:
           type: string
           title: Value
           description: Value of variable
+          example: 100
         tags:
           type: string
           title: Tags
           description: One or more tags related to this variable. Optional.
+          example: "test"
     HmacFunction:
       type: object
       properties:
@@ -56285,9 +56291,11 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
+          example: "default"
+          default: "default"
       operationId: createGlobalVariable
       tags:
         &a102
@@ -56345,9 +56353,11 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
+          example: "default"
+          default: "default"
       responses: *a103
     patch:
       x-speakeasy-entity-operation: GlobalVar#update

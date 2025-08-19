@@ -8,7 +8,7 @@ import (
 )
 
 type CreateGlobalVariableRequest struct {
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New Global Variable object
 	GlobalVar shared.GlobalVar `request:"mediaType=application/json"`

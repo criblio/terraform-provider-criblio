@@ -14,13 +14,13 @@ GlobalVar Resource
 
 ```terraform
 resource "criblio_global_var" "my_globalvar" {
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
-  lib         = "...my_lib..."
-  tags        = "...my_tags..."
+  description = "This is a test var."
+  group_id    = "default"
+  id          = "test_var"
+  lib         = "custom"
+  tags        = "test"
   type        = "number"
-  value       = "...my_value..."
+  value       = 100
 }
 ```
 
@@ -29,7 +29,7 @@ resource "criblio_global_var" "my_globalvar" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
 - `id` (String) Global variable name.
 
 ### Optional
@@ -50,7 +50,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_global_var.my_criblio_global_var
   id = jsonencode({
-    group_id = "..."
+    group_id = "default"
     id = "..."
   })
 }
@@ -59,5 +59,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_global_var.my_criblio_global_var '{"group_id": "...", "id": "..."}'
+terraform import criblio_global_var.my_criblio_global_var '{"group_id": "default", "id": "..."}'
 ```
