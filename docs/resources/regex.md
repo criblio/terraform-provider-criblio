@@ -14,13 +14,13 @@ Regex Resource
 
 ```terraform
 resource "criblio_regex" "my_regex" {
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
-  lib         = "...my_lib..."
-  regex       = "...my_regex..."
-  sample_data = "...my_sample_data..."
-  tags        = "...my_tags..."
+  description = "A sample regex"
+  group_id    = "default"
+  id          = "test_id"
+  lib         = "custom"
+  regex       = "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/"
+  sample_data = "192.168.1.1, 10.0.0.1, 172.16.0.1"
+  tags        = "test"
 }
 ```
 
@@ -29,7 +29,7 @@ resource "criblio_regex" "my_regex" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
 - `id` (String) Unique ID to PATCH
 - `regex` (String)
 
@@ -44,6 +44,20 @@ resource "criblio_regex" "my_regex" {
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_regex.my_criblio_regex
+  id = jsonencode({
+    group_id = "..."
+    id = "..."
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import criblio_regex.my_criblio_regex '{"group_id": "", "id": ""}'
+terraform import criblio_regex.my_criblio_regex '{"group_id": "...", "id": "..."}'
 ```

@@ -56,7 +56,7 @@ func (r *RegexResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -331,7 +331,7 @@ func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStat
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "", "id": ""}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "...", "id": "..."}': `+err.Error())
 		return
 	}
 

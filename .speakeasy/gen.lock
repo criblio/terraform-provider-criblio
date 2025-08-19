@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 5eb61439f2f3eb3265501fa10788b170
+  docChecksum: e3590fd86f27f7a93cc8a4554bad3f95
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.605.1
-  generationVersion: 2.684.0
-  releaseVersion: 1.9.4
-  configChecksum: 4fd10eb2d838f079e6ee74f3cccb6f9a
+  speakeasyVersion: 1.606.0
+  generationVersion: 2.686.7
+  releaseVersion: 1.9.6
+  configChecksum: 01d2461780544c05a35f5fb4e21267a8
   published: true
 features:
   terraform:
@@ -67,74 +67,105 @@ generatedFiles:
   - examples/data-sources/criblio_source/data-source.tf
   - examples/data-sources/criblio_subscription/data-source.tf
   - examples/provider/provider.tf
+  - examples/resources/criblio_appscope_config/import-by-string-id.tf
   - examples/resources/criblio_appscope_config/import.sh
   - examples/resources/criblio_appscope_config/resource.tf
   - examples/resources/criblio_commit/resource.tf
+  - examples/resources/criblio_cribl_lake_dataset/import-by-string-id.tf
   - examples/resources/criblio_cribl_lake_dataset/import.sh
   - examples/resources/criblio_cribl_lake_dataset/resource.tf
+  - examples/resources/criblio_cribl_lake_house/import-by-string-id.tf
   - examples/resources/criblio_cribl_lake_house/import.sh
   - examples/resources/criblio_cribl_lake_house/resource.tf
+  - examples/resources/criblio_database_connection/import-by-string-id.tf
   - examples/resources/criblio_database_connection/import.sh
   - examples/resources/criblio_database_connection/resource.tf
   - examples/resources/criblio_deploy/resource.tf
+  - examples/resources/criblio_destination/import-by-string-id.tf
   - examples/resources/criblio_destination/import.sh
   - examples/resources/criblio_destination/resource.tf
+  - examples/resources/criblio_event_breaker_ruleset/import-by-string-id.tf
   - examples/resources/criblio_event_breaker_ruleset/import.sh
   - examples/resources/criblio_event_breaker_ruleset/resource.tf
+  - examples/resources/criblio_global_var/import-by-string-id.tf
   - examples/resources/criblio_global_var/import.sh
   - examples/resources/criblio_global_var/resource.tf
+  - examples/resources/criblio_grok/import-by-string-id.tf
   - examples/resources/criblio_grok/import.sh
   - examples/resources/criblio_grok/resource.tf
+  - examples/resources/criblio_group/import-by-string-id.tf
   - examples/resources/criblio_group/import.sh
   - examples/resources/criblio_group/resource.tf
+  - examples/resources/criblio_hmac_function/import-by-string-id.tf
   - examples/resources/criblio_hmac_function/import.sh
   - examples/resources/criblio_hmac_function/resource.tf
   - examples/resources/criblio_lakehouse_dataset_connection/resource.tf
+  - examples/resources/criblio_lookup_file/import-by-string-id.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
+  - examples/resources/criblio_notification/import-by-string-id.tf
   - examples/resources/criblio_notification/import.sh
   - examples/resources/criblio_notification/resource.tf
   - examples/resources/criblio_notification_target/resource.tf
+  - examples/resources/criblio_pack/import-by-string-id.tf
   - examples/resources/criblio_pack/import.sh
   - examples/resources/criblio_pack/resource.tf
+  - examples/resources/criblio_pack_breakers/import-by-string-id.tf
   - examples/resources/criblio_pack_breakers/import.sh
   - examples/resources/criblio_pack_breakers/resource.tf
+  - examples/resources/criblio_pack_destination/import-by-string-id.tf
   - examples/resources/criblio_pack_destination/import.sh
   - examples/resources/criblio_pack_destination/resource.tf
+  - examples/resources/criblio_pack_lookups/import-by-string-id.tf
   - examples/resources/criblio_pack_lookups/import.sh
   - examples/resources/criblio_pack_lookups/resource.tf
+  - examples/resources/criblio_pack_pipeline/import-by-string-id.tf
   - examples/resources/criblio_pack_pipeline/import.sh
   - examples/resources/criblio_pack_pipeline/resource.tf
+  - examples/resources/criblio_pack_routes/import-by-string-id.tf
   - examples/resources/criblio_pack_routes/import.sh
   - examples/resources/criblio_pack_routes/resource.tf
+  - examples/resources/criblio_pack_source/import-by-string-id.tf
   - examples/resources/criblio_pack_source/import.sh
   - examples/resources/criblio_pack_source/resource.tf
+  - examples/resources/criblio_pack_vars/import-by-string-id.tf
   - examples/resources/criblio_pack_vars/import.sh
   - examples/resources/criblio_pack_vars/resource.tf
+  - examples/resources/criblio_parquet_schema/import-by-string-id.tf
   - examples/resources/criblio_parquet_schema/import.sh
   - examples/resources/criblio_parquet_schema/resource.tf
+  - examples/resources/criblio_parser_lib_entry/import-by-string-id.tf
   - examples/resources/criblio_parser_lib_entry/import.sh
   - examples/resources/criblio_parser_lib_entry/resource.tf
+  - examples/resources/criblio_pipeline/import-by-string-id.tf
   - examples/resources/criblio_pipeline/import.sh
   - examples/resources/criblio_pipeline/resource.tf
+  - examples/resources/criblio_project/import-by-string-id.tf
   - examples/resources/criblio_project/import.sh
   - examples/resources/criblio_project/resource.tf
+  - examples/resources/criblio_regex/import-by-string-id.tf
   - examples/resources/criblio_regex/import.sh
   - examples/resources/criblio_regex/resource.tf
+  - examples/resources/criblio_schema/import-by-string-id.tf
   - examples/resources/criblio_schema/import.sh
   - examples/resources/criblio_schema/resource.tf
   - examples/resources/criblio_search_dashboard/resource.tf
   - examples/resources/criblio_search_dashboard_category/resource.tf
+  - examples/resources/criblio_search_dataset/import-by-string-id.tf
   - examples/resources/criblio_search_dataset/import.sh
   - examples/resources/criblio_search_dataset/resource.tf
+  - examples/resources/criblio_search_dataset_provider/import-by-string-id.tf
   - examples/resources/criblio_search_dataset_provider/import.sh
   - examples/resources/criblio_search_dataset_provider/resource.tf
   - examples/resources/criblio_search_macro/resource.tf
+  - examples/resources/criblio_search_saved_query/import-by-string-id.tf
   - examples/resources/criblio_search_saved_query/import.sh
   - examples/resources/criblio_search_saved_query/resource.tf
   - examples/resources/criblio_search_usage_group/resource.tf
+  - examples/resources/criblio_source/import-by-string-id.tf
   - examples/resources/criblio_source/import.sh
   - examples/resources/criblio_source/resource.tf
+  - examples/resources/criblio_subscription/import-by-string-id.tf
   - examples/resources/criblio_subscription/import.sh
   - examples/resources/criblio_subscription/resource.tf
   - go.mod
@@ -4477,19 +4508,19 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
           application/json: {}
   createRegexLibEntry:
     speakeasy-default-create-regex-lib-entry:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "default"
       requestBody:
-        application/json: {"id": "<id>", "regex": "<value>"}
+        application/json: {"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
           application/json: {}
   getRegexLibEntryById:
@@ -4500,7 +4531,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
           application/json: {}
   updateRegexLibEntryById:
@@ -4510,10 +4541,10 @@ examples:
           id: "<id>"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "regex": "<value>"}
+        application/json: {"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
           application/json: {}
   deleteRegexLibEntryById:
@@ -4524,7 +4555,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
           application/json: {}
   listSearchDashboard:

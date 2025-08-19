@@ -8,7 +8,7 @@ import (
 )
 
 type CreateRegexLibEntryRequest struct {
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New RegexLibEntry object
 	RegexLibEntry shared.RegexLibEntry `request:"mediaType=application/json"`

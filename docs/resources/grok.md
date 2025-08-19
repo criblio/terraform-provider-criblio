@@ -40,6 +40,20 @@ resource "criblio_grok" "my_grok" {
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_grok.my_criblio_grok
+  id = jsonencode({
+    group_id = "..."
+    id = "..."
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import criblio_grok.my_criblio_grok '{"group_id": "", "id": ""}'
+terraform import criblio_grok.my_criblio_grok '{"group_id": "...", "id": "..."}'
 ```

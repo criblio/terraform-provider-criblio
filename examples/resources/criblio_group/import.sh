@@ -1,1 +1,1 @@
-terraform import criblio_group.my_criblio_group ""
+terraform import criblio_group.my_criblio_group "..."

@@ -1,1 +1,1 @@
-terraform import criblio_notification.my_criblio_notification ""
+terraform import criblio_notification.my_criblio_notification "..."

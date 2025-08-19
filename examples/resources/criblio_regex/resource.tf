@@ -1,9 +1,9 @@
 resource "criblio_regex" "my_regex" {
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
-  lib         = "...my_lib..."
-  regex       = "...my_regex..."
-  sample_data = "...my_sample_data..."
-  tags        = "...my_tags..."
+  description = "A sample regex"
+  group_id    = "default"
+  id          = "test_id"
+  lib         = "custom"
+  regex       = "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/"
+  sample_data = "192.168.1.1, 10.0.0.1, 172.16.0.1"
+  tags        = "test"
 }

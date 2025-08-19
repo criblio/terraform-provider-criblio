@@ -4239,23 +4239,29 @@ components:
         id:
           type: string
           title: ID
+          example: test_id
         lib:
           type: string
           title: Library
+          example: custom
         description:
           type: string
           title: Description
+          example: "A sample regex"
         regex:
           type: string
           title: Regex pattern
+          example: "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/"
         sampleData:
           type: string
           title: Sample data
           description: Optionally, paste in sample data to match against this regex
           maxLength: 4096
+          example: "192.168.1.1, 10.0.0.1, 172.16.0.1"
         tags:
           type: string
           title: Tags
+          example: "test"
     DataSample:
       type: object
       additionalProperties: true
@@ -55124,7 +55130,9 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: "default"
+          example: "default"
           schema:
             type: string
       operationId: createRegexLibEntry
