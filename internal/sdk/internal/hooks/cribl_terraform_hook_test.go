@@ -91,6 +91,69 @@ func TestTerraformBeforeRequest(t *testing.T) {
 	}
 }
 
+func TestTerraformBeforeRequestMultiUse(t *testing.T) {
+	os.Setenv("CRIBL_CLIENT_ID", "foo")
+	os.Setenv("CRIBL_CLIENT_SECRET", "bar")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "biz")
+	os.Setenv("CRIBL_WORKSPACE_ID", "punk'n")
+	os.Setenv("CRIBL_BEARER_TOKEN", "Paradise City")
+
+	var myClient HTTPClient
+	var ctx BeforeRequestContext
+	myUrl := "foobar"
+	myReq, err := http.NewRequest("GET", "http://example.com", nil)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	test := NewCriblTerraformHook()
+	_, _ = test.SDKInit(myUrl, myClient)
+	returnedCtx, err := test.BeforeRequest(ctx, myReq)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
+	expectedUrlString := "foobar/organizations/biz/workspaces/punk'n/app/api/v1/"
+
+	if returnedCtx.Method != "GET" {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")
+	}
+	if returnedCtx.URL.String() != expectedUrlString {
+		t.Errorf("*CriblTerraformHook returnedCtx.Url returned %s, expected %s", returnedCtx.URL.String(), expectedUrlString)
+	}
+	if fmt.Sprintf("%+v", returnedCtx.Header) != expectedHeaderString {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %+v, expected %+v", fmt.Sprintf("%+v", returnedCtx.Header), expectedHeaderString)
+	}
+	if test.workspaceID != "punk'n" {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", test.workspaceID, "punk'n")
+	}
+	if test.orgID != "biz" {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", test.orgID, "biz")
+	}
+
+	finalCtx, err := test.BeforeRequest(ctx, myReq)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	if finalCtx.Method != "GET" {
+		t.Errorf("*CriblTerraformHook finalCtx.Method returned %s, expected %s", finalCtx.Method, "GET")
+	}
+        if finalCtx.URL.String() != expectedUrlString {
+		t.Errorf("*CriblTerraformHook after retry finalCtx.URL returned %s, expected %s", finalCtx.URL.String(), expectedUrlString)
+	}
+	if fmt.Sprintf("%+v", finalCtx.Header) != expectedHeaderString {
+		t.Errorf("*CriblTerraformHook finalCtx.Method returned %+v, expected %+v", fmt.Sprintf("%+v", finalCtx.Header), expectedHeaderString)
+	}
+	if test.workspaceID != "punk'n" {
+		t.Errorf("*CriblTerraformHook finalCtx.Method returned %s, expected %s", test.workspaceID, "punk'n")
+	}
+	if test.orgID != "biz" {
+		t.Errorf("*CriblTerraformHook finalCtx.Method returned %s, expected %s", test.orgID, "biz")
+	}
+}
+
 func TestTerraformBeforeRequestWithSecuritySource(t *testing.T) {
 	os.Setenv("CRIBL_CLIENT_ID", "foo")
 	os.Setenv("CRIBL_CLIENT_SECRET", "bar")
@@ -135,6 +198,71 @@ func TestTerraformBeforeRequestWithSecuritySource(t *testing.T) {
 	}
 }
 
+func TestTerraformBeforeRequestWithSecuritySourceMultiUse(t *testing.T) {
+	os.Setenv("CRIBL_CLIENT_ID", "foo")
+	os.Setenv("CRIBL_CLIENT_SECRET", "bar")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "biz")
+	os.Setenv("CRIBL_WORKSPACE_ID", "punk'n")
+	os.Setenv("CRIBL_BEARER_TOKEN", "Paradise City")
+
+	var myClient HTTPClient
+	var ctx BeforeRequestContext
+	myUrl := "foobar"
+	myReq, err := http.NewRequest("GET", "http://example.com", nil)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	ctx.HookContext.SecuritySource = func(context.Context) (interface{}, error) { var foo interface{}; return foo, nil }
+
+	test := NewCriblTerraformHook()
+	_, _ = test.SDKInit(myUrl, myClient)
+	returnedCtx, err := test.BeforeRequest(ctx, myReq)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
+	expectedUrlString := "foobar/organizations/biz/workspaces/punk'n/app/api/v1/"
+
+	if returnedCtx.Method != "GET" {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")
+	}
+	if returnedCtx.URL.String() != expectedUrlString {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.URL.String(), expectedUrlString)
+	}
+	if fmt.Sprintf("%+v", returnedCtx.Header) != expectedHeaderString {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %+v, expected %+v", fmt.Sprintf("%+v", returnedCtx.Header), expectedHeaderString)
+	}
+	if test.workspaceID != "punk'n" {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", test.workspaceID, "punk'n")
+	}
+	if test.orgID != "biz" {
+		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", test.orgID, "biz")
+	}
+
+	finalCtx, err := test.BeforeRequest(ctx, myReq)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	if finalCtx.Method != "GET" {
+		t.Errorf("*CriblTerraformHook finalCtx.Method returned %s, expected %s", finalCtx.Method, "GET")
+	}
+        if finalCtx.URL.String() != expectedUrlString {
+		t.Errorf("*CriblTerraformHook after retry finalCtx.URL returned %s, expected %s", finalCtx.URL.String(), expectedUrlString)
+	}
+	if fmt.Sprintf("%+v", finalCtx.Header) != expectedHeaderString {
+		t.Errorf("*CriblTerraformHook finalCtx.Method returned %+v, expected %+v", fmt.Sprintf("%+v", finalCtx.Header), expectedHeaderString)
+	}
+	if test.workspaceID != "punk'n" {
+		t.Errorf("*CriblTerraformHook finalCtx.Method returned %s, expected %s", test.workspaceID, "punk'n")
+	}
+	if test.orgID != "biz" {
+		t.Errorf("*CriblTerraformHook finalCtx.Method returned %s, expected %s", test.orgID, "biz")
+	}
+}
+
 func TestTerraformBeforeRequestWithoutBearerToken(t *testing.T) {
 	os.Setenv("CRIBL_CLIENT_ID", "foo")
 	os.Setenv("CRIBL_CLIENT_SECRET", "bar")
@@ -174,6 +302,56 @@ func TestTerraformBeforeRequestWithoutBearerToken(t *testing.T) {
 		t.Errorf("*getBearerToken output.Token returned %s, expected %s", fmt.Sprintf("%s", outReq.Header), "map[Authorization:[Bearer my-access-token]]")
 	}
 }
+
+func TestTerraformBeforeRequestWithoutBearerTokenMultiUse(t *testing.T) {
+	os.Setenv("CRIBL_CLIENT_ID", "foo")
+	os.Setenv("CRIBL_CLIENT_SECRET", "bar")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "biz")
+	os.Setenv("CRIBL_WORKSPACE_ID", "punk'n")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	// generate a test server so we can capture and inspect the request
+	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/oauth/token" {
+			res.Write([]byte(`{"access_token":"my-access-token","expires_in":300}`))
+			res.WriteHeader(200)
+		}
+	}))
+	defer func() { testServer.Close() }()
+
+	var beforeCtx BeforeRequestContext
+	myClient := MockHTTPClient{}
+	myUrl := testServer.URL
+	myReq, err := http.NewRequest("POST", myUrl, nil)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	ctx, cancel := context.WithTimeout(myReq.Context(), 10*time.Millisecond)
+	defer cancel()
+	beforeCtx.Context = ctx
+
+	test := NewCriblTerraformHook()
+	_, _ = test.SDKInit(myUrl, myClient)
+	outReq, err := test.BeforeRequest(beforeCtx, myReq)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	if fmt.Sprintf("%s", outReq.Header) != "map[Authorization:[Bearer my-access-token]]" {
+		t.Errorf("*getBearerToken output.Token returned %s, expected %s", fmt.Sprintf("%s", outReq.Header), "map[Authorization:[Bearer my-access-token]]")
+	}
+
+	finalReq, err := test.BeforeRequest(beforeCtx, myReq)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	if fmt.Sprintf("%s", finalReq.Header) != "map[Authorization:[Bearer my-access-token]]" {
+		t.Errorf("*getBearerToken output.Token returned %s, expected %s", fmt.Sprintf("%s", finalReq.Header), "map[Authorization:[Bearer my-access-token]]")
+	}
+}
+
 
 func TestTerraformGetBearerToken(t *testing.T) {
 	os.Setenv("CRIBL_CLIENT_ID", "foo")
@@ -258,3 +436,49 @@ func TestTerraformAfterError(t *testing.T) {
 		t.Errorf("test.AfterError returned unexpected error, got '%s', expected '%s'", err.Error(), expectedErrorString)
 	}
 }
+
+func TestTerraformAfterErrorMultiUse(t *testing.T) {
+	os.Setenv("CRIBL_CLIENT_ID", "foo")
+	os.Setenv("CRIBL_CLIENT_SECRET", "bar")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "biz")
+	os.Setenv("CRIBL_WORKSPACE_ID", "punk'n")
+
+	// generate a test server so we can capture and inspect the request
+	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/oauth/token" {
+			res.Write([]byte(`{"access_token":"my-access-token","expires_in":300}`))
+			res.WriteHeader(200)
+		}
+	}))
+	defer func() { testServer.Close() }()
+
+	var hookCtx HookContext
+	localCtx := context.TODO()
+	ctx, cancel := context.WithTimeout(localCtx, 10*time.Millisecond)
+	defer cancel()
+
+	hookCtx.BaseURL = testServer.URL
+	hookCtx.Context = ctx
+
+	afterCtx := AfterErrorContext{HookContext: hookCtx}
+	myClient := MockHTTPClient{}
+	myUrl := testServer.URL
+	test := NewCriblTerraformHook()
+	_, _ = test.SDKInit(myUrl, myClient)
+
+
+	test = NewCriblTerraformHook()
+	_, _ = test.SDKInit(myUrl, myClient)
+
+	myResp := http.Response{StatusCode: http.StatusUnauthorized}
+	_, err := test.AfterError(afterCtx, &myResp, errors.New("Testing error for AfterError"))
+	if err == nil {
+		t.Errorf("Expected error was not returned from test.AfterError")
+	}
+
+	expectedErrorString := "authentication handled by custom hook"
+	if err.Error() != expectedErrorString {
+		t.Errorf("test.AfterError returned unexpected error, got '%s', expected '%s'", err.Error(), expectedErrorString)
+	}
+}
+

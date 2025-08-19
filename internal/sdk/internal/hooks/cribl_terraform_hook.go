@@ -154,7 +154,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	path := strings.TrimLeft(req.URL.Path, "/")
 
 	// If we have org and workspace IDs from security context or config, use them
-	if orgID != "" && workspaceID != "" {
+	if orgID != "" && workspaceID != "" && ! strings.Contains(req.URL.String(), "app/api/v1") {
 		newURL := fmt.Sprintf("%s/organizations/%s/workspaces/%s/app/api/v1/%s",
 			serverURL,
 			orgID,
