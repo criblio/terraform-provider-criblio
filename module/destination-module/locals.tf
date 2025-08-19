@@ -12,10 +12,6 @@ locals {
     dest_path               = var.dest_path
     format                  = var.format
     compress                = var.compress
-    add_id_to_stage_path    = true
-    aws_authentication_method = "auto"
-    base_file_name          = "CriblOut"
-    file_name_suffix        = var.format == "json" ? "'.json.gz'" : "'.gz'"
     max_file_size_mb        = 32
     max_open_files          = 100
     write_high_water_mark   = 64

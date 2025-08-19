@@ -32,10 +32,6 @@ resource "criblio_destination" "cribl_lake" {
     dest_path   = "default_logs"
     format      = "json"
     compress    = "gzip"
-    add_id_to_stage_path = true
-    aws_authentication_method = "auto"
-    base_file_name = "CriblOut"
-    file_name_suffix = "'.gz'"
     max_file_size_mb = 32
     max_open_files = 100
     write_high_water_mark = 64
