@@ -5,7 +5,7 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
   bucket_name              = "lake-${var.workspace}-${var.cloud_tenant}"
   format                   = "json"
   retention_period_in_days = 30
-  
+
   search_config = {
     datatypes = [
       # Add your datatypes here if needed
@@ -20,33 +20,33 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
 }
 
 resource "criblio_destination" "cribl_lake" {
-  id       = "cribl-lake-3"
-#   group_id = criblio_group.syslog_worker_group.id
-    group_id = "default"
+  id = "cribl-lake-3"
+  #   group_id = criblio_group.syslog_worker_group.id
+  group_id = "default"
   output_cribl_lake = {
-    id          = "cribl-lake-3"
-    type        = "cribl_lake"
-    description = "Cribl Lake destination for syslog data"
-    disabled    = false
-    streamtags  = ["syslog", "lake"]
-    dest_path   = "default_logs"
-    format      = "json"
-    compress    = "gzip"
-    max_file_size_mb = 32
-    max_open_files = 100
-    write_high_water_mark = 64
-    on_backpressure = "block"
-    deadletter_enabled = false
-    on_disk_full_backpressure = "block"
-    max_file_open_time_sec = 300
-    max_file_idle_time_sec = 30
-    verify_permissions = true
+    id                                = "cribl-lake-3"
+    type                              = "cribl_lake"
+    description                       = "Cribl Lake destination for syslog data"
+    disabled                          = false
+    streamtags                        = ["syslog", "lake"]
+    dest_path                         = "default_logs"
+    format                            = "json"
+    compress                          = "gzip"
+    max_file_size_mb                  = 32
+    max_open_files                    = 100
+    write_high_water_mark             = 64
+    on_backpressure                   = "block"
+    deadletter_enabled                = false
+    on_disk_full_backpressure         = "block"
+    max_file_open_time_sec            = 300
+    max_file_idle_time_sec            = 30
+    verify_permissions                = true
     max_closing_files_to_backpressure = 100
-    max_concurrent_file_parts = 1
-    empty_dir_cleanup_sec = 300
-    max_retry_num = 20
+    max_concurrent_file_parts         = 1
+    empty_dir_cleanup_sec             = 300
+    max_retry_num                     = 20
   }
-  
+
   lifecycle {
     create_before_destroy = true
   }
@@ -67,15 +67,15 @@ data "criblio_cribl_lake_house" "lakehouse_status" {
 # Add a 10-minute delay before creating the dataset connection
 resource "null_resource" "delay_before_connection" {
   provisioner "local-exec" {
-    command = "sleep 600"  # 600 seconds = 10 minutes
+    command = "sleep 600" # 600 seconds = 10 minutes
   }
-  
+
   depends_on = [data.criblio_cribl_lake_house.lakehouse_status]
 }
 
 resource "criblio_lakehouse_dataset_connection" "my_cribllakehouse_dataset_connection" {
   lake_dataset_id = criblio_cribl_lake_dataset.my_cribllakedataset.id
   lakehouse_id    = criblio_cribl_lake_house.my_cribllakehouse.id
-  
+
   depends_on = [null_resource.delay_before_connection]
 }

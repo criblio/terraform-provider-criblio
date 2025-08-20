@@ -30,7 +30,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          style = false
+          style           = false
           apply_threshold = false
           color_thresholds = {
             thresholds = [
@@ -51,25 +51,25 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           color_palette = 0
           data = {
             connect_nulls = "Leave gaps"
-            stack        = false
+            stack         = false
           }
           x_axis = {
             label_orientation = 0
-            position        = "Bottom"
+            position          = "Bottom"
           }
           y_axis = {
-            position  = "Left"
-            scale     = "Linear"
+            position   = "Left"
+            scale      = "Linear"
             split_line = true
           }
           legend = {
-            position  = "Right"
-            truncate  = true
+            position = "Right"
+            truncate = true
           }
-          series = []
-          color   = "#0091eb"
-          decimals = 0
-          label   = " The answer to life, the universe, and everything"
+          series    = []
+          color     = "#0091eb"
+          decimals  = 0
+          label     = " The answer to life, the universe, and everything"
           timestats = false
         }
       }
@@ -98,11 +98,11 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette = 0
+          color_palette          = 0
           color_palette_reversed = false
           custom_data = {
             summarize_others = false
-            series_count    = 1
+            series_count     = 1
           }
           legend = {
             position = "Right"
@@ -113,15 +113,15 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
           data = {
             connect_nulls = "Leave gaps"
-            stack        = false
+            stack         = false
           }
           x_axis = {
             label_orientation = 0
-            position        = "Bottom"
+            position          = "Bottom"
           }
           y_axis = {
-            position  = "Left"
-            scale     = "Linear"
+            position   = "Left"
+            scale      = "Linear"
             split_line = true
           }
           series = [
@@ -182,15 +182,15 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           color_palette = 10
           data = {
             connect_nulls = "Leave gaps"
-            stack        = false
+            stack         = false
           }
           x_axis = {
             label_orientation = 0
-            position        = "Bottom"
+            position          = "Bottom"
           }
           y_axis = {
-            position  = "Left"
-            scale     = "Linear"
+            position   = "Left"
+            scale      = "Linear"
             split_line = true
           }
           timestats = false
@@ -221,21 +221,21 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette = 0
+          color_palette          = 0
           color_palette_reversed = false
           custom_data = {
-            trellis = false
+            trellis       = false
             connect_nulls = "Leave gaps"
-            stack        = false
-            series_count = 2
+            stack         = false
+            series_count  = 2
           }
           x_axis = {
             label_orientation = 0
-            position        = "Bottom"
+            position          = "Bottom"
           }
           y_axis = {
-            position  = "Left"
-            scale     = "Linear"
+            position   = "Left"
+            scale      = "Linear"
             split_line = true
           }
           legend = {
@@ -247,7 +247,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
           data = {
             connect_nulls = "Leave gaps"
-            stack        = false
+            stack         = false
           }
           timestats = true
         }
@@ -277,21 +277,21 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette = 1
+          color_palette          = 1
           color_palette_reversed = false
           custom_data = {
-            trellis = false
+            trellis       = false
             connect_nulls = "Leave gaps"
-            stack        = false
-            series_count = 1
+            stack         = false
+            series_count  = 1
           }
           x_axis = {
             label_orientation = 0
-            position        = "Bottom"
+            position          = "Bottom"
           }
           y_axis = {
-            position  = "Left"
-            scale     = "Linear"
+            position   = "Left"
+            scale      = "Linear"
             split_line = true
           }
           legend = {
@@ -303,7 +303,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
           data = {
             connect_nulls = "Leave gaps"
-            stack        = false
+            stack         = false
           }
           timestats = true
           series = [
@@ -340,11 +340,11 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette = 9
+          color_palette          = 9
           color_palette_reversed = false
           custom_data = {
             summarize_others = false
-            series_count    = 1
+            series_count     = 1
           }
           legend = {
             position = "None"
@@ -355,15 +355,15 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
           data = {
             connect_nulls = "Leave gaps"
-            stack        = false
+            stack         = false
           }
           x_axis = {
             label_orientation = 0
-            position        = "Bottom"
+            position          = "Bottom"
           }
           y_axis = {
-            position  = "Left"
-            scale     = "Linear"
+            position   = "Left"
+            scale      = "Linear"
             split_line = true
           }
           series = [
@@ -401,21 +401,21 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette = 12
+          color_palette          = 12
           color_palette_reversed = false
           custom_data = {
-            trellis = false
+            trellis       = false
             connect_nulls = "Leave gaps"
-            stack        = false
-            series_count = 2
+            stack         = false
+            series_count  = 2
           }
           x_axis = {
             label_orientation = 0
-            position        = "Bottom"
+            position          = "Bottom"
           }
           y_axis = {
-            position  = "Left"
-            scale     = "Linear"
+            position   = "Left"
+            scale      = "Linear"
             split_line = true
           }
           legend = {
@@ -427,7 +427,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
           data = {
             connect_nulls = "Leave gaps"
-            stack        = false
+            stack         = false
           }
           timestats = true
           series = [
@@ -475,15 +475,15 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           color_palette = 0
           data = {
             connect_nulls = "Leave gaps"
-            stack        = false
+            stack         = false
           }
           x_axis = {
             label_orientation = 0
-            position        = "Bottom"
+            position          = "Bottom"
           }
           y_axis = {
-            position  = "Left"
-            scale     = "Linear"
+            position   = "Left"
+            scale      = "Linear"
             split_line = true
           }
           legend = {

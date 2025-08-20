@@ -31,7 +31,7 @@ variable "environment" {
   description = "Environment (production, staging)"
   type        = string
   default     = "production"
-  
+
   validation {
     condition     = contains(["production", "staging"], var.environment)
     error_message = "Environment must be either 'production' or 'staging'."
@@ -67,7 +67,7 @@ variable "cribl_client_id" {
   description = "Cribl OAuth2 client ID"
   type        = string
   sensitive   = true
-  default = "byebyebye"
+  default     = "byebyebye"
   # No default - must be provided
 }
 
@@ -75,7 +75,7 @@ variable "cribl_client_secret" {
   description = "Cribl OAuth2 client secret"
   type        = string
   sensitive   = true
-  default = "youcandancehavingthetimeofyourlife"
+  default     = "youcandancehavingthetimeofyourlife"
   # No default - must be provided
 }
 

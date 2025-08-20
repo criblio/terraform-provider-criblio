@@ -1,5 +1,5 @@
 resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
-  bucket_name = "lake-tfprovider-beautiful-nguyen-y8y4azd"
+  bucket_name              = "lake-tfprovider-beautiful-nguyen-y8y4azd"
   description              = "my_description"
   format                   = "json"
   id                       = "my_lake_dataset_with_lakehouse_11"
@@ -32,14 +32,14 @@ resource "criblio_cribl_lake_house" "my_cribllakehouse" {
 # Add a 15-minute delay before creating the dataset connection, this is to ensure the lakehouse is ready
 resource "null_resource" "delay_before_connection" {
   provisioner "local-exec" {
-    command = "sleep 900"  # 900 seconds = 15 minutes
+    command = "sleep 900" # 900 seconds = 15 minutes
   }
 }
 
 resource "criblio_lakehouse_dataset_connection" "my_cribllakehouse_dataset_connection" {
   lake_dataset_id = criblio_cribl_lake_dataset.my_cribllakedataset.id
   lakehouse_id    = criblio_cribl_lake_house.my_cribllakehouse.id
-  
+
   depends_on = [null_resource.delay_before_connection]
 }
 

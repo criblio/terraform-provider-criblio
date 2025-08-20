@@ -22,9 +22,9 @@ resource "criblio_search_dataset" "my_s3_dataset" {
         "test"
       ]
     }
-    path                   = "logs/*.log"
-    provider_id            = "S3"
-    region                 = "us-east-1"
+    path        = "logs/*.log"
+    provider_id = "S3"
+    region      = "us-east-1"
     storage_classes = [
       "STANDARD"
     ]

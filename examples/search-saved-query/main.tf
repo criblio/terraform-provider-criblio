@@ -11,7 +11,7 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
     keep_last_n   = 2
     notifications = {
       disabled = false
-      items = []
+      items    = []
     }
   }
 }
@@ -39,18 +39,18 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
 }
 
 resource "criblio_notification" "my_notification" {
-  id       = "test_notification"
+  id        = "test_notification"
   condition = "search"
   conf = {
-    trigger_type        = "resultsCount"
-    trigger_comparator  = ">"
-    trigger_count       = 10
-    saved_query_id      = criblio_search_saved_query.my_searchsavedquery_with_notifications.id
-    message             = "Date: {{timestamp}}\n\nA notification was triggered for the scheduled search: {{searchId}},\nTenant ID: {{tenantId}}\nSearch ID: {{savedQueryId}}.\nNotification: {{notificationId}}"
+    trigger_type       = "resultsCount"
+    trigger_comparator = ">"
+    trigger_count      = 10
+    saved_query_id     = criblio_search_saved_query.my_searchsavedquery_with_notifications.id
+    message            = "Date: {{timestamp}}\n\nA notification was triggered for the scheduled search: {{searchId}},\nTenant ID: {{tenantId}}\nSearch ID: {{savedQueryId}}.\nNotification: {{notificationId}}"
   }
   disabled = false
   group    = "default_search"
-  targets = [criblio_notification_target.my_notificationtarget.id]
+  targets  = [criblio_notification_target.my_notificationtarget.id]
   depends_on = [
     criblio_notification_target.my_notificationtarget
   ]

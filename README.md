@@ -284,6 +284,9 @@ provider_installation {
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+Make sure hooks run on your local!
+```git config core.hooksPath .githooks```
+
 ## License
 
 This project is licensed under the terms of the license included in the repository.

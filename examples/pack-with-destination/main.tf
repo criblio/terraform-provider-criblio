@@ -9,9 +9,9 @@ resource "criblio_pack" "my_pack" {
 }
 
 resource "criblio_pack_destination" "my_packdest" {
-  pack = criblio_pack.my_pack.id
+  pack     = criblio_pack.my_pack.id
   group_id = "default"
-  id = "my_id"
+  id       = "my_id"
   output_devnull = {
     environment = "my_environment"
     id          = "my_id"

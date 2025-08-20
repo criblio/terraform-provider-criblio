@@ -32,14 +32,14 @@ resource "local_file" "bootstrap_script" {
   count    = var.create_script_file ? 1 : 0
   filename = "${path.root}/${var.script_filename}"
   content  = local.bootstrap_script
-  
+
   file_permission = "0755"
 }
 
 # Execute the script to get the token
 resource "null_resource" "get_bootstrap_token" {
   count = var.auto_execute ? 1 : 0
-  
+
   # Trigger re-execution when inputs change
   triggers = {
     client_id         = var.client_id
@@ -48,7 +48,7 @@ resource "null_resource" "get_bootstrap_token" {
     workspace         = var.workspace
     group             = var.group
     environment       = var.environment
-    token_output_file = var.token_output_file  # Store for destroy provisioner
+    token_output_file = var.token_output_file # Store for destroy provisioner
   }
 
   provisioner "local-exec" {

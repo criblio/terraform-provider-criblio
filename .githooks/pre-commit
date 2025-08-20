@@ -1,0 +1,6 @@
+#!/bin/bash
+
+find . -type f -name *.tf -exec terraform fmt {} \;
+find . -type f -name *.tf -exec git add {} \;
+find . -type f -name *.go -exec go fmt {} \;
+find . -type f -name *.go -exec git add {} \;

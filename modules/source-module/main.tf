@@ -1,7 +1,7 @@
 resource "criblio_source" "this" {
   id       = var.source_id
   group_id = var.group_id
-  
+
   # Syslog
   input_syslog = var.source_type == "syslog" ? {
     input_syslog_syslog1 = merge(
@@ -22,7 +22,7 @@ resource "criblio_source" "this" {
       var.custom_config
     )
   } : null
-  
+
   # Cribl HTTP
   input_cribl_http = var.source_type == "cribl_http" ? merge(
     {
@@ -51,16 +51,16 @@ resource "criblio_source" "this" {
     var.pipeline != null ? { pipeline = var.pipeline } : {},
     var.custom_config
   ) : null
-  
+
   # Regular HTTP
   input_http = var.source_type == "http" ? local.http_source_config : null
-  
+
   # Regular TCP  
   input_tcp = var.source_type == "tcp" ? local.tcp_source_config : null
-  
+
   # Cribl TCP
   input_cribl_tcp = var.source_type == "cribl_tcp" ? local.tcp_config : null
-  
+
   # OpenTelemetry
   input_open_telemetry = var.source_type == "otlp" ? local.otlp_config : null
 }

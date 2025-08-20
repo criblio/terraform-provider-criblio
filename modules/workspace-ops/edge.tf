@@ -35,14 +35,14 @@ resource "criblio_group" "edge_worker_group" {
   provisioned           = true
   worker_remote_access  = true
   estimated_ingest_rate = var.estimated_ingest_rate
-  
+
   streamtags = ["edge", "terraform", "distributed"]
 }
 
 # Start Docker containers after group creation
 resource "null_resource" "start_edge_docker" {
   depends_on = [local_file.edge_docker_compose]
-  
+
   provisioner "local-exec" {
     command = <<-EOT
       echo "Starting Edge Docker containers..."
@@ -53,7 +53,7 @@ resource "null_resource" "start_edge_docker" {
       echo "Edge nodes should now be connected"
     EOT
   }
-  
+
   triggers = {
     docker_compose = local_file.edge_docker_compose.content
   }
@@ -62,7 +62,7 @@ resource "null_resource" "start_edge_docker" {
 # Add delay resource to ensure nodes are connected
 resource "time_sleep" "wait_for_edge_nodes" {
   depends_on = [null_resource.start_edge_docker]
-  
+
   create_duration = "30s"
 }
 
@@ -74,7 +74,7 @@ resource "time_sleep" "wait_for_edge_nodes" {
 resource "criblio_pipeline" "edge_main_pipeline" {
   id       = "edge-main-processing"
   group_id = var.edge_group
-  
+
   conf = {
     description = "Main Edge fleet data processing pipeline"
     functions = [
@@ -107,7 +107,7 @@ resource "criblio_pipeline" "edge_main_pipeline" {
     # output = "devnull"
     # streamtags = ["edge", "processed"]
   }
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
@@ -115,7 +115,7 @@ resource "criblio_pipeline" "edge_main_pipeline" {
 # resource "criblio_pipeline" "edge_syslog_pipeline" {
 #   id       = "edge-syslog-processing"
 #   group_id = var.edge_group
-  
+
 #   conf = {
 #     description = "Edge syslog data processing"
 #     functions = [
@@ -144,7 +144,7 @@ resource "criblio_pipeline" "edge_main_pipeline" {
 #     ]
 #     output = "devnull"
 #   }
-  
+
 #   depends_on = [time_sleep.wait_for_edge_nodes]
 # }
 
@@ -157,7 +157,7 @@ resource "criblio_pipeline" "edge_main_pipeline" {
 data "criblio_source" "edge_file_monitor" {
   id       = "in_file_varlog"
   group_id = var.edge_group
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
@@ -165,7 +165,7 @@ data "criblio_source" "edge_file_monitor" {
 data "criblio_source" "edge_journal" {
   id       = "in_journal_local"
   group_id = var.edge_group
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
@@ -173,7 +173,7 @@ data "criblio_source" "edge_journal" {
 data "criblio_source" "edge_system_metrics" {
   id       = "in_system_metrics"
   group_id = var.edge_group
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
@@ -181,7 +181,7 @@ data "criblio_source" "edge_system_metrics" {
 data "criblio_source" "edge_system_state" {
   id       = "in_system_state"
   group_id = var.edge_group
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
@@ -189,7 +189,7 @@ data "criblio_source" "edge_system_state" {
 data "criblio_source" "edge_kube_events" {
   id       = "in_kube_events"
   group_id = var.edge_group
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
@@ -197,7 +197,7 @@ data "criblio_source" "edge_kube_events" {
 data "criblio_source" "edge_kube_logs" {
   id       = "in_kube_logs"
   group_id = var.edge_group
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
@@ -205,28 +205,28 @@ data "criblio_source" "edge_kube_logs" {
 data "criblio_source" "edge_kube_metrics" {
   id       = "in_kube_metrics"
   group_id = var.edge_group
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
 # Syslog source
 module "edge_syslog_source" {
   source = "../source-module"
-  
+
   source_id   = "edge-syslog"
   group_id    = var.edge_group
   source_type = "syslog"
-  port        = 515  # Non-default port as required by module
+  port        = 515 # Non-default port as required by module
   description = "Edge fleet syslog receiver"
-  
+
   custom_config = {
-    udpPort       = 515
-    tcpPort       = 10515
-    mode          = "manual"
-    facility      = 16
-    timezone      = "UTC"
+    udpPort           = 515
+    tcpPort           = 10515
+    mode              = "manual"
+    facility          = 16
+    timezone          = "UTC"
     enableProxyHeader = false
-    maxActiveConns = 1000
+    maxActiveConns    = 1000
 
     pipelines = ["edge-syslog-processing"]
   }
@@ -241,20 +241,20 @@ module "edge_syslog_source" {
     }
   ]
   streamtags = ["syslog", "edge"]
-  
+
   # depends_on = [criblio_pipeline.edge_syslog_pipeline]
 }
 
 # HTTP source for metrics and events
 module "edge_http_source" {
   source = "../source-module"
-  
+
   source_id   = "edge-http"
   group_id    = var.edge_group
   source_type = "http"
-  port        = 8088  # Non-default port
+  port        = 8088 # Non-default port
   description = "Edge HTTP receiver for metrics and events"
-  
+
   custom_config = {
     tls = {
       disabled = true
@@ -270,7 +270,7 @@ module "edge_http_source" {
     }
     pipelines = ["edge-main-processing"]
   }
-  
+
   connections = [
     {
       output   = module.edge_cribl_http_dest.destination_id
@@ -278,26 +278,26 @@ module "edge_http_source" {
     }
   ]
   streamtags = ["http", "edge"]
-  
+
   depends_on = [criblio_pipeline.edge_main_pipeline]
 }
 
 # TCP source for metrics
 module "edge_tcp_source" {
   source = "../source-module"
-  
+
   source_id   = "edge-metrics"
   group_id    = var.edge_group
   source_type = "tcp"
-  port        = 8125  # StatsD port
+  port        = 8125 # StatsD port
   description = "Edge metrics receiver"
-  
+
   custom_config = {
-    mode       = "server"
-    protocol   = "tcp"
-    pipelines  = ["edge-main-processing"]
+    mode      = "server"
+    protocol  = "tcp"
+    pipelines = ["edge-main-processing"]
   }
-  
+
   connections = [
     {
       output   = module.edge_cribl_http_dest.destination_id
@@ -305,7 +305,7 @@ module "edge_tcp_source" {
     }
   ]
   streamtags = ["metrics", "edge"]
-  
+
   depends_on = [criblio_pipeline.edge_main_pipeline]
 }
 
@@ -316,46 +316,46 @@ module "edge_tcp_source" {
 # S3 destination for archival
 module "edge_s3_dest" {
   source = "../destination-module"
-  
+
   destination_id   = "edge-s3-archive"
   group_id         = var.edge_group
   destination_type = "s3"
   description      = "Edge data S3 archive"
-  
+
   dest_path = "edge-fleet"
   format    = "json"
   compress  = "gzip"
-  
+
   custom_config = {
-    bucket              = "cribl-edge-data-${var.cloud_tenant}"
-    region              = var.cloud_region
-    destPath            = "'edge-fleet/' + C.Time.strftime(_time, '%Y/%m/%d/%H')"
-    objectACL           = "bucket-owner-full-control"
-    storageClass        = "STANDARD_IA"
+    bucket               = "cribl-edge-data-${var.cloud_tenant}"
+    region               = var.cloud_region
+    destPath             = "'edge-fleet/' + C.Time.strftime(_time, '%Y/%m/%d/%H')"
+    objectACL            = "bucket-owner-full-control"
+    storageClass         = "STANDARD_IA"
     serverSideEncryption = "aws:kms"
-    partitionExpr       = "`$${edge_fleet}/$${C.Time.strftime(_time, '%Y/%m/%d')}`"
-    maxFileSizeMB       = 128
-    maxOpenFiles        = 10
-    maxFileIdleTime     = "30s"
-    onBackpressure      = "block"
+    partitionExpr        = "`$${edge_fleet}/$${C.Time.strftime(_time, '%Y/%m/%d')}`"
+    maxFileSizeMB        = 128
+    maxOpenFiles         = 10
+    maxFileIdleTime      = "30s"
+    onBackpressure       = "block"
   }
-  
+
   streamtags = ["archive", "s3"]
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
 # Cribl HTTP destination
 module "edge_cribl_http_dest" {
   source = "../destination-module"
-  
+
   destination_id   = "edge-cribl-http"
   group_id         = var.edge_group
   destination_type = "cribl_http"
   description      = "Edge Cribl HTTP forwarder"
-  
+
   custom_config = {
-    host               = "https://${var.group-cloud}.${var.workspace}-${var.cloud_tenant}.cribl.cloud:10200"  # Adjust to your Cribl Stream host
+    host               = "https://${var.group-cloud}.${var.workspace}-${var.cloud_tenant}.cribl.cloud:10200" # Adjust to your Cribl Stream host
     port               = 10200
     authType           = "none"
     compress           = true
@@ -366,9 +366,9 @@ module "edge_cribl_http_dest" {
     flushPeriodSec     = 1
     url                = "https://${var.workspace}-${var.cloud_tenant}.cribl.cloud:10200"
   }
-  
+
   streamtags = ["cribl", "edge"]
-  
+
   depends_on = [time_sleep.wait_for_edge_nodes]
 }
 
@@ -412,7 +412,7 @@ resource "criblio_commit" "edge_group_commit" {
   effective = true
   group     = var.edge_group
   message   = "Edge group complete TF setup with pipelines - ${timestamp()}"
-  
+
   depends_on = [
     criblio_group.edge_worker_group,
     criblio_pipeline.edge_main_pipeline,
@@ -432,7 +432,7 @@ resource "criblio_commit" "edge_group_commit" {
 # Use the bootstrap token module to get the token
 module "edge_bootstrap_token" {
   source = "../cribl-bootstrap-token-module"
-  
+
   client_id     = var.cribl_client_id
   client_secret = var.cribl_client_secret
   organization  = var.cloud_tenant
@@ -440,18 +440,18 @@ module "edge_bootstrap_token" {
   workspace_url = "https://${var.workspace}-${var.cloud_tenant}.cribl.cloud"
   environment   = var.environment
   group         = var.edge_group
-  
+
   # Auto-execute to get the token
   auto_execute       = true
   create_script_file = false
   token_output_file  = "${path.module}/.edge-bootstrap-token"
-  
+
   depends_on = [criblio_group.edge_worker_group]
 }
 
 locals {
   edge_bootstrap_token = module.edge_bootstrap_token.bootstrap_token
-  edge_master_url = "tls://${local.edge_bootstrap_token}@${var.workspace}-${var.cloud_tenant}.cribl.cloud:4200?group=${var.edge_group}&tls.rejectUnauthorized=false"
+  edge_master_url      = "tls://${local.edge_bootstrap_token}@${var.workspace}-${var.cloud_tenant}.cribl.cloud:4200?group=${var.edge_group}&tls.rejectUnauthorized=false"
 }
 
 ################################
@@ -463,7 +463,7 @@ resource "local_file" "edge_docker_compose" {
   filename = "${path.module}/edge-docker-compose.yml"
   content  = <<-EOT
 services:
-%{ for i in range(1, var.edge_instance_count + 1) ~}
+%{for i in range(1, var.edge_instance_count + 1)~}
   edge-node-${i}:
     image: cribl/cribl:${var.cribl_version}
     container_name: edge-fleet-tf-node-${i}
@@ -489,18 +489,18 @@ services:
         max-size: "10m"
         max-file: "3"
 
-%{ endfor ~}
+%{endfor~}
 networks:
   cribl-edge:
     driver: bridge
 
 volumes:
-%{ for i in range(1, var.edge_instance_count + 1) ~}
+%{for i in range(1, var.edge_instance_count + 1)~}
   edge-node-${i}-config:
   edge-node-${i}-data:
-%{ endfor ~}
+%{endfor~}
 EOT
-  
+
   depends_on = [module.edge_bootstrap_token]
 }
 
@@ -543,14 +543,14 @@ docker-compose -f edge-docker-compose.yml ps
 echo ""
 echo "Edge Fleet deployed successfully!"
 echo "Access the Edge nodes at:"
-%{ for i in range(1, var.edge_instance_count + 1) ~}
+%{for i in range(1, var.edge_instance_count + 1)~}
 echo "  Node ${i}: http://localhost:${9000 + i}"
-%{ endfor ~}
+%{endfor~}
 echo ""
 echo "Monitor in Cribl Cloud:"
 echo "  https://${var.workspace}-${var.cloud_tenant}.cribl.cloud/?group=${var.edge_group}"
 EOT
-  
+
   depends_on = [local_file.edge_docker_compose]
 }
 
@@ -637,16 +637,16 @@ output "edge_system_state_all_attributes" {
 # Output all Edge sources as a map for easier reference
 output "edge_sources_map" {
   value = {
-    file_monitor    = data.criblio_source.edge_file_monitor.id
-    journal         = data.criblio_source.edge_journal.id
-    system_metrics  = data.criblio_source.edge_system_metrics.id
-    system_state    = data.criblio_source.edge_system_state.id
+    file_monitor   = data.criblio_source.edge_file_monitor.id
+    journal        = data.criblio_source.edge_journal.id
+    system_metrics = data.criblio_source.edge_system_metrics.id
+    system_state   = data.criblio_source.edge_system_state.id
     # kube_events     = data.criblio_source.edge_kube_events.id
     # kube_logs       = data.criblio_source.edge_kube_logs.id
     # kube_metrics    = data.criblio_source.edge_kube_metrics.id
-    syslog_custom   = module.edge_syslog_source.source_id
-    http_custom     = module.edge_http_source.source_id
-    tcp_custom      = module.edge_tcp_source.source_id
+    syslog_custom = module.edge_syslog_source.source_id
+    http_custom   = module.edge_http_source.source_id
+    tcp_custom    = module.edge_tcp_source.source_id
   }
   description = "Map of all Edge source IDs for easy reference"
 }
@@ -654,14 +654,14 @@ output "edge_sources_map" {
 # Output destinations for reference
 output "edge_destinations_map" {
   value = {
-    s3_archive   = module.edge_s3_dest.destination_id
-    cribl_http   = module.edge_cribl_http_dest.destination_id
+    s3_archive = module.edge_s3_dest.destination_id
+    cribl_http = module.edge_cribl_http_dest.destination_id
   }
   description = "Map of all Edge destination IDs for easy reference"
 }
 
 output "edge_deployment_instructions" {
-  value = <<-EOT
+  value       = <<-EOT
     ========================================
     Edge Fleet Setup Complete!
     ========================================

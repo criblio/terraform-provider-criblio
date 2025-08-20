@@ -14,11 +14,11 @@ variable "source_type" {
   validation {
     condition = contains([
       "syslog",
-      "cribl_http",    # Cribl HTTP receiver
-      "cribl_tcp",     # Cribl TCP receiver  
-      "http",          # Regular HTTP source
-      "tcp",           # Regular TCP source
-      "otlp",          # OpenTelemetry
+      "cribl_http", # Cribl HTTP receiver
+      "cribl_tcp",  # Cribl TCP receiver  
+      "http",       # Regular HTTP source
+      "tcp",        # Regular TCP source
+      "otlp",       # OpenTelemetry
       # Add more as needed
     ], var.source_type)
     error_message = "Invalid source type. Must be one of: syslog, cribl_http, cribl_tcp, http, tcp, otlp"
@@ -31,11 +31,11 @@ variable "port" {
   validation {
     condition = (
       var.port != 10200 && # cribl_http default
-      var.port != 9514  && # syslog default
+      var.port != 9514 &&  # syslog default
       var.port != 10001 && # cribl_tcp default
       var.port != 10080 && # http default (assumed)
       var.port != 10060 && # tcp default (assumed)
-      var.port != 4317  && # OTLP gRPC default
+      var.port != 4317 &&  # OTLP gRPC default
       var.port != 4318     # OTLP HTTP default
     )
     error_message = "Port cannot be a default port. Please choose a different port."
