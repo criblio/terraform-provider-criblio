@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetDataSampleContentByIDServerCloud        string = "cloud"
+	GetDataSampleContentByIDServerCloudGroup   string = "cloud-group"
+	GetDataSampleContentByIDServerManagedGroup string = "managed-group"
+)
+
+var GetDataSampleContentByIDServerList = map[string]string{
+	GetDataSampleContentByIDServerCloud:        "https://app.cribl.cloud",
+	GetDataSampleContentByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetDataSampleContentByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetDataSampleContentByIDRequest struct {
 	// Sample ID
 	ID string `pathParam:"style=simple,explode=false,name=id"`

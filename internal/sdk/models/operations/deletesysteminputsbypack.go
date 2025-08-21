@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteSystemInputsByPackServerCloud        string = "cloud"
+	DeleteSystemInputsByPackServerCloudGroup   string = "cloud-group"
+	DeleteSystemInputsByPackServerManagedGroup string = "managed-group"
+)
+
+var DeleteSystemInputsByPackServerList = map[string]string{
+	DeleteSystemInputsByPackServerCloud:        "https://app.cribl.cloud",
+	DeleteSystemInputsByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteSystemInputsByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteSystemInputsByPackRequest struct {
 	// pack ID to DELETE
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSavedJobServerCloud        string = "cloud"
+	CreateSavedJobServerCloudGroup   string = "cloud-group"
+	CreateSavedJobServerManagedGroup string = "managed-group"
+)
+
+var CreateSavedJobServerList = map[string]string{
+	CreateSavedJobServerCloud:        "https://app.cribl.cloud",
+	CreateSavedJobServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSavedJobServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSavedJobResponseBody - a list of SavedJob objects
 type CreateSavedJobResponseBody struct {
 	Items []shared.SavedJob `json:"items,omitempty"`

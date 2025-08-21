@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSchemaServerCloud        string = "cloud"
+	CreateSchemaServerCloudGroup   string = "cloud-group"
+	CreateSchemaServerManagedGroup string = "managed-group"
+)
+
+var CreateSchemaServerList = map[string]string{
+	CreateSchemaServerCloud:        "https://app.cribl.cloud",
+	CreateSchemaServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSchemaServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSchemaRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

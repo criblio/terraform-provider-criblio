@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetFeaturesEntryByIDServerCloud        string = "cloud"
+	GetFeaturesEntryByIDServerCloudGroup   string = "cloud-group"
+	GetFeaturesEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var GetFeaturesEntryByIDServerList = map[string]string{
+	GetFeaturesEntryByIDServerCloud:        "https://app.cribl.cloud",
+	GetFeaturesEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetFeaturesEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetFeaturesEntryByIDRequest struct {
 	// Feature id
 	ID string `pathParam:"style=simple,explode=false,name=id"`

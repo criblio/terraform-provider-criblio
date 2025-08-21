@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateVersionSyncServerCloud        string = "cloud"
+	CreateVersionSyncServerCloudGroup   string = "cloud-group"
+	CreateVersionSyncServerManagedGroup string = "managed-group"
+)
+
+var CreateVersionSyncServerList = map[string]string{
+	CreateVersionSyncServerCloud:        "https://app.cribl.cloud",
+	CreateVersionSyncServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateVersionSyncServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateVersionSyncResponseBody - a list of any objects
 type CreateVersionSyncResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListSavedQueryServerCloud        string = "cloud"
+	ListSavedQueryServerCloudGroup   string = "cloud-group"
+	ListSavedQueryServerManagedGroup string = "managed-group"
+)
+
+var ListSavedQueryServerList = map[string]string{
+	ListSavedQueryServerCloud:        "https://app.cribl.cloud",
+	ListSavedQueryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListSavedQueryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListSavedQueryResponseBody - a list of SavedQuery objects
 type ListSavedQueryResponseBody struct {
 	Items []shared.SavedQuery `json:"items,omitempty"`

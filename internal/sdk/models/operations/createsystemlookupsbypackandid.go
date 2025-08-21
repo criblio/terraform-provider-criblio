@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemLookupsByPackAndIDServerCloud        string = "cloud"
+	CreateSystemLookupsByPackAndIDServerCloudGroup   string = "cloud-group"
+	CreateSystemLookupsByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemLookupsByPackAndIDServerList = map[string]string{
+	CreateSystemLookupsByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	CreateSystemLookupsByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemLookupsByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSystemLookupsByPackAndIDRequest struct {
 	// Unique ID to PATCH for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

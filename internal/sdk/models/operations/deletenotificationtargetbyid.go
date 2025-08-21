@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteNotificationTargetByIDServerCloud        string = "cloud"
+	DeleteNotificationTargetByIDServerCloudGroup   string = "cloud-group"
+	DeleteNotificationTargetByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteNotificationTargetByIDServerList = map[string]string{
+	DeleteNotificationTargetByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteNotificationTargetByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteNotificationTargetByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteNotificationTargetByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

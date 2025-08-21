@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateEdgeFileIngestServerCloud        string = "cloud"
+	CreateEdgeFileIngestServerCloudGroup   string = "cloud-group"
+	CreateEdgeFileIngestServerManagedGroup string = "managed-group"
+)
+
+var CreateEdgeFileIngestServerList = map[string]string{
+	CreateEdgeFileIngestServerCloud:        "https://app.cribl.cloud",
+	CreateEdgeFileIngestServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateEdgeFileIngestServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateEdgeFileIngestRequest struct {
 	// Absolute path to file to ingest.
 	FilePath *string `queryParam:"style=form,explode=true,name=filePath"`

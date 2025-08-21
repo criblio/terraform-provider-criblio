@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateBulletinMessageServerCloud        string = "cloud"
+	CreateBulletinMessageServerCloudGroup   string = "cloud-group"
+	CreateBulletinMessageServerManagedGroup string = "managed-group"
+)
+
+var CreateBulletinMessageServerList = map[string]string{
+	CreateBulletinMessageServerCloud:        "https://app.cribl.cloud",
+	CreateBulletinMessageServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateBulletinMessageServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateBulletinMessageResponseBody - a list of BulletinMessage objects
 type CreateBulletinMessageResponseBody struct {
 	Items []shared.BulletinMessage `json:"items,omitempty"`

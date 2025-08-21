@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteSearchMacroByIDServerCloud        string = "cloud"
+	DeleteSearchMacroByIDServerCloudGroup   string = "cloud-group"
+	DeleteSearchMacroByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteSearchMacroByIDServerList = map[string]string{
+	DeleteSearchMacroByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteSearchMacroByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteSearchMacroByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteSearchMacroByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

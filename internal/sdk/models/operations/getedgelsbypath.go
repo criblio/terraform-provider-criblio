@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeLsByPathServerCloud        string = "cloud"
+	GetEdgeLsByPathServerCloudGroup   string = "cloud-group"
+	GetEdgeLsByPathServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeLsByPathServerList = map[string]string{
+	GetEdgeLsByPathServerCloud:        "https://app.cribl.cloud",
+	GetEdgeLsByPathServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeLsByPathServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetEdgeLsByPathRequest struct {
 	// Defaults to empty for the root directory
 	Path string `pathParam:"style=simple,explode=false,name=path"`

@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAuthAuthorizationCodeCallbackServerCloud        string = "cloud"
+	GetAuthAuthorizationCodeCallbackServerCloudGroup   string = "cloud-group"
+	GetAuthAuthorizationCodeCallbackServerManagedGroup string = "managed-group"
+)
+
+var GetAuthAuthorizationCodeCallbackServerList = map[string]string{
+	GetAuthAuthorizationCodeCallbackServerCloud:        "https://app.cribl.cloud",
+	GetAuthAuthorizationCodeCallbackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAuthAuthorizationCodeCallbackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetAuthAuthorizationCodeCallbackRequest struct {
 	// Authorization Code
 	Code  *string `queryParam:"style=form,explode=true,name=code"`

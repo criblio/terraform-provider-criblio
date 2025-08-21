@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteSystemLookupsByPackAndIDServerCloud        string = "cloud"
+	DeleteSystemLookupsByPackAndIDServerCloudGroup   string = "cloud-group"
+	DeleteSystemLookupsByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteSystemLookupsByPackAndIDServerList = map[string]string{
+	DeleteSystemLookupsByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	DeleteSystemLookupsByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteSystemLookupsByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteSystemLookupsByPackAndIDRequest struct {
 	// Unique ID to DELETE for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

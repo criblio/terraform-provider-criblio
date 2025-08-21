@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeEventsQueryServerCloud        string = "cloud"
+	GetEdgeEventsQueryServerCloudGroup   string = "cloud-group"
+	GetEdgeEventsQueryServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeEventsQueryServerList = map[string]string{
+	GetEdgeEventsQueryServerCloud:        "https://app.cribl.cloud",
+	GetEdgeEventsQueryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeEventsQueryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetEdgeEventsQueryRequest struct {
 	// Optional parameter, when provided the files and provided offsets are used to look for events.
 	Files *string `queryParam:"style=form,explode=true,name=Files"`

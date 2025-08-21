@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteIoMetricsEntryByIDServerCloud        string = "cloud"
+	DeleteIoMetricsEntryByIDServerCloudGroup   string = "cloud-group"
+	DeleteIoMetricsEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteIoMetricsEntryByIDServerList = map[string]string{
+	DeleteIoMetricsEntryByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteIoMetricsEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteIoMetricsEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteIoMetricsEntryByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

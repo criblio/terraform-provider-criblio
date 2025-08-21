@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateLookupFileServerCloud        string = "cloud"
+	CreateLookupFileServerCloudGroup   string = "cloud-group"
+	CreateLookupFileServerManagedGroup string = "managed-group"
+)
+
+var CreateLookupFileServerList = map[string]string{
+	CreateLookupFileServerCloud:        "https://app.cribl.cloud",
+	CreateLookupFileServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateLookupFileServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateLookupFileRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListAppscopeLibEntryServerCloud        string = "cloud"
+	ListAppscopeLibEntryServerCloudGroup   string = "cloud-group"
+	ListAppscopeLibEntryServerManagedGroup string = "managed-group"
+)
+
+var ListAppscopeLibEntryServerList = map[string]string{
+	ListAppscopeLibEntryServerCloud:        "https://app.cribl.cloud",
+	ListAppscopeLibEntryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListAppscopeLibEntryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type ListAppscopeLibEntryRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

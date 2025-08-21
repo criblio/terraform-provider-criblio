@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemProjectsVersionCommitByProjectIDServerCloud        string = "cloud"
+	CreateSystemProjectsVersionCommitByProjectIDServerCloudGroup   string = "cloud-group"
+	CreateSystemProjectsVersionCommitByProjectIDServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemProjectsVersionCommitByProjectIDServerList = map[string]string{
+	CreateSystemProjectsVersionCommitByProjectIDServerCloud:        "https://app.cribl.cloud",
+	CreateSystemProjectsVersionCommitByProjectIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemProjectsVersionCommitByProjectIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSystemProjectsVersionCommitByProjectIDRequest struct {
 	// Project Id
 	ProjectID string `pathParam:"style=simple,explode=false,name=projectId"`

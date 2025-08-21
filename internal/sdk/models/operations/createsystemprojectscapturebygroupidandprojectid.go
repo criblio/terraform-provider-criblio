@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemProjectsCaptureByGroupIDAndProjectIDServerCloud        string = "cloud"
+	CreateSystemProjectsCaptureByGroupIDAndProjectIDServerCloudGroup   string = "cloud-group"
+	CreateSystemProjectsCaptureByGroupIDAndProjectIDServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemProjectsCaptureByGroupIDAndProjectIDServerList = map[string]string{
+	CreateSystemProjectsCaptureByGroupIDAndProjectIDServerCloud:        "https://app.cribl.cloud",
+	CreateSystemProjectsCaptureByGroupIDAndProjectIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemProjectsCaptureByGroupIDAndProjectIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest struct {
 	// Group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

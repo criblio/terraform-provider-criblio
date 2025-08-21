@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateDatabaseConnectionConfigByIDServerCloud        string = "cloud"
+	UpdateDatabaseConnectionConfigByIDServerCloudGroup   string = "cloud-group"
+	UpdateDatabaseConnectionConfigByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateDatabaseConnectionConfigByIDServerList = map[string]string{
+	UpdateDatabaseConnectionConfigByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateDatabaseConnectionConfigByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateDatabaseConnectionConfigByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateDatabaseConnectionConfigByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateUserInfoByIDServerCloud        string = "cloud"
+	UpdateUserInfoByIDServerCloudGroup   string = "cloud-group"
+	UpdateUserInfoByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateUserInfoByIDServerList = map[string]string{
+	UpdateUserInfoByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateUserInfoByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateUserInfoByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateUserInfoByIDRequest struct {
 	// User Id
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateCriblLakeDatasetByLakeIDServerCloud        string = "cloud"
+	CreateCriblLakeDatasetByLakeIDServerCloudGroup   string = "cloud-group"
+	CreateCriblLakeDatasetByLakeIDServerManagedGroup string = "managed-group"
+)
+
+var CreateCriblLakeDatasetByLakeIDServerList = map[string]string{
+	CreateCriblLakeDatasetByLakeIDServerCloud:        "https://app.cribl.cloud",
+	CreateCriblLakeDatasetByLakeIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateCriblLakeDatasetByLakeIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateCriblLakeDatasetByLakeIDRequest struct {
 	// lake id that contains the Datasets
 	LakeID string `pathParam:"style=simple,explode=false,name=lakeId"`

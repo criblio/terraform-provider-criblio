@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemSettingsAuthServerCloud        string = "cloud"
+	GetSystemSettingsAuthServerCloudGroup   string = "cloud-group"
+	GetSystemSettingsAuthServerManagedGroup string = "managed-group"
+)
+
+var GetSystemSettingsAuthServerList = map[string]string{
+	GetSystemSettingsAuthServerCloud:        "https://app.cribl.cloud",
+	GetSystemSettingsAuthServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemSettingsAuthServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSystemSettingsAuthResponseBody - a list of AuthConfig objects
 type GetSystemSettingsAuthResponseBody struct {
 	Items []shared.AuthConfig `json:"items,omitempty"`

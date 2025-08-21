@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetGlobalVariableLibVarsByPackServerCloud        string = "cloud"
+	GetGlobalVariableLibVarsByPackServerCloudGroup   string = "cloud-group"
+	GetGlobalVariableLibVarsByPackServerManagedGroup string = "managed-group"
+)
+
+var GetGlobalVariableLibVarsByPackServerList = map[string]string{
+	GetGlobalVariableLibVarsByPackServerCloud:        "https://app.cribl.cloud",
+	GetGlobalVariableLibVarsByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetGlobalVariableLibVarsByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetGlobalVariableLibVarsByPackRequest struct {
 	// Pass "refs" to include references to fields the variable is used in for pack
 	With *string `queryParam:"style=form,explode=true,name=with"`

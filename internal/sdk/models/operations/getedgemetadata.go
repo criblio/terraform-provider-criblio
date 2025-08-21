@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeMetadataServerCloud        string = "cloud"
+	GetEdgeMetadataServerCloudGroup   string = "cloud-group"
+	GetEdgeMetadataServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeMetadataServerList = map[string]string{
+	GetEdgeMetadataServerCloud:        "https://app.cribl.cloud",
+	GetEdgeMetadataServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeMetadataServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetEdgeMetadataResponseBody - a list of Metadata objects
 type GetEdgeMetadataResponseBody struct {
 	Items []shared.Metadata `json:"items,omitempty"`

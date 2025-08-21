@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetHmacFunctionByIDServerCloud        string = "cloud"
+	GetHmacFunctionByIDServerCloudGroup   string = "cloud-group"
+	GetHmacFunctionByIDServerManagedGroup string = "managed-group"
+)
+
+var GetHmacFunctionByIDServerList = map[string]string{
+	GetHmacFunctionByIDServerCloud:        "https://app.cribl.cloud",
+	GetHmacFunctionByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetHmacFunctionByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetHmacFunctionByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

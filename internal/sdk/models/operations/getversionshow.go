@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetVersionShowServerCloud        string = "cloud"
+	GetVersionShowServerCloudGroup   string = "cloud-group"
+	GetVersionShowServerManagedGroup string = "managed-group"
+)
+
+var GetVersionShowServerList = map[string]string{
+	GetVersionShowServerCloud:        "https://app.cribl.cloud",
+	GetVersionShowServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetVersionShowServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetVersionShowRequest struct {
 	// Commit hash (default is HEAD)
 	Commit *string `queryParam:"style=form,explode=true,name=commit"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListCollectorServerCloud        string = "cloud"
+	ListCollectorServerCloudGroup   string = "cloud-group"
+	ListCollectorServerManagedGroup string = "managed-group"
+)
+
+var ListCollectorServerList = map[string]string{
+	ListCollectorServerCloud:        "https://app.cribl.cloud",
+	ListCollectorServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListCollectorServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListCollectorResponseBody - a list of Collector objects
 type ListCollectorResponseBody struct {
 	Items []shared.Collector `json:"items,omitempty"`

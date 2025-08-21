@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemSettingsUpgradeFromPackageServerCloud        string = "cloud"
+	CreateSystemSettingsUpgradeFromPackageServerCloudGroup   string = "cloud-group"
+	CreateSystemSettingsUpgradeFromPackageServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemSettingsUpgradeFromPackageServerList = map[string]string{
+	CreateSystemSettingsUpgradeFromPackageServerCloud:        "https://app.cribl.cloud",
+	CreateSystemSettingsUpgradeFromPackageServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemSettingsUpgradeFromPackageServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSystemSettingsUpgradeFromPackageResponseBody - a list of string objects
 type CreateSystemSettingsUpgradeFromPackageResponseBody struct {
 	Items []string `json:"items,omitempty"`

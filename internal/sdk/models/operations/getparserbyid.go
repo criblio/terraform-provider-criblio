@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetParserByIDServerCloud        string = "cloud"
+	GetParserByIDServerCloudGroup   string = "cloud-group"
+	GetParserByIDServerManagedGroup string = "managed-group"
+)
+
+var GetParserByIDServerList = map[string]string{
+	GetParserByIDServerCloud:        "https://app.cribl.cloud",
+	GetParserByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetParserByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetParserByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

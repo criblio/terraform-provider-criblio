@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateVersionCommitServerCloud        string = "cloud"
+	CreateVersionCommitServerCloudGroup   string = "cloud-group"
+	CreateVersionCommitServerManagedGroup string = "managed-group"
+)
+
+var CreateVersionCommitServerList = map[string]string{
+	CreateVersionCommitServerCloud:        "https://app.cribl.cloud",
+	CreateVersionCommitServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateVersionCommitServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateVersionCommitResponseBody - a list of GitCommitSummary objects
 type CreateVersionCommitResponseBody struct {
 	Items []shared.GitCommitSummary `json:"items,omitempty"`

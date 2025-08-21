@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateKeyMetadataEntityServerCloud        string = "cloud"
+	CreateKeyMetadataEntityServerCloudGroup   string = "cloud-group"
+	CreateKeyMetadataEntityServerManagedGroup string = "managed-group"
+)
+
+var CreateKeyMetadataEntityServerList = map[string]string{
+	CreateKeyMetadataEntityServerCloud:        "https://app.cribl.cloud",
+	CreateKeyMetadataEntityServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateKeyMetadataEntityServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateKeyMetadataEntityResponseBody - a list of KeyMetadataEntity objects
 type CreateKeyMetadataEntityResponseBody struct {
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`

@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	LogoutServerCloud        string = "cloud"
+	LogoutServerCloudGroup   string = "cloud-group"
+	LogoutServerManagedGroup string = "managed-group"
+)
+
+var LogoutServerList = map[string]string{
+	LogoutServerCloud:        "https://app.cribl.cloud",
+	LogoutServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	LogoutServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type LogoutResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

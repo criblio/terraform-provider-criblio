@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSearchPreviewServerCloud        string = "cloud"
+	CreateSearchPreviewServerCloudGroup   string = "cloud-group"
+	CreateSearchPreviewServerManagedGroup string = "managed-group"
+)
+
+var CreateSearchPreviewServerList = map[string]string{
+	CreateSearchPreviewServerCloud:        "https://app.cribl.cloud",
+	CreateSearchPreviewServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSearchPreviewServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSearchPreviewResponseBody - a list of PreviewResponseBody objects
 type CreateSearchPreviewResponseBody struct {
 	Items []shared.PreviewResponseBody `json:"items,omitempty"`

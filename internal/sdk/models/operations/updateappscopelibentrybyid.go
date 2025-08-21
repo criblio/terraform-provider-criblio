@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateAppscopeLibEntryByIDServerCloud        string = "cloud"
+	UpdateAppscopeLibEntryByIDServerCloudGroup   string = "cloud-group"
+	UpdateAppscopeLibEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateAppscopeLibEntryByIDServerList = map[string]string{
+	UpdateAppscopeLibEntryByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateAppscopeLibEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateAppscopeLibEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateAppscopeLibEntryByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

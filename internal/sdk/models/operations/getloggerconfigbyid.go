@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetLoggerConfigByIDServerCloud        string = "cloud"
+	GetLoggerConfigByIDServerCloudGroup   string = "cloud-group"
+	GetLoggerConfigByIDServerManagedGroup string = "managed-group"
+)
+
+var GetLoggerConfigByIDServerList = map[string]string{
+	GetLoggerConfigByIDServerCloud:        "https://app.cribl.cloud",
+	GetLoggerConfigByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetLoggerConfigByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetLoggerConfigByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

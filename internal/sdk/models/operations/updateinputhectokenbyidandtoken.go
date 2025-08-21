@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateInputHecTokenByIDAndTokenServerCloud        string = "cloud"
+	UpdateInputHecTokenByIDAndTokenServerCloudGroup   string = "cloud-group"
+	UpdateInputHecTokenByIDAndTokenServerManagedGroup string = "managed-group"
+)
+
+var UpdateInputHecTokenByIDAndTokenServerList = map[string]string{
+	UpdateInputHecTokenByIDAndTokenServerCloud:        "https://app.cribl.cloud",
+	UpdateInputHecTokenByIDAndTokenServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateInputHecTokenByIDAndTokenServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateInputHecTokenByIDAndTokenRequest struct {
 	// hec input id
 	ID string `pathParam:"style=simple,explode=false,name=id"`

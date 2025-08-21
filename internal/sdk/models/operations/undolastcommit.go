@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UndoLastCommitServerCloud        string = "cloud"
+	UndoLastCommitServerCloudGroup   string = "cloud-group"
+	UndoLastCommitServerManagedGroup string = "managed-group"
+)
+
+var UndoLastCommitServerList = map[string]string{
+	UndoLastCommitServerCloud:        "https://app.cribl.cloud",
+	UndoLastCommitServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UndoLastCommitServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UndoLastCommitRequest struct {
 	// Group ID
 	Group *string `queryParam:"style=form,explode=true,name=group"`

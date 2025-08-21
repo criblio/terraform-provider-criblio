@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateRestSecretByIDServerCloud        string = "cloud"
+	UpdateRestSecretByIDServerCloudGroup   string = "cloud-group"
+	UpdateRestSecretByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateRestSecretByIDServerList = map[string]string{
+	UpdateRestSecretByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateRestSecretByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateRestSecretByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateRestSecretByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

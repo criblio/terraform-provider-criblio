@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateOutputTestByIDServerCloud        string = "cloud"
+	CreateOutputTestByIDServerCloudGroup   string = "cloud-group"
+	CreateOutputTestByIDServerManagedGroup string = "managed-group"
+)
+
+var CreateOutputTestByIDServerList = map[string]string{
+	CreateOutputTestByIDServerCloud:        "https://app.cribl.cloud",
+	CreateOutputTestByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateOutputTestByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateOutputTestByIDRequest struct {
 	// Output Id
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteCriblLakeDatasetByLakeIDAndIDServerCloud        string = "cloud"
+	DeleteCriblLakeDatasetByLakeIDAndIDServerCloudGroup   string = "cloud-group"
+	DeleteCriblLakeDatasetByLakeIDAndIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteCriblLakeDatasetByLakeIDAndIDServerList = map[string]string{
+	DeleteCriblLakeDatasetByLakeIDAndIDServerCloud:        "https://app.cribl.cloud",
+	DeleteCriblLakeDatasetByLakeIDAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteCriblLakeDatasetByLakeIDAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteCriblLakeDatasetByLakeIDAndIDRequest struct {
 	// lake id that contains the Datasets
 	LakeID string `pathParam:"style=simple,explode=false,name=lakeId"`

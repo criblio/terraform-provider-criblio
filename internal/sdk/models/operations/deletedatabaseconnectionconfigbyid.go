@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteDatabaseConnectionConfigByIDServerCloud        string = "cloud"
+	DeleteDatabaseConnectionConfigByIDServerCloudGroup   string = "cloud-group"
+	DeleteDatabaseConnectionConfigByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteDatabaseConnectionConfigByIDServerList = map[string]string{
+	DeleteDatabaseConnectionConfigByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteDatabaseConnectionConfigByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteDatabaseConnectionConfigByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteDatabaseConnectionConfigByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

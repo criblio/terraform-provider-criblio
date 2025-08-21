@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateIoMetricsEntryByIDServerCloud        string = "cloud"
+	UpdateIoMetricsEntryByIDServerCloudGroup   string = "cloud-group"
+	UpdateIoMetricsEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateIoMetricsEntryByIDServerList = map[string]string{
+	UpdateIoMetricsEntryByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateIoMetricsEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateIoMetricsEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateIoMetricsEntryByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

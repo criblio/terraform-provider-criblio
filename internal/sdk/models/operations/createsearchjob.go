@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSearchJobServerCloud        string = "cloud"
+	CreateSearchJobServerCloudGroup   string = "cloud-group"
+	CreateSearchJobServerManagedGroup string = "managed-group"
+)
+
+var CreateSearchJobServerList = map[string]string{
+	CreateSearchJobServerCloud:        "https://app.cribl.cloud",
+	CreateSearchJobServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSearchJobServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSearchJobResponseBody - a list of SearchJob objects
 type CreateSearchJobResponseBody struct {
 	Items []shared.SearchJob `json:"items,omitempty"`

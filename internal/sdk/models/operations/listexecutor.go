@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListExecutorServerCloud        string = "cloud"
+	ListExecutorServerCloudGroup   string = "cloud-group"
+	ListExecutorServerManagedGroup string = "managed-group"
+)
+
+var ListExecutorServerList = map[string]string{
+	ListExecutorServerCloud:        "https://app.cribl.cloud",
+	ListExecutorServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListExecutorServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListExecutorResponseBody - a list of Executor objects
 type ListExecutorResponseBody struct {
 	Items []shared.Executor `json:"items,omitempty"`

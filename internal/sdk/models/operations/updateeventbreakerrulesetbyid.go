@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateEventBreakerRulesetByIDServerCloud        string = "cloud"
+	UpdateEventBreakerRulesetByIDServerCloudGroup   string = "cloud-group"
+	UpdateEventBreakerRulesetByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateEventBreakerRulesetByIDServerList = map[string]string{
+	UpdateEventBreakerRulesetByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateEventBreakerRulesetByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateEventBreakerRulesetByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateEventBreakerRulesetByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

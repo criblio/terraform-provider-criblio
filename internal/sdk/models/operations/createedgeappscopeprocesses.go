@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateEdgeAppscopeProcessesServerCloud        string = "cloud"
+	CreateEdgeAppscopeProcessesServerCloudGroup   string = "cloud-group"
+	CreateEdgeAppscopeProcessesServerManagedGroup string = "managed-group"
+)
+
+var CreateEdgeAppscopeProcessesServerList = map[string]string{
+	CreateEdgeAppscopeProcessesServerCloud:        "https://app.cribl.cloud",
+	CreateEdgeAppscopeProcessesServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateEdgeAppscopeProcessesServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateEdgeAppscopeProcessesRequest struct {
 	// config string required
 	Pid string `queryParam:"style=form,explode=true,name=pid"`

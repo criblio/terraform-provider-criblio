@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdatePolicyRuleByIDServerCloud        string = "cloud"
+	UpdatePolicyRuleByIDServerCloudGroup   string = "cloud-group"
+	UpdatePolicyRuleByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdatePolicyRuleByIDServerList = map[string]string{
+	UpdatePolicyRuleByIDServerCloud:        "https://app.cribl.cloud",
+	UpdatePolicyRuleByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdatePolicyRuleByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdatePolicyRuleByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

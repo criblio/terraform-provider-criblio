@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSearchDashboardServerCloud        string = "cloud"
+	CreateSearchDashboardServerCloudGroup   string = "cloud-group"
+	CreateSearchDashboardServerManagedGroup string = "managed-group"
+)
+
+var CreateSearchDashboardServerList = map[string]string{
+	CreateSearchDashboardServerCloud:        "https://app.cribl.cloud",
+	CreateSearchDashboardServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSearchDashboardServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSearchDashboardResponseBody - a list of SearchDashboard objects
 type CreateSearchDashboardResponseBody struct {
 	Items []shared.SearchDashboard `json:"items,omitempty"`

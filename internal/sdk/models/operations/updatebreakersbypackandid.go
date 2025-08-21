@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateBreakersByPackAndIDServerCloud        string = "cloud"
+	UpdateBreakersByPackAndIDServerCloudGroup   string = "cloud-group"
+	UpdateBreakersByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateBreakersByPackAndIDServerList = map[string]string{
+	UpdateBreakersByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	UpdateBreakersByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateBreakersByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateBreakersByPackAndIDRequest struct {
 	// Unique ID to PATCH for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

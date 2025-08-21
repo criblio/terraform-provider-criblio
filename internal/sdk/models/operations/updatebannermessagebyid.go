@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateBannerMessageByIDServerCloud        string = "cloud"
+	UpdateBannerMessageByIDServerCloudGroup   string = "cloud-group"
+	UpdateBannerMessageByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateBannerMessageByIDServerList = map[string]string{
+	UpdateBannerMessageByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateBannerMessageByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateBannerMessageByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateBannerMessageByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

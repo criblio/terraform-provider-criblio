@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemInputsByPackAndIDServerCloud        string = "cloud"
+	GetSystemInputsByPackAndIDServerCloudGroup   string = "cloud-group"
+	GetSystemInputsByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var GetSystemInputsByPackAndIDServerList = map[string]string{
+	GetSystemInputsByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	GetSystemInputsByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemInputsByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSystemInputsByPackAndIDRequest struct {
 	// Unique ID to GET for pack source
 	ID string `pathParam:"style=simple,explode=false,name=id"`

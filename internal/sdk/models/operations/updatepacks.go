@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdatePacksServerCloud        string = "cloud"
+	UpdatePacksServerCloudGroup   string = "cloud-group"
+	UpdatePacksServerManagedGroup string = "managed-group"
+)
+
+var UpdatePacksServerList = map[string]string{
+	UpdatePacksServerCloud:        "https://app.cribl.cloud",
+	UpdatePacksServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdatePacksServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdatePacksRequest struct {
 	// the file to upload
 	Filename *string `queryParam:"style=form,explode=true,name=filename"`

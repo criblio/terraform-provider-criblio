@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateProductsEdgeMapQueryServerCloud        string = "cloud"
+	CreateProductsEdgeMapQueryServerCloudGroup   string = "cloud-group"
+	CreateProductsEdgeMapQueryServerManagedGroup string = "managed-group"
+)
+
+var CreateProductsEdgeMapQueryServerList = map[string]string{
+	CreateProductsEdgeMapQueryServerCloud:        "https://app.cribl.cloud",
+	CreateProductsEdgeMapQueryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateProductsEdgeMapQueryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateProductsEdgeMapQueryResponseBody - a list of EdgeMapQueryResult objects
 type CreateProductsEdgeMapQueryResponseBody struct {
 	Items []shared.EdgeMapQueryResult `json:"items,omitempty"`

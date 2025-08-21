@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateNotificationByIDServerCloud        string = "cloud"
+	UpdateNotificationByIDServerCloudGroup   string = "cloud-group"
+	UpdateNotificationByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateNotificationByIDServerList = map[string]string{
+	UpdateNotificationByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateNotificationByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateNotificationByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateNotificationByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

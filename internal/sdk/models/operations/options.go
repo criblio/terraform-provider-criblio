@@ -21,8 +21,8 @@ const (
 type AcceptHeaderEnum string
 
 const (
-	AcceptHeaderEnumApplicationJson        AcceptHeaderEnum = "application/json"
 	AcceptHeaderEnumWildcardRootWildcard   AcceptHeaderEnum = "*/*"
+	AcceptHeaderEnumApplicationJson        AcceptHeaderEnum = "application/json"
 	AcceptHeaderEnumTextXml                AcceptHeaderEnum = "text/xml"
 	AcceptHeaderEnumApplicationTarPlusGzip AcceptHeaderEnum = "application/tar+gzip"
 	AcceptHeaderEnumApplicationXNdjson     AcceptHeaderEnum = "application/x-ndjson"

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateTeamServerCloud        string = "cloud"
+	CreateTeamServerCloudGroup   string = "cloud-group"
+	CreateTeamServerManagedGroup string = "managed-group"
+)
+
+var CreateTeamServerList = map[string]string{
+	CreateTeamServerCloud:        "https://app.cribl.cloud",
+	CreateTeamServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateTeamServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateTeamResponseBody - a list of Team objects
 type CreateTeamResponseBody struct {
 	Items []shared.Team `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetCertificateByIDServerCloud        string = "cloud"
+	GetCertificateByIDServerCloudGroup   string = "cloud-group"
+	GetCertificateByIDServerManagedGroup string = "managed-group"
+)
+
+var GetCertificateByIDServerList = map[string]string{
+	GetCertificateByIDServerCloud:        "https://app.cribl.cloud",
+	GetCertificateByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetCertificateByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetCertificateByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

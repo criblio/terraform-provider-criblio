@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateRoutesByPackServerCloud        string = "cloud"
+	CreateRoutesByPackServerCloudGroup   string = "cloud-group"
+	CreateRoutesByPackServerManagedGroup string = "managed-group"
+)
+
+var CreateRoutesByPackServerList = map[string]string{
+	CreateRoutesByPackServerCloud:        "https://app.cribl.cloud",
+	CreateRoutesByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateRoutesByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateRoutesByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

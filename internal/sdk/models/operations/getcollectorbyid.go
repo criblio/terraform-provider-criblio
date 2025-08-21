@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetCollectorByIDServerCloud        string = "cloud"
+	GetCollectorByIDServerCloudGroup   string = "cloud-group"
+	GetCollectorByIDServerManagedGroup string = "managed-group"
+)
+
+var GetCollectorByIDServerList = map[string]string{
+	GetCollectorByIDServerCloud:        "https://app.cribl.cloud",
+	GetCollectorByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetCollectorByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetCollectorByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

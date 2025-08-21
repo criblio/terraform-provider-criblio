@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreatePipelineByPackServerCloud        string = "cloud"
+	CreatePipelineByPackServerCloudGroup   string = "cloud-group"
+	CreatePipelineByPackServerManagedGroup string = "managed-group"
+)
+
+var CreatePipelineByPackServerList = map[string]string{
+	CreatePipelineByPackServerCloud:        "https://app.cribl.cloud",
+	CreatePipelineByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreatePipelineByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreatePipelineByPackRequest struct {
 	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

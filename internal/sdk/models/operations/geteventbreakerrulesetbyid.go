@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEventBreakerRulesetByIDServerCloud        string = "cloud"
+	GetEventBreakerRulesetByIDServerCloudGroup   string = "cloud-group"
+	GetEventBreakerRulesetByIDServerManagedGroup string = "managed-group"
+)
+
+var GetEventBreakerRulesetByIDServerList = map[string]string{
+	GetEventBreakerRulesetByIDServerCloud:        "https://app.cribl.cloud",
+	GetEventBreakerRulesetByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEventBreakerRulesetByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetEventBreakerRulesetByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

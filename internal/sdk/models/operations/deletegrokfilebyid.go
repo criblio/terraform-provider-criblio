@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteGrokFileByIDServerCloud        string = "cloud"
+	DeleteGrokFileByIDServerCloudGroup   string = "cloud-group"
+	DeleteGrokFileByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteGrokFileByIDServerList = map[string]string{
+	DeleteGrokFileByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteGrokFileByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteGrokFileByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteGrokFileByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

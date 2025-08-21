@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemDistributedUpgradeCancelByGroupServerCloud        string = "cloud"
+	CreateSystemDistributedUpgradeCancelByGroupServerCloudGroup   string = "cloud-group"
+	CreateSystemDistributedUpgradeCancelByGroupServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemDistributedUpgradeCancelByGroupServerList = map[string]string{
+	CreateSystemDistributedUpgradeCancelByGroupServerCloud:        "https://app.cribl.cloud",
+	CreateSystemDistributedUpgradeCancelByGroupServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemDistributedUpgradeCancelByGroupServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSystemDistributedUpgradeCancelByGroupRequest struct {
 	// id of the group
 	Group string `pathParam:"style=simple,explode=false,name=group"`

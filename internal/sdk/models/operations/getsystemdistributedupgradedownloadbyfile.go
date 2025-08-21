@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemDistributedUpgradeDownloadByFileServerCloud        string = "cloud"
+	GetSystemDistributedUpgradeDownloadByFileServerCloudGroup   string = "cloud-group"
+	GetSystemDistributedUpgradeDownloadByFileServerManagedGroup string = "managed-group"
+)
+
+var GetSystemDistributedUpgradeDownloadByFileServerList = map[string]string{
+	GetSystemDistributedUpgradeDownloadByFileServerCloud:        "https://app.cribl.cloud",
+	GetSystemDistributedUpgradeDownloadByFileServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemDistributedUpgradeDownloadByFileServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSystemDistributedUpgradeDownloadByFileRequest struct {
 	// Name of the file to be downloaded
 	File string `pathParam:"style=simple,explode=false,name=file"`

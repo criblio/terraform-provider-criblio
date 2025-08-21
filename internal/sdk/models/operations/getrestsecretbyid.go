@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetRestSecretByIDServerCloud        string = "cloud"
+	GetRestSecretByIDServerCloudGroup   string = "cloud-group"
+	GetRestSecretByIDServerManagedGroup string = "managed-group"
+)
+
+var GetRestSecretByIDServerList = map[string]string{
+	GetRestSecretByIDServerCloud:        "https://app.cribl.cloud",
+	GetRestSecretByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetRestSecretByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetRestSecretByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

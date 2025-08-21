@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetLookupFileByIDServerCloud        string = "cloud"
+	GetLookupFileByIDServerCloudGroup   string = "cloud-group"
+	GetLookupFileByIDServerManagedGroup string = "managed-group"
+)
+
+var GetLookupFileByIDServerList = map[string]string{
+	GetLookupFileByIDServerCloud:        "https://app.cribl.cloud",
+	GetLookupFileByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetLookupFileByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetLookupFileByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

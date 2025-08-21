@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteOutputByIDServerCloud        string = "cloud"
+	DeleteOutputByIDServerCloudGroup   string = "cloud-group"
+	DeleteOutputByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteOutputByIDServerList = map[string]string{
+	DeleteOutputByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteOutputByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteOutputByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteOutputByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

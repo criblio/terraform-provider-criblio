@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateProjectServerCloud        string = "cloud"
+	CreateProjectServerCloudGroup   string = "cloud-group"
+	CreateProjectServerManagedGroup string = "managed-group"
+)
+
+var CreateProjectServerList = map[string]string{
+	CreateProjectServerCloud:        "https://app.cribl.cloud",
+	CreateProjectServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateProjectServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateProjectRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateGrokFileByIDServerCloud        string = "cloud"
+	UpdateGrokFileByIDServerCloudGroup   string = "cloud-group"
+	UpdateGrokFileByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateGrokFileByIDServerList = map[string]string{
+	UpdateGrokFileByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateGrokFileByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateGrokFileByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateGrokFileByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateLookupFileByIDServerCloud        string = "cloud"
+	UpdateLookupFileByIDServerCloudGroup   string = "cloud-group"
+	UpdateLookupFileByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateLookupFileByIDServerList = map[string]string{
+	UpdateLookupFileByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateLookupFileByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateLookupFileByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateLookupFileByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

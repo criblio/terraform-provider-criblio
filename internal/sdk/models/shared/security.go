@@ -3,17 +3,10 @@
 package shared
 
 type Security struct {
-	BearerAuth     *string            `security:"scheme,type=http,subtype=bearer,name=Authorization"`
 	ClientOauth    *SchemeClientOauth `security:"scheme,type=oauth2,subtype=client_credentials"`
+	BearerAuth     *string            `security:"scheme,type=http,subtype=bearer,name=Authorization"`
 	OrganizationID *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
 	WorkspaceID    *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
-}
-
-func (o *Security) GetBearerAuth() *string {
-	if o == nil {
-		return nil
-	}
-	return o.BearerAuth
 }
 
 func (o *Security) GetClientOauth() *SchemeClientOauth {
@@ -21,6 +14,13 @@ func (o *Security) GetClientOauth() *SchemeClientOauth {
 		return nil
 	}
 	return o.ClientOauth
+}
+
+func (o *Security) GetBearerAuth() *string {
+	if o == nil {
+		return nil
+	}
+	return o.BearerAuth
 }
 
 func (o *Security) GetOrganizationID() *string {

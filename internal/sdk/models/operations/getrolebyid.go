@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetRoleByIDServerCloud        string = "cloud"
+	GetRoleByIDServerCloudGroup   string = "cloud-group"
+	GetRoleByIDServerManagedGroup string = "managed-group"
+)
+
+var GetRoleByIDServerList = map[string]string{
+	GetRoleByIDServerCloud:        "https://app.cribl.cloud",
+	GetRoleByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetRoleByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetRoleByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

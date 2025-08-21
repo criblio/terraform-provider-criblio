@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeAppscopeProcessesServerCloud        string = "cloud"
+	GetEdgeAppscopeProcessesServerCloudGroup   string = "cloud-group"
+	GetEdgeAppscopeProcessesServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeAppscopeProcessesServerList = map[string]string{
+	GetEdgeAppscopeProcessesServerCloud:        "https://app.cribl.cloud",
+	GetEdgeAppscopeProcessesServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeAppscopeProcessesServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetEdgeAppscopeProcessesResponseBody - a list of AppScopeProcess objects
 type GetEdgeAppscopeProcessesResponseBody struct {
 	Items []shared.AppScopeProcess `json:"items,omitempty"`

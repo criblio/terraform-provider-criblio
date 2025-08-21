@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListHmacFunctionServerCloud        string = "cloud"
+	ListHmacFunctionServerCloudGroup   string = "cloud-group"
+	ListHmacFunctionServerManagedGroup string = "managed-group"
+)
+
+var ListHmacFunctionServerList = map[string]string{
+	ListHmacFunctionServerCloud:        "https://app.cribl.cloud",
+	ListHmacFunctionServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListHmacFunctionServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type ListHmacFunctionRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

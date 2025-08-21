@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetDefaultLakeLakehouseByIDServerCloud        string = "cloud"
+	GetDefaultLakeLakehouseByIDServerCloudGroup   string = "cloud-group"
+	GetDefaultLakeLakehouseByIDServerManagedGroup string = "managed-group"
+)
+
+var GetDefaultLakeLakehouseByIDServerList = map[string]string{
+	GetDefaultLakeLakehouseByIDServerCloud:        "https://app.cribl.cloud",
+	GetDefaultLakeLakehouseByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetDefaultLakeLakehouseByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetDefaultLakeLakehouseByIDRequest struct {
 	// The ID of the lakehouse to retrieve
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetConditionByIDServerCloud        string = "cloud"
+	GetConditionByIDServerCloudGroup   string = "cloud-group"
+	GetConditionByIDServerManagedGroup string = "managed-group"
+)
+
+var GetConditionByIDServerList = map[string]string{
+	GetConditionByIDServerCloud:        "https://app.cribl.cloud",
+	GetConditionByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetConditionByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetConditionByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

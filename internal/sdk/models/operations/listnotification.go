@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListNotificationServerCloud        string = "cloud"
+	ListNotificationServerCloudGroup   string = "cloud-group"
+	ListNotificationServerManagedGroup string = "managed-group"
+)
+
+var ListNotificationServerList = map[string]string{
+	ListNotificationServerCloud:        "https://app.cribl.cloud",
+	ListNotificationServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListNotificationServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListNotificationResponseBody - a list of Notification objects
 type ListNotificationResponseBody struct {
 	Items []shared.Notification `json:"items,omitempty"`

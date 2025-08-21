@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetProtobufLibraryConfigServerCloud        string = "cloud"
+	GetProtobufLibraryConfigServerCloudGroup   string = "cloud-group"
+	GetProtobufLibraryConfigServerManagedGroup string = "managed-group"
+)
+
+var GetProtobufLibraryConfigServerList = map[string]string{
+	GetProtobufLibraryConfigServerCloud:        "https://app.cribl.cloud",
+	GetProtobufLibraryConfigServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetProtobufLibraryConfigServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetProtobufLibraryConfigRequest struct {
 	// onlyWithEncodings
 	OnlyWithEncodings string `queryParam:"style=form,explode=true,name=onlyWithEncodings"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreatePipelineServerCloud        string = "cloud"
+	CreatePipelineServerCloudGroup   string = "cloud-group"
+	CreatePipelineServerManagedGroup string = "managed-group"
+)
+
+var CreatePipelineServerList = map[string]string{
+	CreatePipelineServerCloud:        "https://app.cribl.cloud",
+	CreatePipelineServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreatePipelineServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreatePipelineRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

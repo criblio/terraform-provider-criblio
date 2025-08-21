@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListConditionServerCloud        string = "cloud"
+	ListConditionServerCloudGroup   string = "cloud-group"
+	ListConditionServerManagedGroup string = "managed-group"
+)
+
+var ListConditionServerList = map[string]string{
+	ListConditionServerCloud:        "https://app.cribl.cloud",
+	ListConditionServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListConditionServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListConditionResponseBody - a list of Condition objects
 type ListConditionResponseBody struct {
 	Items []shared.Condition `json:"items,omitempty"`

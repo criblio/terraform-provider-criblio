@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeKubeProxyServerCloud        string = "cloud"
+	GetEdgeKubeProxyServerCloudGroup   string = "cloud-group"
+	GetEdgeKubeProxyServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeKubeProxyServerList = map[string]string{
+	GetEdgeKubeProxyServerCloud:        "https://app.cribl.cloud",
+	GetEdgeKubeProxyServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeKubeProxyServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetEdgeKubeProxyRequest struct {
 	// string optional
 	Path *string `queryParam:"style=form,explode=true,name=path"`

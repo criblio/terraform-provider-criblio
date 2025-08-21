@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetDiagBundleServerCloud        string = "cloud"
+	GetDiagBundleServerCloudGroup   string = "cloud-group"
+	GetDiagBundleServerManagedGroup string = "managed-group"
+)
+
+var GetDiagBundleServerList = map[string]string{
+	GetDiagBundleServerCloud:        "https://app.cribl.cloud",
+	GetDiagBundleServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetDiagBundleServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetDiagBundleResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

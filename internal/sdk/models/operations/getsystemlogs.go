@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemLogsServerCloud        string = "cloud"
+	GetSystemLogsServerCloudGroup   string = "cloud-group"
+	GetSystemLogsServerManagedGroup string = "managed-group"
+)
+
+var GetSystemLogsServerList = map[string]string{
+	GetSystemLogsServerCloud:        "https://app.cribl.cloud",
+	GetSystemLogsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemLogsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSystemLogsResponseBody - a list of LogFileInfo objects
 type GetSystemLogsResponseBody struct {
 	Items []shared.LogFileInfo `json:"items,omitempty"`

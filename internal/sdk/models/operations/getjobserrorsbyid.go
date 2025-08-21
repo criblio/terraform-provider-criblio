@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetJobsErrorsByIDServerCloud        string = "cloud"
+	GetJobsErrorsByIDServerCloudGroup   string = "cloud-group"
+	GetJobsErrorsByIDServerManagedGroup string = "managed-group"
+)
+
+var GetJobsErrorsByIDServerList = map[string]string{
+	GetJobsErrorsByIDServerCloud:        "https://app.cribl.cloud",
+	GetJobsErrorsByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetJobsErrorsByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetJobsErrorsByIDRequest struct {
 	// Instance id of the job to get results for
 	ID string `pathParam:"style=simple,explode=false,name=id"`

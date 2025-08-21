@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteAuthUsersTokenByIDServerCloud        string = "cloud"
+	DeleteAuthUsersTokenByIDServerCloudGroup   string = "cloud-group"
+	DeleteAuthUsersTokenByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteAuthUsersTokenByIDServerList = map[string]string{
+	DeleteAuthUsersTokenByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteAuthUsersTokenByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteAuthUsersTokenByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteAuthUsersTokenByIDRequest struct {
 	// ID of user to invalidate
 	ID string `pathParam:"style=simple,explode=false,name=id"`

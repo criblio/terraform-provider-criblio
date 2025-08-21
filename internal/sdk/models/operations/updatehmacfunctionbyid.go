@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateHmacFunctionByIDServerCloud        string = "cloud"
+	UpdateHmacFunctionByIDServerCloudGroup   string = "cloud-group"
+	UpdateHmacFunctionByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateHmacFunctionByIDServerList = map[string]string{
+	UpdateHmacFunctionByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateHmacFunctionByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateHmacFunctionByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateHmacFunctionByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemDiagServerCloud        string = "cloud"
+	GetSystemDiagServerCloudGroup   string = "cloud-group"
+	GetSystemDiagServerManagedGroup string = "managed-group"
+)
+
+var GetSystemDiagServerList = map[string]string{
+	GetSystemDiagServerCloud:        "https://app.cribl.cloud",
+	GetSystemDiagServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemDiagServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSystemDiagResponseBody - a list of Diag objects
 type GetSystemDiagResponseBody struct {
 	Items []shared.Diag `json:"items,omitempty"`

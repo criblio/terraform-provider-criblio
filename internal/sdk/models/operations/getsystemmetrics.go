@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemMetricsServerCloud        string = "cloud"
+	GetSystemMetricsServerCloudGroup   string = "cloud-group"
+	GetSystemMetricsServerManagedGroup string = "managed-group"
+)
+
+var GetSystemMetricsServerList = map[string]string{
+	GetSystemMetricsServerCloud:        "https://app.cribl.cloud",
+	GetSystemMetricsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemMetricsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSystemMetricsRequest struct {
 	// worker process to query, this would work only on a worker node
 	Wp *string `queryParam:"style=form,explode=true,name=wp"`

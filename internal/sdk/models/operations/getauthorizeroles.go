@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAuthorizeRolesServerCloud        string = "cloud"
+	GetAuthorizeRolesServerCloudGroup   string = "cloud-group"
+	GetAuthorizeRolesServerManagedGroup string = "managed-group"
+)
+
+var GetAuthorizeRolesServerList = map[string]string{
+	GetAuthorizeRolesServerCloud:        "https://app.cribl.cloud",
+	GetAuthorizeRolesServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAuthorizeRolesServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetAuthorizeRolesResponseBody - a list of string objects
 type GetAuthorizeRolesResponseBody struct {
 	Items []string `json:"items,omitempty"`

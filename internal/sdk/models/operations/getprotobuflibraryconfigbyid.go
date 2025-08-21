@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetProtobufLibraryConfigByIDServerCloud        string = "cloud"
+	GetProtobufLibraryConfigByIDServerCloudGroup   string = "cloud-group"
+	GetProtobufLibraryConfigByIDServerManagedGroup string = "managed-group"
+)
+
+var GetProtobufLibraryConfigByIDServerList = map[string]string{
+	GetProtobufLibraryConfigByIDServerCloud:        "https://app.cribl.cloud",
+	GetProtobufLibraryConfigByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetProtobufLibraryConfigByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetProtobufLibraryConfigByIDRequest struct {
 	// Library Id
 	ID string `pathParam:"style=simple,explode=false,name=id"`

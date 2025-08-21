@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSearchDashboardByIDServerCloud        string = "cloud"
+	GetSearchDashboardByIDServerCloudGroup   string = "cloud-group"
+	GetSearchDashboardByIDServerManagedGroup string = "managed-group"
+)
+
+var GetSearchDashboardByIDServerList = map[string]string{
+	GetSearchDashboardByIDServerCloud:        "https://app.cribl.cloud",
+	GetSearchDashboardByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSearchDashboardByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSearchDashboardByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

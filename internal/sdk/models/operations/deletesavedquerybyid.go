@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteSavedQueryByIDServerCloud        string = "cloud"
+	DeleteSavedQueryByIDServerCloudGroup   string = "cloud-group"
+	DeleteSavedQueryByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteSavedQueryByIDServerList = map[string]string{
+	DeleteSavedQueryByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteSavedQueryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteSavedQueryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteSavedQueryByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

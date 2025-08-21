@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemSettingsUpgradeServerCloud        string = "cloud"
+	GetSystemSettingsUpgradeServerCloudGroup   string = "cloud-group"
+	GetSystemSettingsUpgradeServerManagedGroup string = "managed-group"
+)
+
+var GetSystemSettingsUpgradeServerList = map[string]string{
+	GetSystemSettingsUpgradeServerCloud:        "https://app.cribl.cloud",
+	GetSystemSettingsUpgradeServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemSettingsUpgradeServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSystemSettingsUpgradeResponseBody - a list of UpgradeResult objects
 type GetSystemSettingsUpgradeResponseBody struct {
 	Items []shared.UpgradeResult `json:"items,omitempty"`

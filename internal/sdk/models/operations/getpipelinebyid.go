@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetPipelineByIDServerCloud        string = "cloud"
+	GetPipelineByIDServerCloudGroup   string = "cloud-group"
+	GetPipelineByIDServerManagedGroup string = "managed-group"
+)
+
+var GetPipelineByIDServerList = map[string]string{
+	GetPipelineByIDServerCloud:        "https://app.cribl.cloud",
+	GetPipelineByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetPipelineByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetPipelineByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

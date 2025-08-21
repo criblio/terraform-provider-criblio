@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAuthMetadataServerCloud        string = "cloud"
+	GetAuthMetadataServerCloudGroup   string = "cloud-group"
+	GetAuthMetadataServerManagedGroup string = "managed-group"
+)
+
+var GetAuthMetadataServerList = map[string]string{
+	GetAuthMetadataServerCloud:        "https://app.cribl.cloud",
+	GetAuthMetadataServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAuthMetadataServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetAuthMetadataResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

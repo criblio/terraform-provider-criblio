@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeEventsCollectorsServerCloud        string = "cloud"
+	GetEdgeEventsCollectorsServerCloudGroup   string = "cloud-group"
+	GetEdgeEventsCollectorsServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeEventsCollectorsServerList = map[string]string{
+	GetEdgeEventsCollectorsServerCloud:        "https://app.cribl.cloud",
+	GetEdgeEventsCollectorsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeEventsCollectorsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetEdgeEventsCollectorsResponseBody - a list of any objects
 type GetEdgeEventsCollectorsResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

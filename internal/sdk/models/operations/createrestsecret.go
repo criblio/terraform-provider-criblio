@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateRestSecretServerCloud        string = "cloud"
+	CreateRestSecretServerCloudGroup   string = "cloud-group"
+	CreateRestSecretServerManagedGroup string = "managed-group"
+)
+
+var CreateRestSecretServerList = map[string]string{
+	CreateRestSecretServerCloud:        "https://app.cribl.cloud",
+	CreateRestSecretServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateRestSecretServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateRestSecretResponseBody - a list of RestSecret objects
 type CreateRestSecretResponseBody struct {
 	Items []shared.RestSecret `json:"items,omitempty"`

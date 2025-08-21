@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateKeyMetadataEntityByIDServerCloud        string = "cloud"
+	UpdateKeyMetadataEntityByIDServerCloudGroup   string = "cloud-group"
+	UpdateKeyMetadataEntityByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateKeyMetadataEntityByIDServerList = map[string]string{
+	UpdateKeyMetadataEntityByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateKeyMetadataEntityByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateKeyMetadataEntityByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateKeyMetadataEntityByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSearchJobDispatchExecutorsByIDServerCloud        string = "cloud"
+	CreateSearchJobDispatchExecutorsByIDServerCloudGroup   string = "cloud-group"
+	CreateSearchJobDispatchExecutorsByIDServerManagedGroup string = "managed-group"
+)
+
+var CreateSearchJobDispatchExecutorsByIDServerList = map[string]string{
+	CreateSearchJobDispatchExecutorsByIDServerCloud:        "https://app.cribl.cloud",
+	CreateSearchJobDispatchExecutorsByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSearchJobDispatchExecutorsByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSearchJobDispatchExecutorsByIDRequest struct {
 	// search job id
 	ID string `pathParam:"style=simple,explode=false,name=id"`

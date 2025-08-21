@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateRegexLibEntryServerCloud        string = "cloud"
+	CreateRegexLibEntryServerCloudGroup   string = "cloud-group"
+	CreateRegexLibEntryServerManagedGroup string = "managed-group"
+)
+
+var CreateRegexLibEntryServerList = map[string]string{
+	CreateRegexLibEntryServerCloud:        "https://app.cribl.cloud",
+	CreateRegexLibEntryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateRegexLibEntryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateRegexLibEntryRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

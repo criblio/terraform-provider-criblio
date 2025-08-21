@@ -9,6 +9,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetProductsGroupsACLTeamsByProductAndIDServerCloud        string = "cloud"
+	GetProductsGroupsACLTeamsByProductAndIDServerCloudGroup   string = "cloud-group"
+	GetProductsGroupsACLTeamsByProductAndIDServerManagedGroup string = "managed-group"
+)
+
+var GetProductsGroupsACLTeamsByProductAndIDServerList = map[string]string{
+	GetProductsGroupsACLTeamsByProductAndIDServerCloud:        "https://app.cribl.cloud",
+	GetProductsGroupsACLTeamsByProductAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetProductsGroupsACLTeamsByProductAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetProductsGroupsACLTeamsByProductAndIDProduct - Cribl Product
 type GetProductsGroupsACLTeamsByProductAndIDProduct string
 

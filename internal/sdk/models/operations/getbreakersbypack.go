@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetBreakersByPackServerCloud        string = "cloud"
+	GetBreakersByPackServerCloudGroup   string = "cloud-group"
+	GetBreakersByPackServerManagedGroup string = "managed-group"
+)
+
+var GetBreakersByPackServerList = map[string]string{
+	GetBreakersByPackServerCloud:        "https://app.cribl.cloud",
+	GetBreakersByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetBreakersByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetBreakersByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

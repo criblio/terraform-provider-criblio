@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSearchDashboardACLApplyByIDServerCloud        string = "cloud"
+	CreateSearchDashboardACLApplyByIDServerCloudGroup   string = "cloud-group"
+	CreateSearchDashboardACLApplyByIDServerManagedGroup string = "managed-group"
+)
+
+var CreateSearchDashboardACLApplyByIDServerList = map[string]string{
+	CreateSearchDashboardACLApplyByIDServerCloud:        "https://app.cribl.cloud",
+	CreateSearchDashboardACLApplyByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSearchDashboardACLApplyByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSearchDashboardACLApplyByIDRequest struct {
 	// Unique ID for ACL Create
 	ID string `pathParam:"style=simple,explode=false,name=id"`

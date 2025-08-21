@@ -14,25 +14,14 @@ type HTTPClient interface {
 }
 
 type SDKConfiguration struct {
-	Client          HTTPClient
-	Security        func(context.Context) (interface{}, error)
-	ServerURL       string
-	Server          string
-	ServerList      map[string]string
-	ServerVariables map[string]map[string]string
-	UserAgent       string
-	RetryConfig     *retry.Config
-	Timeout         *time.Duration
+	Client      HTTPClient
+	Security    func(context.Context) (interface{}, error)
+	ServerURL   string
+	UserAgent   string
+	RetryConfig *retry.Config
+	Timeout     *time.Duration
 }
 
 func (c *SDKConfiguration) GetServerDetails() (string, map[string]string) {
-	if c.ServerURL != "" {
-		return c.ServerURL, nil
-	}
-
-	if c.Server == "" {
-		c.Server = "cloud"
-	}
-
-	return c.ServerList[c.Server], c.ServerVariables[c.Server]
+	return c.ServerURL, map[string]string{}
 }

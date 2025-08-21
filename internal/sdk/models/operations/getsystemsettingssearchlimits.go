@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemSettingsSearchLimitsServerCloud        string = "cloud"
+	GetSystemSettingsSearchLimitsServerCloudGroup   string = "cloud-group"
+	GetSystemSettingsSearchLimitsServerManagedGroup string = "managed-group"
+)
+
+var GetSystemSettingsSearchLimitsServerList = map[string]string{
+	GetSystemSettingsSearchLimitsServerCloud:        "https://app.cribl.cloud",
+	GetSystemSettingsSearchLimitsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemSettingsSearchLimitsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSystemSettingsSearchLimitsResponseBody - a list of SearchSettings objects
 type GetSystemSettingsSearchLimitsResponseBody struct {
 	Items []shared.SearchSettings `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemInfoServerCloud        string = "cloud"
+	GetSystemInfoServerCloudGroup   string = "cloud-group"
+	GetSystemInfoServerManagedGroup string = "managed-group"
+)
+
+var GetSystemInfoServerList = map[string]string{
+	GetSystemInfoServerCloud:        "https://app.cribl.cloud",
+	GetSystemInfoServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemInfoServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSystemInfoResponseBody - a list of SystemInfo objects
 type GetSystemInfoResponseBody struct {
 	Items []shared.SystemInfo `json:"items,omitempty"`

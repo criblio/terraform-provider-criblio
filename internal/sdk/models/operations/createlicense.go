@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateLicenseServerCloud        string = "cloud"
+	CreateLicenseServerCloudGroup   string = "cloud-group"
+	CreateLicenseServerManagedGroup string = "managed-group"
+)
+
+var CreateLicenseServerList = map[string]string{
+	CreateLicenseServerCloud:        "https://app.cribl.cloud",
+	CreateLicenseServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateLicenseServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateLicenseResponseBody - a list of License objects
 type CreateLicenseResponseBody struct {
 	Items []shared.License `json:"items,omitempty"`

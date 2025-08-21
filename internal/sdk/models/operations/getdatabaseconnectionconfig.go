@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetDatabaseConnectionConfigServerCloud        string = "cloud"
+	GetDatabaseConnectionConfigServerCloudGroup   string = "cloud-group"
+	GetDatabaseConnectionConfigServerManagedGroup string = "managed-group"
+)
+
+var GetDatabaseConnectionConfigServerList = map[string]string{
+	GetDatabaseConnectionConfigServerCloud:        "https://app.cribl.cloud",
+	GetDatabaseConnectionConfigServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetDatabaseConnectionConfigServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetDatabaseConnectionConfigRequest struct {
 	// type of database connection
 	DatabaseType *string `queryParam:"style=form,explode=true,name=databaseType"`

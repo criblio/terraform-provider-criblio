@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListBannerMessageServerCloud        string = "cloud"
+	ListBannerMessageServerCloudGroup   string = "cloud-group"
+	ListBannerMessageServerManagedGroup string = "managed-group"
+)
+
+var ListBannerMessageServerList = map[string]string{
+	ListBannerMessageServerCloud:        "https://app.cribl.cloud",
+	ListBannerMessageServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListBannerMessageServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListBannerMessageResponseBody - a list of BannerMessage objects
 type ListBannerMessageResponseBody struct {
 	Items []shared.BannerMessage `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteSystemDiagServerCloud        string = "cloud"
+	DeleteSystemDiagServerCloudGroup   string = "cloud-group"
+	DeleteSystemDiagServerManagedGroup string = "managed-group"
+)
+
+var DeleteSystemDiagServerList = map[string]string{
+	DeleteSystemDiagServerCloud:        "https://app.cribl.cloud",
+	DeleteSystemDiagServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteSystemDiagServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteSystemDiagRequest struct {
 	// Diag bundle path
 	Path string `queryParam:"style=form,explode=true,name=path"`

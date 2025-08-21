@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListUserServerCloud        string = "cloud"
+	ListUserServerCloudGroup   string = "cloud-group"
+	ListUserServerManagedGroup string = "managed-group"
+)
+
+var ListUserServerList = map[string]string{
+	ListUserServerCloud:        "https://app.cribl.cloud",
+	ListUserServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListUserServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListUserResponseBody - a list of User objects
 type ListUserResponseBody struct {
 	Items []shared.User `json:"items,omitempty"`

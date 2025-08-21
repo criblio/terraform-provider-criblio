@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAuthSsoCallbackServerCloud        string = "cloud"
+	GetAuthSsoCallbackServerCloudGroup   string = "cloud-group"
+	GetAuthSsoCallbackServerManagedGroup string = "managed-group"
+)
+
+var GetAuthSsoCallbackServerList = map[string]string{
+	GetAuthSsoCallbackServerCloud:        "https://app.cribl.cloud",
+	GetAuthSsoCallbackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAuthSsoCallbackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetAuthSsoCallbackRequest struct {
 	// Authentication request object
 	SAMLResponse *string `queryParam:"style=form,explode=true,name=SAMLResponse"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreatePacksServerCloud        string = "cloud"
+	CreatePacksServerCloudGroup   string = "cloud-group"
+	CreatePacksServerManagedGroup string = "managed-group"
+)
+
+var CreatePacksServerList = map[string]string{
+	CreatePacksServerCloud:        "https://app.cribl.cloud",
+	CreatePacksServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreatePacksServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreatePacksRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

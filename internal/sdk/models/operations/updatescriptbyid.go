@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateScriptByIDServerCloud        string = "cloud"
+	UpdateScriptByIDServerCloudGroup   string = "cloud-group"
+	UpdateScriptByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateScriptByIDServerList = map[string]string{
+	UpdateScriptByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateScriptByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateScriptByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateScriptByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

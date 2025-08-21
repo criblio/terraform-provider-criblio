@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAiSettingsFeaturesServerCloud        string = "cloud"
+	GetAiSettingsFeaturesServerCloudGroup   string = "cloud-group"
+	GetAiSettingsFeaturesServerManagedGroup string = "managed-group"
+)
+
+var GetAiSettingsFeaturesServerList = map[string]string{
+	GetAiSettingsFeaturesServerCloud:        "https://app.cribl.cloud",
+	GetAiSettingsFeaturesServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAiSettingsFeaturesServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetAiSettingsFeaturesResponseBody - a list of Response objects
 type GetAiSettingsFeaturesResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

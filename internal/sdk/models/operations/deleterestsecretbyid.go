@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteRestSecretByIDServerCloud        string = "cloud"
+	DeleteRestSecretByIDServerCloudGroup   string = "cloud-group"
+	DeleteRestSecretByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteRestSecretByIDServerList = map[string]string{
+	DeleteRestSecretByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteRestSecretByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteRestSecretByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteRestSecretByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

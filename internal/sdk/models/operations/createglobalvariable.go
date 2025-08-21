@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateGlobalVariableServerCloud        string = "cloud"
+	CreateGlobalVariableServerCloudGroup   string = "cloud-group"
+	CreateGlobalVariableServerManagedGroup string = "managed-group"
+)
+
+var CreateGlobalVariableServerList = map[string]string{
+	CreateGlobalVariableServerCloud:        "https://app.cribl.cloud",
+	CreateGlobalVariableServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateGlobalVariableServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateGlobalVariableRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

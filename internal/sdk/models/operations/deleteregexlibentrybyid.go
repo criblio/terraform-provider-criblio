@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteRegexLibEntryByIDServerCloud        string = "cloud"
+	DeleteRegexLibEntryByIDServerCloudGroup   string = "cloud-group"
+	DeleteRegexLibEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteRegexLibEntryByIDServerList = map[string]string{
+	DeleteRegexLibEntryByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteRegexLibEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteRegexLibEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteRegexLibEntryByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

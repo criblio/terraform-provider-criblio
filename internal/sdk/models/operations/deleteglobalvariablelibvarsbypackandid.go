@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteGlobalVariableLibVarsByPackAndIDServerCloud        string = "cloud"
+	DeleteGlobalVariableLibVarsByPackAndIDServerCloudGroup   string = "cloud-group"
+	DeleteGlobalVariableLibVarsByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteGlobalVariableLibVarsByPackAndIDServerList = map[string]string{
+	DeleteGlobalVariableLibVarsByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	DeleteGlobalVariableLibVarsByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteGlobalVariableLibVarsByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteGlobalVariableLibVarsByPackAndIDRequest struct {
 	// Unique ID to DELETE for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

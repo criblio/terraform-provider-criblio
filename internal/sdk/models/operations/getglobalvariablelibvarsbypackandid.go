@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetGlobalVariableLibVarsByPackAndIDServerCloud        string = "cloud"
+	GetGlobalVariableLibVarsByPackAndIDServerCloudGroup   string = "cloud-group"
+	GetGlobalVariableLibVarsByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var GetGlobalVariableLibVarsByPackAndIDServerList = map[string]string{
+	GetGlobalVariableLibVarsByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	GetGlobalVariableLibVarsByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetGlobalVariableLibVarsByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetGlobalVariableLibVarsByPackAndIDRequest struct {
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

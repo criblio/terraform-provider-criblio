@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateProjectACLTeamsApplyByIDServerCloud        string = "cloud"
+	CreateProjectACLTeamsApplyByIDServerCloudGroup   string = "cloud-group"
+	CreateProjectACLTeamsApplyByIDServerManagedGroup string = "managed-group"
+)
+
+var CreateProjectACLTeamsApplyByIDServerList = map[string]string{
+	CreateProjectACLTeamsApplyByIDServerCloud:        "https://app.cribl.cloud",
+	CreateProjectACLTeamsApplyByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateProjectACLTeamsApplyByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateProjectACLTeamsApplyByIDRequest struct {
 	// Unique ID for ACL Teams Create
 	ID string `pathParam:"style=simple,explode=false,name=id"`

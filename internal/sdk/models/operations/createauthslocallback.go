@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateAuthSloCallbackServerCloud        string = "cloud"
+	CreateAuthSloCallbackServerCloudGroup   string = "cloud-group"
+	CreateAuthSloCallbackServerManagedGroup string = "managed-group"
+)
+
+var CreateAuthSloCallbackServerList = map[string]string{
+	CreateAuthSloCallbackServerCloud:        "https://app.cribl.cloud",
+	CreateAuthSloCallbackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateAuthSloCallbackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateAuthSloCallbackRequest - Logout request object
 type CreateAuthSloCallbackRequest struct {
 	// Logout request object

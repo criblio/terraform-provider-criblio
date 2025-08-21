@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListOutputServerCloud        string = "cloud"
+	ListOutputServerCloudGroup   string = "cloud-group"
+	ListOutputServerManagedGroup string = "managed-group"
+)
+
+var ListOutputServerList = map[string]string{
+	ListOutputServerCloud:        "https://app.cribl.cloud",
+	ListOutputServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListOutputServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type ListOutputRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

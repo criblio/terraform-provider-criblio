@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeContainersServerCloud        string = "cloud"
+	GetEdgeContainersServerCloudGroup   string = "cloud-group"
+	GetEdgeContainersServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeContainersServerList = map[string]string{
+	GetEdgeContainersServerCloud:        "https://app.cribl.cloud",
+	GetEdgeContainersServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeContainersServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetEdgeContainersResponseBody - a list of Container objects
 type GetEdgeContainersResponseBody struct {
 	Items []shared.Container `json:"items,omitempty"`

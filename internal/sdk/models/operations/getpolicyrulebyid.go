@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetPolicyRuleByIDServerCloud        string = "cloud"
+	GetPolicyRuleByIDServerCloudGroup   string = "cloud-group"
+	GetPolicyRuleByIDServerManagedGroup string = "managed-group"
+)
+
+var GetPolicyRuleByIDServerList = map[string]string{
+	GetPolicyRuleByIDServerCloud:        "https://app.cribl.cloud",
+	GetPolicyRuleByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetPolicyRuleByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetPolicyRuleByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

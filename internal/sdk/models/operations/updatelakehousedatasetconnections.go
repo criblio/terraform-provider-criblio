@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateLakehouseDatasetConnectionsServerCloud        string = "cloud"
+	UpdateLakehouseDatasetConnectionsServerCloudGroup   string = "cloud-group"
+	UpdateLakehouseDatasetConnectionsServerManagedGroup string = "managed-group"
+)
+
+var UpdateLakehouseDatasetConnectionsServerList = map[string]string{
+	UpdateLakehouseDatasetConnectionsServerCloud:        "https://app.cribl.cloud",
+	UpdateLakehouseDatasetConnectionsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateLakehouseDatasetConnectionsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateLakehouseDatasetConnectionsRequestBody struct {
 }
 

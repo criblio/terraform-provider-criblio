@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateSystemInputsByPackServerCloud        string = "cloud"
+	UpdateSystemInputsByPackServerCloudGroup   string = "cloud-group"
+	UpdateSystemInputsByPackServerManagedGroup string = "managed-group"
+)
+
+var UpdateSystemInputsByPackServerList = map[string]string{
+	UpdateSystemInputsByPackServerCloud:        "https://app.cribl.cloud",
+	UpdateSystemInputsByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateSystemInputsByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateSystemInputsByPackRequest struct {
 	// pack ID to PATCH
 	Pack     string `pathParam:"style=simple,explode=false,name=pack"`

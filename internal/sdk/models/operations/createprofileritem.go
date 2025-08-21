@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateProfilerItemServerCloud        string = "cloud"
+	CreateProfilerItemServerCloudGroup   string = "cloud-group"
+	CreateProfilerItemServerManagedGroup string = "managed-group"
+)
+
+var CreateProfilerItemServerList = map[string]string{
+	CreateProfilerItemServerCloud:        "https://app.cribl.cloud",
+	CreateProfilerItemServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateProfilerItemServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateProfilerItemResponseBody - a list of ProfilerItem objects
 type CreateProfilerItemResponseBody struct {
 	Items []shared.ProfilerItem `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeLogsServerCloud        string = "cloud"
+	GetEdgeLogsServerCloudGroup   string = "cloud-group"
+	GetEdgeLogsServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeLogsServerList = map[string]string{
+	GetEdgeLogsServerCloud:        "https://app.cribl.cloud",
+	GetEdgeLogsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeLogsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetEdgeLogsRequest struct {
 	// Discovery Mode (default is "auto")
 	Mode *string `queryParam:"style=form,explode=true,name=mode"`

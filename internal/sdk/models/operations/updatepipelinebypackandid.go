@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdatePipelineByPackAndIDServerCloud        string = "cloud"
+	UpdatePipelineByPackAndIDServerCloudGroup   string = "cloud-group"
+	UpdatePipelineByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var UpdatePipelineByPackAndIDServerList = map[string]string{
+	UpdatePipelineByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	UpdatePipelineByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdatePipelineByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdatePipelineByPackAndIDRequest struct {
 	// Unique ID to PATCH for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

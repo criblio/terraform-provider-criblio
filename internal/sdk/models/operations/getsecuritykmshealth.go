@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSecurityKmsHealthServerCloud        string = "cloud"
+	GetSecurityKmsHealthServerCloudGroup   string = "cloud-group"
+	GetSecurityKmsHealthServerManagedGroup string = "managed-group"
+)
+
+var GetSecurityKmsHealthServerList = map[string]string{
+	GetSecurityKmsHealthServerCloud:        "https://app.cribl.cloud",
+	GetSecurityKmsHealthServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSecurityKmsHealthServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSecurityKmsHealthResponseBody - a list of KMSHealth objects
 type GetSecurityKmsHealthResponseBody struct {
 	Items []shared.KMSHealth `json:"items,omitempty"`

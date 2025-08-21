@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteProfilerItemByIDServerCloud        string = "cloud"
+	DeleteProfilerItemByIDServerCloudGroup   string = "cloud-group"
+	DeleteProfilerItemByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteProfilerItemByIDServerList = map[string]string{
+	DeleteProfilerItemByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteProfilerItemByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteProfilerItemByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteProfilerItemByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

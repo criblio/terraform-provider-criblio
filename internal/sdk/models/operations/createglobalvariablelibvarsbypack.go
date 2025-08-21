@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateGlobalVariableLibVarsByPackServerCloud        string = "cloud"
+	CreateGlobalVariableLibVarsByPackServerCloudGroup   string = "cloud-group"
+	CreateGlobalVariableLibVarsByPackServerManagedGroup string = "managed-group"
+)
+
+var CreateGlobalVariableLibVarsByPackServerList = map[string]string{
+	CreateGlobalVariableLibVarsByPackServerCloud:        "https://app.cribl.cloud",
+	CreateGlobalVariableLibVarsByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateGlobalVariableLibVarsByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateGlobalVariableLibVarsByPackRequest struct {
 	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

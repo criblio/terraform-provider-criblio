@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetTeamUsersByIDServerCloud        string = "cloud"
+	GetTeamUsersByIDServerCloudGroup   string = "cloud-group"
+	GetTeamUsersByIDServerManagedGroup string = "managed-group"
+)
+
+var GetTeamUsersByIDServerList = map[string]string{
+	GetTeamUsersByIDServerCloud:        "https://app.cribl.cloud",
+	GetTeamUsersByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetTeamUsersByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetTeamUsersByIDRequest struct {
 	// Team Name
 	ID string `pathParam:"style=simple,explode=false,name=id"`

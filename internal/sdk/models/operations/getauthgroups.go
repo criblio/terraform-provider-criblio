@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAuthGroupsServerCloud        string = "cloud"
+	GetAuthGroupsServerCloudGroup   string = "cloud-group"
+	GetAuthGroupsServerManagedGroup string = "managed-group"
+)
+
+var GetAuthGroupsServerList = map[string]string{
+	GetAuthGroupsServerCloud:        "https://app.cribl.cloud",
+	GetAuthGroupsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAuthGroupsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetAuthGroupsResponseBody - a list of CrudEntityBase objects
 type GetAuthGroupsResponseBody struct {
 	Items []shared.CrudEntityBase `json:"items,omitempty"`

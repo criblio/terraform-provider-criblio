@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAiConsentServerCloud        string = "cloud"
+	GetAiConsentServerCloudGroup   string = "cloud-group"
+	GetAiConsentServerManagedGroup string = "managed-group"
+)
+
+var GetAiConsentServerList = map[string]string{
+	GetAiConsentServerCloud:        "https://app.cribl.cloud",
+	GetAiConsentServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAiConsentServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetAiConsentResponseBody - a list of Response objects
 type GetAiConsentResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

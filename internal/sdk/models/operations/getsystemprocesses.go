@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemProcessesServerCloud        string = "cloud"
+	GetSystemProcessesServerCloudGroup   string = "cloud-group"
+	GetSystemProcessesServerManagedGroup string = "managed-group"
+)
+
+var GetSystemProcessesServerList = map[string]string{
+	GetSystemProcessesServerCloud:        "https://app.cribl.cloud",
+	GetSystemProcessesServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemProcessesServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSystemProcessesResponseBody - a list of ProcessEntry objects
 type GetSystemProcessesResponseBody struct {
 	Items []shared.ProcessEntry `json:"items,omitempty"`

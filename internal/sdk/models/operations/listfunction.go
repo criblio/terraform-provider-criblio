@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListFunctionServerCloud        string = "cloud"
+	ListFunctionServerCloudGroup   string = "cloud-group"
+	ListFunctionServerManagedGroup string = "managed-group"
+)
+
+var ListFunctionServerList = map[string]string{
+	ListFunctionServerCloud:        "https://app.cribl.cloud",
+	ListFunctionServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListFunctionServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListFunctionResponseBody - a list of Function objects
 type ListFunctionResponseBody struct {
 	Items []shared.Function `json:"items,omitempty"`

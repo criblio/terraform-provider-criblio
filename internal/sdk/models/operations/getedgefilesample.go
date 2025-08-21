@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeFileSampleServerCloud        string = "cloud"
+	GetEdgeFileSampleServerCloudGroup   string = "cloud-group"
+	GetEdgeFileSampleServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeFileSampleServerList = map[string]string{
+	GetEdgeFileSampleServerCloud:        "https://app.cribl.cloud",
+	GetEdgeFileSampleServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeFileSampleServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetEdgeFileSampleRequest struct {
 	// The path to the file to sample
 	Path string `queryParam:"style=form,explode=true,name=path"`

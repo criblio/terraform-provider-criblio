@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListTrustPolicyServerCloud        string = "cloud"
+	ListTrustPolicyServerCloudGroup   string = "cloud-group"
+	ListTrustPolicyServerManagedGroup string = "managed-group"
+)
+
+var ListTrustPolicyServerList = map[string]string{
+	ListTrustPolicyServerCloud:        "https://app.cribl.cloud",
+	ListTrustPolicyServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListTrustPolicyServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListTrustPolicyResponseBody - a list of TrustPolicy objects
 type ListTrustPolicyResponseBody struct {
 	Items []shared.TrustPolicy `json:"items,omitempty"`

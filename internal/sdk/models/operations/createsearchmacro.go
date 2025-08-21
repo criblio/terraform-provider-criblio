@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSearchMacroServerCloud        string = "cloud"
+	CreateSearchMacroServerCloudGroup   string = "cloud-group"
+	CreateSearchMacroServerManagedGroup string = "managed-group"
+)
+
+var CreateSearchMacroServerList = map[string]string{
+	CreateSearchMacroServerCloud:        "https://app.cribl.cloud",
+	CreateSearchMacroServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSearchMacroServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSearchMacroResponseBody - a list of SearchMacro objects
 type CreateSearchMacroResponseBody struct {
 	Items []shared.SearchMacro `json:"items,omitempty"`

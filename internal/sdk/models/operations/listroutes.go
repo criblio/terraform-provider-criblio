@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListRoutesServerCloud        string = "cloud"
+	ListRoutesServerCloudGroup   string = "cloud-group"
+	ListRoutesServerManagedGroup string = "managed-group"
+)
+
+var ListRoutesServerList = map[string]string{
+	ListRoutesServerCloud:        "https://app.cribl.cloud",
+	ListRoutesServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListRoutesServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListRoutesResponseBody - a list of Routes objects
 type ListRoutesResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`

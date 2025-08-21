@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListRoleServerCloud        string = "cloud"
+	ListRoleServerCloudGroup   string = "cloud-group"
+	ListRoleServerManagedGroup string = "managed-group"
+)
+
+var ListRoleServerList = map[string]string{
+	ListRoleServerCloud:        "https://app.cribl.cloud",
+	ListRoleServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListRoleServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListRoleResponseBody - a list of Role objects
 type ListRoleResponseBody struct {
 	Items []shared.Role `json:"items,omitempty"`

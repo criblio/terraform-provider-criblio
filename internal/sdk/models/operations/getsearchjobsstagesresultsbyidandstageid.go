@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSearchJobsStagesResultsByIDAndStageIDServerCloud        string = "cloud"
+	GetSearchJobsStagesResultsByIDAndStageIDServerCloudGroup   string = "cloud-group"
+	GetSearchJobsStagesResultsByIDAndStageIDServerManagedGroup string = "managed-group"
+)
+
+var GetSearchJobsStagesResultsByIDAndStageIDServerList = map[string]string{
+	GetSearchJobsStagesResultsByIDAndStageIDServerCloud:        "https://app.cribl.cloud",
+	GetSearchJobsStagesResultsByIDAndStageIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSearchJobsStagesResultsByIDAndStageIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSearchJobsStagesResultsByIDAndStageIDRequest struct {
 	// search job ID
 	ID string `pathParam:"style=simple,explode=false,name=id"`

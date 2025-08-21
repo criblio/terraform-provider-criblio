@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSearchEventBreakerPreviewServerCloud        string = "cloud"
+	CreateSearchEventBreakerPreviewServerCloudGroup   string = "cloud-group"
+	CreateSearchEventBreakerPreviewServerManagedGroup string = "managed-group"
+)
+
+var CreateSearchEventBreakerPreviewServerList = map[string]string{
+	CreateSearchEventBreakerPreviewServerCloud:        "https://app.cribl.cloud",
+	CreateSearchEventBreakerPreviewServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSearchEventBreakerPreviewServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSearchEventBreakerPreviewResponseBody - a list of PreviewResponseBody objects
 type CreateSearchEventBreakerPreviewResponseBody struct {
 	Items []shared.PreviewResponseBody `json:"items,omitempty"`

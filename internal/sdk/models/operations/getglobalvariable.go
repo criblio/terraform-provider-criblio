@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetGlobalVariableServerCloud        string = "cloud"
+	GetGlobalVariableServerCloudGroup   string = "cloud-group"
+	GetGlobalVariableServerManagedGroup string = "managed-group"
+)
+
+var GetGlobalVariableServerList = map[string]string{
+	GetGlobalVariableServerCloud:        "https://app.cribl.cloud",
+	GetGlobalVariableServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetGlobalVariableServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetGlobalVariableRequest struct {
 	// Pass "refs" to include references to fields the variable is used in
 	With *string `queryParam:"style=form,explode=true,name=with"`

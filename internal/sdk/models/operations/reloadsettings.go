@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	ReloadSettingsServerCloud        string = "cloud"
+	ReloadSettingsServerCloudGroup   string = "cloud-group"
+	ReloadSettingsServerManagedGroup string = "managed-group"
+)
+
+var ReloadSettingsServerList = map[string]string{
+	ReloadSettingsServerCloud:        "https://app.cribl.cloud",
+	ReloadSettingsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ReloadSettingsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type ReloadSettingsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

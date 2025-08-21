@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListLoggerConfigServerCloud        string = "cloud"
+	ListLoggerConfigServerCloudGroup   string = "cloud-group"
+	ListLoggerConfigServerManagedGroup string = "managed-group"
+)
+
+var ListLoggerConfigServerList = map[string]string{
+	ListLoggerConfigServerCloud:        "https://app.cribl.cloud",
+	ListLoggerConfigServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListLoggerConfigServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListLoggerConfigResponseBody - a list of LoggerConfig objects
 type ListLoggerConfigResponseBody struct {
 	Items []shared.LoggerConfig `json:"items,omitempty"`

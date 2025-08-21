@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSearchMacroByIDServerCloud        string = "cloud"
+	GetSearchMacroByIDServerCloudGroup   string = "cloud-group"
+	GetSearchMacroByIDServerManagedGroup string = "managed-group"
+)
+
+var GetSearchMacroByIDServerList = map[string]string{
+	GetSearchMacroByIDServerCloud:        "https://app.cribl.cloud",
+	GetSearchMacroByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSearchMacroByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSearchMacroByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

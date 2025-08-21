@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetDatabaseConnectionConfigByIDServerCloud        string = "cloud"
+	GetDatabaseConnectionConfigByIDServerCloudGroup   string = "cloud-group"
+	GetDatabaseConnectionConfigByIDServerManagedGroup string = "managed-group"
+)
+
+var GetDatabaseConnectionConfigByIDServerList = map[string]string{
+	GetDatabaseConnectionConfigByIDServerCloud:        "https://app.cribl.cloud",
+	GetDatabaseConnectionConfigByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetDatabaseConnectionConfigByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetDatabaseConnectionConfigByIDRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

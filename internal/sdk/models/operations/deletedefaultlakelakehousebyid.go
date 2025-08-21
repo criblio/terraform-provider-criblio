@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteDefaultLakeLakehouseByIDServerCloud        string = "cloud"
+	DeleteDefaultLakeLakehouseByIDServerCloudGroup   string = "cloud-group"
+	DeleteDefaultLakeLakehouseByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteDefaultLakeLakehouseByIDServerList = map[string]string{
+	DeleteDefaultLakeLakehouseByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteDefaultLakeLakehouseByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteDefaultLakeLakehouseByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteDefaultLakeLakehouseByIDRequest struct {
 	// The ID of the lakehouse to delete
 	ID string `pathParam:"style=simple,explode=false,name=id"`

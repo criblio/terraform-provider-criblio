@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAuthSloServerCloud        string = "cloud"
+	GetAuthSloServerCloudGroup   string = "cloud-group"
+	GetAuthSloServerManagedGroup string = "managed-group"
+)
+
+var GetAuthSloServerList = map[string]string{
+	GetAuthSloServerCloud:        "https://app.cribl.cloud",
+	GetAuthSloServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAuthSloServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetAuthSloResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

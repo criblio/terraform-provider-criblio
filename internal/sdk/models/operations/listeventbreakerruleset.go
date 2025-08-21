@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListEventBreakerRulesetServerCloud        string = "cloud"
+	ListEventBreakerRulesetServerCloudGroup   string = "cloud-group"
+	ListEventBreakerRulesetServerManagedGroup string = "managed-group"
+)
+
+var ListEventBreakerRulesetServerList = map[string]string{
+	ListEventBreakerRulesetServerCloud:        "https://app.cribl.cloud",
+	ListEventBreakerRulesetServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListEventBreakerRulesetServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type ListEventBreakerRulesetRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

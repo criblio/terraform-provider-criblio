@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteAuthUsersInvalidationByIDServerCloud        string = "cloud"
+	DeleteAuthUsersInvalidationByIDServerCloudGroup   string = "cloud-group"
+	DeleteAuthUsersInvalidationByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteAuthUsersInvalidationByIDServerList = map[string]string{
+	DeleteAuthUsersInvalidationByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteAuthUsersInvalidationByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteAuthUsersInvalidationByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteAuthUsersInvalidationByIDRequest struct {
 	// ID of user to reenable
 	ID string `pathParam:"style=simple,explode=false,name=id"`

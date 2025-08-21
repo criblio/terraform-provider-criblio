@@ -9,6 +9,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetPacksExportByIDServerCloud        string = "cloud"
+	GetPacksExportByIDServerCloudGroup   string = "cloud-group"
+	GetPacksExportByIDServerManagedGroup string = "managed-group"
+)
+
+var GetPacksExportByIDServerList = map[string]string{
+	GetPacksExportByIDServerCloud:        "https://app.cribl.cloud",
+	GetPacksExportByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetPacksExportByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetPacksExportByIDMode - Export mode. Note: "merge_safe" is deprecated and will be removed in v5.0.0. Use "merge" instead.
 type GetPacksExportByIDMode string
 

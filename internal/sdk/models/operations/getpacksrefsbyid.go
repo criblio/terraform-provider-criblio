@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetPacksRefsByIDServerCloud        string = "cloud"
+	GetPacksRefsByIDServerCloudGroup   string = "cloud-group"
+	GetPacksRefsByIDServerManagedGroup string = "managed-group"
+)
+
+var GetPacksRefsByIDServerList = map[string]string{
+	GetPacksRefsByIDServerCloud:        "https://app.cribl.cloud",
+	GetPacksRefsByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetPacksRefsByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetPacksRefsByIDRequest struct {
 	// Pack name
 	ID string `pathParam:"style=simple,explode=false,name=id"`

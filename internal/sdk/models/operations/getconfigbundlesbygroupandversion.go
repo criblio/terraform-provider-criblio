@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetConfigBundlesByGroupAndVersionServerCloud        string = "cloud"
+	GetConfigBundlesByGroupAndVersionServerCloudGroup   string = "cloud-group"
+	GetConfigBundlesByGroupAndVersionServerManagedGroup string = "managed-group"
+)
+
+var GetConfigBundlesByGroupAndVersionServerList = map[string]string{
+	GetConfigBundlesByGroupAndVersionServerCloud:        "https://app.cribl.cloud",
+	GetConfigBundlesByGroupAndVersionServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetConfigBundlesByGroupAndVersionServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetConfigBundlesByGroupAndVersionRequest struct {
 	Group   string `pathParam:"style=simple,explode=false,name=group"`
 	Version string `pathParam:"style=simple,explode=false,name=version"`

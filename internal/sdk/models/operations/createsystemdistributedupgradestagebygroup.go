@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemDistributedUpgradeStageByGroupServerCloud        string = "cloud"
+	CreateSystemDistributedUpgradeStageByGroupServerCloudGroup   string = "cloud-group"
+	CreateSystemDistributedUpgradeStageByGroupServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemDistributedUpgradeStageByGroupServerList = map[string]string{
+	CreateSystemDistributedUpgradeStageByGroupServerCloud:        "https://app.cribl.cloud",
+	CreateSystemDistributedUpgradeStageByGroupServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemDistributedUpgradeStageByGroupServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSystemDistributedUpgradeStageByGroupRequest struct {
 	// Group to upgrade
 	Group string `pathParam:"style=simple,explode=false,name=group"`

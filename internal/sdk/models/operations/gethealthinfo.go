@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetHealthInfoServerCloud        string = "cloud"
+	GetHealthInfoServerCloudGroup   string = "cloud-group"
+	GetHealthInfoServerManagedGroup string = "managed-group"
+)
+
+var GetHealthInfoServerList = map[string]string{
+	GetHealthInfoServerCloud:        "https://app.cribl.cloud",
+	GetHealthInfoServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetHealthInfoServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetHealthInfoResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

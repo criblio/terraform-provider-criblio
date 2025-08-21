@@ -1,0 +1,395 @@
+openapi: 3.1.0
+info:
+  title: Cribl.Cloud Public API
+  description: Serves as a public API for the Cribl.Cloud platform and powers the Speakeasy SDK
+  version: "1.0"
+  contact: {}
+
+servers:
+    - url: https://publicapi.cribl.cloud
+      x-speakeasy-server-id: cloud-mgmt
+      variables:
+        workspaceName:
+          default: main
+          description: The Workspace name
+        organizationId:
+          default: ian
+          description: the Organization ID
+        cloudDomain:
+          default: cribl.cloud
+          description: Cribl Cloud domain name 
+tags:
+  - name: workspaces
+    description: ""
+  - name: health
+    description: ""
+paths:
+  /:
+    servers:
+      - url: https://publicapi.cribl.cloud
+        x-speakeasy-server-id: cloud-mgmt
+        variables:
+          workspaceName:
+            default: main
+            description: The Workspace name
+          organizationId:
+            default: ian
+            description: the Organization ID
+          cloudDomain:
+            default: cribl.cloud
+            description: Cribl Cloud domain name
+    get:
+      operationId: getHealthStatus
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      summary: Get the health status of the application
+      tags:
+        - health
+      x-speakeasy-group: health
+      x-speakeasy-name-override: get
+
+  /v1/organizations/{organizationId}/workspaces:
+    servers:
+      - url: https://publicapi.cribl.cloud
+        x-speakeasy-server-id: cloud-mgmt
+        variables:
+          workspaceName:
+            default: main
+            description: The Workspace name
+          organizationId:
+            default: ian
+            description: the Organization ID
+          cloudDomain:
+            default: cribl.cloud
+            description: Cribl Cloud domain name
+    post:
+      operationId: v1.workspaces.createWorkspace
+      x-speakeasy-entity-operation: Workspace#create
+      parameters:
+        - name: organizationId
+          in: path
+          description: Organization identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkspaceCreateRequestDTO"
+      responses:
+        "201":
+          description: The workspace has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceSchema"
+        "500":
+          description: Internal Server Error
+      summary: Create a new workspace
+      tags: [workspaces]
+      x-speakeasy-group: workspaces
+      x-speakeasy-name-override: create
+
+    get:
+      operationId: v1.workspaces.listWorkspaces
+      x-speakeasy-entity-operation: Workspace#get
+      parameters:
+        - name: organizationId
+          in: path
+          description: Organization identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of workspaces has been successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspacesListResponseDTO"
+        "500":
+          description: Internal Server Error
+      summary: List all workspaces for an organization
+      tags: [workspaces]
+      x-speakeasy-group: workspaces
+      x-speakeasy-name-override: list
+
+  /v1/organizations/{organizationId}/workspaces/{workspaceId}:
+    servers:
+      - url: https://publicapi.cribl.cloud
+        x-speakeasy-server-id: cloud-mgmt
+        variables:
+          workspaceName:
+            default: main
+            description: The Workspace name
+          organizationId:
+            default: ian
+            description: the Organization ID
+          cloudDomain:
+            default: cribl.cloud
+            description: Cribl Cloud domain name
+    patch:
+      operationId: v1.workspaces.updateWorkspace
+      x-speakeasy-entity-operation: Workspace#update
+      parameters:
+        - name: organizationId
+          in: path
+          description: Organization identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: path
+          description: Workspace identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkspacePatchRequestDTO"
+      responses:
+        "200":
+          description: The workspace has been successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceSchema"
+        "500":
+          description: Internal Server Error
+      summary: Update an existing workspace
+      tags: [workspaces]
+      x-speakeasy-group: workspaces
+      x-speakeasy-name-override: update
+
+    delete:
+      operationId: v1.workspaces.deleteWorkspace
+      x-speakeasy-entity-operation: Workspace#delete
+      parameters:
+        - name: organizationId
+          in: path
+          description: Organization identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: path
+          description: Workspace identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        "202":
+          description: The workspace deletion has been accepted
+        "500":
+          description: Internal Server Error
+      summary: Delete a workspace
+      tags: [workspaces]
+      x-speakeasy-group: workspaces
+      x-speakeasy-name-override: delete
+
+    get:
+      operationId: v1.workspaces.getWorkspace
+      parameters:
+        - name: organizationId
+          in: path
+          description: Organization identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: path
+          description: Workspace identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The workspace details have been successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceSchema"
+        "500":
+          description: Internal Server Error
+      summary: Get a specific workspace by ID
+      tags: [workspaces]
+      x-speakeasy-group: workspaces
+      x-speakeasy-name-override: get
+
+components:
+  securitySchemes:
+    clientOauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.cribl.cloud/oauth/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    AWSRegions:
+      type: string
+      description: AWS region where the workspace is deployed
+      enum:
+        - us-west-2
+        - us-east-1
+        - eu-central-1
+        - eu-west-2
+        - ap-southeast-2
+        - ca-central-1
+        - us-east-2
+      x-speakeasy-unknown-values: allow
+
+    WorkspaceState:
+      type: string
+      description: Current state of the workspace
+      enum:
+        - Workspace-Requested
+        - Workspace-Provisioning
+        - Workspace-Provisioning-Failed
+        - Workspace-Provisioned
+        - Workspace-Active
+        - Workspace-Updated
+        - Workspace-Failed-Update
+        - Workspace-Cleanup-Requested
+        - Workspace-Cleanup-Started
+        - Workspace-Cleanup-Terraform-Completed
+        - Workspace-Cleanup-Terraform-Failed
+        - Workspace-Cleanup-Completed
+        - Workspace-Cleanup-Failed
+      x-speakeasy-unknown-values: allow
+
+    WorkspaceSchema:
+      type: object
+      required: [workspaceId, region, lastUpdated, leaderFQDN, state]
+      properties:
+        workspaceId:
+          type: string
+          description: Unique identifier for the workspace
+          minLength: 4
+          maxLength: 41
+          pattern: "^[a-z0-9]*$"
+          example: main
+        region:
+          description: AWS region where the workspace is deployed
+          example: us-west-2
+          allOf:
+            - $ref: "#/components/schemas/AWSRegions"
+        lastUpdated:
+          type: string
+          description: Timestamp when the workspace was last updated
+          format: date-time
+          example: 2023-01-01T12:00:00Z
+        leaderFQDN:
+          type: string
+          description: Fully Qualified Domain Name of the workspace leader
+          example: workspace-leader.example.com
+        state:
+          description: Current state of the workspace
+          example: Workspace-Active
+          allOf:
+            - $ref: "#/components/schemas/WorkspaceState"
+        alias:
+          type: string
+          description: User-friendly alias for the workspace
+          example: Production Environment
+        description:
+          type: string
+          description: Detailed description of the workspace
+          example: Main production workspace for customer data processing
+        tags:
+          type: array
+          description: Tags associated with the workspace
+          items:
+            type: string
+          example: [production, customer-data]
+
+    WorkspaceCreateRequestDTO:
+      type: object
+      required: [workspaceId, region]
+      properties:
+        workspaceId:
+          type: string
+          description: Unique identifier for the workspace
+          minLength: 4
+          maxLength: 41
+          pattern: "^[a-z0-9]*$"
+          example: main
+        region:
+          description: AWS region where the workspace is deployed
+          example: us-west-2
+          allOf:
+            - $ref: "#/components/schemas/AWSRegions"
+        alias:
+          type: string
+          description: User-friendly alias for the workspace
+          example: Production Environment
+        description:
+          type: string
+          description: Detailed description of the workspace
+          example: Main production workspace for customer data processing
+        tags:
+          type: array
+          description: Tags associated with the workspace
+          items:
+            type: string
+          example: [production, customer-data]
+
+    WorkspacePatchRequestDTO:
+      type: object
+      properties:
+        alias:
+          type: string
+          description: User-friendly alias for the workspace
+          example: Production Environment
+        description:
+          type: string
+          description: Detailed description of the workspace
+          example: Main production workspace for customer data processing
+        tags:
+          type: array
+          description: Tags associated with the workspace
+          items:
+            type: string
+          example: [production, customer-data]
+
+    WorkspacesListResponseDTO:
+      type: object
+      required: [items, count]
+      properties:
+        items:
+          type: array
+          description: List of workspaces
+          items:
+            $ref: "#/components/schemas/WorkspaceSchema"
+        count:
+          type: number
+          description: Total number of workspaces
+          example: 5
+          x-speakeasy-ignore: true
+
+security:
+  - clientOauth: []
+  - bearerAuth: []
+  - organizationId: []
+  - workspaceId: []
+
+x-speakeasy-retries:
+  strategy: backoff
+  backoff:
+    initialInterval: 500
+    maxInterval: 60000
+    maxElapsedTime: 3600000
+    exponent: 1.5
+  statusCodes: ["502", "503", "504"]
+  retryConnectionErrors: true

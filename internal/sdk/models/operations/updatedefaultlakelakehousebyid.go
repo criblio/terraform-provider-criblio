@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateDefaultLakeLakehouseByIDServerCloud        string = "cloud"
+	UpdateDefaultLakeLakehouseByIDServerCloudGroup   string = "cloud-group"
+	UpdateDefaultLakeLakehouseByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateDefaultLakeLakehouseByIDServerList = map[string]string{
+	UpdateDefaultLakeLakehouseByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateDefaultLakeLakehouseByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateDefaultLakeLakehouseByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateDefaultLakeLakehouseByIDRequest struct {
 	// The ID of the lakehouse to update
 	ID        string           `pathParam:"style=simple,explode=false,name=id"`

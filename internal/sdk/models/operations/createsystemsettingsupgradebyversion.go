@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemSettingsUpgradeByVersionServerCloud        string = "cloud"
+	CreateSystemSettingsUpgradeByVersionServerCloudGroup   string = "cloud-group"
+	CreateSystemSettingsUpgradeByVersionServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemSettingsUpgradeByVersionServerList = map[string]string{
+	CreateSystemSettingsUpgradeByVersionServerCloud:        "https://app.cribl.cloud",
+	CreateSystemSettingsUpgradeByVersionServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemSettingsUpgradeByVersionServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSystemSettingsUpgradeByVersionRequest struct {
 	// Version number
 	Version string `pathParam:"style=simple,explode=false,name=version"`

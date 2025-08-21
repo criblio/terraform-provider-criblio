@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetVersionBranchServerCloud        string = "cloud"
+	GetVersionBranchServerCloudGroup   string = "cloud-group"
+	GetVersionBranchServerManagedGroup string = "managed-group"
+)
+
+var GetVersionBranchServerList = map[string]string{
+	GetVersionBranchServerCloud:        "https://app.cribl.cloud",
+	GetVersionBranchServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetVersionBranchServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetVersionBranchResponseBody - a list of any objects
 type GetVersionBranchResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

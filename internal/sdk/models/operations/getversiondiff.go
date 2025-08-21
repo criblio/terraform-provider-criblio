@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetVersionDiffServerCloud        string = "cloud"
+	GetVersionDiffServerCloudGroup   string = "cloud-group"
+	GetVersionDiffServerManagedGroup string = "managed-group"
+)
+
+var GetVersionDiffServerList = map[string]string{
+	GetVersionDiffServerCloud:        "https://app.cribl.cloud",
+	GetVersionDiffServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetVersionDiffServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetVersionDiffRequest struct {
 	// Commit hash (default is HEAD)
 	Commit *string `queryParam:"style=form,explode=true,name=commit"`

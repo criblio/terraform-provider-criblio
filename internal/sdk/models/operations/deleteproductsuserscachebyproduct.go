@@ -9,6 +9,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteProductsUsersCacheByProductServerCloud        string = "cloud"
+	DeleteProductsUsersCacheByProductServerCloudGroup   string = "cloud-group"
+	DeleteProductsUsersCacheByProductServerManagedGroup string = "managed-group"
+)
+
+var DeleteProductsUsersCacheByProductServerList = map[string]string{
+	DeleteProductsUsersCacheByProductServerCloud:        "https://app.cribl.cloud",
+	DeleteProductsUsersCacheByProductServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteProductsUsersCacheByProductServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // DeleteProductsUsersCacheByProductProduct - product by which to filter members
 type DeleteProductsUsersCacheByProductProduct string
 

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemMetricsEnumServerCloud        string = "cloud"
+	CreateSystemMetricsEnumServerCloudGroup   string = "cloud-group"
+	CreateSystemMetricsEnumServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemMetricsEnumServerList = map[string]string{
+	CreateSystemMetricsEnumServerCloud:        "https://app.cribl.cloud",
+	CreateSystemMetricsEnumServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemMetricsEnumServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSystemMetricsEnumResponseBody - a list of MetricNameInfo objects
 type CreateSystemMetricsEnumResponseBody struct {
 	Items []shared.MetricNameInfo `json:"items,omitempty"`

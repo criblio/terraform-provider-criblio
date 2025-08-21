@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteBannerMessageByIDServerCloud        string = "cloud"
+	DeleteBannerMessageByIDServerCloudGroup   string = "cloud-group"
+	DeleteBannerMessageByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteBannerMessageByIDServerList = map[string]string{
+	DeleteBannerMessageByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteBannerMessageByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteBannerMessageByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteBannerMessageByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

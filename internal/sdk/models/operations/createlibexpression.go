@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateLibExpressionServerCloud        string = "cloud"
+	CreateLibExpressionServerCloudGroup   string = "cloud-group"
+	CreateLibExpressionServerManagedGroup string = "managed-group"
+)
+
+var CreateLibExpressionServerList = map[string]string{
+	CreateLibExpressionServerCloud:        "https://app.cribl.cloud",
+	CreateLibExpressionServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateLibExpressionServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateLibExpressionResponseBody - a list of ExprLibEntry objects
 type CreateLibExpressionResponseBody struct {
 	Items []shared.ExprLibEntry `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateCertificateServerCloud        string = "cloud"
+	CreateCertificateServerCloudGroup   string = "cloud-group"
+	CreateCertificateServerManagedGroup string = "managed-group"
+)
+
+var CreateCertificateServerList = map[string]string{
+	CreateCertificateServerCloud:        "https://app.cribl.cloud",
+	CreateCertificateServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateCertificateServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateCertificateResponseBody - a list of Certificate objects
 type CreateCertificateResponseBody struct {
 	Items []shared.Certificate `json:"items,omitempty"`

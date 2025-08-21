@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateJobsServerCloud        string = "cloud"
+	CreateJobsServerCloudGroup   string = "cloud-group"
+	CreateJobsServerManagedGroup string = "managed-group"
+)
+
+var CreateJobsServerList = map[string]string{
+	CreateJobsServerCloud:        "https://app.cribl.cloud",
+	CreateJobsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateJobsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateJobsResponseBody - a list of string objects
 type CreateJobsResponseBody struct {
 	Items []string `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateOutputClickHouseDescribeTableServerCloud        string = "cloud"
+	CreateOutputClickHouseDescribeTableServerCloudGroup   string = "cloud-group"
+	CreateOutputClickHouseDescribeTableServerManagedGroup string = "managed-group"
+)
+
+var CreateOutputClickHouseDescribeTableServerList = map[string]string{
+	CreateOutputClickHouseDescribeTableServerCloud:        "https://app.cribl.cloud",
+	CreateOutputClickHouseDescribeTableServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateOutputClickHouseDescribeTableServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateOutputClickHouseDescribeTableResponseBody - a list of ClickHouseDescriptionResult objects
 type CreateOutputClickHouseDescribeTableResponseBody struct {
 	Items []shared.ClickHouseDescriptionResult `json:"items,omitempty"`

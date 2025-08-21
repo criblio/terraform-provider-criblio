@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeProcessesByPidServerCloud        string = "cloud"
+	GetEdgeProcessesByPidServerCloudGroup   string = "cloud-group"
+	GetEdgeProcessesByPidServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeProcessesByPidServerList = map[string]string{
+	GetEdgeProcessesByPidServerCloud:        "https://app.cribl.cloud",
+	GetEdgeProcessesByPidServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeProcessesByPidServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetEdgeProcessesByPidRequest struct {
 	// PID of the process
 	Pid string `pathParam:"style=simple,explode=false,name=pid"`

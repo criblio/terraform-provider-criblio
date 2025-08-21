@@ -9,6 +9,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetCluiServerCloud        string = "cloud"
+	GetCluiServerCloudGroup   string = "cloud-group"
+	GetCluiServerManagedGroup string = "managed-group"
+)
+
+var GetCluiServerList = map[string]string{
+	GetCluiServerCloud:        "https://app.cribl.cloud",
+	GetCluiServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetCluiServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // Context - Search query context
 type Context string
 

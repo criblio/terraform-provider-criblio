@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListScriptServerCloud        string = "cloud"
+	ListScriptServerCloudGroup   string = "cloud-group"
+	ListScriptServerManagedGroup string = "managed-group"
+)
+
+var ListScriptServerList = map[string]string{
+	ListScriptServerCloud:        "https://app.cribl.cloud",
+	ListScriptServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListScriptServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListScriptResponseBody - a list of Script objects
 type ListScriptResponseBody struct {
 	Items []shared.ScriptLibEntry `json:"items,omitempty"`

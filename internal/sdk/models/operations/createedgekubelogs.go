@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateEdgeKubeLogsServerCloud        string = "cloud"
+	CreateEdgeKubeLogsServerCloudGroup   string = "cloud-group"
+	CreateEdgeKubeLogsServerManagedGroup string = "managed-group"
+)
+
+var CreateEdgeKubeLogsServerList = map[string]string{
+	CreateEdgeKubeLogsServerCloud:        "https://app.cribl.cloud",
+	CreateEdgeKubeLogsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateEdgeKubeLogsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateEdgeKubeLogsResponseBody - a list of object objects
 type CreateEdgeKubeLogsResponseBody struct {
 	Items []string `json:"items,omitempty"`

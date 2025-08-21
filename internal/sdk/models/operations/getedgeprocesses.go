@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeProcessesServerCloud        string = "cloud"
+	GetEdgeProcessesServerCloudGroup   string = "cloud-group"
+	GetEdgeProcessesServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeProcessesServerList = map[string]string{
+	GetEdgeProcessesServerCloud:        "https://app.cribl.cloud",
+	GetEdgeProcessesServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeProcessesServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetEdgeProcessesResponseBody - a list of Process objects
 type GetEdgeProcessesResponseBody struct {
 	Items []shared.Process `json:"items,omitempty"`

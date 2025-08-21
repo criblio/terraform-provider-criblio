@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateDatasetProviderTypeByIDServerCloud        string = "cloud"
+	UpdateDatasetProviderTypeByIDServerCloudGroup   string = "cloud-group"
+	UpdateDatasetProviderTypeByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateDatasetProviderTypeByIDServerList = map[string]string{
+	UpdateDatasetProviderTypeByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateDatasetProviderTypeByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateDatasetProviderTypeByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateDatasetProviderTypeByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

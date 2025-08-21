@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListLibSchemasServerCloud        string = "cloud"
+	ListLibSchemasServerCloudGroup   string = "cloud-group"
+	ListLibSchemasServerManagedGroup string = "managed-group"
+)
+
+var ListLibSchemasServerList = map[string]string{
+	ListLibSchemasServerCloud:        "https://app.cribl.cloud",
+	ListLibSchemasServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListLibSchemasServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type ListLibSchemasRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

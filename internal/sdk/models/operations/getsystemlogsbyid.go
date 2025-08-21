@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemLogsByIDServerCloud        string = "cloud"
+	GetSystemLogsByIDServerCloudGroup   string = "cloud-group"
+	GetSystemLogsByIDServerManagedGroup string = "managed-group"
+)
+
+var GetSystemLogsByIDServerList = map[string]string{
+	GetSystemLogsByIDServerCloud:        "https://app.cribl.cloud",
+	GetSystemLogsByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemLogsByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSystemLogsByIDRequest struct {
 	// Log ID
 	ID string `pathParam:"style=simple,explode=false,name=id"`

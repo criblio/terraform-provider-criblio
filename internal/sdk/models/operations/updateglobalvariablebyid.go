@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateGlobalVariableByIDServerCloud        string = "cloud"
+	UpdateGlobalVariableByIDServerCloudGroup   string = "cloud-group"
+	UpdateGlobalVariableByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateGlobalVariableByIDServerList = map[string]string{
+	UpdateGlobalVariableByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateGlobalVariableByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateGlobalVariableByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateGlobalVariableByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

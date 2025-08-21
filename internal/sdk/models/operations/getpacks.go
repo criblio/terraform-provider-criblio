@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetPacksServerCloud        string = "cloud"
+	GetPacksServerCloudGroup   string = "cloud-group"
+	GetPacksServerManagedGroup string = "managed-group"
+)
+
+var GetPacksServerList = map[string]string{
+	GetPacksServerCloud:        "https://app.cribl.cloud",
+	GetPacksServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetPacksServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetPacksResponseBody - a list of Routes objects
 type GetPacksResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`

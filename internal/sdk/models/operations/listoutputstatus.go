@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListOutputStatusServerCloud        string = "cloud"
+	ListOutputStatusServerCloudGroup   string = "cloud-group"
+	ListOutputStatusServerManagedGroup string = "managed-group"
+)
+
+var ListOutputStatusServerList = map[string]string{
+	ListOutputStatusServerCloud:        "https://app.cribl.cloud",
+	ListOutputStatusServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListOutputStatusServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListOutputStatusResponseBody - a list of OutputStatus objects
 type ListOutputStatusResponseBody struct {
 	Items []shared.OutputStatus `json:"items,omitempty"`

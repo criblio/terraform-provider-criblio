@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateGrokFileServerCloud        string = "cloud"
+	CreateGrokFileServerCloudGroup   string = "cloud-group"
+	CreateGrokFileServerManagedGroup string = "managed-group"
+)
+
+var CreateGrokFileServerList = map[string]string{
+	CreateGrokFileServerCloud:        "https://app.cribl.cloud",
+	CreateGrokFileServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateGrokFileServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateGrokFileRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

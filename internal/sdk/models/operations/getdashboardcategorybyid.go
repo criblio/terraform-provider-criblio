@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetDashboardCategoryByIDServerCloud        string = "cloud"
+	GetDashboardCategoryByIDServerCloudGroup   string = "cloud-group"
+	GetDashboardCategoryByIDServerManagedGroup string = "managed-group"
+)
+
+var GetDashboardCategoryByIDServerList = map[string]string{
+	GetDashboardCategoryByIDServerCloud:        "https://app.cribl.cloud",
+	GetDashboardCategoryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetDashboardCategoryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetDashboardCategoryByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

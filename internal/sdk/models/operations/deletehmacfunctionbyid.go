@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteHmacFunctionByIDServerCloud        string = "cloud"
+	DeleteHmacFunctionByIDServerCloudGroup   string = "cloud-group"
+	DeleteHmacFunctionByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteHmacFunctionByIDServerList = map[string]string{
+	DeleteHmacFunctionByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteHmacFunctionByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteHmacFunctionByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteHmacFunctionByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

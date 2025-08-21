@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetBannerMessageByIDServerCloud        string = "cloud"
+	GetBannerMessageByIDServerCloudGroup   string = "cloud-group"
+	GetBannerMessageByIDServerManagedGroup string = "managed-group"
+)
+
+var GetBannerMessageByIDServerList = map[string]string{
+	GetBannerMessageByIDServerCloud:        "https://app.cribl.cloud",
+	GetBannerMessageByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetBannerMessageByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetBannerMessageByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

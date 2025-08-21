@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSearchHealthcheckServerCloud        string = "cloud"
+	GetSearchHealthcheckServerCloudGroup   string = "cloud-group"
+	GetSearchHealthcheckServerManagedGroup string = "managed-group"
+)
+
+var GetSearchHealthcheckServerList = map[string]string{
+	GetSearchHealthcheckServerCloud:        "https://app.cribl.cloud",
+	GetSearchHealthcheckServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSearchHealthcheckServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSearchHealthcheckResponseBody - a list of SearchHealthCheckStatus objects
 type GetSearchHealthcheckResponseBody struct {
 	Items []shared.SearchHealthCheckStatus `json:"items,omitempty"`

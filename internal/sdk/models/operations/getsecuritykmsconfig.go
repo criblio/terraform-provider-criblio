@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSecurityKmsConfigServerCloud        string = "cloud"
+	GetSecurityKmsConfigServerCloudGroup   string = "cloud-group"
+	GetSecurityKmsConfigServerManagedGroup string = "managed-group"
+)
+
+var GetSecurityKmsConfigServerList = map[string]string{
+	GetSecurityKmsConfigServerCloud:        "https://app.cribl.cloud",
+	GetSecurityKmsConfigServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSecurityKmsConfigServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSecurityKmsConfigResponseBody - a list of KMSProviderConfig objects
 type GetSecurityKmsConfigResponseBody struct {
 	Items []shared.KMSProviderConfig `json:"items,omitempty"`

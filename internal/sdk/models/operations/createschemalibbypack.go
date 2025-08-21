@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSchemaLibByPackServerCloud        string = "cloud"
+	CreateSchemaLibByPackServerCloudGroup   string = "cloud-group"
+	CreateSchemaLibByPackServerManagedGroup string = "managed-group"
+)
+
+var CreateSchemaLibByPackServerList = map[string]string{
+	CreateSchemaLibByPackServerCloud:        "https://app.cribl.cloud",
+	CreateSchemaLibByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSchemaLibByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSchemaLibByPackRequest struct {
 	// pack ID to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAppscopeLibEntryByIDServerCloud        string = "cloud"
+	GetAppscopeLibEntryByIDServerCloudGroup   string = "cloud-group"
+	GetAppscopeLibEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var GetAppscopeLibEntryByIDServerList = map[string]string{
+	GetAppscopeLibEntryByIDServerCloud:        "https://app.cribl.cloud",
+	GetAppscopeLibEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAppscopeLibEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetAppscopeLibEntryByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

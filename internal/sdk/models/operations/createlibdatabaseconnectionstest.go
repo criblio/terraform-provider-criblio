@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateLibDatabaseConnectionsTestServerCloud        string = "cloud"
+	CreateLibDatabaseConnectionsTestServerCloudGroup   string = "cloud-group"
+	CreateLibDatabaseConnectionsTestServerManagedGroup string = "managed-group"
+)
+
+var CreateLibDatabaseConnectionsTestServerList = map[string]string{
+	CreateLibDatabaseConnectionsTestServerCloud:        "https://app.cribl.cloud",
+	CreateLibDatabaseConnectionsTestServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateLibDatabaseConnectionsTestServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateLibDatabaseConnectionsTestResponseBody - a list of DatabaseConnectionTestResult objects
 type CreateLibDatabaseConnectionsTestResponseBody struct {
 	Items []shared.DatabaseConnectionTestResult `json:"items,omitempty"`

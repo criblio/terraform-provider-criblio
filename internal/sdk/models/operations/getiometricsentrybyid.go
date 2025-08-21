@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetIoMetricsEntryByIDServerCloud        string = "cloud"
+	GetIoMetricsEntryByIDServerCloudGroup   string = "cloud-group"
+	GetIoMetricsEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var GetIoMetricsEntryByIDServerList = map[string]string{
+	GetIoMetricsEntryByIDServerCloud:        "https://app.cribl.cloud",
+	GetIoMetricsEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetIoMetricsEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetIoMetricsEntryByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

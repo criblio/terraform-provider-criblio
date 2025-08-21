@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	LoginServerCloud        string = "cloud"
+	LoginServerCloudGroup   string = "cloud-group"
+	LoginServerManagedGroup string = "managed-group"
+)
+
+var LoginServerList = map[string]string{
+	LoginServerCloud:        "https://app.cribl.cloud",
+	LoginServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	LoginServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type LoginResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

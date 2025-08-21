@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateWorkersRestartServerCloud        string = "cloud"
+	UpdateWorkersRestartServerCloudGroup   string = "cloud-group"
+	UpdateWorkersRestartServerManagedGroup string = "managed-group"
+)
+
+var UpdateWorkersRestartServerList = map[string]string{
+	UpdateWorkersRestartServerCloud:        "https://app.cribl.cloud",
+	UpdateWorkersRestartServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateWorkersRestartServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // UpdateWorkersRestartResponseBody - a list of RestartResponse objects
 type UpdateWorkersRestartResponseBody struct {
 	Items []shared.RestartResponse `json:"items,omitempty"`

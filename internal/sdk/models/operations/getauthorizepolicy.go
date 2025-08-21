@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAuthorizePolicyServerCloud        string = "cloud"
+	GetAuthorizePolicyServerCloudGroup   string = "cloud-group"
+	GetAuthorizePolicyServerManagedGroup string = "managed-group"
+)
+
+var GetAuthorizePolicyServerList = map[string]string{
+	GetAuthorizePolicyServerCloud:        "https://app.cribl.cloud",
+	GetAuthorizePolicyServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAuthorizePolicyServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetAuthorizePolicyResponseBody - a list of AuthPolicyEntry objects
 type GetAuthorizePolicyResponseBody struct {
 	Items []shared.AuthPolicyEntry `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemCaptureServerCloud        string = "cloud"
+	CreateSystemCaptureServerCloudGroup   string = "cloud-group"
+	CreateSystemCaptureServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemCaptureServerList = map[string]string{
+	CreateSystemCaptureServerCloud:        "https://app.cribl.cloud",
+	CreateSystemCaptureServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemCaptureServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSystemCaptureResponseBody - a list of any objects
 type CreateSystemCaptureResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

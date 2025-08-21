@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemLookupsByPackServerCloud        string = "cloud"
+	GetSystemLookupsByPackServerCloudGroup   string = "cloud-group"
+	GetSystemLookupsByPackServerManagedGroup string = "managed-group"
+)
+
+var GetSystemLookupsByPackServerList = map[string]string{
+	GetSystemLookupsByPackServerCloud:        "https://app.cribl.cloud",
+	GetSystemLookupsByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemLookupsByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSystemLookupsByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

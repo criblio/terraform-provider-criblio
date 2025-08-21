@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetProfilerItemByIDServerCloud        string = "cloud"
+	GetProfilerItemByIDServerCloudGroup   string = "cloud-group"
+	GetProfilerItemByIDServerManagedGroup string = "managed-group"
+)
+
+var GetProfilerItemByIDServerList = map[string]string{
+	GetProfilerItemByIDServerCloud:        "https://app.cribl.cloud",
+	GetProfilerItemByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetProfilerItemByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetProfilerItemByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

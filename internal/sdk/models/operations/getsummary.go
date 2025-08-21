@@ -9,6 +9,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSummaryServerCloud        string = "cloud"
+	GetSummaryServerCloudGroup   string = "cloud-group"
+	GetSummaryServerManagedGroup string = "managed-group"
+)
+
+var GetSummaryServerList = map[string]string{
+	GetSummaryServerCloud:        "https://app.cribl.cloud",
+	GetSummaryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSummaryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSummaryMode - product filter
 type GetSummaryMode string
 

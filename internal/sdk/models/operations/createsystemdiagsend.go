@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemDiagSendServerCloud        string = "cloud"
+	CreateSystemDiagSendServerCloudGroup   string = "cloud-group"
+	CreateSystemDiagSendServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemDiagSendServerList = map[string]string{
+	CreateSystemDiagSendServerCloud:        "https://app.cribl.cloud",
+	CreateSystemDiagSendServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemDiagSendServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSystemDiagSendResponseBody - a list of any objects
 type CreateSystemDiagSendResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

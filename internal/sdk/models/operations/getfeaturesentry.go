@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetFeaturesEntryServerCloud        string = "cloud"
+	GetFeaturesEntryServerCloudGroup   string = "cloud-group"
+	GetFeaturesEntryServerManagedGroup string = "managed-group"
+)
+
+var GetFeaturesEntryServerList = map[string]string{
+	GetFeaturesEntryServerCloud:        "https://app.cribl.cloud",
+	GetFeaturesEntryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetFeaturesEntryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetFeaturesEntryResponseBody - a list of FeaturesEntry objects
 type GetFeaturesEntryResponseBody struct {
 	Items []shared.FeaturesEntry `json:"items,omitempty"`

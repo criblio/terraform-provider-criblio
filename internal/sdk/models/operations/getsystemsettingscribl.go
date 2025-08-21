@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemSettingsCriblServerCloud        string = "cloud"
+	GetSystemSettingsCriblServerCloudGroup   string = "cloud-group"
+	GetSystemSettingsCriblServerManagedGroup string = "managed-group"
+)
+
+var GetSystemSettingsCriblServerList = map[string]string{
+	GetSystemSettingsCriblServerCloud:        "https://app.cribl.cloud",
+	GetSystemSettingsCriblServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemSettingsCriblServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetSystemSettingsCriblResponseBody - a list of PublicSettings objects
 type GetSystemSettingsCriblResponseBody struct {
 	Items []shared.PublicSettings `json:"items,omitempty"`

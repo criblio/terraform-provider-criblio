@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetRegexLibEntryByIDServerCloud        string = "cloud"
+	GetRegexLibEntryByIDServerCloudGroup   string = "cloud-group"
+	GetRegexLibEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var GetRegexLibEntryByIDServerList = map[string]string{
+	GetRegexLibEntryByIDServerCloud:        "https://app.cribl.cloud",
+	GetRegexLibEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetRegexLibEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetRegexLibEntryByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

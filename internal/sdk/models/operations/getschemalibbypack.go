@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSchemaLibByPackServerCloud        string = "cloud"
+	GetSchemaLibByPackServerCloudGroup   string = "cloud-group"
+	GetSchemaLibByPackServerManagedGroup string = "managed-group"
+)
+
+var GetSchemaLibByPackServerList = map[string]string{
+	GetSchemaLibByPackServerCloud:        "https://app.cribl.cloud",
+	GetSchemaLibByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSchemaLibByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSchemaLibByPackRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

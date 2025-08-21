@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetUIByKeyServerCloud        string = "cloud"
+	GetUIByKeyServerCloudGroup   string = "cloud-group"
+	GetUIByKeyServerManagedGroup string = "managed-group"
+)
+
+var GetUIByKeyServerList = map[string]string{
+	GetUIByKeyServerCloud:        "https://app.cribl.cloud",
+	GetUIByKeyServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetUIByKeyServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetUIByKeyRequest struct {
 	// UI state key
 	Key string `pathParam:"style=simple,explode=false,name=key"`

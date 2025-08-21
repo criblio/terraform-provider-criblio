@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteAppscopeLibEntryByIDServerCloud        string = "cloud"
+	DeleteAppscopeLibEntryByIDServerCloudGroup   string = "cloud-group"
+	DeleteAppscopeLibEntryByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteAppscopeLibEntryByIDServerList = map[string]string{
+	DeleteAppscopeLibEntryByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteAppscopeLibEntryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteAppscopeLibEntryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteAppscopeLibEntryByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

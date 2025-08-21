@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateCriblLakeDatasetByLakeIDAndIDServerCloud        string = "cloud"
+	UpdateCriblLakeDatasetByLakeIDAndIDServerCloudGroup   string = "cloud-group"
+	UpdateCriblLakeDatasetByLakeIDAndIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateCriblLakeDatasetByLakeIDAndIDServerList = map[string]string{
+	UpdateCriblLakeDatasetByLakeIDAndIDServerCloud:        "https://app.cribl.cloud",
+	UpdateCriblLakeDatasetByLakeIDAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateCriblLakeDatasetByLakeIDAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateCriblLakeDatasetByLakeIDAndIDRequest struct {
 	// lake id that contains the Datasets
 	LakeID string `pathParam:"style=simple,explode=false,name=lakeId"`

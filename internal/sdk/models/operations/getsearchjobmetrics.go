@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSearchJobMetricsServerCloud        string = "cloud"
+	GetSearchJobMetricsServerCloudGroup   string = "cloud-group"
+	GetSearchJobMetricsServerManagedGroup string = "managed-group"
+)
+
+var GetSearchJobMetricsServerList = map[string]string{
+	GetSearchJobMetricsServerCloud:        "https://app.cribl.cloud",
+	GetSearchJobMetricsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSearchJobMetricsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSearchJobMetricsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

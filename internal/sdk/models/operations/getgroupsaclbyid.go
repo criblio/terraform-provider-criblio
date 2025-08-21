@@ -9,6 +9,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetGroupsACLByIDServerCloud        string = "cloud"
+	GetGroupsACLByIDServerCloudGroup   string = "cloud-group"
+	GetGroupsACLByIDServerManagedGroup string = "managed-group"
+)
+
+var GetGroupsACLByIDServerList = map[string]string{
+	GetGroupsACLByIDServerCloud:        "https://app.cribl.cloud",
+	GetGroupsACLByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetGroupsACLByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetGroupsACLByIDType - resource type by which to filter access levels
 type GetGroupsACLByIDType string
 

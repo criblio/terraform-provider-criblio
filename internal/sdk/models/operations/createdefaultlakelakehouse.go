@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateDefaultLakeLakehouseServerCloud        string = "cloud"
+	CreateDefaultLakeLakehouseServerCloudGroup   string = "cloud-group"
+	CreateDefaultLakeLakehouseServerManagedGroup string = "managed-group"
+)
+
+var CreateDefaultLakeLakehouseServerList = map[string]string{
+	CreateDefaultLakeLakehouseServerCloud:        "https://app.cribl.cloud",
+	CreateDefaultLakeLakehouseServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateDefaultLakeLakehouseServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateDefaultLakeLakehouseResponseBody - a list of CriblLakeHouse objects
 type CreateDefaultLakeLakehouseResponseBody struct {
 	Items []shared.Lakehouse `json:"items,omitempty"`

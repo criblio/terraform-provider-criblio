@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateDashboardCategoryServerCloud        string = "cloud"
+	CreateDashboardCategoryServerCloudGroup   string = "cloud-group"
+	CreateDashboardCategoryServerManagedGroup string = "managed-group"
+)
+
+var CreateDashboardCategoryServerList = map[string]string{
+	CreateDashboardCategoryServerCloud:        "https://app.cribl.cloud",
+	CreateDashboardCategoryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateDashboardCategoryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateDashboardCategoryResponseBody - a list of DashboardCategory objects
 type CreateDashboardCategoryResponseBody struct {
 	Items []shared.DashboardCategory `json:"items,omitempty"`

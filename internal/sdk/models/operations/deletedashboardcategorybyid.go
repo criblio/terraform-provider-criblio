@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteDashboardCategoryByIDServerCloud        string = "cloud"
+	DeleteDashboardCategoryByIDServerCloudGroup   string = "cloud-group"
+	DeleteDashboardCategoryByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteDashboardCategoryByIDServerList = map[string]string{
+	DeleteDashboardCategoryByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteDashboardCategoryByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteDashboardCategoryByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteDashboardCategoryByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

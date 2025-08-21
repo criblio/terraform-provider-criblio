@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteLicenseByIDServerCloud        string = "cloud"
+	DeleteLicenseByIDServerCloudGroup   string = "cloud-group"
+	DeleteLicenseByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteLicenseByIDServerList = map[string]string{
+	DeleteLicenseByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteLicenseByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteLicenseByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteLicenseByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

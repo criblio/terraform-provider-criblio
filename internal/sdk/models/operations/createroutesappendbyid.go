@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateRoutesAppendByIDServerCloud        string = "cloud"
+	CreateRoutesAppendByIDServerCloudGroup   string = "cloud-group"
+	CreateRoutesAppendByIDServerManagedGroup string = "managed-group"
+)
+
+var CreateRoutesAppendByIDServerList = map[string]string{
+	CreateRoutesAppendByIDServerCloud:        "https://app.cribl.cloud",
+	CreateRoutesAppendByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateRoutesAppendByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateRoutesAppendByIDRequest struct {
 	// the route table to be appended to - currently default is the only supported value
 	ID string `pathParam:"style=simple,explode=false,name=id"`

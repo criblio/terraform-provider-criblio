@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeFileinspectServerCloud        string = "cloud"
+	GetEdgeFileinspectServerCloudGroup   string = "cloud-group"
+	GetEdgeFileinspectServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeFileinspectServerList = map[string]string{
+	GetEdgeFileinspectServerCloud:        "https://app.cribl.cloud",
+	GetEdgeFileinspectServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeFileinspectServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetEdgeFileinspectResponseBody - a list of EdgeFileInspectResponse objects
 type GetEdgeFileinspectResponseBody struct {
 	Items []shared.EdgeFileInspectResponse `json:"items,omitempty"`

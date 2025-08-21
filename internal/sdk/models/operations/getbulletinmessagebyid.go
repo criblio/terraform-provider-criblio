@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetBulletinMessageByIDServerCloud        string = "cloud"
+	GetBulletinMessageByIDServerCloudGroup   string = "cloud-group"
+	GetBulletinMessageByIDServerManagedGroup string = "managed-group"
+)
+
+var GetBulletinMessageByIDServerList = map[string]string{
+	GetBulletinMessageByIDServerCloud:        "https://app.cribl.cloud",
+	GetBulletinMessageByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetBulletinMessageByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetBulletinMessageByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

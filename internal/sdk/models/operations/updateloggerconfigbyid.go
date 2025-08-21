@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateLoggerConfigByIDServerCloud        string = "cloud"
+	UpdateLoggerConfigByIDServerCloudGroup   string = "cloud-group"
+	UpdateLoggerConfigByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateLoggerConfigByIDServerList = map[string]string{
+	UpdateLoggerConfigByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateLoggerConfigByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateLoggerConfigByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateLoggerConfigByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

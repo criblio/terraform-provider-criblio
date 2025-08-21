@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetAuthMultiFactorServerCloud        string = "cloud"
+	GetAuthMultiFactorServerCloudGroup   string = "cloud-group"
+	GetAuthMultiFactorServerManagedGroup string = "managed-group"
+)
+
+var GetAuthMultiFactorServerList = map[string]string{
+	GetAuthMultiFactorServerCloud:        "https://app.cribl.cloud",
+	GetAuthMultiFactorServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetAuthMultiFactorServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetAuthMultiFactorResponseBody - a list of MultiFactorAuthSchema objects
 type GetAuthMultiFactorResponseBody struct {
 	Items []shared.MultiFactorAuthSchema `json:"items,omitempty"`

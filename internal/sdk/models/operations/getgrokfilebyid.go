@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetGrokFileByIDServerCloud        string = "cloud"
+	GetGrokFileByIDServerCloudGroup   string = "cloud-group"
+	GetGrokFileByIDServerManagedGroup string = "managed-group"
+)
+
+var GetGrokFileByIDServerList = map[string]string{
+	GetGrokFileByIDServerCloud:        "https://app.cribl.cloud",
+	GetGrokFileByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetGrokFileByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetGrokFileByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

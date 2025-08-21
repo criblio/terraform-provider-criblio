@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdatePacksByIDServerCloud        string = "cloud"
+	UpdatePacksByIDServerCloudGroup   string = "cloud-group"
+	UpdatePacksByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdatePacksByIDServerList = map[string]string{
+	UpdatePacksByIDServerCloud:        "https://app.cribl.cloud",
+	UpdatePacksByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdatePacksByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdatePacksByIDRequest struct {
 	// Pack name
 	ID string `pathParam:"style=simple,explode=false,name=id"`

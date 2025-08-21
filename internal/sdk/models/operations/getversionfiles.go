@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetVersionFilesServerCloud        string = "cloud"
+	GetVersionFilesServerCloudGroup   string = "cloud-group"
+	GetVersionFilesServerManagedGroup string = "managed-group"
+)
+
+var GetVersionFilesServerList = map[string]string{
+	GetVersionFilesServerCloud:        "https://app.cribl.cloud",
+	GetVersionFilesServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetVersionFilesServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetVersionFilesRequest struct {
 	// Group ID
 	Group *string `queryParam:"style=form,explode=true,name=group"`

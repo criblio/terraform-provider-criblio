@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteBreakersByPackAndIDServerCloud        string = "cloud"
+	DeleteBreakersByPackAndIDServerCloudGroup   string = "cloud-group"
+	DeleteBreakersByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteBreakersByPackAndIDServerList = map[string]string{
+	DeleteBreakersByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	DeleteBreakersByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteBreakersByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteBreakersByPackAndIDRequest struct {
 	// Unique ID to DELETE for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

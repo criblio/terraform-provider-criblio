@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetNotificationByIDServerCloud        string = "cloud"
+	GetNotificationByIDServerCloudGroup   string = "cloud-group"
+	GetNotificationByIDServerManagedGroup string = "managed-group"
+)
+
+var GetNotificationByIDServerList = map[string]string{
+	GetNotificationByIDServerCloud:        "https://app.cribl.cloud",
+	GetNotificationByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetNotificationByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetNotificationByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

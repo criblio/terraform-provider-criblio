@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSystemLogsSearchServerCloud        string = "cloud"
+	GetSystemLogsSearchServerCloudGroup   string = "cloud-group"
+	GetSystemLogsSearchServerManagedGroup string = "managed-group"
+)
+
+var GetSystemLogsSearchServerList = map[string]string{
+	GetSystemLogsSearchServerCloud:        "https://app.cribl.cloud",
+	GetSystemLogsSearchServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSystemLogsSearchServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSystemLogsSearchRequest struct {
 	// type of logs request single multi group
 	Type string `queryParam:"style=form,explode=true,name=type"`

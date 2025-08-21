@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetProjectACLByIDServerCloud        string = "cloud"
+	GetProjectACLByIDServerCloudGroup   string = "cloud-group"
+	GetProjectACLByIDServerManagedGroup string = "managed-group"
+)
+
+var GetProjectACLByIDServerList = map[string]string{
+	GetProjectACLByIDServerCloud:        "https://app.cribl.cloud",
+	GetProjectACLByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetProjectACLByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetProjectACLByIDRequest struct {
 	// Unique ID for ACL Get
 	ID string `pathParam:"style=simple,explode=false,name=id"`

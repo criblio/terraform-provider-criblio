@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteLoggerConfigByIDServerCloud        string = "cloud"
+	DeleteLoggerConfigByIDServerCloudGroup   string = "cloud-group"
+	DeleteLoggerConfigByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteLoggerConfigByIDServerList = map[string]string{
+	DeleteLoggerConfigByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteLoggerConfigByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteLoggerConfigByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteLoggerConfigByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

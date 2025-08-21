@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetPacksByIDServerCloud        string = "cloud"
+	GetPacksByIDServerCloudGroup   string = "cloud-group"
+	GetPacksByIDServerManagedGroup string = "managed-group"
+)
+
+var GetPacksByIDServerList = map[string]string{
+	GetPacksByIDServerCloud:        "https://app.cribl.cloud",
+	GetPacksByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetPacksByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetPacksByIDRequest struct {
 	// Comma separated list of entities, "outputs", "inputs"
 	With *string `queryParam:"style=form,explode=true,name=with"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteLookupFileByIDServerCloud        string = "cloud"
+	DeleteLookupFileByIDServerCloudGroup   string = "cloud-group"
+	DeleteLookupFileByIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteLookupFileByIDServerList = map[string]string{
+	DeleteLookupFileByIDServerCloud:        "https://app.cribl.cloud",
+	DeleteLookupFileByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteLookupFileByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteLookupFileByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`

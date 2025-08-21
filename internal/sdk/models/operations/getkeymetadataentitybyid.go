@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetKeyMetadataEntityByIDServerCloud        string = "cloud"
+	GetKeyMetadataEntityByIDServerCloudGroup   string = "cloud-group"
+	GetKeyMetadataEntityByIDServerManagedGroup string = "managed-group"
+)
+
+var GetKeyMetadataEntityByIDServerList = map[string]string{
+	GetKeyMetadataEntityByIDServerCloud:        "https://app.cribl.cloud",
+	GetKeyMetadataEntityByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetKeyMetadataEntityByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetKeyMetadataEntityByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

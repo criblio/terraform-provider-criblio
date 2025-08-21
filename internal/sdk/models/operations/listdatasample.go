@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListDataSampleServerCloud        string = "cloud"
+	ListDataSampleServerCloudGroup   string = "cloud-group"
+	ListDataSampleServerManagedGroup string = "managed-group"
+)
+
+var ListDataSampleServerList = map[string]string{
+	ListDataSampleServerCloud:        "https://app.cribl.cloud",
+	ListDataSampleServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListDataSampleServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListDataSampleResponseBody - a list of DataSample objects
 type ListDataSampleResponseBody struct {
 	Items []shared.DataSample `json:"items,omitempty"`

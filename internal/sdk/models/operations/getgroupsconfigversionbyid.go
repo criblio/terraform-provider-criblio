@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetGroupsConfigVersionByIDServerCloud        string = "cloud"
+	GetGroupsConfigVersionByIDServerCloudGroup   string = "cloud-group"
+	GetGroupsConfigVersionByIDServerManagedGroup string = "managed-group"
+)
+
+var GetGroupsConfigVersionByIDServerList = map[string]string{
+	GetGroupsConfigVersionByIDServerCloud:        "https://app.cribl.cloud",
+	GetGroupsConfigVersionByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetGroupsConfigVersionByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetGroupsConfigVersionByIDRequest struct {
 	// Group ID
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -9,6 +9,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetTeamServerCloud        string = "cloud"
+	GetTeamServerCloudGroup   string = "cloud-group"
+	GetTeamServerManagedGroup string = "managed-group"
+)
+
+var GetTeamServerList = map[string]string{
+	GetTeamServerCloud:        "https://app.cribl.cloud",
+	GetTeamServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetTeamServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetTeamProduct - filter teams by product
 type GetTeamProduct string
 

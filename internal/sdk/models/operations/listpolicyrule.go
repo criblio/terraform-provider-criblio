@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListPolicyRuleServerCloud        string = "cloud"
+	ListPolicyRuleServerCloudGroup   string = "cloud-group"
+	ListPolicyRuleServerManagedGroup string = "managed-group"
+)
+
+var ListPolicyRuleServerList = map[string]string{
+	ListPolicyRuleServerCloud:        "https://app.cribl.cloud",
+	ListPolicyRuleServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListPolicyRuleServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListPolicyRuleResponseBody - a list of PolicyRule objects
 type ListPolicyRuleResponseBody struct {
 	Items []shared.PolicyRule `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteSchemaLibByPackAndIDServerCloud        string = "cloud"
+	DeleteSchemaLibByPackAndIDServerCloudGroup   string = "cloud-group"
+	DeleteSchemaLibByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var DeleteSchemaLibByPackAndIDServerList = map[string]string{
+	DeleteSchemaLibByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	DeleteSchemaLibByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteSchemaLibByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteSchemaLibByPackAndIDRequest struct {
 	// Unique ID to DELETE for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

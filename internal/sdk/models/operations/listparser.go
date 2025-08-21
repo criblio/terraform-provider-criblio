@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListParserServerCloud        string = "cloud"
+	ListParserServerCloudGroup   string = "cloud-group"
+	ListParserServerManagedGroup string = "managed-group"
+)
+
+var ListParserServerList = map[string]string{
+	ListParserServerCloud:        "https://app.cribl.cloud",
+	ListParserServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListParserServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type ListParserRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

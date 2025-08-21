@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemMetricsQueryServerCloud        string = "cloud"
+	CreateSystemMetricsQueryServerCloudGroup   string = "cloud-group"
+	CreateSystemMetricsQueryServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemMetricsQueryServerList = map[string]string{
+	CreateSystemMetricsQueryServerCloud:        "https://app.cribl.cloud",
+	CreateSystemMetricsQueryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemMetricsQueryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateSystemMetricsQueryResponseBody - a list of Response objects
 type CreateSystemMetricsQueryResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

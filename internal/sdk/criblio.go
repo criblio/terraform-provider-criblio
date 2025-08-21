@@ -2,11 +2,10 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.686.7
+// Generated from OpenAPI doc version 1.0 and generator version 2.686.7
 
 import (
 	"context"
-	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/config"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/hooks"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
@@ -15,19 +14,6 @@ import (
 	"net/http"
 	"time"
 )
-
-const (
-	ServerCloud        string = "cloud"
-	ServerCloudGroup   string = "cloud-group"
-	ServerManagedGroup string = "managed-group"
-)
-
-// ServerList contains the list of servers available to the SDK
-var ServerList = map[string]string{
-	ServerCloud:        "https://app.cribl.cloud",
-	ServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
-	ServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
-}
 
 // HTTPClient provides an interface for supplying the SDK with a custom HTTP client
 type HTTPClient interface {
@@ -55,9 +41,11 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// CriblIo - Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).
+// CriblIo - Cribl.Cloud Public API: Serves as a public API for the Cribl.Cloud platform and powers the Speakeasy SDK
 type CriblIo struct {
 	SDKVersion string
+	Health     *Health
+	Workspaces *Workspaces
 	// Actions related to Projects
 	Projects *Projects
 	// Actions related to Subscriptions
@@ -201,8 +189,6 @@ type CriblIo struct {
 	Conditions *Conditions
 	// Actions related to diagnostics
 	Diag *Diag
-	// Actions related to REST server health
-	Health *Health
 	// Actions related to Jobs
 	Jobs *Jobs
 	// Actions related to Security
@@ -246,114 +232,6 @@ type CriblIo struct {
 
 type SDKOption func(*CriblIo)
 
-// WithServerURL allows the overriding of the default server URL
-func WithServerURL(serverURL string) SDKOption {
-	return func(sdk *CriblIo) {
-		sdk.sdkConfiguration.ServerURL = serverURL
-	}
-}
-
-// WithTemplatedServerURL allows the overriding of the default server URL with a templated URL populated with the provided parameters
-func WithTemplatedServerURL(serverURL string, params map[string]string) SDKOption {
-	return func(sdk *CriblIo) {
-		if params != nil {
-			serverURL = utils.ReplaceParameters(serverURL, params)
-		}
-
-		sdk.sdkConfiguration.ServerURL = serverURL
-	}
-}
-
-// WithServer allows the overriding of the default server by name
-func WithServer(server string) SDKOption {
-	return func(sdk *CriblIo) {
-		_, ok := ServerList[server]
-		if !ok {
-			panic(fmt.Errorf("server %s not found", server))
-		}
-
-		sdk.sdkConfiguration.Server = server
-	}
-}
-
-// WithWorkspaceName allows setting the workspaceName variable for url substitution
-func WithWorkspaceName(workspaceName string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["workspaceName"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["workspaceName"] = fmt.Sprintf("%v", workspaceName)
-		}
-	}
-}
-
-// WithOrganizationID allows setting the organizationId variable for url substitution
-func WithOrganizationID(organizationID string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["organizationId"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["organizationId"] = fmt.Sprintf("%v", organizationID)
-		}
-	}
-}
-
-// WithCloudDomain allows setting the cloudDomain variable for url substitution
-func WithCloudDomain(cloudDomain string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["cloudDomain"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["cloudDomain"] = fmt.Sprintf("%v", cloudDomain)
-		}
-	}
-}
-
-// WithGroupName allows setting the groupName variable for url substitution
-func WithGroupName(groupName string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["groupName"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["groupName"] = fmt.Sprintf("%v", groupName)
-		}
-	}
-}
-
-// WithHostname allows setting the hostname variable for url substitution
-func WithHostname(hostname string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["hostname"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["hostname"] = fmt.Sprintf("%v", hostname)
-		}
-	}
-}
-
-// WithPort allows setting the port variable for url substitution
-func WithPort(port string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["port"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["port"] = fmt.Sprintf("%v", port)
-		}
-	}
-}
-
 // WithClient allows the overriding of the default HTTP client used by the SDK
 func WithClient(client HTTPClient) SDKOption {
 	return func(sdk *CriblIo) {
@@ -390,31 +268,12 @@ func WithTimeout(timeout time.Duration) SDKOption {
 	}
 }
 
-// New creates a new instance of the SDK with the provided options
-func New(opts ...SDKOption) *CriblIo {
+// New creates a new instance of the SDK with the provided serverURL and options
+func New(serverURL string, opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.9.7",
+		SDKVersion: "1.12.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.9.7 2.686.7 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
-			ServerList: ServerList,
-			ServerVariables: map[string]map[string]string{
-				"cloud": {
-					"workspaceName":  "main",
-					"organizationId": "ian",
-					"cloudDomain":    "cribl.cloud",
-				},
-				"cloud-group": {
-					"workspaceName":  "main",
-					"organizationId": "ian",
-					"cloudDomain":    "cribl.cloud",
-					"groupName":      "default",
-				},
-				"managed-group": {
-					"hostname":  "localhost",
-					"port":      "9000",
-					"groupName": "default",
-				},
-			},
+			UserAgent: "speakeasy-sdk/terraform 1.12.1 2.686.7 1.0 github.com/criblio/terraform-provider-criblio/internal/sdk",
 		},
 		hooks: hooks.New(),
 	}
@@ -427,13 +286,17 @@ func New(opts ...SDKOption) *CriblIo {
 		sdk.sdkConfiguration.Client = &http.Client{Timeout: 60 * time.Second}
 	}
 
+	sdk.sdkConfiguration.ServerURL = serverURL
+
 	currentServerURL, _ := sdk.sdkConfiguration.GetServerDetails()
-	serverURL := currentServerURL
+	serverURL = currentServerURL
 	serverURL, sdk.sdkConfiguration.Client = sdk.hooks.SDKInit(currentServerURL, sdk.sdkConfiguration.Client)
 	if currentServerURL != serverURL {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
+	sdk.Health = newHealth(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Projects = newProjects(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Versioning = newVersioning(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -507,7 +370,6 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Expressions = newExpressions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Conditions = newConditions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Diag = newDiag(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Health = newHealth(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Jobs = newJobs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Security = newSecurity(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Licenses = newLicenses(sdk, sdk.sdkConfiguration, sdk.hooks)

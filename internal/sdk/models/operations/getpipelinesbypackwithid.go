@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetPipelinesByPackWithIDServerCloud        string = "cloud"
+	GetPipelinesByPackWithIDServerCloudGroup   string = "cloud-group"
+	GetPipelinesByPackWithIDServerManagedGroup string = "managed-group"
+)
+
+var GetPipelinesByPackWithIDServerList = map[string]string{
+	GetPipelinesByPackWithIDServerCloud:        "https://app.cribl.cloud",
+	GetPipelinesByPackWithIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetPipelinesByPackWithIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetPipelinesByPackWithIDRequest struct {
 	// pack ID to GET
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

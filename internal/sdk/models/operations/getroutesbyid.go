@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetRoutesByIDServerCloud        string = "cloud"
+	GetRoutesByIDServerCloudGroup   string = "cloud-group"
+	GetRoutesByIDServerManagedGroup string = "managed-group"
+)
+
+var GetRoutesByIDServerList = map[string]string{
+	GetRoutesByIDServerCloud:        "https://app.cribl.cloud",
+	GetRoutesByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetRoutesByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetRoutesByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetEdgeContainersByIDServerCloud        string = "cloud"
+	GetEdgeContainersByIDServerCloudGroup   string = "cloud-group"
+	GetEdgeContainersByIDServerManagedGroup string = "managed-group"
+)
+
+var GetEdgeContainersByIDServerList = map[string]string{
+	GetEdgeContainersByIDServerCloud:        "https://app.cribl.cloud",
+	GetEdgeContainersByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetEdgeContainersByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetEdgeContainersByIDRequest struct {
 	// ID
 	ID string `pathParam:"style=simple,explode=false,name=id"`

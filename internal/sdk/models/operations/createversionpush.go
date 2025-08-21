@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateVersionPushServerCloud        string = "cloud"
+	CreateVersionPushServerCloudGroup   string = "cloud-group"
+	CreateVersionPushServerManagedGroup string = "managed-group"
+)
+
+var CreateVersionPushServerList = map[string]string{
+	CreateVersionPushServerCloud:        "https://app.cribl.cloud",
+	CreateVersionPushServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateVersionPushServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateVersionPushResponseBody - a list of any objects
 type CreateVersionPushResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`

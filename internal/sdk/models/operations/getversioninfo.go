@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetVersionInfoServerCloud        string = "cloud"
+	GetVersionInfoServerCloudGroup   string = "cloud-group"
+	GetVersionInfoServerManagedGroup string = "managed-group"
+)
+
+var GetVersionInfoServerList = map[string]string{
+	GetVersionInfoServerCloud:        "https://app.cribl.cloud",
+	GetVersionInfoServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetVersionInfoServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetVersionInfoResponseBody - a list of GitInfo objects
 type GetVersionInfoResponseBody struct {
 	Items []shared.GitInfo `json:"items,omitempty"`

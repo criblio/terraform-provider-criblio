@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateSearchMacroByIDServerCloud        string = "cloud"
+	UpdateSearchMacroByIDServerCloudGroup   string = "cloud-group"
+	UpdateSearchMacroByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateSearchMacroByIDServerList = map[string]string{
+	UpdateSearchMacroByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateSearchMacroByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateSearchMacroByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateSearchMacroByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`

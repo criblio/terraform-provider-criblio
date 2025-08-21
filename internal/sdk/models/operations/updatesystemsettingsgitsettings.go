@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateSystemSettingsGitSettingsServerCloud        string = "cloud"
+	UpdateSystemSettingsGitSettingsServerCloudGroup   string = "cloud-group"
+	UpdateSystemSettingsGitSettingsServerManagedGroup string = "managed-group"
+)
+
+var UpdateSystemSettingsGitSettingsServerList = map[string]string{
+	UpdateSystemSettingsGitSettingsServerCloud:        "https://app.cribl.cloud",
+	UpdateSystemSettingsGitSettingsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateSystemSettingsGitSettingsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // UpdateSystemSettingsGitSettingsResponseBody - a list of GitSettings objects
 type UpdateSystemSettingsGitSettingsResponseBody struct {
 	Items []shared.GitSettings `json:"items,omitempty"`

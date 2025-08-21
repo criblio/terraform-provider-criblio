@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateAuthSsoCallbackServerCloud        string = "cloud"
+	CreateAuthSsoCallbackServerCloudGroup   string = "cloud-group"
+	CreateAuthSsoCallbackServerManagedGroup string = "managed-group"
+)
+
+var CreateAuthSsoCallbackServerList = map[string]string{
+	CreateAuthSsoCallbackServerCloud:        "https://app.cribl.cloud",
+	CreateAuthSsoCallbackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateAuthSsoCallbackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // CreateAuthSsoCallbackRequest - Authentication request object
 type CreateAuthSsoCallbackRequest struct {
 	// Authentication request object

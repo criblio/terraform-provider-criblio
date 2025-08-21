@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetSummaryWorkersServerCloud        string = "cloud"
+	GetSummaryWorkersServerCloudGroup   string = "cloud-group"
+	GetSummaryWorkersServerManagedGroup string = "managed-group"
+)
+
+var GetSummaryWorkersServerList = map[string]string{
+	GetSummaryWorkersServerCloud:        "https://app.cribl.cloud",
+	GetSummaryWorkersServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetSummaryWorkersServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetSummaryWorkersRequest struct {
 	// Filter expression evaluated against nodes
 	FilterExp *string `queryParam:"style=form,explode=true,name=filterExp"`

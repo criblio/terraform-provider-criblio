@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateSystemInputsByPackServerCloud        string = "cloud"
+	CreateSystemInputsByPackServerCloudGroup   string = "cloud-group"
+	CreateSystemInputsByPackServerManagedGroup string = "managed-group"
+)
+
+var CreateSystemInputsByPackServerList = map[string]string{
+	CreateSystemInputsByPackServerCloud:        "https://app.cribl.cloud",
+	CreateSystemInputsByPackServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateSystemInputsByPackServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateSystemInputsByPackRequest struct {
 	// pack inputs to POST
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`

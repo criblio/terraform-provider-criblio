@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListDatasetProviderServerCloud        string = "cloud"
+	ListDatasetProviderServerCloudGroup   string = "cloud-group"
+	ListDatasetProviderServerManagedGroup string = "managed-group"
+)
+
+var ListDatasetProviderServerList = map[string]string{
+	ListDatasetProviderServerCloud:        "https://app.cribl.cloud",
+	ListDatasetProviderServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListDatasetProviderServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListDatasetProviderResponseBody - a list of DatasetProvider objects
 type ListDatasetProviderResponseBody struct {
 	Items []shared.GenericProvider `json:"items,omitempty"`

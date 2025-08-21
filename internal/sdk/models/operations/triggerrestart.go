@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	TriggerRestartServerCloud        string = "cloud"
+	TriggerRestartServerCloudGroup   string = "cloud-group"
+	TriggerRestartServerManagedGroup string = "managed-group"
+)
+
+var TriggerRestartServerList = map[string]string{
+	TriggerRestartServerCloud:        "https://app.cribl.cloud",
+	TriggerRestartServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	TriggerRestartServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type TriggerRestartResponse struct {
 	// HTTP response content type for this operation
 	ContentType string

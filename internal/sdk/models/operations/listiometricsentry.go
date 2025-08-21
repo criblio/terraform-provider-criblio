@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListIoMetricsEntryServerCloud        string = "cloud"
+	ListIoMetricsEntryServerCloudGroup   string = "cloud-group"
+	ListIoMetricsEntryServerManagedGroup string = "managed-group"
+)
+
+var ListIoMetricsEntryServerList = map[string]string{
+	ListIoMetricsEntryServerCloud:        "https://app.cribl.cloud",
+	ListIoMetricsEntryServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListIoMetricsEntryServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // ListIoMetricsEntryResponseBody - a list of IoMetricsEntry objects
 type ListIoMetricsEntryResponseBody struct {
 	Items []shared.IoMetricsEntry `json:"items,omitempty"`

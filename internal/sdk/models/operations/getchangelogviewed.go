@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetChangelogViewedServerCloud        string = "cloud"
+	GetChangelogViewedServerCloudGroup   string = "cloud-group"
+	GetChangelogViewedServerManagedGroup string = "managed-group"
+)
+
+var GetChangelogViewedServerList = map[string]string{
+	GetChangelogViewedServerCloud:        "https://app.cribl.cloud",
+	GetChangelogViewedServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetChangelogViewedServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // GetChangelogViewedResponseBody - a list of ChangelogState objects
 type GetChangelogViewedResponseBody struct {
 	Items []shared.ChangelogState `json:"items,omitempty"`

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	UpdateJobsCancelByIDServerCloud        string = "cloud"
+	UpdateJobsCancelByIDServerCloudGroup   string = "cloud-group"
+	UpdateJobsCancelByIDServerManagedGroup string = "managed-group"
+)
+
+var UpdateJobsCancelByIDServerList = map[string]string{
+	UpdateJobsCancelByIDServerCloud:        "https://app.cribl.cloud",
+	UpdateJobsCancelByIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	UpdateJobsCancelByIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type UpdateJobsCancelByIDRequest struct {
 	// Job instance id
 	ID string `pathParam:"style=simple,explode=false,name=id"`

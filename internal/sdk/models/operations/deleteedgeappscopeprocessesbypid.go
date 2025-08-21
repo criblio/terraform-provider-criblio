@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteEdgeAppscopeProcessesByPidServerCloud        string = "cloud"
+	DeleteEdgeAppscopeProcessesByPidServerCloudGroup   string = "cloud-group"
+	DeleteEdgeAppscopeProcessesByPidServerManagedGroup string = "managed-group"
+)
+
+var DeleteEdgeAppscopeProcessesByPidServerList = map[string]string{
+	DeleteEdgeAppscopeProcessesByPidServerCloud:        "https://app.cribl.cloud",
+	DeleteEdgeAppscopeProcessesByPidServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteEdgeAppscopeProcessesByPidServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteEdgeAppscopeProcessesByPidRequest struct {
 	// config string required
 	Pid string `pathParam:"style=simple,explode=false,name=pid"`

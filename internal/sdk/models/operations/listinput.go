@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	ListInputServerCloud        string = "cloud"
+	ListInputServerCloudGroup   string = "cloud-group"
+	ListInputServerManagedGroup string = "managed-group"
+)
+
+var ListInputServerList = map[string]string{
+	ListInputServerCloud:        "https://app.cribl.cloud",
+	ListInputServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	ListInputServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type ListInputRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

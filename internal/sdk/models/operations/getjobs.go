@@ -9,6 +9,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetJobsServerCloud        string = "cloud"
+	GetJobsServerCloudGroup   string = "cloud-group"
+	GetJobsServerManagedGroup string = "managed-group"
+)
+
+var GetJobsServerList = map[string]string{
+	GetJobsServerCloud:        "https://app.cribl.cloud",
+	GetJobsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetJobsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 // RunType - Filter by job run type
 type RunType string
 

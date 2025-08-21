@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateVersionRevertServerCloud        string = "cloud"
+	CreateVersionRevertServerCloudGroup   string = "cloud-group"
+	CreateVersionRevertServerManagedGroup string = "managed-group"
+)
+
+var CreateVersionRevertServerList = map[string]string{
+	CreateVersionRevertServerCloud:        "https://app.cribl.cloud",
+	CreateVersionRevertServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateVersionRevertServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateVersionRevertRequest struct {
 	// Group ID
 	Group *string `queryParam:"style=form,explode=true,name=group"`

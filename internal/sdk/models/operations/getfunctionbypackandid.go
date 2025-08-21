@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetFunctionByPackAndIDServerCloud        string = "cloud"
+	GetFunctionByPackAndIDServerCloudGroup   string = "cloud-group"
+	GetFunctionByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var GetFunctionByPackAndIDServerList = map[string]string{
+	GetFunctionByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	GetFunctionByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetFunctionByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetFunctionByPackAndIDRequest struct {
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`

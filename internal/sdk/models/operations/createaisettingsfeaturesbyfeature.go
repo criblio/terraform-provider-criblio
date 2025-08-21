@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	CreateAiSettingsFeaturesByFeatureServerCloud        string = "cloud"
+	CreateAiSettingsFeaturesByFeatureServerCloudGroup   string = "cloud-group"
+	CreateAiSettingsFeaturesByFeatureServerManagedGroup string = "managed-group"
+)
+
+var CreateAiSettingsFeaturesByFeatureServerList = map[string]string{
+	CreateAiSettingsFeaturesByFeatureServerCloud:        "https://app.cribl.cloud",
+	CreateAiSettingsFeaturesByFeatureServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	CreateAiSettingsFeaturesByFeatureServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type CreateAiSettingsFeaturesByFeatureRequest struct {
 	// Feature name to update settings for
 	Feature string `pathParam:"style=simple,explode=false,name=feature"`

@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+const (
+	DeleteLakehouseDatasetConnectionsServerCloud        string = "cloud"
+	DeleteLakehouseDatasetConnectionsServerCloudGroup   string = "cloud-group"
+	DeleteLakehouseDatasetConnectionsServerManagedGroup string = "managed-group"
+)
+
+var DeleteLakehouseDatasetConnectionsServerList = map[string]string{
+	DeleteLakehouseDatasetConnectionsServerCloud:        "https://app.cribl.cloud",
+	DeleteLakehouseDatasetConnectionsServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	DeleteLakehouseDatasetConnectionsServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type DeleteLakehouseDatasetConnectionsRequest struct {
 	// The ID of the lakehouse
 	LakehouseID string `pathParam:"style=simple,explode=false,name=lakehouse_id"`

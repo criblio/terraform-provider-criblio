@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	GetBreakersByPackAndIDServerCloud        string = "cloud"
+	GetBreakersByPackAndIDServerCloudGroup   string = "cloud-group"
+	GetBreakersByPackAndIDServerManagedGroup string = "managed-group"
+)
+
+var GetBreakersByPackAndIDServerList = map[string]string{
+	GetBreakersByPackAndIDServerCloud:        "https://app.cribl.cloud",
+	GetBreakersByPackAndIDServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
+	GetBreakersByPackAndIDServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+}
+
 type GetBreakersByPackAndIDRequest struct {
 	// Unique ID to GET for pack
 	ID string `pathParam:"style=simple,explode=false,name=id"`
