@@ -91,10 +91,10 @@ resource "criblio_destination" "cribl_lake" {
   group_id = criblio_group.syslog_worker_group.id
 
   output_cribl_lake = {
-    id                                = "cribl-lake-2"
-    type                              = "cribl_lake"
-    description                       = "Cribl Lake destination for syslog data"
-    dest_path                         = "default_logs"
+    id          = "cribl-lake-2"
+    type        = "cribl_lake"
+    description = "Cribl Lake destination for syslog data"
+    dest_path   = "default_logs"
   }
 }
 
