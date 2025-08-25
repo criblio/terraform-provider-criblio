@@ -3,20 +3,46 @@
 package operations
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
+// DeleteCriblLakeDatasetByLakeIDAndIDLakeID - lake id that contains the Datasets
+type DeleteCriblLakeDatasetByLakeIDAndIDLakeID string
+
+const (
+	DeleteCriblLakeDatasetByLakeIDAndIDLakeIDDefault DeleteCriblLakeDatasetByLakeIDAndIDLakeID = "default"
+)
+
+func (e DeleteCriblLakeDatasetByLakeIDAndIDLakeID) ToPointer() *DeleteCriblLakeDatasetByLakeIDAndIDLakeID {
+	return &e
+}
+func (e *DeleteCriblLakeDatasetByLakeIDAndIDLakeID) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "default":
+		*e = DeleteCriblLakeDatasetByLakeIDAndIDLakeID(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for DeleteCriblLakeDatasetByLakeIDAndIDLakeID: %v", v)
+	}
+}
+
 type DeleteCriblLakeDatasetByLakeIDAndIDRequest struct {
 	// lake id that contains the Datasets
-	LakeID string `pathParam:"style=simple,explode=false,name=lakeId"`
+	LakeID DeleteCriblLakeDatasetByLakeIDAndIDLakeID `pathParam:"style=simple,explode=false,name=lakeId"`
 	// dataset id to delete
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() string {
+func (o *DeleteCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() DeleteCriblLakeDatasetByLakeIDAndIDLakeID {
 	if o == nil {
-		return ""
+		return DeleteCriblLakeDatasetByLakeIDAndIDLakeID("")
 	}
 	return o.LakeID
 }

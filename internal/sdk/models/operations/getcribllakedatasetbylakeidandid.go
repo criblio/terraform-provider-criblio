@@ -3,20 +3,46 @@
 package operations
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
+// GetCriblLakeDatasetByLakeIDAndIDLakeID - lake id that contains the Datasets
+type GetCriblLakeDatasetByLakeIDAndIDLakeID string
+
+const (
+	GetCriblLakeDatasetByLakeIDAndIDLakeIDDefault GetCriblLakeDatasetByLakeIDAndIDLakeID = "default"
+)
+
+func (e GetCriblLakeDatasetByLakeIDAndIDLakeID) ToPointer() *GetCriblLakeDatasetByLakeIDAndIDLakeID {
+	return &e
+}
+func (e *GetCriblLakeDatasetByLakeIDAndIDLakeID) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "default":
+		*e = GetCriblLakeDatasetByLakeIDAndIDLakeID(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for GetCriblLakeDatasetByLakeIDAndIDLakeID: %v", v)
+	}
+}
+
 type GetCriblLakeDatasetByLakeIDAndIDRequest struct {
 	// lake id that contains the Datasets
-	LakeID string `pathParam:"style=simple,explode=false,name=lakeId"`
+	LakeID GetCriblLakeDatasetByLakeIDAndIDLakeID `pathParam:"style=simple,explode=false,name=lakeId"`
 	// dataset id to get
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() string {
+func (o *GetCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() GetCriblLakeDatasetByLakeIDAndIDLakeID {
 	if o == nil {
-		return ""
+		return GetCriblLakeDatasetByLakeIDAndIDLakeID("")
 	}
 	return o.LakeID
 }

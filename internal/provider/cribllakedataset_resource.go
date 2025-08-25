@@ -9,6 +9,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -88,7 +89,10 @@ func (r *CriblLakeDatasetResource) Schema(ctx context.Context, req resource.Sche
 			},
 			"lake_id": schema.StringAttribute{
 				Required:    true,
-				Description: `lake id that contains the Datasets`,
+				Description: `lake id that contains the Datasets. must be "default"`,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default"),
+				},
 			},
 			"retention_period_in_days": schema.Float64Attribute{
 				Computed: true,
@@ -384,23 +388,19 @@ func (r *CriblLakeDatasetResource) ImportState(ctx context.Context, req resource
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		ID     string `json:"id"`
-		LakeID string `json:"lake_id"`
+		ID     string                                            `json:"id"`
+		LakeID operations.GetCriblLakeDatasetByLakeIDAndIDLakeID `json:"lake_id"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"id": "...", "lake_id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"id": "test_lake_dataset", "lake_id": "default"}': `+err.Error())
 		return
 	}
 
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"test_lake_dataset"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
-	if len(data.LakeID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field lake_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
-		return
-	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("lake_id"), data.LakeID)...)
 }

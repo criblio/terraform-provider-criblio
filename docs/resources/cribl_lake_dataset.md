@@ -20,8 +20,8 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
   bucket_name              = "...my_bucket_name..."
   description              = "...my_description..."
   format                   = "json"
-  id                       = "...my_id..."
-  lake_id                  = "...my_lake_id..."
+  id                       = "test_lake_dataset"
+  lake_id                  = "default"
   retention_period_in_days = 3.75
   search_config = {
     datatypes = [
@@ -45,7 +45,7 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
 ### Required
 
 - `id` (String) dataset id to update
-- `lake_id` (String) lake id that contains the Datasets
+- `lake_id` (String) lake id that contains the Datasets. must be "default"
 
 ### Optional
 
@@ -84,8 +84,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_cribl_lake_dataset.my_criblio_cribl_lake_dataset
   id = jsonencode({
-    id = "..."
-    lake_id = "..."
+    id = "test_lake_dataset"
+    lake_id = "default"
   })
 }
 ```
@@ -93,5 +93,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_cribl_lake_dataset.my_criblio_cribl_lake_dataset '{"id": "...", "lake_id": "..."}'
+terraform import criblio_cribl_lake_dataset.my_criblio_cribl_lake_dataset '{"id": "test_lake_dataset", "lake_id": "default"}'
 ```

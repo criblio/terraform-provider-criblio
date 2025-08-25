@@ -1,4 +1,4 @@
 data "criblio_cribl_lake_dataset" "my_cribllakedataset" {
-  id      = "...my_id..."
-  lake_id = "...my_lake_id..."
+  id      = "test_lake_dataset"
+  lake_id = "default"
 }

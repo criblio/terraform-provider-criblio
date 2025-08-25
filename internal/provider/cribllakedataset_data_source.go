@@ -7,8 +7,10 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -69,7 +71,10 @@ func (r *CriblLakeDatasetDataSource) Schema(ctx context.Context, req datasource.
 			},
 			"lake_id": schema.StringAttribute{
 				Required:    true,
-				Description: `lake id that contains the Datasets`,
+				Description: `lake id that contains the Datasets. must be "default"`,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default"),
+				},
 			},
 			"retention_period_in_days": schema.Float64Attribute{
 				Computed: true,

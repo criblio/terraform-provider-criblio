@@ -18495,229 +18495,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		id57 = r.OutputCriblLake.ID.ValueString()
 
 		typeVar57 := shared.OutputCriblLakeType(r.OutputCriblLake.Type.ValueString())
-		pipeline57 := new(string)
-		if !r.OutputCriblLake.Pipeline.IsUnknown() && !r.OutputCriblLake.Pipeline.IsNull() {
-			*pipeline57 = r.OutputCriblLake.Pipeline.ValueString()
-		} else {
-			pipeline57 = nil
-		}
-		systemFields57 := make([]string, 0, len(r.OutputCriblLake.SystemFields))
-		for _, systemFieldsItem57 := range r.OutputCriblLake.SystemFields {
-			systemFields57 = append(systemFields57, systemFieldsItem57.ValueString())
-		}
-		environment57 := new(string)
-		if !r.OutputCriblLake.Environment.IsUnknown() && !r.OutputCriblLake.Environment.IsNull() {
-			*environment57 = r.OutputCriblLake.Environment.ValueString()
-		} else {
-			environment57 = nil
-		}
-		streamtags57 := make([]string, 0, len(r.OutputCriblLake.Streamtags))
-		for _, streamtagsItem57 := range r.OutputCriblLake.Streamtags {
-			streamtags57 = append(streamtags57, streamtagsItem57.ValueString())
-		}
-		bucket7 := new(string)
-		if !r.OutputCriblLake.Bucket.IsUnknown() && !r.OutputCriblLake.Bucket.IsNull() {
-			*bucket7 = r.OutputCriblLake.Bucket.ValueString()
-		} else {
-			bucket7 = nil
-		}
-		region15 := new(string)
-		if !r.OutputCriblLake.Region.IsUnknown() && !r.OutputCriblLake.Region.IsNull() {
-			*region15 = r.OutputCriblLake.Region.ValueString()
-		} else {
-			region15 = nil
-		}
-		awsSecretKey11 := new(string)
-		if !r.OutputCriblLake.AwsSecretKey.IsUnknown() && !r.OutputCriblLake.AwsSecretKey.IsNull() {
-			*awsSecretKey11 = r.OutputCriblLake.AwsSecretKey.ValueString()
-		} else {
-			awsSecretKey11 = nil
-		}
-		endpoint13 := new(string)
-		if !r.OutputCriblLake.Endpoint.IsUnknown() && !r.OutputCriblLake.Endpoint.IsNull() {
-			*endpoint13 = r.OutputCriblLake.Endpoint.ValueString()
-		} else {
-			endpoint13 = nil
-		}
-		signatureVersion10 := new(shared.OutputCriblLakeSignatureVersion)
-		if !r.OutputCriblLake.SignatureVersion.IsUnknown() && !r.OutputCriblLake.SignatureVersion.IsNull() {
-			*signatureVersion10 = shared.OutputCriblLakeSignatureVersion(r.OutputCriblLake.SignatureVersion.ValueString())
-		} else {
-			signatureVersion10 = nil
-		}
-		reuseConnections11 := new(bool)
-		if !r.OutputCriblLake.ReuseConnections.IsUnknown() && !r.OutputCriblLake.ReuseConnections.IsNull() {
-			*reuseConnections11 = r.OutputCriblLake.ReuseConnections.ValueBool()
-		} else {
-			reuseConnections11 = nil
-		}
-		rejectUnauthorized53 := new(bool)
-		if !r.OutputCriblLake.RejectUnauthorized.IsUnknown() && !r.OutputCriblLake.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized53 = r.OutputCriblLake.RejectUnauthorized.ValueBool()
-		} else {
-			rejectUnauthorized53 = nil
-		}
-		enableAssumeRole8 := new(bool)
-		if !r.OutputCriblLake.EnableAssumeRole.IsUnknown() && !r.OutputCriblLake.EnableAssumeRole.IsNull() {
-			*enableAssumeRole8 = r.OutputCriblLake.EnableAssumeRole.ValueBool()
-		} else {
-			enableAssumeRole8 = nil
-		}
-		assumeRoleArn8 := new(string)
-		if !r.OutputCriblLake.AssumeRoleArn.IsUnknown() && !r.OutputCriblLake.AssumeRoleArn.IsNull() {
-			*assumeRoleArn8 = r.OutputCriblLake.AssumeRoleArn.ValueString()
-		} else {
-			assumeRoleArn8 = nil
-		}
-		assumeRoleExternalId8 := new(string)
-		if !r.OutputCriblLake.AssumeRoleExternalID.IsUnknown() && !r.OutputCriblLake.AssumeRoleExternalID.IsNull() {
-			*assumeRoleExternalId8 = r.OutputCriblLake.AssumeRoleExternalID.ValueString()
-		} else {
-			assumeRoleExternalId8 = nil
-		}
-		durationSeconds8 := new(float64)
-		if !r.OutputCriblLake.DurationSeconds.IsUnknown() && !r.OutputCriblLake.DurationSeconds.IsNull() {
-			*durationSeconds8 = r.OutputCriblLake.DurationSeconds.ValueFloat64()
-		} else {
-			durationSeconds8 = nil
-		}
-		stagePath9 := new(string)
-		if !r.OutputCriblLake.StagePath.IsUnknown() && !r.OutputCriblLake.StagePath.IsNull() {
-			*stagePath9 = r.OutputCriblLake.StagePath.ValueString()
-		} else {
-			stagePath9 = nil
-		}
-		addIDToStagePath9 := new(bool)
-		if !r.OutputCriblLake.AddIDToStagePath.IsUnknown() && !r.OutputCriblLake.AddIDToStagePath.IsNull() {
-			*addIDToStagePath9 = r.OutputCriblLake.AddIDToStagePath.ValueBool()
-		} else {
-			addIDToStagePath9 = nil
-		}
 		destPath7 := new(string)
 		if !r.OutputCriblLake.DestPath.IsUnknown() && !r.OutputCriblLake.DestPath.IsNull() {
 			*destPath7 = r.OutputCriblLake.DestPath.ValueString()
 		} else {
 			destPath7 = nil
-		}
-		objectAcl6 := new(shared.OutputCriblLakeObjectACL)
-		if !r.OutputCriblLake.ObjectACL.IsUnknown() && !r.OutputCriblLake.ObjectACL.IsNull() {
-			*objectAcl6 = shared.OutputCriblLakeObjectACL(r.OutputCriblLake.ObjectACL.ValueString())
-		} else {
-			objectAcl6 = nil
-		}
-		storageClass7 := new(shared.OutputCriblLakeStorageClass)
-		if !r.OutputCriblLake.StorageClass.IsUnknown() && !r.OutputCriblLake.StorageClass.IsNull() {
-			*storageClass7 = shared.OutputCriblLakeStorageClass(r.OutputCriblLake.StorageClass.ValueString())
-		} else {
-			storageClass7 = nil
-		}
-		serverSideEncryption4 := new(shared.OutputCriblLakeServerSideEncryptionForUploadedObjects)
-		if !r.OutputCriblLake.ServerSideEncryption.IsUnknown() && !r.OutputCriblLake.ServerSideEncryption.IsNull() {
-			*serverSideEncryption4 = shared.OutputCriblLakeServerSideEncryptionForUploadedObjects(r.OutputCriblLake.ServerSideEncryption.ValueString())
-		} else {
-			serverSideEncryption4 = nil
-		}
-		kmsKeyId3 := new(string)
-		if !r.OutputCriblLake.KmsKeyID.IsUnknown() && !r.OutputCriblLake.KmsKeyID.IsNull() {
-			*kmsKeyId3 = r.OutputCriblLake.KmsKeyID.ValueString()
-		} else {
-			kmsKeyId3 = nil
-		}
-		removeEmptyDirs9 := new(bool)
-		if !r.OutputCriblLake.RemoveEmptyDirs.IsUnknown() && !r.OutputCriblLake.RemoveEmptyDirs.IsNull() {
-			*removeEmptyDirs9 = r.OutputCriblLake.RemoveEmptyDirs.ValueBool()
-		} else {
-			removeEmptyDirs9 = nil
-		}
-		baseFileName7 := new(string)
-		if !r.OutputCriblLake.BaseFileName.IsUnknown() && !r.OutputCriblLake.BaseFileName.IsNull() {
-			*baseFileName7 = r.OutputCriblLake.BaseFileName.ValueString()
-		} else {
-			baseFileName7 = nil
-		}
-		maxFileSizeMb9 := new(float64)
-		if !r.OutputCriblLake.MaxFileSizeMB.IsUnknown() && !r.OutputCriblLake.MaxFileSizeMB.IsNull() {
-			*maxFileSizeMb9 = r.OutputCriblLake.MaxFileSizeMB.ValueFloat64()
-		} else {
-			maxFileSizeMb9 = nil
-		}
-		maxOpenFiles9 := new(float64)
-		if !r.OutputCriblLake.MaxOpenFiles.IsUnknown() && !r.OutputCriblLake.MaxOpenFiles.IsNull() {
-			*maxOpenFiles9 = r.OutputCriblLake.MaxOpenFiles.ValueFloat64()
-		} else {
-			maxOpenFiles9 = nil
-		}
-		headerLine7 := new(string)
-		if !r.OutputCriblLake.HeaderLine.IsUnknown() && !r.OutputCriblLake.HeaderLine.IsNull() {
-			*headerLine7 = r.OutputCriblLake.HeaderLine.ValueString()
-		} else {
-			headerLine7 = nil
-		}
-		writeHighWaterMark7 := new(float64)
-		if !r.OutputCriblLake.WriteHighWaterMark.IsUnknown() && !r.OutputCriblLake.WriteHighWaterMark.IsNull() {
-			*writeHighWaterMark7 = r.OutputCriblLake.WriteHighWaterMark.ValueFloat64()
-		} else {
-			writeHighWaterMark7 = nil
-		}
-		onBackpressure53 := new(shared.OutputCriblLakeBackpressureBehavior)
-		if !r.OutputCriblLake.OnBackpressure.IsUnknown() && !r.OutputCriblLake.OnBackpressure.IsNull() {
-			*onBackpressure53 = shared.OutputCriblLakeBackpressureBehavior(r.OutputCriblLake.OnBackpressure.ValueString())
-		} else {
-			onBackpressure53 = nil
-		}
-		deadletterEnabled9 := new(bool)
-		if !r.OutputCriblLake.DeadletterEnabled.IsUnknown() && !r.OutputCriblLake.DeadletterEnabled.IsNull() {
-			*deadletterEnabled9 = r.OutputCriblLake.DeadletterEnabled.ValueBool()
-		} else {
-			deadletterEnabled9 = nil
-		}
-		onDiskFullBackpressure9 := new(shared.OutputCriblLakeDiskSpaceProtection)
-		if !r.OutputCriblLake.OnDiskFullBackpressure.IsUnknown() && !r.OutputCriblLake.OnDiskFullBackpressure.IsNull() {
-			*onDiskFullBackpressure9 = shared.OutputCriblLakeDiskSpaceProtection(r.OutputCriblLake.OnDiskFullBackpressure.ValueString())
-		} else {
-			onDiskFullBackpressure9 = nil
-		}
-		maxFileOpenTimeSec9 := new(float64)
-		if !r.OutputCriblLake.MaxFileOpenTimeSec.IsUnknown() && !r.OutputCriblLake.MaxFileOpenTimeSec.IsNull() {
-			*maxFileOpenTimeSec9 = r.OutputCriblLake.MaxFileOpenTimeSec.ValueFloat64()
-		} else {
-			maxFileOpenTimeSec9 = nil
-		}
-		maxFileIdleTimeSec9 := new(float64)
-		if !r.OutputCriblLake.MaxFileIdleTimeSec.IsUnknown() && !r.OutputCriblLake.MaxFileIdleTimeSec.IsNull() {
-			*maxFileIdleTimeSec9 = r.OutputCriblLake.MaxFileIdleTimeSec.ValueFloat64()
-		} else {
-			maxFileIdleTimeSec9 = nil
-		}
-		verifyPermissions5 := new(bool)
-		if !r.OutputCriblLake.VerifyPermissions.IsUnknown() && !r.OutputCriblLake.VerifyPermissions.IsNull() {
-			*verifyPermissions5 = r.OutputCriblLake.VerifyPermissions.ValueBool()
-		} else {
-			verifyPermissions5 = nil
-		}
-		maxClosingFilesToBackpressure3 := new(float64)
-		if !r.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() && !r.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() {
-			*maxClosingFilesToBackpressure3 = r.OutputCriblLake.MaxClosingFilesToBackpressure.ValueFloat64()
-		} else {
-			maxClosingFilesToBackpressure3 = nil
-		}
-		awsAuthenticationMethod10 := new(shared.AwsAuthenticationMethod)
-		if !r.OutputCriblLake.AwsAuthenticationMethod.IsUnknown() && !r.OutputCriblLake.AwsAuthenticationMethod.IsNull() {
-			*awsAuthenticationMethod10 = shared.AwsAuthenticationMethod(r.OutputCriblLake.AwsAuthenticationMethod.ValueString())
-		} else {
-			awsAuthenticationMethod10 = nil
-		}
-		format17 := new(shared.OutputCriblLakeFormat)
-		if !r.OutputCriblLake.Format.IsUnknown() && !r.OutputCriblLake.Format.IsNull() {
-			*format17 = shared.OutputCriblLakeFormat(r.OutputCriblLake.Format.ValueString())
-		} else {
-			format17 = nil
-		}
-		maxConcurrentFileParts6 := new(float64)
-		if !r.OutputCriblLake.MaxConcurrentFileParts.IsUnknown() && !r.OutputCriblLake.MaxConcurrentFileParts.IsNull() {
-			*maxConcurrentFileParts6 = r.OutputCriblLake.MaxConcurrentFileParts.ValueFloat64()
-		} else {
-			maxConcurrentFileParts6 = nil
 		}
 		description57 := new(string)
 		if !r.OutputCriblLake.Description.IsUnknown() && !r.OutputCriblLake.Description.IsNull() {
@@ -18725,69 +18507,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			description57 = nil
 		}
-		emptyDirCleanupSec8 := new(float64)
-		if !r.OutputCriblLake.EmptyDirCleanupSec.IsUnknown() && !r.OutputCriblLake.EmptyDirCleanupSec.IsNull() {
-			*emptyDirCleanupSec8 = r.OutputCriblLake.EmptyDirCleanupSec.ValueFloat64()
-		} else {
-			emptyDirCleanupSec8 = nil
-		}
-		deadletterPath8 := new(string)
-		if !r.OutputCriblLake.DeadletterPath.IsUnknown() && !r.OutputCriblLake.DeadletterPath.IsNull() {
-			*deadletterPath8 = r.OutputCriblLake.DeadletterPath.ValueString()
-		} else {
-			deadletterPath8 = nil
-		}
-		maxRetryNum8 := new(float64)
-		if !r.OutputCriblLake.MaxRetryNum.IsUnknown() && !r.OutputCriblLake.MaxRetryNum.IsNull() {
-			*maxRetryNum8 = r.OutputCriblLake.MaxRetryNum.ValueFloat64()
-		} else {
-			maxRetryNum8 = nil
-		}
 		outputCriblLake = &shared.OutputCriblLake{
-			ID:                            id57,
-			Type:                          typeVar57,
-			Pipeline:                      pipeline57,
-			SystemFields:                  systemFields57,
-			Environment:                   environment57,
-			Streamtags:                    streamtags57,
-			Bucket:                        bucket7,
-			Region:                        region15,
-			AwsSecretKey:                  awsSecretKey11,
-			Endpoint:                      endpoint13,
-			SignatureVersion:              signatureVersion10,
-			ReuseConnections:              reuseConnections11,
-			RejectUnauthorized:            rejectUnauthorized53,
-			EnableAssumeRole:              enableAssumeRole8,
-			AssumeRoleArn:                 assumeRoleArn8,
-			AssumeRoleExternalID:          assumeRoleExternalId8,
-			DurationSeconds:               durationSeconds8,
-			StagePath:                     stagePath9,
-			AddIDToStagePath:              addIDToStagePath9,
-			DestPath:                      destPath7,
-			ObjectACL:                     objectAcl6,
-			StorageClass:                  storageClass7,
-			ServerSideEncryption:          serverSideEncryption4,
-			KmsKeyID:                      kmsKeyId3,
-			RemoveEmptyDirs:               removeEmptyDirs9,
-			BaseFileName:                  baseFileName7,
-			MaxFileSizeMB:                 maxFileSizeMb9,
-			MaxOpenFiles:                  maxOpenFiles9,
-			HeaderLine:                    headerLine7,
-			WriteHighWaterMark:            writeHighWaterMark7,
-			OnBackpressure:                onBackpressure53,
-			DeadletterEnabled:             deadletterEnabled9,
-			OnDiskFullBackpressure:        onDiskFullBackpressure9,
-			MaxFileOpenTimeSec:            maxFileOpenTimeSec9,
-			MaxFileIdleTimeSec:            maxFileIdleTimeSec9,
-			VerifyPermissions:             verifyPermissions5,
-			MaxClosingFilesToBackpressure: maxClosingFilesToBackpressure3,
-			AwsAuthenticationMethod:       awsAuthenticationMethod10,
-			Format:                        format17,
-			MaxConcurrentFileParts:        maxConcurrentFileParts6,
-			Description:                   description57,
-			EmptyDirCleanupSec:            emptyDirCleanupSec8,
-			DeadletterPath:                deadletterPath8,
-			MaxRetryNum:                   maxRetryNum8,
+			ID:          id57,
+			Type:        typeVar57,
+			DestPath:    destPath7,
+			Description: description57,
 		}
 	}
 	if outputCriblLake != nil {
@@ -18801,25 +18525,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		id58 = r.OutputDiskSpool.ID.ValueString()
 
 		typeVar58 := shared.OutputDiskSpoolType(r.OutputDiskSpool.Type.ValueString())
-		pipeline58 := new(string)
+		pipeline57 := new(string)
 		if !r.OutputDiskSpool.Pipeline.IsUnknown() && !r.OutputDiskSpool.Pipeline.IsNull() {
-			*pipeline58 = r.OutputDiskSpool.Pipeline.ValueString()
+			*pipeline57 = r.OutputDiskSpool.Pipeline.ValueString()
 		} else {
-			pipeline58 = nil
+			pipeline57 = nil
 		}
-		systemFields58 := make([]string, 0, len(r.OutputDiskSpool.SystemFields))
-		for _, systemFieldsItem58 := range r.OutputDiskSpool.SystemFields {
-			systemFields58 = append(systemFields58, systemFieldsItem58.ValueString())
+		systemFields57 := make([]string, 0, len(r.OutputDiskSpool.SystemFields))
+		for _, systemFieldsItem57 := range r.OutputDiskSpool.SystemFields {
+			systemFields57 = append(systemFields57, systemFieldsItem57.ValueString())
 		}
-		environment58 := new(string)
+		environment57 := new(string)
 		if !r.OutputDiskSpool.Environment.IsUnknown() && !r.OutputDiskSpool.Environment.IsNull() {
-			*environment58 = r.OutputDiskSpool.Environment.ValueString()
+			*environment57 = r.OutputDiskSpool.Environment.ValueString()
 		} else {
-			environment58 = nil
+			environment57 = nil
 		}
-		streamtags58 := make([]string, 0, len(r.OutputDiskSpool.Streamtags))
-		for _, streamtagsItem58 := range r.OutputDiskSpool.Streamtags {
-			streamtags58 = append(streamtags58, streamtagsItem58.ValueString())
+		streamtags57 := make([]string, 0, len(r.OutputDiskSpool.Streamtags))
+		for _, streamtagsItem57 := range r.OutputDiskSpool.Streamtags {
+			streamtags57 = append(streamtags57, streamtagsItem57.ValueString())
 		}
 		timeWindow := new(string)
 		if !r.OutputDiskSpool.TimeWindow.IsUnknown() && !r.OutputDiskSpool.TimeWindow.IsNull() {
@@ -18860,10 +18584,10 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		outputDiskSpool = &shared.OutputDiskSpool{
 			ID:            id58,
 			Type:          typeVar58,
-			Pipeline:      pipeline58,
-			SystemFields:  systemFields58,
-			Environment:   environment58,
-			Streamtags:    streamtags58,
+			Pipeline:      pipeline57,
+			SystemFields:  systemFields57,
+			Environment:   environment57,
+			Streamtags:    streamtags57,
 			TimeWindow:    timeWindow,
 			MaxDataSize:   maxDataSize1,
 			MaxDataTime:   maxDataTime1,
@@ -18891,25 +18615,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			typeVar59 = nil
 		}
-		pipeline59 := new(string)
+		pipeline58 := new(string)
 		if !r.OutputClickHouse.Pipeline.IsUnknown() && !r.OutputClickHouse.Pipeline.IsNull() {
-			*pipeline59 = r.OutputClickHouse.Pipeline.ValueString()
+			*pipeline58 = r.OutputClickHouse.Pipeline.ValueString()
 		} else {
-			pipeline59 = nil
+			pipeline58 = nil
 		}
-		systemFields59 := make([]string, 0, len(r.OutputClickHouse.SystemFields))
-		for _, systemFieldsItem59 := range r.OutputClickHouse.SystemFields {
-			systemFields59 = append(systemFields59, systemFieldsItem59.ValueString())
+		systemFields58 := make([]string, 0, len(r.OutputClickHouse.SystemFields))
+		for _, systemFieldsItem58 := range r.OutputClickHouse.SystemFields {
+			systemFields58 = append(systemFields58, systemFieldsItem58.ValueString())
 		}
-		environment59 := new(string)
+		environment58 := new(string)
 		if !r.OutputClickHouse.Environment.IsUnknown() && !r.OutputClickHouse.Environment.IsNull() {
-			*environment59 = r.OutputClickHouse.Environment.ValueString()
+			*environment58 = r.OutputClickHouse.Environment.ValueString()
 		} else {
-			environment59 = nil
+			environment58 = nil
 		}
-		streamtags59 := make([]string, 0, len(r.OutputClickHouse.Streamtags))
-		for _, streamtagsItem59 := range r.OutputClickHouse.Streamtags {
-			streamtags59 = append(streamtags59, streamtagsItem59.ValueString())
+		streamtags58 := make([]string, 0, len(r.OutputClickHouse.Streamtags))
+		for _, streamtagsItem58 := range r.OutputClickHouse.Streamtags {
+			streamtags58 = append(streamtags58, streamtagsItem58.ValueString())
 		}
 		var url16 string
 		url16 = r.OutputClickHouse.URL.ValueString()
@@ -18926,11 +18650,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		var tableName string
 		tableName = r.OutputClickHouse.TableName.ValueString()
 
-		format18 := new(shared.OutputClickHouseFormat)
+		format17 := new(shared.OutputClickHouseFormat)
 		if !r.OutputClickHouse.Format.IsUnknown() && !r.OutputClickHouse.Format.IsNull() {
-			*format18 = shared.OutputClickHouseFormat(r.OutputClickHouse.Format.ValueString())
+			*format17 = shared.OutputClickHouseFormat(r.OutputClickHouse.Format.ValueString())
 		} else {
-			format18 = nil
+			format17 = nil
 		}
 		mappingType := new(shared.OutputClickHouseMappingType)
 		if !r.OutputClickHouse.MappingType.IsUnknown() && !r.OutputClickHouse.MappingType.IsNull() {
@@ -19036,11 +18760,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			compress34 = nil
 		}
-		rejectUnauthorized54 := new(bool)
+		rejectUnauthorized53 := new(bool)
 		if !r.OutputClickHouse.RejectUnauthorized.IsUnknown() && !r.OutputClickHouse.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized54 = r.OutputClickHouse.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized53 = r.OutputClickHouse.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized54 = nil
+			rejectUnauthorized53 = nil
 		}
 		timeoutSec27 := new(float64)
 		if !r.OutputClickHouse.TimeoutSec.IsUnknown() && !r.OutputClickHouse.TimeoutSec.IsNull() {
@@ -19161,11 +18885,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			dumpFormatErrorsToDisk = nil
 		}
-		onBackpressure54 := new(shared.OutputClickHouseBackpressureBehavior)
+		onBackpressure53 := new(shared.OutputClickHouseBackpressureBehavior)
 		if !r.OutputClickHouse.OnBackpressure.IsUnknown() && !r.OutputClickHouse.OnBackpressure.IsNull() {
-			*onBackpressure54 = shared.OutputClickHouseBackpressureBehavior(r.OutputClickHouse.OnBackpressure.ValueString())
+			*onBackpressure53 = shared.OutputClickHouseBackpressureBehavior(r.OutputClickHouse.OnBackpressure.ValueString())
 		} else {
-			onBackpressure54 = nil
+			onBackpressure53 = nil
 		}
 		description59 := new(string)
 		if !r.OutputClickHouse.Description.IsUnknown() && !r.OutputClickHouse.Description.IsNull() {
@@ -19350,15 +19074,15 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		outputClickHouse = &shared.OutputClickHouse{
 			ID:                            id59,
 			Type:                          typeVar59,
-			Pipeline:                      pipeline59,
-			SystemFields:                  systemFields59,
-			Environment:                   environment59,
-			Streamtags:                    streamtags59,
+			Pipeline:                      pipeline58,
+			SystemFields:                  systemFields58,
+			Environment:                   environment58,
+			Streamtags:                    streamtags58,
 			URL:                           url16,
 			AuthType:                      authType29,
 			Database:                      database2,
 			TableName:                     tableName,
-			Format:                        format18,
+			Format:                        format17,
 			MappingType:                   mappingType,
 			AsyncInserts:                  asyncInserts,
 			TLS:                           tls19,
@@ -19366,7 +19090,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxPayloadSizeKB:              maxPayloadSizeKb27,
 			MaxPayloadEvents:              maxPayloadEvents25,
 			Compress:                      compress34,
-			RejectUnauthorized:            rejectUnauthorized54,
+			RejectUnauthorized:            rejectUnauthorized53,
 			TimeoutSec:                    timeoutSec27,
 			FlushPeriodSec:                flushPeriodSec38,
 			ExtraHTTPHeaders:              extraHTTPHeaders25,
@@ -19377,7 +19101,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			TimeoutRetrySettings:          timeoutRetrySettings26,
 			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader26,
 			DumpFormatErrorsToDisk:        dumpFormatErrorsToDisk,
-			OnBackpressure:                onBackpressure54,
+			OnBackpressure:                onBackpressure53,
 			Description:                   description59,
 			Username:                      username9,
 			Password:                      password9,
@@ -19417,25 +19141,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		id60 = r.OutputXsiam.ID.ValueString()
 
 		typeVar60 := shared.OutputXsiamType(r.OutputXsiam.Type.ValueString())
-		pipeline60 := new(string)
+		pipeline59 := new(string)
 		if !r.OutputXsiam.Pipeline.IsUnknown() && !r.OutputXsiam.Pipeline.IsNull() {
-			*pipeline60 = r.OutputXsiam.Pipeline.ValueString()
+			*pipeline59 = r.OutputXsiam.Pipeline.ValueString()
 		} else {
-			pipeline60 = nil
+			pipeline59 = nil
 		}
-		systemFields60 := make([]string, 0, len(r.OutputXsiam.SystemFields))
-		for _, systemFieldsItem60 := range r.OutputXsiam.SystemFields {
-			systemFields60 = append(systemFields60, systemFieldsItem60.ValueString())
+		systemFields59 := make([]string, 0, len(r.OutputXsiam.SystemFields))
+		for _, systemFieldsItem59 := range r.OutputXsiam.SystemFields {
+			systemFields59 = append(systemFields59, systemFieldsItem59.ValueString())
 		}
-		environment60 := new(string)
+		environment59 := new(string)
 		if !r.OutputXsiam.Environment.IsUnknown() && !r.OutputXsiam.Environment.IsNull() {
-			*environment60 = r.OutputXsiam.Environment.ValueString()
+			*environment59 = r.OutputXsiam.Environment.ValueString()
 		} else {
-			environment60 = nil
+			environment59 = nil
 		}
-		streamtags60 := make([]string, 0, len(r.OutputXsiam.Streamtags))
-		for _, streamtagsItem60 := range r.OutputXsiam.Streamtags {
-			streamtags60 = append(streamtags60, streamtagsItem60.ValueString())
+		streamtags59 := make([]string, 0, len(r.OutputXsiam.Streamtags))
+		for _, streamtagsItem59 := range r.OutputXsiam.Streamtags {
+			streamtags59 = append(streamtags59, streamtagsItem59.ValueString())
 		}
 		loadBalanced7 := new(bool)
 		if !r.OutputXsiam.LoadBalanced.IsUnknown() && !r.OutputXsiam.LoadBalanced.IsNull() {
@@ -19461,11 +19185,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxPayloadEvents26 = nil
 		}
-		rejectUnauthorized55 := new(bool)
+		rejectUnauthorized54 := new(bool)
 		if !r.OutputXsiam.RejectUnauthorized.IsUnknown() && !r.OutputXsiam.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized55 = r.OutputXsiam.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized54 = r.OutputXsiam.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized55 = nil
+			rejectUnauthorized54 = nil
 		}
 		timeoutSec28 := new(float64)
 		if !r.OutputXsiam.TimeoutSec.IsUnknown() && !r.OutputXsiam.TimeoutSec.IsNull() {
@@ -19586,11 +19310,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			throttleRateReqPerSec1 = nil
 		}
-		onBackpressure55 := new(shared.OutputXsiamBackpressureBehavior)
+		onBackpressure54 := new(shared.OutputXsiamBackpressureBehavior)
 		if !r.OutputXsiam.OnBackpressure.IsUnknown() && !r.OutputXsiam.OnBackpressure.IsNull() {
-			*onBackpressure55 = shared.OutputXsiamBackpressureBehavior(r.OutputXsiam.OnBackpressure.ValueString())
+			*onBackpressure54 = shared.OutputXsiamBackpressureBehavior(r.OutputXsiam.OnBackpressure.ValueString())
 		} else {
-			onBackpressure55 = nil
+			onBackpressure54 = nil
 		}
 		totalMemoryLimitKb9 := new(float64)
 		if !r.OutputXsiam.TotalMemoryLimitKB.IsUnknown() && !r.OutputXsiam.TotalMemoryLimitKB.IsNull() {
@@ -19704,15 +19428,15 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		outputXsiam = &shared.OutputXsiam{
 			ID:                            id60,
 			Type:                          typeVar60,
-			Pipeline:                      pipeline60,
-			SystemFields:                  systemFields60,
-			Environment:                   environment60,
-			Streamtags:                    streamtags60,
+			Pipeline:                      pipeline59,
+			SystemFields:                  systemFields59,
+			Environment:                   environment59,
+			Streamtags:                    streamtags59,
 			LoadBalanced:                  loadBalanced7,
 			Concurrency:                   concurrency29,
 			MaxPayloadSizeKB:              maxPayloadSizeKb28,
 			MaxPayloadEvents:              maxPayloadEvents26,
-			RejectUnauthorized:            rejectUnauthorized55,
+			RejectUnauthorized:            rejectUnauthorized54,
 			TimeoutSec:                    timeoutSec28,
 			FlushPeriodSec:                flushPeriodSec39,
 			ExtraHTTPHeaders:              extraHTTPHeaders26,
@@ -19723,7 +19447,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			TimeoutRetrySettings:          timeoutRetrySettings27,
 			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader27,
 			ThrottleRateReqPerSec:         throttleRateReqPerSec1,
-			OnBackpressure:                onBackpressure55,
+			OnBackpressure:                onBackpressure54,
 			TotalMemoryLimitKB:            totalMemoryLimitKb9,
 			Description:                   description60,
 			URL:                           url17,
@@ -19757,25 +19481,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			id61 = nil
 		}
 		typeVar61 := shared.OutputNetflowType(r.OutputNetflow.Type.ValueString())
-		pipeline61 := new(string)
+		pipeline60 := new(string)
 		if !r.OutputNetflow.Pipeline.IsUnknown() && !r.OutputNetflow.Pipeline.IsNull() {
-			*pipeline61 = r.OutputNetflow.Pipeline.ValueString()
+			*pipeline60 = r.OutputNetflow.Pipeline.ValueString()
 		} else {
-			pipeline61 = nil
+			pipeline60 = nil
 		}
-		systemFields61 := make([]string, 0, len(r.OutputNetflow.SystemFields))
-		for _, systemFieldsItem61 := range r.OutputNetflow.SystemFields {
-			systemFields61 = append(systemFields61, systemFieldsItem61.ValueString())
+		systemFields60 := make([]string, 0, len(r.OutputNetflow.SystemFields))
+		for _, systemFieldsItem60 := range r.OutputNetflow.SystemFields {
+			systemFields60 = append(systemFields60, systemFieldsItem60.ValueString())
 		}
-		environment61 := new(string)
+		environment60 := new(string)
 		if !r.OutputNetflow.Environment.IsUnknown() && !r.OutputNetflow.Environment.IsNull() {
-			*environment61 = r.OutputNetflow.Environment.ValueString()
+			*environment60 = r.OutputNetflow.Environment.ValueString()
 		} else {
-			environment61 = nil
+			environment60 = nil
 		}
-		streamtags61 := make([]string, 0, len(r.OutputNetflow.Streamtags))
-		for _, streamtagsItem61 := range r.OutputNetflow.Streamtags {
-			streamtags61 = append(streamtags61, streamtagsItem61.ValueString())
+		streamtags60 := make([]string, 0, len(r.OutputNetflow.Streamtags))
+		for _, streamtagsItem60 := range r.OutputNetflow.Streamtags {
+			streamtags60 = append(streamtags60, streamtagsItem60.ValueString())
 		}
 		hosts4 := make([]shared.OutputNetflowHost, 0, len(r.OutputNetflow.Hosts))
 		for _, hostsItem4 := range r.OutputNetflow.Hosts {
@@ -19808,10 +19532,10 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		outputNetflow = &shared.OutputNetflow{
 			ID:                  id61,
 			Type:                typeVar61,
-			Pipeline:            pipeline61,
-			SystemFields:        systemFields61,
-			Environment:         environment61,
-			Streamtags:          streamtags61,
+			Pipeline:            pipeline60,
+			SystemFields:        systemFields60,
+			Environment:         environment60,
+			Streamtags:          streamtags60,
 			Hosts:               hosts4,
 			DNSResolvePeriodSec: dnsResolvePeriodSec12,
 			Description:         description61,
@@ -19836,25 +19560,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			typeVar62 = nil
 		}
-		pipeline62 := new(string)
+		pipeline61 := new(string)
 		if !r.OutputDynatraceHTTP.Pipeline.IsUnknown() && !r.OutputDynatraceHTTP.Pipeline.IsNull() {
-			*pipeline62 = r.OutputDynatraceHTTP.Pipeline.ValueString()
+			*pipeline61 = r.OutputDynatraceHTTP.Pipeline.ValueString()
 		} else {
-			pipeline62 = nil
+			pipeline61 = nil
 		}
-		systemFields62 := make([]string, 0, len(r.OutputDynatraceHTTP.SystemFields))
-		for _, systemFieldsItem62 := range r.OutputDynatraceHTTP.SystemFields {
-			systemFields62 = append(systemFields62, systemFieldsItem62.ValueString())
+		systemFields61 := make([]string, 0, len(r.OutputDynatraceHTTP.SystemFields))
+		for _, systemFieldsItem61 := range r.OutputDynatraceHTTP.SystemFields {
+			systemFields61 = append(systemFields61, systemFieldsItem61.ValueString())
 		}
-		environment62 := new(string)
+		environment61 := new(string)
 		if !r.OutputDynatraceHTTP.Environment.IsUnknown() && !r.OutputDynatraceHTTP.Environment.IsNull() {
-			*environment62 = r.OutputDynatraceHTTP.Environment.ValueString()
+			*environment61 = r.OutputDynatraceHTTP.Environment.ValueString()
 		} else {
-			environment62 = nil
+			environment61 = nil
 		}
-		streamtags62 := make([]string, 0, len(r.OutputDynatraceHTTP.Streamtags))
-		for _, streamtagsItem62 := range r.OutputDynatraceHTTP.Streamtags {
-			streamtags62 = append(streamtags62, streamtagsItem62.ValueString())
+		streamtags61 := make([]string, 0, len(r.OutputDynatraceHTTP.Streamtags))
+		for _, streamtagsItem61 := range r.OutputDynatraceHTTP.Streamtags {
+			streamtags61 = append(streamtags61, streamtagsItem61.ValueString())
 		}
 		method1 := new(shared.OutputDynatraceHTTPMethod)
 		if !r.OutputDynatraceHTTP.Method.IsUnknown() && !r.OutputDynatraceHTTP.Method.IsNull() {
@@ -19892,11 +19616,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			compress35 = nil
 		}
-		rejectUnauthorized56 := new(bool)
+		rejectUnauthorized55 := new(bool)
 		if !r.OutputDynatraceHTTP.RejectUnauthorized.IsUnknown() && !r.OutputDynatraceHTTP.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized56 = r.OutputDynatraceHTTP.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized55 = r.OutputDynatraceHTTP.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized56 = nil
+			rejectUnauthorized55 = nil
 		}
 		timeoutSec29 := new(float64)
 		if !r.OutputDynatraceHTTP.TimeoutSec.IsUnknown() && !r.OutputDynatraceHTTP.TimeoutSec.IsNull() {
@@ -20011,11 +19735,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			responseHonorRetryAfterHeader28 = nil
 		}
-		onBackpressure56 := new(shared.OutputDynatraceHTTPBackpressureBehavior)
+		onBackpressure55 := new(shared.OutputDynatraceHTTPBackpressureBehavior)
 		if !r.OutputDynatraceHTTP.OnBackpressure.IsUnknown() && !r.OutputDynatraceHTTP.OnBackpressure.IsNull() {
-			*onBackpressure56 = shared.OutputDynatraceHTTPBackpressureBehavior(r.OutputDynatraceHTTP.OnBackpressure.ValueString())
+			*onBackpressure55 = shared.OutputDynatraceHTTPBackpressureBehavior(r.OutputDynatraceHTTP.OnBackpressure.ValueString())
 		} else {
-			onBackpressure56 = nil
+			onBackpressure55 = nil
 		}
 		authType31 := new(shared.OutputDynatraceHTTPAuthenticationType)
 		if !r.OutputDynatraceHTTP.AuthType.IsUnknown() && !r.OutputDynatraceHTTP.AuthType.IsNull() {
@@ -20023,17 +19747,17 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			authType31 = nil
 		}
-		format19 := new(shared.OutputDynatraceHTTPFormat)
+		format18 := new(shared.OutputDynatraceHTTPFormat)
 		if !r.OutputDynatraceHTTP.Format.IsUnknown() && !r.OutputDynatraceHTTP.Format.IsNull() {
-			*format19 = shared.OutputDynatraceHTTPFormat(r.OutputDynatraceHTTP.Format.ValueString())
+			*format18 = shared.OutputDynatraceHTTPFormat(r.OutputDynatraceHTTP.Format.ValueString())
 		} else {
-			format19 = nil
+			format18 = nil
 		}
-		endpoint14 := new(shared.Endpoint)
+		endpoint13 := new(shared.Endpoint)
 		if !r.OutputDynatraceHTTP.Endpoint.IsUnknown() && !r.OutputDynatraceHTTP.Endpoint.IsNull() {
-			*endpoint14 = shared.Endpoint(r.OutputDynatraceHTTP.Endpoint.ValueString())
+			*endpoint13 = shared.Endpoint(r.OutputDynatraceHTTP.Endpoint.ValueString())
 		} else {
-			endpoint14 = nil
+			endpoint13 = nil
 		}
 		telemetryType := new(shared.TelemetryType)
 		if !r.OutputDynatraceHTTP.TelemetryType.IsUnknown() && !r.OutputDynatraceHTTP.TelemetryType.IsNull() {
@@ -20126,17 +19850,17 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		outputDynatraceHTTP = &shared.OutputDynatraceHTTP{
 			ID:                            id62,
 			Type:                          typeVar62,
-			Pipeline:                      pipeline62,
-			SystemFields:                  systemFields62,
-			Environment:                   environment62,
-			Streamtags:                    streamtags62,
+			Pipeline:                      pipeline61,
+			SystemFields:                  systemFields61,
+			Environment:                   environment61,
+			Streamtags:                    streamtags61,
 			Method:                        method1,
 			KeepAlive:                     keepAlive5,
 			Concurrency:                   concurrency30,
 			MaxPayloadSizeKB:              maxPayloadSizeKb29,
 			MaxPayloadEvents:              maxPayloadEvents27,
 			Compress:                      compress35,
-			RejectUnauthorized:            rejectUnauthorized56,
+			RejectUnauthorized:            rejectUnauthorized55,
 			TimeoutSec:                    timeoutSec29,
 			FlushPeriodSec:                flushPeriodSec40,
 			ExtraHTTPHeaders:              extraHTTPHeaders27,
@@ -20146,10 +19870,10 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			ResponseRetrySettings:         responseRetrySettings28,
 			TimeoutRetrySettings:          timeoutRetrySettings28,
 			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader28,
-			OnBackpressure:                onBackpressure56,
+			OnBackpressure:                onBackpressure55,
 			AuthType:                      authType31,
-			Format:                        format19,
-			Endpoint:                      endpoint14,
+			Format:                        format18,
+			Endpoint:                      endpoint13,
 			TelemetryType:                 telemetryType,
 			TotalMemoryLimitKB:            totalMemoryLimitKb10,
 			Description:                   description62,
@@ -20186,25 +19910,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			typeVar63 = nil
 		}
-		pipeline63 := new(string)
+		pipeline62 := new(string)
 		if !r.OutputDynatraceOtlp.Pipeline.IsUnknown() && !r.OutputDynatraceOtlp.Pipeline.IsNull() {
-			*pipeline63 = r.OutputDynatraceOtlp.Pipeline.ValueString()
+			*pipeline62 = r.OutputDynatraceOtlp.Pipeline.ValueString()
 		} else {
-			pipeline63 = nil
+			pipeline62 = nil
 		}
-		systemFields63 := make([]string, 0, len(r.OutputDynatraceOtlp.SystemFields))
-		for _, systemFieldsItem63 := range r.OutputDynatraceOtlp.SystemFields {
-			systemFields63 = append(systemFields63, systemFieldsItem63.ValueString())
+		systemFields62 := make([]string, 0, len(r.OutputDynatraceOtlp.SystemFields))
+		for _, systemFieldsItem62 := range r.OutputDynatraceOtlp.SystemFields {
+			systemFields62 = append(systemFields62, systemFieldsItem62.ValueString())
 		}
-		environment63 := new(string)
+		environment62 := new(string)
 		if !r.OutputDynatraceOtlp.Environment.IsUnknown() && !r.OutputDynatraceOtlp.Environment.IsNull() {
-			*environment63 = r.OutputDynatraceOtlp.Environment.ValueString()
+			*environment62 = r.OutputDynatraceOtlp.Environment.ValueString()
 		} else {
-			environment63 = nil
+			environment62 = nil
 		}
-		streamtags63 := make([]string, 0, len(r.OutputDynatraceOtlp.Streamtags))
-		for _, streamtagsItem63 := range r.OutputDynatraceOtlp.Streamtags {
-			streamtags63 = append(streamtags63, streamtagsItem63.ValueString())
+		streamtags62 := make([]string, 0, len(r.OutputDynatraceOtlp.Streamtags))
+		for _, streamtagsItem62 := range r.OutputDynatraceOtlp.Streamtags {
+			streamtags62 = append(streamtags62, streamtagsItem62.ValueString())
 		}
 		protocol6 := new(shared.OutputDynatraceOtlpProtocol)
 		if !r.OutputDynatraceOtlp.Protocol.IsUnknown() && !r.OutputDynatraceOtlp.Protocol.IsNull() {
@@ -20212,11 +19936,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			protocol6 = nil
 		}
-		endpoint15 := new(string)
+		endpoint14 := new(string)
 		if !r.OutputDynatraceOtlp.Endpoint.IsUnknown() && !r.OutputDynatraceOtlp.Endpoint.IsNull() {
-			*endpoint15 = r.OutputDynatraceOtlp.Endpoint.ValueString()
+			*endpoint14 = r.OutputDynatraceOtlp.Endpoint.ValueString()
 		} else {
-			endpoint15 = nil
+			endpoint14 = nil
 		}
 		otlpVersion2 := new(shared.OutputDynatraceOTLPOTLPVersion)
 		if !r.OutputDynatraceOtlp.OtlpVersion.IsUnknown() && !r.OutputDynatraceOtlp.OtlpVersion.IsNull() {
@@ -20333,11 +20057,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			authTokenName1 = nil
 		}
-		onBackpressure57 := new(shared.OutputDynatraceOtlpBackpressureBehavior)
+		onBackpressure56 := new(shared.OutputDynatraceOtlpBackpressureBehavior)
 		if !r.OutputDynatraceOtlp.OnBackpressure.IsUnknown() && !r.OutputDynatraceOtlp.OnBackpressure.IsNull() {
-			*onBackpressure57 = shared.OutputDynatraceOtlpBackpressureBehavior(r.OutputDynatraceOtlp.OnBackpressure.ValueString())
+			*onBackpressure56 = shared.OutputDynatraceOtlpBackpressureBehavior(r.OutputDynatraceOtlp.OnBackpressure.ValueString())
 		} else {
-			onBackpressure57 = nil
+			onBackpressure56 = nil
 		}
 		description63 := new(string)
 		if !r.OutputDynatraceOtlp.Description.IsUnknown() && !r.OutputDynatraceOtlp.Description.IsNull() {
@@ -20345,11 +20069,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			description63 = nil
 		}
-		rejectUnauthorized57 := new(bool)
+		rejectUnauthorized56 := new(bool)
 		if !r.OutputDynatraceOtlp.RejectUnauthorized.IsUnknown() && !r.OutputDynatraceOtlp.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized57 = r.OutputDynatraceOtlp.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized56 = r.OutputDynatraceOtlp.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized57 = nil
+			rejectUnauthorized56 = nil
 		}
 		useRoundRobinDns28 := new(bool)
 		if !r.OutputDynatraceOtlp.UseRoundRobinDNS.IsUnknown() && !r.OutputDynatraceOtlp.UseRoundRobinDNS.IsNull() {
@@ -20489,12 +20213,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		outputDynatraceOtlp = &shared.OutputDynatraceOtlp{
 			ID:                            id63,
 			Type:                          typeVar63,
-			Pipeline:                      pipeline63,
-			SystemFields:                  systemFields63,
-			Environment:                   environment63,
-			Streamtags:                    streamtags63,
+			Pipeline:                      pipeline62,
+			SystemFields:                  systemFields62,
+			Environment:                   environment62,
+			Streamtags:                    streamtags62,
 			Protocol:                      protocol6,
-			Endpoint:                      endpoint15,
+			Endpoint:                      endpoint14,
 			OtlpVersion:                   otlpVersion2,
 			Compress:                      compress36,
 			HTTPCompress:                  httpCompress2,
@@ -20513,9 +20237,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			EndpointType:                  endpointType,
 			TokenSecret:                   tokenSecret1,
 			AuthTokenName:                 authTokenName1,
-			OnBackpressure:                onBackpressure57,
+			OnBackpressure:                onBackpressure56,
 			Description:                   description63,
-			RejectUnauthorized:            rejectUnauthorized57,
+			RejectUnauthorized:            rejectUnauthorized56,
 			UseRoundRobinDNS:              useRoundRobinDns28,
 			ExtraHTTPHeaders:              extraHTTPHeaders28,
 			SafeHeaders:                   safeHeaders28,

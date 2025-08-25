@@ -14,8 +14,8 @@ CriblLakeDataset DataSource
 
 ```terraform
 data "criblio_cribl_lake_dataset" "my_cribllakedataset" {
-  id      = "...my_id..."
-  lake_id = "...my_lake_id..."
+  id      = "test_lake_dataset"
+  lake_id = "default"
 }
 ```
 
@@ -25,7 +25,7 @@ data "criblio_cribl_lake_dataset" "my_cribllakedataset" {
 ### Required
 
 - `id` (String) dataset id to get
-- `lake_id` (String) lake id that contains the Datasets
+- `lake_id` (String) lake id that contains the Datasets. must be "default"
 
 ### Read-Only
 

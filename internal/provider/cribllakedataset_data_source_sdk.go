@@ -56,9 +56,7 @@ func (r *CriblLakeDatasetDataSourceModel) RefreshFromSharedCriblLakeDataset(ctx 
 func (r *CriblLakeDatasetDataSourceModel) ToOperationsGetCriblLakeDatasetByLakeIDAndIDRequest(ctx context.Context) (*operations.GetCriblLakeDatasetByLakeIDAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var lakeID string
-	lakeID = r.LakeID.ValueString()
-
+	lakeID := operations.GetCriblLakeDatasetByLakeIDAndIDLakeID(r.LakeID.ValueString())
 	var id string
 	id = r.ID.ValueString()
 

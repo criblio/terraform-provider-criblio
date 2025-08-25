@@ -713,6 +713,13 @@ func CreateOutputOutputDynatraceOtlp(outputDynatraceOtlp OutputDynatraceOtlp) Ou
 
 func (u *Output) UnmarshalJSON(data []byte) error {
 
+	var outputCriblLake OutputCriblLake = OutputCriblLake{}
+	if err := utils.UnmarshalJSON(data, &outputCriblLake, "", true, true); err == nil {
+		u.OutputCriblLake = &outputCriblLake
+		u.Type = OutputTypeOutputCriblLake
+		return nil
+	}
+
 	var outputDevnull OutputDevnull = OutputDevnull{}
 	if err := utils.UnmarshalJSON(data, &outputDevnull, "", true, true); err == nil {
 		u.OutputDevnull = &outputDevnull
@@ -762,17 +769,17 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputGraphite OutputGraphite = OutputGraphite{}
-	if err := utils.UnmarshalJSON(data, &outputGraphite, "", true, true); err == nil {
-		u.OutputGraphite = &outputGraphite
-		u.Type = OutputTypeOutputGraphite
-		return nil
-	}
-
 	var outputStatsdExt OutputStatsdExt = OutputStatsdExt{}
 	if err := utils.UnmarshalJSON(data, &outputStatsdExt, "", true, true); err == nil {
 		u.OutputStatsdExt = &outputStatsdExt
 		u.Type = OutputTypeOutputStatsdExt
+		return nil
+	}
+
+	var outputGraphite OutputGraphite = OutputGraphite{}
+	if err := utils.UnmarshalJSON(data, &outputGraphite, "", true, true); err == nil {
+		u.OutputGraphite = &outputGraphite
+		u.Type = OutputTypeOutputGraphite
 		return nil
 	}
 
@@ -790,13 +797,6 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputSplunk OutputSplunk = OutputSplunk{}
-	if err := utils.UnmarshalJSON(data, &outputSplunk, "", true, true); err == nil {
-		u.OutputSplunk = &outputSplunk
-		u.Type = OutputTypeOutputSplunk
-		return nil
-	}
-
 	var outputSns OutputSns = OutputSns{}
 	if err := utils.UnmarshalJSON(data, &outputSns, "", true, true); err == nil {
 		u.OutputSns = &outputSns
@@ -811,10 +811,10 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputCloudwatch OutputCloudwatch = OutputCloudwatch{}
-	if err := utils.UnmarshalJSON(data, &outputCloudwatch, "", true, true); err == nil {
-		u.OutputCloudwatch = &outputCloudwatch
-		u.Type = OutputTypeOutputCloudwatch
+	var outputSplunk OutputSplunk = OutputSplunk{}
+	if err := utils.UnmarshalJSON(data, &outputSplunk, "", true, true); err == nil {
+		u.OutputSplunk = &outputSplunk
+		u.Type = OutputTypeOutputSplunk
 		return nil
 	}
 
@@ -822,6 +822,13 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &outputAzureEventhub, "", true, true); err == nil {
 		u.OutputAzureEventhub = &outputAzureEventhub
 		u.Type = OutputTypeOutputAzureEventhub
+		return nil
+	}
+
+	var outputCloudwatch OutputCloudwatch = OutputCloudwatch{}
+	if err := utils.UnmarshalJSON(data, &outputCloudwatch, "", true, true); err == nil {
+		u.OutputCloudwatch = &outputCloudwatch
+		u.Type = OutputTypeOutputCloudwatch
 		return nil
 	}
 
@@ -853,13 +860,6 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputSumoLogic OutputSumoLogic = OutputSumoLogic{}
-	if err := utils.UnmarshalJSON(data, &outputSumoLogic, "", true, true); err == nil {
-		u.OutputSumoLogic = &outputSumoLogic
-		u.Type = OutputTypeOutputSumoLogic
-		return nil
-	}
-
 	var outputHumioHec OutputHumioHec = OutputHumioHec{}
 	if err := utils.UnmarshalJSON(data, &outputHumioHec, "", true, true); err == nil {
 		u.OutputHumioHec = &outputHumioHec
@@ -867,10 +867,10 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputTcpjson OutputTcpjson = OutputTcpjson{}
-	if err := utils.UnmarshalJSON(data, &outputTcpjson, "", true, true); err == nil {
-		u.OutputTcpjson = &outputTcpjson
-		u.Type = OutputTypeOutputTcpjson
+	var outputSumoLogic OutputSumoLogic = OutputSumoLogic{}
+	if err := utils.UnmarshalJSON(data, &outputSumoLogic, "", true, true); err == nil {
+		u.OutputSumoLogic = &outputSumoLogic
+		u.Type = OutputTypeOutputSumoLogic
 		return nil
 	}
 
@@ -878,6 +878,13 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &outputCrowdstrikeNextGenSiem, "", true, true); err == nil {
 		u.OutputCrowdstrikeNextGenSiem = &outputCrowdstrikeNextGenSiem
 		u.Type = OutputTypeOutputCrowdstrikeNextGenSiem
+		return nil
+	}
+
+	var outputTcpjson OutputTcpjson = OutputTcpjson{}
+	if err := utils.UnmarshalJSON(data, &outputTcpjson, "", true, true); err == nil {
+		u.OutputTcpjson = &outputTcpjson
+		u.Type = OutputTypeOutputTcpjson
 		return nil
 	}
 
@@ -972,13 +979,6 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputDataset OutputDataset = OutputDataset{}
-	if err := utils.UnmarshalJSON(data, &outputDataset, "", true, true); err == nil {
-		u.OutputDataset = &outputDataset
-		u.Type = OutputTypeOutputDataset
-		return nil
-	}
-
 	var outputLoki OutputLoki = OutputLoki{}
 	if err := utils.UnmarshalJSON(data, &outputLoki, "", true, true); err == nil {
 		u.OutputLoki = &outputLoki
@@ -986,10 +986,10 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputDynatraceHTTP OutputDynatraceHTTP = OutputDynatraceHTTP{}
-	if err := utils.UnmarshalJSON(data, &outputDynatraceHTTP, "", true, true); err == nil {
-		u.OutputDynatraceHTTP = &outputDynatraceHTTP
-		u.Type = OutputTypeOutputDynatraceHTTP
+	var outputDataset OutputDataset = OutputDataset{}
+	if err := utils.UnmarshalJSON(data, &outputDataset, "", true, true); err == nil {
+		u.OutputDataset = &outputDataset
+		u.Type = OutputTypeOutputDataset
 		return nil
 	}
 
@@ -997,6 +997,13 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &outputSplunkHec, "", true, true); err == nil {
 		u.OutputSplunkHec = &outputSplunkHec
 		u.Type = OutputTypeOutputSplunkHec
+		return nil
+	}
+
+	var outputDynatraceHTTP OutputDynatraceHTTP = OutputDynatraceHTTP{}
+	if err := utils.UnmarshalJSON(data, &outputDynatraceHTTP, "", true, true); err == nil {
+		u.OutputDynatraceHTTP = &outputDynatraceHTTP
+		u.Type = OutputTypeOutputDynatraceHTTP
 		return nil
 	}
 
@@ -1014,24 +1021,17 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputGoogleChronicle OutputGoogleChronicle = OutputGoogleChronicle{}
-	if err := utils.UnmarshalJSON(data, &outputGoogleChronicle, "", true, true); err == nil {
-		u.OutputGoogleChronicle = &outputGoogleChronicle
-		u.Type = OutputTypeOutputGoogleChronicle
-		return nil
-	}
-
-	var outputCriblLake OutputCriblLake = OutputCriblLake{}
-	if err := utils.UnmarshalJSON(data, &outputCriblLake, "", true, true); err == nil {
-		u.OutputCriblLake = &outputCriblLake
-		u.Type = OutputTypeOutputCriblLake
-		return nil
-	}
-
 	var outputElastic OutputElastic = OutputElastic{}
 	if err := utils.UnmarshalJSON(data, &outputElastic, "", true, true); err == nil {
 		u.OutputElastic = &outputElastic
 		u.Type = OutputTypeOutputElastic
+		return nil
+	}
+
+	var outputGoogleChronicle OutputGoogleChronicle = OutputGoogleChronicle{}
+	if err := utils.UnmarshalJSON(data, &outputGoogleChronicle, "", true, true); err == nil {
+		u.OutputGoogleChronicle = &outputGoogleChronicle
+		u.Type = OutputTypeOutputGoogleChronicle
 		return nil
 	}
 
@@ -1084,17 +1084,17 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var outputOpenTelemetry OutputOpenTelemetry = OutputOpenTelemetry{}
-	if err := utils.UnmarshalJSON(data, &outputOpenTelemetry, "", true, true); err == nil {
-		u.OutputOpenTelemetry = &outputOpenTelemetry
-		u.Type = OutputTypeOutputOpenTelemetry
-		return nil
-	}
-
 	var outputMinio OutputMinio = OutputMinio{}
 	if err := utils.UnmarshalJSON(data, &outputMinio, "", true, true); err == nil {
 		u.OutputMinio = &outputMinio
 		u.Type = OutputTypeOutputMinio
+		return nil
+	}
+
+	var outputOpenTelemetry OutputOpenTelemetry = OutputOpenTelemetry{}
+	if err := utils.UnmarshalJSON(data, &outputOpenTelemetry, "", true, true); err == nil {
+		u.OutputOpenTelemetry = &outputOpenTelemetry
+		u.Type = OutputTypeOutputOpenTelemetry
 		return nil
 	}
 

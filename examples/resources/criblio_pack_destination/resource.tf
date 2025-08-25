@@ -593,54 +593,10 @@ resource "criblio_pack_destination" "my_packdestination" {
     use_round_robin_dns = true
   }
   output_cribl_lake = {
-    add_id_to_stage_path              = true
-    assume_role_arn                   = "...my_assume_role_arn..."
-    assume_role_external_id           = "...my_assume_role_external_id..."
-    aws_authentication_method         = "manual"
-    aws_secret_key                    = "...my_aws_secret_key..."
-    base_file_name                    = "...my_base_file_name..."
-    bucket                            = "...my_bucket..."
-    deadletter_enabled                = true
-    deadletter_path                   = "...my_deadletter_path..."
-    description                       = "...my_description..."
-    dest_path                         = "...my_dest_path..."
-    duration_seconds                  = 26341.25
-    empty_dir_cleanup_sec             = 30972.01
-    enable_assume_role                = false
-    endpoint                          = "...my_endpoint..."
-    environment                       = "...my_environment..."
-    format                            = "ddss"
-    header_line                       = "...my_header_line..."
-    id                                = "...my_id..."
-    kms_key_id                        = "...my_kms_key_id..."
-    max_closing_files_to_backpressure = 1378.78
-    max_concurrent_file_parts         = 7.69
-    max_file_idle_time_sec            = 24383.53
-    max_file_open_time_sec            = 42042.05
-    max_file_size_mb                  = 386.37
-    max_open_files                    = 359.58
-    max_retry_num                     = 5.3
-    object_acl                        = "private"
-    on_backpressure                   = "drop"
-    on_disk_full_backpressure         = "block"
-    pipeline                          = "...my_pipeline..."
-    region                            = "...my_region..."
-    reject_unauthorized               = true
-    remove_empty_dirs                 = false
-    reuse_connections                 = false
-    server_side_encryption            = "aws:kms"
-    signature_version                 = "v4"
-    stage_path                        = "...my_stage_path..."
-    storage_class                     = "ONEZONE_IA"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type                  = "cribl_lake"
-    verify_permissions    = true
-    write_high_water_mark = 2853.57
+    description = "Cribl Lake destination"
+    dest_path   = "test_lake_dataset"
+    id          = "test_lake_output"
+    type        = "cribl_lake"
   }
   output_cribl_tcp = {
     compression            = "none"

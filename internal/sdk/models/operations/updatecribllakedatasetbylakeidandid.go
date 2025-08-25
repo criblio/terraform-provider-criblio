@@ -3,22 +3,48 @@
 package operations
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
+// UpdateCriblLakeDatasetByLakeIDAndIDLakeID - lake id that contains the Datasets
+type UpdateCriblLakeDatasetByLakeIDAndIDLakeID string
+
+const (
+	UpdateCriblLakeDatasetByLakeIDAndIDLakeIDDefault UpdateCriblLakeDatasetByLakeIDAndIDLakeID = "default"
+)
+
+func (e UpdateCriblLakeDatasetByLakeIDAndIDLakeID) ToPointer() *UpdateCriblLakeDatasetByLakeIDAndIDLakeID {
+	return &e
+}
+func (e *UpdateCriblLakeDatasetByLakeIDAndIDLakeID) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "default":
+		*e = UpdateCriblLakeDatasetByLakeIDAndIDLakeID(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for UpdateCriblLakeDatasetByLakeIDAndIDLakeID: %v", v)
+	}
+}
+
 type UpdateCriblLakeDatasetByLakeIDAndIDRequest struct {
 	// lake id that contains the Datasets
-	LakeID string `pathParam:"style=simple,explode=false,name=lakeId"`
+	LakeID UpdateCriblLakeDatasetByLakeIDAndIDLakeID `pathParam:"style=simple,explode=false,name=lakeId"`
 	// dataset id to update
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// CriblLakeDataset object
 	CriblLakeDataset shared.CriblLakeDataset `request:"mediaType=application/json"`
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() string {
+func (o *UpdateCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() UpdateCriblLakeDatasetByLakeIDAndIDLakeID {
 	if o == nil {
-		return ""
+		return UpdateCriblLakeDatasetByLakeIDAndIDLakeID("")
 	}
 	return o.LakeID
 }

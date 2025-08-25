@@ -608,54 +608,10 @@ resource "criblio_destination" "my_destination" {
     use_round_robin_dns = false
   }
   output_cribl_lake = {
-    add_id_to_stage_path              = true
-    assume_role_arn                   = "...my_assume_role_arn..."
-    assume_role_external_id           = "...my_assume_role_external_id..."
-    aws_authentication_method         = "auto"
-    aws_secret_key                    = "...my_aws_secret_key..."
-    base_file_name                    = "...my_base_file_name..."
-    bucket                            = "...my_bucket..."
-    deadletter_enabled                = true
-    deadletter_path                   = "...my_deadletter_path..."
-    description                       = "...my_description..."
-    dest_path                         = "...my_dest_path..."
-    duration_seconds                  = 35105.34
-    empty_dir_cleanup_sec             = 67648.06
-    enable_assume_role                = false
-    endpoint                          = "...my_endpoint..."
-    environment                       = "...my_environment..."
-    format                            = "json"
-    header_line                       = "...my_header_line..."
-    id                                = "...my_id..."
-    kms_key_id                        = "...my_kms_key_id..."
-    max_closing_files_to_backpressure = 434.23
-    max_concurrent_file_parts         = 5.6
-    max_file_idle_time_sec            = 80824.88
-    max_file_open_time_sec            = 9898.55
-    max_file_size_mb                  = 57
-    max_open_files                    = 1917.9
-    max_retry_num                     = 4.32
-    object_acl                        = "aws-exec-read"
-    on_backpressure                   = "block"
-    on_disk_full_backpressure         = "drop"
-    pipeline                          = "...my_pipeline..."
-    region                            = "...my_region..."
-    reject_unauthorized               = true
-    remove_empty_dirs                 = true
-    reuse_connections                 = true
-    server_side_encryption            = "aws:kms"
-    signature_version                 = "v4"
-    stage_path                        = "...my_stage_path..."
-    storage_class                     = "STANDARD"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type                  = "cribl_lake"
-    verify_permissions    = true
-    write_high_water_mark = 1881.2
+    description = "Cribl Lake destination"
+    dest_path   = "test_lake_dataset"
+    id          = "test_lake_output"
+    type        = "cribl_lake"
   }
   output_cribl_tcp = {
     compression            = "none"
@@ -4807,48 +4763,8 @@ Required:
 
 Optional:
 
-- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location. Default: true
-- `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
-- `assume_role_external_id` (String) External ID to use when assuming role
-- `aws_authentication_method` (String) Default: "auto"; must be one of ["auto", "auto_rpc", "manual"]
-- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)
-- `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant). Default: "`CriblOut`"
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
-- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors. Default: false
-- `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded. Default: "$CRIBL_HOME/state/outputs/dead-letter"
 - `description` (String)
 - `dest_path` (String) Lake dataset to send the data to.
-- `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours). Default: 3600
-- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories. Default: 300
-- `enable_assume_role` (Boolean) Use Assume Role credentials to access S3. Default: false
-- `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
-- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `format` (String) must be one of ["json", "parquet", "ddss"]
-- `header_line` (String) If set, this line will be written to the beginning of each output file. Default: ""
-- `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
-- `max_closing_files_to_backpressure` (Number) Maximum number of files that can be waiting for upload before backpressure is applied. Default: 100
-- `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file. Minimum part size is 5MB. Default: 1
-- `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location. Default: 30
-- `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location. Default: 300
-- `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location. Default: 32
-- `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location. Default: 100
-- `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered. Default: 20
-- `object_acl` (String) Object ACL to assign to uploaded objects. Default: "private"; must be one of ["private", "public-read", "public-read-write", "authenticated-read", "aws-exec-read", "bucket-owner-read", "bucket-owner-full-control"]
-- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop"]
-- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit. Default: "block"; must be one of ["block", "drop"]
-- `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Region where the S3 bucket is located
-- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
-- `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files. Default: true
-- `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
-- `server_side_encryption` (String) must be one of ["AES256", "aws:kms"]
-- `signature_version` (String) Signature version to use for signing S3 requests. Default: "v4"; must be one of ["v2", "v4"]
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
-- `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself. Default: true
-- `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
 
 
 <a id="nestedatt--output_cribl_tcp"></a>

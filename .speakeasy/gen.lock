@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 49b9357037b7815316d1e20749d12ad0
+  docChecksum: ae394b10c1692ea8831153a4a78013b3
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.606.0
-  generationVersion: 2.686.7
-  releaseVersion: 1.9.7
-  configChecksum: 11158cc57e50e6329b924acaf598537d
+  speakeasyVersion: 1.606.3
+  generationVersion: 2.687.1
+  releaseVersion: 1.10.2
+  configChecksum: 137e72a4b67c2a3cafed483539f0a0f4
   published: true
 features:
   terraform:
@@ -23,6 +23,7 @@ features:
     nameOverrides: 2.81.3
     nullables: 0.0.0
     oauth2ClientCredentials: 0.1.5
+    retries: 2.81.4
     serverIDs: 2.81.1
     unions: 2.81.17
 generatedFiles:
@@ -1188,6 +1189,7 @@ generatedFiles:
   - internal/sdk/datasets.go
   - internal/sdk/diag.go
   - internal/sdk/distributed.go
+  - internal/sdk/docs/models/operations/option.md
   - internal/sdk/edge.go
   - internal/sdk/edgeappscopeprocesses.go
   - internal/sdk/edgecontainers.go
@@ -3818,7 +3820,7 @@ examples:
     speakeasy-default-create-cribl-lake-dataset-by-lake-id:
       parameters:
         path:
-          lakeId: "<id>"
+          lakeId: "default"
       requestBody:
         application/json: {"bucketName": "lake-${workspaceName}-${organizationId}", "id": "<id>"}
       responses:
@@ -3830,7 +3832,7 @@ examples:
     speakeasy-default-get-cribl-lake-dataset-by-lake-id:
       parameters:
         path:
-          lakeId: "<id>"
+          lakeId: "default"
       responses:
         "200":
           application/json: {}
@@ -3840,8 +3842,8 @@ examples:
     speakeasy-default-delete-cribl-lake-dataset-by-lake-id-and-id:
       parameters:
         path:
-          lakeId: "<id>"
-          id: "<id>"
+          lakeId: "default"
+          id: "test_lake_dataset"
       responses:
         "200":
           application/json: {}
@@ -3851,8 +3853,8 @@ examples:
     speakeasy-default-get-cribl-lake-dataset-by-lake-id-and-id:
       parameters:
         path:
-          lakeId: "<id>"
-          id: "<id>"
+          lakeId: "default"
+          id: "test_lake_dataset"
       responses:
         "200":
           application/json: {}
@@ -3862,8 +3864,8 @@ examples:
     speakeasy-default-update-cribl-lake-dataset-by-lake-id-and-id:
       parameters:
         path:
-          lakeId: "<id>"
-          id: "<id>"
+          lakeId: "default"
+          id: "test_lake_dataset"
       requestBody:
         application/json: {"bucketName": "lake-${workspaceName}-${organizationId}", "id": "<id>"}
       responses:

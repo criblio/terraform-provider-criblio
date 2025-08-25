@@ -3,20 +3,46 @@
 package operations
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
+// CreateCriblLakeDatasetByLakeIDLakeID - lake id that contains the Datasets
+type CreateCriblLakeDatasetByLakeIDLakeID string
+
+const (
+	CreateCriblLakeDatasetByLakeIDLakeIDDefault CreateCriblLakeDatasetByLakeIDLakeID = "default"
+)
+
+func (e CreateCriblLakeDatasetByLakeIDLakeID) ToPointer() *CreateCriblLakeDatasetByLakeIDLakeID {
+	return &e
+}
+func (e *CreateCriblLakeDatasetByLakeIDLakeID) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "default":
+		*e = CreateCriblLakeDatasetByLakeIDLakeID(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for CreateCriblLakeDatasetByLakeIDLakeID: %v", v)
+	}
+}
+
 type CreateCriblLakeDatasetByLakeIDRequest struct {
 	// lake id that contains the Datasets
-	LakeID string `pathParam:"style=simple,explode=false,name=lakeId"`
+	LakeID CreateCriblLakeDatasetByLakeIDLakeID `pathParam:"style=simple,explode=false,name=lakeId"`
 	// CriblLakeDataset object
 	CriblLakeDataset shared.CriblLakeDataset `request:"mediaType=application/json"`
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDRequest) GetLakeID() string {
+func (o *CreateCriblLakeDatasetByLakeIDRequest) GetLakeID() CreateCriblLakeDatasetByLakeIDLakeID {
 	if o == nil {
-		return ""
+		return CreateCriblLakeDatasetByLakeIDLakeID("")
 	}
 	return o.LakeID
 }

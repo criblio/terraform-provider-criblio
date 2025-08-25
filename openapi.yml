@@ -43268,14 +43268,17 @@ components:
           type: string
           title: Output ID
           description: Unique ID for this output
+          example: test_lake_output
         type:
           type: string
           enum:
             - cribl_lake
+          example: cribl_lake
         pipeline:
           type: string
           title: Pipeline
           description: Pipeline to process data before sending out to this output
+          x-speakeasy-ignore: true
         systemFields:
           type: array
           title: System fields
@@ -43285,11 +43288,13 @@ components:
             - cribl_pipe
           items:
             type: string
+          x-speakeasy-ignore: true
         environment:
           type: string
           title: Environment
           description: Optionally, enable this config only on a specified Git branch. If
             empty, will be enabled everywhere.
+          x-speakeasy-ignore: true
         streamtags:
           type: array
           title: Tags
@@ -43297,6 +43302,7 @@ components:
           default: []
           items:
             type: string
+          x-speakeasy-ignore: true
         bucket:
           type: string
           title: S3 bucket name
@@ -43304,20 +43310,24 @@ components:
             (which can evaluate to a constant value), enclosed in quotes or
             backticks. Can be evaluated only at initialization time. Example
             referencing a Global Variable: `myBucket-${C.vars.myVar}`"
+          x-speakeasy-ignore: true
         region:
           type: string
           title: Region
           description: Region where the S3 bucket is located
+          x-speakeasy-ignore: true
         awsSecretKey:
           type: string
           title: Secret key
           description: "Secret key. This value can be a constant or a JavaScript
             expression. Example: `${C.env.SOME_SECRET}`)"
+          x-speakeasy-ignore: true
         endpoint:
           type: string
           title: Endpoint
           description: S3 service endpoint. If empty, defaults to the AWS Region-specific
             endpoint. Otherwise, it must point to S3-compatible endpoint.
+          x-speakeasy-ignore: true
         signatureVersion:
           type: string
           title: Signature version
@@ -43326,32 +43336,38 @@ components:
           enum:
             - v2
             - v4
+          x-speakeasy-ignore: true
         reuseConnections:
           type: boolean
           title: Reuse connections
           description: Reuse connections between requests, which can improve performance
           default: true
+          x-speakeasy-ignore: true
         rejectUnauthorized:
           type: boolean
           title: Reject unauthorized certificates
           description: Reject certificates that cannot be verified against a valid CA,
             such as self-signed certificates
           default: true
+          x-speakeasy-ignore: true
         enableAssumeRole:
           type: boolean
           title: Enable for S3
           description: Use Assume Role credentials to access S3
           default: false
+          x-speakeasy-ignore: true
         assumeRoleArn:
           type: string
           title: AssumeRole ARN
           description: Amazon Resource Name (ARN) of the role to assume
           pattern: "^arn:"
           minLength: 20
+          x-speakeasy-ignore: true
         assumeRoleExternalId:
           type: string
           title: External ID
           description: External ID to use when assuming role
+          x-speakeasy-ignore: true
         durationSeconds:
           type: number
           title: Duration (seconds)
@@ -43361,21 +43377,25 @@ components:
           minimum: 900
           maximum: 43200
           default: 3600
+          x-speakeasy-ignore: true
         stagePath:
           type: string
           title: Staging location
           description: Filesystem location in which to buffer files, before compressing
             and moving to final destination. Use performant and stable storage.
           default: $CRIBL_HOME/state/outputs/staging
+          x-speakeasy-ignore: true
         addIdToStagePath:
           type: boolean
           title: Add output ID
           description: Add the Output ID value to staging location
           default: true
+          x-speakeasy-ignore: true
         destPath:
           type: string
           title: Lake dataset
           description: Lake dataset to send the data to.
+          example: test_lake_dataset
         objectACL:
           type: string
           title: Object ACL
@@ -43389,6 +43409,7 @@ components:
             - aws-exec-read
             - bucket-owner-read
             - bucket-owner-full-control
+          x-speakeasy-ignore: true
         storageClass:
           type: string
           title: Storage class
@@ -43402,27 +43423,32 @@ components:
             - GLACIER
             - GLACIER_IR
             - DEEP_ARCHIVE
+          x-speakeasy-ignore: true
         serverSideEncryption:
           type: string
           title: Server-side encryption for uploaded objects
           enum:
             - AES256
             - aws:kms
+          x-speakeasy-ignore: true
         kmsKeyId:
           type: string
           title: KMS key ID
           description: ID or ARN of the KMS customer-managed key to use for encryption
+          x-speakeasy-ignore: true
         removeEmptyDirs:
           type: boolean
           title: Remove empty staging directories
           description: Remove empty staging directories after moving files
           default: true
+          x-speakeasy-ignore: true
         baseFileName:
           type: string
           title: File name prefix expression
           description: JavaScript expression to define the output filename prefix (can be
             constant)
           default: "`CriblOut`"
+          x-speakeasy-ignore: true
         fileNameSuffix:
           type: string
           title: File name suffix expression
@@ -43441,6 +43467,7 @@ components:
           default: 32
           maximum: 1024
           minimum: 5
+          x-speakeasy-ignore: true
         maxOpenFiles:
           type: number
           title: Open file limit
@@ -43450,12 +43477,14 @@ components:
           default: 100
           minimum: 10
           maximum: 2000
+          x-speakeasy-ignore: true
         headerLine:
           type: string
           title: Header line
           description: If set, this line will be written to the beginning of each output
             file
           default: ""
+          x-speakeasy-ignore: true
         writeHighWaterMark:
           type: number
           title: Writing high watermark (KB)
@@ -43463,6 +43492,7 @@ components:
           default: 64
           maximum: 4096
           minimum: 16
+          x-speakeasy-ignore: true
         onBackpressure:
           type: string
           title: Backpressure behavior
@@ -43471,6 +43501,7 @@ components:
             - block
             - drop
           default: block
+          x-speakeasy-ignore: true
         deadletterEnabled:
           type: boolean
           default: false
@@ -43478,6 +43509,7 @@ components:
           description: If a file fails to move to its final destination after the maximum
             number of retries, move it to a designated directory to prevent
             further errors
+          x-speakeasy-ignore: true
         onDiskFullBackpressure:
           type: string
           title: Disk space protection
@@ -43487,6 +43519,7 @@ components:
             - block
             - drop
           default: block
+          x-speakeasy-ignore: true
         maxFileOpenTimeSec:
           type: number
           title: File open time limit (sec)
@@ -43495,6 +43528,7 @@ components:
           default: 300
           minimum: 10
           maximum: 86400
+          x-speakeasy-ignore: true
         maxFileIdleTimeSec:
           type: number
           title: Idle time limit (sec)
@@ -43503,12 +43537,14 @@ components:
           default: 30
           minimum: 5
           maximum: 86400
+          x-speakeasy-ignore: true
         verifyPermissions:
           type: boolean
           title: Verify if bucket exists
           description: Disable if you can access files within the bucket but not the
             bucket itself
           default: true
+          x-speakeasy-ignore: true
         maxClosingFilesToBackpressure:
           type: number
           title: Staging file limit
@@ -43517,6 +43553,7 @@ components:
           default: 100
           minimum: 10
           maximum: 4200
+          x-speakeasy-ignore: true
         awsAuthenticationMethod:
           type: string
           default: auto
@@ -43524,12 +43561,14 @@ components:
             - auto
             - auto_rpc
             - manual
+          x-speakeasy-ignore: true
         format:
           type: string
           enum:
             - json
             - parquet
             - ddss
+          x-speakeasy-ignore: true
         maxConcurrentFileParts:
           type: number
           title: Concurrent file parts limit
@@ -43538,9 +43577,11 @@ components:
           default: 1
           minimum: 1
           maximum: 10
+          x-speakeasy-ignore: true
         description:
           type: string
           title: Description
+          example: "Cribl Lake destination"
         emptyDirCleanupSec:
           type: number
           title: Staging cleanup period
@@ -43548,12 +43589,14 @@ components:
           default: 300
           minimum: 10
           maximum: 86400
+          x-speakeasy-ignore: true
         deadletterPath:
           type: string
           title: Dead-letter location
           description: Storage location for files that fail to reach their final
             destination after maximum retries are exceeded
           default: $CRIBL_HOME/state/outputs/dead-letter
+          x-speakeasy-ignore: true
         maxRetryNum:
           type: number
           title: Retry limit
@@ -43561,6 +43604,7 @@ components:
             final destination before being dead-lettered
           default: 20
           minimum: 1
+          x-speakeasy-ignore: true
       type: object
     OutputDiskSpool:
       required:
@@ -53538,7 +53582,10 @@ paths:
           default: "default"
           schema:
             type: string
+            enum:
+              - default
           description: lake id that contains the Datasets
+          example: default
     get:
       operationId: getCriblLakeDatasetByLakeId
       tags:
@@ -53577,6 +53624,9 @@ paths:
           default: "default"
           schema:
             type: string
+            enum:
+              - default
+          example: default
           description: lake id that contains the Datasets
   "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections":
     post:
@@ -53618,7 +53668,18 @@ paths:
           description: Lakehouse or dataset not found
         '500':
           description: Internal server error
-
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 1000
+          maxInterval: 30000
+          maxElapsedTime: 900000
+          exponent: 2.0
+        statusCodes:
+          - 400
+          - 401
+          - 404
+          - 500
     patch:
       tags:
         - lakehouse-dataset-connections
@@ -53735,13 +53796,17 @@ paths:
           default: "default"
           schema:
             type: string
+            enum:
+              - default
           description: lake id that contains the Datasets
+          example: default
         - name: id
           in: path
           required: true
           schema:
             type: string
           description: dataset id to delete
+          example: test_lake_dataset
     get:
       operationId: getCriblLakeDatasetByLakeIdAndId
       tags:
@@ -53781,6 +53846,9 @@ paths:
           default: "default"
           schema:
             type: string
+            enum:
+              - default
+          example: default
           description: lake id that contains the Datasets
         - name: id
           in: path
@@ -53788,6 +53856,7 @@ paths:
           schema:
             type: string
           description: dataset id to get
+          example: test_lake_dataset
     patch:
       operationId: updateCriblLakeDatasetByLakeIdAndId
       tags:
@@ -53834,6 +53903,9 @@ paths:
           default: "default"
           schema:
             type: string
+            enum:
+              - default
+          example: default
           description: lake id that contains the Datasets
         - name: id
           in: path
@@ -53841,6 +53913,7 @@ paths:
           schema:
             type: string
           description: dataset id to update
+          example: test_lake_dataset
   /m/default_search/search/dashboard-categories:
     get:
       operationId: listDashboardCategory

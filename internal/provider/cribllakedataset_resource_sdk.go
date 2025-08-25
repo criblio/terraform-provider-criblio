@@ -57,9 +57,7 @@ func (r *CriblLakeDatasetResourceModel) RefreshFromSharedCriblLakeDataset(ctx co
 func (r *CriblLakeDatasetResourceModel) ToOperationsCreateCriblLakeDatasetByLakeIDRequest(ctx context.Context) (*operations.CreateCriblLakeDatasetByLakeIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var lakeID string
-	lakeID = r.LakeID.ValueString()
-
+	lakeID := operations.CreateCriblLakeDatasetByLakeIDLakeID(r.LakeID.ValueString())
 	criblLakeDataset, criblLakeDatasetDiags := r.ToSharedCriblLakeDataset(ctx)
 	diags.Append(criblLakeDatasetDiags...)
 
@@ -78,9 +76,7 @@ func (r *CriblLakeDatasetResourceModel) ToOperationsCreateCriblLakeDatasetByLake
 func (r *CriblLakeDatasetResourceModel) ToOperationsDeleteCriblLakeDatasetByLakeIDAndIDRequest(ctx context.Context) (*operations.DeleteCriblLakeDatasetByLakeIDAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var lakeID string
-	lakeID = r.LakeID.ValueString()
-
+	lakeID := operations.DeleteCriblLakeDatasetByLakeIDAndIDLakeID(r.LakeID.ValueString())
 	var id string
 	id = r.ID.ValueString()
 
@@ -95,9 +91,7 @@ func (r *CriblLakeDatasetResourceModel) ToOperationsDeleteCriblLakeDatasetByLake
 func (r *CriblLakeDatasetResourceModel) ToOperationsGetCriblLakeDatasetByLakeIDAndIDRequest(ctx context.Context) (*operations.GetCriblLakeDatasetByLakeIDAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var lakeID string
-	lakeID = r.LakeID.ValueString()
-
+	lakeID := operations.GetCriblLakeDatasetByLakeIDAndIDLakeID(r.LakeID.ValueString())
 	var id string
 	id = r.ID.ValueString()
 
@@ -112,9 +106,7 @@ func (r *CriblLakeDatasetResourceModel) ToOperationsGetCriblLakeDatasetByLakeIDA
 func (r *CriblLakeDatasetResourceModel) ToOperationsUpdateCriblLakeDatasetByLakeIDAndIDRequest(ctx context.Context) (*operations.UpdateCriblLakeDatasetByLakeIDAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var lakeID string
-	lakeID = r.LakeID.ValueString()
-
+	lakeID := operations.UpdateCriblLakeDatasetByLakeIDAndIDLakeID(r.LakeID.ValueString())
 	var id string
 	id = r.ID.ValueString()
 
