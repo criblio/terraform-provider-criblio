@@ -213,7 +213,7 @@ func (o OutputClickHouseTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputClickHouseTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -287,6 +287,17 @@ type OutputClickHouseExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputClickHouseExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputClickHouseExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputClickHouseExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -347,7 +358,7 @@ func (o OutputClickHouseResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputClickHouseResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -396,7 +407,7 @@ func (o OutputClickHouseTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputClickHouseTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -467,6 +478,17 @@ type OutputClickHouseOauthParam struct {
 	Value string `json:"value"`
 }
 
+func (o OutputClickHouseOauthParam) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputClickHouseOauthParam) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputClickHouseOauthParam) GetName() string {
 	if o == nil {
 		return ""
@@ -486,6 +508,17 @@ type OutputClickHouseOauthHeader struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (o OutputClickHouseOauthHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputClickHouseOauthHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputClickHouseOauthHeader) GetName() string {
@@ -509,6 +542,17 @@ type OutputClickHouseColumnMapping struct {
 	ColumnType *string `json:"columnType,omitempty"`
 	// JavaScript expression to compute value to be inserted into ClickHouse table
 	ColumnValueExpression string `json:"columnValueExpression"`
+}
+
+func (o OutputClickHouseColumnMapping) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputClickHouseColumnMapping) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"columnName", "columnValueExpression"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputClickHouseColumnMapping) GetColumnName() string {
@@ -617,6 +661,17 @@ func (e *OutputClickHouseMode) UnmarshalJSON(data []byte) error {
 }
 
 type OutputClickHousePqControls struct {
+}
+
+func (o OutputClickHousePqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputClickHousePqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 type OutputClickHouse struct {
@@ -731,7 +786,7 @@ func (o OutputClickHouse) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputClickHouse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url", "database", "tableName"}); err != nil {
 		return err
 	}
 	return nil

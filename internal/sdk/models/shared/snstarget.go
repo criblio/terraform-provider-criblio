@@ -154,7 +154,7 @@ func (s SnsTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SnsTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "region"}); err != nil {
 		return err
 	}
 	return nil

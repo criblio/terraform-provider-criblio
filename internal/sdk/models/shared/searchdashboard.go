@@ -68,6 +68,17 @@ type ElementMarkdown struct {
 	Variant     Variant             `json:"variant"`
 }
 
+func (e ElementMarkdown) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *ElementMarkdown) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id", "layout", "type", "variant"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *ElementMarkdown) GetDescription() *string {
 	if o == nil {
 		return nil
@@ -152,6 +163,17 @@ type Element struct {
 	Type            DashboardElementType     `json:"type"`
 	Value           map[string]any           `json:"value,omitempty"`
 	Variant         *DashboardElementVariant `json:"variant,omitempty"`
+}
+
+func (e Element) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *Element) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id", "layout", "search", "type"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Element) GetDescription() *string {
@@ -253,8 +275,8 @@ const (
 )
 
 type ElementUnion struct {
-	Element         *Element         `queryParam:"inline"`
-	ElementMarkdown *ElementMarkdown `queryParam:"inline"`
+	Element         *Element         `queryParam:"inline" name:"element"`
+	ElementMarkdown *ElementMarkdown `queryParam:"inline" name:"element"`
 
 	Type ElementUnionType
 }
@@ -279,17 +301,17 @@ func CreateElementUnionElementMarkdown(elementMarkdown ElementMarkdown) ElementU
 
 func (u *ElementUnion) UnmarshalJSON(data []byte) error {
 
-	var elementMarkdown ElementMarkdown = ElementMarkdown{}
-	if err := utils.UnmarshalJSON(data, &elementMarkdown, "", true, true); err == nil {
-		u.ElementMarkdown = &elementMarkdown
-		u.Type = ElementUnionTypeElementMarkdown
+	var element Element = Element{}
+	if err := utils.UnmarshalJSON(data, &element, "", true, nil); err == nil {
+		u.Element = &element
+		u.Type = ElementUnionTypeElement
 		return nil
 	}
 
-	var element Element = Element{}
-	if err := utils.UnmarshalJSON(data, &element, "", true, true); err == nil {
-		u.Element = &element
-		u.Type = ElementUnionTypeElement
+	var elementMarkdown ElementMarkdown = ElementMarkdown{}
+	if err := utils.UnmarshalJSON(data, &elementMarkdown, "", true, nil); err == nil {
+		u.ElementMarkdown = &elementMarkdown
+		u.Type = ElementUnionTypeElementMarkdown
 		return nil
 	}
 

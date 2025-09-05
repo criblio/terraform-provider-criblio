@@ -191,7 +191,7 @@ func (o OutputOpenTelemetryMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputOpenTelemetryMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -278,6 +278,17 @@ type OutputOpenTelemetryOauthParam struct {
 	Value string `json:"value"`
 }
 
+func (o OutputOpenTelemetryOauthParam) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputOpenTelemetryOauthParam) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputOpenTelemetryOauthParam) GetName() string {
 	if o == nil {
 		return ""
@@ -299,6 +310,17 @@ type OutputOpenTelemetryOauthHeader struct {
 	Value string `json:"value"`
 }
 
+func (o OutputOpenTelemetryOauthHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputOpenTelemetryOauthHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputOpenTelemetryOauthHeader) GetName() string {
 	if o == nil {
 		return ""
@@ -316,6 +338,17 @@ func (o *OutputOpenTelemetryOauthHeader) GetValue() string {
 type OutputOpenTelemetryExtraHTTPHeader struct {
 	Name  *string `json:"name,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o OutputOpenTelemetryExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputOpenTelemetryExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputOpenTelemetryExtraHTTPHeader) GetName() *string {
@@ -348,7 +381,7 @@ func (o OutputOpenTelemetryResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputOpenTelemetryResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -397,7 +430,7 @@ func (o OutputOpenTelemetryTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputOpenTelemetryTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -519,7 +552,7 @@ func (o OutputOpenTelemetryTLSSettingsClientSide) MarshalJSON() ([]byte, error) 
 }
 
 func (o *OutputOpenTelemetryTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -675,6 +708,17 @@ func (e *OutputOpenTelemetryMode) UnmarshalJSON(data []byte) error {
 type OutputOpenTelemetryPqControls struct {
 }
 
+func (o OutputOpenTelemetryPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputOpenTelemetryPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputOpenTelemetry struct {
 	// Unique ID for this output
 	ID   *string                 `json:"id,omitempty"`
@@ -786,7 +830,7 @@ func (o OutputOpenTelemetry) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputOpenTelemetry) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "endpoint"}); err != nil {
 		return err
 	}
 	return nil

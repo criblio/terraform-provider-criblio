@@ -63,6 +63,17 @@ type OutputSumoLogicExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputSumoLogicExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSumoLogicExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputSumoLogicExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -123,7 +134,7 @@ func (o OutputSumoLogicResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSumoLogicResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -172,7 +183,7 @@ func (o OutputSumoLogicTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSumoLogicTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -323,6 +334,17 @@ func (e *OutputSumoLogicMode) UnmarshalJSON(data []byte) error {
 type OutputSumoLogicPqControls struct {
 }
 
+func (o OutputSumoLogicPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSumoLogicPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSumoLogic struct {
 	// Unique ID for this output
 	ID   *string             `json:"id,omitempty"`
@@ -397,7 +419,7 @@ func (o OutputSumoLogic) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSumoLogic) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "url"}); err != nil {
 		return err
 	}
 	return nil

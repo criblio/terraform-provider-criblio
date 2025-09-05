@@ -72,64 +72,64 @@ const (
 )
 
 type Input struct {
-	InputCollection           *InputCollection           `queryParam:"inline"`
-	InputKafka                *InputKafka                `queryParam:"inline"`
-	InputMsk                  *InputMsk                  `queryParam:"inline"`
-	InputHTTP                 *InputHTTP                 `queryParam:"inline"`
-	InputSplunk               *InputSplunk               `queryParam:"inline"`
-	InputSplunkSearch         *InputSplunkSearch         `queryParam:"inline"`
-	InputSplunkHec            *InputSplunkHec            `queryParam:"inline"`
-	InputAzureBlob            *InputAzureBlob            `queryParam:"inline"`
-	InputElastic              *InputElastic              `queryParam:"inline"`
-	InputConfluentCloud       *InputConfluentCloud       `queryParam:"inline"`
-	InputGrafana              *InputGrafana              `queryParam:"inline"`
-	InputLoki                 *InputLoki                 `queryParam:"inline"`
-	InputPrometheusRw         *InputPrometheusRw         `queryParam:"inline"`
-	InputPrometheus           *InputPrometheus           `queryParam:"inline"`
-	InputEdgePrometheus       *InputEdgePrometheus       `queryParam:"inline"`
-	InputOffice365Mgmt        *InputOffice365Mgmt        `queryParam:"inline"`
-	InputOffice365Service     *InputOffice365Service     `queryParam:"inline"`
-	InputOffice365MsgTrace    *InputOffice365MsgTrace    `queryParam:"inline"`
-	InputEventhub             *InputEventhub             `queryParam:"inline"`
-	InputExec                 *InputExec                 `queryParam:"inline"`
-	InputFirehose             *InputFirehose             `queryParam:"inline"`
-	InputGooglePubsub         *InputGooglePubsub         `queryParam:"inline"`
-	InputCribl                *InputCribl                `queryParam:"inline"`
-	InputCriblTCP             *InputCriblTCP             `queryParam:"inline"`
-	InputCriblHTTP            *InputCriblHTTP            `queryParam:"inline"`
-	InputCriblLakeHTTP        *InputCriblLakeHTTP        `queryParam:"inline"`
-	InputTcpjson              *InputTcpjson              `queryParam:"inline"`
-	InputSystemMetrics        *InputSystemMetrics        `queryParam:"inline"`
-	InputSystemState          *InputSystemState          `queryParam:"inline"`
-	InputKubeMetrics          *InputKubeMetrics          `queryParam:"inline"`
-	InputKubeLogs             *InputKubeLogs             `queryParam:"inline"`
-	InputKubeEvents           *InputKubeEvents           `queryParam:"inline"`
-	InputWindowsMetrics       *InputWindowsMetrics       `queryParam:"inline"`
-	InputCrowdstrike          *InputCrowdstrike          `queryParam:"inline"`
-	InputDatadogAgent         *InputDatadogAgent         `queryParam:"inline"`
-	InputDatagen              *InputDatagen              `queryParam:"inline"`
-	InputHTTPRaw              *InputHTTPRaw              `queryParam:"inline"`
-	InputKinesis              *InputKinesis              `queryParam:"inline"`
-	InputCriblmetrics         *InputCriblmetrics         `queryParam:"inline"`
-	InputMetrics              *InputMetrics              `queryParam:"inline"`
-	InputS3                   *InputS3                   `queryParam:"inline"`
-	InputS3Inventory          *InputS3Inventory          `queryParam:"inline"`
-	InputSnmp                 *InputSnmp                 `queryParam:"inline"`
-	InputOpenTelemetry        *InputOpenTelemetry        `queryParam:"inline"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetry `queryParam:"inline"`
-	InputSqs                  *InputSqs                  `queryParam:"inline"`
-	InputSyslog               *InputSyslog               `queryParam:"inline"`
-	InputFile                 *InputFile                 `queryParam:"inline"`
-	InputTCP                  *InputTCP                  `queryParam:"inline"`
-	InputAppscope             *InputAppscope             `queryParam:"inline"`
-	InputWef                  *InputWef                  `queryParam:"inline"`
-	InputWinEventLogs         *InputWinEventLogs         `queryParam:"inline"`
-	InputRawUDP               *InputRawUDP               `queryParam:"inline"`
-	InputJournalFiles         *InputJournalFiles         `queryParam:"inline"`
-	InputWiz                  *InputWiz                  `queryParam:"inline"`
-	InputNetflow              *InputNetflow              `queryParam:"inline"`
-	InputSecurityLake         *InputSecurityLake         `queryParam:"inline"`
-	InputZscalerHec           *InputZscalerHec           `queryParam:"inline"`
+	InputCollection           *InputCollection           `queryParam:"inline" name:"Input"`
+	InputKafka                *InputKafka                `queryParam:"inline" name:"Input"`
+	InputMsk                  *InputMsk                  `queryParam:"inline" name:"Input"`
+	InputHTTP                 *InputHTTP                 `queryParam:"inline" name:"Input"`
+	InputSplunk               *InputSplunk               `queryParam:"inline" name:"Input"`
+	InputSplunkSearch         *InputSplunkSearch         `queryParam:"inline" name:"Input"`
+	InputSplunkHec            *InputSplunkHec            `queryParam:"inline" name:"Input"`
+	InputAzureBlob            *InputAzureBlob            `queryParam:"inline" name:"Input"`
+	InputElastic              *InputElastic              `queryParam:"inline" name:"Input"`
+	InputConfluentCloud       *InputConfluentCloud       `queryParam:"inline" name:"Input"`
+	InputGrafana              *InputGrafana              `queryParam:"inline" name:"Input"`
+	InputLoki                 *InputLoki                 `queryParam:"inline" name:"Input"`
+	InputPrometheusRw         *InputPrometheusRw         `queryParam:"inline" name:"Input"`
+	InputPrometheus           *InputPrometheus           `queryParam:"inline" name:"Input"`
+	InputEdgePrometheus       *InputEdgePrometheus       `queryParam:"inline" name:"Input"`
+	InputOffice365Mgmt        *InputOffice365Mgmt        `queryParam:"inline" name:"Input"`
+	InputOffice365Service     *InputOffice365Service     `queryParam:"inline" name:"Input"`
+	InputOffice365MsgTrace    *InputOffice365MsgTrace    `queryParam:"inline" name:"Input"`
+	InputEventhub             *InputEventhub             `queryParam:"inline" name:"Input"`
+	InputExec                 *InputExec                 `queryParam:"inline" name:"Input"`
+	InputFirehose             *InputFirehose             `queryParam:"inline" name:"Input"`
+	InputGooglePubsub         *InputGooglePubsub         `queryParam:"inline" name:"Input"`
+	InputCribl                *InputCribl                `queryParam:"inline" name:"Input"`
+	InputCriblTCP             *InputCriblTCP             `queryParam:"inline" name:"Input"`
+	InputCriblHTTP            *InputCriblHTTP            `queryParam:"inline" name:"Input"`
+	InputCriblLakeHTTP        *InputCriblLakeHTTP        `queryParam:"inline" name:"Input"`
+	InputTcpjson              *InputTcpjson              `queryParam:"inline" name:"Input"`
+	InputSystemMetrics        *InputSystemMetrics        `queryParam:"inline" name:"Input"`
+	InputSystemState          *InputSystemState          `queryParam:"inline" name:"Input"`
+	InputKubeMetrics          *InputKubeMetrics          `queryParam:"inline" name:"Input"`
+	InputKubeLogs             *InputKubeLogs             `queryParam:"inline" name:"Input"`
+	InputKubeEvents           *InputKubeEvents           `queryParam:"inline" name:"Input"`
+	InputWindowsMetrics       *InputWindowsMetrics       `queryParam:"inline" name:"Input"`
+	InputCrowdstrike          *InputCrowdstrike          `queryParam:"inline" name:"Input"`
+	InputDatadogAgent         *InputDatadogAgent         `queryParam:"inline" name:"Input"`
+	InputDatagen              *InputDatagen              `queryParam:"inline" name:"Input"`
+	InputHTTPRaw              *InputHTTPRaw              `queryParam:"inline" name:"Input"`
+	InputKinesis              *InputKinesis              `queryParam:"inline" name:"Input"`
+	InputCriblmetrics         *InputCriblmetrics         `queryParam:"inline" name:"Input"`
+	InputMetrics              *InputMetrics              `queryParam:"inline" name:"Input"`
+	InputS3                   *InputS3                   `queryParam:"inline" name:"Input"`
+	InputS3Inventory          *InputS3Inventory          `queryParam:"inline" name:"Input"`
+	InputSnmp                 *InputSnmp                 `queryParam:"inline" name:"Input"`
+	InputOpenTelemetry        *InputOpenTelemetry        `queryParam:"inline" name:"Input"`
+	InputModelDrivenTelemetry *InputModelDrivenTelemetry `queryParam:"inline" name:"Input"`
+	InputSqs                  *InputSqs                  `queryParam:"inline" name:"Input"`
+	InputSyslog               *InputSyslog               `queryParam:"inline" name:"Input"`
+	InputFile                 *InputFile                 `queryParam:"inline" name:"Input"`
+	InputTCP                  *InputTCP                  `queryParam:"inline" name:"Input"`
+	InputAppscope             *InputAppscope             `queryParam:"inline" name:"Input"`
+	InputWef                  *InputWef                  `queryParam:"inline" name:"Input"`
+	InputWinEventLogs         *InputWinEventLogs         `queryParam:"inline" name:"Input"`
+	InputRawUDP               *InputRawUDP               `queryParam:"inline" name:"Input"`
+	InputJournalFiles         *InputJournalFiles         `queryParam:"inline" name:"Input"`
+	InputWiz                  *InputWiz                  `queryParam:"inline" name:"Input"`
+	InputNetflow              *InputNetflow              `queryParam:"inline" name:"Input"`
+	InputSecurityLake         *InputSecurityLake         `queryParam:"inline" name:"Input"`
+	InputZscalerHec           *InputZscalerHec           `queryParam:"inline" name:"Input"`
 
 	Type InputType
 }
@@ -658,409 +658,409 @@ func CreateInputInputZscalerHec(inputZscalerHec InputZscalerHec) Input {
 
 func (u *Input) UnmarshalJSON(data []byte) error {
 
-	var inputCribl InputCribl = InputCribl{}
-	if err := utils.UnmarshalJSON(data, &inputCribl, "", true, true); err == nil {
-		u.InputCribl = &inputCribl
-		u.Type = InputTypeInputCribl
-		return nil
-	}
-
-	var inputKubeEvents InputKubeEvents = InputKubeEvents{}
-	if err := utils.UnmarshalJSON(data, &inputKubeEvents, "", true, true); err == nil {
-		u.InputKubeEvents = &inputKubeEvents
-		u.Type = InputTypeInputKubeEvents
-		return nil
-	}
-
-	var inputDatagen InputDatagen = InputDatagen{}
-	if err := utils.UnmarshalJSON(data, &inputDatagen, "", true, true); err == nil {
-		u.InputDatagen = &inputDatagen
-		u.Type = InputTypeInputDatagen
-		return nil
-	}
-
-	var inputCriblmetrics InputCriblmetrics = InputCriblmetrics{}
-	if err := utils.UnmarshalJSON(data, &inputCriblmetrics, "", true, true); err == nil {
-		u.InputCriblmetrics = &inputCriblmetrics
-		u.Type = InputTypeInputCriblmetrics
-		return nil
-	}
-
-	var inputKubeMetrics InputKubeMetrics = InputKubeMetrics{}
-	if err := utils.UnmarshalJSON(data, &inputKubeMetrics, "", true, true); err == nil {
-		u.InputKubeMetrics = &inputKubeMetrics
-		u.Type = InputTypeInputKubeMetrics
-		return nil
-	}
-
-	var inputSystemState InputSystemState = InputSystemState{}
-	if err := utils.UnmarshalJSON(data, &inputSystemState, "", true, true); err == nil {
-		u.InputSystemState = &inputSystemState
-		u.Type = InputTypeInputSystemState
-		return nil
-	}
-
-	var inputCollection InputCollection = InputCollection{}
-	if err := utils.UnmarshalJSON(data, &inputCollection, "", true, true); err == nil {
-		u.InputCollection = &inputCollection
-		u.Type = InputTypeInputCollection
-		return nil
-	}
-
-	var inputSystemMetrics InputSystemMetrics = InputSystemMetrics{}
-	if err := utils.UnmarshalJSON(data, &inputSystemMetrics, "", true, true); err == nil {
-		u.InputSystemMetrics = &inputSystemMetrics
-		u.Type = InputTypeInputSystemMetrics
-		return nil
-	}
-
-	var inputModelDrivenTelemetry InputModelDrivenTelemetry = InputModelDrivenTelemetry{}
-	if err := utils.UnmarshalJSON(data, &inputModelDrivenTelemetry, "", true, true); err == nil {
-		u.InputModelDrivenTelemetry = &inputModelDrivenTelemetry
-		u.Type = InputTypeInputModelDrivenTelemetry
-		return nil
-	}
-
-	var inputWindowsMetrics InputWindowsMetrics = InputWindowsMetrics{}
-	if err := utils.UnmarshalJSON(data, &inputWindowsMetrics, "", true, true); err == nil {
-		u.InputWindowsMetrics = &inputWindowsMetrics
-		u.Type = InputTypeInputWindowsMetrics
-		return nil
-	}
-
-	var inputJournalFiles InputJournalFiles = InputJournalFiles{}
-	if err := utils.UnmarshalJSON(data, &inputJournalFiles, "", true, true); err == nil {
-		u.InputJournalFiles = &inputJournalFiles
-		u.Type = InputTypeInputJournalFiles
-		return nil
-	}
-
-	var inputRawUDP InputRawUDP = InputRawUDP{}
-	if err := utils.UnmarshalJSON(data, &inputRawUDP, "", true, true); err == nil {
-		u.InputRawUDP = &inputRawUDP
-		u.Type = InputTypeInputRawUDP
-		return nil
-	}
-
-	var inputWinEventLogs InputWinEventLogs = InputWinEventLogs{}
-	if err := utils.UnmarshalJSON(data, &inputWinEventLogs, "", true, true); err == nil {
-		u.InputWinEventLogs = &inputWinEventLogs
-		u.Type = InputTypeInputWinEventLogs
-		return nil
-	}
-
-	var inputExec InputExec = InputExec{}
-	if err := utils.UnmarshalJSON(data, &inputExec, "", true, true); err == nil {
-		u.InputExec = &inputExec
-		u.Type = InputTypeInputExec
-		return nil
-	}
-
-	var inputKubeLogs InputKubeLogs = InputKubeLogs{}
-	if err := utils.UnmarshalJSON(data, &inputKubeLogs, "", true, true); err == nil {
-		u.InputKubeLogs = &inputKubeLogs
-		u.Type = InputTypeInputKubeLogs
-		return nil
-	}
-
-	var inputMetrics InputMetrics = InputMetrics{}
-	if err := utils.UnmarshalJSON(data, &inputMetrics, "", true, true); err == nil {
-		u.InputMetrics = &inputMetrics
-		u.Type = InputTypeInputMetrics
-		return nil
-	}
-
-	var inputSnmp InputSnmp = InputSnmp{}
-	if err := utils.UnmarshalJSON(data, &inputSnmp, "", true, true); err == nil {
-		u.InputSnmp = &inputSnmp
-		u.Type = InputTypeInputSnmp
-		return nil
-	}
-
-	var inputCriblTCP InputCriblTCP = InputCriblTCP{}
-	if err := utils.UnmarshalJSON(data, &inputCriblTCP, "", true, true); err == nil {
-		u.InputCriblTCP = &inputCriblTCP
-		u.Type = InputTypeInputCriblTCP
-		return nil
-	}
-
-	var inputNetflow InputNetflow = InputNetflow{}
-	if err := utils.UnmarshalJSON(data, &inputNetflow, "", true, true); err == nil {
-		u.InputNetflow = &inputNetflow
-		u.Type = InputTypeInputNetflow
-		return nil
-	}
-
-	var inputGooglePubsub InputGooglePubsub = InputGooglePubsub{}
-	if err := utils.UnmarshalJSON(data, &inputGooglePubsub, "", true, true); err == nil {
-		u.InputGooglePubsub = &inputGooglePubsub
-		u.Type = InputTypeInputGooglePubsub
-		return nil
-	}
-
-	var inputTcpjson InputTcpjson = InputTcpjson{}
-	if err := utils.UnmarshalJSON(data, &inputTcpjson, "", true, true); err == nil {
-		u.InputTcpjson = &inputTcpjson
-		u.Type = InputTypeInputTcpjson
-		return nil
-	}
-
-	var inputOffice365Service InputOffice365Service = InputOffice365Service{}
-	if err := utils.UnmarshalJSON(data, &inputOffice365Service, "", true, true); err == nil {
-		u.InputOffice365Service = &inputOffice365Service
-		u.Type = InputTypeInputOffice365Service
-		return nil
-	}
-
-	var inputTCP InputTCP = InputTCP{}
-	if err := utils.UnmarshalJSON(data, &inputTCP, "", true, true); err == nil {
-		u.InputTCP = &inputTCP
-		u.Type = InputTypeInputTCP
-		return nil
-	}
-
-	var inputWiz InputWiz = InputWiz{}
-	if err := utils.UnmarshalJSON(data, &inputWiz, "", true, true); err == nil {
-		u.InputWiz = &inputWiz
-		u.Type = InputTypeInputWiz
-		return nil
-	}
-
-	var inputFirehose InputFirehose = InputFirehose{}
-	if err := utils.UnmarshalJSON(data, &inputFirehose, "", true, true); err == nil {
-		u.InputFirehose = &inputFirehose
-		u.Type = InputTypeInputFirehose
-		return nil
-	}
-
-	var inputCriblHTTP InputCriblHTTP = InputCriblHTTP{}
-	if err := utils.UnmarshalJSON(data, &inputCriblHTTP, "", true, true); err == nil {
-		u.InputCriblHTTP = &inputCriblHTTP
-		u.Type = InputTypeInputCriblHTTP
-		return nil
-	}
-
-	var inputCriblLakeHTTP InputCriblLakeHTTP = InputCriblLakeHTTP{}
-	if err := utils.UnmarshalJSON(data, &inputCriblLakeHTTP, "", true, true); err == nil {
-		u.InputCriblLakeHTTP = &inputCriblLakeHTTP
-		u.Type = InputTypeInputCriblLakeHTTP
-		return nil
-	}
-
-	var inputDatadogAgent InputDatadogAgent = InputDatadogAgent{}
-	if err := utils.UnmarshalJSON(data, &inputDatadogAgent, "", true, true); err == nil {
-		u.InputDatadogAgent = &inputDatadogAgent
-		u.Type = InputTypeInputDatadogAgent
-		return nil
-	}
-
-	var inputOffice365Mgmt InputOffice365Mgmt = InputOffice365Mgmt{}
-	if err := utils.UnmarshalJSON(data, &inputOffice365Mgmt, "", true, true); err == nil {
-		u.InputOffice365Mgmt = &inputOffice365Mgmt
-		u.Type = InputTypeInputOffice365Mgmt
-		return nil
-	}
-
-	var inputFile InputFile = InputFile{}
-	if err := utils.UnmarshalJSON(data, &inputFile, "", true, true); err == nil {
-		u.InputFile = &inputFile
-		u.Type = InputTypeInputFile
-		return nil
-	}
-
-	var inputSplunk InputSplunk = InputSplunk{}
-	if err := utils.UnmarshalJSON(data, &inputSplunk, "", true, true); err == nil {
-		u.InputSplunk = &inputSplunk
-		u.Type = InputTypeInputSplunk
-		return nil
-	}
-
-	var inputWef InputWef = InputWef{}
-	if err := utils.UnmarshalJSON(data, &inputWef, "", true, true); err == nil {
-		u.InputWef = &inputWef
-		u.Type = InputTypeInputWef
-		return nil
-	}
-
-	var inputAppscope InputAppscope = InputAppscope{}
-	if err := utils.UnmarshalJSON(data, &inputAppscope, "", true, true); err == nil {
-		u.InputAppscope = &inputAppscope
-		u.Type = InputTypeInputAppscope
-		return nil
-	}
-
-	var inputHTTPRaw InputHTTPRaw = InputHTTPRaw{}
-	if err := utils.UnmarshalJSON(data, &inputHTTPRaw, "", true, true); err == nil {
-		u.InputHTTPRaw = &inputHTTPRaw
-		u.Type = InputTypeInputHTTPRaw
-		return nil
-	}
-
-	var inputHTTP InputHTTP = InputHTTP{}
-	if err := utils.UnmarshalJSON(data, &inputHTTP, "", true, true); err == nil {
-		u.InputHTTP = &inputHTTP
-		u.Type = InputTypeInputHTTP
+	var inputMsk InputMsk = InputMsk{}
+	if err := utils.UnmarshalJSON(data, &inputMsk, "", true, nil); err == nil {
+		u.InputMsk = &inputMsk
+		u.Type = InputTypeInputMsk
 		return nil
 	}
 
 	var inputAzureBlob InputAzureBlob = InputAzureBlob{}
-	if err := utils.UnmarshalJSON(data, &inputAzureBlob, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputAzureBlob, "", true, nil); err == nil {
 		u.InputAzureBlob = &inputAzureBlob
 		u.Type = InputTypeInputAzureBlob
 		return nil
 	}
 
-	var inputZscalerHec InputZscalerHec = InputZscalerHec{}
-	if err := utils.UnmarshalJSON(data, &inputZscalerHec, "", true, true); err == nil {
-		u.InputZscalerHec = &inputZscalerHec
-		u.Type = InputTypeInputZscalerHec
+	var inputOffice365Mgmt InputOffice365Mgmt = InputOffice365Mgmt{}
+	if err := utils.UnmarshalJSON(data, &inputOffice365Mgmt, "", true, nil); err == nil {
+		u.InputOffice365Mgmt = &inputOffice365Mgmt
+		u.Type = InputTypeInputOffice365Mgmt
 		return nil
 	}
 
-	var inputSqs InputSqs = InputSqs{}
-	if err := utils.UnmarshalJSON(data, &inputSqs, "", true, true); err == nil {
-		u.InputSqs = &inputSqs
-		u.Type = InputTypeInputSqs
+	var inputOffice365Service InputOffice365Service = InputOffice365Service{}
+	if err := utils.UnmarshalJSON(data, &inputOffice365Service, "", true, nil); err == nil {
+		u.InputOffice365Service = &inputOffice365Service
+		u.Type = InputTypeInputOffice365Service
 		return nil
 	}
 
-	var inputConfluentCloud InputConfluentCloud = InputConfluentCloud{}
-	if err := utils.UnmarshalJSON(data, &inputConfluentCloud, "", true, true); err == nil {
-		u.InputConfluentCloud = &inputConfluentCloud
-		u.Type = InputTypeInputConfluentCloud
+	var inputExec InputExec = InputExec{}
+	if err := utils.UnmarshalJSON(data, &inputExec, "", true, nil); err == nil {
+		u.InputExec = &inputExec
+		u.Type = InputTypeInputExec
+		return nil
+	}
+
+	var inputGooglePubsub InputGooglePubsub = InputGooglePubsub{}
+	if err := utils.UnmarshalJSON(data, &inputGooglePubsub, "", true, nil); err == nil {
+		u.InputGooglePubsub = &inputGooglePubsub
+		u.Type = InputTypeInputGooglePubsub
+		return nil
+	}
+
+	var inputCribl InputCribl = InputCribl{}
+	if err := utils.UnmarshalJSON(data, &inputCribl, "", true, nil); err == nil {
+		u.InputCribl = &inputCribl
+		u.Type = InputTypeInputCribl
+		return nil
+	}
+
+	var inputSystemMetrics InputSystemMetrics = InputSystemMetrics{}
+	if err := utils.UnmarshalJSON(data, &inputSystemMetrics, "", true, nil); err == nil {
+		u.InputSystemMetrics = &inputSystemMetrics
+		u.Type = InputTypeInputSystemMetrics
+		return nil
+	}
+
+	var inputSystemState InputSystemState = InputSystemState{}
+	if err := utils.UnmarshalJSON(data, &inputSystemState, "", true, nil); err == nil {
+		u.InputSystemState = &inputSystemState
+		u.Type = InputTypeInputSystemState
+		return nil
+	}
+
+	var inputKubeMetrics InputKubeMetrics = InputKubeMetrics{}
+	if err := utils.UnmarshalJSON(data, &inputKubeMetrics, "", true, nil); err == nil {
+		u.InputKubeMetrics = &inputKubeMetrics
+		u.Type = InputTypeInputKubeMetrics
+		return nil
+	}
+
+	var inputKubeLogs InputKubeLogs = InputKubeLogs{}
+	if err := utils.UnmarshalJSON(data, &inputKubeLogs, "", true, nil); err == nil {
+		u.InputKubeLogs = &inputKubeLogs
+		u.Type = InputTypeInputKubeLogs
+		return nil
+	}
+
+	var inputKubeEvents InputKubeEvents = InputKubeEvents{}
+	if err := utils.UnmarshalJSON(data, &inputKubeEvents, "", true, nil); err == nil {
+		u.InputKubeEvents = &inputKubeEvents
+		u.Type = InputTypeInputKubeEvents
+		return nil
+	}
+
+	var inputWindowsMetrics InputWindowsMetrics = InputWindowsMetrics{}
+	if err := utils.UnmarshalJSON(data, &inputWindowsMetrics, "", true, nil); err == nil {
+		u.InputWindowsMetrics = &inputWindowsMetrics
+		u.Type = InputTypeInputWindowsMetrics
+		return nil
+	}
+
+	var inputCrowdstrike InputCrowdstrike = InputCrowdstrike{}
+	if err := utils.UnmarshalJSON(data, &inputCrowdstrike, "", true, nil); err == nil {
+		u.InputCrowdstrike = &inputCrowdstrike
+		u.Type = InputTypeInputCrowdstrike
+		return nil
+	}
+
+	var inputDatagen InputDatagen = InputDatagen{}
+	if err := utils.UnmarshalJSON(data, &inputDatagen, "", true, nil); err == nil {
+		u.InputDatagen = &inputDatagen
+		u.Type = InputTypeInputDatagen
 		return nil
 	}
 
 	var inputKinesis InputKinesis = InputKinesis{}
-	if err := utils.UnmarshalJSON(data, &inputKinesis, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputKinesis, "", true, nil); err == nil {
 		u.InputKinesis = &inputKinesis
 		u.Type = InputTypeInputKinesis
 		return nil
 	}
 
-	var inputEventhub InputEventhub = InputEventhub{}
-	if err := utils.UnmarshalJSON(data, &inputEventhub, "", true, true); err == nil {
-		u.InputEventhub = &inputEventhub
-		u.Type = InputTypeInputEventhub
+	var inputCriblmetrics InputCriblmetrics = InputCriblmetrics{}
+	if err := utils.UnmarshalJSON(data, &inputCriblmetrics, "", true, nil); err == nil {
+		u.InputCriblmetrics = &inputCriblmetrics
+		u.Type = InputTypeInputCriblmetrics
+		return nil
+	}
+
+	var inputS3 InputS3 = InputS3{}
+	if err := utils.UnmarshalJSON(data, &inputS3, "", true, nil); err == nil {
+		u.InputS3 = &inputS3
+		u.Type = InputTypeInputS3
+		return nil
+	}
+
+	var inputS3Inventory InputS3Inventory = InputS3Inventory{}
+	if err := utils.UnmarshalJSON(data, &inputS3Inventory, "", true, nil); err == nil {
+		u.InputS3Inventory = &inputS3Inventory
+		u.Type = InputTypeInputS3Inventory
+		return nil
+	}
+
+	var inputFile InputFile = InputFile{}
+	if err := utils.UnmarshalJSON(data, &inputFile, "", true, nil); err == nil {
+		u.InputFile = &inputFile
+		u.Type = InputTypeInputFile
+		return nil
+	}
+
+	var inputAppscope InputAppscope = InputAppscope{}
+	if err := utils.UnmarshalJSON(data, &inputAppscope, "", true, nil); err == nil {
+		u.InputAppscope = &inputAppscope
+		u.Type = InputTypeInputAppscope
+		return nil
+	}
+
+	var inputWiz InputWiz = InputWiz{}
+	if err := utils.UnmarshalJSON(data, &inputWiz, "", true, nil); err == nil {
+		u.InputWiz = &inputWiz
+		u.Type = InputTypeInputWiz
+		return nil
+	}
+
+	var inputSecurityLake InputSecurityLake = InputSecurityLake{}
+	if err := utils.UnmarshalJSON(data, &inputSecurityLake, "", true, nil); err == nil {
+		u.InputSecurityLake = &inputSecurityLake
+		u.Type = InputTypeInputSecurityLake
+		return nil
+	}
+
+	var inputCollection InputCollection = InputCollection{}
+	if err := utils.UnmarshalJSON(data, &inputCollection, "", true, nil); err == nil {
+		u.InputCollection = &inputCollection
+		u.Type = InputTypeInputCollection
 		return nil
 	}
 
 	var inputKafka InputKafka = InputKafka{}
-	if err := utils.UnmarshalJSON(data, &inputKafka, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputKafka, "", true, nil); err == nil {
 		u.InputKafka = &inputKafka
 		u.Type = InputTypeInputKafka
 		return nil
 	}
 
-	var inputElastic InputElastic = InputElastic{}
-	if err := utils.UnmarshalJSON(data, &inputElastic, "", true, true); err == nil {
-		u.InputElastic = &inputElastic
-		u.Type = InputTypeInputElastic
+	var inputHTTP InputHTTP = InputHTTP{}
+	if err := utils.UnmarshalJSON(data, &inputHTTP, "", true, nil); err == nil {
+		u.InputHTTP = &inputHTTP
+		u.Type = InputTypeInputHTTP
+		return nil
+	}
+
+	var inputSplunk InputSplunk = InputSplunk{}
+	if err := utils.UnmarshalJSON(data, &inputSplunk, "", true, nil); err == nil {
+		u.InputSplunk = &inputSplunk
+		u.Type = InputTypeInputSplunk
+		return nil
+	}
+
+	var inputSplunkSearch InputSplunkSearch = InputSplunkSearch{}
+	if err := utils.UnmarshalJSON(data, &inputSplunkSearch, "", true, nil); err == nil {
+		u.InputSplunkSearch = &inputSplunkSearch
+		u.Type = InputTypeInputSplunkSearch
 		return nil
 	}
 
 	var inputSplunkHec InputSplunkHec = InputSplunkHec{}
-	if err := utils.UnmarshalJSON(data, &inputSplunkHec, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputSplunkHec, "", true, nil); err == nil {
 		u.InputSplunkHec = &inputSplunkHec
 		u.Type = InputTypeInputSplunkHec
 		return nil
 	}
 
-	var inputOffice365MsgTrace InputOffice365MsgTrace = InputOffice365MsgTrace{}
-	if err := utils.UnmarshalJSON(data, &inputOffice365MsgTrace, "", true, true); err == nil {
-		u.InputOffice365MsgTrace = &inputOffice365MsgTrace
-		u.Type = InputTypeInputOffice365MsgTrace
+	var inputElastic InputElastic = InputElastic{}
+	if err := utils.UnmarshalJSON(data, &inputElastic, "", true, nil); err == nil {
+		u.InputElastic = &inputElastic
+		u.Type = InputTypeInputElastic
+		return nil
+	}
+
+	var inputConfluentCloud InputConfluentCloud = InputConfluentCloud{}
+	if err := utils.UnmarshalJSON(data, &inputConfluentCloud, "", true, nil); err == nil {
+		u.InputConfluentCloud = &inputConfluentCloud
+		u.Type = InputTypeInputConfluentCloud
 		return nil
 	}
 
 	var inputLoki InputLoki = InputLoki{}
-	if err := utils.UnmarshalJSON(data, &inputLoki, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputLoki, "", true, nil); err == nil {
 		u.InputLoki = &inputLoki
 		u.Type = InputTypeInputLoki
 		return nil
 	}
 
 	var inputPrometheusRw InputPrometheusRw = InputPrometheusRw{}
-	if err := utils.UnmarshalJSON(data, &inputPrometheusRw, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputPrometheusRw, "", true, nil); err == nil {
 		u.InputPrometheusRw = &inputPrometheusRw
 		u.Type = InputTypeInputPrometheusRw
 		return nil
 	}
 
-	var inputCrowdstrike InputCrowdstrike = InputCrowdstrike{}
-	if err := utils.UnmarshalJSON(data, &inputCrowdstrike, "", true, true); err == nil {
-		u.InputCrowdstrike = &inputCrowdstrike
-		u.Type = InputTypeInputCrowdstrike
+	var inputEventhub InputEventhub = InputEventhub{}
+	if err := utils.UnmarshalJSON(data, &inputEventhub, "", true, nil); err == nil {
+		u.InputEventhub = &inputEventhub
+		u.Type = InputTypeInputEventhub
+		return nil
+	}
+
+	var inputFirehose InputFirehose = InputFirehose{}
+	if err := utils.UnmarshalJSON(data, &inputFirehose, "", true, nil); err == nil {
+		u.InputFirehose = &inputFirehose
+		u.Type = InputTypeInputFirehose
+		return nil
+	}
+
+	var inputCriblTCP InputCriblTCP = InputCriblTCP{}
+	if err := utils.UnmarshalJSON(data, &inputCriblTCP, "", true, nil); err == nil {
+		u.InputCriblTCP = &inputCriblTCP
+		u.Type = InputTypeInputCriblTCP
+		return nil
+	}
+
+	var inputCriblHTTP InputCriblHTTP = InputCriblHTTP{}
+	if err := utils.UnmarshalJSON(data, &inputCriblHTTP, "", true, nil); err == nil {
+		u.InputCriblHTTP = &inputCriblHTTP
+		u.Type = InputTypeInputCriblHTTP
+		return nil
+	}
+
+	var inputCriblLakeHTTP InputCriblLakeHTTP = InputCriblLakeHTTP{}
+	if err := utils.UnmarshalJSON(data, &inputCriblLakeHTTP, "", true, nil); err == nil {
+		u.InputCriblLakeHTTP = &inputCriblLakeHTTP
+		u.Type = InputTypeInputCriblLakeHTTP
+		return nil
+	}
+
+	var inputTcpjson InputTcpjson = InputTcpjson{}
+	if err := utils.UnmarshalJSON(data, &inputTcpjson, "", true, nil); err == nil {
+		u.InputTcpjson = &inputTcpjson
+		u.Type = InputTypeInputTcpjson
+		return nil
+	}
+
+	var inputDatadogAgent InputDatadogAgent = InputDatadogAgent{}
+	if err := utils.UnmarshalJSON(data, &inputDatadogAgent, "", true, nil); err == nil {
+		u.InputDatadogAgent = &inputDatadogAgent
+		u.Type = InputTypeInputDatadogAgent
+		return nil
+	}
+
+	var inputHTTPRaw InputHTTPRaw = InputHTTPRaw{}
+	if err := utils.UnmarshalJSON(data, &inputHTTPRaw, "", true, nil); err == nil {
+		u.InputHTTPRaw = &inputHTTPRaw
+		u.Type = InputTypeInputHTTPRaw
+		return nil
+	}
+
+	var inputMetrics InputMetrics = InputMetrics{}
+	if err := utils.UnmarshalJSON(data, &inputMetrics, "", true, nil); err == nil {
+		u.InputMetrics = &inputMetrics
+		u.Type = InputTypeInputMetrics
+		return nil
+	}
+
+	var inputSqs InputSqs = InputSqs{}
+	if err := utils.UnmarshalJSON(data, &inputSqs, "", true, nil); err == nil {
+		u.InputSqs = &inputSqs
+		u.Type = InputTypeInputSqs
+		return nil
+	}
+
+	var inputTCP InputTCP = InputTCP{}
+	if err := utils.UnmarshalJSON(data, &inputTCP, "", true, nil); err == nil {
+		u.InputTCP = &inputTCP
+		u.Type = InputTypeInputTCP
+		return nil
+	}
+
+	var inputWef InputWef = InputWef{}
+	if err := utils.UnmarshalJSON(data, &inputWef, "", true, nil); err == nil {
+		u.InputWef = &inputWef
+		u.Type = InputTypeInputWef
+		return nil
+	}
+
+	var inputWinEventLogs InputWinEventLogs = InputWinEventLogs{}
+	if err := utils.UnmarshalJSON(data, &inputWinEventLogs, "", true, nil); err == nil {
+		u.InputWinEventLogs = &inputWinEventLogs
+		u.Type = InputTypeInputWinEventLogs
+		return nil
+	}
+
+	var inputRawUDP InputRawUDP = InputRawUDP{}
+	if err := utils.UnmarshalJSON(data, &inputRawUDP, "", true, nil); err == nil {
+		u.InputRawUDP = &inputRawUDP
+		u.Type = InputTypeInputRawUDP
+		return nil
+	}
+
+	var inputJournalFiles InputJournalFiles = InputJournalFiles{}
+	if err := utils.UnmarshalJSON(data, &inputJournalFiles, "", true, nil); err == nil {
+		u.InputJournalFiles = &inputJournalFiles
+		u.Type = InputTypeInputJournalFiles
+		return nil
+	}
+
+	var inputZscalerHec InputZscalerHec = InputZscalerHec{}
+	if err := utils.UnmarshalJSON(data, &inputZscalerHec, "", true, nil); err == nil {
+		u.InputZscalerHec = &inputZscalerHec
+		u.Type = InputTypeInputZscalerHec
 		return nil
 	}
 
 	var inputPrometheus InputPrometheus = InputPrometheus{}
-	if err := utils.UnmarshalJSON(data, &inputPrometheus, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputPrometheus, "", true, nil); err == nil {
 		u.InputPrometheus = &inputPrometheus
 		u.Type = InputTypeInputPrometheus
 		return nil
 	}
 
 	var inputEdgePrometheus InputEdgePrometheus = InputEdgePrometheus{}
-	if err := utils.UnmarshalJSON(data, &inputEdgePrometheus, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputEdgePrometheus, "", true, nil); err == nil {
 		u.InputEdgePrometheus = &inputEdgePrometheus
 		u.Type = InputTypeInputEdgePrometheus
 		return nil
 	}
 
-	var inputS3 InputS3 = InputS3{}
-	if err := utils.UnmarshalJSON(data, &inputS3, "", true, true); err == nil {
-		u.InputS3 = &inputS3
-		u.Type = InputTypeInputS3
+	var inputOffice365MsgTrace InputOffice365MsgTrace = InputOffice365MsgTrace{}
+	if err := utils.UnmarshalJSON(data, &inputOffice365MsgTrace, "", true, nil); err == nil {
+		u.InputOffice365MsgTrace = &inputOffice365MsgTrace
+		u.Type = InputTypeInputOffice365MsgTrace
 		return nil
 	}
 
-	var inputSecurityLake InputSecurityLake = InputSecurityLake{}
-	if err := utils.UnmarshalJSON(data, &inputSecurityLake, "", true, true); err == nil {
-		u.InputSecurityLake = &inputSecurityLake
-		u.Type = InputTypeInputSecurityLake
+	var inputSnmp InputSnmp = InputSnmp{}
+	if err := utils.UnmarshalJSON(data, &inputSnmp, "", true, nil); err == nil {
+		u.InputSnmp = &inputSnmp
+		u.Type = InputTypeInputSnmp
 		return nil
 	}
 
 	var inputOpenTelemetry InputOpenTelemetry = InputOpenTelemetry{}
-	if err := utils.UnmarshalJSON(data, &inputOpenTelemetry, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputOpenTelemetry, "", true, nil); err == nil {
 		u.InputOpenTelemetry = &inputOpenTelemetry
 		u.Type = InputTypeInputOpenTelemetry
 		return nil
 	}
 
-	var inputS3Inventory InputS3Inventory = InputS3Inventory{}
-	if err := utils.UnmarshalJSON(data, &inputS3Inventory, "", true, true); err == nil {
-		u.InputS3Inventory = &inputS3Inventory
-		u.Type = InputTypeInputS3Inventory
+	var inputModelDrivenTelemetry InputModelDrivenTelemetry = InputModelDrivenTelemetry{}
+	if err := utils.UnmarshalJSON(data, &inputModelDrivenTelemetry, "", true, nil); err == nil {
+		u.InputModelDrivenTelemetry = &inputModelDrivenTelemetry
+		u.Type = InputTypeInputModelDrivenTelemetry
 		return nil
 	}
 
-	var inputMsk InputMsk = InputMsk{}
-	if err := utils.UnmarshalJSON(data, &inputMsk, "", true, true); err == nil {
-		u.InputMsk = &inputMsk
-		u.Type = InputTypeInputMsk
-		return nil
-	}
-
-	var inputSplunkSearch InputSplunkSearch = InputSplunkSearch{}
-	if err := utils.UnmarshalJSON(data, &inputSplunkSearch, "", true, true); err == nil {
-		u.InputSplunkSearch = &inputSplunkSearch
-		u.Type = InputTypeInputSplunkSearch
-		return nil
-	}
-
-	var inputSyslog InputSyslog = InputSyslog{}
-	if err := utils.UnmarshalJSON(data, &inputSyslog, "", true, true); err == nil {
-		u.InputSyslog = &inputSyslog
-		u.Type = InputTypeInputSyslog
+	var inputNetflow InputNetflow = InputNetflow{}
+	if err := utils.UnmarshalJSON(data, &inputNetflow, "", true, nil); err == nil {
+		u.InputNetflow = &inputNetflow
+		u.Type = InputTypeInputNetflow
 		return nil
 	}
 
 	var inputGrafana InputGrafana = InputGrafana{}
-	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
 		u.InputGrafana = &inputGrafana
 		u.Type = InputTypeInputGrafana
+		return nil
+	}
+
+	var inputSyslog InputSyslog = InputSyslog{}
+	if err := utils.UnmarshalJSON(data, &inputSyslog, "", true, nil); err == nil {
+		u.InputSyslog = &inputSyslog
+		u.Type = InputTypeInputSyslog
 		return nil
 	}
 

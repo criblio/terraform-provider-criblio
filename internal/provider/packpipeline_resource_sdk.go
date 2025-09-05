@@ -91,7 +91,7 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackRes
 	return diags
 }
 
-func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackResponseBody) diag.Diagnostics {
+func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackWithIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -241,17 +241,21 @@ func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx 
 	return &out, diags
 }
 
-func (r *PackPipelineResourceModel) ToOperationsGetPipelinesByPackRequest(ctx context.Context) (*operations.GetPipelinesByPackRequest, diag.Diagnostics) {
+func (r *PackPipelineResourceModel) ToOperationsGetPipelinesByPackWithIDRequest(ctx context.Context) (*operations.GetPipelinesByPackWithIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var pack string
 	pack = r.Pack.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetPipelinesByPackRequest{
+	out := operations.GetPipelinesByPackWithIDRequest{
 		Pack:    pack,
+		ID:      id,
 		GroupID: groupID,
 	}
 

@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
 type OutputDefaultType string
@@ -44,6 +45,17 @@ type OutputDefault struct {
 	Streamtags []string `json:"streamtags,omitempty"`
 	// ID of the default output. This will be used whenever a nonexistent/deleted output is referenced.
 	DefaultID string `json:"defaultId"`
+}
+
+func (o OutputDefault) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDefault) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "defaultId"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputDefault) GetID() *string {

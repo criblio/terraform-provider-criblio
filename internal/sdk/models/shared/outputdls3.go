@@ -409,7 +409,7 @@ func (o OutputDlS3KeyValueMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDlS3KeyValueMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -554,7 +554,7 @@ func (o OutputDlS3) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDlS3) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"bucket"}); err != nil {
 		return err
 	}
 	return nil

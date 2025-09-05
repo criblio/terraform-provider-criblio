@@ -77,69 +77,69 @@ const (
 )
 
 type Output struct {
-	OutputDefault                *OutputDefault                `queryParam:"inline"`
-	OutputWebhook                *OutputWebhook                `queryParam:"inline"`
-	OutputSentinel               *OutputSentinel               `queryParam:"inline"`
-	OutputDevnull                *OutputDevnull                `queryParam:"inline"`
-	OutputSyslog                 *OutputSyslog                 `queryParam:"inline"`
-	OutputSplunk                 *OutputSplunk                 `queryParam:"inline"`
-	OutputSplunkLb               *OutputSplunkLb               `queryParam:"inline"`
-	OutputSplunkHec              *OutputSplunkHec              `queryParam:"inline"`
-	OutputTcpjson                *OutputTcpjson                `queryParam:"inline"`
-	OutputWavefront              *OutputWavefront              `queryParam:"inline"`
-	OutputSignalfx               *OutputSignalfx               `queryParam:"inline"`
-	OutputFilesystem             *OutputFilesystem             `queryParam:"inline"`
-	OutputS3                     *OutputS3                     `queryParam:"inline"`
-	OutputAzureBlob              *OutputAzureBlob              `queryParam:"inline"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorer      `queryParam:"inline"`
-	OutputAzureLogs              *OutputAzureLogs              `queryParam:"inline"`
-	OutputKinesis                *OutputKinesis                `queryParam:"inline"`
-	OutputHoneycomb              *OutputHoneycomb              `queryParam:"inline"`
-	OutputAzureEventhub          *OutputAzureEventhub          `queryParam:"inline"`
-	OutputGoogleChronicle        *OutputGoogleChronicle        `queryParam:"inline"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorage     `queryParam:"inline"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLogging     `queryParam:"inline"`
-	OutputGooglePubsub           *OutputGooglePubsub           `queryParam:"inline"`
-	OutputExabeam                *OutputExabeam                `queryParam:"inline"`
-	OutputKafka                  *OutputKafka                  `queryParam:"inline"`
-	OutputConfluentCloud         *OutputConfluentCloud         `queryParam:"inline"`
-	OutputMsk                    *OutputMsk                    `queryParam:"inline"`
-	OutputElastic                *OutputElastic                `queryParam:"inline"`
-	OutputElasticCloud           *OutputElasticCloud           `queryParam:"inline"`
-	OutputNewrelic               *OutputNewrelic               `queryParam:"inline"`
-	OutputNewrelicEvents         *OutputNewrelicEvents         `queryParam:"inline"`
-	OutputInfluxdb               *OutputInfluxdb               `queryParam:"inline"`
-	OutputCloudwatch             *OutputCloudwatch             `queryParam:"inline"`
-	OutputMinio                  *OutputMinio                  `queryParam:"inline"`
-	OutputStatsd                 *OutputStatsd                 `queryParam:"inline"`
-	OutputStatsdExt              *OutputStatsdExt              `queryParam:"inline"`
-	OutputGraphite               *OutputGraphite               `queryParam:"inline"`
-	OutputRouter                 *OutputRouter                 `queryParam:"inline"`
-	OutputSns                    *OutputSns                    `queryParam:"inline"`
-	OutputSqs                    *OutputSqs                    `queryParam:"inline"`
-	OutputSnmp                   *OutputSnmp                   `queryParam:"inline"`
-	OutputSumoLogic              *OutputSumoLogic              `queryParam:"inline"`
-	OutputDatadog                *OutputDatadog                `queryParam:"inline"`
-	OutputGrafanaCloud           *OutputGrafanaCloud           `queryParam:"inline"`
-	OutputLoki                   *OutputLoki                   `queryParam:"inline"`
-	OutputPrometheus             *OutputPrometheus             `queryParam:"inline"`
-	OutputRing                   *OutputRing                   `queryParam:"inline"`
-	OutputOpenTelemetry          *OutputOpenTelemetry          `queryParam:"inline"`
-	OutputServiceNow             *OutputServiceNow             `queryParam:"inline"`
-	OutputDataset                *OutputDataset                `queryParam:"inline"`
-	OutputCriblTCP               *OutputCriblTCP               `queryParam:"inline"`
-	OutputCriblHTTP              *OutputCriblHTTP              `queryParam:"inline"`
-	OutputHumioHec               *OutputHumioHec               `queryParam:"inline"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiem `queryParam:"inline"`
-	OutputDlS3                   *OutputDlS3                   `queryParam:"inline"`
-	OutputSecurityLake           *OutputSecurityLake           `queryParam:"inline"`
-	OutputCriblLake              *OutputCriblLake              `queryParam:"inline"`
-	OutputDiskSpool              *OutputDiskSpool              `queryParam:"inline"`
-	OutputClickHouse             *OutputClickHouse             `queryParam:"inline"`
-	OutputXsiam                  *OutputXsiam                  `queryParam:"inline"`
-	OutputNetflow                *OutputNetflow                `queryParam:"inline"`
-	OutputDynatraceHTTP          *OutputDynatraceHTTP          `queryParam:"inline"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlp          `queryParam:"inline"`
+	OutputDefault                *OutputDefault                `queryParam:"inline" name:"Output"`
+	OutputWebhook                *OutputWebhook                `queryParam:"inline" name:"Output"`
+	OutputSentinel               *OutputSentinel               `queryParam:"inline" name:"Output"`
+	OutputDevnull                *OutputDevnull                `queryParam:"inline" name:"Output"`
+	OutputSyslog                 *OutputSyslog                 `queryParam:"inline" name:"Output"`
+	OutputSplunk                 *OutputSplunk                 `queryParam:"inline" name:"Output"`
+	OutputSplunkLb               *OutputSplunkLb               `queryParam:"inline" name:"Output"`
+	OutputSplunkHec              *OutputSplunkHec              `queryParam:"inline" name:"Output"`
+	OutputTcpjson                *OutputTcpjson                `queryParam:"inline" name:"Output"`
+	OutputWavefront              *OutputWavefront              `queryParam:"inline" name:"Output"`
+	OutputSignalfx               *OutputSignalfx               `queryParam:"inline" name:"Output"`
+	OutputFilesystem             *OutputFilesystem             `queryParam:"inline" name:"Output"`
+	OutputS3                     *OutputS3                     `queryParam:"inline" name:"Output"`
+	OutputAzureBlob              *OutputAzureBlob              `queryParam:"inline" name:"Output"`
+	OutputAzureDataExplorer      *OutputAzureDataExplorer      `queryParam:"inline" name:"Output"`
+	OutputAzureLogs              *OutputAzureLogs              `queryParam:"inline" name:"Output"`
+	OutputKinesis                *OutputKinesis                `queryParam:"inline" name:"Output"`
+	OutputHoneycomb              *OutputHoneycomb              `queryParam:"inline" name:"Output"`
+	OutputAzureEventhub          *OutputAzureEventhub          `queryParam:"inline" name:"Output"`
+	OutputGoogleChronicle        *OutputGoogleChronicle        `queryParam:"inline" name:"Output"`
+	OutputGoogleCloudStorage     *OutputGoogleCloudStorage     `queryParam:"inline" name:"Output"`
+	OutputGoogleCloudLogging     *OutputGoogleCloudLogging     `queryParam:"inline" name:"Output"`
+	OutputGooglePubsub           *OutputGooglePubsub           `queryParam:"inline" name:"Output"`
+	OutputExabeam                *OutputExabeam                `queryParam:"inline" name:"Output"`
+	OutputKafka                  *OutputKafka                  `queryParam:"inline" name:"Output"`
+	OutputConfluentCloud         *OutputConfluentCloud         `queryParam:"inline" name:"Output"`
+	OutputMsk                    *OutputMsk                    `queryParam:"inline" name:"Output"`
+	OutputElastic                *OutputElastic                `queryParam:"inline" name:"Output"`
+	OutputElasticCloud           *OutputElasticCloud           `queryParam:"inline" name:"Output"`
+	OutputNewrelic               *OutputNewrelic               `queryParam:"inline" name:"Output"`
+	OutputNewrelicEvents         *OutputNewrelicEvents         `queryParam:"inline" name:"Output"`
+	OutputInfluxdb               *OutputInfluxdb               `queryParam:"inline" name:"Output"`
+	OutputCloudwatch             *OutputCloudwatch             `queryParam:"inline" name:"Output"`
+	OutputMinio                  *OutputMinio                  `queryParam:"inline" name:"Output"`
+	OutputStatsd                 *OutputStatsd                 `queryParam:"inline" name:"Output"`
+	OutputStatsdExt              *OutputStatsdExt              `queryParam:"inline" name:"Output"`
+	OutputGraphite               *OutputGraphite               `queryParam:"inline" name:"Output"`
+	OutputRouter                 *OutputRouter                 `queryParam:"inline" name:"Output"`
+	OutputSns                    *OutputSns                    `queryParam:"inline" name:"Output"`
+	OutputSqs                    *OutputSqs                    `queryParam:"inline" name:"Output"`
+	OutputSnmp                   *OutputSnmp                   `queryParam:"inline" name:"Output"`
+	OutputSumoLogic              *OutputSumoLogic              `queryParam:"inline" name:"Output"`
+	OutputDatadog                *OutputDatadog                `queryParam:"inline" name:"Output"`
+	OutputGrafanaCloud           *OutputGrafanaCloud           `queryParam:"inline" name:"Output"`
+	OutputLoki                   *OutputLoki                   `queryParam:"inline" name:"Output"`
+	OutputPrometheus             *OutputPrometheus             `queryParam:"inline" name:"Output"`
+	OutputRing                   *OutputRing                   `queryParam:"inline" name:"Output"`
+	OutputOpenTelemetry          *OutputOpenTelemetry          `queryParam:"inline" name:"Output"`
+	OutputServiceNow             *OutputServiceNow             `queryParam:"inline" name:"Output"`
+	OutputDataset                *OutputDataset                `queryParam:"inline" name:"Output"`
+	OutputCriblTCP               *OutputCriblTCP               `queryParam:"inline" name:"Output"`
+	OutputCriblHTTP              *OutputCriblHTTP              `queryParam:"inline" name:"Output"`
+	OutputHumioHec               *OutputHumioHec               `queryParam:"inline" name:"Output"`
+	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiem `queryParam:"inline" name:"Output"`
+	OutputDlS3                   *OutputDlS3                   `queryParam:"inline" name:"Output"`
+	OutputSecurityLake           *OutputSecurityLake           `queryParam:"inline" name:"Output"`
+	OutputCriblLake              *OutputCriblLake              `queryParam:"inline" name:"Output"`
+	OutputDiskSpool              *OutputDiskSpool              `queryParam:"inline" name:"Output"`
+	OutputClickHouse             *OutputClickHouse             `queryParam:"inline" name:"Output"`
+	OutputXsiam                  *OutputXsiam                  `queryParam:"inline" name:"Output"`
+	OutputNetflow                *OutputNetflow                `queryParam:"inline" name:"Output"`
+	OutputDynatraceHTTP          *OutputDynatraceHTTP          `queryParam:"inline" name:"Output"`
+	OutputDynatraceOtlp          *OutputDynatraceOtlp          `queryParam:"inline" name:"Output"`
 
 	Type OutputType
 }
@@ -713,442 +713,442 @@ func CreateOutputOutputDynatraceOtlp(outputDynatraceOtlp OutputDynatraceOtlp) Ou
 
 func (u *Output) UnmarshalJSON(data []byte) error {
 
-	var outputCriblLake OutputCriblLake = OutputCriblLake{}
-	if err := utils.UnmarshalJSON(data, &outputCriblLake, "", true, true); err == nil {
-		u.OutputCriblLake = &outputCriblLake
-		u.Type = OutputTypeOutputCriblLake
+	var outputAzureDataExplorer OutputAzureDataExplorer = OutputAzureDataExplorer{}
+	if err := utils.UnmarshalJSON(data, &outputAzureDataExplorer, "", true, nil); err == nil {
+		u.OutputAzureDataExplorer = &outputAzureDataExplorer
+		u.Type = OutputTypeOutputAzureDataExplorer
 		return nil
 	}
 
-	var outputDevnull OutputDevnull = OutputDevnull{}
-	if err := utils.UnmarshalJSON(data, &outputDevnull, "", true, true); err == nil {
-		u.OutputDevnull = &outputDevnull
-		u.Type = OutputTypeOutputDevnull
+	var outputSecurityLake OutputSecurityLake = OutputSecurityLake{}
+	if err := utils.UnmarshalJSON(data, &outputSecurityLake, "", true, nil); err == nil {
+		u.OutputSecurityLake = &outputSecurityLake
+		u.Type = OutputTypeOutputSecurityLake
+		return nil
+	}
+
+	var outputSentinel OutputSentinel = OutputSentinel{}
+	if err := utils.UnmarshalJSON(data, &outputSentinel, "", true, nil); err == nil {
+		u.OutputSentinel = &outputSentinel
+		u.Type = OutputTypeOutputSentinel
+		return nil
+	}
+
+	var outputGoogleCloudLogging OutputGoogleCloudLogging = OutputGoogleCloudLogging{}
+	if err := utils.UnmarshalJSON(data, &outputGoogleCloudLogging, "", true, nil); err == nil {
+		u.OutputGoogleCloudLogging = &outputGoogleCloudLogging
+		u.Type = OutputTypeOutputGoogleCloudLogging
+		return nil
+	}
+
+	var outputExabeam OutputExabeam = OutputExabeam{}
+	if err := utils.UnmarshalJSON(data, &outputExabeam, "", true, nil); err == nil {
+		u.OutputExabeam = &outputExabeam
+		u.Type = OutputTypeOutputExabeam
+		return nil
+	}
+
+	var outputMsk OutputMsk = OutputMsk{}
+	if err := utils.UnmarshalJSON(data, &outputMsk, "", true, nil); err == nil {
+		u.OutputMsk = &outputMsk
+		u.Type = OutputTypeOutputMsk
+		return nil
+	}
+
+	var outputCloudwatch OutputCloudwatch = OutputCloudwatch{}
+	if err := utils.UnmarshalJSON(data, &outputCloudwatch, "", true, nil); err == nil {
+		u.OutputCloudwatch = &outputCloudwatch
+		u.Type = OutputTypeOutputCloudwatch
+		return nil
+	}
+
+	var outputClickHouse OutputClickHouse = OutputClickHouse{}
+	if err := utils.UnmarshalJSON(data, &outputClickHouse, "", true, nil); err == nil {
+		u.OutputClickHouse = &outputClickHouse
+		u.Type = OutputTypeOutputClickHouse
 		return nil
 	}
 
 	var outputDefault OutputDefault = OutputDefault{}
-	if err := utils.UnmarshalJSON(data, &outputDefault, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputDefault, "", true, nil); err == nil {
 		u.OutputDefault = &outputDefault
 		u.Type = OutputTypeOutputDefault
 		return nil
 	}
 
+	var outputWebhook OutputWebhook = OutputWebhook{}
+	if err := utils.UnmarshalJSON(data, &outputWebhook, "", true, nil); err == nil {
+		u.OutputWebhook = &outputWebhook
+		u.Type = OutputTypeOutputWebhook
+		return nil
+	}
+
+	var outputDevnull OutputDevnull = OutputDevnull{}
+	if err := utils.UnmarshalJSON(data, &outputDevnull, "", true, nil); err == nil {
+		u.OutputDevnull = &outputDevnull
+		u.Type = OutputTypeOutputDevnull
+		return nil
+	}
+
+	var outputSyslog OutputSyslog = OutputSyslog{}
+	if err := utils.UnmarshalJSON(data, &outputSyslog, "", true, nil); err == nil {
+		u.OutputSyslog = &outputSyslog
+		u.Type = OutputTypeOutputSyslog
+		return nil
+	}
+
+	var outputSplunkLb OutputSplunkLb = OutputSplunkLb{}
+	if err := utils.UnmarshalJSON(data, &outputSplunkLb, "", true, nil); err == nil {
+		u.OutputSplunkLb = &outputSplunkLb
+		u.Type = OutputTypeOutputSplunkLb
+		return nil
+	}
+
+	var outputSplunkHec OutputSplunkHec = OutputSplunkHec{}
+	if err := utils.UnmarshalJSON(data, &outputSplunkHec, "", true, nil); err == nil {
+		u.OutputSplunkHec = &outputSplunkHec
+		u.Type = OutputTypeOutputSplunkHec
+		return nil
+	}
+
+	var outputTcpjson OutputTcpjson = OutputTcpjson{}
+	if err := utils.UnmarshalJSON(data, &outputTcpjson, "", true, nil); err == nil {
+		u.OutputTcpjson = &outputTcpjson
+		u.Type = OutputTypeOutputTcpjson
+		return nil
+	}
+
+	var outputFilesystem OutputFilesystem = OutputFilesystem{}
+	if err := utils.UnmarshalJSON(data, &outputFilesystem, "", true, nil); err == nil {
+		u.OutputFilesystem = &outputFilesystem
+		u.Type = OutputTypeOutputFilesystem
+		return nil
+	}
+
+	var outputKinesis OutputKinesis = OutputKinesis{}
+	if err := utils.UnmarshalJSON(data, &outputKinesis, "", true, nil); err == nil {
+		u.OutputKinesis = &outputKinesis
+		u.Type = OutputTypeOutputKinesis
+		return nil
+	}
+
+	var outputHoneycomb OutputHoneycomb = OutputHoneycomb{}
+	if err := utils.UnmarshalJSON(data, &outputHoneycomb, "", true, nil); err == nil {
+		u.OutputHoneycomb = &outputHoneycomb
+		u.Type = OutputTypeOutputHoneycomb
+		return nil
+	}
+
+	var outputAzureEventhub OutputAzureEventhub = OutputAzureEventhub{}
+	if err := utils.UnmarshalJSON(data, &outputAzureEventhub, "", true, nil); err == nil {
+		u.OutputAzureEventhub = &outputAzureEventhub
+		u.Type = OutputTypeOutputAzureEventhub
+		return nil
+	}
+
+	var outputGoogleCloudStorage OutputGoogleCloudStorage = OutputGoogleCloudStorage{}
+	if err := utils.UnmarshalJSON(data, &outputGoogleCloudStorage, "", true, nil); err == nil {
+		u.OutputGoogleCloudStorage = &outputGoogleCloudStorage
+		u.Type = OutputTypeOutputGoogleCloudStorage
+		return nil
+	}
+
+	var outputGooglePubsub OutputGooglePubsub = OutputGooglePubsub{}
+	if err := utils.UnmarshalJSON(data, &outputGooglePubsub, "", true, nil); err == nil {
+		u.OutputGooglePubsub = &outputGooglePubsub
+		u.Type = OutputTypeOutputGooglePubsub
+		return nil
+	}
+
+	var outputKafka OutputKafka = OutputKafka{}
+	if err := utils.UnmarshalJSON(data, &outputKafka, "", true, nil); err == nil {
+		u.OutputKafka = &outputKafka
+		u.Type = OutputTypeOutputKafka
+		return nil
+	}
+
+	var outputConfluentCloud OutputConfluentCloud = OutputConfluentCloud{}
+	if err := utils.UnmarshalJSON(data, &outputConfluentCloud, "", true, nil); err == nil {
+		u.OutputConfluentCloud = &outputConfluentCloud
+		u.Type = OutputTypeOutputConfluentCloud
+		return nil
+	}
+
+	var outputElastic OutputElastic = OutputElastic{}
+	if err := utils.UnmarshalJSON(data, &outputElastic, "", true, nil); err == nil {
+		u.OutputElastic = &outputElastic
+		u.Type = OutputTypeOutputElastic
+		return nil
+	}
+
+	var outputElasticCloud OutputElasticCloud = OutputElasticCloud{}
+	if err := utils.UnmarshalJSON(data, &outputElasticCloud, "", true, nil); err == nil {
+		u.OutputElasticCloud = &outputElasticCloud
+		u.Type = OutputTypeOutputElasticCloud
+		return nil
+	}
+
+	var outputNewrelic OutputNewrelic = OutputNewrelic{}
+	if err := utils.UnmarshalJSON(data, &outputNewrelic, "", true, nil); err == nil {
+		u.OutputNewrelic = &outputNewrelic
+		u.Type = OutputTypeOutputNewrelic
+		return nil
+	}
+
+	var outputNewrelicEvents OutputNewrelicEvents = OutputNewrelicEvents{}
+	if err := utils.UnmarshalJSON(data, &outputNewrelicEvents, "", true, nil); err == nil {
+		u.OutputNewrelicEvents = &outputNewrelicEvents
+		u.Type = OutputTypeOutputNewrelicEvents
+		return nil
+	}
+
+	var outputInfluxdb OutputInfluxdb = OutputInfluxdb{}
+	if err := utils.UnmarshalJSON(data, &outputInfluxdb, "", true, nil); err == nil {
+		u.OutputInfluxdb = &outputInfluxdb
+		u.Type = OutputTypeOutputInfluxdb
+		return nil
+	}
+
+	var outputMinio OutputMinio = OutputMinio{}
+	if err := utils.UnmarshalJSON(data, &outputMinio, "", true, nil); err == nil {
+		u.OutputMinio = &outputMinio
+		u.Type = OutputTypeOutputMinio
+		return nil
+	}
+
 	var outputRouter OutputRouter = OutputRouter{}
-	if err := utils.UnmarshalJSON(data, &outputRouter, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputRouter, "", true, nil); err == nil {
 		u.OutputRouter = &outputRouter
 		u.Type = OutputTypeOutputRouter
 		return nil
 	}
 
-	var outputNetflow OutputNetflow = OutputNetflow{}
-	if err := utils.UnmarshalJSON(data, &outputNetflow, "", true, true); err == nil {
-		u.OutputNetflow = &outputNetflow
-		u.Type = OutputTypeOutputNetflow
+	var outputSns OutputSns = OutputSns{}
+	if err := utils.UnmarshalJSON(data, &outputSns, "", true, nil); err == nil {
+		u.OutputSns = &outputSns
+		u.Type = OutputTypeOutputSns
 		return nil
 	}
 
 	var outputSnmp OutputSnmp = OutputSnmp{}
-	if err := utils.UnmarshalJSON(data, &outputSnmp, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputSnmp, "", true, nil); err == nil {
 		u.OutputSnmp = &outputSnmp
 		u.Type = OutputTypeOutputSnmp
 		return nil
 	}
 
-	var outputDiskSpool OutputDiskSpool = OutputDiskSpool{}
-	if err := utils.UnmarshalJSON(data, &outputDiskSpool, "", true, true); err == nil {
-		u.OutputDiskSpool = &outputDiskSpool
-		u.Type = OutputTypeOutputDiskSpool
+	var outputSumoLogic OutputSumoLogic = OutputSumoLogic{}
+	if err := utils.UnmarshalJSON(data, &outputSumoLogic, "", true, nil); err == nil {
+		u.OutputSumoLogic = &outputSumoLogic
+		u.Type = OutputTypeOutputSumoLogic
+		return nil
+	}
+
+	var outputDatadog OutputDatadog = OutputDatadog{}
+	if err := utils.UnmarshalJSON(data, &outputDatadog, "", true, nil); err == nil {
+		u.OutputDatadog = &outputDatadog
+		u.Type = OutputTypeOutputDatadog
+		return nil
+	}
+
+	var outputLoki OutputLoki = OutputLoki{}
+	if err := utils.UnmarshalJSON(data, &outputLoki, "", true, nil); err == nil {
+		u.OutputLoki = &outputLoki
+		u.Type = OutputTypeOutputLoki
+		return nil
+	}
+
+	var outputPrometheus OutputPrometheus = OutputPrometheus{}
+	if err := utils.UnmarshalJSON(data, &outputPrometheus, "", true, nil); err == nil {
+		u.OutputPrometheus = &outputPrometheus
+		u.Type = OutputTypeOutputPrometheus
 		return nil
 	}
 
 	var outputRing OutputRing = OutputRing{}
-	if err := utils.UnmarshalJSON(data, &outputRing, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputRing, "", true, nil); err == nil {
 		u.OutputRing = &outputRing
 		u.Type = OutputTypeOutputRing
 		return nil
 	}
 
+	var outputOpenTelemetry OutputOpenTelemetry = OutputOpenTelemetry{}
+	if err := utils.UnmarshalJSON(data, &outputOpenTelemetry, "", true, nil); err == nil {
+		u.OutputOpenTelemetry = &outputOpenTelemetry
+		u.Type = OutputTypeOutputOpenTelemetry
+		return nil
+	}
+
+	var outputDataset OutputDataset = OutputDataset{}
+	if err := utils.UnmarshalJSON(data, &outputDataset, "", true, nil); err == nil {
+		u.OutputDataset = &outputDataset
+		u.Type = OutputTypeOutputDataset
+		return nil
+	}
+
+	var outputCriblTCP OutputCriblTCP = OutputCriblTCP{}
+	if err := utils.UnmarshalJSON(data, &outputCriblTCP, "", true, nil); err == nil {
+		u.OutputCriblTCP = &outputCriblTCP
+		u.Type = OutputTypeOutputCriblTCP
+		return nil
+	}
+
+	var outputCriblHTTP OutputCriblHTTP = OutputCriblHTTP{}
+	if err := utils.UnmarshalJSON(data, &outputCriblHTTP, "", true, nil); err == nil {
+		u.OutputCriblHTTP = &outputCriblHTTP
+		u.Type = OutputTypeOutputCriblHTTP
+		return nil
+	}
+
+	var outputCriblLake OutputCriblLake = OutputCriblLake{}
+	if err := utils.UnmarshalJSON(data, &outputCriblLake, "", true, nil); err == nil {
+		u.OutputCriblLake = &outputCriblLake
+		u.Type = OutputTypeOutputCriblLake
+		return nil
+	}
+
+	var outputDiskSpool OutputDiskSpool = OutputDiskSpool{}
+	if err := utils.UnmarshalJSON(data, &outputDiskSpool, "", true, nil); err == nil {
+		u.OutputDiskSpool = &outputDiskSpool
+		u.Type = OutputTypeOutputDiskSpool
+		return nil
+	}
+
+	var outputXsiam OutputXsiam = OutputXsiam{}
+	if err := utils.UnmarshalJSON(data, &outputXsiam, "", true, nil); err == nil {
+		u.OutputXsiam = &outputXsiam
+		u.Type = OutputTypeOutputXsiam
+		return nil
+	}
+
+	var outputNetflow OutputNetflow = OutputNetflow{}
+	if err := utils.UnmarshalJSON(data, &outputNetflow, "", true, nil); err == nil {
+		u.OutputNetflow = &outputNetflow
+		u.Type = OutputTypeOutputNetflow
+		return nil
+	}
+
+	var outputSplunk OutputSplunk = OutputSplunk{}
+	if err := utils.UnmarshalJSON(data, &outputSplunk, "", true, nil); err == nil {
+		u.OutputSplunk = &outputSplunk
+		u.Type = OutputTypeOutputSplunk
+		return nil
+	}
+
+	var outputWavefront OutputWavefront = OutputWavefront{}
+	if err := utils.UnmarshalJSON(data, &outputWavefront, "", true, nil); err == nil {
+		u.OutputWavefront = &outputWavefront
+		u.Type = OutputTypeOutputWavefront
+		return nil
+	}
+
+	var outputSignalfx OutputSignalfx = OutputSignalfx{}
+	if err := utils.UnmarshalJSON(data, &outputSignalfx, "", true, nil); err == nil {
+		u.OutputSignalfx = &outputSignalfx
+		u.Type = OutputTypeOutputSignalfx
+		return nil
+	}
+
+	var outputS3 OutputS3 = OutputS3{}
+	if err := utils.UnmarshalJSON(data, &outputS3, "", true, nil); err == nil {
+		u.OutputS3 = &outputS3
+		u.Type = OutputTypeOutputS3
+		return nil
+	}
+
+	var outputAzureBlob OutputAzureBlob = OutputAzureBlob{}
+	if err := utils.UnmarshalJSON(data, &outputAzureBlob, "", true, nil); err == nil {
+		u.OutputAzureBlob = &outputAzureBlob
+		u.Type = OutputTypeOutputAzureBlob
+		return nil
+	}
+
+	var outputAzureLogs OutputAzureLogs = OutputAzureLogs{}
+	if err := utils.UnmarshalJSON(data, &outputAzureLogs, "", true, nil); err == nil {
+		u.OutputAzureLogs = &outputAzureLogs
+		u.Type = OutputTypeOutputAzureLogs
+		return nil
+	}
+
+	var outputGoogleChronicle OutputGoogleChronicle = OutputGoogleChronicle{}
+	if err := utils.UnmarshalJSON(data, &outputGoogleChronicle, "", true, nil); err == nil {
+		u.OutputGoogleChronicle = &outputGoogleChronicle
+		u.Type = OutputTypeOutputGoogleChronicle
+		return nil
+	}
+
+	var outputStatsd OutputStatsd = OutputStatsd{}
+	if err := utils.UnmarshalJSON(data, &outputStatsd, "", true, nil); err == nil {
+		u.OutputStatsd = &outputStatsd
+		u.Type = OutputTypeOutputStatsd
+		return nil
+	}
+
 	var outputStatsdExt OutputStatsdExt = OutputStatsdExt{}
-	if err := utils.UnmarshalJSON(data, &outputStatsdExt, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputStatsdExt, "", true, nil); err == nil {
 		u.OutputStatsdExt = &outputStatsdExt
 		u.Type = OutputTypeOutputStatsdExt
 		return nil
 	}
 
 	var outputGraphite OutputGraphite = OutputGraphite{}
-	if err := utils.UnmarshalJSON(data, &outputGraphite, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputGraphite, "", true, nil); err == nil {
 		u.OutputGraphite = &outputGraphite
 		u.Type = OutputTypeOutputGraphite
 		return nil
 	}
 
-	var outputStatsd OutputStatsd = OutputStatsd{}
-	if err := utils.UnmarshalJSON(data, &outputStatsd, "", true, true); err == nil {
-		u.OutputStatsd = &outputStatsd
-		u.Type = OutputTypeOutputStatsd
-		return nil
-	}
-
-	var outputGooglePubsub OutputGooglePubsub = OutputGooglePubsub{}
-	if err := utils.UnmarshalJSON(data, &outputGooglePubsub, "", true, true); err == nil {
-		u.OutputGooglePubsub = &outputGooglePubsub
-		u.Type = OutputTypeOutputGooglePubsub
-		return nil
-	}
-
-	var outputSns OutputSns = OutputSns{}
-	if err := utils.UnmarshalJSON(data, &outputSns, "", true, true); err == nil {
-		u.OutputSns = &outputSns
-		u.Type = OutputTypeOutputSns
-		return nil
-	}
-
-	var outputCriblTCP OutputCriblTCP = OutputCriblTCP{}
-	if err := utils.UnmarshalJSON(data, &outputCriblTCP, "", true, true); err == nil {
-		u.OutputCriblTCP = &outputCriblTCP
-		u.Type = OutputTypeOutputCriblTCP
-		return nil
-	}
-
-	var outputSplunk OutputSplunk = OutputSplunk{}
-	if err := utils.UnmarshalJSON(data, &outputSplunk, "", true, true); err == nil {
-		u.OutputSplunk = &outputSplunk
-		u.Type = OutputTypeOutputSplunk
-		return nil
-	}
-
-	var outputAzureEventhub OutputAzureEventhub = OutputAzureEventhub{}
-	if err := utils.UnmarshalJSON(data, &outputAzureEventhub, "", true, true); err == nil {
-		u.OutputAzureEventhub = &outputAzureEventhub
-		u.Type = OutputTypeOutputAzureEventhub
-		return nil
-	}
-
-	var outputCloudwatch OutputCloudwatch = OutputCloudwatch{}
-	if err := utils.UnmarshalJSON(data, &outputCloudwatch, "", true, true); err == nil {
-		u.OutputCloudwatch = &outputCloudwatch
-		u.Type = OutputTypeOutputCloudwatch
-		return nil
-	}
-
-	var outputSyslog OutputSyslog = OutputSyslog{}
-	if err := utils.UnmarshalJSON(data, &outputSyslog, "", true, true); err == nil {
-		u.OutputSyslog = &outputSyslog
-		u.Type = OutputTypeOutputSyslog
-		return nil
-	}
-
-	var outputHoneycomb OutputHoneycomb = OutputHoneycomb{}
-	if err := utils.UnmarshalJSON(data, &outputHoneycomb, "", true, true); err == nil {
-		u.OutputHoneycomb = &outputHoneycomb
-		u.Type = OutputTypeOutputHoneycomb
-		return nil
-	}
-
-	var outputSignalfx OutputSignalfx = OutputSignalfx{}
-	if err := utils.UnmarshalJSON(data, &outputSignalfx, "", true, true); err == nil {
-		u.OutputSignalfx = &outputSignalfx
-		u.Type = OutputTypeOutputSignalfx
-		return nil
-	}
-
-	var outputWavefront OutputWavefront = OutputWavefront{}
-	if err := utils.UnmarshalJSON(data, &outputWavefront, "", true, true); err == nil {
-		u.OutputWavefront = &outputWavefront
-		u.Type = OutputTypeOutputWavefront
-		return nil
-	}
-
-	var outputHumioHec OutputHumioHec = OutputHumioHec{}
-	if err := utils.UnmarshalJSON(data, &outputHumioHec, "", true, true); err == nil {
-		u.OutputHumioHec = &outputHumioHec
-		u.Type = OutputTypeOutputHumioHec
-		return nil
-	}
-
-	var outputSumoLogic OutputSumoLogic = OutputSumoLogic{}
-	if err := utils.UnmarshalJSON(data, &outputSumoLogic, "", true, true); err == nil {
-		u.OutputSumoLogic = &outputSumoLogic
-		u.Type = OutputTypeOutputSumoLogic
-		return nil
-	}
-
-	var outputCrowdstrikeNextGenSiem OutputCrowdstrikeNextGenSiem = OutputCrowdstrikeNextGenSiem{}
-	if err := utils.UnmarshalJSON(data, &outputCrowdstrikeNextGenSiem, "", true, true); err == nil {
-		u.OutputCrowdstrikeNextGenSiem = &outputCrowdstrikeNextGenSiem
-		u.Type = OutputTypeOutputCrowdstrikeNextGenSiem
-		return nil
-	}
-
-	var outputTcpjson OutputTcpjson = OutputTcpjson{}
-	if err := utils.UnmarshalJSON(data, &outputTcpjson, "", true, true); err == nil {
-		u.OutputTcpjson = &outputTcpjson
-		u.Type = OutputTypeOutputTcpjson
-		return nil
-	}
-
-	var outputElasticCloud OutputElasticCloud = OutputElasticCloud{}
-	if err := utils.UnmarshalJSON(data, &outputElasticCloud, "", true, true); err == nil {
-		u.OutputElasticCloud = &outputElasticCloud
-		u.Type = OutputTypeOutputElasticCloud
-		return nil
-	}
-
-	var outputKinesis OutputKinesis = OutputKinesis{}
-	if err := utils.UnmarshalJSON(data, &outputKinesis, "", true, true); err == nil {
-		u.OutputKinesis = &outputKinesis
-		u.Type = OutputTypeOutputKinesis
-		return nil
-	}
-
-	var outputConfluentCloud OutputConfluentCloud = OutputConfluentCloud{}
-	if err := utils.UnmarshalJSON(data, &outputConfluentCloud, "", true, true); err == nil {
-		u.OutputConfluentCloud = &outputConfluentCloud
-		u.Type = OutputTypeOutputConfluentCloud
-		return nil
-	}
-
-	var outputKafka OutputKafka = OutputKafka{}
-	if err := utils.UnmarshalJSON(data, &outputKafka, "", true, true); err == nil {
-		u.OutputKafka = &outputKafka
-		u.Type = OutputTypeOutputKafka
-		return nil
-	}
-
-	var outputExabeam OutputExabeam = OutputExabeam{}
-	if err := utils.UnmarshalJSON(data, &outputExabeam, "", true, true); err == nil {
-		u.OutputExabeam = &outputExabeam
-		u.Type = OutputTypeOutputExabeam
-		return nil
-	}
-
-	var outputNewrelicEvents OutputNewrelicEvents = OutputNewrelicEvents{}
-	if err := utils.UnmarshalJSON(data, &outputNewrelicEvents, "", true, true); err == nil {
-		u.OutputNewrelicEvents = &outputNewrelicEvents
-		u.Type = OutputTypeOutputNewrelicEvents
-		return nil
-	}
-
-	var outputAzureLogs OutputAzureLogs = OutputAzureLogs{}
-	if err := utils.UnmarshalJSON(data, &outputAzureLogs, "", true, true); err == nil {
-		u.OutputAzureLogs = &outputAzureLogs
-		u.Type = OutputTypeOutputAzureLogs
-		return nil
-	}
-
 	var outputSqs OutputSqs = OutputSqs{}
-	if err := utils.UnmarshalJSON(data, &outputSqs, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputSqs, "", true, nil); err == nil {
 		u.OutputSqs = &outputSqs
 		u.Type = OutputTypeOutputSqs
 		return nil
 	}
 
-	var outputSplunkLb OutputSplunkLb = OutputSplunkLb{}
-	if err := utils.UnmarshalJSON(data, &outputSplunkLb, "", true, true); err == nil {
-		u.OutputSplunkLb = &outputSplunkLb
-		u.Type = OutputTypeOutputSplunkLb
-		return nil
-	}
-
-	var outputNewrelic OutputNewrelic = OutputNewrelic{}
-	if err := utils.UnmarshalJSON(data, &outputNewrelic, "", true, true); err == nil {
-		u.OutputNewrelic = &outputNewrelic
-		u.Type = OutputTypeOutputNewrelic
-		return nil
-	}
-
-	var outputCriblHTTP OutputCriblHTTP = OutputCriblHTTP{}
-	if err := utils.UnmarshalJSON(data, &outputCriblHTTP, "", true, true); err == nil {
-		u.OutputCriblHTTP = &outputCriblHTTP
-		u.Type = OutputTypeOutputCriblHTTP
-		return nil
-	}
-
-	var outputXsiam OutputXsiam = OutputXsiam{}
-	if err := utils.UnmarshalJSON(data, &outputXsiam, "", true, true); err == nil {
-		u.OutputXsiam = &outputXsiam
-		u.Type = OutputTypeOutputXsiam
-		return nil
-	}
-
-	var outputFilesystem OutputFilesystem = OutputFilesystem{}
-	if err := utils.UnmarshalJSON(data, &outputFilesystem, "", true, true); err == nil {
-		u.OutputFilesystem = &outputFilesystem
-		u.Type = OutputTypeOutputFilesystem
-		return nil
-	}
-
-	var outputLoki OutputLoki = OutputLoki{}
-	if err := utils.UnmarshalJSON(data, &outputLoki, "", true, true); err == nil {
-		u.OutputLoki = &outputLoki
-		u.Type = OutputTypeOutputLoki
-		return nil
-	}
-
-	var outputDataset OutputDataset = OutputDataset{}
-	if err := utils.UnmarshalJSON(data, &outputDataset, "", true, true); err == nil {
-		u.OutputDataset = &outputDataset
-		u.Type = OutputTypeOutputDataset
-		return nil
-	}
-
-	var outputSplunkHec OutputSplunkHec = OutputSplunkHec{}
-	if err := utils.UnmarshalJSON(data, &outputSplunkHec, "", true, true); err == nil {
-		u.OutputSplunkHec = &outputSplunkHec
-		u.Type = OutputTypeOutputSplunkHec
-		return nil
-	}
-
-	var outputDynatraceHTTP OutputDynatraceHTTP = OutputDynatraceHTTP{}
-	if err := utils.UnmarshalJSON(data, &outputDynatraceHTTP, "", true, true); err == nil {
-		u.OutputDynatraceHTTP = &outputDynatraceHTTP
-		u.Type = OutputTypeOutputDynatraceHTTP
-		return nil
-	}
-
-	var outputDynatraceOtlp OutputDynatraceOtlp = OutputDynatraceOtlp{}
-	if err := utils.UnmarshalJSON(data, &outputDynatraceOtlp, "", true, true); err == nil {
-		u.OutputDynatraceOtlp = &outputDynatraceOtlp
-		u.Type = OutputTypeOutputDynatraceOtlp
-		return nil
-	}
-
 	var outputServiceNow OutputServiceNow = OutputServiceNow{}
-	if err := utils.UnmarshalJSON(data, &outputServiceNow, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputServiceNow, "", true, nil); err == nil {
 		u.OutputServiceNow = &outputServiceNow
 		u.Type = OutputTypeOutputServiceNow
 		return nil
 	}
 
-	var outputElastic OutputElastic = OutputElastic{}
-	if err := utils.UnmarshalJSON(data, &outputElastic, "", true, true); err == nil {
-		u.OutputElastic = &outputElastic
-		u.Type = OutputTypeOutputElastic
-		return nil
-	}
-
-	var outputGoogleChronicle OutputGoogleChronicle = OutputGoogleChronicle{}
-	if err := utils.UnmarshalJSON(data, &outputGoogleChronicle, "", true, true); err == nil {
-		u.OutputGoogleChronicle = &outputGoogleChronicle
-		u.Type = OutputTypeOutputGoogleChronicle
-		return nil
-	}
-
-	var outputDatadog OutputDatadog = OutputDatadog{}
-	if err := utils.UnmarshalJSON(data, &outputDatadog, "", true, true); err == nil {
-		u.OutputDatadog = &outputDatadog
-		u.Type = OutputTypeOutputDatadog
-		return nil
-	}
-
-	var outputPrometheus OutputPrometheus = OutputPrometheus{}
-	if err := utils.UnmarshalJSON(data, &outputPrometheus, "", true, true); err == nil {
-		u.OutputPrometheus = &outputPrometheus
-		u.Type = OutputTypeOutputPrometheus
-		return nil
-	}
-
-	var outputMsk OutputMsk = OutputMsk{}
-	if err := utils.UnmarshalJSON(data, &outputMsk, "", true, true); err == nil {
-		u.OutputMsk = &outputMsk
-		u.Type = OutputTypeOutputMsk
-		return nil
-	}
-
-	var outputSentinel OutputSentinel = OutputSentinel{}
-	if err := utils.UnmarshalJSON(data, &outputSentinel, "", true, true); err == nil {
-		u.OutputSentinel = &outputSentinel
-		u.Type = OutputTypeOutputSentinel
-		return nil
-	}
-
-	var outputInfluxdb OutputInfluxdb = OutputInfluxdb{}
-	if err := utils.UnmarshalJSON(data, &outputInfluxdb, "", true, true); err == nil {
-		u.OutputInfluxdb = &outputInfluxdb
-		u.Type = OutputTypeOutputInfluxdb
-		return nil
-	}
-
-	var outputGoogleCloudStorage OutputGoogleCloudStorage = OutputGoogleCloudStorage{}
-	if err := utils.UnmarshalJSON(data, &outputGoogleCloudStorage, "", true, true); err == nil {
-		u.OutputGoogleCloudStorage = &outputGoogleCloudStorage
-		u.Type = OutputTypeOutputGoogleCloudStorage
-		return nil
-	}
-
-	var outputAzureBlob OutputAzureBlob = OutputAzureBlob{}
-	if err := utils.UnmarshalJSON(data, &outputAzureBlob, "", true, true); err == nil {
-		u.OutputAzureBlob = &outputAzureBlob
-		u.Type = OutputTypeOutputAzureBlob
-		return nil
-	}
-
-	var outputMinio OutputMinio = OutputMinio{}
-	if err := utils.UnmarshalJSON(data, &outputMinio, "", true, true); err == nil {
-		u.OutputMinio = &outputMinio
-		u.Type = OutputTypeOutputMinio
-		return nil
-	}
-
-	var outputOpenTelemetry OutputOpenTelemetry = OutputOpenTelemetry{}
-	if err := utils.UnmarshalJSON(data, &outputOpenTelemetry, "", true, true); err == nil {
-		u.OutputOpenTelemetry = &outputOpenTelemetry
-		u.Type = OutputTypeOutputOpenTelemetry
-		return nil
-	}
-
-	var outputClickHouse OutputClickHouse = OutputClickHouse{}
-	if err := utils.UnmarshalJSON(data, &outputClickHouse, "", true, true); err == nil {
-		u.OutputClickHouse = &outputClickHouse
-		u.Type = OutputTypeOutputClickHouse
-		return nil
-	}
-
-	var outputSecurityLake OutputSecurityLake = OutputSecurityLake{}
-	if err := utils.UnmarshalJSON(data, &outputSecurityLake, "", true, true); err == nil {
-		u.OutputSecurityLake = &outputSecurityLake
-		u.Type = OutputTypeOutputSecurityLake
+	var outputCrowdstrikeNextGenSiem OutputCrowdstrikeNextGenSiem = OutputCrowdstrikeNextGenSiem{}
+	if err := utils.UnmarshalJSON(data, &outputCrowdstrikeNextGenSiem, "", true, nil); err == nil {
+		u.OutputCrowdstrikeNextGenSiem = &outputCrowdstrikeNextGenSiem
+		u.Type = OutputTypeOutputCrowdstrikeNextGenSiem
 		return nil
 	}
 
 	var outputDlS3 OutputDlS3 = OutputDlS3{}
-	if err := utils.UnmarshalJSON(data, &outputDlS3, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputDlS3, "", true, nil); err == nil {
 		u.OutputDlS3 = &outputDlS3
 		u.Type = OutputTypeOutputDlS3
 		return nil
 	}
 
-	var outputS3 OutputS3 = OutputS3{}
-	if err := utils.UnmarshalJSON(data, &outputS3, "", true, true); err == nil {
-		u.OutputS3 = &outputS3
-		u.Type = OutputTypeOutputS3
+	var outputDynatraceOtlp OutputDynatraceOtlp = OutputDynatraceOtlp{}
+	if err := utils.UnmarshalJSON(data, &outputDynatraceOtlp, "", true, nil); err == nil {
+		u.OutputDynatraceOtlp = &outputDynatraceOtlp
+		u.Type = OutputTypeOutputDynatraceOtlp
 		return nil
 	}
 
-	var outputWebhook OutputWebhook = OutputWebhook{}
-	if err := utils.UnmarshalJSON(data, &outputWebhook, "", true, true); err == nil {
-		u.OutputWebhook = &outputWebhook
-		u.Type = OutputTypeOutputWebhook
+	var outputHumioHec OutputHumioHec = OutputHumioHec{}
+	if err := utils.UnmarshalJSON(data, &outputHumioHec, "", true, nil); err == nil {
+		u.OutputHumioHec = &outputHumioHec
+		u.Type = OutputTypeOutputHumioHec
 		return nil
 	}
 
-	var outputAzureDataExplorer OutputAzureDataExplorer = OutputAzureDataExplorer{}
-	if err := utils.UnmarshalJSON(data, &outputAzureDataExplorer, "", true, true); err == nil {
-		u.OutputAzureDataExplorer = &outputAzureDataExplorer
-		u.Type = OutputTypeOutputAzureDataExplorer
-		return nil
-	}
-
-	var outputGoogleCloudLogging OutputGoogleCloudLogging = OutputGoogleCloudLogging{}
-	if err := utils.UnmarshalJSON(data, &outputGoogleCloudLogging, "", true, true); err == nil {
-		u.OutputGoogleCloudLogging = &outputGoogleCloudLogging
-		u.Type = OutputTypeOutputGoogleCloudLogging
+	var outputDynatraceHTTP OutputDynatraceHTTP = OutputDynatraceHTTP{}
+	if err := utils.UnmarshalJSON(data, &outputDynatraceHTTP, "", true, nil); err == nil {
+		u.OutputDynatraceHTTP = &outputDynatraceHTTP
+		u.Type = OutputTypeOutputDynatraceHTTP
 		return nil
 	}
 
 	var outputGrafanaCloud OutputGrafanaCloud = OutputGrafanaCloud{}
-	if err := utils.UnmarshalJSON(data, &outputGrafanaCloud, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputGrafanaCloud, "", true, nil); err == nil {
 		u.OutputGrafanaCloud = &outputGrafanaCloud
 		u.Type = OutputTypeOutputGrafanaCloud
 		return nil

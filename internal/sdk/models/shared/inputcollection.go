@@ -36,6 +36,17 @@ type InputCollectionConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputCollectionConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputCollectionConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputCollectionConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputCollectionPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectionPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -194,7 +205,7 @@ func (i InputCollectionPreprocess) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectionPreprocess) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -225,6 +236,17 @@ type InputCollectionMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (i InputCollectionMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputCollectionMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputCollectionMetadatum) GetName() string {
@@ -277,7 +299,7 @@ func (i InputCollection) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id"}); err != nil {
 		return err
 	}
 	return nil

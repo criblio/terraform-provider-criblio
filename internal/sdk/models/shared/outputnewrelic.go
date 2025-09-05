@@ -99,6 +99,17 @@ type OutputNewrelicMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (o OutputNewrelicMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputNewrelicMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputNewrelicMetadatum) GetName() FieldName {
 	if o == nil {
 		return FieldName("")
@@ -116,6 +127,17 @@ func (o *OutputNewrelicMetadatum) GetValue() string {
 type OutputNewrelicExtraHTTPHeader struct {
 	Name  *string `json:"name,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o OutputNewrelicExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputNewrelicExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputNewrelicExtraHTTPHeader) GetName() *string {
@@ -178,7 +200,7 @@ func (o OutputNewrelicResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNewrelicResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -227,7 +249,7 @@ func (o OutputNewrelicTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNewrelicTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -405,6 +427,17 @@ func (e *OutputNewrelicMode) UnmarshalJSON(data []byte) error {
 type OutputNewrelicPqControls struct {
 }
 
+func (o OutputNewrelicPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputNewrelicPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputNewrelic struct {
 	// Unique ID for this output
 	ID   string             `json:"id"`
@@ -486,7 +519,7 @@ func (o OutputNewrelic) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNewrelic) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

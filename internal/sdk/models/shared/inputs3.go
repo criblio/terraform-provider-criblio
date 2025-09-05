@@ -36,6 +36,17 @@ type InputS3Connection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputS3Connection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputS3Connection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputS3Connection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputS3Pq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputS3Pq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -251,7 +262,7 @@ func (i InputS3Preprocess) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputS3Preprocess) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -284,6 +295,17 @@ type InputS3Metadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputS3Metadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputS3Metadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputS3Metadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -310,7 +332,7 @@ func (i InputS3Checkpointing) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputS3Checkpointing) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -420,7 +442,7 @@ func (i InputS3) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputS3) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "queueName"}); err != nil {
 		return err
 	}
 	return nil

@@ -66,6 +66,17 @@ type OutputDynatraceHTTPExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputDynatraceHTTPExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDynatraceHTTPExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputDynatraceHTTPExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (o OutputDynatraceHTTPResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceHTTPResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -175,7 +186,7 @@ func (o OutputDynatraceHTTPTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceHTTPTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -434,6 +445,17 @@ func (e *OutputDynatraceHTTPMode) UnmarshalJSON(data []byte) error {
 type OutputDynatraceHTTPPqControls struct {
 }
 
+func (o OutputDynatraceHTTPPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDynatraceHTTPPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputDynatraceHTTP struct {
 	// Unique ID for this output
 	ID   *string                  `json:"id,omitempty"`
@@ -519,7 +541,7 @@ func (o OutputDynatraceHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

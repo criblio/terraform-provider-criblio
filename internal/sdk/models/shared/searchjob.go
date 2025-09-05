@@ -36,8 +36,8 @@ const (
 )
 
 type SearchJobEarliest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"earliest"`
+	Number *float64 `queryParam:"inline" name:"earliest"`
 
 	Type SearchJobEarliestType
 }
@@ -63,14 +63,14 @@ func CreateSearchJobEarliestNumber(number float64) SearchJobEarliest {
 func (u *SearchJobEarliest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = SearchJobEarliestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = SearchJobEarliestTypeNumber
 		return nil
@@ -99,8 +99,8 @@ const (
 )
 
 type SearchJobLatest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"latest"`
+	Number *float64 `queryParam:"inline" name:"latest"`
 
 	Type SearchJobLatestType
 }
@@ -126,14 +126,14 @@ func CreateSearchJobLatestNumber(number float64) SearchJobLatest {
 func (u *SearchJobLatest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = SearchJobLatestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = SearchJobLatestTypeNumber
 		return nil

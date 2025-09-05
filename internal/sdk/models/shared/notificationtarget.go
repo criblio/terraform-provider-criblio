@@ -19,11 +19,11 @@ const (
 )
 
 type NotificationTarget struct {
-	WebhookTarget   *WebhookTarget   `queryParam:"inline"`
-	PagerDutyTarget *PagerDutyTarget `queryParam:"inline"`
-	SlackTarget     *SlackTarget     `queryParam:"inline"`
-	SnsTarget       *SnsTarget       `queryParam:"inline"`
-	SMTPTarget      *SMTPTarget      `queryParam:"inline"`
+	WebhookTarget   *WebhookTarget   `queryParam:"inline" name:"NotificationTarget"`
+	PagerDutyTarget *PagerDutyTarget `queryParam:"inline" name:"NotificationTarget"`
+	SlackTarget     *SlackTarget     `queryParam:"inline" name:"NotificationTarget"`
+	SnsTarget       *SnsTarget       `queryParam:"inline" name:"NotificationTarget"`
+	SMTPTarget      *SMTPTarget      `queryParam:"inline" name:"NotificationTarget"`
 
 	Type NotificationTargetType
 }
@@ -75,36 +75,36 @@ func CreateNotificationTargetSMTPTarget(smtpTarget SMTPTarget) NotificationTarge
 
 func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 
-	var slackTarget SlackTarget = SlackTarget{}
-	if err := utils.UnmarshalJSON(data, &slackTarget, "", true, true); err == nil {
-		u.SlackTarget = &slackTarget
-		u.Type = NotificationTargetTypeSlackTarget
-		return nil
-	}
-
-	var pagerDutyTarget PagerDutyTarget = PagerDutyTarget{}
-	if err := utils.UnmarshalJSON(data, &pagerDutyTarget, "", true, true); err == nil {
-		u.PagerDutyTarget = &pagerDutyTarget
-		u.Type = NotificationTargetTypePagerDutyTarget
-		return nil
-	}
-
 	var webhookTarget WebhookTarget = WebhookTarget{}
-	if err := utils.UnmarshalJSON(data, &webhookTarget, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &webhookTarget, "", true, nil); err == nil {
 		u.WebhookTarget = &webhookTarget
 		u.Type = NotificationTargetTypeWebhookTarget
 		return nil
 	}
 
 	var smtpTarget SMTPTarget = SMTPTarget{}
-	if err := utils.UnmarshalJSON(data, &smtpTarget, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &smtpTarget, "", true, nil); err == nil {
 		u.SMTPTarget = &smtpTarget
 		u.Type = NotificationTargetTypeSMTPTarget
 		return nil
 	}
 
+	var pagerDutyTarget PagerDutyTarget = PagerDutyTarget{}
+	if err := utils.UnmarshalJSON(data, &pagerDutyTarget, "", true, nil); err == nil {
+		u.PagerDutyTarget = &pagerDutyTarget
+		u.Type = NotificationTargetTypePagerDutyTarget
+		return nil
+	}
+
+	var slackTarget SlackTarget = SlackTarget{}
+	if err := utils.UnmarshalJSON(data, &slackTarget, "", true, nil); err == nil {
+		u.SlackTarget = &slackTarget
+		u.Type = NotificationTargetTypeSlackTarget
+		return nil
+	}
+
 	var snsTarget SnsTarget = SnsTarget{}
-	if err := utils.UnmarshalJSON(data, &snsTarget, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &snsTarget, "", true, nil); err == nil {
 		u.SnsTarget = &snsTarget
 		u.Type = NotificationTargetTypeSnsTarget
 		return nil

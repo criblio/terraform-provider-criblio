@@ -334,7 +334,7 @@ func (o OutputSyslogTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSyslogTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -527,6 +527,17 @@ func (e *OutputSyslogMode) UnmarshalJSON(data []byte) error {
 type OutputSyslogPqControls struct {
 }
 
+func (o OutputSyslogPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSyslogPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSyslog struct {
 	// Unique ID for this output
 	ID   string           `json:"id"`
@@ -595,7 +606,7 @@ func (o OutputSyslog) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSyslog) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

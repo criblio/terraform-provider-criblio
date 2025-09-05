@@ -16,8 +16,8 @@ const (
 )
 
 type PreviewOptionsEarliest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"earliest"`
+	Number *float64 `queryParam:"inline" name:"earliest"`
 
 	Type PreviewOptionsEarliestType
 }
@@ -43,14 +43,14 @@ func CreatePreviewOptionsEarliestNumber(number float64) PreviewOptionsEarliest {
 func (u *PreviewOptionsEarliest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = PreviewOptionsEarliestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = PreviewOptionsEarliestTypeNumber
 		return nil
@@ -79,8 +79,8 @@ const (
 )
 
 type PreviewOptionsLatest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"latest"`
+	Number *float64 `queryParam:"inline" name:"latest"`
 
 	Type PreviewOptionsLatestType
 }
@@ -106,14 +106,14 @@ func CreatePreviewOptionsLatestNumber(number float64) PreviewOptionsLatest {
 func (u *PreviewOptionsLatest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = PreviewOptionsLatestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = PreviewOptionsLatestTypeNumber
 		return nil

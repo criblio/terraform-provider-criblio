@@ -76,6 +76,17 @@ func (e *SavedJobScheduledSearchLogLevel) UnmarshalJSON(data []byte) error {
 type SavedJobScheduledSearchTimeWarning struct {
 }
 
+func (s SavedJobScheduledSearchTimeWarning) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SavedJobScheduledSearchTimeWarning) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type SavedJobScheduledSearchRunSettings struct {
 	// Reschedule tasks that failed with non-fatal errors
 	RescheduleDroppedTasks *bool `default:"true" json:"rescheduleDroppedTasks"`
@@ -109,7 +120,7 @@ func (s SavedJobScheduledSearchRunSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobScheduledSearchRunSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -225,7 +236,7 @@ func (s SavedJobScheduledSearchSchedule) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobScheduledSearchSchedule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -301,7 +312,7 @@ func (s SavedJobScheduledSearch) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobScheduledSearch) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type", "savedQueryId"}); err != nil {
 		return err
 	}
 	return nil

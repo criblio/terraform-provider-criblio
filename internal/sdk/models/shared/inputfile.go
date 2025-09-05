@@ -36,6 +36,17 @@ type InputFileConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputFileConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputFileConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputFileConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputFilePq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputFilePq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -214,6 +225,17 @@ type InputFileMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputFileMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputFileMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputFileMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -287,7 +309,7 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputFile) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

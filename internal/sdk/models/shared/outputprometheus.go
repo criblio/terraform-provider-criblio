@@ -36,6 +36,17 @@ type OutputPrometheusExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputPrometheusExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputPrometheusExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputPrometheusExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -96,7 +107,7 @@ func (o OutputPrometheusResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputPrometheusResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -145,7 +156,7 @@ func (o OutputPrometheusTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputPrometheusTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -335,11 +346,33 @@ func (e *OutputPrometheusMode) UnmarshalJSON(data []byte) error {
 type OutputPrometheusPqControls struct {
 }
 
+func (o OutputPrometheusPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputPrometheusPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputPrometheusOauthParam struct {
 	// OAuth parameter name
 	Name string `json:"name"`
 	// OAuth parameter value
 	Value string `json:"value"`
+}
+
+func (o OutputPrometheusOauthParam) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputPrometheusOauthParam) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputPrometheusOauthParam) GetName() string {
@@ -361,6 +394,17 @@ type OutputPrometheusOauthHeader struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (o OutputPrometheusOauthHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputPrometheusOauthHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputPrometheusOauthHeader) GetName() string {
@@ -473,7 +517,7 @@ func (o OutputPrometheus) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputPrometheus) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "url"}); err != nil {
 		return err
 	}
 	return nil

@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type AwsAccountConfig struct {
 	// Account name
 	Name string `json:"name"`
@@ -13,6 +17,17 @@ type AwsAccountConfig struct {
 	AwsAPIKey *string `json:"awsApiKey,omitempty"`
 	// AWS secret key
 	AwsSecretKey *string `json:"awsSecretKey,omitempty"`
+}
+
+func (a AwsAccountConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AwsAccountConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AwsAccountConfig) GetName() string {

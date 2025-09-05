@@ -17,6 +17,17 @@ type KMSProviderConfigAuth2 struct {
 	EnableAssumeRole        *bool   `json:"enableAssumeRole,omitempty"`
 }
 
+func (k KMSProviderConfigAuth2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *KMSProviderConfigAuth2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *KMSProviderConfigAuth2) GetAssumeRoleArn() *string {
 	if o == nil {
 		return nil
@@ -70,6 +81,17 @@ type KMSProviderConfigAuth1 struct {
 	Token                   *string      `json:"token,omitempty"`
 	VaultAWSIAMServerID     string       `json:"vaultAWSIAMServerID"`
 	VaultRole               *string      `json:"vaultRole,omitempty"`
+}
+
+func (k KMSProviderConfigAuth1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *KMSProviderConfigAuth1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"provider", "vaultAWSIAMServerID"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *KMSProviderConfigAuth1) GetAssumeRoleArn() *string {
@@ -150,8 +172,8 @@ const (
 )
 
 type Auth struct {
-	KMSProviderConfigAuth1 *KMSProviderConfigAuth1 `queryParam:"inline"`
-	KMSProviderConfigAuth2 *KMSProviderConfigAuth2 `queryParam:"inline"`
+	KMSProviderConfigAuth1 *KMSProviderConfigAuth1 `queryParam:"inline" name:"auth"`
+	KMSProviderConfigAuth2 *KMSProviderConfigAuth2 `queryParam:"inline" name:"auth"`
 
 	Type AuthType
 }
@@ -176,17 +198,17 @@ func CreateAuthKMSProviderConfigAuth2(kmsProviderConfigAuth2 KMSProviderConfigAu
 
 func (u *Auth) UnmarshalJSON(data []byte) error {
 
-	var kmsProviderConfigAuth2 KMSProviderConfigAuth2 = KMSProviderConfigAuth2{}
-	if err := utils.UnmarshalJSON(data, &kmsProviderConfigAuth2, "", true, true); err == nil {
-		u.KMSProviderConfigAuth2 = &kmsProviderConfigAuth2
-		u.Type = AuthTypeKMSProviderConfigAuth2
+	var kmsProviderConfigAuth1 KMSProviderConfigAuth1 = KMSProviderConfigAuth1{}
+	if err := utils.UnmarshalJSON(data, &kmsProviderConfigAuth1, "", true, nil); err == nil {
+		u.KMSProviderConfigAuth1 = &kmsProviderConfigAuth1
+		u.Type = AuthTypeKMSProviderConfigAuth1
 		return nil
 	}
 
-	var kmsProviderConfigAuth1 KMSProviderConfigAuth1 = KMSProviderConfigAuth1{}
-	if err := utils.UnmarshalJSON(data, &kmsProviderConfigAuth1, "", true, true); err == nil {
-		u.KMSProviderConfigAuth1 = &kmsProviderConfigAuth1
-		u.Type = AuthTypeKMSProviderConfigAuth1
+	var kmsProviderConfigAuth2 KMSProviderConfigAuth2 = KMSProviderConfigAuth2{}
+	if err := utils.UnmarshalJSON(data, &kmsProviderConfigAuth2, "", true, nil); err == nil {
+		u.KMSProviderConfigAuth2 = &kmsProviderConfigAuth2
+		u.Type = AuthTypeKMSProviderConfigAuth2
 		return nil
 	}
 

@@ -306,7 +306,7 @@ func (o OutputAzureBlobKeyValueMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputAzureBlobKeyValueMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -329,6 +329,17 @@ func (o *OutputAzureBlobKeyValueMetadatum) GetValue() string {
 type OutputAzureBlobCertificate struct {
 	// The certificate you registered as credentials for your app in the Azure portal
 	CertificateName string `json:"certificateName"`
+}
+
+func (o OutputAzureBlobCertificate) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputAzureBlobCertificate) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"certificateName"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputAzureBlobCertificate) GetCertificateName() string {
@@ -447,7 +458,7 @@ func (o OutputAzureBlob) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputAzureBlob) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"containerName"}); err != nil {
 		return err
 	}
 	return nil

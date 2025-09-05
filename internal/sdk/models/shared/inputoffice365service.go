@@ -36,6 +36,17 @@ type InputOffice365ServiceConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputOffice365ServiceConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputOffice365ServiceConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputOffice365ServiceConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputOffice365ServicePq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365ServicePq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -220,6 +231,17 @@ type InputOffice365ServiceMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputOffice365ServiceMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputOffice365ServiceMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputOffice365ServiceMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -276,6 +298,17 @@ type InputOffice365ServiceContentConfig struct {
 	// Collector runtime Log Level
 	LogLevel *InputOffice365ServiceLogLevel `json:"logLevel,omitempty"`
 	Enabled  *bool                          `json:"enabled,omitempty"`
+}
+
+func (i InputOffice365ServiceContentConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputOffice365ServiceContentConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputOffice365ServiceContentConfig) GetContentType() *string {
@@ -367,7 +400,7 @@ func (i InputOffice365ServiceRetryRules) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365ServiceRetryRules) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -511,7 +544,7 @@ func (i InputOffice365Service) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365Service) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"tenantId", "appId"}); err != nil {
 		return err
 	}
 	return nil

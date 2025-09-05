@@ -36,6 +36,17 @@ type OutputHumioHecExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputHumioHecExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputHumioHecExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputHumioHecExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -150,7 +161,7 @@ func (o OutputHumioHecResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputHumioHecResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -199,7 +210,7 @@ func (o OutputHumioHecTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputHumioHecTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -350,6 +361,17 @@ func (e *OutputHumioHecMode) UnmarshalJSON(data []byte) error {
 type OutputHumioHecPqControls struct {
 }
 
+func (o OutputHumioHecPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputHumioHecPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputHumioHec struct {
 	// Unique ID for this output
 	ID   *string             `json:"id,omitempty"`
@@ -424,7 +446,7 @@ func (o OutputHumioHec) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputHumioHec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

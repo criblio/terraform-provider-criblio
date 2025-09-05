@@ -99,6 +99,17 @@ type OutputWebhookExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputWebhookExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputWebhookExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputWebhookExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -159,7 +170,7 @@ func (o OutputWebhookResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhookResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -208,7 +219,7 @@ func (o OutputWebhookTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhookTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -398,7 +409,7 @@ func (o OutputWebhookTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhookTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -554,11 +565,33 @@ func (e *OutputWebhookMode) UnmarshalJSON(data []byte) error {
 type OutputWebhookPqControls struct {
 }
 
+func (o OutputWebhookPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputWebhookPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputWebhookOauthParam struct {
 	// OAuth parameter name
 	Name string `json:"name"`
 	// OAuth parameter value
 	Value string `json:"value"`
+}
+
+func (o OutputWebhookOauthParam) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputWebhookOauthParam) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputWebhookOauthParam) GetName() string {
@@ -580,6 +613,17 @@ type OutputWebhookOauthHeader struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (o OutputWebhookOauthHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputWebhookOauthHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputWebhookOauthHeader) GetName() string {
@@ -608,7 +652,7 @@ func (o OutputWebhookURL) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhookURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
 		return err
 	}
 	return nil
@@ -754,7 +798,7 @@ func (o OutputWebhook) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhook) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

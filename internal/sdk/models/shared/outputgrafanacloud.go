@@ -69,7 +69,7 @@ func (o OutputGrafanaCloudLabel2) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudLabel2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -143,7 +143,7 @@ func (o OutputGrafanaCloudPrometheusAuth2) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudPrometheusAuth2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -245,7 +245,7 @@ func (o OutputGrafanaCloudLokiAuth2) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudLokiAuth2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -296,6 +296,17 @@ func (o *OutputGrafanaCloudLokiAuth2) GetCredentialsSecret() *string {
 type OutputGrafanaCloudExtraHTTPHeader2 struct {
 	Name  *string `json:"name,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o OutputGrafanaCloudExtraHTTPHeader2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGrafanaCloudExtraHTTPHeader2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputGrafanaCloudExtraHTTPHeader2) GetName() *string {
@@ -358,7 +369,7 @@ func (o OutputGrafanaCloudResponseRetrySetting2) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudResponseRetrySetting2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -407,7 +418,7 @@ func (o OutputGrafanaCloudTimeoutRetrySettings2) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudTimeoutRetrySettings2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -558,6 +569,17 @@ func (e *OutputGrafanaCloudMode2) UnmarshalJSON(data []byte) error {
 type OutputGrafanaCloudPqControls2 struct {
 }
 
+func (o OutputGrafanaCloudPqControls2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGrafanaCloudPqControls2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputGrafanaCloudGrafanaCloud2 struct {
 	// Unique ID for this output
 	ID   string                  `json:"id"`
@@ -636,7 +658,7 @@ func (o OutputGrafanaCloudGrafanaCloud2) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudGrafanaCloud2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type", "prometheusUrl"}); err != nil {
 		return err
 	}
 	return nil
@@ -961,7 +983,7 @@ func (o OutputGrafanaCloudLabel1) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudLabel1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -1035,7 +1057,7 @@ func (o OutputGrafanaCloudPrometheusAuth1) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudPrometheusAuth1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1137,7 +1159,7 @@ func (o OutputGrafanaCloudLokiAuth1) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudLokiAuth1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1188,6 +1210,17 @@ func (o *OutputGrafanaCloudLokiAuth1) GetCredentialsSecret() *string {
 type OutputGrafanaCloudExtraHTTPHeader1 struct {
 	Name  *string `json:"name,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o OutputGrafanaCloudExtraHTTPHeader1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGrafanaCloudExtraHTTPHeader1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputGrafanaCloudExtraHTTPHeader1) GetName() *string {
@@ -1250,7 +1283,7 @@ func (o OutputGrafanaCloudResponseRetrySetting1) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudResponseRetrySetting1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -1299,7 +1332,7 @@ func (o OutputGrafanaCloudTimeoutRetrySettings1) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudTimeoutRetrySettings1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1450,6 +1483,17 @@ func (e *OutputGrafanaCloudMode1) UnmarshalJSON(data []byte) error {
 type OutputGrafanaCloudPqControls1 struct {
 }
 
+func (o OutputGrafanaCloudPqControls1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGrafanaCloudPqControls1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputGrafanaCloudGrafanaCloud1 struct {
 	// Unique ID for this output
 	ID   string                  `json:"id"`
@@ -1528,7 +1572,7 @@ func (o OutputGrafanaCloudGrafanaCloud1) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudGrafanaCloud1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type", "lokiUrl"}); err != nil {
 		return err
 	}
 	return nil
@@ -1801,8 +1845,8 @@ const (
 )
 
 type OutputGrafanaCloud struct {
-	OutputGrafanaCloudGrafanaCloud1 *OutputGrafanaCloudGrafanaCloud1 `queryParam:"inline"`
-	OutputGrafanaCloudGrafanaCloud2 *OutputGrafanaCloudGrafanaCloud2 `queryParam:"inline"`
+	OutputGrafanaCloudGrafanaCloud1 *OutputGrafanaCloudGrafanaCloud1 `queryParam:"inline" name:"OutputGrafanaCloud"`
+	OutputGrafanaCloudGrafanaCloud2 *OutputGrafanaCloudGrafanaCloud2 `queryParam:"inline" name:"OutputGrafanaCloud"`
 
 	Type OutputGrafanaCloudType
 }
@@ -1828,14 +1872,14 @@ func CreateOutputGrafanaCloudOutputGrafanaCloudGrafanaCloud2(outputGrafanaCloudG
 func (u *OutputGrafanaCloud) UnmarshalJSON(data []byte) error {
 
 	var outputGrafanaCloudGrafanaCloud1 OutputGrafanaCloudGrafanaCloud1 = OutputGrafanaCloudGrafanaCloud1{}
-	if err := utils.UnmarshalJSON(data, &outputGrafanaCloudGrafanaCloud1, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputGrafanaCloudGrafanaCloud1, "", true, nil); err == nil {
 		u.OutputGrafanaCloudGrafanaCloud1 = &outputGrafanaCloudGrafanaCloud1
 		u.Type = OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud1
 		return nil
 	}
 
 	var outputGrafanaCloudGrafanaCloud2 OutputGrafanaCloudGrafanaCloud2 = OutputGrafanaCloudGrafanaCloud2{}
-	if err := utils.UnmarshalJSON(data, &outputGrafanaCloudGrafanaCloud2, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &outputGrafanaCloudGrafanaCloud2, "", true, nil); err == nil {
 		u.OutputGrafanaCloudGrafanaCloud2 = &outputGrafanaCloudGrafanaCloud2
 		u.Type = OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud2
 		return nil

@@ -178,6 +178,17 @@ func (e *OutputCloudwatchMode) UnmarshalJSON(data []byte) error {
 type OutputCloudwatchPqControls struct {
 }
 
+func (o OutputCloudwatchPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputCloudwatchPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputCloudwatch struct {
 	// Unique ID for this output
 	ID   *string               `json:"id,omitempty"`
@@ -245,7 +256,7 @@ func (o OutputCloudwatch) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCloudwatch) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"logGroupName", "logStreamName", "region"}); err != nil {
 		return err
 	}
 	return nil

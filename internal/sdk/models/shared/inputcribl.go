@@ -36,6 +36,17 @@ type InputCriblConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputCriblConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputCriblConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputCriblConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputCriblPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCriblPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -187,6 +198,17 @@ type InputCriblMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputCriblMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputCriblMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputCriblMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -230,7 +252,7 @@ func (i InputCribl) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCribl) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

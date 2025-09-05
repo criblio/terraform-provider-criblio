@@ -367,7 +367,7 @@ func (o OutputGoogleCloudStorageKeyValueMetadatum) MarshalJSON() ([]byte, error)
 }
 
 func (o *OutputGoogleCloudStorageKeyValueMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -496,7 +496,7 @@ func (o OutputGoogleCloudStorage) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGoogleCloudStorage) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"bucket", "region"}); err != nil {
 		return err
 	}
 	return nil

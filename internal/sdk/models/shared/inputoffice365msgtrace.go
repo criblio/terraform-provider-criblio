@@ -36,6 +36,17 @@ type InputOffice365MsgTraceConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputOffice365MsgTraceConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputOffice365MsgTraceConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputOffice365MsgTraceConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputOffice365MsgTracePq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365MsgTracePq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -259,6 +270,17 @@ type InputOffice365MsgTraceMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputOffice365MsgTraceMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputOffice365MsgTraceMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputOffice365MsgTraceMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -327,7 +349,7 @@ func (i InputOffice365MsgTraceRetryRules) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365MsgTraceRetryRules) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -431,6 +453,17 @@ type CertOptions struct {
 	Passphrase *string `json:"passphrase,omitempty"`
 	// Path to the certificate to use. Certificate should be in PEM format. Can reference $ENV_VARS.
 	CertPath string `json:"certPath"`
+}
+
+func (c CertOptions) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CertOptions) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"privKeyPath", "certPath"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *CertOptions) GetCertificateName() *string {
@@ -539,7 +572,7 @@ func (i InputOffice365MsgTrace) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365MsgTrace) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

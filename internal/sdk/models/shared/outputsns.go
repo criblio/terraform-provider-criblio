@@ -205,6 +205,17 @@ func (e *OutputSnsMode) UnmarshalJSON(data []byte) error {
 type OutputSnsPqControls struct {
 }
 
+func (o OutputSnsPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSnsPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSns struct {
 	// Unique ID for this output
 	ID   *string        `json:"id,omitempty"`
@@ -270,7 +281,7 @@ func (o OutputSns) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSns) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"topicArn", "messageGroupId"}); err != nil {
 		return err
 	}
 	return nil

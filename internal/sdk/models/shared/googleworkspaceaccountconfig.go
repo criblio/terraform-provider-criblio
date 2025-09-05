@@ -2,12 +2,27 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type GoogleWorkspaceAccountConfig struct {
 	Name string `json:"name"`
 	// Email matching Google service account of the authorized principal whose role this integration is assuming
 	Subject string `json:"subject"`
 	// Contents of Google Cloud service account credentials (JSON keys) file
 	ServiceAccountCredentials string `json:"serviceAccountCredentials"`
+}
+
+func (g GoogleWorkspaceAccountConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleWorkspaceAccountConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "subject", "serviceAccountCredentials"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GoogleWorkspaceAccountConfig) GetName() string {

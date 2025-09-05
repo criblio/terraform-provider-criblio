@@ -66,6 +66,17 @@ type OutputNewrelicEventsExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputNewrelicEventsExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputNewrelicEventsExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputNewrelicEventsExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (o OutputNewrelicEventsResponseRetrySetting) MarshalJSON() ([]byte, error) 
 }
 
 func (o *OutputNewrelicEventsResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -175,7 +186,7 @@ func (o OutputNewrelicEventsTimeoutRetrySettings) MarshalJSON() ([]byte, error) 
 }
 
 func (o *OutputNewrelicEventsTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -353,6 +364,17 @@ func (e *OutputNewrelicEventsMode) UnmarshalJSON(data []byte) error {
 type OutputNewrelicEventsPqControls struct {
 }
 
+func (o OutputNewrelicEventsPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputNewrelicEventsPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputNewrelicEvents struct {
 	// Unique ID for this output
 	ID   *string                   `json:"id,omitempty"`
@@ -430,7 +452,7 @@ func (o OutputNewrelicEvents) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNewrelicEvents) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"accountId", "eventType"}); err != nil {
 		return err
 	}
 	return nil

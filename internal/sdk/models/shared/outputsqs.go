@@ -232,6 +232,17 @@ func (e *OutputSqsMode) UnmarshalJSON(data []byte) error {
 type OutputSqsPqControls struct {
 }
 
+func (o OutputSqsPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSqsPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSqs struct {
 	// Unique ID for this output
 	ID   *string        `json:"id,omitempty"`
@@ -309,7 +320,7 @@ func (o OutputSqs) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSqs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"queueName"}); err != nil {
 		return err
 	}
 	return nil

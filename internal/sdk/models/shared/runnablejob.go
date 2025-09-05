@@ -17,9 +17,9 @@ const (
 )
 
 type RunnableJob struct {
-	RunnableJobCollection      *RunnableJobCollection      `queryParam:"inline"`
-	RunnableJobExecutor        *RunnableJobExecutor        `queryParam:"inline"`
-	RunnableJobScheduledSearch *RunnableJobScheduledSearch `queryParam:"inline"`
+	RunnableJobCollection      *RunnableJobCollection      `queryParam:"inline" name:"RunnableJob"`
+	RunnableJobExecutor        *RunnableJobExecutor        `queryParam:"inline" name:"RunnableJob"`
+	RunnableJobScheduledSearch *RunnableJobScheduledSearch `queryParam:"inline" name:"RunnableJob"`
 
 	Type RunnableJobType
 }
@@ -53,24 +53,24 @@ func CreateRunnableJobRunnableJobScheduledSearch(runnableJobScheduledSearch Runn
 
 func (u *RunnableJob) UnmarshalJSON(data []byte) error {
 
-	var runnableJobScheduledSearch RunnableJobScheduledSearch = RunnableJobScheduledSearch{}
-	if err := utils.UnmarshalJSON(data, &runnableJobScheduledSearch, "", true, true); err == nil {
-		u.RunnableJobScheduledSearch = &runnableJobScheduledSearch
-		u.Type = RunnableJobTypeRunnableJobScheduledSearch
+	var runnableJobCollection RunnableJobCollection = RunnableJobCollection{}
+	if err := utils.UnmarshalJSON(data, &runnableJobCollection, "", true, nil); err == nil {
+		u.RunnableJobCollection = &runnableJobCollection
+		u.Type = RunnableJobTypeRunnableJobCollection
 		return nil
 	}
 
 	var runnableJobExecutor RunnableJobExecutor = RunnableJobExecutor{}
-	if err := utils.UnmarshalJSON(data, &runnableJobExecutor, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &runnableJobExecutor, "", true, nil); err == nil {
 		u.RunnableJobExecutor = &runnableJobExecutor
 		u.Type = RunnableJobTypeRunnableJobExecutor
 		return nil
 	}
 
-	var runnableJobCollection RunnableJobCollection = RunnableJobCollection{}
-	if err := utils.UnmarshalJSON(data, &runnableJobCollection, "", true, true); err == nil {
-		u.RunnableJobCollection = &runnableJobCollection
-		u.Type = RunnableJobTypeRunnableJobCollection
+	var runnableJobScheduledSearch RunnableJobScheduledSearch = RunnableJobScheduledSearch{}
+	if err := utils.UnmarshalJSON(data, &runnableJobScheduledSearch, "", true, nil); err == nil {
+		u.RunnableJobScheduledSearch = &runnableJobScheduledSearch
+		u.Type = RunnableJobTypeRunnableJobScheduledSearch
 		return nil
 	}
 

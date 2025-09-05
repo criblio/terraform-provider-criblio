@@ -98,13 +98,17 @@ func (r *PipelineResourceModel) ToOperationsDeletePipelineByIDRequest(ctx contex
 	return &out, diags
 }
 
-func (r *PipelineResourceModel) ToOperationsListPipelineRequest(ctx context.Context) (*operations.ListPipelineRequest, diag.Diagnostics) {
+func (r *PipelineResourceModel) ToOperationsGetPipelineByIDRequest(ctx context.Context) (*operations.GetPipelineByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListPipelineRequest{
+	out := operations.GetPipelineByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

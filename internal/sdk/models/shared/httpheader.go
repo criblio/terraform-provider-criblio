@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type HTTPHeader struct {
 	// Header name
 	Name string `json:"name"`
 	// Header value
 	Value string `json:"value"`
+}
+
+func (h HTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(h, "", false)
+}
+
+func (h *HTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &h, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *HTTPHeader) GetName() string {

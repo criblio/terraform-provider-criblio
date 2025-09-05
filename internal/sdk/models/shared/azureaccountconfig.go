@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type AzureAccountConfig struct {
 	// Account name
 	Name string `json:"name"`
@@ -11,6 +15,17 @@ type AzureAccountConfig struct {
 	ClientSecret string `json:"clientSecret"`
 	// The ID of your Azure tenant
 	TenantID string `json:"tenantId"`
+}
+
+func (a AzureAccountConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzureAccountConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "clientId", "clientSecret", "tenantId"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AzureAccountConfig) GetName() string {

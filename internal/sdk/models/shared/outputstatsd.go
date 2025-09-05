@@ -175,6 +175,17 @@ func (e *OutputStatsdMode) UnmarshalJSON(data []byte) error {
 type OutputStatsdPqControls struct {
 }
 
+func (o OutputStatsdPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputStatsdPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputStatsd struct {
 	// Unique ID for this output
 	ID   *string           `json:"id,omitempty"`
@@ -228,7 +239,7 @@ func (o OutputStatsd) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputStatsd) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
 		return err
 	}
 	return nil

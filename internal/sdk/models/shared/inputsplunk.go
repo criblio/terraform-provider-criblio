@@ -36,6 +36,17 @@ type InputSplunkConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputSplunkConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputSplunkConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputSplunkConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputSplunkPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSplunkPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -270,7 +281,7 @@ func (i InputSplunkTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSplunkTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -359,6 +370,17 @@ type InputSplunkMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputSplunkMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputSplunkMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputSplunkMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -377,6 +399,17 @@ type InputSplunkAuthToken struct {
 	// Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
 	Token       string  `json:"token"`
 	Description *string `json:"description,omitempty"`
+}
+
+func (i InputSplunkAuthToken) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputSplunkAuthToken) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"token"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputSplunkAuthToken) GetToken() string {
@@ -511,7 +544,7 @@ func (i InputSplunk) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSplunk) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
 		return err
 	}
 	return nil

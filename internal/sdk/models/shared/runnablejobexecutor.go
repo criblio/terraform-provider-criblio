@@ -76,6 +76,17 @@ func (e *RunnableJobExecutorScheduleLogLevel) UnmarshalJSON(data []byte) error {
 type RunnableJobExecutorTimeWarning struct {
 }
 
+func (r RunnableJobExecutorTimeWarning) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(r, "", false)
+}
+
+func (r *RunnableJobExecutorTimeWarning) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type RunnableJobExecutorRunSettings struct {
 	// Reschedule tasks that failed with non-fatal errors
 	RescheduleDroppedTasks *bool `default:"true" json:"rescheduleDroppedTasks"`
@@ -109,7 +120,7 @@ func (r RunnableJobExecutorRunSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobExecutorRunSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -225,7 +236,7 @@ func (r RunnableJobExecutorSchedule) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobExecutorSchedule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -276,6 +287,17 @@ func (o *RunnableJobExecutorSchedule) GetRun() *RunnableJobExecutorRunSettings {
 type RunnableJobExecutorExecutorSpecificSettings struct {
 }
 
+func (r RunnableJobExecutorExecutorSpecificSettings) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(r, "", false)
+}
+
+func (r *RunnableJobExecutorExecutorSpecificSettings) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type RunnableJobExecutorExecutor struct {
 	// The type of executor to run
 	Type string `json:"type"`
@@ -289,7 +311,7 @@ func (r RunnableJobExecutorExecutor) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobExecutorExecutor) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
@@ -368,7 +390,7 @@ func (r RunnableJobExecutorRun) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobExecutorRun) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -430,7 +452,7 @@ func (r RunnableJobExecutor) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobExecutor) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"executor", "run"}); err != nil {
 		return err
 	}
 	return nil

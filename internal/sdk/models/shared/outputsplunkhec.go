@@ -36,6 +36,17 @@ type OutputSplunkHecExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputSplunkHecExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSplunkHecExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputSplunkHecExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -123,7 +134,7 @@ func (o OutputSplunkHecResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkHecResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -172,7 +183,7 @@ func (o OutputSplunkHecTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkHecTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -248,7 +259,7 @@ func (o OutputSplunkHecURL) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkHecURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -355,6 +366,17 @@ func (e *OutputSplunkHecMode) UnmarshalJSON(data []byte) error {
 type OutputSplunkHecPqControls struct {
 }
 
+func (o OutputSplunkHecPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSplunkHecPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSplunkHec struct {
 	// Unique ID for this output
 	ID   string              `json:"id"`
@@ -442,7 +464,7 @@ func (o OutputSplunkHec) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkHec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

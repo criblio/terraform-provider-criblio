@@ -37,6 +37,17 @@ type DatatypePreviewInputRawData struct {
 	Type    TypeRawData `json:"type"`
 }
 
+func (d DatatypePreviewInputRawData) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DatatypePreviewInputRawData) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"rawData", "type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *DatatypePreviewInputRawData) GetRawData() string {
 	if o == nil {
 		return ""
@@ -79,6 +90,17 @@ type DatatypePreviewInputDataset struct {
 	Type    DatatypePreviewInputTypeDataset `json:"type"`
 }
 
+func (d DatatypePreviewInputDataset) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DatatypePreviewInputDataset) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"dataset", "type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *DatatypePreviewInputDataset) GetDataset() string {
 	if o == nil {
 		return ""
@@ -101,8 +123,8 @@ const (
 )
 
 type DatatypePreviewInput struct {
-	DatatypePreviewInputDataset *DatatypePreviewInputDataset `queryParam:"inline"`
-	DatatypePreviewInputRawData *DatatypePreviewInputRawData `queryParam:"inline"`
+	DatatypePreviewInputDataset *DatatypePreviewInputDataset `queryParam:"inline" name:"DatatypePreviewInput"`
+	DatatypePreviewInputRawData *DatatypePreviewInputRawData `queryParam:"inline" name:"DatatypePreviewInput"`
 
 	Type DatatypePreviewInputType
 }
@@ -128,14 +150,14 @@ func CreateDatatypePreviewInputDatatypePreviewInputRawData(datatypePreviewInputR
 func (u *DatatypePreviewInput) UnmarshalJSON(data []byte) error {
 
 	var datatypePreviewInputDataset DatatypePreviewInputDataset = DatatypePreviewInputDataset{}
-	if err := utils.UnmarshalJSON(data, &datatypePreviewInputDataset, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &datatypePreviewInputDataset, "", true, nil); err == nil {
 		u.DatatypePreviewInputDataset = &datatypePreviewInputDataset
 		u.Type = DatatypePreviewInputTypeDatatypePreviewInputDataset
 		return nil
 	}
 
 	var datatypePreviewInputRawData DatatypePreviewInputRawData = DatatypePreviewInputRawData{}
-	if err := utils.UnmarshalJSON(data, &datatypePreviewInputRawData, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &datatypePreviewInputRawData, "", true, nil); err == nil {
 		u.DatatypePreviewInputRawData = &datatypePreviewInputRawData
 		u.Type = DatatypePreviewInputTypeDatatypePreviewInputRawData
 		return nil

@@ -89,7 +89,7 @@ func (o OutputDatasetResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDatasetResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -138,7 +138,7 @@ func (o OutputDatasetTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDatasetTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -205,6 +205,17 @@ func (e *DataSetSite) UnmarshalJSON(data []byte) error {
 type OutputDatasetExtraHTTPHeader struct {
 	Name  *string `json:"name,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o OutputDatasetExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDatasetExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputDatasetExtraHTTPHeader) GetName() *string {
@@ -395,6 +406,17 @@ func (e *OutputDatasetMode) UnmarshalJSON(data []byte) error {
 type OutputDatasetPqControls struct {
 }
 
+func (o OutputDatasetPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDatasetPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputDataset struct {
 	// Unique ID for this output
 	ID   string            `json:"id"`
@@ -480,7 +502,7 @@ func (o OutputDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

@@ -47,7 +47,7 @@ func (o OutputRouterRule) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputRouterRule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"filter", "output"}); err != nil {
 		return err
 	}
 	return nil
@@ -96,6 +96,17 @@ type OutputRouter struct {
 	// Event routing rules
 	Rules       []OutputRouterRule `json:"rules"`
 	Description *string            `json:"description,omitempty"`
+}
+
+func (o OutputRouter) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputRouter) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "rules"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputRouter) GetID() *string {

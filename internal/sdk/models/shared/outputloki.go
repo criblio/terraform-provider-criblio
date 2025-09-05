@@ -68,7 +68,7 @@ func (o OutputLokiLabel) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputLokiLabel) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -126,6 +126,17 @@ func (e *OutputLokiAuthenticationType) UnmarshalJSON(data []byte) error {
 type OutputLokiExtraHTTPHeader struct {
 	Name  *string `json:"name,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o OutputLokiExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputLokiExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputLokiExtraHTTPHeader) GetName() *string {
@@ -188,7 +199,7 @@ func (o OutputLokiResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputLokiResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -237,7 +248,7 @@ func (o OutputLokiTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputLokiTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -388,6 +399,17 @@ func (e *OutputLokiMode) UnmarshalJSON(data []byte) error {
 type OutputLokiPqControls struct {
 }
 
+func (o OutputLokiPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputLokiPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputLoki struct {
 	// Unique ID for this output
 	ID   *string        `json:"id,omitempty"`
@@ -473,7 +495,7 @@ func (o OutputLoki) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputLoki) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "url"}); err != nil {
 		return err
 	}
 	return nil

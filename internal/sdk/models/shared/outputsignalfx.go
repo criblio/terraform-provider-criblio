@@ -63,6 +63,17 @@ type OutputSignalfxExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputSignalfxExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSignalfxExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputSignalfxExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -123,7 +134,7 @@ func (o OutputSignalfxResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSignalfxResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -172,7 +183,7 @@ func (o OutputSignalfxTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSignalfxTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -323,6 +334,17 @@ func (e *OutputSignalfxMode) UnmarshalJSON(data []byte) error {
 type OutputSignalfxPqControls struct {
 }
 
+func (o OutputSignalfxPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSignalfxPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSignalfx struct {
 	// Unique ID for this output
 	ID   *string            `json:"id,omitempty"`
@@ -395,7 +417,7 @@ func (o OutputSignalfx) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSignalfx) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil

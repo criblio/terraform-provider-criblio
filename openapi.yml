@@ -57511,7 +57511,6 @@ paths:
       responses: *a124
   "/m/{groupId}/pipelines":
     get:
-      x-speakeasy-entity-operation: Pipeline#read
       parameters:
         - name: groupId
           in: path
@@ -57578,6 +57577,7 @@ paths:
       tags: *a126
       summary: Get Pipeline by ID
       description: Get Pipeline by ID
+      x-speakeasy-entity-operation: Pipeline#get
       parameters:
         - name: id
           in: path
@@ -57860,7 +57860,6 @@ paths:
       responses: *a136
   "/m/{groupId}/p/{pack}/pipelines":
     get:
-      x-speakeasy-entity-operation: PackPipeline#read
       operationId: getPipelinesByPack
       tags: *a135
       summary: Get a list of Pipeline objects within a Pack
@@ -57915,6 +57914,7 @@ paths:
       tags: *a135
       summary: Get a list of Pipelines by ID within a Pack
       description: Get a list of Pipeline by ID within a Pack
+      x-speakeasy-entity-operation: PackPipeline#get
       responses: *a136
       parameters:
         - name: pack

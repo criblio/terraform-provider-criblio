@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
 type SlackTargetType string
@@ -38,6 +39,17 @@ type SlackTarget struct {
 	SystemFields []string `json:"systemFields,omitempty"`
 	// Slack's Incoming Webhook URL
 	URL string `json:"url"`
+}
+
+func (s SlackTarget) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SlackTarget) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "url"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SlackTarget) GetID() string {

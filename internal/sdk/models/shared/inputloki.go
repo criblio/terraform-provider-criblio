@@ -36,6 +36,17 @@ type InputLokiConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputLokiConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputLokiConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputLokiConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputLokiPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputLokiPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -270,7 +281,7 @@ func (i InputLokiTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputLokiTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -398,6 +409,17 @@ type InputLokiMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputLokiMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputLokiMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputLokiMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -419,6 +441,17 @@ type InputLokiOauthParam struct {
 	Value string `json:"value"`
 }
 
+func (i InputLokiOauthParam) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputLokiOauthParam) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputLokiOauthParam) GetName() string {
 	if o == nil {
 		return ""
@@ -438,6 +471,17 @@ type InputLokiOauthHeader struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (i InputLokiOauthHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputLokiOauthHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputLokiOauthHeader) GetName() string {
@@ -537,7 +581,7 @@ func (i InputLoki) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputLoki) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
 		return err
 	}
 	return nil

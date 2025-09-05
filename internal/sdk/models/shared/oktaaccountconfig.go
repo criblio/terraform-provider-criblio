@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type OktaAccountConfig struct {
 	// Okta account name
 	Name string `json:"name"`
@@ -9,6 +13,17 @@ type OktaAccountConfig struct {
 	DomainEndpoint string `json:"domainEndpoint"`
 	// API token for authorizing requests
 	APIToken string `json:"apiToken"`
+}
+
+func (o OktaAccountConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OktaAccountConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "domainEndpoint", "apiToken"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OktaAccountConfig) GetName() string {

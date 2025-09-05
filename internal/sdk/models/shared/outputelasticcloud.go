@@ -36,6 +36,17 @@ type OutputElasticCloudExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputElasticCloudExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputElasticCloudExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputElasticCloudExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -83,6 +94,17 @@ func (e *OutputElasticCloudFailedRequestLoggingMode) UnmarshalJSON(data []byte) 
 type OutputElasticCloudExtraParam struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
+}
+
+func (o OutputElasticCloudExtraParam) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputElasticCloudExtraParam) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputElasticCloudExtraParam) GetName() string {
@@ -143,7 +165,7 @@ func (o OutputElasticCloudAuth) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticCloudAuth) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -179,7 +201,7 @@ func (o OutputElasticCloudResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticCloudResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -228,7 +250,7 @@ func (o OutputElasticCloudTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticCloudTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -379,6 +401,17 @@ func (e *OutputElasticCloudMode) UnmarshalJSON(data []byte) error {
 type OutputElasticCloudPqControls struct {
 }
 
+func (o OutputElasticCloudPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputElasticCloudPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputElasticCloud struct {
 	// Unique ID for this output
 	ID   *string                 `json:"id,omitempty"`
@@ -452,7 +485,7 @@ func (o OutputElasticCloud) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticCloud) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url", "index"}); err != nil {
 		return err
 	}
 	return nil

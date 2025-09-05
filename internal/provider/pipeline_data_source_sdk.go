@@ -60,13 +60,17 @@ func (r *PipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context,
 	return diags
 }
 
-func (r *PipelineDataSourceModel) ToOperationsListPipelineRequest(ctx context.Context) (*operations.ListPipelineRequest, diag.Diagnostics) {
+func (r *PipelineDataSourceModel) ToOperationsGetPipelineByIDRequest(ctx context.Context) (*operations.GetPipelineByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListPipelineRequest{
+	out := operations.GetPipelineByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

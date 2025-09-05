@@ -16,8 +16,8 @@ const (
 )
 
 type Remote struct {
-	Str     *string `queryParam:"inline"`
-	Boolean *bool   `queryParam:"inline"`
+	Str     *string `queryParam:"inline" name:"remote"`
+	Boolean *bool   `queryParam:"inline" name:"remote"`
 
 	Type RemoteType
 }
@@ -43,14 +43,14 @@ func CreateRemoteBoolean(boolean bool) Remote {
 func (u *Remote) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = RemoteTypeStr
 		return nil
 	}
 
 	var boolean bool = false
-	if err := utils.UnmarshalJSON(data, &boolean, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &boolean, "", true, nil); err == nil {
 		u.Boolean = &boolean
 		u.Type = RemoteTypeBoolean
 		return nil

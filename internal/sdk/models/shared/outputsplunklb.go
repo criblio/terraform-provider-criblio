@@ -148,7 +148,7 @@ func (o OutputSplunkLbTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkLbTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -375,7 +375,7 @@ func (o OutputSplunkLbAuthToken) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkLbAuthToken) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -440,7 +440,7 @@ func (i IndexerDiscoveryConfigs) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IndexerDiscoveryConfigs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"masterUri"}); err != nil {
 		return err
 	}
 	return nil
@@ -547,7 +547,7 @@ func (o OutputSplunkLbHost) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkLbHost) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
 		return err
 	}
 	return nil
@@ -675,6 +675,17 @@ func (e *OutputSplunkLbMode) UnmarshalJSON(data []byte) error {
 type OutputSplunkLbPqControls struct {
 }
 
+func (o OutputSplunkLbPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSplunkLbPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSplunkLb struct {
 	// Unique ID for this output
 	ID   *string            `json:"id,omitempty"`
@@ -753,7 +764,7 @@ func (o OutputSplunkLb) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkLb) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "hosts"}); err != nil {
 		return err
 	}
 	return nil

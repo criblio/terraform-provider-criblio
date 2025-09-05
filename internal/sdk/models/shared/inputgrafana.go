@@ -37,6 +37,17 @@ type InputGrafanaConnection2 struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputGrafanaConnection2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputGrafanaConnection2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputGrafanaConnection2) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -127,7 +138,7 @@ func (i InputGrafanaPq2) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaPq2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -271,7 +282,7 @@ func (i InputGrafanaTLSSettingsServerSide2) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaTLSSettingsServerSide2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -400,6 +411,17 @@ type PrometheusAuthOauthParam2 struct {
 	Value string `json:"value"`
 }
 
+func (p PrometheusAuthOauthParam2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PrometheusAuthOauthParam2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *PrometheusAuthOauthParam2) GetName() string {
 	if o == nil {
 		return ""
@@ -419,6 +441,17 @@ type PrometheusAuthOauthHeader2 struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (p PrometheusAuthOauthHeader2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PrometheusAuthOauthHeader2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *PrometheusAuthOauthHeader2) GetName() string {
@@ -469,7 +502,7 @@ func (i InputGrafanaPrometheusAuth2) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaPrometheusAuth2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -619,6 +652,17 @@ type LokiAuthOauthParam2 struct {
 	Value string `json:"value"`
 }
 
+func (l LokiAuthOauthParam2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LokiAuthOauthParam2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *LokiAuthOauthParam2) GetName() string {
 	if o == nil {
 		return ""
@@ -638,6 +682,17 @@ type LokiAuthOauthHeader2 struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (l LokiAuthOauthHeader2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LokiAuthOauthHeader2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *LokiAuthOauthHeader2) GetName() string {
@@ -688,7 +743,7 @@ func (i InputGrafanaLokiAuth2) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaLokiAuth2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -798,6 +853,17 @@ type InputGrafanaMetadatum2 struct {
 	Value string `json:"value"`
 }
 
+func (i InputGrafanaMetadatum2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputGrafanaMetadatum2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputGrafanaMetadatum2) GetName() string {
 	if o == nil {
 		return ""
@@ -873,7 +939,7 @@ func (i InputGrafanaGrafana2) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaGrafana2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
 		return err
 	}
 	return nil
@@ -1117,6 +1183,17 @@ type InputGrafanaConnection1 struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputGrafanaConnection1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputGrafanaConnection1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputGrafanaConnection1) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -1207,7 +1284,7 @@ func (i InputGrafanaPq1) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaPq1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1351,7 +1428,7 @@ func (i InputGrafanaTLSSettingsServerSide1) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaTLSSettingsServerSide1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1480,6 +1557,17 @@ type PrometheusAuthOauthParam1 struct {
 	Value string `json:"value"`
 }
 
+func (p PrometheusAuthOauthParam1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PrometheusAuthOauthParam1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *PrometheusAuthOauthParam1) GetName() string {
 	if o == nil {
 		return ""
@@ -1499,6 +1587,17 @@ type PrometheusAuthOauthHeader1 struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (p PrometheusAuthOauthHeader1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PrometheusAuthOauthHeader1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *PrometheusAuthOauthHeader1) GetName() string {
@@ -1549,7 +1648,7 @@ func (i InputGrafanaPrometheusAuth1) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaPrometheusAuth1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1699,6 +1798,17 @@ type LokiAuthOauthParam1 struct {
 	Value string `json:"value"`
 }
 
+func (l LokiAuthOauthParam1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LokiAuthOauthParam1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *LokiAuthOauthParam1) GetName() string {
 	if o == nil {
 		return ""
@@ -1718,6 +1828,17 @@ type LokiAuthOauthHeader1 struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (l LokiAuthOauthHeader1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LokiAuthOauthHeader1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *LokiAuthOauthHeader1) GetName() string {
@@ -1768,7 +1889,7 @@ func (i InputGrafanaLokiAuth1) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaLokiAuth1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1878,6 +1999,17 @@ type InputGrafanaMetadatum1 struct {
 	Value string `json:"value"`
 }
 
+func (i InputGrafanaMetadatum1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputGrafanaMetadatum1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputGrafanaMetadatum1) GetName() string {
 	if o == nil {
 		return ""
@@ -1953,7 +2085,7 @@ func (i InputGrafanaGrafana1) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaGrafana1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
 		return err
 	}
 	return nil
@@ -2177,8 +2309,8 @@ const (
 )
 
 type InputGrafana struct {
-	InputGrafanaGrafana1 *InputGrafanaGrafana1 `queryParam:"inline"`
-	InputGrafanaGrafana2 *InputGrafanaGrafana2 `queryParam:"inline"`
+	InputGrafanaGrafana1 *InputGrafanaGrafana1 `queryParam:"inline" name:"InputGrafana"`
+	InputGrafanaGrafana2 *InputGrafanaGrafana2 `queryParam:"inline" name:"InputGrafana"`
 
 	Type InputGrafanaType
 }
@@ -2204,14 +2336,14 @@ func CreateInputGrafanaInputGrafanaGrafana2(inputGrafanaGrafana2 InputGrafanaGra
 func (u *InputGrafana) UnmarshalJSON(data []byte) error {
 
 	var inputGrafanaGrafana1 InputGrafanaGrafana1 = InputGrafanaGrafana1{}
-	if err := utils.UnmarshalJSON(data, &inputGrafanaGrafana1, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputGrafanaGrafana1, "", true, nil); err == nil {
 		u.InputGrafanaGrafana1 = &inputGrafanaGrafana1
 		u.Type = InputGrafanaTypeInputGrafanaGrafana1
 		return nil
 	}
 
 	var inputGrafanaGrafana2 InputGrafanaGrafana2 = InputGrafanaGrafana2{}
-	if err := utils.UnmarshalJSON(data, &inputGrafanaGrafana2, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &inputGrafanaGrafana2, "", true, nil); err == nil {
 		u.InputGrafanaGrafana2 = &inputGrafanaGrafana2
 		u.Type = InputGrafanaTypeInputGrafanaGrafana2
 		return nil

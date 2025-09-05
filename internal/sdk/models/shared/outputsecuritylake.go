@@ -322,7 +322,7 @@ func (o OutputSecurityLakeKeyValueMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSecurityLakeKeyValueMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -460,7 +460,7 @@ func (o OutputSecurityLake) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSecurityLake) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"bucket", "region", "assumeRoleArn", "accountId", "customSource"}); err != nil {
 		return err
 	}
 	return nil

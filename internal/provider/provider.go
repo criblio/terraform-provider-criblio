@@ -51,16 +51,19 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `HTTP Bearer.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"client_id": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `OAuth2 Client Credentials Flow client identifier. Configurable via environment variable ` + "`" + `CRIBL_CLIENT_ID` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"client_secret": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `OAuth2 Client Credentials Flow client secret. Configurable via environment variable ` + "`" + `CRIBL_CLIENT_SECRET` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"cloud_domain": schema.StringAttribute{
 				MarkdownDescription: `Cribl Cloud domain name (defaults to cribl.cloud)`,
@@ -87,12 +90,14 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 				Optional:    true,
 			},
 			"token_url": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `OAuth2 Client Credentials Flow token URL.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"workspace_id": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `API Key. Configurable via environment variable ` + "`" + `CRIBL_WORKSPACE_ID` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"workspace_name": schema.StringAttribute{
 				MarkdownDescription: `The Workspace name (defaults to main)`,

@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type GcpEndpointConfig struct {
 	// GCP endpoint
 	EndpointName string `json:"endpointName"`
 	// GCP region (required for some endpoints)
 	Region *string `json:"region,omitempty"`
+}
+
+func (g GcpEndpointConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GcpEndpointConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"endpointName"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GcpEndpointConfig) GetEndpointName() string {

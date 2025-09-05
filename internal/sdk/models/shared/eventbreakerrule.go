@@ -50,6 +50,17 @@ type ParserKvp struct {
 	Type              TypeKvp    `json:"type"`
 }
 
+func (p ParserKvp) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *ParserKvp) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"mode", "srcField", "type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *ParserKvp) GetAllowedKeyChars() *bool {
 	if o == nil {
 		return nil
@@ -190,6 +201,17 @@ type ParserJSON struct {
 	Type            TypeJSON   `json:"type"`
 }
 
+func (p ParserJSON) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *ParserJSON) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"mode", "srcField", "type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *ParserJSON) GetCleanFields() []string {
 	if o == nil {
 		return nil
@@ -257,6 +279,17 @@ type PatternList struct {
 	Pattern string `json:"pattern"`
 }
 
+func (p PatternList) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PatternList) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"pattern"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *PatternList) GetPattern() string {
 	if o == nil {
 		return ""
@@ -295,6 +328,17 @@ type ParserGrok struct {
 	Source      *string       `json:"source,omitempty"`
 	SrcField    string        `json:"srcField"`
 	Type        TypeGrok      `json:"type"`
+}
+
+func (p ParserGrok) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *ParserGrok) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"mode", "srcField", "type"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ParserGrok) GetDstField() *string {
@@ -394,6 +438,17 @@ type Parser struct {
 	Remove            []string   `json:"remove,omitempty"`
 	SrcField          string     `json:"srcField"`
 	Type              ParserType `json:"type"`
+}
+
+func (p Parser) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *Parser) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"mode", "srcField", "type"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Parser) GetAllowedKeyChars() *bool {
@@ -511,10 +566,10 @@ const (
 )
 
 type ParserUnion struct {
-	Parser     *Parser     `queryParam:"inline"`
-	ParserGrok *ParserGrok `queryParam:"inline"`
-	ParserJSON *ParserJSON `queryParam:"inline"`
-	ParserKvp  *ParserKvp  `queryParam:"inline"`
+	Parser     *Parser     `queryParam:"inline" name:"parser"`
+	ParserGrok *ParserGrok `queryParam:"inline" name:"parser"`
+	ParserJSON *ParserJSON `queryParam:"inline" name:"parser"`
+	ParserKvp  *ParserKvp  `queryParam:"inline" name:"parser"`
 
 	Type ParserUnionType
 }
@@ -557,29 +612,29 @@ func CreateParserUnionParserKvp(parserKvp ParserKvp) ParserUnion {
 
 func (u *ParserUnion) UnmarshalJSON(data []byte) error {
 
+	var parser Parser = Parser{}
+	if err := utils.UnmarshalJSON(data, &parser, "", true, nil); err == nil {
+		u.Parser = &parser
+		u.Type = ParserUnionTypeParser
+		return nil
+	}
+
 	var parserGrok ParserGrok = ParserGrok{}
-	if err := utils.UnmarshalJSON(data, &parserGrok, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &parserGrok, "", true, nil); err == nil {
 		u.ParserGrok = &parserGrok
 		u.Type = ParserUnionTypeParserGrok
 		return nil
 	}
 
 	var parserJSON ParserJSON = ParserJSON{}
-	if err := utils.UnmarshalJSON(data, &parserJSON, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &parserJSON, "", true, nil); err == nil {
 		u.ParserJSON = &parserJSON
 		u.Type = ParserUnionTypeParserJSON
 		return nil
 	}
 
-	var parser Parser = Parser{}
-	if err := utils.UnmarshalJSON(data, &parser, "", true, true); err == nil {
-		u.Parser = &parser
-		u.Type = ParserUnionTypeParser
-		return nil
-	}
-
 	var parserKvp ParserKvp = ParserKvp{}
-	if err := utils.UnmarshalJSON(data, &parserKvp, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &parserKvp, "", true, nil); err == nil {
 		u.ParserKvp = &parserKvp
 		u.Type = ParserUnionTypeParserKvp
 		return nil
@@ -670,6 +725,17 @@ type TimestampTimezone struct {
 	Untils  []float64 `json:"untils"`
 }
 
+func (t TimestampTimezone) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TimestampTimezone) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"name", "offsets", "untils"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *TimestampTimezone) GetName() string {
 	if o == nil {
 		return ""
@@ -699,8 +765,8 @@ const (
 )
 
 type TimestampTimezoneUnion struct {
-	Str               *string            `queryParam:"inline"`
-	TimestampTimezone *TimestampTimezone `queryParam:"inline"`
+	Str               *string            `queryParam:"inline" name:"timestampTimezone"`
+	TimestampTimezone *TimestampTimezone `queryParam:"inline" name:"timestampTimezone"`
 
 	Type TimestampTimezoneUnionType
 }
@@ -726,14 +792,14 @@ func CreateTimestampTimezoneUnionTimestampTimezone(timestampTimezone TimestampTi
 func (u *TimestampTimezoneUnion) UnmarshalJSON(data []byte) error {
 
 	var timestampTimezone TimestampTimezone = TimestampTimezone{}
-	if err := utils.UnmarshalJSON(data, &timestampTimezone, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &timestampTimezone, "", true, nil); err == nil {
 		u.TimestampTimezone = &timestampTimezone
 		u.Type = TimestampTimezoneUnionTypeTimestampTimezone
 		return nil
 	}
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = TimestampTimezoneUnionTypeStr
 		return nil
@@ -834,7 +900,7 @@ func (e EventBreakerRule) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EventBreakerRule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"condition", "maxEventBytes", "name", "timestamp", "timestampAnchorRegex", "timestampTimezone"}); err != nil {
 		return err
 	}
 	return nil

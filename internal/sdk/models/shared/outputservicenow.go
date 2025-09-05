@@ -149,7 +149,7 @@ func (o OutputServiceNowMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputServiceNowMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -234,6 +234,17 @@ type OutputServiceNowExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputServiceNowExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputServiceNowExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputServiceNowExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -264,7 +275,7 @@ func (o OutputServiceNowResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputServiceNowResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -313,7 +324,7 @@ func (o OutputServiceNowTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputServiceNowTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -435,7 +446,7 @@ func (o OutputServiceNowTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputServiceNowTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -591,6 +602,17 @@ func (e *OutputServiceNowMode) UnmarshalJSON(data []byte) error {
 type OutputServiceNowPqControls struct {
 }
 
+func (o OutputServiceNowPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputServiceNowPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputServiceNow struct {
 	// Unique ID for this output
 	ID   *string               `json:"id,omitempty"`
@@ -679,7 +701,7 @@ func (o OutputServiceNow) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputServiceNow) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"tokenSecret"}); err != nil {
 		return err
 	}
 	return nil

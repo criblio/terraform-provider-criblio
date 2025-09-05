@@ -36,6 +36,17 @@ type OutputSentinelExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputSentinelExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSentinelExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputSentinelExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -96,7 +107,7 @@ func (o OutputSentinelResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSentinelResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -145,7 +156,7 @@ func (o OutputSentinelTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSentinelTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -378,6 +389,17 @@ func (e *OutputSentinelMode) UnmarshalJSON(data []byte) error {
 type OutputSentinelPqControls struct {
 }
 
+func (o OutputSentinelPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSentinelPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSentinel struct {
 	// Unique ID for this output
 	ID   *string             `json:"id,omitempty"`
@@ -482,7 +504,7 @@ func (o OutputSentinel) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSentinel) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"loginUrl", "secret", "client_id"}); err != nil {
 		return err
 	}
 	return nil

@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type TailscaleAccountConfig struct {
 	// Tailscale account name
 	Name string `json:"name"`
@@ -9,6 +13,17 @@ type TailscaleAccountConfig struct {
 	ClientID string `json:"clientId"`
 	// Client secret string
 	ClientSecret string `json:"clientSecret"`
+}
+
+func (t TailscaleAccountConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TailscaleAccountConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"name", "clientId", "clientSecret"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *TailscaleAccountConfig) GetName() string {

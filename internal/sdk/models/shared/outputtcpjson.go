@@ -148,7 +148,7 @@ func (o OutputTcpjsonTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputTcpjsonTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -326,7 +326,7 @@ func (o OutputTcpjsonHost) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputTcpjsonHost) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host", "port"}); err != nil {
 		return err
 	}
 	return nil
@@ -454,6 +454,17 @@ func (e *OutputTcpjsonMode) UnmarshalJSON(data []byte) error {
 type OutputTcpjsonPqControls struct {
 }
 
+func (o OutputTcpjsonPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputTcpjsonPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputTcpjson struct {
 	// Unique ID for this output
 	ID   string            `json:"id"`
@@ -526,7 +537,7 @@ func (o OutputTcpjson) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputTcpjson) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

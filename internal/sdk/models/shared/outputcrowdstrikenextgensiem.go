@@ -36,6 +36,17 @@ type OutputCrowdstrikeNextGenSiemExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputCrowdstrikeNextGenSiemExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputCrowdstrikeNextGenSiemExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputCrowdstrikeNextGenSiemExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -150,7 +161,7 @@ func (o OutputCrowdstrikeNextGenSiemResponseRetrySetting) MarshalJSON() ([]byte,
 }
 
 func (o *OutputCrowdstrikeNextGenSiemResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -199,7 +210,7 @@ func (o OutputCrowdstrikeNextGenSiemTimeoutRetrySettings) MarshalJSON() ([]byte,
 }
 
 func (o *OutputCrowdstrikeNextGenSiemTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -350,6 +361,17 @@ func (e *OutputCrowdstrikeNextGenSiemMode) UnmarshalJSON(data []byte) error {
 type OutputCrowdstrikeNextGenSiemPqControls struct {
 }
 
+func (o OutputCrowdstrikeNextGenSiemPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputCrowdstrikeNextGenSiemPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputCrowdstrikeNextGenSiem struct {
 	// Unique ID for this output
 	ID   *string                           `json:"id,omitempty"`
@@ -424,7 +446,7 @@ func (o OutputCrowdstrikeNextGenSiem) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCrowdstrikeNextGenSiem) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
 		return err
 	}
 	return nil

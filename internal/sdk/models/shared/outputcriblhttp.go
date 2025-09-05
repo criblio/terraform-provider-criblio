@@ -121,7 +121,7 @@ func (o OutputCriblHTTPTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCriblHTTPTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -229,6 +229,17 @@ type OutputCriblHTTPExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputCriblHTTPExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputCriblHTTPExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputCriblHTTPExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -289,7 +300,7 @@ func (o OutputCriblHTTPResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCriblHTTPResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -338,7 +349,7 @@ func (o OutputCriblHTTPTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCriblHTTPTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -414,7 +425,7 @@ func (o OutputCriblHTTPURL) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCriblHTTPURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
 		return err
 	}
 	return nil
@@ -521,6 +532,17 @@ func (e *OutputCriblHTTPMode) UnmarshalJSON(data []byte) error {
 type OutputCriblHTTPPqControls struct {
 }
 
+func (o OutputCriblHTTPPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputCriblHTTPPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputCriblHTTP struct {
 	// Unique ID for this output
 	ID   string              `json:"id"`
@@ -601,7 +623,7 @@ func (o OutputCriblHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCriblHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

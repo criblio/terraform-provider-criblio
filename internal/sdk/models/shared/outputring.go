@@ -144,7 +144,7 @@ func (o OutputRing) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputRing) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

@@ -36,6 +36,17 @@ type OutputElasticExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputElasticExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputElasticExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputElasticExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -96,7 +107,7 @@ func (o OutputElasticResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -145,7 +156,7 @@ func (o OutputElasticTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -182,6 +193,17 @@ func (o *OutputElasticTimeoutRetrySettings) GetMaxBackoff() *float64 {
 type OutputElasticExtraParam struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
+}
+
+func (o OutputElasticExtraParam) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputElasticExtraParam) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputElasticExtraParam) GetName() string {
@@ -242,7 +264,7 @@ func (o OutputElasticAuth) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticAuth) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -361,7 +383,7 @@ func (o OutputElasticURL) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
 		return err
 	}
 	return nil
@@ -468,6 +490,17 @@ func (e *OutputElasticMode) UnmarshalJSON(data []byte) error {
 type OutputElasticPqControls struct {
 }
 
+func (o OutputElasticPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputElasticPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputElastic struct {
 	// Unique ID for this output
 	ID   *string           `json:"id,omitempty"`
@@ -559,7 +592,7 @@ func (o OutputElastic) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElastic) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "index"}); err != nil {
 		return err
 	}
 	return nil

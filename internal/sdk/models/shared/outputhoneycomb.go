@@ -36,6 +36,17 @@ type OutputHoneycombExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputHoneycombExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputHoneycombExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputHoneycombExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -96,7 +107,7 @@ func (o OutputHoneycombResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputHoneycombResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -145,7 +156,7 @@ func (o OutputHoneycombTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputHoneycombTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -323,6 +334,17 @@ func (e *OutputHoneycombMode) UnmarshalJSON(data []byte) error {
 type OutputHoneycombPqControls struct {
 }
 
+func (o OutputHoneycombPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputHoneycombPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputHoneycomb struct {
 	// Unique ID for this output
 	ID   *string             `json:"id,omitempty"`
@@ -395,7 +417,7 @@ func (o OutputHoneycomb) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputHoneycomb) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "dataset"}); err != nil {
 		return err
 	}
 	return nil

@@ -150,6 +150,17 @@ type OutputDatadogExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputDatadogExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDatadogExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputDatadogExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -210,7 +221,7 @@ func (o OutputDatadogResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDatadogResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -259,7 +270,7 @@ func (o OutputDatadogTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDatadogTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -437,6 +448,17 @@ func (e *OutputDatadogMode) UnmarshalJSON(data []byte) error {
 type OutputDatadogPqControls struct {
 }
 
+func (o OutputDatadogPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDatadogPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputDatadog struct {
 	// Unique ID for this output
 	ID   string            `json:"id"`
@@ -532,7 +554,7 @@ func (o OutputDatadog) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDatadog) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

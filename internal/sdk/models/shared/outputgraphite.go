@@ -175,6 +175,17 @@ func (e *OutputGraphiteMode) UnmarshalJSON(data []byte) error {
 type OutputGraphitePqControls struct {
 }
 
+func (o OutputGraphitePqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGraphitePqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputGraphite struct {
 	// Unique ID for this output
 	ID   *string             `json:"id,omitempty"`
@@ -228,7 +239,7 @@ func (o OutputGraphite) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGraphite) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
 		return err
 	}
 	return nil

@@ -23,7 +23,7 @@ func (s ScriptLibEntry) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScriptLibEntry) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "command"}); err != nil {
 		return err
 	}
 	return nil

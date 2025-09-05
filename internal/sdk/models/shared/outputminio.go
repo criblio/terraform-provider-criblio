@@ -389,7 +389,7 @@ func (o OutputMinioKeyValueMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputMinioKeyValueMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -523,7 +523,7 @@ func (o OutputMinio) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputMinio) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"endpoint", "bucket"}); err != nil {
 		return err
 	}
 	return nil

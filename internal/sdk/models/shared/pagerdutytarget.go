@@ -87,7 +87,7 @@ func (p PagerDutyTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PagerDutyTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"id", "type", "routingKey"}); err != nil {
 		return err
 	}
 	return nil

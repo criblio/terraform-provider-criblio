@@ -16,8 +16,8 @@ const (
 )
 
 type DimKeyFilter struct {
-	Str        *string  `queryParam:"inline"`
-	ArrayOfStr []string `queryParam:"inline"`
+	Str        *string  `queryParam:"inline" name:"dimKeyFilter"`
+	ArrayOfStr []string `queryParam:"inline" name:"dimKeyFilter"`
 
 	Type DimKeyFilterType
 }
@@ -43,14 +43,14 @@ func CreateDimKeyFilterArrayOfStr(arrayOfStr []string) DimKeyFilter {
 func (u *DimKeyFilter) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = DimKeyFilterTypeStr
 		return nil
 	}
 
 	var arrayOfStr []string = []string{}
-	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
 		u.ArrayOfStr = arrayOfStr
 		u.Type = DimKeyFilterTypeArrayOfStr
 		return nil
@@ -79,8 +79,8 @@ const (
 )
 
 type DimValueFilter struct {
-	Str        *string  `queryParam:"inline"`
-	ArrayOfStr []string `queryParam:"inline"`
+	Str        *string  `queryParam:"inline" name:"dimValueFilter"`
+	ArrayOfStr []string `queryParam:"inline" name:"dimValueFilter"`
 
 	Type DimValueFilterType
 }
@@ -106,14 +106,14 @@ func CreateDimValueFilterArrayOfStr(arrayOfStr []string) DimValueFilter {
 func (u *DimValueFilter) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = DimValueFilterTypeStr
 		return nil
 	}
 
 	var arrayOfStr []string = []string{}
-	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
 		u.ArrayOfStr = arrayOfStr
 		u.Type = DimValueFilterTypeArrayOfStr
 		return nil
@@ -142,8 +142,8 @@ const (
 )
 
 type MetricNameFilter struct {
-	Str        *string  `queryParam:"inline"`
-	ArrayOfStr []string `queryParam:"inline"`
+	Str        *string  `queryParam:"inline" name:"metricNameFilter"`
+	ArrayOfStr []string `queryParam:"inline" name:"metricNameFilter"`
 
 	Type MetricNameFilterType
 }
@@ -169,14 +169,14 @@ func CreateMetricNameFilterArrayOfStr(arrayOfStr []string) MetricNameFilter {
 func (u *MetricNameFilter) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = MetricNameFilterTypeStr
 		return nil
 	}
 
 	var arrayOfStr []string = []string{}
-	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
 		u.ArrayOfStr = arrayOfStr
 		u.Type = MetricNameFilterTypeArrayOfStr
 		return nil

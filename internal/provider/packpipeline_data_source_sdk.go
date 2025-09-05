@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *PackPipelineDataSourceModel) RefreshFromOperationsGetPipelinesByPackResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackResponseBody) diag.Diagnostics {
+func (r *PackPipelineDataSourceModel) RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackWithIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -90,17 +90,21 @@ func (r *PackPipelineDataSourceModel) RefreshFromOperationsGetPipelinesByPackRes
 	return diags
 }
 
-func (r *PackPipelineDataSourceModel) ToOperationsGetPipelinesByPackRequest(ctx context.Context) (*operations.GetPipelinesByPackRequest, diag.Diagnostics) {
+func (r *PackPipelineDataSourceModel) ToOperationsGetPipelinesByPackWithIDRequest(ctx context.Context) (*operations.GetPipelinesByPackWithIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var pack string
 	pack = r.Pack.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.GetPipelinesByPackRequest{
+	out := operations.GetPipelinesByPackWithIDRequest{
 		Pack:    pack,
+		ID:      id,
 		GroupID: groupID,
 	}
 

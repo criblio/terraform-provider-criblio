@@ -136,7 +136,7 @@ func (o OutputMskAuth) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputMskAuth) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -246,7 +246,7 @@ func (o OutputMskKafkaSchemaRegistryTLSSettingsClientSide) MarshalJSON() ([]byte
 }
 
 func (o *OutputMskKafkaSchemaRegistryTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -346,7 +346,7 @@ func (o OutputMskKafkaSchemaRegistryAuthentication) MarshalJSON() ([]byte, error
 }
 
 func (o *OutputMskKafkaSchemaRegistryAuthentication) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -562,7 +562,7 @@ func (o OutputMskTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputMskTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -755,6 +755,17 @@ func (e *OutputMskMode) UnmarshalJSON(data []byte) error {
 type OutputMskPqControls struct {
 }
 
+func (o OutputMskPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputMskPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputMsk struct {
 	// Unique ID for this output
 	ID   *string        `json:"id,omitempty"`
@@ -850,7 +861,7 @@ func (o OutputMsk) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputMsk) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"brokers", "topic", "region"}); err != nil {
 		return err
 	}
 	return nil

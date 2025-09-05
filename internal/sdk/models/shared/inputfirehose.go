@@ -36,6 +36,17 @@ type InputFirehoseConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputFirehoseConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputFirehoseConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputFirehoseConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputFirehosePq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputFirehosePq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -270,7 +281,7 @@ func (i InputFirehoseTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputFirehoseTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -359,6 +370,17 @@ type InputFirehoseMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputFirehoseMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputFirehoseMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputFirehoseMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -430,7 +452,7 @@ func (i InputFirehose) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputFirehose) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
 		return err
 	}
 	return nil

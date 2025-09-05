@@ -163,6 +163,17 @@ type NodeProvidedInfoOs2 struct {
 	Addresses []string `json:"addresses"`
 }
 
+func (n NodeProvidedInfoOs2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NodeProvidedInfoOs2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, []string{"addresses"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *NodeProvidedInfoOs2) GetAddresses() []string {
 	if o == nil {
 		return []string{}
@@ -175,6 +186,17 @@ type NodeProvidedInfoOs1 struct {
 	Enabled   bool     `json:"enabled"`
 	ID        string   `json:"id"`
 	Version   string   `json:"version"`
+}
+
+func (n NodeProvidedInfoOs1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NodeProvidedInfoOs1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, []string{"addresses", "enabled", "id", "version"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *NodeProvidedInfoOs1) GetAddresses() []string {
@@ -213,8 +235,8 @@ const (
 )
 
 type Os struct {
-	NodeProvidedInfoOs1 *NodeProvidedInfoOs1 `queryParam:"inline"`
-	NodeProvidedInfoOs2 *NodeProvidedInfoOs2 `queryParam:"inline"`
+	NodeProvidedInfoOs1 *NodeProvidedInfoOs1 `queryParam:"inline" name:"os"`
+	NodeProvidedInfoOs2 *NodeProvidedInfoOs2 `queryParam:"inline" name:"os"`
 
 	Type OsType
 }
@@ -239,17 +261,17 @@ func CreateOsNodeProvidedInfoOs2(nodeProvidedInfoOs2 NodeProvidedInfoOs2) Os {
 
 func (u *Os) UnmarshalJSON(data []byte) error {
 
-	var nodeProvidedInfoOs2 NodeProvidedInfoOs2 = NodeProvidedInfoOs2{}
-	if err := utils.UnmarshalJSON(data, &nodeProvidedInfoOs2, "", true, true); err == nil {
-		u.NodeProvidedInfoOs2 = &nodeProvidedInfoOs2
-		u.Type = OsTypeNodeProvidedInfoOs2
+	var nodeProvidedInfoOs1 NodeProvidedInfoOs1 = NodeProvidedInfoOs1{}
+	if err := utils.UnmarshalJSON(data, &nodeProvidedInfoOs1, "", true, nil); err == nil {
+		u.NodeProvidedInfoOs1 = &nodeProvidedInfoOs1
+		u.Type = OsTypeNodeProvidedInfoOs1
 		return nil
 	}
 
-	var nodeProvidedInfoOs1 NodeProvidedInfoOs1 = NodeProvidedInfoOs1{}
-	if err := utils.UnmarshalJSON(data, &nodeProvidedInfoOs1, "", true, true); err == nil {
-		u.NodeProvidedInfoOs1 = &nodeProvidedInfoOs1
-		u.Type = OsTypeNodeProvidedInfoOs1
+	var nodeProvidedInfoOs2 NodeProvidedInfoOs2 = NodeProvidedInfoOs2{}
+	if err := utils.UnmarshalJSON(data, &nodeProvidedInfoOs2, "", true, nil); err == nil {
+		u.NodeProvidedInfoOs2 = &nodeProvidedInfoOs2
+		u.Type = OsTypeNodeProvidedInfoOs2
 		return nil
 	}
 

@@ -16,8 +16,8 @@ const (
 )
 
 type MetricsAggOptsEarliest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"earliest"`
+	Number *float64 `queryParam:"inline" name:"earliest"`
 
 	Type MetricsAggOptsEarliestType
 }
@@ -43,14 +43,14 @@ func CreateMetricsAggOptsEarliestNumber(number float64) MetricsAggOptsEarliest {
 func (u *MetricsAggOptsEarliest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = MetricsAggOptsEarliestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = MetricsAggOptsEarliestTypeNumber
 		return nil
@@ -79,8 +79,8 @@ const (
 )
 
 type MetricsAggOptsLatest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"latest"`
+	Number *float64 `queryParam:"inline" name:"latest"`
 
 	Type MetricsAggOptsLatestType
 }
@@ -106,14 +106,14 @@ func CreateMetricsAggOptsLatestNumber(number float64) MetricsAggOptsLatest {
 func (u *MetricsAggOptsLatest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = MetricsAggOptsLatestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = MetricsAggOptsLatestTypeNumber
 		return nil

@@ -36,6 +36,17 @@ type InputElasticConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputElasticConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputElasticConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputElasticConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputElasticPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputElasticPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -270,7 +281,7 @@ func (i InputElasticTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputElasticTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -420,6 +431,17 @@ type InputElasticExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (i InputElasticExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputElasticExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputElasticExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -438,6 +460,17 @@ type InputElasticMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (i InputElasticMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputElasticMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputElasticMetadatum) GetName() string {
@@ -504,7 +537,7 @@ func (i InputElasticProxyMode) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputElasticProxyMode) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -623,7 +656,7 @@ func (i InputElastic) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputElastic) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
 		return err
 	}
 	return nil

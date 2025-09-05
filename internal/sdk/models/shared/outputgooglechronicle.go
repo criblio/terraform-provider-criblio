@@ -105,7 +105,7 @@ func (o OutputGoogleChronicleResponseRetrySetting) MarshalJSON() ([]byte, error)
 }
 
 func (o *OutputGoogleChronicleResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -154,7 +154,7 @@ func (o OutputGoogleChronicleTimeoutRetrySettings) MarshalJSON() ([]byte, error)
 }
 
 func (o *OutputGoogleChronicleTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -217,6 +217,17 @@ func (e *SendEventsAs) UnmarshalJSON(data []byte) error {
 type OutputGoogleChronicleExtraHTTPHeader struct {
 	Name  *string `json:"name,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o OutputGoogleChronicleExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGoogleChronicleExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputGoogleChronicleExtraHTTPHeader) GetName() *string {
@@ -298,6 +309,17 @@ type ExtraLogType struct {
 	Description *string `json:"description,omitempty"`
 }
 
+func (e ExtraLogType) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *ExtraLogType) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"logType"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *ExtraLogType) GetLogType() string {
 	if o == nil {
 		return ""
@@ -315,6 +337,17 @@ func (o *ExtraLogType) GetDescription() *string {
 type CustomLabel struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
+}
+
+func (c CustomLabel) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CustomLabel) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"key", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *CustomLabel) GetKey() string {
@@ -418,6 +451,17 @@ func (e *OutputGoogleChronicleMode) UnmarshalJSON(data []byte) error {
 type OutputGoogleChroniclePqControls struct {
 }
 
+func (o OutputGoogleChroniclePqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGoogleChroniclePqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputGoogleChronicle struct {
 	// Unique ID for this output
 	ID   *string                   `json:"id,omitempty"`
@@ -509,7 +553,7 @@ func (o OutputGoogleChronicle) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGoogleChronicle) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil

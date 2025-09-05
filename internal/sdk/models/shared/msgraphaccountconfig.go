@@ -2,12 +2,27 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type MsGraphAccountConfig struct {
 	// Azure account name
 	Name         string `json:"name"`
 	TenantID     string `json:"tenantId"`
 	ClientID     string `json:"clientId"`
 	ClientSecret string `json:"clientSecret"`
+}
+
+func (m MsGraphAccountConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(m, "", false)
+}
+
+func (m *MsGraphAccountConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"name", "tenantId", "clientId", "clientSecret"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *MsGraphAccountConfig) GetName() string {

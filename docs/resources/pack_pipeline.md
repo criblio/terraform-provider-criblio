@@ -162,6 +162,7 @@ import {
   to = criblio_pack_pipeline.my_criblio_pack_pipeline
   id = jsonencode({
     group_id = "..."
+    id = "..."
     pack = "..."
   })
 }
@@ -170,5 +171,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_pipeline.my_criblio_pack_pipeline '{"group_id": "...", "pack": "..."}'
+terraform import criblio_pack_pipeline.my_criblio_pack_pipeline '{"group_id": "...", "id": "...", "pack": "..."}'
 ```

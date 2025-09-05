@@ -36,6 +36,17 @@ type InputSplunkHecConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputSplunkHecConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputSplunkHecConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputSplunkHecConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputSplunkHecPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSplunkHecPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -214,6 +225,17 @@ type InputSplunkHecAuthTokenMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputSplunkHecAuthTokenMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputSplunkHecAuthTokenMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputSplunkHecAuthTokenMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -247,7 +269,7 @@ func (i InputSplunkHecAuthToken) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSplunkHecAuthToken) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"token"}); err != nil {
 		return err
 	}
 	return nil
@@ -391,7 +413,7 @@ func (i InputSplunkHecTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSplunkHecTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -478,6 +500,17 @@ type InputSplunkHecMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (i InputSplunkHecMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputSplunkHecMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputSplunkHecMetadatum) GetName() string {
@@ -572,7 +605,7 @@ func (i InputSplunkHec) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSplunkHec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
 		return err
 	}
 	return nil

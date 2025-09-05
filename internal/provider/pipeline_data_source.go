@@ -126,7 +126,8 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 		},
 	}
@@ -170,13 +171,13 @@ func (r *PipelineDataSource) Read(ctx context.Context, req datasource.ReadReques
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListPipelineRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPipelineByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.ListPipeline(ctx, *request)
+	res, err := r.client.Pipelines.GetPipelineByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

@@ -146,7 +146,7 @@ func (o OutputDynatraceOtlpMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceOtlpMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -258,6 +258,17 @@ type OutputDynatraceOtlpExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputDynatraceOtlpExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDynatraceOtlpExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputDynatraceOtlpExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -288,7 +299,7 @@ func (o OutputDynatraceOtlpResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceOtlpResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -337,7 +348,7 @@ func (o OutputDynatraceOtlpTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceOtlpTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -458,6 +469,17 @@ func (e *OutputDynatraceOtlpMode) UnmarshalJSON(data []byte) error {
 type OutputDynatraceOtlpPqControls struct {
 }
 
+func (o OutputDynatraceOtlpPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputDynatraceOtlpPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputDynatraceOtlp struct {
 	// Unique ID for this output
 	ID   *string                  `json:"id,omitempty"`
@@ -547,7 +569,7 @@ func (o OutputDynatraceOtlp) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceOtlp) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"tokenSecret"}); err != nil {
 		return err
 	}
 	return nil

@@ -37,6 +37,17 @@ type SearchQueryValues struct {
 	Values []string   `json:"values"`
 }
 
+func (s SearchQueryValues) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SearchQueryValues) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type", "values"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SearchQueryValues) GetType() TypeValues {
 	if o == nil {
 		return TypeValues("")
@@ -59,8 +70,8 @@ const (
 )
 
 type SearchQueryEarliest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"earliest"`
+	Number *float64 `queryParam:"inline" name:"earliest"`
 
 	Type SearchQueryEarliestType
 }
@@ -86,14 +97,14 @@ func CreateSearchQueryEarliestNumber(number float64) SearchQueryEarliest {
 func (u *SearchQueryEarliest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = SearchQueryEarliestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = SearchQueryEarliestTypeNumber
 		return nil
@@ -122,8 +133,8 @@ const (
 )
 
 type SearchQueryLatest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"latest"`
+	Number *float64 `queryParam:"inline" name:"latest"`
 
 	Type SearchQueryLatestType
 }
@@ -149,14 +160,14 @@ func CreateSearchQueryLatestNumber(number float64) SearchQueryLatest {
 func (u *SearchQueryLatest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = SearchQueryLatestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = SearchQueryLatestTypeNumber
 		return nil
@@ -208,6 +219,17 @@ type SearchQueryInline struct {
 	SampleRate     *float64             `json:"sampleRate,omitempty"`
 	Timezone       *string              `json:"timezone,omitempty"`
 	Type           TypeInline           `json:"type"`
+}
+
+func (s SearchQueryInline) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SearchQueryInline) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"earliest", "latest", "query", "type"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SearchQueryInline) GetEarliest() *SearchQueryEarliest {
@@ -289,6 +311,17 @@ type SearchQuerySaved struct {
 	Type    TypeSaved           `json:"type"`
 }
 
+func (s SearchQuerySaved) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SearchQuerySaved) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"queryId", "type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SearchQuerySaved) GetQuery() *string {
 	if o == nil {
 		return nil
@@ -326,9 +359,9 @@ const (
 )
 
 type SearchQuery struct {
-	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline"`
-	SearchQueryInline *SearchQueryInline `queryParam:"inline"`
-	SearchQueryValues *SearchQueryValues `queryParam:"inline"`
+	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline" name:"SearchQuery"`
+	SearchQueryInline *SearchQueryInline `queryParam:"inline" name:"SearchQuery"`
+	SearchQueryValues *SearchQueryValues `queryParam:"inline" name:"SearchQuery"`
 
 	Type SearchQueryType
 }
@@ -362,24 +395,24 @@ func CreateSearchQuerySearchQueryValues(searchQueryValues SearchQueryValues) Sea
 
 func (u *SearchQuery) UnmarshalJSON(data []byte) error {
 
-	var searchQueryValues SearchQueryValues = SearchQueryValues{}
-	if err := utils.UnmarshalJSON(data, &searchQueryValues, "", true, true); err == nil {
-		u.SearchQueryValues = &searchQueryValues
-		u.Type = SearchQueryTypeSearchQueryValues
+	var searchQueryInline SearchQueryInline = SearchQueryInline{}
+	if err := utils.UnmarshalJSON(data, &searchQueryInline, "", true, nil); err == nil {
+		u.SearchQueryInline = &searchQueryInline
+		u.Type = SearchQueryTypeSearchQueryInline
 		return nil
 	}
 
 	var searchQuerySaved SearchQuerySaved = SearchQuerySaved{}
-	if err := utils.UnmarshalJSON(data, &searchQuerySaved, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &searchQuerySaved, "", true, nil); err == nil {
 		u.SearchQuerySaved = &searchQuerySaved
 		u.Type = SearchQueryTypeSearchQuerySaved
 		return nil
 	}
 
-	var searchQueryInline SearchQueryInline = SearchQueryInline{}
-	if err := utils.UnmarshalJSON(data, &searchQueryInline, "", true, true); err == nil {
-		u.SearchQueryInline = &searchQueryInline
-		u.Type = SearchQueryTypeSearchQueryInline
+	var searchQueryValues SearchQueryValues = SearchQueryValues{}
+	if err := utils.UnmarshalJSON(data, &searchQueryValues, "", true, nil); err == nil {
+		u.SearchQueryValues = &searchQueryValues
+		u.Type = SearchQueryTypeSearchQueryValues
 		return nil
 	}
 

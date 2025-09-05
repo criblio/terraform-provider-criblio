@@ -47,7 +47,7 @@ func (t TargetConfigConf) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TargetConfigConf) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil

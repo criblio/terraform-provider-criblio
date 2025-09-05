@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type DashboardLayout struct {
 	H float64 `json:"h"`
 	W float64 `json:"w"`
 	X float64 `json:"x"`
 	Y float64 `json:"y"`
+}
+
+func (d DashboardLayout) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DashboardLayout) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"h", "w", "x", "y"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *DashboardLayout) GetH() float64 {

@@ -239,7 +239,7 @@ func (o OutputFilesystemKeyValueMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputFilesystemKeyValueMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
@@ -343,7 +343,7 @@ func (o OutputFilesystem) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputFilesystem) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "destPath"}); err != nil {
 		return err
 	}
 	return nil

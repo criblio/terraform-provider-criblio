@@ -178,6 +178,17 @@ func (e *OutputGooglePubsubMode) UnmarshalJSON(data []byte) error {
 type OutputGooglePubsubPqControls struct {
 }
 
+func (o OutputGooglePubsubPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGooglePubsubPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputGooglePubsub struct {
 	// Unique ID for this output
 	ID   *string                `json:"id,omitempty"`
@@ -239,7 +250,7 @@ func (o OutputGooglePubsub) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGooglePubsub) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "topicName"}); err != nil {
 		return err
 	}
 	return nil

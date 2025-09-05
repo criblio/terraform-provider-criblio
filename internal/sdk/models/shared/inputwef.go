@@ -36,6 +36,17 @@ type InputWefConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputWefConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputWefConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputWefConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputWefPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWefPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -306,7 +317,7 @@ func (m MTLSSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MTLSSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &m, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"privKeyPath", "certPath", "caPath"}); err != nil {
 		return err
 	}
 	return nil
@@ -476,6 +487,17 @@ type SubscriptionMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (s SubscriptionMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SubscriptionMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SubscriptionMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -521,7 +543,7 @@ func (i InputWefSubscription) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWefSubscription) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "subscriptionName"}); err != nil {
 		return err
 	}
 	return nil
@@ -624,6 +646,17 @@ type InputWefMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputWefMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputWefMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputWefMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -703,7 +736,7 @@ func (i InputWef) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWef) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"subscriptions"}); err != nil {
 		return err
 	}
 	return nil

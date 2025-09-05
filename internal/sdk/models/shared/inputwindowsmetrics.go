@@ -36,6 +36,17 @@ type InputWindowsMetricsConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputWindowsMetricsConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputWindowsMetricsConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputWindowsMetricsConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputWindowsMetricsPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -259,7 +270,7 @@ func (i InputWindowsMetricsSystem) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsSystem) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -328,7 +339,7 @@ func (i InputWindowsMetricsCPU) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsCPU) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -407,7 +418,7 @@ func (i InputWindowsMetricsMemory) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsMemory) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -476,7 +487,7 @@ func (i InputWindowsMetricsNetwork) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsNetwork) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -557,7 +568,7 @@ func (i InputWindowsMetricsDisk) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsDisk) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -590,6 +601,17 @@ type InputWindowsMetricsCustom struct {
 	Memory  *InputWindowsMetricsMemory  `json:"memory,omitempty"`
 	Network *InputWindowsMetricsNetwork `json:"network,omitempty"`
 	Disk    *InputWindowsMetricsDisk    `json:"disk,omitempty"`
+}
+
+func (i InputWindowsMetricsCustom) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputWindowsMetricsCustom) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputWindowsMetricsCustom) GetSystem() *InputWindowsMetricsSystem {
@@ -638,7 +660,7 @@ func (i InputWindowsMetricsHost) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsHost) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -669,7 +691,7 @@ func (i InputWindowsMetricsSet) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsSet) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "filter"}); err != nil {
 		return err
 	}
 	return nil
@@ -701,6 +723,17 @@ type InputWindowsMetricsProcess struct {
 	Sets []InputWindowsMetricsSet `json:"sets,omitempty"`
 }
 
+func (i InputWindowsMetricsProcess) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputWindowsMetricsProcess) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputWindowsMetricsProcess) GetSets() []InputWindowsMetricsSet {
 	if o == nil {
 		return nil
@@ -712,6 +745,17 @@ type InputWindowsMetricsMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (i InputWindowsMetricsMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputWindowsMetricsMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputWindowsMetricsMetadatum) GetName() string {
@@ -773,7 +817,7 @@ func (i InputWindowsMetricsPersistence) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetricsPersistence) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -856,7 +900,7 @@ func (i InputWindowsMetrics) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWindowsMetrics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

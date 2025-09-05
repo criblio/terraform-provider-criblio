@@ -36,6 +36,17 @@ type InputKubeMetricsConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputKubeMetricsConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputKubeMetricsConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputKubeMetricsConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputKubeMetricsPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeMetricsPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -188,6 +199,17 @@ type InputKubeMetricsRule struct {
 	Description *string `json:"description,omitempty"`
 }
 
+func (i InputKubeMetricsRule) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputKubeMetricsRule) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"filter"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputKubeMetricsRule) GetFilter() string {
 	if o == nil {
 		return ""
@@ -206,6 +228,17 @@ type InputKubeMetricsMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (i InputKubeMetricsMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputKubeMetricsMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputKubeMetricsMetadatum) GetName() string {
@@ -267,7 +300,7 @@ func (i InputKubeMetricsPersistence) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeMetricsPersistence) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -348,7 +381,7 @@ func (i InputKubeMetrics) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeMetrics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

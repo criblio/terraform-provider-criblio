@@ -36,6 +36,17 @@ type InputKubeLogsConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputKubeLogsConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputKubeLogsConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputKubeLogsConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputKubeLogsPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeLogsPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -188,6 +199,17 @@ type InputKubeLogsRule struct {
 	Description *string `json:"description,omitempty"`
 }
 
+func (i InputKubeLogsRule) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputKubeLogsRule) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"filter"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputKubeLogsRule) GetFilter() string {
 	if o == nil {
 		return ""
@@ -206,6 +228,17 @@ type InputKubeLogsMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (i InputKubeLogsMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputKubeLogsMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputKubeLogsMetadatum) GetName() string {
@@ -267,7 +300,7 @@ func (i InputKubeLogsDiskSpooling) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeLogsDiskSpooling) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -349,7 +382,7 @@ func (i InputKubeLogs) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeLogs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

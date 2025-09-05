@@ -17,9 +17,9 @@ const (
 )
 
 type SavedJob struct {
-	SavedJobCollection      *SavedJobCollection      `queryParam:"inline"`
-	SavedJobExecutor        *SavedJobExecutor        `queryParam:"inline"`
-	SavedJobScheduledSearch *SavedJobScheduledSearch `queryParam:"inline"`
+	SavedJobCollection      *SavedJobCollection      `queryParam:"inline" name:"SavedJob"`
+	SavedJobExecutor        *SavedJobExecutor        `queryParam:"inline" name:"SavedJob"`
+	SavedJobScheduledSearch *SavedJobScheduledSearch `queryParam:"inline" name:"SavedJob"`
 
 	Type SavedJobType
 }
@@ -53,24 +53,24 @@ func CreateSavedJobSavedJobScheduledSearch(savedJobScheduledSearch SavedJobSched
 
 func (u *SavedJob) UnmarshalJSON(data []byte) error {
 
+	var savedJobCollection SavedJobCollection = SavedJobCollection{}
+	if err := utils.UnmarshalJSON(data, &savedJobCollection, "", true, nil); err == nil {
+		u.SavedJobCollection = &savedJobCollection
+		u.Type = SavedJobTypeSavedJobCollection
+		return nil
+	}
+
 	var savedJobExecutor SavedJobExecutor = SavedJobExecutor{}
-	if err := utils.UnmarshalJSON(data, &savedJobExecutor, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &savedJobExecutor, "", true, nil); err == nil {
 		u.SavedJobExecutor = &savedJobExecutor
 		u.Type = SavedJobTypeSavedJobExecutor
 		return nil
 	}
 
 	var savedJobScheduledSearch SavedJobScheduledSearch = SavedJobScheduledSearch{}
-	if err := utils.UnmarshalJSON(data, &savedJobScheduledSearch, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &savedJobScheduledSearch, "", true, nil); err == nil {
 		u.SavedJobScheduledSearch = &savedJobScheduledSearch
 		u.Type = SavedJobTypeSavedJobScheduledSearch
-		return nil
-	}
-
-	var savedJobCollection SavedJobCollection = SavedJobCollection{}
-	if err := utils.UnmarshalJSON(data, &savedJobCollection, "", true, true); err == nil {
-		u.SavedJobCollection = &savedJobCollection
-		u.Type = SavedJobTypeSavedJobCollection
 		return nil
 	}
 

@@ -15,6 +15,7 @@ Pipeline DataSource
 ```terraform
 data "criblio_pipeline" "my_pipeline" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
 }
 ```
 
@@ -24,11 +25,11 @@ data "criblio_pipeline" "my_pipeline" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
-- `id` (String) The ID of this resource.
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`

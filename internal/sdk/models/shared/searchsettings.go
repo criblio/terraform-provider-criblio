@@ -40,8 +40,8 @@ const (
 )
 
 type WarmPoolSize struct {
-	Number           *float64          `queryParam:"inline"`
-	WarmPoolSizeEnum *WarmPoolSizeEnum `queryParam:"inline"`
+	Number           *float64          `queryParam:"inline" name:"warmPoolSize"`
+	WarmPoolSizeEnum *WarmPoolSizeEnum `queryParam:"inline" name:"warmPoolSize"`
 
 	Type WarmPoolSizeType
 }
@@ -67,14 +67,14 @@ func CreateWarmPoolSizeWarmPoolSizeEnum(warmPoolSizeEnum WarmPoolSizeEnum) WarmP
 func (u *WarmPoolSize) UnmarshalJSON(data []byte) error {
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = WarmPoolSizeTypeNumber
 		return nil
 	}
 
 	var warmPoolSizeEnum WarmPoolSizeEnum = WarmPoolSizeEnum("")
-	if err := utils.UnmarshalJSON(data, &warmPoolSizeEnum, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &warmPoolSizeEnum, "", true, nil); err == nil {
 		u.WarmPoolSizeEnum = &warmPoolSizeEnum
 		u.Type = WarmPoolSizeTypeWarmPoolSizeEnum
 		return nil

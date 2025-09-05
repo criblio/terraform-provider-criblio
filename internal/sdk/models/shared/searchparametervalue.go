@@ -17,9 +17,9 @@ const (
 )
 
 type SearchParameterValue struct {
-	Str     *string  `queryParam:"inline"`
-	Number  *float64 `queryParam:"inline"`
-	Boolean *bool    `queryParam:"inline"`
+	Str     *string  `queryParam:"inline" name:"SearchParameterValue"`
+	Number  *float64 `queryParam:"inline" name:"SearchParameterValue"`
+	Boolean *bool    `queryParam:"inline" name:"SearchParameterValue"`
 
 	Type SearchParameterValueType
 }
@@ -54,21 +54,21 @@ func CreateSearchParameterValueBoolean(boolean bool) SearchParameterValue {
 func (u *SearchParameterValue) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = SearchParameterValueTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = SearchParameterValueTypeNumber
 		return nil
 	}
 
 	var boolean bool = false
-	if err := utils.UnmarshalJSON(data, &boolean, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &boolean, "", true, nil); err == nil {
 		u.Boolean = &boolean
 		u.Type = SearchParameterValueTypeBoolean
 		return nil

@@ -136,7 +136,7 @@ func (o OutputKafkaAuth) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputKafkaAuth) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -246,7 +246,7 @@ func (o OutputKafkaKafkaSchemaRegistryTLSSettingsClientSide) MarshalJSON() ([]by
 }
 
 func (o *OutputKafkaKafkaSchemaRegistryTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -346,7 +346,7 @@ func (o OutputKafkaKafkaSchemaRegistryAuthentication) MarshalJSON() ([]byte, err
 }
 
 func (o *OutputKafkaKafkaSchemaRegistryAuthentication) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -458,7 +458,7 @@ func (o OutputKafkaAuthentication) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputKafkaAuthentication) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -568,7 +568,7 @@ func (o OutputKafkaTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputKafkaTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -761,6 +761,17 @@ func (e *OutputKafkaMode) UnmarshalJSON(data []byte) error {
 type OutputKafkaPqControls struct {
 }
 
+func (o OutputKafkaPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputKafkaPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputKafka struct {
 	// Unique ID for this output
 	ID   *string          `json:"id,omitempty"`
@@ -834,7 +845,7 @@ func (o OutputKafka) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputKafka) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"brokers", "topic"}); err != nil {
 		return err
 	}
 	return nil

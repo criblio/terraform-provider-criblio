@@ -36,6 +36,17 @@ type InputEdgePrometheusConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputEdgePrometheusConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputEdgePrometheusConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputEdgePrometheusConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputEdgePrometheusPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputEdgePrometheusPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -262,7 +273,7 @@ func (i InputEdgePrometheusDiskSpooling) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputEdgePrometheusDiskSpooling) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -307,6 +318,17 @@ type InputEdgePrometheusMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (i InputEdgePrometheusMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputEdgePrometheusMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputEdgePrometheusMetadatum) GetName() string {
@@ -396,7 +418,7 @@ func (t Target) MarshalJSON() ([]byte, error) {
 }
 
 func (t *Target) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"host"}); err != nil {
 		return err
 	}
 	return nil
@@ -494,6 +516,17 @@ type InputEdgePrometheusSearchFilter struct {
 	Values []string `json:"Values,omitempty"`
 }
 
+func (i InputEdgePrometheusSearchFilter) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputEdgePrometheusSearchFilter) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"Name"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputEdgePrometheusSearchFilter) GetName() string {
 	if o == nil {
 		return ""
@@ -570,6 +603,17 @@ type PodFilter struct {
 	Filter string `json:"filter"`
 	// Optional description of this rule's purpose
 	Description *string `json:"description,omitempty"`
+}
+
+func (p PodFilter) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PodFilter) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"filter"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *PodFilter) GetFilter() string {
@@ -678,7 +722,7 @@ func (i InputEdgePrometheus) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputEdgePrometheus) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

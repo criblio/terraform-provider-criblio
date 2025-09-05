@@ -31,6 +31,7 @@ type PackPipelineDataSource struct {
 // PackPipelineDataSourceModel describes the data model.
 type PackPipelineDataSourceModel struct {
 	GroupID types.String     `tfsdk:"group_id"`
+	ID      types.String     `tfsdk:"id"`
 	Items   []tfTypes.Routes `tfsdk:"items"`
 	Pack    types.String     `tfsdk:"pack"`
 }
@@ -49,6 +50,10 @@ func (r *PackPipelineDataSource) Schema(ctx context.Context, req datasource.Sche
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET for pack`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -194,13 +199,13 @@ func (r *PackPipelineDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetPipelinesByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPipelinesByPackWithIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Routes.GetPipelinesByPack(ctx, *request)
+	res, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -220,7 +225,7 @@ func (r *PackPipelineDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelinesByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

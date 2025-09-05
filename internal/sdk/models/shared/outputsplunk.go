@@ -148,7 +148,7 @@ func (o OutputSplunkTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -425,6 +425,17 @@ func (e *OutputSplunkMode) UnmarshalJSON(data []byte) error {
 type OutputSplunkPqControls struct {
 }
 
+func (o OutputSplunkPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputSplunkPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputSplunk struct {
 	// Unique ID for this output
 	ID   *string           `json:"id,omitempty"`
@@ -491,7 +502,7 @@ func (o OutputSplunk) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunk) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
 		return err
 	}
 	return nil

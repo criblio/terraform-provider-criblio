@@ -150,6 +150,9 @@ terraform plan
 
 <!-- No Table of Contents [toc] -->
 
+<!-- No Authentication [security] -->
+
+
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
 

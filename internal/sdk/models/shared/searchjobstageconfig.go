@@ -17,8 +17,8 @@ const (
 )
 
 type SearchJobStageConfigEarliest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"earliest"`
+	Number *float64 `queryParam:"inline" name:"earliest"`
 
 	Type SearchJobStageConfigEarliestType
 }
@@ -44,14 +44,14 @@ func CreateSearchJobStageConfigEarliestNumber(number float64) SearchJobStageConf
 func (u *SearchJobStageConfigEarliest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = SearchJobStageConfigEarliestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = SearchJobStageConfigEarliestTypeNumber
 		return nil
@@ -80,8 +80,8 @@ const (
 )
 
 type SearchJobStageConfigLatest struct {
-	Str    *string  `queryParam:"inline"`
-	Number *float64 `queryParam:"inline"`
+	Str    *string  `queryParam:"inline" name:"latest"`
+	Number *float64 `queryParam:"inline" name:"latest"`
 
 	Type SearchJobStageConfigLatestType
 }
@@ -107,14 +107,14 @@ func CreateSearchJobStageConfigLatestNumber(number float64) SearchJobStageConfig
 func (u *SearchJobStageConfigLatest) UnmarshalJSON(data []byte) error {
 
 	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		u.Str = &str
 		u.Type = SearchJobStageConfigLatestTypeStr
 		return nil
 	}
 
 	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		u.Number = &number
 		u.Type = SearchJobStageConfigLatestTypeNumber
 		return nil

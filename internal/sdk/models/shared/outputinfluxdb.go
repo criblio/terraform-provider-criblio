@@ -75,6 +75,17 @@ type OutputInfluxdbExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputInfluxdbExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputInfluxdbExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputInfluxdbExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -135,7 +146,7 @@ func (o OutputInfluxdbResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputInfluxdbResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -184,7 +195,7 @@ func (o OutputInfluxdbTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputInfluxdbTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -374,11 +385,33 @@ func (e *OutputInfluxdbMode) UnmarshalJSON(data []byte) error {
 type OutputInfluxdbPqControls struct {
 }
 
+func (o OutputInfluxdbPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputInfluxdbPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputInfluxdbOauthParam struct {
 	// OAuth parameter name
 	Name string `json:"name"`
 	// OAuth parameter value
 	Value string `json:"value"`
+}
+
+func (o OutputInfluxdbOauthParam) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputInfluxdbOauthParam) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputInfluxdbOauthParam) GetName() string {
@@ -400,6 +433,17 @@ type OutputInfluxdbOauthHeader struct {
 	Name string `json:"name"`
 	// OAuth header value
 	Value string `json:"value"`
+}
+
+func (o OutputInfluxdbOauthHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputInfluxdbOauthHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputInfluxdbOauthHeader) GetName() string {
@@ -522,7 +566,7 @@ func (o OutputInfluxdb) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputInfluxdb) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "url"}); err != nil {
 		return err
 	}
 	return nil

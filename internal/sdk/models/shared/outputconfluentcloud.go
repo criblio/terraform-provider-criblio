@@ -121,7 +121,7 @@ func (o OutputConfluentCloudTLSSettingsClientSide) MarshalJSON() ([]byte, error)
 }
 
 func (o *OutputConfluentCloudTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -302,7 +302,7 @@ func (o OutputConfluentCloudAuth) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputConfluentCloudAuth) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -412,7 +412,7 @@ func (o OutputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) MarshalJSO
 }
 
 func (o *OutputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -512,7 +512,7 @@ func (o OutputConfluentCloudKafkaSchemaRegistryAuthentication) MarshalJSON() ([]
 }
 
 func (o *OutputConfluentCloudKafkaSchemaRegistryAuthentication) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -624,7 +624,7 @@ func (o OutputConfluentCloudAuthentication) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputConfluentCloudAuthentication) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -761,6 +761,17 @@ func (e *OutputConfluentCloudMode) UnmarshalJSON(data []byte) error {
 type OutputConfluentCloudPqControls struct {
 }
 
+func (o OutputConfluentCloudPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputConfluentCloudPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputConfluentCloud struct {
 	// Unique ID for this output
 	ID   *string                   `json:"id,omitempty"`
@@ -834,7 +845,7 @@ func (o OutputConfluentCloud) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputConfluentCloud) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"brokers", "topic"}); err != nil {
 		return err
 	}
 	return nil

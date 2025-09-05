@@ -63,6 +63,17 @@ type OutputWavefrontExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputWavefrontExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputWavefrontExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputWavefrontExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -123,7 +134,7 @@ func (o OutputWavefrontResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWavefrontResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -172,7 +183,7 @@ func (o OutputWavefrontTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWavefrontTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -323,6 +334,17 @@ func (e *OutputWavefrontMode) UnmarshalJSON(data []byte) error {
 type OutputWavefrontPqControls struct {
 }
 
+func (o OutputWavefrontPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputWavefrontPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputWavefront struct {
 	// Unique ID for this output
 	ID   *string             `json:"id,omitempty"`
@@ -395,7 +417,7 @@ func (o OutputWavefront) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWavefront) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil

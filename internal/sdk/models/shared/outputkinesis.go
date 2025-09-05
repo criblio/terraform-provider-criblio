@@ -232,6 +232,17 @@ func (e *OutputKinesisMode) UnmarshalJSON(data []byte) error {
 type OutputKinesisPqControls struct {
 }
 
+func (o OutputKinesisPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputKinesisPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputKinesis struct {
 	// Unique ID for this output
 	ID   *string            `json:"id,omitempty"`
@@ -305,7 +316,7 @@ func (o OutputKinesis) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputKinesis) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"streamName", "region"}); err != nil {
 		return err
 	}
 	return nil

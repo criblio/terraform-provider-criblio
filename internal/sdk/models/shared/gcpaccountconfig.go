@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type GcpAccountConfig struct {
 	// Account name
 	Name string `json:"name"`
 	// JSON blob downloaded from the Google Cloud Console, containing creds for a service account
 	ServiceAccountCredentials string `json:"serviceAccountCredentials"`
+}
+
+func (g GcpAccountConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GcpAccountConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "serviceAccountCredentials"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GcpAccountConfig) GetName() string {

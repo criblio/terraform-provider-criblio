@@ -142,7 +142,7 @@ func (t TLSConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TLSConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -196,7 +196,7 @@ func (s SMTPTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SMTPTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "host", "port", "from"}); err != nil {
 		return err
 	}
 	return nil

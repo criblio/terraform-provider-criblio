@@ -76,6 +76,17 @@ func (e *SavedJobCollectionLogLevel) UnmarshalJSON(data []byte) error {
 type SavedJobCollectionTimeWarning struct {
 }
 
+func (s SavedJobCollectionTimeWarning) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SavedJobCollectionTimeWarning) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type SavedJobCollectionRunSettings struct {
 	// Reschedule tasks that failed with non-fatal errors
 	RescheduleDroppedTasks *bool `default:"true" json:"rescheduleDroppedTasks"`
@@ -109,7 +120,7 @@ func (s SavedJobCollectionRunSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollectionRunSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -225,7 +236,7 @@ func (s SavedJobCollectionSchedule) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollectionSchedule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -276,6 +287,17 @@ func (o *SavedJobCollectionSchedule) GetRun() *SavedJobCollectionRunSettings {
 type SavedJobCollectionCollectorSpecificSettings struct {
 }
 
+func (s SavedJobCollectionCollectorSpecificSettings) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SavedJobCollectionCollectorSpecificSettings) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type SavedJobCollectionCollector struct {
 	// The type of collector to run
 	Type string                                      `json:"type"`
@@ -291,7 +313,7 @@ func (s SavedJobCollectionCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollectionCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type", "conf"}); err != nil {
 		return err
 	}
 	return nil
@@ -361,7 +383,7 @@ func (s SavedJobCollectionPreprocess) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollectionPreprocess) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -392,6 +414,17 @@ type SavedJobCollectionMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (s SavedJobCollectionMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SavedJobCollectionMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SavedJobCollectionMetadatum) GetName() string {
@@ -432,7 +465,7 @@ func (s SavedJobCollectionInput) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollectionInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -531,7 +564,7 @@ func (s SavedJobCollection) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type", "collector"}); err != nil {
 		return err
 	}
 	return nil

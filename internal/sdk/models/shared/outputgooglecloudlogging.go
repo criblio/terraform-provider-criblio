@@ -97,6 +97,17 @@ type LogLabel struct {
 	ValueExpression string `json:"valueExpression"`
 }
 
+func (l LogLabel) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LogLabel) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"label", "valueExpression"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *LogLabel) GetLabel() string {
 	if o == nil {
 		return ""
@@ -116,6 +127,17 @@ type ResourceTypeLabel struct {
 	Label string `json:"label"`
 	// JavaScript expression to compute the label's value.
 	ValueExpression string `json:"valueExpression"`
+}
+
+func (r ResourceTypeLabel) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(r, "", false)
+}
+
+func (r *ResourceTypeLabel) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"label", "valueExpression"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ResourceTypeLabel) GetLabel() string {
@@ -279,6 +301,17 @@ func (e *OutputGoogleCloudLoggingMode) UnmarshalJSON(data []byte) error {
 type OutputGoogleCloudLoggingPqControls struct {
 }
 
+func (o OutputGoogleCloudLoggingPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputGoogleCloudLoggingPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputGoogleCloudLogging struct {
 	// Unique ID for this output
 	ID   *string                       `json:"id,omitempty"`
@@ -411,7 +444,7 @@ func (o OutputGoogleCloudLogging) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGoogleCloudLogging) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"logLocationType", "logNameExpression", "logLocationExpression"}); err != nil {
 		return err
 	}
 	return nil

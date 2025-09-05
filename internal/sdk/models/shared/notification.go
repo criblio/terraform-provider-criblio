@@ -79,7 +79,7 @@ func (n Notification) MarshalJSON() ([]byte, error) {
 }
 
 func (n *Notification) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &n, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &n, "", false, []string{"id", "condition"}); err != nil {
 		return err
 	}
 	return nil

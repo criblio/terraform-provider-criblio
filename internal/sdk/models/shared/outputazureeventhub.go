@@ -125,7 +125,7 @@ func (o OutputAzureEventhubAuthentication) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputAzureEventhubAuthentication) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -156,7 +156,7 @@ func (o OutputAzureEventhubTLSSettingsClientSide) MarshalJSON() ([]byte, error) 
 }
 
 func (o *OutputAzureEventhubTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -293,6 +293,17 @@ func (e *OutputAzureEventhubMode) UnmarshalJSON(data []byte) error {
 type OutputAzureEventhubPqControls struct {
 }
 
+func (o OutputAzureEventhubPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputAzureEventhubPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputAzureEventhub struct {
 	// Unique ID for this output
 	ID   *string                  `json:"id,omitempty"`
@@ -361,7 +372,7 @@ func (o OutputAzureEventhub) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputAzureEventhub) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"brokers", "topic"}); err != nil {
 		return err
 	}
 	return nil

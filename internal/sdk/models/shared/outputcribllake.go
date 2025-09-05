@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
 type OutputCriblLakeType string
@@ -37,6 +38,17 @@ type OutputCriblLake struct {
 	// Lake dataset to send the data to.
 	DestPath    *string `json:"destPath,omitempty"`
 	Description *string `json:"description,omitempty"`
+}
+
+func (o OutputCriblLake) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputCriblLake) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OutputCriblLake) GetID() string {

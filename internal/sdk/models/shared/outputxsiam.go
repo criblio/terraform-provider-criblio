@@ -36,6 +36,17 @@ type OutputXsiamExtraHTTPHeader struct {
 	Value string  `json:"value"`
 }
 
+func (o OutputXsiamExtraHTTPHeader) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputXsiamExtraHTTPHeader) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *OutputXsiamExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
@@ -123,7 +134,7 @@ func (o OutputXsiamResponseRetrySetting) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputXsiamResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
@@ -172,7 +183,7 @@ func (o OutputXsiamTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputXsiamTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -247,7 +258,7 @@ func (o OutputXsiamURL) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputXsiamURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
 		return err
 	}
 	return nil
@@ -354,6 +365,17 @@ func (e *OutputXsiamMode) UnmarshalJSON(data []byte) error {
 type OutputXsiamPqControls struct {
 }
 
+func (o OutputXsiamPqControls) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OutputXsiamPqControls) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type OutputXsiam struct {
 	// Unique ID for this output
 	ID   string          `json:"id"`
@@ -437,7 +459,7 @@ func (o OutputXsiam) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputXsiam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

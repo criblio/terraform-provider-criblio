@@ -36,6 +36,17 @@ type InputAppscopeConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputAppscopeConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputAppscopeConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputAppscopeConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputAppscopePq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputAppscopePq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -187,6 +198,17 @@ type InputAppscopeMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputAppscopeMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputAppscopeMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputAppscopeMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -208,6 +230,17 @@ type Allow struct {
 	Arg *string `json:"arg,omitempty"`
 	// Choose a config to apply to processes that match the process name and/or argument.
 	Config string `json:"config"`
+}
+
+func (a Allow) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *Allow) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"procname", "config"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Allow) GetProcname() string {
@@ -236,6 +269,17 @@ type InputAppscopeFilter struct {
 	Allow []Allow `json:"allow,omitempty"`
 	// To override the UNIX domain socket or address/port specified in General Settings (while leaving Authentication settings as is), enter a URL.
 	TransportURL *string `json:"transportURL,omitempty"`
+}
+
+func (i InputAppscopeFilter) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputAppscopeFilter) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputAppscopeFilter) GetAllow() []Allow {
@@ -297,7 +341,7 @@ func (i InputAppscopePersistence) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputAppscopePersistence) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -461,7 +505,7 @@ func (i InputAppscopeTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputAppscopeTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -607,7 +651,7 @@ func (i InputAppscope) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputAppscope) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

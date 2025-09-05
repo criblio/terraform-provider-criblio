@@ -88,7 +88,7 @@ func (o OutputDiskSpool) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDiskSpool) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil

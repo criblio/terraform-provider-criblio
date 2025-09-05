@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type ZoomAccountConfig struct {
 	// Zoom account name
 	Name string `json:"name"`
@@ -11,6 +15,17 @@ type ZoomAccountConfig struct {
 	ClientID string `json:"clientId"`
 	// Client secret string
 	ClientSecret string `json:"clientSecret"`
+}
+
+func (z ZoomAccountConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(z, "", false)
+}
+
+func (z *ZoomAccountConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &z, "", false, []string{"name", "accountId", "clientId", "clientSecret"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ZoomAccountConfig) GetName() string {

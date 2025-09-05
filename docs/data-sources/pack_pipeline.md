@@ -15,6 +15,7 @@ PackPipeline DataSource
 ```terraform
 data "criblio_pack_pipeline" "my_packpipeline" {
   group_id = "...my_group_id..."
+  id       = "...my_id..."
   pack     = "...my_pack..."
 }
 ```
@@ -25,6 +26,7 @@ data "criblio_pack_pipeline" "my_packpipeline" {
 ### Required
 
 - `group_id` (String) group Id
+- `id` (String) Unique ID to GET for pack
 - `pack` (String) pack ID to GET
 
 ### Read-Only

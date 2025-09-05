@@ -36,6 +36,17 @@ type InputHTTPConnection struct {
 	Output   string  `json:"output"`
 }
 
+func (i InputHTTPConnection) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputHTTPConnection) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputHTTPConnection) GetPipeline() *string {
 	if o == nil {
 		return nil
@@ -126,7 +137,7 @@ func (i InputHTTPPq) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputHTTPPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -270,7 +281,7 @@ func (i InputHTTPTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputHTTPTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -359,6 +370,17 @@ type InputHTTPMetadatum struct {
 	Value string `json:"value"`
 }
 
+func (i InputHTTPMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputHTTPMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *InputHTTPMetadatum) GetName() string {
 	if o == nil {
 		return ""
@@ -377,6 +399,17 @@ type InputHTTPAuthTokensExtMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 	Value string `json:"value"`
+}
+
+func (i InputHTTPAuthTokensExtMetadatum) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputHTTPAuthTokensExtMetadatum) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputHTTPAuthTokensExtMetadatum) GetName() string {
@@ -399,6 +432,17 @@ type InputHTTPAuthTokensExt struct {
 	Description *string `json:"description,omitempty"`
 	// Fields to add to events referencing this token
 	Metadata []InputHTTPAuthTokensExtMetadatum `json:"metadata,omitempty"`
+}
+
+func (i InputHTTPAuthTokensExt) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InputHTTPAuthTokensExt) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"token"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InputHTTPAuthTokensExt) GetToken() string {
@@ -488,7 +532,7 @@ func (i InputHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, true); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
 		return err
 	}
 	return nil
