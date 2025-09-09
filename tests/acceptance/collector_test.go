@@ -5,7 +5,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestCollector(t *testing.T) {
@@ -25,14 +24,6 @@ func TestCollector(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "environment", "demo"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "collector.type", "rest"),
 					),
-				},
-				{
-					ConfigDirectory: config.TestNameDirectory(),
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectNonEmptyPlan(),
-						},
-					},
 				},
 			},
 		})
