@@ -159,6 +159,7 @@ terraform plan
 ### Resources
 
 * [criblio_appscope_config](docs/resources/appscope_config.md)
+* [criblio_collector](docs/resources/collector.md)
 * [criblio_commit](docs/resources/commit.md)
 * [criblio_cribl_lake_dataset](docs/resources/cribl_lake_dataset.md)
 * [criblio_cribl_lake_house](docs/resources/cribl_lake_house.md)
@@ -200,6 +201,7 @@ terraform plan
 ### Data Sources
 
 * [criblio_appscope_config](docs/data-sources/appscope_config.md)
+* [criblio_collector](docs/data-sources/collector.md)
 * [criblio_config_version](docs/data-sources/config_version.md)
 * [criblio_cribl_lake_dataset](docs/data-sources/cribl_lake_dataset.md)
 * [criblio_cribl_lake_house](docs/data-sources/cribl_lake_house.md)

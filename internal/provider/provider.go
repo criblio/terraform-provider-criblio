@@ -252,6 +252,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewAppscopeConfigResource,
+		NewCollectorResource,
 		NewCommitResource,
 		NewCriblLakeDatasetResource,
 		NewCriblLakeHouseResource,
@@ -296,6 +297,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewAppscopeConfigDataSource,
+		NewCollectorDataSource,
 		NewConfigVersionDataSource,
 		NewCriblLakeDatasetDataSource,
 		NewCriblLakeHouseDataSource,

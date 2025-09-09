@@ -7,40 +7,40 @@ import (
 	"net/http"
 )
 
-type GetSavedJobByIDRequest struct {
-	// Unique ID to GET
+type DeleteCollectorByIDRequest struct {
+	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetSavedJobByIDRequest) GetID() string {
+func (o *DeleteCollectorByIDRequest) GetID() string {
 	if o == nil {
 		return ""
 	}
 	return o.ID
 }
 
-func (o *GetSavedJobByIDRequest) GetGroupID() string {
+func (o *DeleteCollectorByIDRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// GetSavedJobByIDResponseBody - a list of Collector objects
-type GetSavedJobByIDResponseBody struct {
+// DeleteCollectorByIDResponseBody - a list of Collector objects
+type DeleteCollectorByIDResponseBody struct {
 	Items []shared.InputCollector `json:"items,omitempty"`
 }
 
-func (o *GetSavedJobByIDResponseBody) GetItems() []shared.InputCollector {
+func (o *DeleteCollectorByIDResponseBody) GetItems() []shared.InputCollector {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetSavedJobByIDResponse struct {
+type DeleteCollectorByIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,40 +48,40 @@ type GetSavedJobByIDResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Collector objects
-	Object *GetSavedJobByIDResponseBody
+	Object *DeleteCollectorByIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetSavedJobByIDResponse) GetContentType() string {
+func (o *DeleteCollectorByIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetSavedJobByIDResponse) GetStatusCode() int {
+func (o *DeleteCollectorByIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetSavedJobByIDResponse) GetRawResponse() *http.Response {
+func (o *DeleteCollectorByIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetSavedJobByIDResponse) GetObject() *GetSavedJobByIDResponseBody {
+func (o *DeleteCollectorByIDResponse) GetObject() *DeleteCollectorByIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetSavedJobByIDResponse) GetError() *shared.Error {
+func (o *DeleteCollectorByIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

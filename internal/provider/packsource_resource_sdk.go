@@ -2529,9 +2529,9 @@ func (r *PackSourceResourceModel) ToSharedInput(ctx context.Context) (*shared.In
 		} else {
 			endpoint1 = nil
 		}
-		outputMode := new(shared.OutputMode)
+		outputMode := new(shared.InputSplunkSearchOutputMode)
 		if !r.InputSplunkSearch.OutputMode.IsUnknown() && !r.InputSplunkSearch.OutputMode.IsNull() {
-			*outputMode = shared.OutputMode(r.InputSplunkSearch.OutputMode.ValueString())
+			*outputMode = shared.InputSplunkSearchOutputMode(r.InputSplunkSearch.OutputMode.ValueString())
 		} else {
 			outputMode = nil
 		}

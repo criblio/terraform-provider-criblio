@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 5c13d37af17a70183f1327f75735a525
+  docChecksum: daa4686ac3d714e603b1e2a9bdd857bf
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.609.0
-  generationVersion: 2.692.0
-  releaseVersion: 1.11.0
-  configChecksum: 82a317eded6bb45e7825a80b13855df9
+  speakeasyVersion: 1.613.0
+  generationVersion: 2.696.0
+  releaseVersion: 1.11.17
+  configChecksum: 82c6c3fa29ff7a459493107362b0def6
   published: true
 features:
   terraform:
@@ -31,6 +31,7 @@ generatedFiles:
   - USAGE.md
   - examples/README.md
   - examples/data-sources/criblio_appscope_config/data-source.tf
+  - examples/data-sources/criblio_collector/data-source.tf
   - examples/data-sources/criblio_config_version/data-source.tf
   - examples/data-sources/criblio_cribl_lake_dataset/data-source.tf
   - examples/data-sources/criblio_cribl_lake_house/data-source.tf
@@ -71,6 +72,9 @@ generatedFiles:
   - examples/resources/criblio_appscope_config/import-by-string-id.tf
   - examples/resources/criblio_appscope_config/import.sh
   - examples/resources/criblio_appscope_config/resource.tf
+  - examples/resources/criblio_collector/import-by-string-id.tf
+  - examples/resources/criblio_collector/import.sh
+  - examples/resources/criblio_collector/resource.tf
   - examples/resources/criblio_commit/resource.tf
   - examples/resources/criblio_cribl_lake_dataset/import-by-string-id.tf
   - examples/resources/criblio_cribl_lake_dataset/import.sh
@@ -187,6 +191,10 @@ generatedFiles:
   - internal/provider/appscopeconfig_data_source_sdk.go
   - internal/provider/appscopeconfig_resource.go
   - internal/provider/appscopeconfig_resource_sdk.go
+  - internal/provider/collector_data_source.go
+  - internal/provider/collector_data_source_sdk.go
+  - internal/provider/collector_resource.go
+  - internal/provider/collector_resource_sdk.go
   - internal/provider/commit_resource.go
   - internal/provider/commit_resource_sdk.go
   - internal/provider/configversion_data_source.go
@@ -449,6 +457,7 @@ generatedFiles:
   - internal/provider/types/event_breaker_ruleset_timestamp_format.go
   - internal/provider/types/extent_tag.go
   - internal/provider/types/extra_log_type.go
+  - internal/provider/types/extractor.go
   - internal/provider/types/field.go
   - internal/provider/types/firewall.go
   - internal/provider/types/gcp_account_config.go
@@ -483,6 +492,13 @@ generatedFiles:
   - internal/provider/types/input_collection_metadatum.go
   - internal/provider/types/input_collection_pq.go
   - internal/provider/types/input_collection_preprocess.go
+  - internal/provider/types/input_collector_collector.go
+  - internal/provider/types/input_collector_conf.go
+  - internal/provider/types/input_collector_input.go
+  - internal/provider/types/input_collector_metadatum.go
+  - internal/provider/types/input_collector_preprocess.go
+  - internal/provider/types/input_collector_run_settings.go
+  - internal/provider/types/input_collector_schedule.go
   - internal/provider/types/input_confluent_cloud.go
   - internal/provider/types/input_confluent_cloud_auth.go
   - internal/provider/types/input_confluent_cloud_authentication.go
@@ -1358,6 +1374,7 @@ generatedFiles:
   - internal/sdk/models/operations/deletebreakersbypackandid.go
   - internal/sdk/models/operations/deletebulletinmessagebyid.go
   - internal/sdk/models/operations/deletecertificatebyid.go
+  - internal/sdk/models/operations/deletecollectorbyid.go
   - internal/sdk/models/operations/deletecribllakedatasetbylakeidandid.go
   - internal/sdk/models/operations/deletedashboardcategorybyid.go
   - internal/sdk/models/operations/deletedatabaseconnectionconfigbyid.go
@@ -1397,7 +1414,6 @@ generatedFiles:
   - internal/sdk/models/operations/deleteregexlibentrybyid.go
   - internal/sdk/models/operations/deleterestsecretbyid.go
   - internal/sdk/models/operations/deleterolebyid.go
-  - internal/sdk/models/operations/deletesavedjobbyid.go
   - internal/sdk/models/operations/deletesavedquerybyid.go
   - internal/sdk/models/operations/deleteschemabyid.go
   - internal/sdk/models/operations/deleteschemalibbypackandid.go
@@ -1608,6 +1624,7 @@ generatedFiles:
   - internal/sdk/models/operations/listbulletinmessage.go
   - internal/sdk/models/operations/listcertificate.go
   - internal/sdk/models/operations/listcollector.go
+  - internal/sdk/models/operations/listcollectors.go
   - internal/sdk/models/operations/listcondition.go
   - internal/sdk/models/operations/listdashboardcategory.go
   - internal/sdk/models/operations/listdatasample.go
@@ -1642,7 +1659,6 @@ generatedFiles:
   - internal/sdk/models/operations/listrestsecret.go
   - internal/sdk/models/operations/listrole.go
   - internal/sdk/models/operations/listroutes.go
-  - internal/sdk/models/operations/listsavedjob.go
   - internal/sdk/models/operations/listsavedquery.go
   - internal/sdk/models/operations/listschema.go
   - internal/sdk/models/operations/listscript.go
@@ -1664,6 +1680,7 @@ generatedFiles:
   - internal/sdk/models/operations/updatebreakersbypackandid.go
   - internal/sdk/models/operations/updatecertificatebyid.go
   - internal/sdk/models/operations/updatechangelogviewed.go
+  - internal/sdk/models/operations/updatecollectorbyid.go
   - internal/sdk/models/operations/updatecribllakedatasetbylakeidandid.go
   - internal/sdk/models/operations/updatedashboardcategorybyid.go
   - internal/sdk/models/operations/updatedatabaseconnectionconfigbyid.go
@@ -1708,7 +1725,6 @@ generatedFiles:
   - internal/sdk/models/operations/updaterestsecretbyid.go
   - internal/sdk/models/operations/updaterolebyid.go
   - internal/sdk/models/operations/updateroutesbyid.go
-  - internal/sdk/models/operations/updatesavedjobbyid.go
   - internal/sdk/models/operations/updatesavedquerybyid.go
   - internal/sdk/models/operations/updateschemabyid.go
   - internal/sdk/models/operations/updateschemalibbypackandid.go
@@ -1860,6 +1876,7 @@ generatedFiles:
   - internal/sdk/models/shared/inputappscope.go
   - internal/sdk/models/shared/inputazureblob.go
   - internal/sdk/models/shared/inputcollection.go
+  - internal/sdk/models/shared/inputcollector.go
   - internal/sdk/models/shared/inputconfluentcloud.go
   - internal/sdk/models/shared/inputcribl.go
   - internal/sdk/models/shared/inputcriblhttp.go
@@ -3250,6 +3267,9 @@ examples:
           application/json: {}
   listSavedJob:
     speakeasy-default-list-saved-job:
+      parameters:
+        path:
+          groupId: "default"
       responses:
         "200":
           application/json: {}
@@ -3257,8 +3277,11 @@ examples:
           application/json: {}
   createSavedJob:
     speakeasy-default-create-saved-job:
+      parameters:
+        path:
+          groupId: "default"
       requestBody:
-        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": false, "streamtags": [], "workerAffinity": false, "collector": {"type": "<value>", "conf": {}, "destructive": false}}
+        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "splunk", "destructive": false, "encoding": "utf8"}}
       responses:
         "200":
           application/json: {}
@@ -3269,6 +3292,7 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "default"
       responses:
         "200":
           application/json: {}
@@ -3279,8 +3303,9 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "default"
       requestBody:
-        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": false, "streamtags": [], "workerAffinity": false, "collector": {"type": "<value>", "conf": {}, "destructive": false}}
+        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": false, "streamtags": [], "workerAffinity": false, "collector": {"type": "cribl_lake", "conf": {"authType": "manual", "containerName": "<value>", "recurse": true, "includeMetadata": true, "includeTags": true, "maxBatchSize": 10, "parquetChunkSizeMB": 5, "parquetChunkDownloadTimeout": 600, "azureCloud": "azure"}, "destructive": false}}
       responses:
         "200":
           application/json: {}
@@ -3291,6 +3316,7 @@ examples:
       parameters:
         path:
           id: "<id>"
+          groupId: "default"
       responses:
         "200":
           application/json: {}
@@ -6240,7 +6266,7 @@ examples:
   createJobs:
     speakeasy-default-create-jobs:
       requestBody:
-        application/json: {"type": "scheduledSearch", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": false, "streamtags": [], "executor": {"type": "<value>", "storeTaskResults": true}}
+        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": false, "streamtags": [], "executor": {"type": "<value>", "storeTaskResults": true}}
       responses:
         "200":
           application/json: {}
@@ -7398,6 +7424,40 @@ examples:
           lake_dataset_id: "<id>"
       responses:
         "200":
+          application/json: {}
+  listCollectors:
+    speakeasy-default-list-collectors:
+      parameters:
+        path:
+          groupId: "default"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  updateCollectorById:
+    speakeasy-default-update-collector-by-id:
+      parameters:
+        path:
+          id: "<id>"
+          groupId: "default"
+      requestBody:
+        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "gcs", "destructive": false, "encoding": "utf8"}}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  deleteCollectorById:
+    speakeasy-default-delete-collector-by-id:
+      parameters:
+        path:
+          id: "<id>"
+          groupId: "default"
+      responses:
+        "200":
+          application/json: {}
+        "500":
           application/json: {}
 examplesVersion: 1.0.2
 generatedTests: {}

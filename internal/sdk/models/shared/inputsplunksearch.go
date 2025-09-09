@@ -192,18 +192,18 @@ func (o *InputSplunkSearchPq) GetCompress() *InputSplunkSearchCompression {
 	return o.Compress
 }
 
-// OutputMode - Format of the returned output
-type OutputMode string
+// InputSplunkSearchOutputMode - Format of the returned output
+type InputSplunkSearchOutputMode string
 
 const (
-	OutputModeCsv  OutputMode = "csv"
-	OutputModeJSON OutputMode = "json"
+	InputSplunkSearchOutputModeCsv  InputSplunkSearchOutputMode = "csv"
+	InputSplunkSearchOutputModeJSON InputSplunkSearchOutputMode = "json"
 )
 
-func (e OutputMode) ToPointer() *OutputMode {
+func (e InputSplunkSearchOutputMode) ToPointer() *InputSplunkSearchOutputMode {
 	return &e
 }
-func (e *OutputMode) UnmarshalJSON(data []byte) error {
+func (e *InputSplunkSearchOutputMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -212,10 +212,10 @@ func (e *OutputMode) UnmarshalJSON(data []byte) error {
 	case "csv":
 		fallthrough
 	case "json":
-		*e = OutputMode(v)
+		*e = InputSplunkSearchOutputMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputMode: %v", v)
+		return fmt.Errorf("invalid value for InputSplunkSearchOutputMode: %v", v)
 	}
 }
 
@@ -595,7 +595,7 @@ type InputSplunkSearch struct {
 	// REST API used to create a search
 	Endpoint *string `default:"/services/search/v2/jobs/export" json:"endpoint"`
 	// Format of the returned output
-	OutputMode *OutputMode `default:"json" json:"outputMode"`
+	OutputMode *InputSplunkSearchOutputMode `default:"json" json:"outputMode"`
 	// Optional request parameters to send to the endpoint
 	EndpointParams []EndpointParam `json:"endpointParams,omitempty"`
 	// Optional request headers to send to the endpoint
@@ -779,7 +779,7 @@ func (o *InputSplunkSearch) GetEndpoint() *string {
 	return o.Endpoint
 }
 
-func (o *InputSplunkSearch) GetOutputMode() *OutputMode {
+func (o *InputSplunkSearch) GetOutputMode() *InputSplunkSearchOutputMode {
 	if o == nil {
 		return nil
 	}

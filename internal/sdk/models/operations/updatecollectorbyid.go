@@ -7,40 +7,49 @@ import (
 	"net/http"
 )
 
-type GetSavedJobByIDRequest struct {
-	// Unique ID to GET
+type UpdateCollectorByIDRequest struct {
+	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// Collector object to be updated
+	InputCollector shared.InputCollector `request:"mediaType=application/json"`
 }
 
-func (o *GetSavedJobByIDRequest) GetID() string {
+func (o *UpdateCollectorByIDRequest) GetID() string {
 	if o == nil {
 		return ""
 	}
 	return o.ID
 }
 
-func (o *GetSavedJobByIDRequest) GetGroupID() string {
+func (o *UpdateCollectorByIDRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// GetSavedJobByIDResponseBody - a list of Collector objects
-type GetSavedJobByIDResponseBody struct {
+func (o *UpdateCollectorByIDRequest) GetInputCollector() shared.InputCollector {
+	if o == nil {
+		return shared.InputCollector{}
+	}
+	return o.InputCollector
+}
+
+// UpdateCollectorByIDResponseBody - a list of Collector objects
+type UpdateCollectorByIDResponseBody struct {
 	Items []shared.InputCollector `json:"items,omitempty"`
 }
 
-func (o *GetSavedJobByIDResponseBody) GetItems() []shared.InputCollector {
+func (o *UpdateCollectorByIDResponseBody) GetItems() []shared.InputCollector {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetSavedJobByIDResponse struct {
+type UpdateCollectorByIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,40 +57,40 @@ type GetSavedJobByIDResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Collector objects
-	Object *GetSavedJobByIDResponseBody
+	Object *UpdateCollectorByIDResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetSavedJobByIDResponse) GetContentType() string {
+func (o *UpdateCollectorByIDResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetSavedJobByIDResponse) GetStatusCode() int {
+func (o *UpdateCollectorByIDResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetSavedJobByIDResponse) GetRawResponse() *http.Response {
+func (o *UpdateCollectorByIDResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetSavedJobByIDResponse) GetObject() *GetSavedJobByIDResponseBody {
+func (o *UpdateCollectorByIDResponse) GetObject() *UpdateCollectorByIDResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetSavedJobByIDResponse) GetError() *shared.Error {
+func (o *UpdateCollectorByIDResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

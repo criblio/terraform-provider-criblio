@@ -7,40 +7,31 @@ import (
 	"net/http"
 )
 
-type GetSavedJobByIDRequest struct {
-	// Unique ID to GET
-	ID string `pathParam:"style=simple,explode=false,name=id"`
+type ListCollectorsRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetSavedJobByIDRequest) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
-}
-
-func (o *GetSavedJobByIDRequest) GetGroupID() string {
+func (o *ListCollectorsRequest) GetGroupID() string {
 	if o == nil {
 		return ""
 	}
 	return o.GroupID
 }
 
-// GetSavedJobByIDResponseBody - a list of Collector objects
-type GetSavedJobByIDResponseBody struct {
+// ListCollectorsResponseBody - a list of Collector objects
+type ListCollectorsResponseBody struct {
 	Items []shared.InputCollector `json:"items,omitempty"`
 }
 
-func (o *GetSavedJobByIDResponseBody) GetItems() []shared.InputCollector {
+func (o *ListCollectorsResponseBody) GetItems() []shared.InputCollector {
 	if o == nil {
 		return nil
 	}
 	return o.Items
 }
 
-type GetSavedJobByIDResponse struct {
+type ListCollectorsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,40 +39,40 @@ type GetSavedJobByIDResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of Collector objects
-	Object *GetSavedJobByIDResponseBody
+	Object *ListCollectorsResponseBody
 	// Unexpected error
 	Error *shared.Error
 }
 
-func (o *GetSavedJobByIDResponse) GetContentType() string {
+func (o *ListCollectorsResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetSavedJobByIDResponse) GetStatusCode() int {
+func (o *ListCollectorsResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetSavedJobByIDResponse) GetRawResponse() *http.Response {
+func (o *ListCollectorsResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetSavedJobByIDResponse) GetObject() *GetSavedJobByIDResponseBody {
+func (o *ListCollectorsResponse) GetObject() *ListCollectorsResponseBody {
 	if o == nil {
 		return nil
 	}
 	return o.Object
 }
 
-func (o *GetSavedJobByIDResponse) GetError() *shared.Error {
+func (o *ListCollectorsResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

@@ -7,12 +7,33 @@ import (
 	"net/http"
 )
 
-// CreateSavedJobResponseBody - a list of SavedJob objects
-type CreateSavedJobResponseBody struct {
-	Items []shared.SavedJob `json:"items,omitempty"`
+type CreateSavedJobRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// New Collector object
+	InputCollector shared.InputCollector `request:"mediaType=application/json"`
 }
 
-func (o *CreateSavedJobResponseBody) GetItems() []shared.SavedJob {
+func (o *CreateSavedJobRequest) GetGroupID() string {
+	if o == nil {
+		return ""
+	}
+	return o.GroupID
+}
+
+func (o *CreateSavedJobRequest) GetInputCollector() shared.InputCollector {
+	if o == nil {
+		return shared.InputCollector{}
+	}
+	return o.InputCollector
+}
+
+// CreateSavedJobResponseBody - a list of Collector objects
+type CreateSavedJobResponseBody struct {
+	Items []shared.InputCollector `json:"items,omitempty"`
+}
+
+func (o *CreateSavedJobResponseBody) GetItems() []shared.InputCollector {
 	if o == nil {
 		return nil
 	}
@@ -26,7 +47,7 @@ type CreateSavedJobResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of SavedJob objects
+	// a list of Collector objects
 	Object *CreateSavedJobResponseBody
 	// Unexpected error
 	Error *shared.Error

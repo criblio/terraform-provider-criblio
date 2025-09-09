@@ -13,7 +13,6 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
-	"net/url"
 )
 
 // SavedJobs - Actions related to Saved Jobs
@@ -31,9 +30,9 @@ func newSavedJobs(rootSDK *CriblIo, sdkConfig config.SDKConfiguration, hooks *ho
 	}
 }
 
-// ListSavedJob - Get a list of SavedJob objects
-// Get a list of SavedJob objects
-func (s *SavedJobs) ListSavedJob(ctx context.Context, opts ...operations.Option) (*operations.ListSavedJobResponse, error) {
+// ListCollectors - Get a list of Collector objects
+// Get a list of Collector objects
+func (s *SavedJobs) ListCollectors(ctx context.Context, request operations.ListCollectorsRequest, opts ...operations.Option) (*operations.ListCollectorsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -51,7 +50,7 @@ func (s *SavedJobs) ListSavedJob(ctx context.Context, opts ...operations.Option)
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/lib/jobs")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/lib/jobs", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -61,7 +60,7 @@ func (s *SavedJobs) ListSavedJob(ctx context.Context, opts ...operations.Option)
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "listSavedJob",
+		OperationID:      "listCollectors",
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -121,7 +120,7 @@ func (s *SavedJobs) ListSavedJob(ctx context.Context, opts ...operations.Option)
 		}
 	}
 
-	res := &operations.ListSavedJobResponse{
+	res := &operations.ListCollectorsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -136,7 +135,7 @@ func (s *SavedJobs) ListSavedJob(ctx context.Context, opts ...operations.Option)
 				return nil, err
 			}
 
-			var out operations.ListSavedJobResponseBody
+			var out operations.ListCollectorsResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -183,9 +182,9 @@ func (s *SavedJobs) ListSavedJob(ctx context.Context, opts ...operations.Option)
 
 }
 
-// CreateSavedJob - Create SavedJob
-// Create SavedJob
-func (s *SavedJobs) CreateSavedJob(ctx context.Context, request shared.SavedJob, opts ...operations.Option) (*operations.CreateSavedJobResponse, error) {
+// CreateSavedJob - Create Collector
+// Create Collector
+func (s *SavedJobs) CreateSavedJob(ctx context.Context, request operations.CreateSavedJobRequest, opts ...operations.Option) (*operations.CreateSavedJobResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -203,7 +202,7 @@ func (s *SavedJobs) CreateSavedJob(ctx context.Context, request shared.SavedJob,
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/lib/jobs")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/lib/jobs", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -217,7 +216,7 @@ func (s *SavedJobs) CreateSavedJob(ctx context.Context, request shared.SavedJob,
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "InputCollector", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -342,8 +341,8 @@ func (s *SavedJobs) CreateSavedJob(ctx context.Context, request shared.SavedJob,
 
 }
 
-// GetSavedJobByID - Get SavedJob by ID
-// Get SavedJob by ID
+// GetSavedJobByID - Get Collector by ID
+// Get Collector by ID
 func (s *SavedJobs) GetSavedJobByID(ctx context.Context, request operations.GetSavedJobByIDRequest, opts ...operations.Option) (*operations.GetSavedJobByIDResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -362,7 +361,7 @@ func (s *SavedJobs) GetSavedJobByID(ctx context.Context, request operations.GetS
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/lib/jobs/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/lib/jobs/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -494,9 +493,9 @@ func (s *SavedJobs) GetSavedJobByID(ctx context.Context, request operations.GetS
 
 }
 
-// UpdateSavedJobByID - Update SavedJob
-// Update SavedJob
-func (s *SavedJobs) UpdateSavedJobByID(ctx context.Context, request operations.UpdateSavedJobByIDRequest, opts ...operations.Option) (*operations.UpdateSavedJobByIDResponse, error) {
+// UpdateCollectorByID - Update Collector
+// Update Collector
+func (s *SavedJobs) UpdateCollectorByID(ctx context.Context, request operations.UpdateCollectorByIDRequest, opts ...operations.Option) (*operations.UpdateCollectorByIDResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -514,7 +513,7 @@ func (s *SavedJobs) UpdateSavedJobByID(ctx context.Context, request operations.U
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/lib/jobs/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/lib/jobs/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -524,11 +523,11 @@ func (s *SavedJobs) UpdateSavedJobByID(ctx context.Context, request operations.U
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "updateSavedJobById",
+		OperationID:      "updateCollectorById",
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "SavedJob", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "InputCollector", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -591,7 +590,7 @@ func (s *SavedJobs) UpdateSavedJobByID(ctx context.Context, request operations.U
 		}
 	}
 
-	res := &operations.UpdateSavedJobByIDResponse{
+	res := &operations.UpdateCollectorByIDResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -606,7 +605,7 @@ func (s *SavedJobs) UpdateSavedJobByID(ctx context.Context, request operations.U
 				return nil, err
 			}
 
-			var out operations.UpdateSavedJobByIDResponseBody
+			var out operations.UpdateCollectorByIDResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -653,9 +652,9 @@ func (s *SavedJobs) UpdateSavedJobByID(ctx context.Context, request operations.U
 
 }
 
-// DeleteSavedJobByID - Delete SavedJob
-// Delete SavedJob
-func (s *SavedJobs) DeleteSavedJobByID(ctx context.Context, request operations.DeleteSavedJobByIDRequest, opts ...operations.Option) (*operations.DeleteSavedJobByIDResponse, error) {
+// DeleteCollectorByID - Delete Collector
+// Delete Collector
+func (s *SavedJobs) DeleteCollectorByID(ctx context.Context, request operations.DeleteCollectorByIDRequest, opts ...operations.Option) (*operations.DeleteCollectorByIDResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -673,7 +672,7 @@ func (s *SavedJobs) DeleteSavedJobByID(ctx context.Context, request operations.D
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/lib/jobs/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/lib/jobs/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -683,7 +682,7 @@ func (s *SavedJobs) DeleteSavedJobByID(ctx context.Context, request operations.D
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "deleteSavedJobById",
+		OperationID:      "deleteCollectorById",
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -743,7 +742,7 @@ func (s *SavedJobs) DeleteSavedJobByID(ctx context.Context, request operations.D
 		}
 	}
 
-	res := &operations.DeleteSavedJobByIDResponse{
+	res := &operations.DeleteCollectorByIDResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -758,7 +757,7 @@ func (s *SavedJobs) DeleteSavedJobByID(ctx context.Context, request operations.D
 				return nil, err
 			}
 
-			var out operations.DeleteSavedJobByIDResponseBody
+			var out operations.DeleteCollectorByIDResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
