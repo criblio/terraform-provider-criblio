@@ -31,7 +31,7 @@ func TestCollector(t *testing.T) {
 					ConfigDirectory: config.TestNameDirectory(),
 					ConfigPlanChecks: resource.ConfigPlanChecks{
 						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
+							plancheck.ExpectNonEmptyPlan(),
 						},
 					},
 				},
