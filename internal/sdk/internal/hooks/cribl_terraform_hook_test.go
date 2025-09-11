@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -32,14 +33,16 @@ func TestTerraformSDKInit(t *testing.T) {
 	test := NewCriblTerraformHook()
 	url, _ := test.SDKInit(myUrl, myClient)
 
-	if url != myUrl {
-		t.Errorf("creds hook init returned %s, expected %s", url, myUrl)
+	// With environment variables set, the hook should construct the URL from them
+	expectedURL := "https://punk'n-biz.cribl.cloud"
+	if url != expectedURL {
+		t.Errorf("creds hook init returned %s, expected %s", url, expectedURL)
 	}
 	if test.client != myClient {
 		t.Errorf("creds hook init test.client %+v, expected %+v", test.client, myClient)
 	}
-	if test.baseURL != myUrl {
-		t.Errorf("creds hook init test.baseURLd %s, expected %s", url, myUrl)
+	if test.baseURL != expectedURL {
+		t.Errorf("creds hook init test.baseURL %s, expected %s", test.baseURL, expectedURL)
 	}
 	if test.orgID != "biz" {
 		t.Errorf("*CriblTerraformHook.orgID returned %s, expected %s", test.orgID, "biz")
@@ -47,6 +50,145 @@ func TestTerraformSDKInit(t *testing.T) {
 	if test.workspaceID != "punk'n" {
 		t.Errorf("*CriblTerraformHook.workspaceID returned %s, expected %s", test.orgID, "biz")
 	}
+}
+
+func TestTerraformSDKInitWithCloudDomain(t *testing.T) {
+	// Set all environment variables including cloud domain
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-playground.cloud")
+
+	myUrl := "should-be-overridden"
+	var myClient HTTPClient
+
+	test := NewCriblTerraformHook()
+	url, _ := test.SDKInit(myUrl, myClient)
+
+	// Should construct URL from all environment variables
+	expectedURL := "https://test-workspace-test-org.cribl-playground.cloud"
+	if url != expectedURL {
+		t.Errorf("creds hook init returned %s, expected %s", url, expectedURL)
+	}
+	if test.baseURL != expectedURL {
+		t.Errorf("creds hook init test.baseURL %s, expected %s", test.baseURL, expectedURL)
+	}
+	if test.orgID != "test-org" {
+		t.Errorf("*CriblTerraformHook.orgID returned %s, expected %s", test.orgID, "test-org")
+	}
+	if test.workspaceID != "test-workspace" {
+		t.Errorf("*CriblTerraformHook.workspaceID returned %s, expected %s", test.workspaceID, "test-workspace")
+	}
+
+	// Clean up environment variables
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+}
+
+func TestTerraformBeforeRequestWithCloudDomain(t *testing.T) {
+	// Set all environment variables including cloud domain
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "staging-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "staging-workspace")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-staging.cloud")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-bearer-token")
+
+	myUrl := "should-be-overridden"
+	var myClient HTTPClient
+
+	test := NewCriblTerraformHook()
+	test.SDKInit(myUrl, myClient)
+
+	// Create a test request
+	myReq, _ := http.NewRequest("GET", "/", nil)
+	var myCtx BeforeRequestContext
+
+	// Call BeforeRequest
+	finalCtx, _ := test.BeforeRequest(myCtx, myReq)
+
+	// Should construct URL with cloud domain from environment
+	expectedUrlString := "https://staging-workspace-staging-org.cribl-staging.cloud/api/v1/"
+	if finalCtx.URL.String() != expectedUrlString {
+		t.Errorf("*CriblTerraformHook with cloud domain returned %s, expected %s", finalCtx.URL.String(), expectedUrlString)
+	}
+
+	// Should have bearer token from environment
+	expectedHeaderString := "map[Authorization:[Bearer test-bearer-token]]"
+	if fmt.Sprintf("%+v", finalCtx.Header) != expectedHeaderString {
+		t.Errorf("*CriblTerraformHook finalCtx.Header returned %+v, expected %+v", fmt.Sprintf("%+v", finalCtx.Header), expectedHeaderString)
+	}
+
+	// Clean up environment variables
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestProviderConfigTakesPrecedenceOverEnvironment(t *testing.T) {
+	// Set environment variables that should be overridden by provider config
+	os.Setenv("CRIBL_CLIENT_ID", "env-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "env-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "env-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "env-workspace")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl.cloud")
+	os.Setenv("CRIBL_BEARER_TOKEN", "provider-bearer-token")
+
+	// Create hook and initialize
+	test := NewCriblTerraformHook()
+	test.SDKInit("initial-url", nil)
+
+	// Simulate provider configuration that should override environment
+	providerSecurity := shared.Security{
+		OrganizationID: StringPtr("provider-org"),
+		WorkspaceID:    StringPtr("provider-workspace"),
+		CloudDomain:    StringPtr("cribl-playground.cloud"),
+	}
+
+	// Create security source that returns provider config
+	securitySource := func(ctx context.Context) (interface{}, error) {
+		return providerSecurity, nil
+	}
+
+	// Create test request context with security source
+	myCtx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context:        context.Background(),
+			SecuritySource: securitySource,
+		},
+	}
+
+	// Create a test request
+	myReq, _ := http.NewRequest("GET", "/", nil)
+
+	// Call BeforeRequest - should use provider config over environment
+	finalCtx, _ := test.BeforeRequest(myCtx, myReq)
+
+	// Should construct URL using provider config, NOT environment variables
+	expectedUrlString := "https://provider-workspace-provider-org.cribl-playground.cloud/api/v1/"
+	if finalCtx.URL.String() != expectedUrlString {
+		t.Errorf("Provider config precedence failed. Got %s, expected %s", finalCtx.URL.String(), expectedUrlString)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+// Helper function to create string pointers
+func StringPtr(s string) *string {
+	return &s
 }
 
 func TestTerraformBeforeRequest(t *testing.T) {
@@ -72,7 +214,7 @@ func TestTerraformBeforeRequest(t *testing.T) {
 	}
 
 	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
-	expectedUrlString := "foobar/api/v1/"
+	expectedUrlString := "https://punk'n-biz.cribl.cloud/api/v1/"
 
 	if returnedCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")
@@ -114,7 +256,7 @@ func TestTerraformBeforeRequestMultiUse(t *testing.T) {
 	}
 
 	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
-	expectedUrlString := "foobar/api/v1/"
+	expectedUrlString := "https://punk'n-biz.cribl.cloud/api/v1/"
 
 	if returnedCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")
@@ -179,7 +321,7 @@ func TestTerraformBeforeRequestWithSecuritySource(t *testing.T) {
 	}
 
 	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
-	expectedUrlString := "foobar/api/v1/"
+	expectedUrlString := "https://punk'n-biz.cribl.cloud/api/v1/"
 
 	if returnedCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")
@@ -223,7 +365,7 @@ func TestTerraformBeforeRequestWithSecuritySourceMultiUse(t *testing.T) {
 	}
 
 	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
-	expectedUrlString := "foobar/api/v1/"
+	expectedUrlString := "https://punk'n-biz.cribl.cloud/api/v1/"
 
 	if returnedCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")

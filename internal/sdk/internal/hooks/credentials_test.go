@@ -339,3 +339,94 @@ func TestParseIniConfigMultiProfile(t *testing.T) {
 		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-secondary-id", cfg.Workspace)
 	}
 }
+
+func TestParseIniConfigWithCloudDomain(t *testing.T) {
+	// Reset profile to default for this test
+	os.Setenv("CRIBL_PROFILE", "")
+
+	creds := `[default]
+		  client_id = your-client-id
+		  client_secret = your-client-secret
+		  organization_id = your-organization-id
+		  workspace = your-workspace-id
+		  cloud_domain = cribl-playground.cloud`
+
+	cfg, err := parseIniConfig([]byte(creds))
+	if err != nil {
+		t.Errorf("parseIniConfig threw an error in operation: %s", err)
+	}
+
+	if cfg.ClientID != "your-client-id" {
+		t.Errorf("parseIniConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID)
+	} else if cfg.ClientSecret != "your-client-secret" {
+		t.Errorf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret)
+	} else if cfg.OrganizationID != "your-organization-id" {
+		t.Errorf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID)
+	} else if cfg.Workspace != "your-workspace-id" {
+		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace)
+	} else if cfg.CloudDomain != "cribl-playground.cloud" {
+		t.Errorf("parseIniConfig returned incorrect CloudDomain, expected %s got %s", "cribl-playground.cloud", cfg.CloudDomain)
+	}
+}
+
+func TestParseJSONConfigWithCloudDomain(t *testing.T) {
+	creds := `{"client_id": "your-client-id", 
+	   "client_secret": "your-client-secret",
+	   "organization_id": "your-organization-id",
+	   "workspace": "your-workspace-id",
+	   "cloud_domain": "cribl-staging.cloud"}`
+
+	cfg, err := parseJSONConfig([]byte(creds))
+	if err != nil {
+		t.Errorf("parseJSONConfig threw an error in operation: %s", err)
+	}
+
+	if cfg.ClientID != "your-client-id" {
+		t.Errorf("parseJSONConfig returned incorrect ClientID, expected %s got %s", "your-client-id", cfg.ClientID)
+	} else if cfg.ClientSecret != "your-client-secret" {
+		t.Errorf("parseJSONConfig returned incorrect ClientSecret, expected %s got %s", "your-client-secret", cfg.ClientSecret)
+	} else if cfg.OrganizationID != "your-organization-id" {
+		t.Errorf("parseJSONConfig returned incorrect OrganizationID, expected %s got %s", "your-organization-id", cfg.OrganizationID)
+	} else if cfg.Workspace != "your-workspace-id" {
+		t.Errorf("parseJSONConfig returned incorrect Workspace, expected %s got %s", "your-workspace-id", cfg.Workspace)
+	} else if cfg.CloudDomain != "cribl-staging.cloud" {
+		t.Errorf("parseJSONConfig returned incorrect CloudDomain, expected %s got %s", "cribl-staging.cloud", cfg.CloudDomain)
+	}
+}
+
+func TestParseIniConfigMultiProfileWithCloudDomain(t *testing.T) {
+	os.Setenv("CRIBL_PROFILE", "playground")
+	creds := `[default]
+		  client_id = default-client-id
+		  client_secret = default-client-secret
+		  organization_id = default-organization-id
+		  workspace = default-workspace-id
+		  cloud_domain = cribl.cloud
+                  [playground]
+		  client_id = playground-client-id
+		  client_secret = playground-client-secret
+		  organization_id = playground-organization-id
+		  workspace = playground-workspace-id
+		  cloud_domain = cribl-playground.cloud
+		  `
+
+	cfg, err := parseIniConfig([]byte(creds))
+	if err != nil {
+		t.Errorf("parseIniConfig threw an error in operation: %s", err)
+	}
+
+	if cfg.ClientID != "playground-client-id" {
+		t.Errorf("parseIniConfig returned incorrect ClientID, expected %s got %s", "playground-client-id", cfg.ClientID)
+	} else if cfg.ClientSecret != "playground-client-secret" {
+		t.Errorf("parseIniConfig returned incorrect ClientSecret, expected %s got %s", "playground-client-secret", cfg.ClientSecret)
+	} else if cfg.OrganizationID != "playground-organization-id" {
+		t.Errorf("parseIniConfig returned incorrect OrganizationID, expected %s got %s", "playground-organization-id", cfg.OrganizationID)
+	} else if cfg.Workspace != "playground-workspace-id" {
+		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "playground-workspace-id", cfg.Workspace)
+	} else if cfg.CloudDomain != "cribl-playground.cloud" {
+		t.Errorf("parseIniConfig returned incorrect CloudDomain, expected %s got %s", "cribl-playground.cloud", cfg.CloudDomain)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_PROFILE", "")
+}

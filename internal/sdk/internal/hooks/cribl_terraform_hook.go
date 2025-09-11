@@ -75,13 +75,26 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 
 // constructBaseURL builds the workspace URL from credentials when needed
 func (o *CriblTerraformHook) constructBaseURL(baseURL string, config *CriblConfig) string {
-	// If we have a concrete URL (not a template), use it as-is
-	if baseURL != "" && !strings.Contains(baseURL, "{workspaceName}") && !strings.Contains(baseURL, "{organizationId}") {
+	// Always check if environment variables are set - they take highest priority
+	// If any environment variables are set, reconstruct the URL from components
+	workspaceEnv := os.Getenv("CRIBL_WORKSPACE_ID")
+	orgEnv := os.Getenv("CRIBL_ORGANIZATION_ID")
+	domainEnv := os.Getenv("CRIBL_CLOUD_DOMAIN")
+
+	// Special case: if we have a localhost/test URL, keep it even with environment variables
+	if baseURL != "" && (strings.Contains(baseURL, "127.0.0.1") || strings.Contains(baseURL, "localhost")) {
+		log.Printf("[DEBUG] Localhost URL detected, keeping as-is: %s", baseURL)
+		return baseURL
+	}
+
+	// If no environment variables are set and we have a concrete URL, use it as-is
+	if workspaceEnv == "" && orgEnv == "" && domainEnv == "" &&
+		baseURL != "" && !strings.Contains(baseURL, "{workspaceName}") && !strings.Contains(baseURL, "{organizationId}") {
+		log.Printf("[DEBUG] No environment variables set, using provided concrete URL: %s", baseURL)
 		return baseURL
 	}
 
 	// Get values with proper precedence: Environment > Config > Default
-	workspaceEnv := os.Getenv("CRIBL_WORKSPACE_ID")
 	workspace := workspaceEnv
 	workspaceSource := "environment"
 	if workspace == "" {
@@ -92,10 +105,9 @@ func (o *CriblTerraformHook) constructBaseURL(baseURL string, config *CriblConfi
 		workspace = "main" // Default workspace name
 		workspaceSource = "default"
 	}
-	log.Printf("[DEBUG] Workspace selection: env='%s', config='%s', final='%s', source='%s'", 
+	log.Printf("[DEBUG] Workspace selection: env='%s', config='%s', final='%s', source='%s'",
 		workspaceEnv, config.Workspace, workspace, workspaceSource)
 
-	orgEnv := os.Getenv("CRIBL_ORGANIZATION_ID")
 	organizationID := orgEnv
 	orgSource := "environment"
 	if organizationID == "" {
@@ -106,11 +118,10 @@ func (o *CriblTerraformHook) constructBaseURL(baseURL string, config *CriblConfi
 		organizationID = "ian" // Default organization ID
 		orgSource = "default"
 	}
-	log.Printf("[DEBUG] Organization selection: env='%s', config='%s', final='%s', source='%s'", 
+	log.Printf("[DEBUG] Organization selection: env='%s', config='%s', final='%s', source='%s'",
 		orgEnv, config.OrganizationID, organizationID, orgSource)
 
 	// Get cloud domain with proper precedence: Environment > Config > Default
-	domainEnv := os.Getenv("CRIBL_CLOUD_DOMAIN")
 	cloudDomain := domainEnv
 	domainSource := "environment"
 	if cloudDomain == "" {
@@ -121,7 +132,7 @@ func (o *CriblTerraformHook) constructBaseURL(baseURL string, config *CriblConfi
 		cloudDomain = "cribl.cloud" // Default domain
 		domainSource = "default"
 	}
-	log.Printf("[DEBUG] Domain selection: env='%s', config='%s', final='%s', source='%s'", 
+	log.Printf("[DEBUG] Domain selection: env='%s', config='%s', final='%s', source='%s'",
 		domainEnv, config.CloudDomain, cloudDomain, domainSource)
 
 	// Construct the workspace URL: https://{workspace}-{organizationId}.{cloudDomain}
@@ -132,9 +143,78 @@ func (o *CriblTerraformHook) constructBaseURL(baseURL string, config *CriblConfi
 	return constructedURL
 }
 
+// constructBaseURLWithProviderConfig builds URL with proper precedence: Provider Config > Environment > Credentials File > Default
+func (o *CriblTerraformHook) constructBaseURLWithProviderConfig(providerOrgID, providerWorkspaceID, providerCloudDomain string, config *CriblConfig) string {
+	// Special case: if we have a localhost/test URL, keep it even with provider config
+	if o.baseURL != "" && (strings.Contains(o.baseURL, "127.0.0.1") || strings.Contains(o.baseURL, "localhost")) {
+		log.Printf("[DEBUG] Localhost URL detected, keeping as-is: %s", o.baseURL)
+		return o.baseURL
+	}
+
+	// Get environment variables (second precedence)
+	workspaceEnv := os.Getenv("CRIBL_WORKSPACE_ID")
+	orgEnv := os.Getenv("CRIBL_ORGANIZATION_ID")
+	domainEnv := os.Getenv("CRIBL_CLOUD_DOMAIN")
+
+	// Apply precedence: Provider Config > Environment > Credentials File > Default
+	workspace := providerWorkspaceID
+	workspaceSource := "provider"
+	if workspace == "" {
+		workspace = workspaceEnv
+		workspaceSource = "environment"
+	}
+	if workspace == "" && config != nil {
+		workspace = config.Workspace
+		workspaceSource = "credentials"
+	}
+	if workspace == "" {
+		workspace = "main" // Default workspace name
+		workspaceSource = "default"
+	}
+
+	organizationID := providerOrgID
+	orgSource := "provider"
+	if organizationID == "" {
+		organizationID = orgEnv
+		orgSource = "environment"
+	}
+	if organizationID == "" && config != nil {
+		organizationID = config.OrganizationID
+		orgSource = "credentials"
+	}
+	if organizationID == "" {
+		organizationID = "ian" // Default organization ID
+		orgSource = "default"
+	}
+
+	cloudDomain := providerCloudDomain
+	domainSource := "provider"
+	if cloudDomain == "" {
+		cloudDomain = domainEnv
+		domainSource = "environment"
+	}
+	if cloudDomain == "" && config != nil {
+		cloudDomain = config.CloudDomain
+		domainSource = "credentials"
+	}
+	if cloudDomain == "" {
+		cloudDomain = "cribl.cloud" // Default domain
+		domainSource = "default"
+	}
+
+	log.Printf("[DEBUG] Final precedence - Workspace: '%s' (from %s), Org: '%s' (from %s), Domain: '%s' (from %s)",
+		workspace, workspaceSource, organizationID, orgSource, cloudDomain, domainSource)
+
+	// Construct the workspace URL: https://{workspace}-{organizationId}.{cloudDomain}
+	constructedURL := fmt.Sprintf("https://%s-%s.%s", workspace, organizationID, cloudDomain)
+	log.Printf("[DEBUG] Final constructed URL: %s", constructedURL)
+
+	return constructedURL
+}
+
 func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.Request) (*http.Request, error) {
 	// First try to get credentials from security context
-	var clientID, clientSecret, orgID, workspaceID string
+	var clientID, clientSecret, orgID, workspaceID, cloudDomain string
 
 	if ctx.SecuritySource != nil {
 		if security, err := ctx.SecuritySource(ctx.Context); err == nil {
@@ -145,7 +225,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 					clientSecret = s.ClientOauth.ClientSecret
 				}
 
-				// Get org and workspace IDs
+				// Get org and workspace IDs from provider config (higher precedence than credentials file)
 				if s.OrganizationID != nil {
 					orgID = *s.OrganizationID
 					o.orgID = orgID
@@ -154,30 +234,31 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 					workspaceID = *s.WorkspaceID
 					o.workspaceID = workspaceID
 				}
+				if s.CloudDomain != nil {
+					cloudDomain = *s.CloudDomain
+				}
 			}
 		} else {
 			log.Printf("[ERROR] Failed to get security info: %v", err)
 		}
 	}
 
-	// If we don't have credentials from security context, try to get them from config file
+	// Get credentials file config for fallback values
+	config, err := GetCredentials()
+	if err != nil {
+		log.Printf("[ERROR] Failed to get credentials from config: %v", err)
+	}
+
+	// If we don't have credentials from security context, use config file
 	if clientID == "" || clientSecret == "" {
-		config, err := GetCredentials()
-		if err != nil {
-			log.Printf("[ERROR] Failed to get credentials from config: %v", err)
-		} else if config != nil {
+		if config != nil {
 			clientID = config.ClientID
 			clientSecret = config.ClientSecret
-			if orgID == "" {
-				orgID = config.OrganizationID
-				o.orgID = orgID
-			}
-			if workspaceID == "" {
-				workspaceID = config.Workspace
-				o.workspaceID = workspaceID
-			}
 		}
 	}
+
+	// Reconstruct baseURL with proper precedence: Provider Config > Environment > Credentials File > Default
+	o.baseURL = o.constructBaseURLWithProviderConfig(orgID, workspaceID, cloudDomain, config)
 
 	// Handle authentication
 	if bearerToken := os.Getenv("CRIBL_BEARER_TOKEN"); bearerToken != "" {

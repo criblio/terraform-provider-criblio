@@ -32,11 +32,11 @@ provider "criblio" {
 
 The Cribl provider supports multiple authentication methods with the following precedence order (highest to lowest priority):
 
-1. **Environment variables** (highest priority - overrides all other methods)
-2. **Credentials file** (`~/.cribl/credentials`)
-3. **Provider configuration block** (lowest priority)
+1. **Provider configuration block** (highest priority - overrides all other methods)
+2. **Environment variables**
+3. **Credentials file** (`~/.cribl/credentials`) (lowest priority)
 
-You can configure authentication using any of these methods, but environment variables will always take precedence.
+You can configure authentication using any of these methods, but provider configuration will always take precedence.
 
 ### Environment Variables
 
@@ -89,7 +89,7 @@ export CRIBL_PROFILE="profile2"
 
 ### Provider Configuration
 
-You can also configure authentication directly in your Terraform configuration:
+You can configure authentication directly in your Terraform configuration. This has the highest precedence and will override any environment variables or credentials file settings:
 
 ```hcl
 provider "criblio" {
