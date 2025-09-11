@@ -16,7 +16,7 @@ terraform {
   required_providers {
     criblio = {
       source  = "criblio/criblio"
-      version = "1.11.17"
+      version = "1.11.19"
     }
   }
 }
@@ -35,11 +35,8 @@ provider "criblio" {
 - `client_id` (String, Sensitive) OAuth2 Client Credentials Flow client identifier. Configurable via environment variable `CRIBL_CLIENT_ID`.
 - `client_secret` (String, Sensitive) OAuth2 Client Credentials Flow client secret. Configurable via environment variable `CRIBL_CLIENT_SECRET`.
 - `cloud_domain` (String) Cribl Cloud domain name (defaults to cribl.cloud)
-- `group_name` (String) The name of the Worker Group or Fleet (defaults to default)
-- `hostname` (String) The hostname of the managed API server (defaults to localhost)
 - `organization_id` (String) The Organization ID (defaults to ian)
-- `port` (String) The port of the managed API server (defaults to 9000)
-- `server_url` (String) Server URL (defaults to https://app.cribl.cloud)
+- `server_url` (String) Server URL (defaults to https://{workspaceName}-{organizationId}.{cloudDomain})
 - `token_url` (String, Sensitive) OAuth2 Client Credentials Flow token URL.
 - `workspace_id` (String, Sensitive) API Key. Configurable via environment variable `CRIBL_WORKSPACE_ID`.
 - `workspace_name` (String) The Workspace name (defaults to main)

@@ -51434,6 +51434,7 @@ security:
   - clientOauth: []
   - organizationId: []
   - workspaceId: []
+  - cloudDomain: []
 tags:
   - name: ai-settings
     description: Actions related to Ai Settings
@@ -66720,20 +66721,8 @@ paths:
           type: string
         description: Group ID
 servers:
-- url: https://app.cribl.cloud
+- url: https://{workspaceName}-{organizationId}.{cloudDomain}
   x-speakeasy-server-id: cloud
-  variables:
-    workspaceName:
-      default: main
-      description: The Workspace name
-    organizationId:
-      default: ian
-      description: the Organization ID
-    cloudDomain:
-      default: cribl.cloud
-      description: Cribl Cloud domain name
-- url: https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}
-  x-speakeasy-server-id: cloud-group
   variables:
     workspaceName:
       default: main
@@ -66744,18 +66733,3 @@ servers:
     cloudDomain:
       default: cribl.cloud
       description: Cribl Cloud domain name
-    groupName:
-      default: default
-      description: The name of the Worker Group or Fleet
-- url: https://{hostname}:{port}/api/v1/m/{groupName}
-  x-speakeasy-server-id: managed-group
-  variables:
-    hostname:
-      default: localhost
-      description: The hostname of the managed API server
-    port:
-      default: '9000'
-      description: The port of the managed API server
-    groupName:
-      default: default
-      description: The name of the Worker Group or Fleet

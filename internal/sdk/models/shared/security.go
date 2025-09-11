@@ -7,6 +7,7 @@ type Security struct {
 	ClientOauth    *SchemeClientOauth `security:"scheme,type=oauth2,subtype=client_credentials"`
 	OrganizationID *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
 	WorkspaceID    *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
+	CloudDomain    *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
 }
 
 func (o *Security) GetBearerAuth() *string {
@@ -35,4 +36,11 @@ func (o *Security) GetWorkspaceID() *string {
 		return nil
 	}
 	return o.WorkspaceID
+}
+
+func (o *Security) GetCloudDomain() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CloudDomain
 }

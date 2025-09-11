@@ -15,6 +15,7 @@ type CriblConfig struct {
 	ClientSecret   string `json:"client_secret" ini:"client_secret"`
 	OrganizationID string `json:"organization_id" ini:"organization_id"`
 	Workspace      string `json:"workspace" ini:"workspace"`
+	CloudDomain    string `json:"cloud_domain" ini:"cloud_domain"`
 }
 
 type CriblConfigFile struct {
@@ -110,8 +111,8 @@ func parseIniConfig(file []byte) (*CriblConfig, error) {
 		return nil, fmt.Errorf("failed to parse config file profile: %v", err)
 	}
 
-	log.Printf("[DEBUG] Selected profile values - clientID=%s, orgID=%s, workspace=%s",
-		config.ClientID, config.OrganizationID, config.Workspace)
+	log.Printf("[DEBUG] Selected profile values - clientID=%s, orgID=%s, workspace=%s, domain=%s",
+		config.ClientID, config.OrganizationID, config.Workspace, config.CloudDomain)
 	return &config, nil
 }
 
@@ -122,9 +123,10 @@ func GetCredentials() (*CriblConfig, error) {
 	clientSecret := os.Getenv("CRIBL_CLIENT_SECRET")
 	organizationID := os.Getenv("CRIBL_ORGANIZATION_ID")
 	workspace := os.Getenv("CRIBL_WORKSPACE_ID")
+	cloudDomain := os.Getenv("CRIBL_CLOUD_DOMAIN")
 
-	log.Printf("[DEBUG] Environment variables - clientID=%s, orgID=%s, workspace=%s",
-		clientID, organizationID, workspace)
+	log.Printf("[DEBUG] Environment variables - clientID=%s, orgID=%s, workspace=%s, domain=%s",
+		clientID, organizationID, workspace, cloudDomain)
 
 	// If we have direct credentials in environment, use them
 	if clientID != "" && clientSecret != "" {
@@ -134,6 +136,7 @@ func GetCredentials() (*CriblConfig, error) {
 			ClientSecret:   clientSecret,
 			OrganizationID: organizationID,
 			Workspace:      workspace,
+			CloudDomain:    cloudDomain,
 		}, nil
 	}
 
@@ -146,6 +149,7 @@ func GetCredentials() (*CriblConfig, error) {
 				ClientSecret:   clientSecret,
 				OrganizationID: organizationID,
 				Workspace:      workspace,
+				CloudDomain:    cloudDomain,
 			}, nil
 		} else {
 			return nil, err

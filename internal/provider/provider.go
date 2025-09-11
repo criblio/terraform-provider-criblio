@@ -32,10 +32,7 @@ type CriblioProviderModel struct {
 	ClientID       types.String `tfsdk:"client_id"`
 	ClientSecret   types.String `tfsdk:"client_secret"`
 	CloudDomain    types.String `tfsdk:"cloud_domain"`
-	GroupName      types.String `tfsdk:"group_name"`
-	Hostname       types.String `tfsdk:"hostname"`
 	OrganizationID types.String `tfsdk:"organization_id"`
-	Port           types.String `tfsdk:"port"`
 	ServerURL      types.String `tfsdk:"server_url"`
 	TokenURL       types.String `tfsdk:"token_url"`
 	WorkspaceID    types.String `tfsdk:"workspace_id"`
@@ -69,24 +66,12 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 				MarkdownDescription: `Cribl Cloud domain name (defaults to cribl.cloud)`,
 				Optional:            true,
 			},
-			"group_name": schema.StringAttribute{
-				MarkdownDescription: `The name of the Worker Group or Fleet (defaults to default)`,
-				Optional:            true,
-			},
-			"hostname": schema.StringAttribute{
-				MarkdownDescription: `The hostname of the managed API server (defaults to localhost)`,
-				Optional:            true,
-			},
 			"organization_id": schema.StringAttribute{
 				MarkdownDescription: `The Organization ID (defaults to ian)`,
 				Optional:            true,
 			},
-			"port": schema.StringAttribute{
-				MarkdownDescription: `The port of the managed API server (defaults to 9000)`,
-				Optional:            true,
-			},
 			"server_url": schema.StringAttribute{
-				Description: `Server URL (defaults to https://app.cribl.cloud)`,
+				Description: `Server URL (defaults to https://{workspaceName}-{organizationId}.{cloudDomain})`,
 				Optional:    true,
 			},
 			"token_url": schema.StringAttribute{
@@ -119,12 +104,8 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	serverUrl := data.ServerURL.ValueString()
 
-	if serverUrl == "" && os.Getenv("CRIBL_SERVER_URL") != "" {
-		serverUrl = os.Getenv("CRIBL_SERVER_URL")
-	}
-
 	if serverUrl == "" {
-		serverUrl = "https://app.cribl.cloud"
+		serverUrl = "https://{workspaceName}-{organizationId}.{cloudDomain}"
 	}
 
 	serverUrlParams := make(map[string]string)
@@ -153,32 +134,12 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		serverUrlParams["cloudDomain"] = data.CloudDomain.ValueString()
 	}
 
+	if _, ok := serverUrlParams["cloudDomain"]; !ok && os.Getenv("CRIBL_CLOUD_DOMAIN") != "" {
+		serverUrlParams["cloudDomain"] = os.Getenv("CRIBL_CLOUD_DOMAIN")
+	}
+
 	if _, ok := serverUrlParams["cloudDomain"]; !ok {
 		serverUrlParams["cloudDomain"] = "cribl.cloud"
-	}
-
-	if data.GroupName.ValueString() != "" {
-		serverUrlParams["groupName"] = data.GroupName.ValueString()
-	}
-
-	if _, ok := serverUrlParams["groupName"]; !ok {
-		serverUrlParams["groupName"] = "default"
-	}
-
-	if data.Hostname.ValueString() != "" {
-		serverUrlParams["hostname"] = data.Hostname.ValueString()
-	}
-
-	if _, ok := serverUrlParams["hostname"]; !ok {
-		serverUrlParams["hostname"] = "localhost"
-	}
-
-	if data.Port.ValueString() != "" {
-		serverUrlParams["port"] = data.Port.ValueString()
-	}
-
-	if _, ok := serverUrlParams["port"]; !ok {
-		serverUrlParams["port"] = "9000"
 	}
 
 	security := shared.Security{}
@@ -227,6 +188,14 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	if workspaceIDEnvVar := os.Getenv("CRIBL_WORKSPACE_ID"); security.WorkspaceID == nil && workspaceIDEnvVar != "" {
 		security.WorkspaceID = &workspaceIDEnvVar
+	}
+
+	if !data.CloudDomain.IsUnknown() {
+		security.CloudDomain = data.CloudDomain.ValueStringPointer()
+	}
+
+	if cloudDomainEnvVar := os.Getenv("CRIBL_CLOUD_DOMAIN"); security.CloudDomain == nil && cloudDomainEnvVar != "" {
+		security.CloudDomain = &cloudDomainEnvVar
 	}
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{

@@ -339,3 +339,198 @@ func TestParseIniConfigMultiProfile(t *testing.T) {
 		t.Errorf("parseIniConfig returned incorrect Workspace, expected %s got %s", "your-secondary-id", cfg.Workspace)
 	}
 }
+
+// Tests for constructBaseURL function
+func TestConstructBaseURLConcreteURL(t *testing.T) {
+	// Clear environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{}
+
+	concreteURL := "https://my-concrete-url.com"
+	result := hook.constructBaseURL(concreteURL, config)
+
+	if result != concreteURL {
+		t.Errorf("constructBaseURL should return concrete URL as-is, got %s expected %s", result, concreteURL)
+	}
+}
+
+func TestConstructBaseURLFromConfigValues(t *testing.T) {
+	// Clear environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{
+		Workspace:      "test-workspace",
+		OrganizationID: "test-org",
+		CloudDomain:    "cribl-playground.cloud",
+	}
+
+	expected := "https://test-workspace-test-org.cribl-playground.cloud"
+	result := hook.constructBaseURL("", config)
+
+	if result != expected {
+		t.Errorf("constructBaseURL returned %s, expected %s", result, expected)
+	}
+}
+
+func TestConstructBaseURLEnvironmentVariableFallbacks(t *testing.T) {
+	// Set environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "env-workspace")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "env-org")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-staging.cloud")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{} // Empty config
+
+	expected := "https://env-workspace-env-org.cribl-staging.cloud"
+	result := hook.constructBaseURL("", config)
+
+	if result != expected {
+		t.Errorf("constructBaseURL returned %s, expected %s", result, expected)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+}
+
+func TestConstructBaseURLDefaultFallbacks(t *testing.T) {
+	// Clear environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{} // Empty config
+
+	expected := "https://main-ian.cribl.cloud" // Default values
+	result := hook.constructBaseURL("", config)
+
+	if result != expected {
+		t.Errorf("constructBaseURL returned %s, expected %s", result, expected)
+	}
+}
+
+func TestConstructBaseURLConfigOverridesEnvironment(t *testing.T) {
+	// Set environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "env-workspace")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "env-org")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-staging.cloud")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{
+		Workspace:      "config-workspace",  // Should override env
+		OrganizationID: "config-org",        // Should override env
+		CloudDomain:    "config-domain.com", // Should override env
+	}
+
+	expected := "https://config-workspace-config-org.config-domain.com"
+	result := hook.constructBaseURL("", config)
+
+	if result != expected {
+		t.Errorf("constructBaseURL returned %s, expected %s", result, expected)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+}
+
+func TestConstructBaseURLMixedConfigAndEnvironment(t *testing.T) {
+	// Set some environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "env-workspace")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "") // Not set
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-staging.cloud")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{
+		OrganizationID: "config-org", // Should be used since env is empty
+		// Workspace and CloudDomain empty, should use env vars
+	}
+
+	expected := "https://env-workspace-config-org.cribl-staging.cloud"
+	result := hook.constructBaseURL("", config)
+
+	if result != expected {
+		t.Errorf("constructBaseURL returned %s, expected %s", result, expected)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+}
+
+func TestConstructBaseURLPlaygroundEnvironment(t *testing.T) {
+	// Clear environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{
+		Workspace:      "main",
+		OrganizationID: "beautiful-nguyen-y8y4azd", // Playground org ID
+		CloudDomain:    "cribl-playground.cloud",
+	}
+
+	expected := "https://main-beautiful-nguyen-y8y4azd.cribl-playground.cloud"
+	result := hook.constructBaseURL("", config)
+
+	if result != expected {
+		t.Errorf("constructBaseURL returned %s, expected %s", result, expected)
+	}
+}
+
+func TestConstructBaseURLTemplateBaseURL(t *testing.T) {
+	// Clear environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{
+		Workspace:      "test-workspace",
+		OrganizationID: "test-org",
+		CloudDomain:    "test-domain.com",
+	}
+
+	// Template URLs should be ignored and constructed from components
+	templateURL := "https://{workspaceName}-{organizationId}.{cloudDomain}"
+	expected := "https://test-workspace-test-org.test-domain.com"
+	result := hook.constructBaseURL(templateURL, config)
+
+	if result != expected {
+		t.Errorf("constructBaseURL returned %s, expected %s", result, expected)
+	}
+}
+
+func TestConstructBaseURLEmptyBaseURL(t *testing.T) {
+	// Clear environment variables
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+	hook := NewCriblTerraformHook()
+	config := &CriblConfig{
+		Workspace:      "custom-workspace",
+		OrganizationID: "custom-org",
+		CloudDomain:    "custom.domain.com",
+	}
+
+	// Empty baseURL should trigger URL construction
+	expected := "https://custom-workspace-custom-org.custom.domain.com"
+	result := hook.constructBaseURL("", config)
+
+	if result != expected {
+		t.Errorf("constructBaseURL with empty baseURL returned %s, expected %s", result, expected)
+	}
+}

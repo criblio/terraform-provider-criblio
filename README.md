@@ -30,7 +30,13 @@ provider "criblio" {
 
 ## Authentication
 
-The Cribl provider supports multiple authentication methods. You can configure authentication using environment variables, credentials file, or directly in the provider configuration block.
+The Cribl provider supports multiple authentication methods with the following precedence order (highest to lowest priority):
+
+1. **Environment variables** (highest priority - overrides all other methods)
+2. **Credentials file** (`~/.cribl/credentials`)
+3. **Provider configuration block** (lowest priority)
+
+You can configure authentication using any of these methods, but environment variables will always take precedence.
 
 ### Environment Variables
 
@@ -46,6 +52,12 @@ export CRIBL_CLIENT_SECRET="your-client-secret"
 export CRIBL_ORGANIZATION_ID="your-organization-id"
 export CRIBL_WORKSPACE_ID="your-workspace-id"
 
+# Optional: specify cloud domain (defaults to cribl.cloud)
+export CRIBL_CLOUD_DOMAIN="cribl-playground.cloud"  # for playground environment
+# export CRIBL_CLOUD_DOMAIN="cribl-staging.cloud"  # for staging environment
+# export CRIBL_CLOUD_DOMAIN="cribl.cloud"          # for production environment
+
+
 ```
 
 ### Credentials File
@@ -58,12 +70,15 @@ client_id = your-client-id
 client_secret = your-client-secret
 organization_id = your-organization-id
 workspace = your-workspace-id
+# Optional: specify cloud domain
+cloud_domain = cribl-playground.cloud
 
 [profile2]
 client_id = another-client-id
 client_secret = another-client-secret
 organization_id = another-organization-id
 workspace = another-workspace-id
+cloud_domain = cribl.cloud
 ```
 
 To use a specific profile, set the `CRIBL_PROFILE` environment variable:

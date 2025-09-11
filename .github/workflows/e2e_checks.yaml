@@ -25,7 +25,7 @@ jobs:
         env:
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
-          CRIBL_SERVER_URL: "https://app.cribl-playground.cloud"
+          CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
           CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
           CRIBL_WORKSPACE_ID: "tfprovider2"
         run: | 

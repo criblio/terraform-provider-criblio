@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.696.0
+// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.698.4
 
 import (
 	"context"
@@ -17,16 +17,12 @@ import (
 )
 
 const (
-	ServerCloud        string = "cloud"
-	ServerCloudGroup   string = "cloud-group"
-	ServerManagedGroup string = "managed-group"
+	ServerCloud string = "cloud"
 )
 
 // ServerList contains the list of servers available to the SDK
 var ServerList = map[string]string{
-	ServerCloud:        "https://app.cribl.cloud",
-	ServerCloudGroup:   "https://{workspaceName}-{organizationId}.{cloudDomain}/api/v1/m/{groupName}",
-	ServerManagedGroup: "https://{hostname}:{port}/api/v1/m/{groupName}",
+	ServerCloud: "https://{workspaceName}-{organizationId}.{cloudDomain}",
 }
 
 // HTTPClient provides an interface for supplying the SDK with a custom HTTP client
@@ -315,45 +311,6 @@ func WithCloudDomain(cloudDomain string) SDKOption {
 	}
 }
 
-// WithGroupName allows setting the groupName variable for url substitution
-func WithGroupName(groupName string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["groupName"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["groupName"] = fmt.Sprintf("%v", groupName)
-		}
-	}
-}
-
-// WithHostname allows setting the hostname variable for url substitution
-func WithHostname(hostname string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["hostname"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["hostname"] = fmt.Sprintf("%v", hostname)
-		}
-	}
-}
-
-// WithPort allows setting the port variable for url substitution
-func WithPort(port string) SDKOption {
-	return func(sdk *CriblIo) {
-		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["port"]; !ok {
-				continue
-			}
-
-			sdk.sdkConfiguration.ServerVariables[server]["port"] = fmt.Sprintf("%v", port)
-		}
-	}
-}
-
 // WithClient allows the overriding of the default HTTP client used by the SDK
 func WithClient(client HTTPClient) SDKOption {
 	return func(sdk *CriblIo) {
@@ -393,26 +350,15 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.11.17",
+		SDKVersion: "1.11.19",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.11.17 2.696.0 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.11.19 2.698.4 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
 					"workspaceName":  "main",
 					"organizationId": "ian",
 					"cloudDomain":    "cribl.cloud",
-				},
-				"cloud-group": {
-					"workspaceName":  "main",
-					"organizationId": "ian",
-					"cloudDomain":    "cribl.cloud",
-					"groupName":      "default",
-				},
-				"managed-group": {
-					"hostname":  "localhost",
-					"port":      "9000",
-					"groupName": "default",
 				},
 			},
 		},

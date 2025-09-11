@@ -10,9 +10,9 @@ e2e-test:
 	./tests/e2e/scripts/e2e.sh
 
 acceptance-test:
-	export CRIBL_SERVER_URL="https://app.cribl-playground.cloud" && \
 	export CRIBL_ORGANIZATION_ID="beautiful-nguyen-y8y4azd" &&  \
 	export CRIBL_WORKSPACE_ID="tfprovider" && \
+	export CRIBL_CLOUD_DOMAIN="cribl-playground.cloud" && \
 	export TF_ACC=true && \
 	go test -v ./tests/acceptance
 

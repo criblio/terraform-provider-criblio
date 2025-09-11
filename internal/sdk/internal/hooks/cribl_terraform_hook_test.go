@@ -72,7 +72,7 @@ func TestTerraformBeforeRequest(t *testing.T) {
 	}
 
 	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
-	expectedUrlString := "foobar/organizations/biz/workspaces/punk'n/app/api/v1/"
+	expectedUrlString := "foobar/api/v1/"
 
 	if returnedCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")
@@ -114,7 +114,7 @@ func TestTerraformBeforeRequestMultiUse(t *testing.T) {
 	}
 
 	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
-	expectedUrlString := "foobar/organizations/biz/workspaces/punk'n/app/api/v1/"
+	expectedUrlString := "foobar/api/v1/"
 
 	if returnedCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")
@@ -179,7 +179,7 @@ func TestTerraformBeforeRequestWithSecuritySource(t *testing.T) {
 	}
 
 	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
-	expectedUrlString := "foobar/organizations/biz/workspaces/punk'n/app/api/v1/"
+	expectedUrlString := "foobar/api/v1/"
 
 	if returnedCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")
@@ -223,7 +223,7 @@ func TestTerraformBeforeRequestWithSecuritySourceMultiUse(t *testing.T) {
 	}
 
 	expectedHeaderString := "map[Authorization:[Bearer Paradise City]]"
-	expectedUrlString := "foobar/organizations/biz/workspaces/punk'n/app/api/v1/"
+	expectedUrlString := "foobar/api/v1/"
 
 	if returnedCtx.Method != "GET" {
 		t.Errorf("*CriblTerraformHook returnedCtx.Method returned %s, expected %s", returnedCtx.Method, "GET")

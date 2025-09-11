@@ -16,12 +16,13 @@ generation:
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
+    hoistGlobalSecurity: true
   tests:
     generateTests: true
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 1.11.17
+  version: 1.11.19
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
@@ -39,10 +40,10 @@ terraform:
       providerAttribute: client_id
     - env: CRIBL_CLIENT_SECRET
       providerAttribute: client_secret
-    - env: CRIBL_SERVER_URL
-      providerAttribute: server_url
     - env: CRIBL_ORGANIZATION_ID
       providerAttribute: organization_id
     - env: CRIBL_WORKSPACE_ID
       providerAttribute: workspace_id
+    - env: CRIBL_CLOUD_DOMAIN
+      providerAttribute: cloud_domain
   packageName: criblio
