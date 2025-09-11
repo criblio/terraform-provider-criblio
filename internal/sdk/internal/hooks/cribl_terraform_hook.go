@@ -81,30 +81,48 @@ func (o *CriblTerraformHook) constructBaseURL(baseURL string, config *CriblConfi
 	}
 
 	// Get values with proper precedence: Environment > Config > Default
-	workspace := os.Getenv("CRIBL_WORKSPACE_ID")
+	workspaceEnv := os.Getenv("CRIBL_WORKSPACE_ID")
+	workspace := workspaceEnv
+	workspaceSource := "environment"
 	if workspace == "" {
 		workspace = config.Workspace
+		workspaceSource = "config"
 	}
 	if workspace == "" {
 		workspace = "main" // Default workspace name
+		workspaceSource = "default"
 	}
+	log.Printf("[DEBUG] Workspace selection: env='%s', config='%s', final='%s', source='%s'", 
+		workspaceEnv, config.Workspace, workspace, workspaceSource)
 
-	organizationID := os.Getenv("CRIBL_ORGANIZATION_ID")
+	orgEnv := os.Getenv("CRIBL_ORGANIZATION_ID")
+	organizationID := orgEnv
+	orgSource := "environment"
 	if organizationID == "" {
 		organizationID = config.OrganizationID
+		orgSource = "config"
 	}
 	if organizationID == "" {
 		organizationID = "ian" // Default organization ID
+		orgSource = "default"
 	}
+	log.Printf("[DEBUG] Organization selection: env='%s', config='%s', final='%s', source='%s'", 
+		orgEnv, config.OrganizationID, organizationID, orgSource)
 
 	// Get cloud domain with proper precedence: Environment > Config > Default
-	cloudDomain := os.Getenv("CRIBL_CLOUD_DOMAIN")
+	domainEnv := os.Getenv("CRIBL_CLOUD_DOMAIN")
+	cloudDomain := domainEnv
+	domainSource := "environment"
 	if cloudDomain == "" {
 		cloudDomain = config.CloudDomain
+		domainSource = "config"
 	}
 	if cloudDomain == "" {
 		cloudDomain = "cribl.cloud" // Default domain
+		domainSource = "default"
 	}
+	log.Printf("[DEBUG] Domain selection: env='%s', config='%s', final='%s', source='%s'", 
+		domainEnv, config.CloudDomain, cloudDomain, domainSource)
 
 	// Construct the workspace URL: https://{workspace}-{organizationId}.{cloudDomain}
 	constructedURL := fmt.Sprintf("https://%s-%s.%s", workspace, organizationID, cloudDomain)
