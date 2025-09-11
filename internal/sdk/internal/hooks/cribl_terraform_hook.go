@@ -80,27 +80,27 @@ func (o *CriblTerraformHook) constructBaseURL(baseURL string, config *CriblConfi
 		return baseURL
 	}
 
-	// Get values from config or environment with fallbacks
-	workspace := config.Workspace
+	// Get values with proper precedence: Environment > Config > Default
+	workspace := os.Getenv("CRIBL_WORKSPACE_ID")
 	if workspace == "" {
-		workspace = os.Getenv("CRIBL_WORKSPACE_ID")
+		workspace = config.Workspace
 	}
 	if workspace == "" {
 		workspace = "main" // Default workspace name
 	}
 
-	organizationID := config.OrganizationID
+	organizationID := os.Getenv("CRIBL_ORGANIZATION_ID")
 	if organizationID == "" {
-		organizationID = os.Getenv("CRIBL_ORGANIZATION_ID")
+		organizationID = config.OrganizationID
 	}
 	if organizationID == "" {
 		organizationID = "ian" // Default organization ID
 	}
 
-	// Get cloud domain from config first, then environment, then default
-	cloudDomain := config.CloudDomain
+	// Get cloud domain with proper precedence: Environment > Config > Default
+	cloudDomain := os.Getenv("CRIBL_CLOUD_DOMAIN")
 	if cloudDomain == "" {
-		cloudDomain = os.Getenv("CRIBL_CLOUD_DOMAIN")
+		cloudDomain = config.CloudDomain
 	}
 	if cloudDomain == "" {
 		cloudDomain = "cribl.cloud" // Default domain
