@@ -8,6 +8,8 @@ import (
 )
 
 func TestLakeHouse(t *testing.T) {
+	t.Skip("Skipping lakehouse test due to lakehouse delete time")
+
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories:  providerFactory,
