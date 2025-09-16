@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: cf658d0471c88522ef86938ead77b836
+  docChecksum: f38797bdf43368a661c8443d962b1ac1
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.615.1
+  speakeasyVersion: 1.615.2
   generationVersion: 2.698.4
-  releaseVersion: 1.11.20
-  configChecksum: f7f9fd49445e99a5c08413239f67c866
+  releaseVersion: 1.11.23
+  configChecksum: 932d50f8949ba7380f70bc2c51fbe483
   published: true
 features:
   terraform:
@@ -416,6 +416,8 @@ generatedFiles:
   - internal/provider/types/appscope_custom.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
+  - internal/provider/types/auth_request_header.go
+  - internal/provider/types/auth_request_param.go
   - internal/provider/types/author.go
   - internal/provider/types/aws_account_config.go
   - internal/provider/types/aws_security_lake_dataset.go
@@ -428,6 +430,8 @@ generatedFiles:
   - internal/provider/types/click_house_dataset.go
   - internal/provider/types/click_house_provider.go
   - internal/provider/types/cloud.go
+  - internal/provider/types/collect_request_header.go
+  - internal/provider/types/collect_request_param.go
   - internal/provider/types/collectors.go
   - internal/provider/types/comment.go
   - internal/provider/types/commit.go
@@ -444,6 +448,9 @@ generatedFiles:
   - internal/provider/types/custom_label.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
+  - internal/provider/types/discover_request_header.go
+  - internal/provider/types/discover_request_param.go
+  - internal/provider/types/discovery_configuration.go
   - internal/provider/types/disks_and_file_systems.go
   - internal/provider/types/dns.go
   - internal/provider/types/edge_dataset.go
@@ -457,7 +464,6 @@ generatedFiles:
   - internal/provider/types/event_breaker_ruleset_timestamp_format.go
   - internal/provider/types/extent_tag.go
   - internal/provider/types/extra_log_type.go
-  - internal/provider/types/extractor.go
   - internal/provider/types/field.go
   - internal/provider/types/firewall.go
   - internal/provider/types/gcp_account_config.go
@@ -492,13 +498,97 @@ generatedFiles:
   - internal/provider/types/input_collection_metadatum.go
   - internal/provider/types/input_collection_pq.go
   - internal/provider/types/input_collection_preprocess.go
-  - internal/provider/types/input_collector_collector.go
-  - internal/provider/types/input_collector_conf.go
-  - internal/provider/types/input_collector_input.go
-  - internal/provider/types/input_collector_metadatum.go
-  - internal/provider/types/input_collector_preprocess.go
-  - internal/provider/types/input_collector_run_settings.go
-  - internal/provider/types/input_collector_schedule.go
+  - internal/provider/types/input_collector_azure_blob.go
+  - internal/provider/types/input_collector_azure_blob_collector.go
+  - internal/provider/types/input_collector_azure_blob_conf.go
+  - internal/provider/types/input_collector_azure_blob_extractor.go
+  - internal/provider/types/input_collector_azure_blob_input.go
+  - internal/provider/types/input_collector_azure_blob_metadatum.go
+  - internal/provider/types/input_collector_azure_blob_preprocess.go
+  - internal/provider/types/input_collector_azure_blob_run_settings.go
+  - internal/provider/types/input_collector_azure_blob_saved_state.go
+  - internal/provider/types/input_collector_azure_blob_schedule.go
+  - internal/provider/types/input_collector_azure_blob_state_tracking.go
+  - internal/provider/types/input_collector_azure_blob_time_warning.go
+  - internal/provider/types/input_collector_cribl_lake.go
+  - internal/provider/types/input_collector_cribl_lake_collector.go
+  - internal/provider/types/input_collector_cribl_lake_conf.go
+  - internal/provider/types/input_collector_cribl_lake_input.go
+  - internal/provider/types/input_collector_cribl_lake_metadatum.go
+  - internal/provider/types/input_collector_cribl_lake_preprocess.go
+  - internal/provider/types/input_collector_cribl_lake_run_settings.go
+  - internal/provider/types/input_collector_cribl_lake_saved_state.go
+  - internal/provider/types/input_collector_cribl_lake_schedule.go
+  - internal/provider/types/input_collector_cribl_lake_state_tracking.go
+  - internal/provider/types/input_collector_cribl_lake_time_warning.go
+  - internal/provider/types/input_collector_database.go
+  - internal/provider/types/input_collector_database_collector.go
+  - internal/provider/types/input_collector_database_conf.go
+  - internal/provider/types/input_collector_database_input.go
+  - internal/provider/types/input_collector_database_metadatum.go
+  - internal/provider/types/input_collector_database_preprocess.go
+  - internal/provider/types/input_collector_database_run_settings.go
+  - internal/provider/types/input_collector_database_saved_state.go
+  - internal/provider/types/input_collector_database_schedule.go
+  - internal/provider/types/input_collector_database_state_tracking.go
+  - internal/provider/types/input_collector_database_time_warning.go
+  - internal/provider/types/input_collector_gcs.go
+  - internal/provider/types/input_collector_gcs_collector.go
+  - internal/provider/types/input_collector_gcs_conf.go
+  - internal/provider/types/input_collector_gcs_extractor.go
+  - internal/provider/types/input_collector_gcs_input.go
+  - internal/provider/types/input_collector_gcs_metadatum.go
+  - internal/provider/types/input_collector_gcs_preprocess.go
+  - internal/provider/types/input_collector_gcs_run_settings.go
+  - internal/provider/types/input_collector_gcs_saved_state.go
+  - internal/provider/types/input_collector_gcs_schedule.go
+  - internal/provider/types/input_collector_gcs_state_tracking.go
+  - internal/provider/types/input_collector_gcs_time_warning.go
+  - internal/provider/types/input_collector_health_check.go
+  - internal/provider/types/input_collector_health_check_collector.go
+  - internal/provider/types/input_collector_health_check_conf.go
+  - internal/provider/types/input_collector_health_check_input.go
+  - internal/provider/types/input_collector_health_check_metadatum.go
+  - internal/provider/types/input_collector_health_check_preprocess.go
+  - internal/provider/types/input_collector_health_check_run_settings.go
+  - internal/provider/types/input_collector_health_check_saved_state.go
+  - internal/provider/types/input_collector_health_check_schedule.go
+  - internal/provider/types/input_collector_health_check_state_tracking.go
+  - internal/provider/types/input_collector_health_check_time_warning.go
+  - internal/provider/types/input_collector_rest.go
+  - internal/provider/types/input_collector_rest_collector.go
+  - internal/provider/types/input_collector_rest_conf.go
+  - internal/provider/types/input_collector_rest_input.go
+  - internal/provider/types/input_collector_rest_metadatum.go
+  - internal/provider/types/input_collector_rest_preprocess.go
+  - internal/provider/types/input_collector_rest_run_settings.go
+  - internal/provider/types/input_collector_rest_run_state_tracking.go
+  - internal/provider/types/input_collector_rest_saved_state.go
+  - internal/provider/types/input_collector_rest_schedule.go
+  - internal/provider/types/input_collector_rest_time_warning.go
+  - internal/provider/types/input_collector_s3.go
+  - internal/provider/types/input_collector_s3_collector.go
+  - internal/provider/types/input_collector_s3_conf.go
+  - internal/provider/types/input_collector_s3_extractor.go
+  - internal/provider/types/input_collector_s3_input.go
+  - internal/provider/types/input_collector_s3_metadatum.go
+  - internal/provider/types/input_collector_s3_preprocess.go
+  - internal/provider/types/input_collector_s3_run_settings.go
+  - internal/provider/types/input_collector_s3_saved_state.go
+  - internal/provider/types/input_collector_s3_schedule.go
+  - internal/provider/types/input_collector_s3_state_tracking.go
+  - internal/provider/types/input_collector_s3_time_warning.go
+  - internal/provider/types/input_collector_splunk.go
+  - internal/provider/types/input_collector_splunk_collector.go
+  - internal/provider/types/input_collector_splunk_conf.go
+  - internal/provider/types/input_collector_splunk_input.go
+  - internal/provider/types/input_collector_splunk_metadatum.go
+  - internal/provider/types/input_collector_splunk_preprocess.go
+  - internal/provider/types/input_collector_splunk_run_settings.go
+  - internal/provider/types/input_collector_splunk_saved_state.go
+  - internal/provider/types/input_collector_splunk_schedule.go
+  - internal/provider/types/input_collector_splunk_state_tracking.go
+  - internal/provider/types/input_collector_splunk_time_warning.go
   - internal/provider/types/input_confluent_cloud.go
   - internal/provider/types/input_confluent_cloud_auth.go
   - internal/provider/types/input_confluent_cloud_authentication.go
@@ -843,6 +933,7 @@ generatedFiles:
   - internal/provider/types/input_zscaler_hec_pq.go
   - internal/provider/types/input_zscaler_hec_tls_settings_server_side.go
   - internal/provider/types/interfaces.go
+  - internal/provider/types/internal_scheduling.go
   - internal/provider/types/lake_dataset_search_config.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
@@ -1137,6 +1228,7 @@ generatedFiles:
   - internal/provider/types/pack_install_info_tags.go
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
+  - internal/provider/types/pagination_config.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1148,6 +1240,7 @@ generatedFiles:
   - internal/provider/types/prometheus_dataset.go
   - internal/provider/types/prometheus_provider.go
   - internal/provider/types/resource_type_label.go
+  - internal/provider/types/retry_rules_configuration.go
   - internal/provider/types/routes.go
   - internal/provider/types/routes1.go
   - internal/provider/types/routes_groups.go
@@ -1160,6 +1253,7 @@ generatedFiles:
   - internal/provider/types/sample.go
   - internal/provider/types/sas_config.go
   - internal/provider/types/saved_query_schedule.go
+  - internal/provider/types/scheduling_state_tracking.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1877,6 +1971,14 @@ generatedFiles:
   - internal/sdk/models/shared/inputazureblob.go
   - internal/sdk/models/shared/inputcollection.go
   - internal/sdk/models/shared/inputcollector.go
+  - internal/sdk/models/shared/inputcollectorazureblob.go
+  - internal/sdk/models/shared/inputcollectorcribllake.go
+  - internal/sdk/models/shared/inputcollectordatabase.go
+  - internal/sdk/models/shared/inputcollectorgcs.go
+  - internal/sdk/models/shared/inputcollectorhealthcheck.go
+  - internal/sdk/models/shared/inputcollectorrest.go
+  - internal/sdk/models/shared/inputcollectors3.go
+  - internal/sdk/models/shared/inputcollectorsplunk.go
   - internal/sdk/models/shared/inputconfluentcloud.go
   - internal/sdk/models/shared/inputcribl.go
   - internal/sdk/models/shared/inputcriblhttp.go
@@ -2054,6 +2156,7 @@ generatedFiles:
   - internal/sdk/models/shared/packinstallinfo.go
   - internal/sdk/models/shared/packrequestbody.go
   - internal/sdk/models/shared/pagerdutytarget.go
+  - internal/sdk/models/shared/paginationconfig.go
   - internal/sdk/models/shared/parserlibentry.go
   - internal/sdk/models/shared/parsermode.go
   - internal/sdk/models/shared/pipeline.go
@@ -3280,8 +3383,10 @@ examples:
       parameters:
         path:
           groupId: "default"
+        query:
+          id: "<id>"
       requestBody:
-        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "splunk", "destructive": false, "encoding": "utf8"}}
+        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "splunk"}}
       responses:
         "200":
           application/json: {}
@@ -7442,7 +7547,7 @@ examples:
           id: "<id>"
           groupId: "default"
       requestBody:
-        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "gcs", "destructive": false, "encoding": "utf8"}}
+        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "database"}}
       responses:
         "200":
           application/json: {}

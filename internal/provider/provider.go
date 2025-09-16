@@ -89,7 +89,11 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 				Optional:            true,
 			},
 		},
-		MarkdownDescription: `Cribl API Reference: This API Reference lists available REST endpoints, along with their supported operations for accessing, creating, updating, or deleting resources. See our complementary product documentation at [docs.cribl.io](http://docs.cribl.io).`,
+		MarkdownDescription: `Cribl Terraform Provider: The Cribl Terraform provider offers a streamlined, repeatable approach for configuring end-to-end infrastructure as code (IaC) and managing resources consistently across Cribl Organizations and Workspaces.` + "\n" +
+			`` + "\n" +
+			`This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.` + "\n" +
+			`` + "\n" +
+			`Complementary API reference documentation is available at https://docs.cribl.io/api-reference/. Product documentation is available at https://docs.cribl.io.`,
 	}
 }
 

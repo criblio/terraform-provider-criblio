@@ -10,6 +10,8 @@ import (
 type CreateSavedJobRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// The id of this collector instance
+	ID string `queryParam:"style=form,explode=true,name=id"`
 	// New Collector object
 	InputCollector shared.InputCollector `request:"mediaType=application/json"`
 }
@@ -21,6 +23,13 @@ func (o *CreateSavedJobRequest) GetGroupID() string {
 	return o.GroupID
 }
 
+func (o *CreateSavedJobRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
 func (o *CreateSavedJobRequest) GetInputCollector() shared.InputCollector {
 	if o == nil {
 		return shared.InputCollector{}
@@ -30,14 +39,6 @@ func (o *CreateSavedJobRequest) GetInputCollector() shared.InputCollector {
 
 // CreateSavedJobResponseBody - a list of Collector objects
 type CreateSavedJobResponseBody struct {
-	Items []shared.InputCollector `json:"items,omitempty"`
-}
-
-func (o *CreateSavedJobResponseBody) GetItems() []shared.InputCollector {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type CreateSavedJobResponse struct {

@@ -30,14 +30,6 @@ func (o *GetSavedJobByIDRequest) GetGroupID() string {
 
 // GetSavedJobByIDResponseBody - a list of Collector objects
 type GetSavedJobByIDResponseBody struct {
-	Items []shared.InputCollector `json:"items,omitempty"`
-}
-
-func (o *GetSavedJobByIDResponseBody) GetItems() []shared.InputCollector {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type GetSavedJobByIDResponse struct {

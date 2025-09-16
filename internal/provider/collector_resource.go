@@ -9,10 +9,9 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
-	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -20,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -44,18 +44,16 @@ type CollectorResource struct {
 
 // CollectorResourceModel describes the resource data model.
 type CollectorResourceModel struct {
-	Collector            tfTypes.InputCollectorCollector `tfsdk:"collector"`
-	Environment          types.String                    `tfsdk:"environment"`
-	GroupID              types.String                    `tfsdk:"group_id"`
-	ID                   types.String                    `tfsdk:"id"`
-	IgnoreGroupJobsLimit types.Bool                      `tfsdk:"ignore_group_jobs_limit"`
-	Input                *tfTypes.InputCollectorInput    `tfsdk:"input"`
-	RemoveFields         []types.String                  `tfsdk:"remove_fields"`
-	ResumeOnBoot         types.Bool                      `tfsdk:"resume_on_boot"`
-	Schedule             *tfTypes.InputCollectorSchedule `tfsdk:"schedule"`
-	Streamtags           []types.String                  `tfsdk:"streamtags"`
-	TTL                  types.String                    `tfsdk:"ttl"`
-	WorkerAffinity       types.Bool                      `tfsdk:"worker_affinity"`
+	GroupID                   types.String                       `tfsdk:"group_id"`
+	ID                        types.String                       `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
+	InputCollectorAzureBlob   *tfTypes.InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob" tfPlanOnly:"true"`
+	InputCollectorCriblLake   *tfTypes.InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake" tfPlanOnly:"true"`
+	InputCollectorDatabase    *tfTypes.InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database" tfPlanOnly:"true"`
+	InputCollectorGCS         *tfTypes.InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs" tfPlanOnly:"true"`
+	InputCollectorHealthCheck *tfTypes.InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check" tfPlanOnly:"true"`
+	InputCollectorRest        *tfTypes.InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest" tfPlanOnly:"true"`
+	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3" tfPlanOnly:"true"`
+	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk" tfPlanOnly:"true"`
 }
 
 func (r *CollectorResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -66,554 +64,3389 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Collector Resource",
 		Attributes: map[string]schema.Attribute{
-			"collector": schema.SingleNestedAttribute{
-				Required: true,
-				Attributes: map[string]schema.Attribute{
-					"conf": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"auth_type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"manual",
-										"secret",
-										"clientSecret",
-										"clientCert",
-									),
-								},
-							},
-							"authentication": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"none",
-										"basic",
-										"basicSecret",
-										"token",
-										"tokenSecret",
-										"login",
-										"loginSecret",
-										"oauth",
-										"oauthSecret",
-										"google_oauth",
-										"google_oauthSecret",
-										"hmac",
-									),
-								},
-							},
-							"aws_api_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"aws_authentication_method": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `must be one of ["auto", "manual", "secret"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"auto",
-										"manual",
-										"secret",
-									),
-								},
-							},
-							"aws_secret": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"aws_secret_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"bucket": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `S3 Bucket from which to collect data`,
-							},
-							"collect_method": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `must be one of ["get", "post", "post_with_body", "other"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"get",
-										"post",
-										"post_with_body",
-										"other",
-									),
-								},
-							},
-							"collect_url": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `URL to use for the Collect operation`,
-							},
-							"connection_id": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Select an existing Database Connection`,
-							},
-							"connection_string": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Azure storage account Connection String`,
-							},
-							"container_name": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Azure container to collect from`,
-							},
-							"credentials_secret": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"dataset": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Lake dataset to collect data from`,
-							},
-							"disable_time_filter": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"earliest": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Earliest time boundary for the search`,
-							},
-							"endpoint": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `REST API endpoint used to create a search`,
-							},
-							"extractors": schema.ListNestedAttribute{
-								Computed: true,
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
-									Attributes: map[string]schema.Attribute{},
-								},
-							},
-							"handle_escaped_chars": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"latest": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Latest time boundary for the search`,
-							},
-							"max_batch_size": schema.Int64Attribute{
-								Computed: true,
-								Optional: true,
-								Validators: []validator.Int64{
-									int64validator.AtLeast(1),
-								},
-							},
-							"output_mode": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `must be one of ["csv", "json"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"csv",
-										"json",
-									),
-								},
-							},
-							"password": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"path": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Directory where data will be collected`,
-							},
-							"query": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Query string for selecting data from the database`,
-							},
-							"query_validation_enabled": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"recurse": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"region": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `AWS region from which to retrieve data`,
-							},
-							"reject_unauthorized": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"search": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Splunk search query`,
-							},
-							"search_head": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Search head base URL`,
-							},
-							"service_account_credentials": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"storage_account_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"timeout": schema.Int64Attribute{
-								Computed: true,
-								Optional: true,
-								Validators: []validator.Int64{
-									int64validator.AtMost(1800),
-								},
-							},
-							"token": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"token_secret": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"use_round_robin_dns": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-					},
-					"destructive": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Delete any files collected (where applicable). Default: false`,
-					},
-					"encoding": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`utf8`),
-						Description: `Character encoding to use when parsing ingested data. Default: "utf8"`,
-					},
-					"type": schema.StringAttribute{
-						Required:    true,
-						Description: `must be one of ["splunk", "s3", "azureblob", "cribllake", "database", "gcs", "healthcheck", "rest"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"splunk",
-								"s3",
-								"azureblob",
-								"cribllake",
-								"database",
-								"gcs",
-								"healthcheck",
-								"rest",
-							),
-						},
-					},
-				},
-			},
-			"environment": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Unique ID to PATCH`,
+				Required:    true,
+				Description: `The id of this collector instance`,
 			},
-			"ignore_group_jobs_limit": schema.BoolAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     booldefault.StaticBool(false),
-				Description: `Default: false`,
-			},
-			"input": schema.SingleNestedAttribute{
-				Computed: true,
+			"input_collector_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
-					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						ElementType: types.StringType,
-						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
-					},
-					"metadata": schema.ListNestedAttribute{
-						Computed: true,
-						Optional: true,
-						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
-							Attributes: map[string]schema.Attribute{
-								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"auth_type": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"manual",
+												"secret",
+												"clientSecret",
+												"clientCert",
+											),
+										},
+									},
+									"connection_string": schema.StringAttribute{
+										Optional:    true,
+										Description: `Azure storage account Connection String`,
+									},
+									"container_name": schema.StringAttribute{
+										Optional:    true,
+										Description: `Azure container to collect from`,
+									},
+									"extractors": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{},
+										},
+									},
+									"max_batch_size": schema.Int64Attribute{
+										Optional: true,
+										Validators: []validator.Int64{
+											int64validator.AtLeast(1),
+										},
+									},
+									"path": schema.StringAttribute{
+										Optional:    true,
+										Description: `Directory where data will be collected`,
+									},
+									"recurse": schema.BoolAttribute{
+										Optional: true,
+									},
+									"storage_account_name": schema.StringAttribute{
+										Optional: true,
 									},
 								},
-								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
-								},
 							},
-						},
-						Description: `Fields to add to events from this input`,
-					},
-					"output": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Destination to send results to`,
-					},
-					"pipeline": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Pipeline to process results`,
-					},
-					"preprocess": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"args": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Arguments to be added to the custom command`,
-							},
-							"command": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
-							},
-							"disabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Default: true`,
-							},
-						},
-					},
-					"send_to_routes": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(true),
-						Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
-					},
-					"stale_channel_flush_ms": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(10000),
-						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
-						Validators: []validator.Float64{
-							float64validator.Between(10, 43200000),
-						},
-					},
-					"throttle_rate_per_sec": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`0`),
-						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
-						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
-						},
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`collection`),
-						Description: `Default: "collection"; must be "collection"`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"collection",
-							),
-						},
-					},
-				},
-			},
-			"remove_fields": schema.ListAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-				ElementType: types.StringType,
-			},
-			"resume_on_boot": schema.BoolAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     booldefault.StaticBool(true),
-				Description: `Default: true`,
-			},
-			"schedule": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"cron_schedule": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`*/5 * * * *`),
-						Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
-					},
-					"enabled": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Enable to configure scheduling for this Collector`,
-					},
-					"max_concurrent_runs": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(1),
-						Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(1),
-						},
-					},
-					"run": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"earliest": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Earliest time to collect data for the selected timezone`,
-							},
-							"expression": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`true`),
-								Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
-							},
-							"job_timeout": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
-								Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
-								},
-							},
-							"latest": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Latest time to collect data for the selected timezone`,
-							},
-							"log_level": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`info`),
-								Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "azureblob"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
-										"error",
-										"warn",
-										"info",
-										"debug",
-										"silly",
+										"azureblob",
 									),
 								},
 							},
-							"max_task_reschedule": schema.Float64Attribute{
+						},
+					},
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Optional: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(1),
-								Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
-							"max_task_size": schema.StringAttribute{
+							"resume_missed": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     stringdefault.StaticString(`10MB`),
-								Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
 								},
 							},
-							"min_task_size": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`1MB`),
-								Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
-								},
-							},
-							"mode": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`list`),
-								Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"`,
-							},
-							"reschedule_dropped_tasks": schema.BoolAttribute{
+							"skippable": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(true),
-								Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
-							"time_range_type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`relative`),
-								Description: `Default: "relative"`,
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_cribl_lake"),
+						path.MatchRelative().AtParent().AtName("input_collector_database"),
+						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
+						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
+						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
+					}...),
+				},
+			},
+			"input_collector_cribl_lake": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"dataset": schema.StringAttribute{
+										Optional:    true,
+										Description: `Lake dataset to collect data from`,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "cribllake"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"cribllake",
+									),
+								},
 							},
 						},
 					},
-					"skippable": schema.BoolAttribute{
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Optional: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1),
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"resume_missed": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
+								},
+							},
+							"skippable": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+							},
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
 					},
 				},
-				Description: `Configuration for a scheduled job`,
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collector_database"),
+						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
+						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
+						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
+					}...),
+				},
 			},
-			"streamtags": schema.ListAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-				ElementType: types.StringType,
-				Description: `Tags for filtering and grouping`,
+			"input_collector_database": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"connection_id": schema.StringAttribute{
+										Optional:    true,
+										Description: `Select an existing Database Connection`,
+									},
+									"query": schema.StringAttribute{
+										Optional:    true,
+										Description: `Query string for selecting data from the database`,
+									},
+									"query_validation_enabled": schema.BoolAttribute{
+										Optional: true,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "database"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf("database"),
+								},
+							},
+						},
+					},
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Optional: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1),
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"resume_missed": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
+								},
+							},
+							"skippable": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+							},
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collector_cribl_lake"),
+						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
+						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
+						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
+					}...),
+				},
 			},
-			"ttl": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     stringdefault.StaticString(`4h`),
-				Description: `Default: "4h"`,
+			"input_collector_gcs": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"auth_type": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"manual",
+												"secret",
+												"clientSecret",
+												"clientCert",
+											),
+										},
+									},
+									"bucket": schema.StringAttribute{
+										Optional:    true,
+										Description: `GCS Bucket from which to collect data`,
+									},
+									"extractors": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{},
+										},
+									},
+									"max_batch_size": schema.Int64Attribute{
+										Optional: true,
+										Validators: []validator.Int64{
+											int64validator.AtLeast(1),
+										},
+									},
+									"path": schema.StringAttribute{
+										Optional:    true,
+										Description: `Directory where data will be collected`,
+									},
+									"recurse": schema.BoolAttribute{
+										Optional: true,
+									},
+									"service_account_credentials": schema.StringAttribute{
+										Optional: true,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "gcs"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf("gcs"),
+								},
+							},
+						},
+					},
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Optional: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1),
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"resume_missed": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
+								},
+							},
+							"skippable": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+							},
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collector_cribl_lake"),
+						path.MatchRelative().AtParent().AtName("input_collector_database"),
+						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
+						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
+					}...),
+				},
 			},
-			"worker_affinity": schema.BoolAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     booldefault.StaticBool(false),
-				Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+			"input_collector_health_check": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"authentication": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"none",
+												"basic",
+												"basicSecret",
+												"token",
+												"tokenSecret",
+												"login",
+												"loginSecret",
+												"oauth",
+												"oauthSecret",
+												"google_oauth",
+												"google_oauthSecret",
+												"hmac",
+											),
+										},
+									},
+									"collect_method": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["get", "post", "post_with_body", "other"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"get",
+												"post",
+												"post_with_body",
+												"other",
+											),
+										},
+									},
+									"collect_url": schema.StringAttribute{
+										Optional:    true,
+										Description: `URL to use for the Collect operation`,
+									},
+									"credentials_secret": schema.StringAttribute{
+										Optional: true,
+									},
+									"password": schema.StringAttribute{
+										Optional: true,
+									},
+									"reject_unauthorized": schema.BoolAttribute{
+										Optional: true,
+									},
+									"timeout": schema.Int64Attribute{
+										Optional: true,
+										Validators: []validator.Int64{
+											int64validator.AtMost(1800),
+										},
+									},
+									"username": schema.StringAttribute{
+										Optional: true,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "healthcheck"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"healthcheck",
+									),
+								},
+							},
+						},
+					},
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Optional: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1),
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"resume_missed": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
+								},
+							},
+							"skippable": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+							},
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collector_cribl_lake"),
+						path.MatchRelative().AtParent().AtName("input_collector_database"),
+						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
+						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
+					}...),
+				},
+			},
+			"input_collector_rest": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"auth_header_expr": schema.StringAttribute{
+										Optional:    true,
+										Description: `Expression for auth header value`,
+									},
+									"auth_header_key": schema.StringAttribute{
+										Optional:    true,
+										Description: `Header key for authentication`,
+									},
+									"auth_request_headers": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Optional: true,
+												},
+												"value": schema.StringAttribute{
+													Optional: true,
+												},
+											},
+										},
+									},
+									"auth_request_params": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Optional: true,
+												},
+												"value": schema.StringAttribute{
+													Optional: true,
+												},
+											},
+										},
+									},
+									"authentication": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"none",
+												"basic",
+												"basicSecret",
+												"token",
+												"tokenSecret",
+												"login",
+												"loginSecret",
+												"oauth",
+												"oauthSecret",
+												"google_oauth",
+												"google_oauthSecret",
+												"hmac",
+											),
+										},
+									},
+									"capture_headers": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Default: false`,
+									},
+									"client_secret_param_name": schema.StringAttribute{
+										Optional: true,
+									},
+									"collect_method": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["get", "post", "post_with_body", "other"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"get",
+												"post",
+												"post_with_body",
+												"other",
+											),
+										},
+									},
+									"collect_request_headers": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Optional: true,
+												},
+												"value": schema.StringAttribute{
+													Optional: true,
+												},
+											},
+										},
+									},
+									"collect_request_params": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Optional: true,
+												},
+												"value": schema.StringAttribute{
+													Optional: true,
+												},
+											},
+										},
+									},
+									"collect_url": schema.StringAttribute{
+										Optional:    true,
+										Description: `URL to use for the Collect operation`,
+									},
+									"credentials_secret": schema.StringAttribute{
+										Optional: true,
+									},
+									"decode_url": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Default: false`,
+									},
+									"disable_time_filter": schema.BoolAttribute{
+										Optional: true,
+									},
+									"discovery": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"discover_body": schema.StringAttribute{
+												Optional: true,
+											},
+											"discover_data_field": schema.StringAttribute{
+												Optional: true,
+											},
+											"discover_method": schema.StringAttribute{
+												Optional:    true,
+												Description: `must be one of ["get", "post", "post_with_body", "other"]`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"get",
+														"post",
+														"post_with_body",
+														"other",
+													),
+												},
+											},
+											"discover_request_headers": schema.ListNestedAttribute{
+												Optional: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Optional: true,
+														},
+														"value": schema.StringAttribute{
+															Optional: true,
+														},
+													},
+												},
+											},
+											"discover_request_params": schema.ListNestedAttribute{
+												Optional: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{},
+												},
+											},
+											"discover_type": schema.StringAttribute{
+												Optional:    true,
+												Description: `must be "http"`,
+												Validators: []validator.String{
+													stringvalidator.OneOf("http"),
+												},
+											},
+											"discover_url": schema.StringAttribute{
+												Optional: true,
+											},
+											"enable_discover_code": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"format_result_code": schema.StringAttribute{
+												Optional: true,
+											},
+											"item_list": schema.ListAttribute{
+												Optional:    true,
+												ElementType: types.StringType,
+											},
+											"pagination": schema.SingleNestedAttribute{
+												Optional: true,
+												Attributes: map[string]schema.Attribute{
+													"attribute": schema.ListAttribute{
+														Optional:    true,
+														ElementType: types.StringType,
+													},
+													"last_page_expr": schema.StringAttribute{
+														Optional: true,
+													},
+													"limit": schema.Int64Attribute{
+														Computed:    true,
+														Optional:    true,
+														Default:     int64default.StaticInt64(100),
+														Description: `Default: 100`,
+													},
+													"limit_field": schema.StringAttribute{
+														Optional: true,
+													},
+													"max_pages": schema.Int64Attribute{
+														Computed:    true,
+														Optional:    true,
+														Default:     int64default.StaticInt64(0),
+														Description: `Default: 0`,
+													},
+													"offset": schema.Int64Attribute{
+														Optional: true,
+													},
+													"offset_field": schema.StringAttribute{
+														Optional: true,
+													},
+													"page_field": schema.StringAttribute{
+														Optional: true,
+													},
+													"size": schema.Int64Attribute{
+														Computed:    true,
+														Optional:    true,
+														Default:     int64default.StaticInt64(50),
+														Description: `Default: 50`,
+													},
+													"size_field": schema.StringAttribute{
+														Optional: true,
+													},
+													"total_record_field": schema.StringAttribute{
+														Optional: true,
+													},
+													"type": schema.StringAttribute{
+														Computed:    true,
+														Optional:    true,
+														Default:     stringdefault.StaticString(`none`),
+														Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page"]`,
+														Validators: []validator.String{
+															stringvalidator.OneOf(
+																"none",
+																"offset",
+																"cursor",
+																"page",
+															),
+														},
+													},
+													"zero_indexed": schema.BoolAttribute{
+														Computed:    true,
+														Optional:    true,
+														Default:     booldefault.StaticBool(false),
+														Description: `Default: false`,
+													},
+												},
+											},
+										},
+									},
+									"login_body": schema.StringAttribute{
+										Optional:    true,
+										Description: `Body content for login request`,
+									},
+									"login_url": schema.StringAttribute{
+										Optional:    true,
+										Description: `URL for authentication login`,
+									},
+									"pagination": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"attribute": schema.ListAttribute{
+												Optional:    true,
+												ElementType: types.StringType,
+											},
+											"last_page_expr": schema.StringAttribute{
+												Optional: true,
+											},
+											"limit": schema.Int64Attribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     int64default.StaticInt64(100),
+												Description: `Default: 100`,
+											},
+											"limit_field": schema.StringAttribute{
+												Optional: true,
+											},
+											"max_pages": schema.Int64Attribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     int64default.StaticInt64(0),
+												Description: `Default: 0`,
+											},
+											"offset": schema.Int64Attribute{
+												Optional: true,
+											},
+											"offset_field": schema.StringAttribute{
+												Optional: true,
+											},
+											"page_field": schema.StringAttribute{
+												Optional: true,
+											},
+											"size": schema.Int64Attribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     int64default.StaticInt64(50),
+												Description: `Default: 50`,
+											},
+											"size_field": schema.StringAttribute{
+												Optional: true,
+											},
+											"total_record_field": schema.StringAttribute{
+												Optional: true,
+											},
+											"type": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     stringdefault.StaticString(`none`),
+												Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page"]`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"none",
+														"offset",
+														"cursor",
+														"page",
+													),
+												},
+											},
+											"zero_indexed": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+										},
+									},
+									"password": schema.StringAttribute{
+										Optional: true,
+									},
+									"reject_unauthorized": schema.BoolAttribute{
+										Optional: true,
+									},
+									"retry_rules": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"codes": schema.ListAttribute{
+												Optional:    true,
+												ElementType: types.Int64Type,
+											},
+											"enable_header": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(true),
+												Description: `Default: true`,
+											},
+											"interval": schema.Int64Attribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     int64default.StaticInt64(1000),
+												Description: `Default: 1000`,
+											},
+											"limit": schema.Int64Attribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     int64default.StaticInt64(5),
+												Description: `Default: 5`,
+											},
+											"max_interval_ms": schema.Int64Attribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     int64default.StaticInt64(20000),
+												Description: `Default: 20000`,
+											},
+											"multiplier": schema.Float64Attribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     float64default.StaticFloat64(2),
+												Description: `Default: 2`,
+											},
+											"retry_connect_reset": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"retry_connect_timeout": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"retry_header_name": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     stringdefault.StaticString(`retry-after`),
+												Description: `Default: "retry-after"`,
+											},
+											"type": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     stringdefault.StaticString(`backoff`),
+												Description: `Default: "backoff"; must be one of ["backoff", "fixed"]`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"backoff",
+														"fixed",
+													),
+												},
+											},
+										},
+									},
+									"safe_headers": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+									},
+									"scheduling": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"state_tracking": schema.SingleNestedAttribute{
+												Optional: true,
+											},
+										},
+									},
+									"timeout": schema.Int64Attribute{
+										Optional: true,
+										Validators: []validator.Int64{
+											int64validator.AtMost(1800),
+										},
+									},
+									"token": schema.StringAttribute{
+										Optional: true,
+									},
+									"token_resp_attribute": schema.StringAttribute{
+										Optional:    true,
+										Description: `Attribute name for token in response`,
+									},
+									"token_secret": schema.StringAttribute{
+										Optional: true,
+									},
+									"use_round_robin_dns": schema.BoolAttribute{
+										Optional: true,
+									},
+									"username": schema.StringAttribute{
+										Optional: true,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "rest"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf("rest"),
+								},
+							},
+						},
+					},
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Optional: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1),
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"resume_missed": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
+								},
+							},
+							"skippable": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+							},
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collector_cribl_lake"),
+						path.MatchRelative().AtParent().AtName("input_collector_database"),
+						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
+						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
+						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
+					}...),
+				},
+			},
+			"input_collector_s3": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"aws_api_key": schema.StringAttribute{
+										Optional: true,
+									},
+									"aws_authentication_method": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["auto", "manual", "secret"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"auto",
+												"manual",
+												"secret",
+											),
+										},
+									},
+									"aws_secret": schema.StringAttribute{
+										Optional: true,
+									},
+									"aws_secret_key": schema.StringAttribute{
+										Optional: true,
+									},
+									"bucket": schema.StringAttribute{
+										Optional:    true,
+										Description: `S3 Bucket from which to collect data`,
+									},
+									"extractors": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{},
+										},
+									},
+									"max_batch_size": schema.Int64Attribute{
+										Optional: true,
+										Validators: []validator.Int64{
+											int64validator.AtLeast(1),
+										},
+									},
+									"path": schema.StringAttribute{
+										Optional:    true,
+										Description: `Directory where data will be collected`,
+									},
+									"recurse": schema.BoolAttribute{
+										Optional: true,
+									},
+									"region": schema.StringAttribute{
+										Optional:    true,
+										Description: `AWS region from which to retrieve data`,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "s3"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf("s3"),
+								},
+							},
+						},
+					},
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Optional: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1),
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"resume_missed": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
+								},
+							},
+							"skippable": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+							},
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collector_cribl_lake"),
+						path.MatchRelative().AtParent().AtName("input_collector_database"),
+						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
+						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
+						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
+					}...),
+				},
+			},
+			"input_collector_splunk": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"authentication": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"none",
+												"basic",
+												"basicSecret",
+												"token",
+												"tokenSecret",
+												"login",
+												"loginSecret",
+												"oauth",
+												"oauthSecret",
+												"google_oauth",
+												"google_oauthSecret",
+												"hmac",
+											),
+										},
+									},
+									"credentials_secret": schema.StringAttribute{
+										Optional: true,
+									},
+									"disable_time_filter": schema.BoolAttribute{
+										Optional: true,
+									},
+									"earliest": schema.StringAttribute{
+										Optional:    true,
+										Description: `Earliest time boundary for the search`,
+									},
+									"endpoint": schema.StringAttribute{
+										Optional:    true,
+										Description: `REST API endpoint used to create a search`,
+									},
+									"handle_escaped_chars": schema.BoolAttribute{
+										Optional: true,
+									},
+									"latest": schema.StringAttribute{
+										Optional:    true,
+										Description: `Latest time boundary for the search`,
+									},
+									"output_mode": schema.StringAttribute{
+										Optional:    true,
+										Description: `must be one of ["csv", "json"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"csv",
+												"json",
+											),
+										},
+									},
+									"password": schema.StringAttribute{
+										Optional: true,
+									},
+									"reject_unauthorized": schema.BoolAttribute{
+										Optional: true,
+									},
+									"search": schema.StringAttribute{
+										Optional:    true,
+										Description: `Splunk search query`,
+									},
+									"search_head": schema.StringAttribute{
+										Optional:    true,
+										Description: `Search head base URL`,
+									},
+									"timeout": schema.Int64Attribute{
+										Optional: true,
+										Validators: []validator.Int64{
+											int64validator.AtMost(1800),
+										},
+									},
+									"token": schema.StringAttribute{
+										Optional: true,
+									},
+									"token_secret": schema.StringAttribute{
+										Optional: true,
+									},
+									"use_round_robin_dns": schema.BoolAttribute{
+										Optional: true,
+									},
+									"username": schema.StringAttribute{
+										Optional: true,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "splunk"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf("splunk"),
+								},
+							},
+						},
+					},
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Optional: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1),
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"resume_missed": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
+								},
+							},
+							"skippable": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+							},
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collector_cribl_lake"),
+						path.MatchRelative().AtParent().AtName("input_collector_database"),
+						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
+						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
+						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+					}...),
+				},
 			},
 		},
 	}
@@ -679,11 +3512,11 @@ func (r *CollectorResource) Create(ctx context.Context, req resource.CreateReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInputCollector(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateSavedJobResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -743,11 +3576,11 @@ func (r *CollectorResource) Read(ctx context.Context, req resource.ReadRequest, 
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInputCollector(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSavedJobByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -793,11 +3626,11 @@ func (r *CollectorResource) Update(ctx context.Context, req resource.UpdateReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInputCollector(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateCollectorByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

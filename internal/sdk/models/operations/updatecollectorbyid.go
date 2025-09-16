@@ -39,14 +39,6 @@ func (o *UpdateCollectorByIDRequest) GetInputCollector() shared.InputCollector {
 
 // UpdateCollectorByIDResponseBody - a list of Collector objects
 type UpdateCollectorByIDResponseBody struct {
-	Items []shared.InputCollector `json:"items,omitempty"`
-}
-
-func (o *UpdateCollectorByIDResponseBody) GetItems() []shared.InputCollector {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type UpdateCollectorByIDResponse struct {

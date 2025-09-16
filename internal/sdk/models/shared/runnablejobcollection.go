@@ -600,17 +600,17 @@ func (e *RunnableJobCollectionMode) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type TimeRange string
+type RunnableJobCollectionTimeRange string
 
 const (
-	TimeRangeAbsolute TimeRange = "absolute"
-	TimeRangeRelative TimeRange = "relative"
+	RunnableJobCollectionTimeRangeAbsolute RunnableJobCollectionTimeRange = "absolute"
+	RunnableJobCollectionTimeRangeRelative RunnableJobCollectionTimeRange = "relative"
 )
 
-func (e TimeRange) ToPointer() *TimeRange {
+func (e RunnableJobCollectionTimeRange) ToPointer() *RunnableJobCollectionTimeRange {
 	return &e
 }
-func (e *TimeRange) UnmarshalJSON(data []byte) error {
+func (e *RunnableJobCollectionTimeRange) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -619,10 +619,10 @@ func (e *TimeRange) UnmarshalJSON(data []byte) error {
 	case "absolute":
 		fallthrough
 	case "relative":
-		*e = TimeRange(v)
+		*e = RunnableJobCollectionTimeRange(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for TimeRange: %v", v)
+		return fmt.Errorf("invalid value for RunnableJobCollectionTimeRange: %v", v)
 	}
 }
 
@@ -722,8 +722,8 @@ type RunnableJobCollectionRun struct {
 	// Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 	JobTimeout *string `default:"0" json:"jobTimeout"`
 	// Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
-	Mode          *RunnableJobCollectionMode `default:"list" json:"mode"`
-	TimeRangeType *TimeRange                 `default:"relative" json:"timeRangeType"`
+	Mode          *RunnableJobCollectionMode      `default:"list" json:"mode"`
+	TimeRangeType *RunnableJobCollectionTimeRange `default:"relative" json:"timeRangeType"`
 	// Earliest time to collect data for the selected timezone
 	Earliest *float64 `json:"earliest,omitempty"`
 	// Latest time to collect data for the selected timezone
@@ -790,7 +790,7 @@ func (o *RunnableJobCollectionRun) GetMode() *RunnableJobCollectionMode {
 	return o.Mode
 }
 
-func (o *RunnableJobCollectionRun) GetTimeRangeType() *TimeRange {
+func (o *RunnableJobCollectionRun) GetTimeRangeType() *RunnableJobCollectionTimeRange {
 	if o == nil {
 		return nil
 	}

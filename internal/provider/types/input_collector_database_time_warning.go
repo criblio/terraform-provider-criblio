@@ -2,5 +2,5 @@
 
 package types
 
-type Extractor struct {
+type InputCollectorDatabaseTimeWarning struct {
 }

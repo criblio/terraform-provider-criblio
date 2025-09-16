@@ -1,10 +1,12 @@
 openapi: 3.0.2
 info:
-  title: Cribl API Reference
-  description: This API Reference lists available REST endpoints, along with their
-    supported operations for accessing, creating, updating, or deleting
-    resources. See our complementary product documentation at
-    [docs.cribl.io](http://docs.cribl.io).
+  title: Cribl Terraform Provider
+  description: |
+    The Cribl Terraform provider offers a streamlined, repeatable approach for configuring end-to-end infrastructure as code (IaC) and managing resources consistently across Cribl Organizations and Workspaces.
+
+    This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.
+
+    Complementary API reference documentation is available at https://docs.cribl.io/api-reference/. Product documentation is available at https://docs.cribl.io.
   version: 4.12.2-4b17c8d4
   contact:
     name: Support
@@ -831,7 +833,8 @@ components:
         - $ref: "#/components/schemas/SavedJobExecutor"
         - $ref: "#/components/schemas/SavedJobScheduledSearch"
 
-    InputCollector:
+    
+    InputCollectorBase:
       type: object
       required:
         - collector
@@ -866,6 +869,11 @@ components:
         environment:
           type: string
           title: Environment
+        savedState:
+          type: object
+          title: Saved state
+          description: Saved state for the collector
+          default: {}
         schedule:
           type: object
           title: Schedule
@@ -891,6 +899,11 @@ components:
               title: Skippable
               description: Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
               default: true
+            resumeMissed:
+              type: boolean
+              title: Resume missed
+              description: Resume missed scheduled runs
+              default: false
             run:
               type: object
               title: Run settings
@@ -925,16 +938,20 @@ components:
                   title: Mode
                   description: Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
                   default: list
+                  enum: [list, preview, run]
                 timeRangeType:
                   type: string
                   title: Time range
                   default: relative
+                  enum: [relative, absolute]
                 earliest:
                   type: number
+                  default: 0
                   title: Earliest
                   description: Earliest time to collect data for the selected timezone
                 latest:
                   type: number
+                  default: 1
                   title: Latest
                   description: Latest time to collect data for the selected timezone
                 expression:
@@ -954,6 +971,25 @@ components:
                   description: "Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks."
                   default: 10MB
                   pattern: ^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$
+                timeWarning:
+                  type: object
+                  title: Time warning
+                  description: Time warning configuration
+                stateTracking:
+                  type: object
+                  title: State tracking
+                  description: State tracking configuration
+                  properties:
+                    stateUpdateExpression:
+                      type: string
+                      title: State update expression
+                    stateMergeExpression:
+                      type: string
+                      title: State merge expression
+                    enabled:
+                      type: boolean
+                      title: Enabled
+                      default: false
         streamtags:
           type: array
           title: Tags
@@ -1041,7 +1077,7 @@ components:
               title: Destination
               description: Destination to send results to
 
-        # Unified Collector Configuration
+        # Common collector properties
         collector:
           type: object
           required:
@@ -1061,174 +1097,645 @@ components:
               title: Encoding
               description: Character encoding to use when parsing ingested data
               default: "utf8"
-            
-            # Unified Configuration Object - Contains ALL collector properties
-            conf:
+
+    # Specific collector type implementations
+    InputCollectorSplunk:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
               type: object
+              required: [type]
               properties:
-                # Splunk Collector Properties
-                searchHead:
+                type:
                   type: string
-                  title: Search head
-                  description: Search head base URL
-                search:
-                  type: string
-                  title: Search
-                  description: Splunk search query
-                earliest:
-                  type: string
-                  title: Earliest
-                  description: Earliest time boundary for the search
-                latest:
-                  type: string
-                  title: Latest
-                  description: Latest time boundary for the search
-                endpoint:
-                  type: string
-                  title: Search endpoint
-                  description: REST API endpoint used to create a search
-                outputMode:
-                  type: string
-                  enum: [csv, json]
-                  title: Output mode
-                authentication:
-                  type: string
-                  enum: [none, basic, basicSecret, token, tokenSecret, login, loginSecret, oauth, oauthSecret, google_oauth, google_oauthSecret, hmac]
-                  title: Authentication
-                timeout:
-                  type: integer
-                  minimum: 0
-                  maximum: 1800
-                  title: Timeout (secs)
-                useRoundRobinDns:
-                  type: boolean
-                  title: Use round robin DNS
-                disableTimeFilter:
-                  type: boolean
-                  title: Disable time filter
-                rejectUnauthorized:
-                  type: boolean
-                  title: Reject unauthorized certificates
-                handleEscapedChars:
-                  type: boolean
-                  title: Handle escaped characters
-                username:
-                  type: string
-                  title: Username
-                password:
-                  type: string
-                  title: Password
-                credentialsSecret:
-                  type: string
-                  title: Credentials secret
-                token:
-                  type: string
-                  title: Bearer token
-                tokenSecret:
-                  type: string
-                  title: Bearer token secret
+                  enum: [splunk]
+                conf:
+                  type: object
+                  properties:
+                    searchHead:
+                      type: string
+                      title: Search head
+                      description: Search head base URL
+                    search:
+                      type: string
+                      title: Search
+                      description: Splunk search query
+                    earliest:
+                      type: string
+                      title: Earliest
+                      description: Earliest time boundary for the search
+                    latest:
+                      type: string
+                      title: Latest
+                      description: Latest time boundary for the search
+                    endpoint:
+                      type: string
+                      title: Search endpoint
+                      description: REST API endpoint used to create a search
+                    outputMode:
+                      type: string
+                      enum: [csv, json]
+                      title: Output mode
+                    authentication:
+                      type: string
+                      enum: [none, basic, basicSecret, token, tokenSecret, login, loginSecret, oauth, oauthSecret, google_oauth, google_oauthSecret, hmac]
+                      title: Authentication
+                    timeout:
+                      type: integer
+                      minimum: 0
+                      maximum: 1800
+                      title: Timeout (secs)
+                    useRoundRobinDns:
+                      type: boolean
+                      title: Use round robin DNS
+                    disableTimeFilter:
+                      type: boolean
+                      title: Disable time filter
+                    rejectUnauthorized:
+                      type: boolean
+                      title: Reject unauthorized certificates
+                    handleEscapedChars:
+                      type: boolean
+                      title: Handle escaped characters
+                    username:
+                      type: string
+                      title: Username
+                    password:
+                      type: string
+                      title: Password
+                    credentialsSecret:
+                      type: string
+                      title: Credentials secret
+                    token:
+                      type: string
+                      title: Bearer token
+                    tokenSecret:
+                      type: string
+                      title: Bearer token secret
 
-                # S3 Collector Properties
-                bucket:
+    InputCollectorRest:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
                   type: string
-                  title: S3 bucket
-                  description: S3 Bucket from which to collect data
-                region:
-                  type: string
-                  title: Region
-                  description: AWS region from which to retrieve data
-                path:
-                  type: string
-                  title: Path
-                  description: Directory where data will be collected
-                awsAuthenticationMethod:
-                  type: string
-                  title: Authentication method
-                  enum: [auto, manual, secret]
-                awsApiKey:
-                  type: string
-                  title: Access key
-                awsSecretKey:
-                  type: string
-                  title: Secret key
-                awsSecret:
-                  type: string
-                  title: Secret key pair
-                recurse:
-                  type: boolean
-                  title: Recursive
-                extractors:
-                  type: array
-                  title: Path extractors
-                  items:
-                    type: object
-                maxBatchSize:
-                  type: integer
-                  title: Batch size limit
-                  minimum: 1
+                  enum: [rest]
+                conf:
+                  type: object
+                  properties:
+                    # Authentication Properties
+                    authentication:
+                      type: string
+                      enum: [none, basic, basicSecret, token, tokenSecret, login, loginSecret, oauth, oauthSecret, google_oauth, google_oauthSecret, hmac]
+                      title: Authentication
+                    username:
+                      type: string
+                      title: Username
+                    password:
+                      type: string
+                      title: Password
+                    credentialsSecret:
+                      type: string
+                      title: Credentials secret
+                    token:
+                      type: string
+                      title: Bearer token
+                    tokenSecret:
+                      type: string
+                      title: Bearer token secret
+                    loginUrl:
+                      type: string
+                      title: Login URL
+                      description: URL for authentication login
+                    loginBody:
+                      type: string
+                      title: Login body
+                      description: Body content for login request
+                    authHeaderKey:
+                      type: string
+                      title: Auth header key
+                      description: Header key for authentication
+                    authHeaderExpr:
+                      type: string
+                      title: Auth header expression
+                      description: Expression for auth header value
+                    clientSecretParamName:
+                      type: string
+                      title: Client secret parameter name
+                    authRequestParams:
+                      type: array
+                      title: Auth request parameters
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            title: Parameter name
+                          value:
+                            type: string
+                            title: Parameter value
+                    tokenRespAttribute:
+                      type: string
+                      title: Token response attribute
+                      description: Attribute name for token in response
+                    authRequestHeaders:
+                      type: array
+                      title: Auth request headers
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            title: Header name
+                          value:
+                            type: string
+                            title: Header value
 
-                # Azure Blob Collector Properties
-                containerName:
-                  type: string
-                  title: Container name
-                  description: Azure container to collect from
-                storageAccountName:
-                  type: string
-                  title: Storage account name
-                connectionString:
-                  type: string
-                  title: Connection string
-                  description: Azure storage account Connection String
-                authType:
-                  type: string
-                  title: Authentication method
-                  enum: [manual, secret, clientSecret, clientCert]
+                    # Collection Properties
+                    collectUrl:
+                      type: string
+                      title: Collect URL
+                      description: URL to use for the Collect operation
+                    collectMethod:
+                      type: string
+                      title: Collect method
+                      enum: [get, post, post_with_body, other]
+                    collectRequestHeaders:
+                      type: array
+                      title: Collect request headers
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            title: Header name
+                          value:
+                            type: string
+                            title: Header value
+                    collectRequestParams:
+                      type: array
+                      title: Collect request parameters
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            title: Parameter name
+                          value:
+                            type: string
+                            title: Parameter value
 
-                # Cribl Lake Collector Properties
-                dataset:
-                  type: string
-                  title: Lake dataset
-                  description: Lake dataset to collect data from
+                    # Request Configuration
+                    timeout:
+                      type: integer
+                      minimum: 0
+                      maximum: 1800
+                      title: Timeout (secs)
+                    useRoundRobinDns:
+                      type: boolean
+                      title: Use round robin DNS
+                    disableTimeFilter:
+                      type: boolean
+                      title: Disable time filter
+                    decodeUrl:
+                      type: boolean
+                      title: Decode URL
+                      default: false
+                    rejectUnauthorized:
+                      type: boolean
+                      title: Reject unauthorized certificates
+                    captureHeaders:
+                      type: boolean
+                      title: Capture headers
+                      default: false
+                    safeHeaders:
+                      type: array
+                      title: Safe headers
+                      items:
+                        type: string
 
-                # Database Collector Properties
-                connectionId:
-                  type: string
-                  title: Connection
-                  description: Select an existing Database Connection
-                query:
-                  type: string
-                  title: SQL Query
-                  description: Query string for selecting data from the database
-                queryValidationEnabled:
-                  type: boolean
-                  title: Validate Query
-                
-                # Google Cloud Storage Properties
-                serviceAccountCredentials:
-                  type: string
-                  title: Service account credentials
-                # bucket: (shared with S3, defined above)
-                # path: (shared with S3, defined above)  
-                # authType: (shared with Azure, defined above)
-                # recurse: (shared with S3, defined above)
-                # maxBatchSize: (shared with S3, defined above)
-                # extractors: (shared with S3, defined above)
+                    # Discovery Configuration
+                    discovery:
+                      type: object
+                      title: Discovery Configuration
+                      properties:
+                        discoverType:
+                          type: string
+                          title: Discover type
+                          enum: [http]
+                        discoverMethod:
+                          type: string
+                          title: Discover method
+                          enum: [get, post, post_with_body, other]
+                        pagination:
+                          $ref: '#/components/schemas/PaginationConfig'
+                        enableDiscoverCode:
+                          type: boolean
+                          title: Enable discover code
+                          default: false
+                        itemList:
+                          type: array
+                          title: Item list
+                          items:
+                            type: string
+                        discoverUrl:
+                          type: string
+                          title: Discover URL
+                        discoverRequestHeaders:
+                          type: array
+                          title: Discover request headers
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                title: Header name
+                              value:
+                                type: string
+                                title: Header value
+                        discoverRequestParams:
+                          type: array
+                          title: Discover request parameters
+                          items:
+                            type: object
+                        discoverBody:
+                          type: string
+                          title: Discover body
+                        formatResultCode:
+                          type: string
+                          title: Format result code
+                        discoverDataField:
+                          type: string
+                          title: Discover data field
 
-                # Health Check & Rest Collector Properties - Both use collectUrl format
-                collectUrl:
+                    # Pagination Configuration  
+                    pagination:
+                      $ref: '#/components/schemas/PaginationConfig'
+
+                    # Retry Rules
+                    retryRules:
+                      type: object
+                      title: Retry Rules Configuration
+                      properties:
+                        type:
+                          type: string
+                          title: Retry type
+                          enum: [backoff, fixed]
+                          default: backoff
+                        interval:
+                          type: integer
+                          title: Interval (ms)
+                          default: 1000
+                        limit:
+                          type: integer
+                          title: Retry limit
+                          default: 5
+                        multiplier:
+                          type: number
+                          title: Multiplier
+                          default: 2
+                        maxIntervalMs:
+                          type: integer
+                          title: Max interval (ms)
+                          default: 20000
+                        codes:
+                          type: array
+                          title: HTTP status codes to retry
+                          items:
+                            type: integer
+                          default: [429, 503]
+                        enableHeader:
+                          type: boolean
+                          title: Enable header
+                          default: true
+                        retryConnectTimeout:
+                          type: boolean
+                          title: Retry connect timeout
+                          default: false
+                        retryConnectReset:
+                          type: boolean
+                          title: Retry connect reset
+                          default: false
+                        retryHeaderName:
+                          type: string
+                          title: Retry header name
+                          default: "retry-after"
+
+                    # Internal Scheduling
+                    __scheduling:
+                      type: object
+                      title: Internal scheduling
+                      properties:
+                        stateTracking:
+                          type: object
+                          title: State tracking
+
+    InputCollectorS3:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
                   type: string
-                  title: Collect URL
-                  description: URL to use for the Collect operation
-                collectMethod:
+                  enum: [s3]
+                conf:
+                  type: object
+                  properties:
+                    bucket:
+                      type: string
+                      title: S3 bucket
+                      description: S3 Bucket from which to collect data
+                    region:
+                      type: string
+                      title: Region
+                      description: AWS region from which to retrieve data
+                    path:
+                      type: string
+                      title: Path
+                      description: Directory where data will be collected
+                    awsAuthenticationMethod:
+                      type: string
+                      title: Authentication method
+                      enum: [auto, manual, secret]
+                    awsApiKey:
+                      type: string
+                      title: Access key
+                    awsSecretKey:
+                      type: string
+                      title: Secret key
+                    awsSecret:
+                      type: string
+                      title: Secret key pair
+                    recurse:
+                      type: boolean
+                      title: Recursive
+                    extractors:
+                      type: array
+                      title: Path extractors
+                      items:
+                        type: object
+                    maxBatchSize:
+                      type: integer
+                      title: Batch size limit
+                      minimum: 1
+
+    InputCollectorAzureBlob:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
                   type: string
-                  title: Collect method
-                  enum: [get, post, post_with_body, other]
-                # authentication: (uses broader enum, defined above for splunk)
-                # timeout: (shared with Splunk, defined above)
-                # rejectUnauthorized: (shared with Splunk, defined above)
-                # username: (shared with Splunk, defined above) 
-                # password: (shared with Splunk, defined above)
-                # credentialsSecret: (shared with Splunk, defined above)
+                  enum: [azureblob]
+                conf:
+                  type: object
+                  properties:
+                    containerName:
+                      type: string
+                      title: Container name
+                      description: Azure container to collect from
+                    storageAccountName:
+                      type: string
+                      title: Storage account name
+                    connectionString:
+                      type: string
+                      title: Connection string
+                      description: Azure storage account Connection String
+                    authType:
+                      type: string
+                      title: Authentication method
+                      enum: [manual, secret, clientSecret, clientCert]
+                    path:
+                      type: string
+                      title: Path
+                      description: Directory where data will be collected
+                    recurse:
+                      type: boolean
+                      title: Recursive
+                    extractors:
+                      type: array
+                      title: Path extractors
+                      items:
+                        type: object
+                    maxBatchSize:
+                      type: integer
+                      title: Batch size limit
+                      minimum: 1
+
+    InputCollectorCriblLake:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
+                  type: string
+                  enum: [cribllake]
+                conf:
+                  type: object
+                  properties:
+                    dataset:
+                      type: string
+                      title: Lake dataset
+                      description: Lake dataset to collect data from
+
+    InputCollectorDatabase:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
+                  type: string
+                  enum: [database]
+                conf:
+                  type: object
+                  properties:
+                    connectionId:
+                      type: string
+                      title: Connection
+                      description: Select an existing Database Connection
+                    query:
+                      type: string
+                      title: SQL Query
+                      description: Query string for selecting data from the database
+                    queryValidationEnabled:
+                      type: boolean
+                      title: Validate Query
+
+    InputCollectorGCS:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
+                  type: string
+                  enum: [gcs]
+                conf:
+                  type: object
+                  properties:
+                    serviceAccountCredentials:
+                      type: string
+                      title: Service account credentials
+                    bucket:
+                      type: string
+                      title: GCS bucket
+                      description: GCS Bucket from which to collect data
+                    path:
+                      type: string
+                      title: Path
+                      description: Directory where data will be collected
+                    authType:
+                      type: string
+                      title: Authentication method
+                      enum: [manual, secret, clientSecret, clientCert]
+                    recurse:
+                      type: boolean
+                      title: Recursive
+                    extractors:
+                      type: array
+                      title: Path extractors
+                      items:
+                        type: object
+                    maxBatchSize:
+                      type: integer
+                      title: Batch size limit
+                      minimum: 1
+
+    InputCollectorHealthCheck:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
+                  type: string
+                  enum: [healthcheck]
+                conf:
+                  type: object
+                  properties:
+                    collectUrl:
+                      type: string
+                      title: Collect URL
+                      description: URL to use for the Collect operation
+                    collectMethod:
+                      type: string
+                      title: Collect method
+                      enum: [get, post, post_with_body, other]
+                    authentication:
+                      type: string
+                      enum: [none, basic, basicSecret, token, tokenSecret, login, loginSecret, oauth, oauthSecret, google_oauth, google_oauthSecret, hmac]
+                      title: Authentication
+                    timeout:
+                      type: integer
+                      minimum: 0
+                      maximum: 1800
+                      title: Timeout (secs)
+                    rejectUnauthorized:
+                      type: boolean
+                      title: Reject unauthorized certificates
+                    username:
+                      type: string
+                      title: Username
+                    password:
+                      type: string
+                      title: Password
+                    credentialsSecret:
+                      type: string
+                      title: Credentials secret
+
+    # Supporting Schemas
+    PaginationConfig:
+      type: object
+      title: Pagination Configuration
+      properties:
+        type:
+          type: string
+          title: Pagination type
+          enum: [none, offset, cursor, page]
+          default: none
+        offsetField:
+          type: string
+          title: Offset field
+        limitField:
+          type: string
+          title: Limit field
+        limit:
+          type: integer
+          title: Limit
+          default: 100
+        maxPages:
+          type: integer
+          title: Max pages
+          default: 0
+        zeroIndexed:
+          type: boolean
+          title: Zero indexed
+          default: false
+        pageField:
+          type: string
+          title: Page field
+        sizeField:
+          type: string
+          title: Size field
+        size:
+          type: integer
+          title: Size
+          default: 50
+        attribute:
+          type: array
+          title: Attribute
+          items:
+            type: string
+        lastPageExpr:
+          type: string
+          title: Last page expression
+        offset:
+          type: integer
+          title: Offset
+        totalRecordField:
+          type: string
+          title: Total record field
+
+    # Main InputCollector that uses oneOf to discriminate between types
+    InputCollector:
+      oneOf:
+        - $ref: '#/components/schemas/InputCollectorSplunk'
+        - $ref: '#/components/schemas/InputCollectorRest'
+        - $ref: '#/components/schemas/InputCollectorS3'
+        - $ref: '#/components/schemas/InputCollectorAzureBlob'
+        - $ref: '#/components/schemas/InputCollectorCriblLake'
+        - $ref: '#/components/schemas/InputCollectorDatabase'
+        - $ref: '#/components/schemas/InputCollectorGCS'
+        - $ref: '#/components/schemas/InputCollectorHealthCheck'
 
     KeyMetadataEntity:
       type: object
@@ -52592,6 +53099,7 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/InputCollector"
+                    x-speakeasy-ignore: true
         "401":
           description: Unauthorized
         "500":
@@ -52615,6 +53123,12 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           default: default
           example: default
+        - name: id
+          in: query
+          required: true
+          description: The id of this collector instance
+          schema:
+            type: string
       requestBody:
         description: New Collector object
         required: true

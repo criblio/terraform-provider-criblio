@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,18 +28,8 @@ type CollectorDataSource struct {
 
 // CollectorDataSourceModel describes the data model.
 type CollectorDataSourceModel struct {
-	Collector            tfTypes.InputCollectorCollector `tfsdk:"collector"`
-	Environment          types.String                    `tfsdk:"environment"`
-	GroupID              types.String                    `tfsdk:"group_id"`
-	ID                   types.String                    `tfsdk:"id"`
-	IgnoreGroupJobsLimit types.Bool                      `tfsdk:"ignore_group_jobs_limit"`
-	Input                *tfTypes.InputCollectorInput    `tfsdk:"input"`
-	RemoveFields         []types.String                  `tfsdk:"remove_fields"`
-	ResumeOnBoot         types.Bool                      `tfsdk:"resume_on_boot"`
-	Schedule             *tfTypes.InputCollectorSchedule `tfsdk:"schedule"`
-	Streamtags           []types.String                  `tfsdk:"streamtags"`
-	TTL                  types.String                    `tfsdk:"ttl"`
-	WorkerAffinity       types.Bool                      `tfsdk:"worker_affinity"`
+	GroupID types.String `tfsdk:"group_id"`
+	ID      types.String `tfsdk:"id"`
 }
 
 // Metadata returns the data source type name.
@@ -54,161 +43,6 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 		MarkdownDescription: "Collector DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"collector": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"conf": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"auth_type": schema.StringAttribute{
-								Computed: true,
-							},
-							"authentication": schema.StringAttribute{
-								Computed: true,
-							},
-							"aws_api_key": schema.StringAttribute{
-								Computed: true,
-							},
-							"aws_authentication_method": schema.StringAttribute{
-								Computed: true,
-							},
-							"aws_secret": schema.StringAttribute{
-								Computed: true,
-							},
-							"aws_secret_key": schema.StringAttribute{
-								Computed: true,
-							},
-							"bucket": schema.StringAttribute{
-								Computed:    true,
-								Description: `S3 Bucket from which to collect data`,
-							},
-							"collect_method": schema.StringAttribute{
-								Computed: true,
-							},
-							"collect_url": schema.StringAttribute{
-								Computed:    true,
-								Description: `URL to use for the Collect operation`,
-							},
-							"connection_id": schema.StringAttribute{
-								Computed:    true,
-								Description: `Select an existing Database Connection`,
-							},
-							"connection_string": schema.StringAttribute{
-								Computed:    true,
-								Description: `Azure storage account Connection String`,
-							},
-							"container_name": schema.StringAttribute{
-								Computed:    true,
-								Description: `Azure container to collect from`,
-							},
-							"credentials_secret": schema.StringAttribute{
-								Computed: true,
-							},
-							"dataset": schema.StringAttribute{
-								Computed:    true,
-								Description: `Lake dataset to collect data from`,
-							},
-							"disable_time_filter": schema.BoolAttribute{
-								Computed: true,
-							},
-							"earliest": schema.StringAttribute{
-								Computed:    true,
-								Description: `Earliest time boundary for the search`,
-							},
-							"endpoint": schema.StringAttribute{
-								Computed:    true,
-								Description: `REST API endpoint used to create a search`,
-							},
-							"extractors": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{},
-								},
-							},
-							"handle_escaped_chars": schema.BoolAttribute{
-								Computed: true,
-							},
-							"latest": schema.StringAttribute{
-								Computed:    true,
-								Description: `Latest time boundary for the search`,
-							},
-							"max_batch_size": schema.Int64Attribute{
-								Computed: true,
-							},
-							"output_mode": schema.StringAttribute{
-								Computed: true,
-							},
-							"password": schema.StringAttribute{
-								Computed: true,
-							},
-							"path": schema.StringAttribute{
-								Computed:    true,
-								Description: `Directory where data will be collected`,
-							},
-							"query": schema.StringAttribute{
-								Computed:    true,
-								Description: `Query string for selecting data from the database`,
-							},
-							"query_validation_enabled": schema.BoolAttribute{
-								Computed: true,
-							},
-							"recurse": schema.BoolAttribute{
-								Computed: true,
-							},
-							"region": schema.StringAttribute{
-								Computed:    true,
-								Description: `AWS region from which to retrieve data`,
-							},
-							"reject_unauthorized": schema.BoolAttribute{
-								Computed: true,
-							},
-							"search": schema.StringAttribute{
-								Computed:    true,
-								Description: `Splunk search query`,
-							},
-							"search_head": schema.StringAttribute{
-								Computed:    true,
-								Description: `Search head base URL`,
-							},
-							"service_account_credentials": schema.StringAttribute{
-								Computed: true,
-							},
-							"storage_account_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"timeout": schema.Int64Attribute{
-								Computed: true,
-							},
-							"token": schema.StringAttribute{
-								Computed: true,
-							},
-							"token_secret": schema.StringAttribute{
-								Computed: true,
-							},
-							"use_round_robin_dns": schema.BoolAttribute{
-								Computed: true,
-							},
-							"username": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"destructive": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Delete any files collected (where applicable)`,
-					},
-					"encoding": schema.StringAttribute{
-						Computed:    true,
-						Description: `Character encoding to use when parsing ingested data`,
-					},
-					"type": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"environment": schema.StringAttribute{
-				Computed: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
@@ -216,163 +50,6 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
-			},
-			"ignore_group_jobs_limit": schema.BoolAttribute{
-				Computed: true,
-			},
-			"input": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"breaker_rulesets": schema.ListAttribute{
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
-					},
-					"metadata": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"name": schema.StringAttribute{
-									Computed: true,
-								},
-								"value": schema.StringAttribute{
-									Computed:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-								},
-							},
-						},
-						Description: `Fields to add to events from this input`,
-					},
-					"output": schema.StringAttribute{
-						Computed:    true,
-						Description: `Destination to send results to`,
-					},
-					"pipeline": schema.StringAttribute{
-						Computed:    true,
-						Description: `Pipeline to process results`,
-					},
-					"preprocess": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"args": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-								Description: `Arguments to be added to the custom command`,
-							},
-							"command": schema.StringAttribute{
-								Computed:    true,
-								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
-							},
-							"disabled": schema.BoolAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"send_to_routes": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
-					},
-					"stale_channel_flush_ms": schema.Float64Attribute{
-						Computed:    true,
-						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
-					},
-					"throttle_rate_per_sec": schema.StringAttribute{
-						Computed:    true,
-						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
-					},
-					"type": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"remove_fields": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
-			},
-			"resume_on_boot": schema.BoolAttribute{
-				Computed: true,
-			},
-			"schedule": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"cron_schedule": schema.StringAttribute{
-						Computed:    true,
-						Description: `A cron schedule on which to run this job`,
-					},
-					"enabled": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Enable to configure scheduling for this Collector`,
-					},
-					"max_concurrent_runs": schema.Float64Attribute{
-						Computed:    true,
-						Description: `The maximum number of instances of this scheduled job that may be running at any time`,
-					},
-					"run": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"earliest": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Earliest time to collect data for the selected timezone`,
-							},
-							"expression": schema.StringAttribute{
-								Computed:    true,
-								Description: `A filter for tokens in the provided collect path and/or the events being collected`,
-							},
-							"job_timeout": schema.StringAttribute{
-								Computed:    true,
-								Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
-							},
-							"latest": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Latest time to collect data for the selected timezone`,
-							},
-							"log_level": schema.StringAttribute{
-								Computed:    true,
-								Description: `Level at which to set task logging`,
-							},
-							"max_task_reschedule": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum number of times a task can be rescheduled`,
-							},
-							"max_task_size": schema.StringAttribute{
-								Computed:    true,
-								Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
-							},
-							"min_task_size": schema.StringAttribute{
-								Computed:    true,
-								Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
-							},
-							"mode": schema.StringAttribute{
-								Computed:    true,
-								Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
-							},
-							"reschedule_dropped_tasks": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Reschedule tasks that failed with non-fatal errors`,
-							},
-							"time_range_type": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"skippable": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
-					},
-				},
-				Description: `Configuration for a scheduled job`,
-			},
-			"streamtags": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
-				Description: `Tags for filtering and grouping`,
-			},
-			"ttl": schema.StringAttribute{
-				Computed: true,
-			},
-			"worker_affinity": schema.BoolAttribute{
-				Computed:    true,
-				Description: `If enabled, tasks are created and run by the same Worker Node`,
 			},
 		},
 	}
@@ -438,11 +115,11 @@ func (r *CollectorDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInputCollector(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSavedJobByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

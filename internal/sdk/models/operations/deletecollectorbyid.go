@@ -30,14 +30,6 @@ func (o *DeleteCollectorByIDRequest) GetGroupID() string {
 
 // DeleteCollectorByIDResponseBody - a list of Collector objects
 type DeleteCollectorByIDResponseBody struct {
-	Items []shared.InputCollector `json:"items,omitempty"`
-}
-
-func (o *DeleteCollectorByIDResponseBody) GetItems() []shared.InputCollector {
-	if o == nil {
-		return nil
-	}
-	return o.Items
 }
 
 type DeleteCollectorByIDResponse struct {

@@ -4,164 +4,34 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Context, resp *shared.InputCollector) diag.Diagnostics {
+func (r *CollectorResourceModel) RefreshFromOperationsCreateSavedJobResponseBody(ctx context.Context, resp *operations.CreateSavedJobResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp.Collector.Conf == nil {
-		r.Collector.Conf = nil
-	} else {
-		r.Collector.Conf = &tfTypes.InputCollectorConf{}
-		if resp.Collector.Conf.Authentication != nil {
-			r.Collector.Conf.Authentication = types.StringValue(string(*resp.Collector.Conf.Authentication))
-		} else {
-			r.Collector.Conf.Authentication = types.StringNull()
-		}
-		if resp.Collector.Conf.AuthType != nil {
-			r.Collector.Conf.AuthType = types.StringValue(string(*resp.Collector.Conf.AuthType))
-		} else {
-			r.Collector.Conf.AuthType = types.StringNull()
-		}
-		r.Collector.Conf.AwsAPIKey = types.StringPointerValue(resp.Collector.Conf.AwsAPIKey)
-		if resp.Collector.Conf.AwsAuthenticationMethod != nil {
-			r.Collector.Conf.AwsAuthenticationMethod = types.StringValue(string(*resp.Collector.Conf.AwsAuthenticationMethod))
-		} else {
-			r.Collector.Conf.AwsAuthenticationMethod = types.StringNull()
-		}
-		r.Collector.Conf.AwsSecret = types.StringPointerValue(resp.Collector.Conf.AwsSecret)
-		r.Collector.Conf.AwsSecretKey = types.StringPointerValue(resp.Collector.Conf.AwsSecretKey)
-		r.Collector.Conf.Bucket = types.StringPointerValue(resp.Collector.Conf.Bucket)
-		if resp.Collector.Conf.CollectMethod != nil {
-			r.Collector.Conf.CollectMethod = types.StringValue(string(*resp.Collector.Conf.CollectMethod))
-		} else {
-			r.Collector.Conf.CollectMethod = types.StringNull()
-		}
-		r.Collector.Conf.CollectURL = types.StringPointerValue(resp.Collector.Conf.CollectURL)
-		r.Collector.Conf.ConnectionID = types.StringPointerValue(resp.Collector.Conf.ConnectionID)
-		r.Collector.Conf.ConnectionString = types.StringPointerValue(resp.Collector.Conf.ConnectionString)
-		r.Collector.Conf.ContainerName = types.StringPointerValue(resp.Collector.Conf.ContainerName)
-		r.Collector.Conf.CredentialsSecret = types.StringPointerValue(resp.Collector.Conf.CredentialsSecret)
-		r.Collector.Conf.Dataset = types.StringPointerValue(resp.Collector.Conf.Dataset)
-		r.Collector.Conf.DisableTimeFilter = types.BoolPointerValue(resp.Collector.Conf.DisableTimeFilter)
-		r.Collector.Conf.Earliest = types.StringPointerValue(resp.Collector.Conf.Earliest)
-		r.Collector.Conf.Endpoint = types.StringPointerValue(resp.Collector.Conf.Endpoint)
-		r.Collector.Conf.HandleEscapedChars = types.BoolPointerValue(resp.Collector.Conf.HandleEscapedChars)
-		r.Collector.Conf.Latest = types.StringPointerValue(resp.Collector.Conf.Latest)
-		r.Collector.Conf.MaxBatchSize = types.Int64PointerValue(resp.Collector.Conf.MaxBatchSize)
-		if resp.Collector.Conf.OutputMode != nil {
-			r.Collector.Conf.OutputMode = types.StringValue(string(*resp.Collector.Conf.OutputMode))
-		} else {
-			r.Collector.Conf.OutputMode = types.StringNull()
-		}
-		r.Collector.Conf.Password = types.StringPointerValue(resp.Collector.Conf.Password)
-		r.Collector.Conf.Path = types.StringPointerValue(resp.Collector.Conf.Path)
-		r.Collector.Conf.Query = types.StringPointerValue(resp.Collector.Conf.Query)
-		r.Collector.Conf.QueryValidationEnabled = types.BoolPointerValue(resp.Collector.Conf.QueryValidationEnabled)
-		r.Collector.Conf.Recurse = types.BoolPointerValue(resp.Collector.Conf.Recurse)
-		r.Collector.Conf.Region = types.StringPointerValue(resp.Collector.Conf.Region)
-		r.Collector.Conf.RejectUnauthorized = types.BoolPointerValue(resp.Collector.Conf.RejectUnauthorized)
-		r.Collector.Conf.Search = types.StringPointerValue(resp.Collector.Conf.Search)
-		r.Collector.Conf.SearchHead = types.StringPointerValue(resp.Collector.Conf.SearchHead)
-		r.Collector.Conf.ServiceAccountCredentials = types.StringPointerValue(resp.Collector.Conf.ServiceAccountCredentials)
-		r.Collector.Conf.StorageAccountName = types.StringPointerValue(resp.Collector.Conf.StorageAccountName)
-		r.Collector.Conf.Timeout = types.Int64PointerValue(resp.Collector.Conf.Timeout)
-		r.Collector.Conf.Token = types.StringPointerValue(resp.Collector.Conf.Token)
-		r.Collector.Conf.TokenSecret = types.StringPointerValue(resp.Collector.Conf.TokenSecret)
-		r.Collector.Conf.Username = types.StringPointerValue(resp.Collector.Conf.Username)
-		r.Collector.Conf.UseRoundRobinDNS = types.BoolPointerValue(resp.Collector.Conf.UseRoundRobinDNS)
+	if resp != nil {
 	}
-	r.Collector.Destructive = types.BoolPointerValue(resp.Collector.Destructive)
-	r.Collector.Encoding = types.StringPointerValue(resp.Collector.Encoding)
-	r.Collector.Type = types.StringValue(string(resp.Collector.Type))
-	r.Environment = types.StringPointerValue(resp.Environment)
-	r.ID = types.StringPointerValue(resp.ID)
-	r.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.IgnoreGroupJobsLimit)
-	if resp.Input == nil {
-		r.Input = nil
-	} else {
-		r.Input = &tfTypes.InputCollectorInput{}
-		r.Input.BreakerRulesets = make([]types.String, 0, len(resp.Input.BreakerRulesets))
-		for _, v := range resp.Input.BreakerRulesets {
-			r.Input.BreakerRulesets = append(r.Input.BreakerRulesets, types.StringValue(v))
-		}
-		r.Input.Metadata = []tfTypes.InputCollectorMetadatum{}
 
-		for _, metadataItem := range resp.Input.Metadata {
-			var metadata tfTypes.InputCollectorMetadatum
+	return diags
+}
 
-			metadata.Name = types.StringValue(metadataItem.Name)
-			metadata.Value = types.StringValue(metadataItem.Value)
+func (r *CollectorResourceModel) RefreshFromOperationsGetSavedJobByIDResponseBody(ctx context.Context, resp *operations.GetSavedJobByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
 
-			r.Input.Metadata = append(r.Input.Metadata, metadata)
-		}
-		r.Input.Output = types.StringPointerValue(resp.Input.Output)
-		r.Input.Pipeline = types.StringPointerValue(resp.Input.Pipeline)
-		if resp.Input.Preprocess == nil {
-			r.Input.Preprocess = nil
-		} else {
-			r.Input.Preprocess = &tfTypes.InputCollectorPreprocess{}
-			r.Input.Preprocess.Args = make([]types.String, 0, len(resp.Input.Preprocess.Args))
-			for _, v := range resp.Input.Preprocess.Args {
-				r.Input.Preprocess.Args = append(r.Input.Preprocess.Args, types.StringValue(v))
-			}
-			r.Input.Preprocess.Command = types.StringPointerValue(resp.Input.Preprocess.Command)
-			r.Input.Preprocess.Disabled = types.BoolPointerValue(resp.Input.Preprocess.Disabled)
-		}
-		r.Input.SendToRoutes = types.BoolPointerValue(resp.Input.SendToRoutes)
-		r.Input.StaleChannelFlushMs = types.Float64PointerValue(resp.Input.StaleChannelFlushMs)
-		r.Input.ThrottleRatePerSec = types.StringPointerValue(resp.Input.ThrottleRatePerSec)
-		if resp.Input.Type != nil {
-			r.Input.Type = types.StringValue(string(*resp.Input.Type))
-		} else {
-			r.Input.Type = types.StringNull()
-		}
+	if resp != nil {
 	}
-	r.RemoveFields = make([]types.String, 0, len(resp.RemoveFields))
-	for _, v := range resp.RemoveFields {
-		r.RemoveFields = append(r.RemoveFields, types.StringValue(v))
+
+	return diags
+}
+
+func (r *CollectorResourceModel) RefreshFromOperationsUpdateCollectorByIDResponseBody(ctx context.Context, resp *operations.UpdateCollectorByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
 	}
-	r.ResumeOnBoot = types.BoolPointerValue(resp.ResumeOnBoot)
-	if resp.Schedule == nil {
-		r.Schedule = nil
-	} else {
-		r.Schedule = &tfTypes.InputCollectorSchedule{}
-		r.Schedule.CronSchedule = types.StringPointerValue(resp.Schedule.CronSchedule)
-		r.Schedule.Enabled = types.BoolPointerValue(resp.Schedule.Enabled)
-		r.Schedule.MaxConcurrentRuns = types.Float64PointerValue(resp.Schedule.MaxConcurrentRuns)
-		if resp.Schedule.Run == nil {
-			r.Schedule.Run = nil
-		} else {
-			r.Schedule.Run = &tfTypes.InputCollectorRunSettings{}
-			r.Schedule.Run.Earliest = types.Float64PointerValue(resp.Schedule.Run.Earliest)
-			r.Schedule.Run.Expression = types.StringPointerValue(resp.Schedule.Run.Expression)
-			r.Schedule.Run.JobTimeout = types.StringPointerValue(resp.Schedule.Run.JobTimeout)
-			r.Schedule.Run.Latest = types.Float64PointerValue(resp.Schedule.Run.Latest)
-			if resp.Schedule.Run.LogLevel != nil {
-				r.Schedule.Run.LogLevel = types.StringValue(string(*resp.Schedule.Run.LogLevel))
-			} else {
-				r.Schedule.Run.LogLevel = types.StringNull()
-			}
-			r.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(resp.Schedule.Run.MaxTaskReschedule)
-			r.Schedule.Run.MaxTaskSize = types.StringPointerValue(resp.Schedule.Run.MaxTaskSize)
-			r.Schedule.Run.MinTaskSize = types.StringPointerValue(resp.Schedule.Run.MinTaskSize)
-			r.Schedule.Run.Mode = types.StringPointerValue(resp.Schedule.Run.Mode)
-			r.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(resp.Schedule.Run.RescheduleDroppedTasks)
-			r.Schedule.Run.TimeRangeType = types.StringPointerValue(resp.Schedule.Run.TimeRangeType)
-		}
-		r.Schedule.Skippable = types.BoolPointerValue(resp.Schedule.Skippable)
-	}
-	r.Streamtags = make([]types.String, 0, len(resp.Streamtags))
-	for _, v := range resp.Streamtags {
-		r.Streamtags = append(r.Streamtags, types.StringValue(v))
-	}
-	r.TTL = types.StringPointerValue(resp.TTL)
-	r.WorkerAffinity = types.BoolPointerValue(resp.WorkerAffinity)
 
 	return diags
 }
@@ -172,6 +42,9 @@ func (r *CollectorResourceModel) ToOperationsCreateSavedJobRequest(ctx context.C
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
+	var id string
+	id = r.ID.ValueString()
+
 	inputCollector, inputCollectorDiags := r.ToSharedInputCollector(ctx)
 	diags.Append(inputCollectorDiags...)
 
@@ -181,6 +54,7 @@ func (r *CollectorResourceModel) ToOperationsCreateSavedJobRequest(ctx context.C
 
 	out := operations.CreateSavedJobRequest{
 		GroupID:        groupID,
+		ID:             id,
 		InputCollector: *inputCollector,
 	}
 
@@ -249,554 +123,3559 @@ func (r *CollectorResourceModel) ToOperationsUpdateCollectorByIDRequest(ctx cont
 func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*shared.InputCollector, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
-	} else {
-		id = nil
-	}
-	ttl := new(string)
-	if !r.TTL.IsUnknown() && !r.TTL.IsNull() {
-		*ttl = r.TTL.ValueString()
-	} else {
-		ttl = nil
-	}
-	ignoreGroupJobsLimit := new(bool)
-	if !r.IgnoreGroupJobsLimit.IsUnknown() && !r.IgnoreGroupJobsLimit.IsNull() {
-		*ignoreGroupJobsLimit = r.IgnoreGroupJobsLimit.ValueBool()
-	} else {
-		ignoreGroupJobsLimit = nil
-	}
-	removeFields := make([]string, 0, len(r.RemoveFields))
-	for _, removeFieldsItem := range r.RemoveFields {
-		removeFields = append(removeFields, removeFieldsItem.ValueString())
-	}
-	resumeOnBoot := new(bool)
-	if !r.ResumeOnBoot.IsUnknown() && !r.ResumeOnBoot.IsNull() {
-		*resumeOnBoot = r.ResumeOnBoot.ValueBool()
-	} else {
-		resumeOnBoot = nil
-	}
-	environment := new(string)
-	if !r.Environment.IsUnknown() && !r.Environment.IsNull() {
-		*environment = r.Environment.ValueString()
-	} else {
-		environment = nil
-	}
-	var schedule *shared.InputCollectorSchedule
-	if r.Schedule != nil {
-		enabled := new(bool)
-		if !r.Schedule.Enabled.IsUnknown() && !r.Schedule.Enabled.IsNull() {
-			*enabled = r.Schedule.Enabled.ValueBool()
+	var out shared.InputCollector
+	var inputCollectorSplunk *shared.InputCollectorSplunk
+	if r.InputCollectorSplunk != nil {
+		id := new(string)
+		if !r.InputCollectorSplunk.ID.IsUnknown() && !r.InputCollectorSplunk.ID.IsNull() {
+			*id = r.InputCollectorSplunk.ID.ValueString()
 		} else {
-			enabled = nil
+			id = nil
 		}
-		cronSchedule := new(string)
-		if !r.Schedule.CronSchedule.IsUnknown() && !r.Schedule.CronSchedule.IsNull() {
-			*cronSchedule = r.Schedule.CronSchedule.ValueString()
+		ttl := new(string)
+		if !r.InputCollectorSplunk.TTL.IsUnknown() && !r.InputCollectorSplunk.TTL.IsNull() {
+			*ttl = r.InputCollectorSplunk.TTL.ValueString()
 		} else {
-			cronSchedule = nil
+			ttl = nil
 		}
-		maxConcurrentRuns := new(float64)
-		if !r.Schedule.MaxConcurrentRuns.IsUnknown() && !r.Schedule.MaxConcurrentRuns.IsNull() {
-			*maxConcurrentRuns = r.Schedule.MaxConcurrentRuns.ValueFloat64()
+		ignoreGroupJobsLimit := new(bool)
+		if !r.InputCollectorSplunk.IgnoreGroupJobsLimit.IsUnknown() && !r.InputCollectorSplunk.IgnoreGroupJobsLimit.IsNull() {
+			*ignoreGroupJobsLimit = r.InputCollectorSplunk.IgnoreGroupJobsLimit.ValueBool()
 		} else {
-			maxConcurrentRuns = nil
+			ignoreGroupJobsLimit = nil
 		}
-		skippable := new(bool)
-		if !r.Schedule.Skippable.IsUnknown() && !r.Schedule.Skippable.IsNull() {
-			*skippable = r.Schedule.Skippable.ValueBool()
+		removeFields := make([]string, 0, len(r.InputCollectorSplunk.RemoveFields))
+		for _, removeFieldsItem := range r.InputCollectorSplunk.RemoveFields {
+			removeFields = append(removeFields, removeFieldsItem.ValueString())
+		}
+		resumeOnBoot := new(bool)
+		if !r.InputCollectorSplunk.ResumeOnBoot.IsUnknown() && !r.InputCollectorSplunk.ResumeOnBoot.IsNull() {
+			*resumeOnBoot = r.InputCollectorSplunk.ResumeOnBoot.ValueBool()
 		} else {
-			skippable = nil
+			resumeOnBoot = nil
 		}
-		var run *shared.InputCollectorRunSettings
-		if r.Schedule.Run != nil {
-			rescheduleDroppedTasks := new(bool)
-			if !r.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.Schedule.Run.RescheduleDroppedTasks.IsNull() {
-				*rescheduleDroppedTasks = r.Schedule.Run.RescheduleDroppedTasks.ValueBool()
-			} else {
-				rescheduleDroppedTasks = nil
-			}
-			maxTaskReschedule := new(float64)
-			if !r.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.Schedule.Run.MaxTaskReschedule.IsNull() {
-				*maxTaskReschedule = r.Schedule.Run.MaxTaskReschedule.ValueFloat64()
-			} else {
-				maxTaskReschedule = nil
-			}
-			logLevel := new(shared.InputCollectorLogLevel)
-			if !r.Schedule.Run.LogLevel.IsUnknown() && !r.Schedule.Run.LogLevel.IsNull() {
-				*logLevel = shared.InputCollectorLogLevel(r.Schedule.Run.LogLevel.ValueString())
-			} else {
-				logLevel = nil
-			}
-			jobTimeout := new(string)
-			if !r.Schedule.Run.JobTimeout.IsUnknown() && !r.Schedule.Run.JobTimeout.IsNull() {
-				*jobTimeout = r.Schedule.Run.JobTimeout.ValueString()
-			} else {
-				jobTimeout = nil
-			}
-			mode := new(string)
-			if !r.Schedule.Run.Mode.IsUnknown() && !r.Schedule.Run.Mode.IsNull() {
-				*mode = r.Schedule.Run.Mode.ValueString()
-			} else {
-				mode = nil
-			}
-			timeRangeType := new(string)
-			if !r.Schedule.Run.TimeRangeType.IsUnknown() && !r.Schedule.Run.TimeRangeType.IsNull() {
-				*timeRangeType = r.Schedule.Run.TimeRangeType.ValueString()
-			} else {
-				timeRangeType = nil
-			}
-			earliest := new(float64)
-			if !r.Schedule.Run.Earliest.IsUnknown() && !r.Schedule.Run.Earliest.IsNull() {
-				*earliest = r.Schedule.Run.Earliest.ValueFloat64()
-			} else {
-				earliest = nil
-			}
-			latest := new(float64)
-			if !r.Schedule.Run.Latest.IsUnknown() && !r.Schedule.Run.Latest.IsNull() {
-				*latest = r.Schedule.Run.Latest.ValueFloat64()
-			} else {
-				latest = nil
-			}
-			expression := new(string)
-			if !r.Schedule.Run.Expression.IsUnknown() && !r.Schedule.Run.Expression.IsNull() {
-				*expression = r.Schedule.Run.Expression.ValueString()
-			} else {
-				expression = nil
-			}
-			minTaskSize := new(string)
-			if !r.Schedule.Run.MinTaskSize.IsUnknown() && !r.Schedule.Run.MinTaskSize.IsNull() {
-				*minTaskSize = r.Schedule.Run.MinTaskSize.ValueString()
-			} else {
-				minTaskSize = nil
-			}
-			maxTaskSize := new(string)
-			if !r.Schedule.Run.MaxTaskSize.IsUnknown() && !r.Schedule.Run.MaxTaskSize.IsNull() {
-				*maxTaskSize = r.Schedule.Run.MaxTaskSize.ValueString()
-			} else {
-				maxTaskSize = nil
-			}
-			run = &shared.InputCollectorRunSettings{
-				RescheduleDroppedTasks: rescheduleDroppedTasks,
-				MaxTaskReschedule:      maxTaskReschedule,
-				LogLevel:               logLevel,
-				JobTimeout:             jobTimeout,
-				Mode:                   mode,
-				TimeRangeType:          timeRangeType,
-				Earliest:               earliest,
-				Latest:                 latest,
-				Expression:             expression,
-				MinTaskSize:            minTaskSize,
-				MaxTaskSize:            maxTaskSize,
-			}
-		}
-		schedule = &shared.InputCollectorSchedule{
-			Enabled:           enabled,
-			CronSchedule:      cronSchedule,
-			MaxConcurrentRuns: maxConcurrentRuns,
-			Skippable:         skippable,
-			Run:               run,
-		}
-	}
-	streamtags := make([]string, 0, len(r.Streamtags))
-	for _, streamtagsItem := range r.Streamtags {
-		streamtags = append(streamtags, streamtagsItem.ValueString())
-	}
-	workerAffinity := new(bool)
-	if !r.WorkerAffinity.IsUnknown() && !r.WorkerAffinity.IsNull() {
-		*workerAffinity = r.WorkerAffinity.ValueBool()
-	} else {
-		workerAffinity = nil
-	}
-	var input *shared.InputCollectorInput
-	if r.Input != nil {
-		typeVar := new(shared.InputCollectorType2)
-		if !r.Input.Type.IsUnknown() && !r.Input.Type.IsNull() {
-			*typeVar = shared.InputCollectorType2(r.Input.Type.ValueString())
+		environment := new(string)
+		if !r.InputCollectorSplunk.Environment.IsUnknown() && !r.InputCollectorSplunk.Environment.IsNull() {
+			*environment = r.InputCollectorSplunk.Environment.ValueString()
 		} else {
-			typeVar = nil
+			environment = nil
 		}
-		breakerRulesets := make([]string, 0, len(r.Input.BreakerRulesets))
-		for _, breakerRulesetsItem := range r.Input.BreakerRulesets {
-			breakerRulesets = append(breakerRulesets, breakerRulesetsItem.ValueString())
+		var savedState *shared.InputCollectorSplunkSavedState
+		if r.InputCollectorSplunk.SavedState != nil {
+			savedState = &shared.InputCollectorSplunkSavedState{}
 		}
-		staleChannelFlushMs := new(float64)
-		if !r.Input.StaleChannelFlushMs.IsUnknown() && !r.Input.StaleChannelFlushMs.IsNull() {
-			*staleChannelFlushMs = r.Input.StaleChannelFlushMs.ValueFloat64()
-		} else {
-			staleChannelFlushMs = nil
-		}
-		sendToRoutes := new(bool)
-		if !r.Input.SendToRoutes.IsUnknown() && !r.Input.SendToRoutes.IsNull() {
-			*sendToRoutes = r.Input.SendToRoutes.ValueBool()
-		} else {
-			sendToRoutes = nil
-		}
-		var preprocess *shared.InputCollectorPreprocess
-		if r.Input.Preprocess != nil {
-			disabled := new(bool)
-			if !r.Input.Preprocess.Disabled.IsUnknown() && !r.Input.Preprocess.Disabled.IsNull() {
-				*disabled = r.Input.Preprocess.Disabled.ValueBool()
+		var schedule *shared.InputCollectorSplunkSchedule
+		if r.InputCollectorSplunk.Schedule != nil {
+			enabled := new(bool)
+			if !r.InputCollectorSplunk.Schedule.Enabled.IsUnknown() && !r.InputCollectorSplunk.Schedule.Enabled.IsNull() {
+				*enabled = r.InputCollectorSplunk.Schedule.Enabled.ValueBool()
 			} else {
-				disabled = nil
+				enabled = nil
 			}
-			command := new(string)
-			if !r.Input.Preprocess.Command.IsUnknown() && !r.Input.Preprocess.Command.IsNull() {
-				*command = r.Input.Preprocess.Command.ValueString()
+			cronSchedule := new(string)
+			if !r.InputCollectorSplunk.Schedule.CronSchedule.IsUnknown() && !r.InputCollectorSplunk.Schedule.CronSchedule.IsNull() {
+				*cronSchedule = r.InputCollectorSplunk.Schedule.CronSchedule.ValueString()
 			} else {
-				command = nil
+				cronSchedule = nil
 			}
-			args := make([]string, 0, len(r.Input.Preprocess.Args))
-			for _, argsItem := range r.Input.Preprocess.Args {
-				args = append(args, argsItem.ValueString())
+			maxConcurrentRuns := new(float64)
+			if !r.InputCollectorSplunk.Schedule.MaxConcurrentRuns.IsUnknown() && !r.InputCollectorSplunk.Schedule.MaxConcurrentRuns.IsNull() {
+				*maxConcurrentRuns = r.InputCollectorSplunk.Schedule.MaxConcurrentRuns.ValueFloat64()
+			} else {
+				maxConcurrentRuns = nil
 			}
-			preprocess = &shared.InputCollectorPreprocess{
-				Disabled: disabled,
-				Command:  command,
-				Args:     args,
+			skippable := new(bool)
+			if !r.InputCollectorSplunk.Schedule.Skippable.IsUnknown() && !r.InputCollectorSplunk.Schedule.Skippable.IsNull() {
+				*skippable = r.InputCollectorSplunk.Schedule.Skippable.ValueBool()
+			} else {
+				skippable = nil
+			}
+			resumeMissed := new(bool)
+			if !r.InputCollectorSplunk.Schedule.ResumeMissed.IsUnknown() && !r.InputCollectorSplunk.Schedule.ResumeMissed.IsNull() {
+				*resumeMissed = r.InputCollectorSplunk.Schedule.ResumeMissed.ValueBool()
+			} else {
+				resumeMissed = nil
+			}
+			var run *shared.InputCollectorSplunkRunSettings
+			if r.InputCollectorSplunk.Schedule.Run != nil {
+				rescheduleDroppedTasks := new(bool)
+				if !r.InputCollectorSplunk.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.RescheduleDroppedTasks.IsNull() {
+					*rescheduleDroppedTasks = r.InputCollectorSplunk.Schedule.Run.RescheduleDroppedTasks.ValueBool()
+				} else {
+					rescheduleDroppedTasks = nil
+				}
+				maxTaskReschedule := new(float64)
+				if !r.InputCollectorSplunk.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.MaxTaskReschedule.IsNull() {
+					*maxTaskReschedule = r.InputCollectorSplunk.Schedule.Run.MaxTaskReschedule.ValueFloat64()
+				} else {
+					maxTaskReschedule = nil
+				}
+				logLevel := new(shared.InputCollectorSplunkLogLevel)
+				if !r.InputCollectorSplunk.Schedule.Run.LogLevel.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.LogLevel.IsNull() {
+					*logLevel = shared.InputCollectorSplunkLogLevel(r.InputCollectorSplunk.Schedule.Run.LogLevel.ValueString())
+				} else {
+					logLevel = nil
+				}
+				jobTimeout := new(string)
+				if !r.InputCollectorSplunk.Schedule.Run.JobTimeout.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.JobTimeout.IsNull() {
+					*jobTimeout = r.InputCollectorSplunk.Schedule.Run.JobTimeout.ValueString()
+				} else {
+					jobTimeout = nil
+				}
+				mode := new(shared.InputCollectorSplunkMode)
+				if !r.InputCollectorSplunk.Schedule.Run.Mode.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.Mode.IsNull() {
+					*mode = shared.InputCollectorSplunkMode(r.InputCollectorSplunk.Schedule.Run.Mode.ValueString())
+				} else {
+					mode = nil
+				}
+				timeRangeType := new(shared.InputCollectorSplunkTimeRange)
+				if !r.InputCollectorSplunk.Schedule.Run.TimeRangeType.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.TimeRangeType.IsNull() {
+					*timeRangeType = shared.InputCollectorSplunkTimeRange(r.InputCollectorSplunk.Schedule.Run.TimeRangeType.ValueString())
+				} else {
+					timeRangeType = nil
+				}
+				earliest := new(float64)
+				if !r.InputCollectorSplunk.Schedule.Run.Earliest.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.Earliest.IsNull() {
+					*earliest = r.InputCollectorSplunk.Schedule.Run.Earliest.ValueFloat64()
+				} else {
+					earliest = nil
+				}
+				latest := new(float64)
+				if !r.InputCollectorSplunk.Schedule.Run.Latest.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.Latest.IsNull() {
+					*latest = r.InputCollectorSplunk.Schedule.Run.Latest.ValueFloat64()
+				} else {
+					latest = nil
+				}
+				expression := new(string)
+				if !r.InputCollectorSplunk.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.Expression.IsNull() {
+					*expression = r.InputCollectorSplunk.Schedule.Run.Expression.ValueString()
+				} else {
+					expression = nil
+				}
+				minTaskSize := new(string)
+				if !r.InputCollectorSplunk.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.MinTaskSize.IsNull() {
+					*minTaskSize = r.InputCollectorSplunk.Schedule.Run.MinTaskSize.ValueString()
+				} else {
+					minTaskSize = nil
+				}
+				maxTaskSize := new(string)
+				if !r.InputCollectorSplunk.Schedule.Run.MaxTaskSize.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.MaxTaskSize.IsNull() {
+					*maxTaskSize = r.InputCollectorSplunk.Schedule.Run.MaxTaskSize.ValueString()
+				} else {
+					maxTaskSize = nil
+				}
+				var timeWarning *shared.InputCollectorSplunkTimeWarning
+				if r.InputCollectorSplunk.Schedule.Run.TimeWarning != nil {
+					timeWarning = &shared.InputCollectorSplunkTimeWarning{}
+				}
+				var stateTracking *shared.InputCollectorSplunkStateTracking
+				if r.InputCollectorSplunk.Schedule.Run.StateTracking != nil {
+					stateUpdateExpression := new(string)
+					if !r.InputCollectorSplunk.Schedule.Run.StateTracking.StateUpdateExpression.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.StateTracking.StateUpdateExpression.IsNull() {
+						*stateUpdateExpression = r.InputCollectorSplunk.Schedule.Run.StateTracking.StateUpdateExpression.ValueString()
+					} else {
+						stateUpdateExpression = nil
+					}
+					stateMergeExpression := new(string)
+					if !r.InputCollectorSplunk.Schedule.Run.StateTracking.StateMergeExpression.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.StateTracking.StateMergeExpression.IsNull() {
+						*stateMergeExpression = r.InputCollectorSplunk.Schedule.Run.StateTracking.StateMergeExpression.ValueString()
+					} else {
+						stateMergeExpression = nil
+					}
+					enabled1 := new(bool)
+					if !r.InputCollectorSplunk.Schedule.Run.StateTracking.Enabled.IsUnknown() && !r.InputCollectorSplunk.Schedule.Run.StateTracking.Enabled.IsNull() {
+						*enabled1 = r.InputCollectorSplunk.Schedule.Run.StateTracking.Enabled.ValueBool()
+					} else {
+						enabled1 = nil
+					}
+					stateTracking = &shared.InputCollectorSplunkStateTracking{
+						StateUpdateExpression: stateUpdateExpression,
+						StateMergeExpression:  stateMergeExpression,
+						Enabled:               enabled1,
+					}
+				}
+				run = &shared.InputCollectorSplunkRunSettings{
+					RescheduleDroppedTasks: rescheduleDroppedTasks,
+					MaxTaskReschedule:      maxTaskReschedule,
+					LogLevel:               logLevel,
+					JobTimeout:             jobTimeout,
+					Mode:                   mode,
+					TimeRangeType:          timeRangeType,
+					Earliest:               earliest,
+					Latest:                 latest,
+					Expression:             expression,
+					MinTaskSize:            minTaskSize,
+					MaxTaskSize:            maxTaskSize,
+					TimeWarning:            timeWarning,
+					StateTracking:          stateTracking,
+				}
+			}
+			schedule = &shared.InputCollectorSplunkSchedule{
+				Enabled:           enabled,
+				CronSchedule:      cronSchedule,
+				MaxConcurrentRuns: maxConcurrentRuns,
+				Skippable:         skippable,
+				ResumeMissed:      resumeMissed,
+				Run:               run,
 			}
 		}
-		throttleRatePerSec := new(string)
-		if !r.Input.ThrottleRatePerSec.IsUnknown() && !r.Input.ThrottleRatePerSec.IsNull() {
-			*throttleRatePerSec = r.Input.ThrottleRatePerSec.ValueString()
+		streamtags := make([]string, 0, len(r.InputCollectorSplunk.Streamtags))
+		for _, streamtagsItem := range r.InputCollectorSplunk.Streamtags {
+			streamtags = append(streamtags, streamtagsItem.ValueString())
+		}
+		workerAffinity := new(bool)
+		if !r.InputCollectorSplunk.WorkerAffinity.IsUnknown() && !r.InputCollectorSplunk.WorkerAffinity.IsNull() {
+			*workerAffinity = r.InputCollectorSplunk.WorkerAffinity.ValueBool()
 		} else {
-			throttleRatePerSec = nil
+			workerAffinity = nil
 		}
-		metadata := make([]shared.InputCollectorMetadatum, 0, len(r.Input.Metadata))
-		for _, metadataItem := range r.Input.Metadata {
-			var name string
-			name = metadataItem.Name.ValueString()
+		var input *shared.InputCollectorSplunkInput
+		if r.InputCollectorSplunk.Input != nil {
+			typeVar := new(shared.InputCollectorSplunkTypeCollection2)
+			if !r.InputCollectorSplunk.Input.Type.IsUnknown() && !r.InputCollectorSplunk.Input.Type.IsNull() {
+				*typeVar = shared.InputCollectorSplunkTypeCollection2(r.InputCollectorSplunk.Input.Type.ValueString())
+			} else {
+				typeVar = nil
+			}
+			breakerRulesets := make([]string, 0, len(r.InputCollectorSplunk.Input.BreakerRulesets))
+			for _, breakerRulesetsItem := range r.InputCollectorSplunk.Input.BreakerRulesets {
+				breakerRulesets = append(breakerRulesets, breakerRulesetsItem.ValueString())
+			}
+			staleChannelFlushMs := new(float64)
+			if !r.InputCollectorSplunk.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorSplunk.Input.StaleChannelFlushMs.IsNull() {
+				*staleChannelFlushMs = r.InputCollectorSplunk.Input.StaleChannelFlushMs.ValueFloat64()
+			} else {
+				staleChannelFlushMs = nil
+			}
+			sendToRoutes := new(bool)
+			if !r.InputCollectorSplunk.Input.SendToRoutes.IsUnknown() && !r.InputCollectorSplunk.Input.SendToRoutes.IsNull() {
+				*sendToRoutes = r.InputCollectorSplunk.Input.SendToRoutes.ValueBool()
+			} else {
+				sendToRoutes = nil
+			}
+			var preprocess *shared.InputCollectorSplunkPreprocess
+			if r.InputCollectorSplunk.Input.Preprocess != nil {
+				disabled := new(bool)
+				if !r.InputCollectorSplunk.Input.Preprocess.Disabled.IsUnknown() && !r.InputCollectorSplunk.Input.Preprocess.Disabled.IsNull() {
+					*disabled = r.InputCollectorSplunk.Input.Preprocess.Disabled.ValueBool()
+				} else {
+					disabled = nil
+				}
+				command := new(string)
+				if !r.InputCollectorSplunk.Input.Preprocess.Command.IsUnknown() && !r.InputCollectorSplunk.Input.Preprocess.Command.IsNull() {
+					*command = r.InputCollectorSplunk.Input.Preprocess.Command.ValueString()
+				} else {
+					command = nil
+				}
+				args := make([]string, 0, len(r.InputCollectorSplunk.Input.Preprocess.Args))
+				for _, argsItem := range r.InputCollectorSplunk.Input.Preprocess.Args {
+					args = append(args, argsItem.ValueString())
+				}
+				preprocess = &shared.InputCollectorSplunkPreprocess{
+					Disabled: disabled,
+					Command:  command,
+					Args:     args,
+				}
+			}
+			throttleRatePerSec := new(string)
+			if !r.InputCollectorSplunk.Input.ThrottleRatePerSec.IsUnknown() && !r.InputCollectorSplunk.Input.ThrottleRatePerSec.IsNull() {
+				*throttleRatePerSec = r.InputCollectorSplunk.Input.ThrottleRatePerSec.ValueString()
+			} else {
+				throttleRatePerSec = nil
+			}
+			metadata := make([]shared.InputCollectorSplunkMetadatum, 0, len(r.InputCollectorSplunk.Input.Metadata))
+			for _, metadataItem := range r.InputCollectorSplunk.Input.Metadata {
+				var name string
+				name = metadataItem.Name.ValueString()
 
-			var value string
-			value = metadataItem.Value.ValueString()
+				var value string
+				value = metadataItem.Value.ValueString()
 
-			metadata = append(metadata, shared.InputCollectorMetadatum{
-				Name:  name,
-				Value: value,
-			})
+				metadata = append(metadata, shared.InputCollectorSplunkMetadatum{
+					Name:  name,
+					Value: value,
+				})
+			}
+			pipeline := new(string)
+			if !r.InputCollectorSplunk.Input.Pipeline.IsUnknown() && !r.InputCollectorSplunk.Input.Pipeline.IsNull() {
+				*pipeline = r.InputCollectorSplunk.Input.Pipeline.ValueString()
+			} else {
+				pipeline = nil
+			}
+			output := new(string)
+			if !r.InputCollectorSplunk.Input.Output.IsUnknown() && !r.InputCollectorSplunk.Input.Output.IsNull() {
+				*output = r.InputCollectorSplunk.Input.Output.ValueString()
+			} else {
+				output = nil
+			}
+			input = &shared.InputCollectorSplunkInput{
+				Type:                typeVar,
+				BreakerRulesets:     breakerRulesets,
+				StaleChannelFlushMs: staleChannelFlushMs,
+				SendToRoutes:        sendToRoutes,
+				Preprocess:          preprocess,
+				ThrottleRatePerSec:  throttleRatePerSec,
+				Metadata:            metadata,
+				Pipeline:            pipeline,
+				Output:              output,
+			}
 		}
-		pipeline := new(string)
-		if !r.Input.Pipeline.IsUnknown() && !r.Input.Pipeline.IsNull() {
-			*pipeline = r.Input.Pipeline.ValueString()
-		} else {
-			pipeline = nil
+		typeVar1 := shared.InputCollectorSplunkTypeSplunk(r.InputCollectorSplunk.Collector.Type.ValueString())
+		var conf *shared.InputCollectorSplunkConf
+		if r.InputCollectorSplunk.Collector.Conf != nil {
+			searchHead := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.SearchHead.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.SearchHead.IsNull() {
+				*searchHead = r.InputCollectorSplunk.Collector.Conf.SearchHead.ValueString()
+			} else {
+				searchHead = nil
+			}
+			search := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.Search.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Search.IsNull() {
+				*search = r.InputCollectorSplunk.Collector.Conf.Search.ValueString()
+			} else {
+				search = nil
+			}
+			earliest1 := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.Earliest.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Earliest.IsNull() {
+				*earliest1 = r.InputCollectorSplunk.Collector.Conf.Earliest.ValueString()
+			} else {
+				earliest1 = nil
+			}
+			latest1 := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.Latest.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Latest.IsNull() {
+				*latest1 = r.InputCollectorSplunk.Collector.Conf.Latest.ValueString()
+			} else {
+				latest1 = nil
+			}
+			endpoint := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.Endpoint.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Endpoint.IsNull() {
+				*endpoint = r.InputCollectorSplunk.Collector.Conf.Endpoint.ValueString()
+			} else {
+				endpoint = nil
+			}
+			outputMode := new(shared.InputCollectorSplunkOutputMode)
+			if !r.InputCollectorSplunk.Collector.Conf.OutputMode.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.OutputMode.IsNull() {
+				*outputMode = shared.InputCollectorSplunkOutputMode(r.InputCollectorSplunk.Collector.Conf.OutputMode.ValueString())
+			} else {
+				outputMode = nil
+			}
+			authentication := new(shared.InputCollectorSplunkAuthentication)
+			if !r.InputCollectorSplunk.Collector.Conf.Authentication.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Authentication.IsNull() {
+				*authentication = shared.InputCollectorSplunkAuthentication(r.InputCollectorSplunk.Collector.Conf.Authentication.ValueString())
+			} else {
+				authentication = nil
+			}
+			timeout := new(int64)
+			if !r.InputCollectorSplunk.Collector.Conf.Timeout.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Timeout.IsNull() {
+				*timeout = r.InputCollectorSplunk.Collector.Conf.Timeout.ValueInt64()
+			} else {
+				timeout = nil
+			}
+			useRoundRobinDNS := new(bool)
+			if !r.InputCollectorSplunk.Collector.Conf.UseRoundRobinDNS.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.UseRoundRobinDNS.IsNull() {
+				*useRoundRobinDNS = r.InputCollectorSplunk.Collector.Conf.UseRoundRobinDNS.ValueBool()
+			} else {
+				useRoundRobinDNS = nil
+			}
+			disableTimeFilter := new(bool)
+			if !r.InputCollectorSplunk.Collector.Conf.DisableTimeFilter.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.DisableTimeFilter.IsNull() {
+				*disableTimeFilter = r.InputCollectorSplunk.Collector.Conf.DisableTimeFilter.ValueBool()
+			} else {
+				disableTimeFilter = nil
+			}
+			rejectUnauthorized := new(bool)
+			if !r.InputCollectorSplunk.Collector.Conf.RejectUnauthorized.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.RejectUnauthorized.IsNull() {
+				*rejectUnauthorized = r.InputCollectorSplunk.Collector.Conf.RejectUnauthorized.ValueBool()
+			} else {
+				rejectUnauthorized = nil
+			}
+			handleEscapedChars := new(bool)
+			if !r.InputCollectorSplunk.Collector.Conf.HandleEscapedChars.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.HandleEscapedChars.IsNull() {
+				*handleEscapedChars = r.InputCollectorSplunk.Collector.Conf.HandleEscapedChars.ValueBool()
+			} else {
+				handleEscapedChars = nil
+			}
+			username := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.Username.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Username.IsNull() {
+				*username = r.InputCollectorSplunk.Collector.Conf.Username.ValueString()
+			} else {
+				username = nil
+			}
+			password := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.Password.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Password.IsNull() {
+				*password = r.InputCollectorSplunk.Collector.Conf.Password.ValueString()
+			} else {
+				password = nil
+			}
+			credentialsSecret := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.CredentialsSecret.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.CredentialsSecret.IsNull() {
+				*credentialsSecret = r.InputCollectorSplunk.Collector.Conf.CredentialsSecret.ValueString()
+			} else {
+				credentialsSecret = nil
+			}
+			token := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.Token.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.Token.IsNull() {
+				*token = r.InputCollectorSplunk.Collector.Conf.Token.ValueString()
+			} else {
+				token = nil
+			}
+			tokenSecret := new(string)
+			if !r.InputCollectorSplunk.Collector.Conf.TokenSecret.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.TokenSecret.IsNull() {
+				*tokenSecret = r.InputCollectorSplunk.Collector.Conf.TokenSecret.ValueString()
+			} else {
+				tokenSecret = nil
+			}
+			conf = &shared.InputCollectorSplunkConf{
+				SearchHead:         searchHead,
+				Search:             search,
+				Earliest:           earliest1,
+				Latest:             latest1,
+				Endpoint:           endpoint,
+				OutputMode:         outputMode,
+				Authentication:     authentication,
+				Timeout:            timeout,
+				UseRoundRobinDNS:   useRoundRobinDNS,
+				DisableTimeFilter:  disableTimeFilter,
+				RejectUnauthorized: rejectUnauthorized,
+				HandleEscapedChars: handleEscapedChars,
+				Username:           username,
+				Password:           password,
+				CredentialsSecret:  credentialsSecret,
+				Token:              token,
+				TokenSecret:        tokenSecret,
+			}
 		}
-		output := new(string)
-		if !r.Input.Output.IsUnknown() && !r.Input.Output.IsNull() {
-			*output = r.Input.Output.ValueString()
-		} else {
-			output = nil
+		collector := shared.InputCollectorSplunkCollector{
+			Type: typeVar1,
+			Conf: conf,
 		}
-		input = &shared.InputCollectorInput{
-			Type:                typeVar,
-			BreakerRulesets:     breakerRulesets,
-			StaleChannelFlushMs: staleChannelFlushMs,
-			SendToRoutes:        sendToRoutes,
-			Preprocess:          preprocess,
-			ThrottleRatePerSec:  throttleRatePerSec,
-			Metadata:            metadata,
-			Pipeline:            pipeline,
-			Output:              output,
-		}
-	}
-	typeVar1 := shared.CollectorType(r.Collector.Type.ValueString())
-	destructive := new(bool)
-	if !r.Collector.Destructive.IsUnknown() && !r.Collector.Destructive.IsNull() {
-		*destructive = r.Collector.Destructive.ValueBool()
-	} else {
-		destructive = nil
-	}
-	encoding := new(string)
-	if !r.Collector.Encoding.IsUnknown() && !r.Collector.Encoding.IsNull() {
-		*encoding = r.Collector.Encoding.ValueString()
-	} else {
-		encoding = nil
-	}
-	var conf *shared.InputCollectorConf
-	if r.Collector.Conf != nil {
-		searchHead := new(string)
-		if !r.Collector.Conf.SearchHead.IsUnknown() && !r.Collector.Conf.SearchHead.IsNull() {
-			*searchHead = r.Collector.Conf.SearchHead.ValueString()
-		} else {
-			searchHead = nil
-		}
-		search := new(string)
-		if !r.Collector.Conf.Search.IsUnknown() && !r.Collector.Conf.Search.IsNull() {
-			*search = r.Collector.Conf.Search.ValueString()
-		} else {
-			search = nil
-		}
-		earliest1 := new(string)
-		if !r.Collector.Conf.Earliest.IsUnknown() && !r.Collector.Conf.Earliest.IsNull() {
-			*earliest1 = r.Collector.Conf.Earliest.ValueString()
-		} else {
-			earliest1 = nil
-		}
-		latest1 := new(string)
-		if !r.Collector.Conf.Latest.IsUnknown() && !r.Collector.Conf.Latest.IsNull() {
-			*latest1 = r.Collector.Conf.Latest.ValueString()
-		} else {
-			latest1 = nil
-		}
-		endpoint := new(string)
-		if !r.Collector.Conf.Endpoint.IsUnknown() && !r.Collector.Conf.Endpoint.IsNull() {
-			*endpoint = r.Collector.Conf.Endpoint.ValueString()
-		} else {
-			endpoint = nil
-		}
-		outputMode := new(shared.InputCollectorOutputMode)
-		if !r.Collector.Conf.OutputMode.IsUnknown() && !r.Collector.Conf.OutputMode.IsNull() {
-			*outputMode = shared.InputCollectorOutputMode(r.Collector.Conf.OutputMode.ValueString())
-		} else {
-			outputMode = nil
-		}
-		authentication := new(shared.AuthenticationEnum)
-		if !r.Collector.Conf.Authentication.IsUnknown() && !r.Collector.Conf.Authentication.IsNull() {
-			*authentication = shared.AuthenticationEnum(r.Collector.Conf.Authentication.ValueString())
-		} else {
-			authentication = nil
-		}
-		timeout := new(int64)
-		if !r.Collector.Conf.Timeout.IsUnknown() && !r.Collector.Conf.Timeout.IsNull() {
-			*timeout = r.Collector.Conf.Timeout.ValueInt64()
-		} else {
-			timeout = nil
-		}
-		useRoundRobinDNS := new(bool)
-		if !r.Collector.Conf.UseRoundRobinDNS.IsUnknown() && !r.Collector.Conf.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDNS = r.Collector.Conf.UseRoundRobinDNS.ValueBool()
-		} else {
-			useRoundRobinDNS = nil
-		}
-		disableTimeFilter := new(bool)
-		if !r.Collector.Conf.DisableTimeFilter.IsUnknown() && !r.Collector.Conf.DisableTimeFilter.IsNull() {
-			*disableTimeFilter = r.Collector.Conf.DisableTimeFilter.ValueBool()
-		} else {
-			disableTimeFilter = nil
-		}
-		rejectUnauthorized := new(bool)
-		if !r.Collector.Conf.RejectUnauthorized.IsUnknown() && !r.Collector.Conf.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized = r.Collector.Conf.RejectUnauthorized.ValueBool()
-		} else {
-			rejectUnauthorized = nil
-		}
-		handleEscapedChars := new(bool)
-		if !r.Collector.Conf.HandleEscapedChars.IsUnknown() && !r.Collector.Conf.HandleEscapedChars.IsNull() {
-			*handleEscapedChars = r.Collector.Conf.HandleEscapedChars.ValueBool()
-		} else {
-			handleEscapedChars = nil
-		}
-		username := new(string)
-		if !r.Collector.Conf.Username.IsUnknown() && !r.Collector.Conf.Username.IsNull() {
-			*username = r.Collector.Conf.Username.ValueString()
-		} else {
-			username = nil
-		}
-		password := new(string)
-		if !r.Collector.Conf.Password.IsUnknown() && !r.Collector.Conf.Password.IsNull() {
-			*password = r.Collector.Conf.Password.ValueString()
-		} else {
-			password = nil
-		}
-		credentialsSecret := new(string)
-		if !r.Collector.Conf.CredentialsSecret.IsUnknown() && !r.Collector.Conf.CredentialsSecret.IsNull() {
-			*credentialsSecret = r.Collector.Conf.CredentialsSecret.ValueString()
-		} else {
-			credentialsSecret = nil
-		}
-		token := new(string)
-		if !r.Collector.Conf.Token.IsUnknown() && !r.Collector.Conf.Token.IsNull() {
-			*token = r.Collector.Conf.Token.ValueString()
-		} else {
-			token = nil
-		}
-		tokenSecret := new(string)
-		if !r.Collector.Conf.TokenSecret.IsUnknown() && !r.Collector.Conf.TokenSecret.IsNull() {
-			*tokenSecret = r.Collector.Conf.TokenSecret.ValueString()
-		} else {
-			tokenSecret = nil
-		}
-		bucket := new(string)
-		if !r.Collector.Conf.Bucket.IsUnknown() && !r.Collector.Conf.Bucket.IsNull() {
-			*bucket = r.Collector.Conf.Bucket.ValueString()
-		} else {
-			bucket = nil
-		}
-		region := new(string)
-		if !r.Collector.Conf.Region.IsUnknown() && !r.Collector.Conf.Region.IsNull() {
-			*region = r.Collector.Conf.Region.ValueString()
-		} else {
-			region = nil
-		}
-		path := new(string)
-		if !r.Collector.Conf.Path.IsUnknown() && !r.Collector.Conf.Path.IsNull() {
-			*path = r.Collector.Conf.Path.ValueString()
-		} else {
-			path = nil
-		}
-		awsAuthenticationMethod := new(shared.InputCollectorAwsAuthenticationMethodAuthenticationMethod)
-		if !r.Collector.Conf.AwsAuthenticationMethod.IsUnknown() && !r.Collector.Conf.AwsAuthenticationMethod.IsNull() {
-			*awsAuthenticationMethod = shared.InputCollectorAwsAuthenticationMethodAuthenticationMethod(r.Collector.Conf.AwsAuthenticationMethod.ValueString())
-		} else {
-			awsAuthenticationMethod = nil
-		}
-		awsAPIKey := new(string)
-		if !r.Collector.Conf.AwsAPIKey.IsUnknown() && !r.Collector.Conf.AwsAPIKey.IsNull() {
-			*awsAPIKey = r.Collector.Conf.AwsAPIKey.ValueString()
-		} else {
-			awsAPIKey = nil
-		}
-		awsSecretKey := new(string)
-		if !r.Collector.Conf.AwsSecretKey.IsUnknown() && !r.Collector.Conf.AwsSecretKey.IsNull() {
-			*awsSecretKey = r.Collector.Conf.AwsSecretKey.ValueString()
-		} else {
-			awsSecretKey = nil
-		}
-		awsSecret := new(string)
-		if !r.Collector.Conf.AwsSecret.IsUnknown() && !r.Collector.Conf.AwsSecret.IsNull() {
-			*awsSecret = r.Collector.Conf.AwsSecret.ValueString()
-		} else {
-			awsSecret = nil
-		}
-		recurse := new(bool)
-		if !r.Collector.Conf.Recurse.IsUnknown() && !r.Collector.Conf.Recurse.IsNull() {
-			*recurse = r.Collector.Conf.Recurse.ValueBool()
-		} else {
-			recurse = nil
-		}
-		extractors := make([]shared.Extractor, len(r.Collector.Conf.Extractors))
-		maxBatchSize := new(int64)
-		if !r.Collector.Conf.MaxBatchSize.IsUnknown() && !r.Collector.Conf.MaxBatchSize.IsNull() {
-			*maxBatchSize = r.Collector.Conf.MaxBatchSize.ValueInt64()
-		} else {
-			maxBatchSize = nil
-		}
-		containerName := new(string)
-		if !r.Collector.Conf.ContainerName.IsUnknown() && !r.Collector.Conf.ContainerName.IsNull() {
-			*containerName = r.Collector.Conf.ContainerName.ValueString()
-		} else {
-			containerName = nil
-		}
-		storageAccountName := new(string)
-		if !r.Collector.Conf.StorageAccountName.IsUnknown() && !r.Collector.Conf.StorageAccountName.IsNull() {
-			*storageAccountName = r.Collector.Conf.StorageAccountName.ValueString()
-		} else {
-			storageAccountName = nil
-		}
-		connectionString := new(string)
-		if !r.Collector.Conf.ConnectionString.IsUnknown() && !r.Collector.Conf.ConnectionString.IsNull() {
-			*connectionString = r.Collector.Conf.ConnectionString.ValueString()
-		} else {
-			connectionString = nil
-		}
-		authType := new(shared.InputCollectorAuthTypeAuthenticationMethod)
-		if !r.Collector.Conf.AuthType.IsUnknown() && !r.Collector.Conf.AuthType.IsNull() {
-			*authType = shared.InputCollectorAuthTypeAuthenticationMethod(r.Collector.Conf.AuthType.ValueString())
-		} else {
-			authType = nil
-		}
-		dataset := new(string)
-		if !r.Collector.Conf.Dataset.IsUnknown() && !r.Collector.Conf.Dataset.IsNull() {
-			*dataset = r.Collector.Conf.Dataset.ValueString()
-		} else {
-			dataset = nil
-		}
-		connectionID := new(string)
-		if !r.Collector.Conf.ConnectionID.IsUnknown() && !r.Collector.Conf.ConnectionID.IsNull() {
-			*connectionID = r.Collector.Conf.ConnectionID.ValueString()
-		} else {
-			connectionID = nil
-		}
-		query := new(string)
-		if !r.Collector.Conf.Query.IsUnknown() && !r.Collector.Conf.Query.IsNull() {
-			*query = r.Collector.Conf.Query.ValueString()
-		} else {
-			query = nil
-		}
-		queryValidationEnabled := new(bool)
-		if !r.Collector.Conf.QueryValidationEnabled.IsUnknown() && !r.Collector.Conf.QueryValidationEnabled.IsNull() {
-			*queryValidationEnabled = r.Collector.Conf.QueryValidationEnabled.ValueBool()
-		} else {
-			queryValidationEnabled = nil
-		}
-		serviceAccountCredentials := new(string)
-		if !r.Collector.Conf.ServiceAccountCredentials.IsUnknown() && !r.Collector.Conf.ServiceAccountCredentials.IsNull() {
-			*serviceAccountCredentials = r.Collector.Conf.ServiceAccountCredentials.ValueString()
-		} else {
-			serviceAccountCredentials = nil
-		}
-		collectURL := new(string)
-		if !r.Collector.Conf.CollectURL.IsUnknown() && !r.Collector.Conf.CollectURL.IsNull() {
-			*collectURL = r.Collector.Conf.CollectURL.ValueString()
-		} else {
-			collectURL = nil
-		}
-		collectMethod := new(shared.CollectMethod)
-		if !r.Collector.Conf.CollectMethod.IsUnknown() && !r.Collector.Conf.CollectMethod.IsNull() {
-			*collectMethod = shared.CollectMethod(r.Collector.Conf.CollectMethod.ValueString())
-		} else {
-			collectMethod = nil
-		}
-		conf = &shared.InputCollectorConf{
-			SearchHead:                searchHead,
-			Search:                    search,
-			Earliest:                  earliest1,
-			Latest:                    latest1,
-			Endpoint:                  endpoint,
-			OutputMode:                outputMode,
-			Authentication:            authentication,
-			Timeout:                   timeout,
-			UseRoundRobinDNS:          useRoundRobinDNS,
-			DisableTimeFilter:         disableTimeFilter,
-			RejectUnauthorized:        rejectUnauthorized,
-			HandleEscapedChars:        handleEscapedChars,
-			Username:                  username,
-			Password:                  password,
-			CredentialsSecret:         credentialsSecret,
-			Token:                     token,
-			TokenSecret:               tokenSecret,
-			Bucket:                    bucket,
-			Region:                    region,
-			Path:                      path,
-			AwsAuthenticationMethod:   awsAuthenticationMethod,
-			AwsAPIKey:                 awsAPIKey,
-			AwsSecretKey:              awsSecretKey,
-			AwsSecret:                 awsSecret,
-			Recurse:                   recurse,
-			Extractors:                extractors,
-			MaxBatchSize:              maxBatchSize,
-			ContainerName:             containerName,
-			StorageAccountName:        storageAccountName,
-			ConnectionString:          connectionString,
-			AuthType:                  authType,
-			Dataset:                   dataset,
-			ConnectionID:              connectionID,
-			Query:                     query,
-			QueryValidationEnabled:    queryValidationEnabled,
-			ServiceAccountCredentials: serviceAccountCredentials,
-			CollectURL:                collectURL,
-			CollectMethod:             collectMethod,
+		inputCollectorSplunk = &shared.InputCollectorSplunk{
+			ID:                   id,
+			TTL:                  ttl,
+			IgnoreGroupJobsLimit: ignoreGroupJobsLimit,
+			RemoveFields:         removeFields,
+			ResumeOnBoot:         resumeOnBoot,
+			Environment:          environment,
+			SavedState:           savedState,
+			Schedule:             schedule,
+			Streamtags:           streamtags,
+			WorkerAffinity:       workerAffinity,
+			Input:                input,
+			Collector:            collector,
 		}
 	}
-	collector := shared.InputCollectorCollector{
-		Type:        typeVar1,
-		Destructive: destructive,
-		Encoding:    encoding,
-		Conf:        conf,
+	if inputCollectorSplunk != nil {
+		out = shared.InputCollector{
+			InputCollectorSplunk: inputCollectorSplunk,
+		}
 	}
-	out := shared.InputCollector{
-		ID:                   id,
-		TTL:                  ttl,
-		IgnoreGroupJobsLimit: ignoreGroupJobsLimit,
-		RemoveFields:         removeFields,
-		ResumeOnBoot:         resumeOnBoot,
-		Environment:          environment,
-		Schedule:             schedule,
-		Streamtags:           streamtags,
-		WorkerAffinity:       workerAffinity,
-		Input:                input,
-		Collector:            collector,
+	var inputCollectorRest *shared.InputCollectorRest
+	if r.InputCollectorRest != nil {
+		id1 := new(string)
+		if !r.InputCollectorRest.ID.IsUnknown() && !r.InputCollectorRest.ID.IsNull() {
+			*id1 = r.InputCollectorRest.ID.ValueString()
+		} else {
+			id1 = nil
+		}
+		ttl1 := new(string)
+		if !r.InputCollectorRest.TTL.IsUnknown() && !r.InputCollectorRest.TTL.IsNull() {
+			*ttl1 = r.InputCollectorRest.TTL.ValueString()
+		} else {
+			ttl1 = nil
+		}
+		ignoreGroupJobsLimit1 := new(bool)
+		if !r.InputCollectorRest.IgnoreGroupJobsLimit.IsUnknown() && !r.InputCollectorRest.IgnoreGroupJobsLimit.IsNull() {
+			*ignoreGroupJobsLimit1 = r.InputCollectorRest.IgnoreGroupJobsLimit.ValueBool()
+		} else {
+			ignoreGroupJobsLimit1 = nil
+		}
+		removeFields1 := make([]string, 0, len(r.InputCollectorRest.RemoveFields))
+		for _, removeFieldsItem1 := range r.InputCollectorRest.RemoveFields {
+			removeFields1 = append(removeFields1, removeFieldsItem1.ValueString())
+		}
+		resumeOnBoot1 := new(bool)
+		if !r.InputCollectorRest.ResumeOnBoot.IsUnknown() && !r.InputCollectorRest.ResumeOnBoot.IsNull() {
+			*resumeOnBoot1 = r.InputCollectorRest.ResumeOnBoot.ValueBool()
+		} else {
+			resumeOnBoot1 = nil
+		}
+		environment1 := new(string)
+		if !r.InputCollectorRest.Environment.IsUnknown() && !r.InputCollectorRest.Environment.IsNull() {
+			*environment1 = r.InputCollectorRest.Environment.ValueString()
+		} else {
+			environment1 = nil
+		}
+		var savedState1 *shared.InputCollectorRestSavedState
+		if r.InputCollectorRest.SavedState != nil {
+			savedState1 = &shared.InputCollectorRestSavedState{}
+		}
+		var schedule1 *shared.InputCollectorRestSchedule
+		if r.InputCollectorRest.Schedule != nil {
+			enabled2 := new(bool)
+			if !r.InputCollectorRest.Schedule.Enabled.IsUnknown() && !r.InputCollectorRest.Schedule.Enabled.IsNull() {
+				*enabled2 = r.InputCollectorRest.Schedule.Enabled.ValueBool()
+			} else {
+				enabled2 = nil
+			}
+			cronSchedule1 := new(string)
+			if !r.InputCollectorRest.Schedule.CronSchedule.IsUnknown() && !r.InputCollectorRest.Schedule.CronSchedule.IsNull() {
+				*cronSchedule1 = r.InputCollectorRest.Schedule.CronSchedule.ValueString()
+			} else {
+				cronSchedule1 = nil
+			}
+			maxConcurrentRuns1 := new(float64)
+			if !r.InputCollectorRest.Schedule.MaxConcurrentRuns.IsUnknown() && !r.InputCollectorRest.Schedule.MaxConcurrentRuns.IsNull() {
+				*maxConcurrentRuns1 = r.InputCollectorRest.Schedule.MaxConcurrentRuns.ValueFloat64()
+			} else {
+				maxConcurrentRuns1 = nil
+			}
+			skippable1 := new(bool)
+			if !r.InputCollectorRest.Schedule.Skippable.IsUnknown() && !r.InputCollectorRest.Schedule.Skippable.IsNull() {
+				*skippable1 = r.InputCollectorRest.Schedule.Skippable.ValueBool()
+			} else {
+				skippable1 = nil
+			}
+			resumeMissed1 := new(bool)
+			if !r.InputCollectorRest.Schedule.ResumeMissed.IsUnknown() && !r.InputCollectorRest.Schedule.ResumeMissed.IsNull() {
+				*resumeMissed1 = r.InputCollectorRest.Schedule.ResumeMissed.ValueBool()
+			} else {
+				resumeMissed1 = nil
+			}
+			var run1 *shared.InputCollectorRestRunSettings
+			if r.InputCollectorRest.Schedule.Run != nil {
+				rescheduleDroppedTasks1 := new(bool)
+				if !r.InputCollectorRest.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.InputCollectorRest.Schedule.Run.RescheduleDroppedTasks.IsNull() {
+					*rescheduleDroppedTasks1 = r.InputCollectorRest.Schedule.Run.RescheduleDroppedTasks.ValueBool()
+				} else {
+					rescheduleDroppedTasks1 = nil
+				}
+				maxTaskReschedule1 := new(float64)
+				if !r.InputCollectorRest.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.InputCollectorRest.Schedule.Run.MaxTaskReschedule.IsNull() {
+					*maxTaskReschedule1 = r.InputCollectorRest.Schedule.Run.MaxTaskReschedule.ValueFloat64()
+				} else {
+					maxTaskReschedule1 = nil
+				}
+				logLevel1 := new(shared.InputCollectorRestLogLevel)
+				if !r.InputCollectorRest.Schedule.Run.LogLevel.IsUnknown() && !r.InputCollectorRest.Schedule.Run.LogLevel.IsNull() {
+					*logLevel1 = shared.InputCollectorRestLogLevel(r.InputCollectorRest.Schedule.Run.LogLevel.ValueString())
+				} else {
+					logLevel1 = nil
+				}
+				jobTimeout1 := new(string)
+				if !r.InputCollectorRest.Schedule.Run.JobTimeout.IsUnknown() && !r.InputCollectorRest.Schedule.Run.JobTimeout.IsNull() {
+					*jobTimeout1 = r.InputCollectorRest.Schedule.Run.JobTimeout.ValueString()
+				} else {
+					jobTimeout1 = nil
+				}
+				mode1 := new(shared.InputCollectorRestMode)
+				if !r.InputCollectorRest.Schedule.Run.Mode.IsUnknown() && !r.InputCollectorRest.Schedule.Run.Mode.IsNull() {
+					*mode1 = shared.InputCollectorRestMode(r.InputCollectorRest.Schedule.Run.Mode.ValueString())
+				} else {
+					mode1 = nil
+				}
+				timeRangeType1 := new(shared.InputCollectorRestTimeRange)
+				if !r.InputCollectorRest.Schedule.Run.TimeRangeType.IsUnknown() && !r.InputCollectorRest.Schedule.Run.TimeRangeType.IsNull() {
+					*timeRangeType1 = shared.InputCollectorRestTimeRange(r.InputCollectorRest.Schedule.Run.TimeRangeType.ValueString())
+				} else {
+					timeRangeType1 = nil
+				}
+				earliest2 := new(float64)
+				if !r.InputCollectorRest.Schedule.Run.Earliest.IsUnknown() && !r.InputCollectorRest.Schedule.Run.Earliest.IsNull() {
+					*earliest2 = r.InputCollectorRest.Schedule.Run.Earliest.ValueFloat64()
+				} else {
+					earliest2 = nil
+				}
+				latest2 := new(float64)
+				if !r.InputCollectorRest.Schedule.Run.Latest.IsUnknown() && !r.InputCollectorRest.Schedule.Run.Latest.IsNull() {
+					*latest2 = r.InputCollectorRest.Schedule.Run.Latest.ValueFloat64()
+				} else {
+					latest2 = nil
+				}
+				expression1 := new(string)
+				if !r.InputCollectorRest.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorRest.Schedule.Run.Expression.IsNull() {
+					*expression1 = r.InputCollectorRest.Schedule.Run.Expression.ValueString()
+				} else {
+					expression1 = nil
+				}
+				minTaskSize1 := new(string)
+				if !r.InputCollectorRest.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorRest.Schedule.Run.MinTaskSize.IsNull() {
+					*minTaskSize1 = r.InputCollectorRest.Schedule.Run.MinTaskSize.ValueString()
+				} else {
+					minTaskSize1 = nil
+				}
+				maxTaskSize1 := new(string)
+				if !r.InputCollectorRest.Schedule.Run.MaxTaskSize.IsUnknown() && !r.InputCollectorRest.Schedule.Run.MaxTaskSize.IsNull() {
+					*maxTaskSize1 = r.InputCollectorRest.Schedule.Run.MaxTaskSize.ValueString()
+				} else {
+					maxTaskSize1 = nil
+				}
+				var timeWarning1 *shared.InputCollectorRestTimeWarning
+				if r.InputCollectorRest.Schedule.Run.TimeWarning != nil {
+					timeWarning1 = &shared.InputCollectorRestTimeWarning{}
+				}
+				var stateTracking1 *shared.InputCollectorRestRunStateTracking
+				if r.InputCollectorRest.Schedule.Run.StateTracking != nil {
+					stateUpdateExpression1 := new(string)
+					if !r.InputCollectorRest.Schedule.Run.StateTracking.StateUpdateExpression.IsUnknown() && !r.InputCollectorRest.Schedule.Run.StateTracking.StateUpdateExpression.IsNull() {
+						*stateUpdateExpression1 = r.InputCollectorRest.Schedule.Run.StateTracking.StateUpdateExpression.ValueString()
+					} else {
+						stateUpdateExpression1 = nil
+					}
+					stateMergeExpression1 := new(string)
+					if !r.InputCollectorRest.Schedule.Run.StateTracking.StateMergeExpression.IsUnknown() && !r.InputCollectorRest.Schedule.Run.StateTracking.StateMergeExpression.IsNull() {
+						*stateMergeExpression1 = r.InputCollectorRest.Schedule.Run.StateTracking.StateMergeExpression.ValueString()
+					} else {
+						stateMergeExpression1 = nil
+					}
+					enabled3 := new(bool)
+					if !r.InputCollectorRest.Schedule.Run.StateTracking.Enabled.IsUnknown() && !r.InputCollectorRest.Schedule.Run.StateTracking.Enabled.IsNull() {
+						*enabled3 = r.InputCollectorRest.Schedule.Run.StateTracking.Enabled.ValueBool()
+					} else {
+						enabled3 = nil
+					}
+					stateTracking1 = &shared.InputCollectorRestRunStateTracking{
+						StateUpdateExpression: stateUpdateExpression1,
+						StateMergeExpression:  stateMergeExpression1,
+						Enabled:               enabled3,
+					}
+				}
+				run1 = &shared.InputCollectorRestRunSettings{
+					RescheduleDroppedTasks: rescheduleDroppedTasks1,
+					MaxTaskReschedule:      maxTaskReschedule1,
+					LogLevel:               logLevel1,
+					JobTimeout:             jobTimeout1,
+					Mode:                   mode1,
+					TimeRangeType:          timeRangeType1,
+					Earliest:               earliest2,
+					Latest:                 latest2,
+					Expression:             expression1,
+					MinTaskSize:            minTaskSize1,
+					MaxTaskSize:            maxTaskSize1,
+					TimeWarning:            timeWarning1,
+					StateTracking:          stateTracking1,
+				}
+			}
+			schedule1 = &shared.InputCollectorRestSchedule{
+				Enabled:           enabled2,
+				CronSchedule:      cronSchedule1,
+				MaxConcurrentRuns: maxConcurrentRuns1,
+				Skippable:         skippable1,
+				ResumeMissed:      resumeMissed1,
+				Run:               run1,
+			}
+		}
+		streamtags1 := make([]string, 0, len(r.InputCollectorRest.Streamtags))
+		for _, streamtagsItem1 := range r.InputCollectorRest.Streamtags {
+			streamtags1 = append(streamtags1, streamtagsItem1.ValueString())
+		}
+		workerAffinity1 := new(bool)
+		if !r.InputCollectorRest.WorkerAffinity.IsUnknown() && !r.InputCollectorRest.WorkerAffinity.IsNull() {
+			*workerAffinity1 = r.InputCollectorRest.WorkerAffinity.ValueBool()
+		} else {
+			workerAffinity1 = nil
+		}
+		var input1 *shared.InputCollectorRestInput
+		if r.InputCollectorRest.Input != nil {
+			typeVar2 := new(shared.InputCollectorRestTypeCollection2)
+			if !r.InputCollectorRest.Input.Type.IsUnknown() && !r.InputCollectorRest.Input.Type.IsNull() {
+				*typeVar2 = shared.InputCollectorRestTypeCollection2(r.InputCollectorRest.Input.Type.ValueString())
+			} else {
+				typeVar2 = nil
+			}
+			breakerRulesets1 := make([]string, 0, len(r.InputCollectorRest.Input.BreakerRulesets))
+			for _, breakerRulesetsItem1 := range r.InputCollectorRest.Input.BreakerRulesets {
+				breakerRulesets1 = append(breakerRulesets1, breakerRulesetsItem1.ValueString())
+			}
+			staleChannelFlushMs1 := new(float64)
+			if !r.InputCollectorRest.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorRest.Input.StaleChannelFlushMs.IsNull() {
+				*staleChannelFlushMs1 = r.InputCollectorRest.Input.StaleChannelFlushMs.ValueFloat64()
+			} else {
+				staleChannelFlushMs1 = nil
+			}
+			sendToRoutes1 := new(bool)
+			if !r.InputCollectorRest.Input.SendToRoutes.IsUnknown() && !r.InputCollectorRest.Input.SendToRoutes.IsNull() {
+				*sendToRoutes1 = r.InputCollectorRest.Input.SendToRoutes.ValueBool()
+			} else {
+				sendToRoutes1 = nil
+			}
+			var preprocess1 *shared.InputCollectorRestPreprocess
+			if r.InputCollectorRest.Input.Preprocess != nil {
+				disabled1 := new(bool)
+				if !r.InputCollectorRest.Input.Preprocess.Disabled.IsUnknown() && !r.InputCollectorRest.Input.Preprocess.Disabled.IsNull() {
+					*disabled1 = r.InputCollectorRest.Input.Preprocess.Disabled.ValueBool()
+				} else {
+					disabled1 = nil
+				}
+				command1 := new(string)
+				if !r.InputCollectorRest.Input.Preprocess.Command.IsUnknown() && !r.InputCollectorRest.Input.Preprocess.Command.IsNull() {
+					*command1 = r.InputCollectorRest.Input.Preprocess.Command.ValueString()
+				} else {
+					command1 = nil
+				}
+				args1 := make([]string, 0, len(r.InputCollectorRest.Input.Preprocess.Args))
+				for _, argsItem1 := range r.InputCollectorRest.Input.Preprocess.Args {
+					args1 = append(args1, argsItem1.ValueString())
+				}
+				preprocess1 = &shared.InputCollectorRestPreprocess{
+					Disabled: disabled1,
+					Command:  command1,
+					Args:     args1,
+				}
+			}
+			throttleRatePerSec1 := new(string)
+			if !r.InputCollectorRest.Input.ThrottleRatePerSec.IsUnknown() && !r.InputCollectorRest.Input.ThrottleRatePerSec.IsNull() {
+				*throttleRatePerSec1 = r.InputCollectorRest.Input.ThrottleRatePerSec.ValueString()
+			} else {
+				throttleRatePerSec1 = nil
+			}
+			metadata1 := make([]shared.InputCollectorRestMetadatum, 0, len(r.InputCollectorRest.Input.Metadata))
+			for _, metadataItem1 := range r.InputCollectorRest.Input.Metadata {
+				var name1 string
+				name1 = metadataItem1.Name.ValueString()
+
+				var value1 string
+				value1 = metadataItem1.Value.ValueString()
+
+				metadata1 = append(metadata1, shared.InputCollectorRestMetadatum{
+					Name:  name1,
+					Value: value1,
+				})
+			}
+			pipeline1 := new(string)
+			if !r.InputCollectorRest.Input.Pipeline.IsUnknown() && !r.InputCollectorRest.Input.Pipeline.IsNull() {
+				*pipeline1 = r.InputCollectorRest.Input.Pipeline.ValueString()
+			} else {
+				pipeline1 = nil
+			}
+			output1 := new(string)
+			if !r.InputCollectorRest.Input.Output.IsUnknown() && !r.InputCollectorRest.Input.Output.IsNull() {
+				*output1 = r.InputCollectorRest.Input.Output.ValueString()
+			} else {
+				output1 = nil
+			}
+			input1 = &shared.InputCollectorRestInput{
+				Type:                typeVar2,
+				BreakerRulesets:     breakerRulesets1,
+				StaleChannelFlushMs: staleChannelFlushMs1,
+				SendToRoutes:        sendToRoutes1,
+				Preprocess:          preprocess1,
+				ThrottleRatePerSec:  throttleRatePerSec1,
+				Metadata:            metadata1,
+				Pipeline:            pipeline1,
+				Output:              output1,
+			}
+		}
+		typeVar3 := shared.TypeRest(r.InputCollectorRest.Collector.Type.ValueString())
+		var conf1 *shared.InputCollectorRestConf
+		if r.InputCollectorRest.Collector.Conf != nil {
+			authentication1 := new(shared.InputCollectorRestAuthentication)
+			if !r.InputCollectorRest.Collector.Conf.Authentication.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Authentication.IsNull() {
+				*authentication1 = shared.InputCollectorRestAuthentication(r.InputCollectorRest.Collector.Conf.Authentication.ValueString())
+			} else {
+				authentication1 = nil
+			}
+			username1 := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Username.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Username.IsNull() {
+				*username1 = r.InputCollectorRest.Collector.Conf.Username.ValueString()
+			} else {
+				username1 = nil
+			}
+			password1 := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Password.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Password.IsNull() {
+				*password1 = r.InputCollectorRest.Collector.Conf.Password.ValueString()
+			} else {
+				password1 = nil
+			}
+			credentialsSecret1 := new(string)
+			if !r.InputCollectorRest.Collector.Conf.CredentialsSecret.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CredentialsSecret.IsNull() {
+				*credentialsSecret1 = r.InputCollectorRest.Collector.Conf.CredentialsSecret.ValueString()
+			} else {
+				credentialsSecret1 = nil
+			}
+			token1 := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Token.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Token.IsNull() {
+				*token1 = r.InputCollectorRest.Collector.Conf.Token.ValueString()
+			} else {
+				token1 = nil
+			}
+			tokenSecret1 := new(string)
+			if !r.InputCollectorRest.Collector.Conf.TokenSecret.IsUnknown() && !r.InputCollectorRest.Collector.Conf.TokenSecret.IsNull() {
+				*tokenSecret1 = r.InputCollectorRest.Collector.Conf.TokenSecret.ValueString()
+			} else {
+				tokenSecret1 = nil
+			}
+			loginURL := new(string)
+			if !r.InputCollectorRest.Collector.Conf.LoginURL.IsUnknown() && !r.InputCollectorRest.Collector.Conf.LoginURL.IsNull() {
+				*loginURL = r.InputCollectorRest.Collector.Conf.LoginURL.ValueString()
+			} else {
+				loginURL = nil
+			}
+			loginBody := new(string)
+			if !r.InputCollectorRest.Collector.Conf.LoginBody.IsUnknown() && !r.InputCollectorRest.Collector.Conf.LoginBody.IsNull() {
+				*loginBody = r.InputCollectorRest.Collector.Conf.LoginBody.ValueString()
+			} else {
+				loginBody = nil
+			}
+			authHeaderKey := new(string)
+			if !r.InputCollectorRest.Collector.Conf.AuthHeaderKey.IsUnknown() && !r.InputCollectorRest.Collector.Conf.AuthHeaderKey.IsNull() {
+				*authHeaderKey = r.InputCollectorRest.Collector.Conf.AuthHeaderKey.ValueString()
+			} else {
+				authHeaderKey = nil
+			}
+			authHeaderExpr := new(string)
+			if !r.InputCollectorRest.Collector.Conf.AuthHeaderExpr.IsUnknown() && !r.InputCollectorRest.Collector.Conf.AuthHeaderExpr.IsNull() {
+				*authHeaderExpr = r.InputCollectorRest.Collector.Conf.AuthHeaderExpr.ValueString()
+			} else {
+				authHeaderExpr = nil
+			}
+			clientSecretParamName := new(string)
+			if !r.InputCollectorRest.Collector.Conf.ClientSecretParamName.IsUnknown() && !r.InputCollectorRest.Collector.Conf.ClientSecretParamName.IsNull() {
+				*clientSecretParamName = r.InputCollectorRest.Collector.Conf.ClientSecretParamName.ValueString()
+			} else {
+				clientSecretParamName = nil
+			}
+			authRequestParams := make([]shared.AuthRequestParam, 0, len(r.InputCollectorRest.Collector.Conf.AuthRequestParams))
+			for _, authRequestParamsItem := range r.InputCollectorRest.Collector.Conf.AuthRequestParams {
+				name2 := new(string)
+				if !authRequestParamsItem.Name.IsUnknown() && !authRequestParamsItem.Name.IsNull() {
+					*name2 = authRequestParamsItem.Name.ValueString()
+				} else {
+					name2 = nil
+				}
+				value2 := new(string)
+				if !authRequestParamsItem.Value.IsUnknown() && !authRequestParamsItem.Value.IsNull() {
+					*value2 = authRequestParamsItem.Value.ValueString()
+				} else {
+					value2 = nil
+				}
+				authRequestParams = append(authRequestParams, shared.AuthRequestParam{
+					Name:  name2,
+					Value: value2,
+				})
+			}
+			tokenRespAttribute := new(string)
+			if !r.InputCollectorRest.Collector.Conf.TokenRespAttribute.IsUnknown() && !r.InputCollectorRest.Collector.Conf.TokenRespAttribute.IsNull() {
+				*tokenRespAttribute = r.InputCollectorRest.Collector.Conf.TokenRespAttribute.ValueString()
+			} else {
+				tokenRespAttribute = nil
+			}
+			authRequestHeaders := make([]shared.AuthRequestHeader, 0, len(r.InputCollectorRest.Collector.Conf.AuthRequestHeaders))
+			for _, authRequestHeadersItem := range r.InputCollectorRest.Collector.Conf.AuthRequestHeaders {
+				name3 := new(string)
+				if !authRequestHeadersItem.Name.IsUnknown() && !authRequestHeadersItem.Name.IsNull() {
+					*name3 = authRequestHeadersItem.Name.ValueString()
+				} else {
+					name3 = nil
+				}
+				value3 := new(string)
+				if !authRequestHeadersItem.Value.IsUnknown() && !authRequestHeadersItem.Value.IsNull() {
+					*value3 = authRequestHeadersItem.Value.ValueString()
+				} else {
+					value3 = nil
+				}
+				authRequestHeaders = append(authRequestHeaders, shared.AuthRequestHeader{
+					Name:  name3,
+					Value: value3,
+				})
+			}
+			collectURL := new(string)
+			if !r.InputCollectorRest.Collector.Conf.CollectURL.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CollectURL.IsNull() {
+				*collectURL = r.InputCollectorRest.Collector.Conf.CollectURL.ValueString()
+			} else {
+				collectURL = nil
+			}
+			collectMethod := new(shared.InputCollectorRestCollectMethod)
+			if !r.InputCollectorRest.Collector.Conf.CollectMethod.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CollectMethod.IsNull() {
+				*collectMethod = shared.InputCollectorRestCollectMethod(r.InputCollectorRest.Collector.Conf.CollectMethod.ValueString())
+			} else {
+				collectMethod = nil
+			}
+			collectRequestHeaders := make([]shared.CollectRequestHeader, 0, len(r.InputCollectorRest.Collector.Conf.CollectRequestHeaders))
+			for _, collectRequestHeadersItem := range r.InputCollectorRest.Collector.Conf.CollectRequestHeaders {
+				name4 := new(string)
+				if !collectRequestHeadersItem.Name.IsUnknown() && !collectRequestHeadersItem.Name.IsNull() {
+					*name4 = collectRequestHeadersItem.Name.ValueString()
+				} else {
+					name4 = nil
+				}
+				value4 := new(string)
+				if !collectRequestHeadersItem.Value.IsUnknown() && !collectRequestHeadersItem.Value.IsNull() {
+					*value4 = collectRequestHeadersItem.Value.ValueString()
+				} else {
+					value4 = nil
+				}
+				collectRequestHeaders = append(collectRequestHeaders, shared.CollectRequestHeader{
+					Name:  name4,
+					Value: value4,
+				})
+			}
+			collectRequestParams := make([]shared.CollectRequestParam, 0, len(r.InputCollectorRest.Collector.Conf.CollectRequestParams))
+			for _, collectRequestParamsItem := range r.InputCollectorRest.Collector.Conf.CollectRequestParams {
+				name5 := new(string)
+				if !collectRequestParamsItem.Name.IsUnknown() && !collectRequestParamsItem.Name.IsNull() {
+					*name5 = collectRequestParamsItem.Name.ValueString()
+				} else {
+					name5 = nil
+				}
+				value5 := new(string)
+				if !collectRequestParamsItem.Value.IsUnknown() && !collectRequestParamsItem.Value.IsNull() {
+					*value5 = collectRequestParamsItem.Value.ValueString()
+				} else {
+					value5 = nil
+				}
+				collectRequestParams = append(collectRequestParams, shared.CollectRequestParam{
+					Name:  name5,
+					Value: value5,
+				})
+			}
+			timeout1 := new(int64)
+			if !r.InputCollectorRest.Collector.Conf.Timeout.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Timeout.IsNull() {
+				*timeout1 = r.InputCollectorRest.Collector.Conf.Timeout.ValueInt64()
+			} else {
+				timeout1 = nil
+			}
+			useRoundRobinDns1 := new(bool)
+			if !r.InputCollectorRest.Collector.Conf.UseRoundRobinDNS.IsUnknown() && !r.InputCollectorRest.Collector.Conf.UseRoundRobinDNS.IsNull() {
+				*useRoundRobinDns1 = r.InputCollectorRest.Collector.Conf.UseRoundRobinDNS.ValueBool()
+			} else {
+				useRoundRobinDns1 = nil
+			}
+			disableTimeFilter1 := new(bool)
+			if !r.InputCollectorRest.Collector.Conf.DisableTimeFilter.IsUnknown() && !r.InputCollectorRest.Collector.Conf.DisableTimeFilter.IsNull() {
+				*disableTimeFilter1 = r.InputCollectorRest.Collector.Conf.DisableTimeFilter.ValueBool()
+			} else {
+				disableTimeFilter1 = nil
+			}
+			decodeURL := new(bool)
+			if !r.InputCollectorRest.Collector.Conf.DecodeURL.IsUnknown() && !r.InputCollectorRest.Collector.Conf.DecodeURL.IsNull() {
+				*decodeURL = r.InputCollectorRest.Collector.Conf.DecodeURL.ValueBool()
+			} else {
+				decodeURL = nil
+			}
+			rejectUnauthorized1 := new(bool)
+			if !r.InputCollectorRest.Collector.Conf.RejectUnauthorized.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RejectUnauthorized.IsNull() {
+				*rejectUnauthorized1 = r.InputCollectorRest.Collector.Conf.RejectUnauthorized.ValueBool()
+			} else {
+				rejectUnauthorized1 = nil
+			}
+			captureHeaders := new(bool)
+			if !r.InputCollectorRest.Collector.Conf.CaptureHeaders.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CaptureHeaders.IsNull() {
+				*captureHeaders = r.InputCollectorRest.Collector.Conf.CaptureHeaders.ValueBool()
+			} else {
+				captureHeaders = nil
+			}
+			safeHeaders := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.SafeHeaders))
+			for _, safeHeadersItem := range r.InputCollectorRest.Collector.Conf.SafeHeaders {
+				safeHeaders = append(safeHeaders, safeHeadersItem.ValueString())
+			}
+			var discovery *shared.DiscoveryConfiguration
+			if r.InputCollectorRest.Collector.Conf.Discovery != nil {
+				discoverType := new(shared.DiscoverType)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType.IsNull() {
+					*discoverType = shared.DiscoverType(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType.ValueString())
+				} else {
+					discoverType = nil
+				}
+				discoverMethod := new(shared.DiscoverMethod)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.IsNull() {
+					*discoverMethod = shared.DiscoverMethod(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.ValueString())
+				} else {
+					discoverMethod = nil
+				}
+				var pagination *shared.PaginationConfig
+				if r.InputCollectorRest.Collector.Conf.Discovery.Pagination != nil {
+					typeVar4 := new(shared.PaginationType)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.IsNull() {
+						*typeVar4 = shared.PaginationType(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.ValueString())
+					} else {
+						typeVar4 = nil
+					}
+					offsetField := new(string)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.IsNull() {
+						*offsetField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.ValueString()
+					} else {
+						offsetField = nil
+					}
+					limitField := new(string)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.IsNull() {
+						*limitField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.ValueString()
+					} else {
+						limitField = nil
+					}
+					limit := new(int64)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.IsNull() {
+						*limit = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.ValueInt64()
+					} else {
+						limit = nil
+					}
+					maxPages := new(int64)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.IsNull() {
+						*maxPages = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.ValueInt64()
+					} else {
+						maxPages = nil
+					}
+					zeroIndexed := new(bool)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.IsNull() {
+						*zeroIndexed = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.ValueBool()
+					} else {
+						zeroIndexed = nil
+					}
+					pageField := new(string)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.IsNull() {
+						*pageField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.ValueString()
+					} else {
+						pageField = nil
+					}
+					sizeField := new(string)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.IsNull() {
+						*sizeField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.ValueString()
+					} else {
+						sizeField = nil
+					}
+					size := new(int64)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.IsNull() {
+						*size = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.ValueInt64()
+					} else {
+						size = nil
+					}
+					attribute := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute))
+					for _, attributeItem := range r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
+						attribute = append(attribute, attributeItem.ValueString())
+					}
+					lastPageExpr := new(string)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.IsNull() {
+						*lastPageExpr = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.ValueString()
+					} else {
+						lastPageExpr = nil
+					}
+					offset := new(int64)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.IsNull() {
+						*offset = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.ValueInt64()
+					} else {
+						offset = nil
+					}
+					totalRecordField := new(string)
+					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.IsNull() {
+						*totalRecordField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.ValueString()
+					} else {
+						totalRecordField = nil
+					}
+					pagination = &shared.PaginationConfig{
+						Type:             typeVar4,
+						OffsetField:      offsetField,
+						LimitField:       limitField,
+						Limit:            limit,
+						MaxPages:         maxPages,
+						ZeroIndexed:      zeroIndexed,
+						PageField:        pageField,
+						SizeField:        sizeField,
+						Size:             size,
+						Attribute:        attribute,
+						LastPageExpr:     lastPageExpr,
+						Offset:           offset,
+						TotalRecordField: totalRecordField,
+					}
+				}
+				enableDiscoverCode := new(bool)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.IsNull() {
+					*enableDiscoverCode = r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.ValueBool()
+				} else {
+					enableDiscoverCode = nil
+				}
+				itemList := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.ItemList))
+				for _, itemListItem := range r.InputCollectorRest.Collector.Conf.Discovery.ItemList {
+					itemList = append(itemList, itemListItem.ValueString())
+				}
+				discoverURL := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.IsNull() {
+					*discoverURL = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.ValueString()
+				} else {
+					discoverURL = nil
+				}
+				discoverRequestHeaders := make([]shared.DiscoverRequestHeader, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders))
+				for _, discoverRequestHeadersItem := range r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders {
+					name6 := new(string)
+					if !discoverRequestHeadersItem.Name.IsUnknown() && !discoverRequestHeadersItem.Name.IsNull() {
+						*name6 = discoverRequestHeadersItem.Name.ValueString()
+					} else {
+						name6 = nil
+					}
+					value6 := new(string)
+					if !discoverRequestHeadersItem.Value.IsUnknown() && !discoverRequestHeadersItem.Value.IsNull() {
+						*value6 = discoverRequestHeadersItem.Value.ValueString()
+					} else {
+						value6 = nil
+					}
+					discoverRequestHeaders = append(discoverRequestHeaders, shared.DiscoverRequestHeader{
+						Name:  name6,
+						Value: value6,
+					})
+				}
+				discoverRequestParams := make([]shared.DiscoverRequestParam, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams))
+				discoverBody := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.IsNull() {
+					*discoverBody = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.ValueString()
+				} else {
+					discoverBody = nil
+				}
+				formatResultCode := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.IsNull() {
+					*formatResultCode = r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.ValueString()
+				} else {
+					formatResultCode = nil
+				}
+				discoverDataField := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.IsNull() {
+					*discoverDataField = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.ValueString()
+				} else {
+					discoverDataField = nil
+				}
+				discovery = &shared.DiscoveryConfiguration{
+					DiscoverType:           discoverType,
+					DiscoverMethod:         discoverMethod,
+					Pagination:             pagination,
+					EnableDiscoverCode:     enableDiscoverCode,
+					ItemList:               itemList,
+					DiscoverURL:            discoverURL,
+					DiscoverRequestHeaders: discoverRequestHeaders,
+					DiscoverRequestParams:  discoverRequestParams,
+					DiscoverBody:           discoverBody,
+					FormatResultCode:       formatResultCode,
+					DiscoverDataField:      discoverDataField,
+				}
+			}
+			var pagination1 *shared.PaginationConfig
+			if r.InputCollectorRest.Collector.Conf.Pagination != nil {
+				typeVar5 := new(shared.PaginationType)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.Type.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.Type.IsNull() {
+					*typeVar5 = shared.PaginationType(r.InputCollectorRest.Collector.Conf.Pagination.Type.ValueString())
+				} else {
+					typeVar5 = nil
+				}
+				offsetField1 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.OffsetField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.OffsetField.IsNull() {
+					*offsetField1 = r.InputCollectorRest.Collector.Conf.Pagination.OffsetField.ValueString()
+				} else {
+					offsetField1 = nil
+				}
+				limitField1 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.LimitField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.LimitField.IsNull() {
+					*limitField1 = r.InputCollectorRest.Collector.Conf.Pagination.LimitField.ValueString()
+				} else {
+					limitField1 = nil
+				}
+				limit1 := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.Limit.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.Limit.IsNull() {
+					*limit1 = r.InputCollectorRest.Collector.Conf.Pagination.Limit.ValueInt64()
+				} else {
+					limit1 = nil
+				}
+				maxPages1 := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.MaxPages.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.MaxPages.IsNull() {
+					*maxPages1 = r.InputCollectorRest.Collector.Conf.Pagination.MaxPages.ValueInt64()
+				} else {
+					maxPages1 = nil
+				}
+				zeroIndexed1 := new(bool)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.ZeroIndexed.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.ZeroIndexed.IsNull() {
+					*zeroIndexed1 = r.InputCollectorRest.Collector.Conf.Pagination.ZeroIndexed.ValueBool()
+				} else {
+					zeroIndexed1 = nil
+				}
+				pageField1 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.PageField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.PageField.IsNull() {
+					*pageField1 = r.InputCollectorRest.Collector.Conf.Pagination.PageField.ValueString()
+				} else {
+					pageField1 = nil
+				}
+				sizeField1 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.SizeField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.SizeField.IsNull() {
+					*sizeField1 = r.InputCollectorRest.Collector.Conf.Pagination.SizeField.ValueString()
+				} else {
+					sizeField1 = nil
+				}
+				size1 := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.Size.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.Size.IsNull() {
+					*size1 = r.InputCollectorRest.Collector.Conf.Pagination.Size.ValueInt64()
+				} else {
+					size1 = nil
+				}
+				attribute1 := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Pagination.Attribute))
+				for _, attributeItem1 := range r.InputCollectorRest.Collector.Conf.Pagination.Attribute {
+					attribute1 = append(attribute1, attributeItem1.ValueString())
+				}
+				lastPageExpr1 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr.IsNull() {
+					*lastPageExpr1 = r.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr.ValueString()
+				} else {
+					lastPageExpr1 = nil
+				}
+				offset1 := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.Offset.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.Offset.IsNull() {
+					*offset1 = r.InputCollectorRest.Collector.Conf.Pagination.Offset.ValueInt64()
+				} else {
+					offset1 = nil
+				}
+				totalRecordField1 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.TotalRecordField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.TotalRecordField.IsNull() {
+					*totalRecordField1 = r.InputCollectorRest.Collector.Conf.Pagination.TotalRecordField.ValueString()
+				} else {
+					totalRecordField1 = nil
+				}
+				pagination1 = &shared.PaginationConfig{
+					Type:             typeVar5,
+					OffsetField:      offsetField1,
+					LimitField:       limitField1,
+					Limit:            limit1,
+					MaxPages:         maxPages1,
+					ZeroIndexed:      zeroIndexed1,
+					PageField:        pageField1,
+					SizeField:        sizeField1,
+					Size:             size1,
+					Attribute:        attribute1,
+					LastPageExpr:     lastPageExpr1,
+					Offset:           offset1,
+					TotalRecordField: totalRecordField1,
+				}
+			}
+			var retryRules *shared.RetryRulesConfiguration
+			if r.InputCollectorRest.Collector.Conf.RetryRules != nil {
+				typeVar6 := new(shared.InputCollectorRestRetryType)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.Type.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.Type.IsNull() {
+					*typeVar6 = shared.InputCollectorRestRetryType(r.InputCollectorRest.Collector.Conf.RetryRules.Type.ValueString())
+				} else {
+					typeVar6 = nil
+				}
+				interval := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.Interval.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.Interval.IsNull() {
+					*interval = r.InputCollectorRest.Collector.Conf.RetryRules.Interval.ValueInt64()
+				} else {
+					interval = nil
+				}
+				limit2 := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.Limit.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.Limit.IsNull() {
+					*limit2 = r.InputCollectorRest.Collector.Conf.RetryRules.Limit.ValueInt64()
+				} else {
+					limit2 = nil
+				}
+				multiplier := new(float64)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.Multiplier.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.Multiplier.IsNull() {
+					*multiplier = r.InputCollectorRest.Collector.Conf.RetryRules.Multiplier.ValueFloat64()
+				} else {
+					multiplier = nil
+				}
+				maxIntervalMs := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.MaxIntervalMs.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.MaxIntervalMs.IsNull() {
+					*maxIntervalMs = r.InputCollectorRest.Collector.Conf.RetryRules.MaxIntervalMs.ValueInt64()
+				} else {
+					maxIntervalMs = nil
+				}
+				codes := make([]int64, 0, len(r.InputCollectorRest.Collector.Conf.RetryRules.Codes))
+				for _, codesItem := range r.InputCollectorRest.Collector.Conf.RetryRules.Codes {
+					codes = append(codes, codesItem.ValueInt64())
+				}
+				enableHeader := new(bool)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.EnableHeader.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.EnableHeader.IsNull() {
+					*enableHeader = r.InputCollectorRest.Collector.Conf.RetryRules.EnableHeader.ValueBool()
+				} else {
+					enableHeader = nil
+				}
+				retryConnectTimeout := new(bool)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectTimeout.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectTimeout.IsNull() {
+					*retryConnectTimeout = r.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectTimeout.ValueBool()
+				} else {
+					retryConnectTimeout = nil
+				}
+				retryConnectReset := new(bool)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectReset.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectReset.IsNull() {
+					*retryConnectReset = r.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectReset.ValueBool()
+				} else {
+					retryConnectReset = nil
+				}
+				retryHeaderName := new(string)
+				if !r.InputCollectorRest.Collector.Conf.RetryRules.RetryHeaderName.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.RetryHeaderName.IsNull() {
+					*retryHeaderName = r.InputCollectorRest.Collector.Conf.RetryRules.RetryHeaderName.ValueString()
+				} else {
+					retryHeaderName = nil
+				}
+				retryRules = &shared.RetryRulesConfiguration{
+					Type:                typeVar6,
+					Interval:            interval,
+					Limit:               limit2,
+					Multiplier:          multiplier,
+					MaxIntervalMs:       maxIntervalMs,
+					Codes:               codes,
+					EnableHeader:        enableHeader,
+					RetryConnectTimeout: retryConnectTimeout,
+					RetryConnectReset:   retryConnectReset,
+					RetryHeaderName:     retryHeaderName,
+				}
+			}
+			var scheduling *shared.InternalScheduling
+			if r.InputCollectorRest.Collector.Conf.Scheduling != nil {
+				var stateTracking2 *shared.SchedulingStateTracking
+				if r.InputCollectorRest.Collector.Conf.Scheduling.StateTracking != nil {
+					stateTracking2 = &shared.SchedulingStateTracking{}
+				}
+				scheduling = &shared.InternalScheduling{
+					StateTracking: stateTracking2,
+				}
+			}
+			conf1 = &shared.InputCollectorRestConf{
+				Authentication:        authentication1,
+				Username:              username1,
+				Password:              password1,
+				CredentialsSecret:     credentialsSecret1,
+				Token:                 token1,
+				TokenSecret:           tokenSecret1,
+				LoginURL:              loginURL,
+				LoginBody:             loginBody,
+				AuthHeaderKey:         authHeaderKey,
+				AuthHeaderExpr:        authHeaderExpr,
+				ClientSecretParamName: clientSecretParamName,
+				AuthRequestParams:     authRequestParams,
+				TokenRespAttribute:    tokenRespAttribute,
+				AuthRequestHeaders:    authRequestHeaders,
+				CollectURL:            collectURL,
+				CollectMethod:         collectMethod,
+				CollectRequestHeaders: collectRequestHeaders,
+				CollectRequestParams:  collectRequestParams,
+				Timeout:               timeout1,
+				UseRoundRobinDNS:      useRoundRobinDns1,
+				DisableTimeFilter:     disableTimeFilter1,
+				DecodeURL:             decodeURL,
+				RejectUnauthorized:    rejectUnauthorized1,
+				CaptureHeaders:        captureHeaders,
+				SafeHeaders:           safeHeaders,
+				Discovery:             discovery,
+				Pagination:            pagination1,
+				RetryRules:            retryRules,
+				Scheduling:            scheduling,
+			}
+		}
+		collector1 := shared.InputCollectorRestCollector{
+			Type: typeVar3,
+			Conf: conf1,
+		}
+		inputCollectorRest = &shared.InputCollectorRest{
+			ID:                   id1,
+			TTL:                  ttl1,
+			IgnoreGroupJobsLimit: ignoreGroupJobsLimit1,
+			RemoveFields:         removeFields1,
+			ResumeOnBoot:         resumeOnBoot1,
+			Environment:          environment1,
+			SavedState:           savedState1,
+			Schedule:             schedule1,
+			Streamtags:           streamtags1,
+			WorkerAffinity:       workerAffinity1,
+			Input:                input1,
+			Collector:            collector1,
+		}
+	}
+	if inputCollectorRest != nil {
+		out = shared.InputCollector{
+			InputCollectorRest: inputCollectorRest,
+		}
+	}
+	var inputCollectorS3 *shared.InputCollectorS3
+	if r.InputCollectorS3 != nil {
+		id2 := new(string)
+		if !r.InputCollectorS3.ID.IsUnknown() && !r.InputCollectorS3.ID.IsNull() {
+			*id2 = r.InputCollectorS3.ID.ValueString()
+		} else {
+			id2 = nil
+		}
+		ttl2 := new(string)
+		if !r.InputCollectorS3.TTL.IsUnknown() && !r.InputCollectorS3.TTL.IsNull() {
+			*ttl2 = r.InputCollectorS3.TTL.ValueString()
+		} else {
+			ttl2 = nil
+		}
+		ignoreGroupJobsLimit2 := new(bool)
+		if !r.InputCollectorS3.IgnoreGroupJobsLimit.IsUnknown() && !r.InputCollectorS3.IgnoreGroupJobsLimit.IsNull() {
+			*ignoreGroupJobsLimit2 = r.InputCollectorS3.IgnoreGroupJobsLimit.ValueBool()
+		} else {
+			ignoreGroupJobsLimit2 = nil
+		}
+		removeFields2 := make([]string, 0, len(r.InputCollectorS3.RemoveFields))
+		for _, removeFieldsItem2 := range r.InputCollectorS3.RemoveFields {
+			removeFields2 = append(removeFields2, removeFieldsItem2.ValueString())
+		}
+		resumeOnBoot2 := new(bool)
+		if !r.InputCollectorS3.ResumeOnBoot.IsUnknown() && !r.InputCollectorS3.ResumeOnBoot.IsNull() {
+			*resumeOnBoot2 = r.InputCollectorS3.ResumeOnBoot.ValueBool()
+		} else {
+			resumeOnBoot2 = nil
+		}
+		environment2 := new(string)
+		if !r.InputCollectorS3.Environment.IsUnknown() && !r.InputCollectorS3.Environment.IsNull() {
+			*environment2 = r.InputCollectorS3.Environment.ValueString()
+		} else {
+			environment2 = nil
+		}
+		var savedState2 *shared.InputCollectorS3SavedState
+		if r.InputCollectorS3.SavedState != nil {
+			savedState2 = &shared.InputCollectorS3SavedState{}
+		}
+		var schedule2 *shared.InputCollectorS3Schedule
+		if r.InputCollectorS3.Schedule != nil {
+			enabled4 := new(bool)
+			if !r.InputCollectorS3.Schedule.Enabled.IsUnknown() && !r.InputCollectorS3.Schedule.Enabled.IsNull() {
+				*enabled4 = r.InputCollectorS3.Schedule.Enabled.ValueBool()
+			} else {
+				enabled4 = nil
+			}
+			cronSchedule2 := new(string)
+			if !r.InputCollectorS3.Schedule.CronSchedule.IsUnknown() && !r.InputCollectorS3.Schedule.CronSchedule.IsNull() {
+				*cronSchedule2 = r.InputCollectorS3.Schedule.CronSchedule.ValueString()
+			} else {
+				cronSchedule2 = nil
+			}
+			maxConcurrentRuns2 := new(float64)
+			if !r.InputCollectorS3.Schedule.MaxConcurrentRuns.IsUnknown() && !r.InputCollectorS3.Schedule.MaxConcurrentRuns.IsNull() {
+				*maxConcurrentRuns2 = r.InputCollectorS3.Schedule.MaxConcurrentRuns.ValueFloat64()
+			} else {
+				maxConcurrentRuns2 = nil
+			}
+			skippable2 := new(bool)
+			if !r.InputCollectorS3.Schedule.Skippable.IsUnknown() && !r.InputCollectorS3.Schedule.Skippable.IsNull() {
+				*skippable2 = r.InputCollectorS3.Schedule.Skippable.ValueBool()
+			} else {
+				skippable2 = nil
+			}
+			resumeMissed2 := new(bool)
+			if !r.InputCollectorS3.Schedule.ResumeMissed.IsUnknown() && !r.InputCollectorS3.Schedule.ResumeMissed.IsNull() {
+				*resumeMissed2 = r.InputCollectorS3.Schedule.ResumeMissed.ValueBool()
+			} else {
+				resumeMissed2 = nil
+			}
+			var run2 *shared.InputCollectorS3RunSettings
+			if r.InputCollectorS3.Schedule.Run != nil {
+				rescheduleDroppedTasks2 := new(bool)
+				if !r.InputCollectorS3.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.InputCollectorS3.Schedule.Run.RescheduleDroppedTasks.IsNull() {
+					*rescheduleDroppedTasks2 = r.InputCollectorS3.Schedule.Run.RescheduleDroppedTasks.ValueBool()
+				} else {
+					rescheduleDroppedTasks2 = nil
+				}
+				maxTaskReschedule2 := new(float64)
+				if !r.InputCollectorS3.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.InputCollectorS3.Schedule.Run.MaxTaskReschedule.IsNull() {
+					*maxTaskReschedule2 = r.InputCollectorS3.Schedule.Run.MaxTaskReschedule.ValueFloat64()
+				} else {
+					maxTaskReschedule2 = nil
+				}
+				logLevel2 := new(shared.InputCollectorS3LogLevel)
+				if !r.InputCollectorS3.Schedule.Run.LogLevel.IsUnknown() && !r.InputCollectorS3.Schedule.Run.LogLevel.IsNull() {
+					*logLevel2 = shared.InputCollectorS3LogLevel(r.InputCollectorS3.Schedule.Run.LogLevel.ValueString())
+				} else {
+					logLevel2 = nil
+				}
+				jobTimeout2 := new(string)
+				if !r.InputCollectorS3.Schedule.Run.JobTimeout.IsUnknown() && !r.InputCollectorS3.Schedule.Run.JobTimeout.IsNull() {
+					*jobTimeout2 = r.InputCollectorS3.Schedule.Run.JobTimeout.ValueString()
+				} else {
+					jobTimeout2 = nil
+				}
+				mode2 := new(shared.InputCollectorS3Mode)
+				if !r.InputCollectorS3.Schedule.Run.Mode.IsUnknown() && !r.InputCollectorS3.Schedule.Run.Mode.IsNull() {
+					*mode2 = shared.InputCollectorS3Mode(r.InputCollectorS3.Schedule.Run.Mode.ValueString())
+				} else {
+					mode2 = nil
+				}
+				timeRangeType2 := new(shared.InputCollectorS3TimeRange)
+				if !r.InputCollectorS3.Schedule.Run.TimeRangeType.IsUnknown() && !r.InputCollectorS3.Schedule.Run.TimeRangeType.IsNull() {
+					*timeRangeType2 = shared.InputCollectorS3TimeRange(r.InputCollectorS3.Schedule.Run.TimeRangeType.ValueString())
+				} else {
+					timeRangeType2 = nil
+				}
+				earliest3 := new(float64)
+				if !r.InputCollectorS3.Schedule.Run.Earliest.IsUnknown() && !r.InputCollectorS3.Schedule.Run.Earliest.IsNull() {
+					*earliest3 = r.InputCollectorS3.Schedule.Run.Earliest.ValueFloat64()
+				} else {
+					earliest3 = nil
+				}
+				latest3 := new(float64)
+				if !r.InputCollectorS3.Schedule.Run.Latest.IsUnknown() && !r.InputCollectorS3.Schedule.Run.Latest.IsNull() {
+					*latest3 = r.InputCollectorS3.Schedule.Run.Latest.ValueFloat64()
+				} else {
+					latest3 = nil
+				}
+				expression2 := new(string)
+				if !r.InputCollectorS3.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorS3.Schedule.Run.Expression.IsNull() {
+					*expression2 = r.InputCollectorS3.Schedule.Run.Expression.ValueString()
+				} else {
+					expression2 = nil
+				}
+				minTaskSize2 := new(string)
+				if !r.InputCollectorS3.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorS3.Schedule.Run.MinTaskSize.IsNull() {
+					*minTaskSize2 = r.InputCollectorS3.Schedule.Run.MinTaskSize.ValueString()
+				} else {
+					minTaskSize2 = nil
+				}
+				maxTaskSize2 := new(string)
+				if !r.InputCollectorS3.Schedule.Run.MaxTaskSize.IsUnknown() && !r.InputCollectorS3.Schedule.Run.MaxTaskSize.IsNull() {
+					*maxTaskSize2 = r.InputCollectorS3.Schedule.Run.MaxTaskSize.ValueString()
+				} else {
+					maxTaskSize2 = nil
+				}
+				var timeWarning2 *shared.InputCollectorS3TimeWarning
+				if r.InputCollectorS3.Schedule.Run.TimeWarning != nil {
+					timeWarning2 = &shared.InputCollectorS3TimeWarning{}
+				}
+				var stateTracking3 *shared.InputCollectorS3StateTracking
+				if r.InputCollectorS3.Schedule.Run.StateTracking != nil {
+					stateUpdateExpression2 := new(string)
+					if !r.InputCollectorS3.Schedule.Run.StateTracking.StateUpdateExpression.IsUnknown() && !r.InputCollectorS3.Schedule.Run.StateTracking.StateUpdateExpression.IsNull() {
+						*stateUpdateExpression2 = r.InputCollectorS3.Schedule.Run.StateTracking.StateUpdateExpression.ValueString()
+					} else {
+						stateUpdateExpression2 = nil
+					}
+					stateMergeExpression2 := new(string)
+					if !r.InputCollectorS3.Schedule.Run.StateTracking.StateMergeExpression.IsUnknown() && !r.InputCollectorS3.Schedule.Run.StateTracking.StateMergeExpression.IsNull() {
+						*stateMergeExpression2 = r.InputCollectorS3.Schedule.Run.StateTracking.StateMergeExpression.ValueString()
+					} else {
+						stateMergeExpression2 = nil
+					}
+					enabled5 := new(bool)
+					if !r.InputCollectorS3.Schedule.Run.StateTracking.Enabled.IsUnknown() && !r.InputCollectorS3.Schedule.Run.StateTracking.Enabled.IsNull() {
+						*enabled5 = r.InputCollectorS3.Schedule.Run.StateTracking.Enabled.ValueBool()
+					} else {
+						enabled5 = nil
+					}
+					stateTracking3 = &shared.InputCollectorS3StateTracking{
+						StateUpdateExpression: stateUpdateExpression2,
+						StateMergeExpression:  stateMergeExpression2,
+						Enabled:               enabled5,
+					}
+				}
+				run2 = &shared.InputCollectorS3RunSettings{
+					RescheduleDroppedTasks: rescheduleDroppedTasks2,
+					MaxTaskReschedule:      maxTaskReschedule2,
+					LogLevel:               logLevel2,
+					JobTimeout:             jobTimeout2,
+					Mode:                   mode2,
+					TimeRangeType:          timeRangeType2,
+					Earliest:               earliest3,
+					Latest:                 latest3,
+					Expression:             expression2,
+					MinTaskSize:            minTaskSize2,
+					MaxTaskSize:            maxTaskSize2,
+					TimeWarning:            timeWarning2,
+					StateTracking:          stateTracking3,
+				}
+			}
+			schedule2 = &shared.InputCollectorS3Schedule{
+				Enabled:           enabled4,
+				CronSchedule:      cronSchedule2,
+				MaxConcurrentRuns: maxConcurrentRuns2,
+				Skippable:         skippable2,
+				ResumeMissed:      resumeMissed2,
+				Run:               run2,
+			}
+		}
+		streamtags2 := make([]string, 0, len(r.InputCollectorS3.Streamtags))
+		for _, streamtagsItem2 := range r.InputCollectorS3.Streamtags {
+			streamtags2 = append(streamtags2, streamtagsItem2.ValueString())
+		}
+		workerAffinity2 := new(bool)
+		if !r.InputCollectorS3.WorkerAffinity.IsUnknown() && !r.InputCollectorS3.WorkerAffinity.IsNull() {
+			*workerAffinity2 = r.InputCollectorS3.WorkerAffinity.ValueBool()
+		} else {
+			workerAffinity2 = nil
+		}
+		var input2 *shared.InputCollectorS3Input
+		if r.InputCollectorS3.Input != nil {
+			typeVar7 := new(shared.InputCollectorS3TypeCollection2)
+			if !r.InputCollectorS3.Input.Type.IsUnknown() && !r.InputCollectorS3.Input.Type.IsNull() {
+				*typeVar7 = shared.InputCollectorS3TypeCollection2(r.InputCollectorS3.Input.Type.ValueString())
+			} else {
+				typeVar7 = nil
+			}
+			breakerRulesets2 := make([]string, 0, len(r.InputCollectorS3.Input.BreakerRulesets))
+			for _, breakerRulesetsItem2 := range r.InputCollectorS3.Input.BreakerRulesets {
+				breakerRulesets2 = append(breakerRulesets2, breakerRulesetsItem2.ValueString())
+			}
+			staleChannelFlushMs2 := new(float64)
+			if !r.InputCollectorS3.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorS3.Input.StaleChannelFlushMs.IsNull() {
+				*staleChannelFlushMs2 = r.InputCollectorS3.Input.StaleChannelFlushMs.ValueFloat64()
+			} else {
+				staleChannelFlushMs2 = nil
+			}
+			sendToRoutes2 := new(bool)
+			if !r.InputCollectorS3.Input.SendToRoutes.IsUnknown() && !r.InputCollectorS3.Input.SendToRoutes.IsNull() {
+				*sendToRoutes2 = r.InputCollectorS3.Input.SendToRoutes.ValueBool()
+			} else {
+				sendToRoutes2 = nil
+			}
+			var preprocess2 *shared.InputCollectorS3Preprocess
+			if r.InputCollectorS3.Input.Preprocess != nil {
+				disabled2 := new(bool)
+				if !r.InputCollectorS3.Input.Preprocess.Disabled.IsUnknown() && !r.InputCollectorS3.Input.Preprocess.Disabled.IsNull() {
+					*disabled2 = r.InputCollectorS3.Input.Preprocess.Disabled.ValueBool()
+				} else {
+					disabled2 = nil
+				}
+				command2 := new(string)
+				if !r.InputCollectorS3.Input.Preprocess.Command.IsUnknown() && !r.InputCollectorS3.Input.Preprocess.Command.IsNull() {
+					*command2 = r.InputCollectorS3.Input.Preprocess.Command.ValueString()
+				} else {
+					command2 = nil
+				}
+				args2 := make([]string, 0, len(r.InputCollectorS3.Input.Preprocess.Args))
+				for _, argsItem2 := range r.InputCollectorS3.Input.Preprocess.Args {
+					args2 = append(args2, argsItem2.ValueString())
+				}
+				preprocess2 = &shared.InputCollectorS3Preprocess{
+					Disabled: disabled2,
+					Command:  command2,
+					Args:     args2,
+				}
+			}
+			throttleRatePerSec2 := new(string)
+			if !r.InputCollectorS3.Input.ThrottleRatePerSec.IsUnknown() && !r.InputCollectorS3.Input.ThrottleRatePerSec.IsNull() {
+				*throttleRatePerSec2 = r.InputCollectorS3.Input.ThrottleRatePerSec.ValueString()
+			} else {
+				throttleRatePerSec2 = nil
+			}
+			metadata2 := make([]shared.InputCollectorS3Metadatum, 0, len(r.InputCollectorS3.Input.Metadata))
+			for _, metadataItem2 := range r.InputCollectorS3.Input.Metadata {
+				var name7 string
+				name7 = metadataItem2.Name.ValueString()
+
+				var value7 string
+				value7 = metadataItem2.Value.ValueString()
+
+				metadata2 = append(metadata2, shared.InputCollectorS3Metadatum{
+					Name:  name7,
+					Value: value7,
+				})
+			}
+			pipeline2 := new(string)
+			if !r.InputCollectorS3.Input.Pipeline.IsUnknown() && !r.InputCollectorS3.Input.Pipeline.IsNull() {
+				*pipeline2 = r.InputCollectorS3.Input.Pipeline.ValueString()
+			} else {
+				pipeline2 = nil
+			}
+			output2 := new(string)
+			if !r.InputCollectorS3.Input.Output.IsUnknown() && !r.InputCollectorS3.Input.Output.IsNull() {
+				*output2 = r.InputCollectorS3.Input.Output.ValueString()
+			} else {
+				output2 = nil
+			}
+			input2 = &shared.InputCollectorS3Input{
+				Type:                typeVar7,
+				BreakerRulesets:     breakerRulesets2,
+				StaleChannelFlushMs: staleChannelFlushMs2,
+				SendToRoutes:        sendToRoutes2,
+				Preprocess:          preprocess2,
+				ThrottleRatePerSec:  throttleRatePerSec2,
+				Metadata:            metadata2,
+				Pipeline:            pipeline2,
+				Output:              output2,
+			}
+		}
+		typeVar8 := shared.InputCollectorS3TypeS3(r.InputCollectorS3.Collector.Type.ValueString())
+		var conf2 *shared.InputCollectorS3Conf
+		if r.InputCollectorS3.Collector.Conf != nil {
+			bucket := new(string)
+			if !r.InputCollectorS3.Collector.Conf.Bucket.IsUnknown() && !r.InputCollectorS3.Collector.Conf.Bucket.IsNull() {
+				*bucket = r.InputCollectorS3.Collector.Conf.Bucket.ValueString()
+			} else {
+				bucket = nil
+			}
+			region := new(string)
+			if !r.InputCollectorS3.Collector.Conf.Region.IsUnknown() && !r.InputCollectorS3.Collector.Conf.Region.IsNull() {
+				*region = r.InputCollectorS3.Collector.Conf.Region.ValueString()
+			} else {
+				region = nil
+			}
+			path := new(string)
+			if !r.InputCollectorS3.Collector.Conf.Path.IsUnknown() && !r.InputCollectorS3.Collector.Conf.Path.IsNull() {
+				*path = r.InputCollectorS3.Collector.Conf.Path.ValueString()
+			} else {
+				path = nil
+			}
+			awsAuthenticationMethod := new(shared.InputCollectorS3AuthenticationMethod)
+			if !r.InputCollectorS3.Collector.Conf.AwsAuthenticationMethod.IsUnknown() && !r.InputCollectorS3.Collector.Conf.AwsAuthenticationMethod.IsNull() {
+				*awsAuthenticationMethod = shared.InputCollectorS3AuthenticationMethod(r.InputCollectorS3.Collector.Conf.AwsAuthenticationMethod.ValueString())
+			} else {
+				awsAuthenticationMethod = nil
+			}
+			awsAPIKey := new(string)
+			if !r.InputCollectorS3.Collector.Conf.AwsAPIKey.IsUnknown() && !r.InputCollectorS3.Collector.Conf.AwsAPIKey.IsNull() {
+				*awsAPIKey = r.InputCollectorS3.Collector.Conf.AwsAPIKey.ValueString()
+			} else {
+				awsAPIKey = nil
+			}
+			awsSecretKey := new(string)
+			if !r.InputCollectorS3.Collector.Conf.AwsSecretKey.IsUnknown() && !r.InputCollectorS3.Collector.Conf.AwsSecretKey.IsNull() {
+				*awsSecretKey = r.InputCollectorS3.Collector.Conf.AwsSecretKey.ValueString()
+			} else {
+				awsSecretKey = nil
+			}
+			awsSecret := new(string)
+			if !r.InputCollectorS3.Collector.Conf.AwsSecret.IsUnknown() && !r.InputCollectorS3.Collector.Conf.AwsSecret.IsNull() {
+				*awsSecret = r.InputCollectorS3.Collector.Conf.AwsSecret.ValueString()
+			} else {
+				awsSecret = nil
+			}
+			recurse := new(bool)
+			if !r.InputCollectorS3.Collector.Conf.Recurse.IsUnknown() && !r.InputCollectorS3.Collector.Conf.Recurse.IsNull() {
+				*recurse = r.InputCollectorS3.Collector.Conf.Recurse.ValueBool()
+			} else {
+				recurse = nil
+			}
+			extractors := make([]shared.InputCollectorS3Extractor, len(r.InputCollectorS3.Collector.Conf.Extractors))
+			maxBatchSize := new(int64)
+			if !r.InputCollectorS3.Collector.Conf.MaxBatchSize.IsUnknown() && !r.InputCollectorS3.Collector.Conf.MaxBatchSize.IsNull() {
+				*maxBatchSize = r.InputCollectorS3.Collector.Conf.MaxBatchSize.ValueInt64()
+			} else {
+				maxBatchSize = nil
+			}
+			conf2 = &shared.InputCollectorS3Conf{
+				Bucket:                  bucket,
+				Region:                  region,
+				Path:                    path,
+				AwsAuthenticationMethod: awsAuthenticationMethod,
+				AwsAPIKey:               awsAPIKey,
+				AwsSecretKey:            awsSecretKey,
+				AwsSecret:               awsSecret,
+				Recurse:                 recurse,
+				Extractors:              extractors,
+				MaxBatchSize:            maxBatchSize,
+			}
+		}
+		collector2 := shared.InputCollectorS3Collector{
+			Type: typeVar8,
+			Conf: conf2,
+		}
+		inputCollectorS3 = &shared.InputCollectorS3{
+			ID:                   id2,
+			TTL:                  ttl2,
+			IgnoreGroupJobsLimit: ignoreGroupJobsLimit2,
+			RemoveFields:         removeFields2,
+			ResumeOnBoot:         resumeOnBoot2,
+			Environment:          environment2,
+			SavedState:           savedState2,
+			Schedule:             schedule2,
+			Streamtags:           streamtags2,
+			WorkerAffinity:       workerAffinity2,
+			Input:                input2,
+			Collector:            collector2,
+		}
+	}
+	if inputCollectorS3 != nil {
+		out = shared.InputCollector{
+			InputCollectorS3: inputCollectorS3,
+		}
+	}
+	var inputCollectorAzureBlob *shared.InputCollectorAzureBlob
+	if r.InputCollectorAzureBlob != nil {
+		id3 := new(string)
+		if !r.InputCollectorAzureBlob.ID.IsUnknown() && !r.InputCollectorAzureBlob.ID.IsNull() {
+			*id3 = r.InputCollectorAzureBlob.ID.ValueString()
+		} else {
+			id3 = nil
+		}
+		ttl3 := new(string)
+		if !r.InputCollectorAzureBlob.TTL.IsUnknown() && !r.InputCollectorAzureBlob.TTL.IsNull() {
+			*ttl3 = r.InputCollectorAzureBlob.TTL.ValueString()
+		} else {
+			ttl3 = nil
+		}
+		ignoreGroupJobsLimit3 := new(bool)
+		if !r.InputCollectorAzureBlob.IgnoreGroupJobsLimit.IsUnknown() && !r.InputCollectorAzureBlob.IgnoreGroupJobsLimit.IsNull() {
+			*ignoreGroupJobsLimit3 = r.InputCollectorAzureBlob.IgnoreGroupJobsLimit.ValueBool()
+		} else {
+			ignoreGroupJobsLimit3 = nil
+		}
+		removeFields3 := make([]string, 0, len(r.InputCollectorAzureBlob.RemoveFields))
+		for _, removeFieldsItem3 := range r.InputCollectorAzureBlob.RemoveFields {
+			removeFields3 = append(removeFields3, removeFieldsItem3.ValueString())
+		}
+		resumeOnBoot3 := new(bool)
+		if !r.InputCollectorAzureBlob.ResumeOnBoot.IsUnknown() && !r.InputCollectorAzureBlob.ResumeOnBoot.IsNull() {
+			*resumeOnBoot3 = r.InputCollectorAzureBlob.ResumeOnBoot.ValueBool()
+		} else {
+			resumeOnBoot3 = nil
+		}
+		environment3 := new(string)
+		if !r.InputCollectorAzureBlob.Environment.IsUnknown() && !r.InputCollectorAzureBlob.Environment.IsNull() {
+			*environment3 = r.InputCollectorAzureBlob.Environment.ValueString()
+		} else {
+			environment3 = nil
+		}
+		var savedState3 *shared.InputCollectorAzureBlobSavedState
+		if r.InputCollectorAzureBlob.SavedState != nil {
+			savedState3 = &shared.InputCollectorAzureBlobSavedState{}
+		}
+		var schedule3 *shared.InputCollectorAzureBlobSchedule
+		if r.InputCollectorAzureBlob.Schedule != nil {
+			enabled6 := new(bool)
+			if !r.InputCollectorAzureBlob.Schedule.Enabled.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Enabled.IsNull() {
+				*enabled6 = r.InputCollectorAzureBlob.Schedule.Enabled.ValueBool()
+			} else {
+				enabled6 = nil
+			}
+			cronSchedule3 := new(string)
+			if !r.InputCollectorAzureBlob.Schedule.CronSchedule.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.CronSchedule.IsNull() {
+				*cronSchedule3 = r.InputCollectorAzureBlob.Schedule.CronSchedule.ValueString()
+			} else {
+				cronSchedule3 = nil
+			}
+			maxConcurrentRuns3 := new(float64)
+			if !r.InputCollectorAzureBlob.Schedule.MaxConcurrentRuns.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.MaxConcurrentRuns.IsNull() {
+				*maxConcurrentRuns3 = r.InputCollectorAzureBlob.Schedule.MaxConcurrentRuns.ValueFloat64()
+			} else {
+				maxConcurrentRuns3 = nil
+			}
+			skippable3 := new(bool)
+			if !r.InputCollectorAzureBlob.Schedule.Skippable.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Skippable.IsNull() {
+				*skippable3 = r.InputCollectorAzureBlob.Schedule.Skippable.ValueBool()
+			} else {
+				skippable3 = nil
+			}
+			resumeMissed3 := new(bool)
+			if !r.InputCollectorAzureBlob.Schedule.ResumeMissed.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.ResumeMissed.IsNull() {
+				*resumeMissed3 = r.InputCollectorAzureBlob.Schedule.ResumeMissed.ValueBool()
+			} else {
+				resumeMissed3 = nil
+			}
+			var run3 *shared.InputCollectorAzureBlobRunSettings
+			if r.InputCollectorAzureBlob.Schedule.Run != nil {
+				rescheduleDroppedTasks3 := new(bool)
+				if !r.InputCollectorAzureBlob.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.RescheduleDroppedTasks.IsNull() {
+					*rescheduleDroppedTasks3 = r.InputCollectorAzureBlob.Schedule.Run.RescheduleDroppedTasks.ValueBool()
+				} else {
+					rescheduleDroppedTasks3 = nil
+				}
+				maxTaskReschedule3 := new(float64)
+				if !r.InputCollectorAzureBlob.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.MaxTaskReschedule.IsNull() {
+					*maxTaskReschedule3 = r.InputCollectorAzureBlob.Schedule.Run.MaxTaskReschedule.ValueFloat64()
+				} else {
+					maxTaskReschedule3 = nil
+				}
+				logLevel3 := new(shared.InputCollectorAzureBlobLogLevel)
+				if !r.InputCollectorAzureBlob.Schedule.Run.LogLevel.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.LogLevel.IsNull() {
+					*logLevel3 = shared.InputCollectorAzureBlobLogLevel(r.InputCollectorAzureBlob.Schedule.Run.LogLevel.ValueString())
+				} else {
+					logLevel3 = nil
+				}
+				jobTimeout3 := new(string)
+				if !r.InputCollectorAzureBlob.Schedule.Run.JobTimeout.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.JobTimeout.IsNull() {
+					*jobTimeout3 = r.InputCollectorAzureBlob.Schedule.Run.JobTimeout.ValueString()
+				} else {
+					jobTimeout3 = nil
+				}
+				mode3 := new(shared.InputCollectorAzureBlobMode)
+				if !r.InputCollectorAzureBlob.Schedule.Run.Mode.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.Mode.IsNull() {
+					*mode3 = shared.InputCollectorAzureBlobMode(r.InputCollectorAzureBlob.Schedule.Run.Mode.ValueString())
+				} else {
+					mode3 = nil
+				}
+				timeRangeType3 := new(shared.InputCollectorAzureBlobTimeRange)
+				if !r.InputCollectorAzureBlob.Schedule.Run.TimeRangeType.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.TimeRangeType.IsNull() {
+					*timeRangeType3 = shared.InputCollectorAzureBlobTimeRange(r.InputCollectorAzureBlob.Schedule.Run.TimeRangeType.ValueString())
+				} else {
+					timeRangeType3 = nil
+				}
+				earliest4 := new(float64)
+				if !r.InputCollectorAzureBlob.Schedule.Run.Earliest.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.Earliest.IsNull() {
+					*earliest4 = r.InputCollectorAzureBlob.Schedule.Run.Earliest.ValueFloat64()
+				} else {
+					earliest4 = nil
+				}
+				latest4 := new(float64)
+				if !r.InputCollectorAzureBlob.Schedule.Run.Latest.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.Latest.IsNull() {
+					*latest4 = r.InputCollectorAzureBlob.Schedule.Run.Latest.ValueFloat64()
+				} else {
+					latest4 = nil
+				}
+				expression3 := new(string)
+				if !r.InputCollectorAzureBlob.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.Expression.IsNull() {
+					*expression3 = r.InputCollectorAzureBlob.Schedule.Run.Expression.ValueString()
+				} else {
+					expression3 = nil
+				}
+				minTaskSize3 := new(string)
+				if !r.InputCollectorAzureBlob.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.MinTaskSize.IsNull() {
+					*minTaskSize3 = r.InputCollectorAzureBlob.Schedule.Run.MinTaskSize.ValueString()
+				} else {
+					minTaskSize3 = nil
+				}
+				maxTaskSize3 := new(string)
+				if !r.InputCollectorAzureBlob.Schedule.Run.MaxTaskSize.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.MaxTaskSize.IsNull() {
+					*maxTaskSize3 = r.InputCollectorAzureBlob.Schedule.Run.MaxTaskSize.ValueString()
+				} else {
+					maxTaskSize3 = nil
+				}
+				var timeWarning3 *shared.InputCollectorAzureBlobTimeWarning
+				if r.InputCollectorAzureBlob.Schedule.Run.TimeWarning != nil {
+					timeWarning3 = &shared.InputCollectorAzureBlobTimeWarning{}
+				}
+				var stateTracking4 *shared.InputCollectorAzureBlobStateTracking
+				if r.InputCollectorAzureBlob.Schedule.Run.StateTracking != nil {
+					stateUpdateExpression3 := new(string)
+					if !r.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateUpdateExpression.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateUpdateExpression.IsNull() {
+						*stateUpdateExpression3 = r.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateUpdateExpression.ValueString()
+					} else {
+						stateUpdateExpression3 = nil
+					}
+					stateMergeExpression3 := new(string)
+					if !r.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateMergeExpression.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateMergeExpression.IsNull() {
+						*stateMergeExpression3 = r.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateMergeExpression.ValueString()
+					} else {
+						stateMergeExpression3 = nil
+					}
+					enabled7 := new(bool)
+					if !r.InputCollectorAzureBlob.Schedule.Run.StateTracking.Enabled.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.StateTracking.Enabled.IsNull() {
+						*enabled7 = r.InputCollectorAzureBlob.Schedule.Run.StateTracking.Enabled.ValueBool()
+					} else {
+						enabled7 = nil
+					}
+					stateTracking4 = &shared.InputCollectorAzureBlobStateTracking{
+						StateUpdateExpression: stateUpdateExpression3,
+						StateMergeExpression:  stateMergeExpression3,
+						Enabled:               enabled7,
+					}
+				}
+				run3 = &shared.InputCollectorAzureBlobRunSettings{
+					RescheduleDroppedTasks: rescheduleDroppedTasks3,
+					MaxTaskReschedule:      maxTaskReschedule3,
+					LogLevel:               logLevel3,
+					JobTimeout:             jobTimeout3,
+					Mode:                   mode3,
+					TimeRangeType:          timeRangeType3,
+					Earliest:               earliest4,
+					Latest:                 latest4,
+					Expression:             expression3,
+					MinTaskSize:            minTaskSize3,
+					MaxTaskSize:            maxTaskSize3,
+					TimeWarning:            timeWarning3,
+					StateTracking:          stateTracking4,
+				}
+			}
+			schedule3 = &shared.InputCollectorAzureBlobSchedule{
+				Enabled:           enabled6,
+				CronSchedule:      cronSchedule3,
+				MaxConcurrentRuns: maxConcurrentRuns3,
+				Skippable:         skippable3,
+				ResumeMissed:      resumeMissed3,
+				Run:               run3,
+			}
+		}
+		streamtags3 := make([]string, 0, len(r.InputCollectorAzureBlob.Streamtags))
+		for _, streamtagsItem3 := range r.InputCollectorAzureBlob.Streamtags {
+			streamtags3 = append(streamtags3, streamtagsItem3.ValueString())
+		}
+		workerAffinity3 := new(bool)
+		if !r.InputCollectorAzureBlob.WorkerAffinity.IsUnknown() && !r.InputCollectorAzureBlob.WorkerAffinity.IsNull() {
+			*workerAffinity3 = r.InputCollectorAzureBlob.WorkerAffinity.ValueBool()
+		} else {
+			workerAffinity3 = nil
+		}
+		var input3 *shared.InputCollectorAzureBlobInput
+		if r.InputCollectorAzureBlob.Input != nil {
+			typeVar9 := new(shared.InputCollectorAzureBlobTypeCollection2)
+			if !r.InputCollectorAzureBlob.Input.Type.IsUnknown() && !r.InputCollectorAzureBlob.Input.Type.IsNull() {
+				*typeVar9 = shared.InputCollectorAzureBlobTypeCollection2(r.InputCollectorAzureBlob.Input.Type.ValueString())
+			} else {
+				typeVar9 = nil
+			}
+			breakerRulesets3 := make([]string, 0, len(r.InputCollectorAzureBlob.Input.BreakerRulesets))
+			for _, breakerRulesetsItem3 := range r.InputCollectorAzureBlob.Input.BreakerRulesets {
+				breakerRulesets3 = append(breakerRulesets3, breakerRulesetsItem3.ValueString())
+			}
+			staleChannelFlushMs3 := new(float64)
+			if !r.InputCollectorAzureBlob.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorAzureBlob.Input.StaleChannelFlushMs.IsNull() {
+				*staleChannelFlushMs3 = r.InputCollectorAzureBlob.Input.StaleChannelFlushMs.ValueFloat64()
+			} else {
+				staleChannelFlushMs3 = nil
+			}
+			sendToRoutes3 := new(bool)
+			if !r.InputCollectorAzureBlob.Input.SendToRoutes.IsUnknown() && !r.InputCollectorAzureBlob.Input.SendToRoutes.IsNull() {
+				*sendToRoutes3 = r.InputCollectorAzureBlob.Input.SendToRoutes.ValueBool()
+			} else {
+				sendToRoutes3 = nil
+			}
+			var preprocess3 *shared.InputCollectorAzureBlobPreprocess
+			if r.InputCollectorAzureBlob.Input.Preprocess != nil {
+				disabled3 := new(bool)
+				if !r.InputCollectorAzureBlob.Input.Preprocess.Disabled.IsUnknown() && !r.InputCollectorAzureBlob.Input.Preprocess.Disabled.IsNull() {
+					*disabled3 = r.InputCollectorAzureBlob.Input.Preprocess.Disabled.ValueBool()
+				} else {
+					disabled3 = nil
+				}
+				command3 := new(string)
+				if !r.InputCollectorAzureBlob.Input.Preprocess.Command.IsUnknown() && !r.InputCollectorAzureBlob.Input.Preprocess.Command.IsNull() {
+					*command3 = r.InputCollectorAzureBlob.Input.Preprocess.Command.ValueString()
+				} else {
+					command3 = nil
+				}
+				args3 := make([]string, 0, len(r.InputCollectorAzureBlob.Input.Preprocess.Args))
+				for _, argsItem3 := range r.InputCollectorAzureBlob.Input.Preprocess.Args {
+					args3 = append(args3, argsItem3.ValueString())
+				}
+				preprocess3 = &shared.InputCollectorAzureBlobPreprocess{
+					Disabled: disabled3,
+					Command:  command3,
+					Args:     args3,
+				}
+			}
+			throttleRatePerSec3 := new(string)
+			if !r.InputCollectorAzureBlob.Input.ThrottleRatePerSec.IsUnknown() && !r.InputCollectorAzureBlob.Input.ThrottleRatePerSec.IsNull() {
+				*throttleRatePerSec3 = r.InputCollectorAzureBlob.Input.ThrottleRatePerSec.ValueString()
+			} else {
+				throttleRatePerSec3 = nil
+			}
+			metadata3 := make([]shared.InputCollectorAzureBlobMetadatum, 0, len(r.InputCollectorAzureBlob.Input.Metadata))
+			for _, metadataItem3 := range r.InputCollectorAzureBlob.Input.Metadata {
+				var name8 string
+				name8 = metadataItem3.Name.ValueString()
+
+				var value8 string
+				value8 = metadataItem3.Value.ValueString()
+
+				metadata3 = append(metadata3, shared.InputCollectorAzureBlobMetadatum{
+					Name:  name8,
+					Value: value8,
+				})
+			}
+			pipeline3 := new(string)
+			if !r.InputCollectorAzureBlob.Input.Pipeline.IsUnknown() && !r.InputCollectorAzureBlob.Input.Pipeline.IsNull() {
+				*pipeline3 = r.InputCollectorAzureBlob.Input.Pipeline.ValueString()
+			} else {
+				pipeline3 = nil
+			}
+			output3 := new(string)
+			if !r.InputCollectorAzureBlob.Input.Output.IsUnknown() && !r.InputCollectorAzureBlob.Input.Output.IsNull() {
+				*output3 = r.InputCollectorAzureBlob.Input.Output.ValueString()
+			} else {
+				output3 = nil
+			}
+			input3 = &shared.InputCollectorAzureBlobInput{
+				Type:                typeVar9,
+				BreakerRulesets:     breakerRulesets3,
+				StaleChannelFlushMs: staleChannelFlushMs3,
+				SendToRoutes:        sendToRoutes3,
+				Preprocess:          preprocess3,
+				ThrottleRatePerSec:  throttleRatePerSec3,
+				Metadata:            metadata3,
+				Pipeline:            pipeline3,
+				Output:              output3,
+			}
+		}
+		typeVar10 := shared.TypeAzureblob(r.InputCollectorAzureBlob.Collector.Type.ValueString())
+		var conf3 *shared.InputCollectorAzureBlobConf
+		if r.InputCollectorAzureBlob.Collector.Conf != nil {
+			containerName := new(string)
+			if !r.InputCollectorAzureBlob.Collector.Conf.ContainerName.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.ContainerName.IsNull() {
+				*containerName = r.InputCollectorAzureBlob.Collector.Conf.ContainerName.ValueString()
+			} else {
+				containerName = nil
+			}
+			storageAccountName := new(string)
+			if !r.InputCollectorAzureBlob.Collector.Conf.StorageAccountName.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.StorageAccountName.IsNull() {
+				*storageAccountName = r.InputCollectorAzureBlob.Collector.Conf.StorageAccountName.ValueString()
+			} else {
+				storageAccountName = nil
+			}
+			connectionString := new(string)
+			if !r.InputCollectorAzureBlob.Collector.Conf.ConnectionString.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.ConnectionString.IsNull() {
+				*connectionString = r.InputCollectorAzureBlob.Collector.Conf.ConnectionString.ValueString()
+			} else {
+				connectionString = nil
+			}
+			authType := new(shared.InputCollectorAzureBlobAuthenticationMethod)
+			if !r.InputCollectorAzureBlob.Collector.Conf.AuthType.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.AuthType.IsNull() {
+				*authType = shared.InputCollectorAzureBlobAuthenticationMethod(r.InputCollectorAzureBlob.Collector.Conf.AuthType.ValueString())
+			} else {
+				authType = nil
+			}
+			path1 := new(string)
+			if !r.InputCollectorAzureBlob.Collector.Conf.Path.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.Path.IsNull() {
+				*path1 = r.InputCollectorAzureBlob.Collector.Conf.Path.ValueString()
+			} else {
+				path1 = nil
+			}
+			recurse1 := new(bool)
+			if !r.InputCollectorAzureBlob.Collector.Conf.Recurse.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.Recurse.IsNull() {
+				*recurse1 = r.InputCollectorAzureBlob.Collector.Conf.Recurse.ValueBool()
+			} else {
+				recurse1 = nil
+			}
+			extractors1 := make([]shared.InputCollectorAzureBlobExtractor, len(r.InputCollectorAzureBlob.Collector.Conf.Extractors))
+			maxBatchSize1 := new(int64)
+			if !r.InputCollectorAzureBlob.Collector.Conf.MaxBatchSize.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.MaxBatchSize.IsNull() {
+				*maxBatchSize1 = r.InputCollectorAzureBlob.Collector.Conf.MaxBatchSize.ValueInt64()
+			} else {
+				maxBatchSize1 = nil
+			}
+			conf3 = &shared.InputCollectorAzureBlobConf{
+				ContainerName:      containerName,
+				StorageAccountName: storageAccountName,
+				ConnectionString:   connectionString,
+				AuthType:           authType,
+				Path:               path1,
+				Recurse:            recurse1,
+				Extractors:         extractors1,
+				MaxBatchSize:       maxBatchSize1,
+			}
+		}
+		collector3 := shared.InputCollectorAzureBlobCollector{
+			Type: typeVar10,
+			Conf: conf3,
+		}
+		inputCollectorAzureBlob = &shared.InputCollectorAzureBlob{
+			ID:                   id3,
+			TTL:                  ttl3,
+			IgnoreGroupJobsLimit: ignoreGroupJobsLimit3,
+			RemoveFields:         removeFields3,
+			ResumeOnBoot:         resumeOnBoot3,
+			Environment:          environment3,
+			SavedState:           savedState3,
+			Schedule:             schedule3,
+			Streamtags:           streamtags3,
+			WorkerAffinity:       workerAffinity3,
+			Input:                input3,
+			Collector:            collector3,
+		}
+	}
+	if inputCollectorAzureBlob != nil {
+		out = shared.InputCollector{
+			InputCollectorAzureBlob: inputCollectorAzureBlob,
+		}
+	}
+	var inputCollectorCriblLake *shared.InputCollectorCriblLake
+	if r.InputCollectorCriblLake != nil {
+		id4 := new(string)
+		if !r.InputCollectorCriblLake.ID.IsUnknown() && !r.InputCollectorCriblLake.ID.IsNull() {
+			*id4 = r.InputCollectorCriblLake.ID.ValueString()
+		} else {
+			id4 = nil
+		}
+		ttl4 := new(string)
+		if !r.InputCollectorCriblLake.TTL.IsUnknown() && !r.InputCollectorCriblLake.TTL.IsNull() {
+			*ttl4 = r.InputCollectorCriblLake.TTL.ValueString()
+		} else {
+			ttl4 = nil
+		}
+		ignoreGroupJobsLimit4 := new(bool)
+		if !r.InputCollectorCriblLake.IgnoreGroupJobsLimit.IsUnknown() && !r.InputCollectorCriblLake.IgnoreGroupJobsLimit.IsNull() {
+			*ignoreGroupJobsLimit4 = r.InputCollectorCriblLake.IgnoreGroupJobsLimit.ValueBool()
+		} else {
+			ignoreGroupJobsLimit4 = nil
+		}
+		removeFields4 := make([]string, 0, len(r.InputCollectorCriblLake.RemoveFields))
+		for _, removeFieldsItem4 := range r.InputCollectorCriblLake.RemoveFields {
+			removeFields4 = append(removeFields4, removeFieldsItem4.ValueString())
+		}
+		resumeOnBoot4 := new(bool)
+		if !r.InputCollectorCriblLake.ResumeOnBoot.IsUnknown() && !r.InputCollectorCriblLake.ResumeOnBoot.IsNull() {
+			*resumeOnBoot4 = r.InputCollectorCriblLake.ResumeOnBoot.ValueBool()
+		} else {
+			resumeOnBoot4 = nil
+		}
+		environment4 := new(string)
+		if !r.InputCollectorCriblLake.Environment.IsUnknown() && !r.InputCollectorCriblLake.Environment.IsNull() {
+			*environment4 = r.InputCollectorCriblLake.Environment.ValueString()
+		} else {
+			environment4 = nil
+		}
+		var savedState4 *shared.InputCollectorCriblLakeSavedState
+		if r.InputCollectorCriblLake.SavedState != nil {
+			savedState4 = &shared.InputCollectorCriblLakeSavedState{}
+		}
+		var schedule4 *shared.InputCollectorCriblLakeSchedule
+		if r.InputCollectorCriblLake.Schedule != nil {
+			enabled8 := new(bool)
+			if !r.InputCollectorCriblLake.Schedule.Enabled.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Enabled.IsNull() {
+				*enabled8 = r.InputCollectorCriblLake.Schedule.Enabled.ValueBool()
+			} else {
+				enabled8 = nil
+			}
+			cronSchedule4 := new(string)
+			if !r.InputCollectorCriblLake.Schedule.CronSchedule.IsUnknown() && !r.InputCollectorCriblLake.Schedule.CronSchedule.IsNull() {
+				*cronSchedule4 = r.InputCollectorCriblLake.Schedule.CronSchedule.ValueString()
+			} else {
+				cronSchedule4 = nil
+			}
+			maxConcurrentRuns4 := new(float64)
+			if !r.InputCollectorCriblLake.Schedule.MaxConcurrentRuns.IsUnknown() && !r.InputCollectorCriblLake.Schedule.MaxConcurrentRuns.IsNull() {
+				*maxConcurrentRuns4 = r.InputCollectorCriblLake.Schedule.MaxConcurrentRuns.ValueFloat64()
+			} else {
+				maxConcurrentRuns4 = nil
+			}
+			skippable4 := new(bool)
+			if !r.InputCollectorCriblLake.Schedule.Skippable.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Skippable.IsNull() {
+				*skippable4 = r.InputCollectorCriblLake.Schedule.Skippable.ValueBool()
+			} else {
+				skippable4 = nil
+			}
+			resumeMissed4 := new(bool)
+			if !r.InputCollectorCriblLake.Schedule.ResumeMissed.IsUnknown() && !r.InputCollectorCriblLake.Schedule.ResumeMissed.IsNull() {
+				*resumeMissed4 = r.InputCollectorCriblLake.Schedule.ResumeMissed.ValueBool()
+			} else {
+				resumeMissed4 = nil
+			}
+			var run4 *shared.InputCollectorCriblLakeRunSettings
+			if r.InputCollectorCriblLake.Schedule.Run != nil {
+				rescheduleDroppedTasks4 := new(bool)
+				if !r.InputCollectorCriblLake.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.RescheduleDroppedTasks.IsNull() {
+					*rescheduleDroppedTasks4 = r.InputCollectorCriblLake.Schedule.Run.RescheduleDroppedTasks.ValueBool()
+				} else {
+					rescheduleDroppedTasks4 = nil
+				}
+				maxTaskReschedule4 := new(float64)
+				if !r.InputCollectorCriblLake.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.MaxTaskReschedule.IsNull() {
+					*maxTaskReschedule4 = r.InputCollectorCriblLake.Schedule.Run.MaxTaskReschedule.ValueFloat64()
+				} else {
+					maxTaskReschedule4 = nil
+				}
+				logLevel4 := new(shared.InputCollectorCriblLakeLogLevel)
+				if !r.InputCollectorCriblLake.Schedule.Run.LogLevel.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.LogLevel.IsNull() {
+					*logLevel4 = shared.InputCollectorCriblLakeLogLevel(r.InputCollectorCriblLake.Schedule.Run.LogLevel.ValueString())
+				} else {
+					logLevel4 = nil
+				}
+				jobTimeout4 := new(string)
+				if !r.InputCollectorCriblLake.Schedule.Run.JobTimeout.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.JobTimeout.IsNull() {
+					*jobTimeout4 = r.InputCollectorCriblLake.Schedule.Run.JobTimeout.ValueString()
+				} else {
+					jobTimeout4 = nil
+				}
+				mode4 := new(shared.InputCollectorCriblLakeMode)
+				if !r.InputCollectorCriblLake.Schedule.Run.Mode.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.Mode.IsNull() {
+					*mode4 = shared.InputCollectorCriblLakeMode(r.InputCollectorCriblLake.Schedule.Run.Mode.ValueString())
+				} else {
+					mode4 = nil
+				}
+				timeRangeType4 := new(shared.InputCollectorCriblLakeTimeRange)
+				if !r.InputCollectorCriblLake.Schedule.Run.TimeRangeType.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.TimeRangeType.IsNull() {
+					*timeRangeType4 = shared.InputCollectorCriblLakeTimeRange(r.InputCollectorCriblLake.Schedule.Run.TimeRangeType.ValueString())
+				} else {
+					timeRangeType4 = nil
+				}
+				earliest5 := new(float64)
+				if !r.InputCollectorCriblLake.Schedule.Run.Earliest.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.Earliest.IsNull() {
+					*earliest5 = r.InputCollectorCriblLake.Schedule.Run.Earliest.ValueFloat64()
+				} else {
+					earliest5 = nil
+				}
+				latest5 := new(float64)
+				if !r.InputCollectorCriblLake.Schedule.Run.Latest.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.Latest.IsNull() {
+					*latest5 = r.InputCollectorCriblLake.Schedule.Run.Latest.ValueFloat64()
+				} else {
+					latest5 = nil
+				}
+				expression4 := new(string)
+				if !r.InputCollectorCriblLake.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.Expression.IsNull() {
+					*expression4 = r.InputCollectorCriblLake.Schedule.Run.Expression.ValueString()
+				} else {
+					expression4 = nil
+				}
+				minTaskSize4 := new(string)
+				if !r.InputCollectorCriblLake.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.MinTaskSize.IsNull() {
+					*minTaskSize4 = r.InputCollectorCriblLake.Schedule.Run.MinTaskSize.ValueString()
+				} else {
+					minTaskSize4 = nil
+				}
+				maxTaskSize4 := new(string)
+				if !r.InputCollectorCriblLake.Schedule.Run.MaxTaskSize.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.MaxTaskSize.IsNull() {
+					*maxTaskSize4 = r.InputCollectorCriblLake.Schedule.Run.MaxTaskSize.ValueString()
+				} else {
+					maxTaskSize4 = nil
+				}
+				var timeWarning4 *shared.InputCollectorCriblLakeTimeWarning
+				if r.InputCollectorCriblLake.Schedule.Run.TimeWarning != nil {
+					timeWarning4 = &shared.InputCollectorCriblLakeTimeWarning{}
+				}
+				var stateTracking5 *shared.InputCollectorCriblLakeStateTracking
+				if r.InputCollectorCriblLake.Schedule.Run.StateTracking != nil {
+					stateUpdateExpression4 := new(string)
+					if !r.InputCollectorCriblLake.Schedule.Run.StateTracking.StateUpdateExpression.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.StateTracking.StateUpdateExpression.IsNull() {
+						*stateUpdateExpression4 = r.InputCollectorCriblLake.Schedule.Run.StateTracking.StateUpdateExpression.ValueString()
+					} else {
+						stateUpdateExpression4 = nil
+					}
+					stateMergeExpression4 := new(string)
+					if !r.InputCollectorCriblLake.Schedule.Run.StateTracking.StateMergeExpression.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.StateTracking.StateMergeExpression.IsNull() {
+						*stateMergeExpression4 = r.InputCollectorCriblLake.Schedule.Run.StateTracking.StateMergeExpression.ValueString()
+					} else {
+						stateMergeExpression4 = nil
+					}
+					enabled9 := new(bool)
+					if !r.InputCollectorCriblLake.Schedule.Run.StateTracking.Enabled.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.StateTracking.Enabled.IsNull() {
+						*enabled9 = r.InputCollectorCriblLake.Schedule.Run.StateTracking.Enabled.ValueBool()
+					} else {
+						enabled9 = nil
+					}
+					stateTracking5 = &shared.InputCollectorCriblLakeStateTracking{
+						StateUpdateExpression: stateUpdateExpression4,
+						StateMergeExpression:  stateMergeExpression4,
+						Enabled:               enabled9,
+					}
+				}
+				run4 = &shared.InputCollectorCriblLakeRunSettings{
+					RescheduleDroppedTasks: rescheduleDroppedTasks4,
+					MaxTaskReschedule:      maxTaskReschedule4,
+					LogLevel:               logLevel4,
+					JobTimeout:             jobTimeout4,
+					Mode:                   mode4,
+					TimeRangeType:          timeRangeType4,
+					Earliest:               earliest5,
+					Latest:                 latest5,
+					Expression:             expression4,
+					MinTaskSize:            minTaskSize4,
+					MaxTaskSize:            maxTaskSize4,
+					TimeWarning:            timeWarning4,
+					StateTracking:          stateTracking5,
+				}
+			}
+			schedule4 = &shared.InputCollectorCriblLakeSchedule{
+				Enabled:           enabled8,
+				CronSchedule:      cronSchedule4,
+				MaxConcurrentRuns: maxConcurrentRuns4,
+				Skippable:         skippable4,
+				ResumeMissed:      resumeMissed4,
+				Run:               run4,
+			}
+		}
+		streamtags4 := make([]string, 0, len(r.InputCollectorCriblLake.Streamtags))
+		for _, streamtagsItem4 := range r.InputCollectorCriblLake.Streamtags {
+			streamtags4 = append(streamtags4, streamtagsItem4.ValueString())
+		}
+		workerAffinity4 := new(bool)
+		if !r.InputCollectorCriblLake.WorkerAffinity.IsUnknown() && !r.InputCollectorCriblLake.WorkerAffinity.IsNull() {
+			*workerAffinity4 = r.InputCollectorCriblLake.WorkerAffinity.ValueBool()
+		} else {
+			workerAffinity4 = nil
+		}
+		var input4 *shared.InputCollectorCriblLakeInput
+		if r.InputCollectorCriblLake.Input != nil {
+			typeVar11 := new(shared.InputCollectorCriblLakeTypeCollection2)
+			if !r.InputCollectorCriblLake.Input.Type.IsUnknown() && !r.InputCollectorCriblLake.Input.Type.IsNull() {
+				*typeVar11 = shared.InputCollectorCriblLakeTypeCollection2(r.InputCollectorCriblLake.Input.Type.ValueString())
+			} else {
+				typeVar11 = nil
+			}
+			breakerRulesets4 := make([]string, 0, len(r.InputCollectorCriblLake.Input.BreakerRulesets))
+			for _, breakerRulesetsItem4 := range r.InputCollectorCriblLake.Input.BreakerRulesets {
+				breakerRulesets4 = append(breakerRulesets4, breakerRulesetsItem4.ValueString())
+			}
+			staleChannelFlushMs4 := new(float64)
+			if !r.InputCollectorCriblLake.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorCriblLake.Input.StaleChannelFlushMs.IsNull() {
+				*staleChannelFlushMs4 = r.InputCollectorCriblLake.Input.StaleChannelFlushMs.ValueFloat64()
+			} else {
+				staleChannelFlushMs4 = nil
+			}
+			sendToRoutes4 := new(bool)
+			if !r.InputCollectorCriblLake.Input.SendToRoutes.IsUnknown() && !r.InputCollectorCriblLake.Input.SendToRoutes.IsNull() {
+				*sendToRoutes4 = r.InputCollectorCriblLake.Input.SendToRoutes.ValueBool()
+			} else {
+				sendToRoutes4 = nil
+			}
+			var preprocess4 *shared.InputCollectorCriblLakePreprocess
+			if r.InputCollectorCriblLake.Input.Preprocess != nil {
+				disabled4 := new(bool)
+				if !r.InputCollectorCriblLake.Input.Preprocess.Disabled.IsUnknown() && !r.InputCollectorCriblLake.Input.Preprocess.Disabled.IsNull() {
+					*disabled4 = r.InputCollectorCriblLake.Input.Preprocess.Disabled.ValueBool()
+				} else {
+					disabled4 = nil
+				}
+				command4 := new(string)
+				if !r.InputCollectorCriblLake.Input.Preprocess.Command.IsUnknown() && !r.InputCollectorCriblLake.Input.Preprocess.Command.IsNull() {
+					*command4 = r.InputCollectorCriblLake.Input.Preprocess.Command.ValueString()
+				} else {
+					command4 = nil
+				}
+				args4 := make([]string, 0, len(r.InputCollectorCriblLake.Input.Preprocess.Args))
+				for _, argsItem4 := range r.InputCollectorCriblLake.Input.Preprocess.Args {
+					args4 = append(args4, argsItem4.ValueString())
+				}
+				preprocess4 = &shared.InputCollectorCriblLakePreprocess{
+					Disabled: disabled4,
+					Command:  command4,
+					Args:     args4,
+				}
+			}
+			throttleRatePerSec4 := new(string)
+			if !r.InputCollectorCriblLake.Input.ThrottleRatePerSec.IsUnknown() && !r.InputCollectorCriblLake.Input.ThrottleRatePerSec.IsNull() {
+				*throttleRatePerSec4 = r.InputCollectorCriblLake.Input.ThrottleRatePerSec.ValueString()
+			} else {
+				throttleRatePerSec4 = nil
+			}
+			metadata4 := make([]shared.InputCollectorCriblLakeMetadatum, 0, len(r.InputCollectorCriblLake.Input.Metadata))
+			for _, metadataItem4 := range r.InputCollectorCriblLake.Input.Metadata {
+				var name9 string
+				name9 = metadataItem4.Name.ValueString()
+
+				var value9 string
+				value9 = metadataItem4.Value.ValueString()
+
+				metadata4 = append(metadata4, shared.InputCollectorCriblLakeMetadatum{
+					Name:  name9,
+					Value: value9,
+				})
+			}
+			pipeline4 := new(string)
+			if !r.InputCollectorCriblLake.Input.Pipeline.IsUnknown() && !r.InputCollectorCriblLake.Input.Pipeline.IsNull() {
+				*pipeline4 = r.InputCollectorCriblLake.Input.Pipeline.ValueString()
+			} else {
+				pipeline4 = nil
+			}
+			output4 := new(string)
+			if !r.InputCollectorCriblLake.Input.Output.IsUnknown() && !r.InputCollectorCriblLake.Input.Output.IsNull() {
+				*output4 = r.InputCollectorCriblLake.Input.Output.ValueString()
+			} else {
+				output4 = nil
+			}
+			input4 = &shared.InputCollectorCriblLakeInput{
+				Type:                typeVar11,
+				BreakerRulesets:     breakerRulesets4,
+				StaleChannelFlushMs: staleChannelFlushMs4,
+				SendToRoutes:        sendToRoutes4,
+				Preprocess:          preprocess4,
+				ThrottleRatePerSec:  throttleRatePerSec4,
+				Metadata:            metadata4,
+				Pipeline:            pipeline4,
+				Output:              output4,
+			}
+		}
+		typeVar12 := shared.TypeCribllake(r.InputCollectorCriblLake.Collector.Type.ValueString())
+		var conf4 *shared.InputCollectorCriblLakeConf
+		if r.InputCollectorCriblLake.Collector.Conf != nil {
+			dataset := new(string)
+			if !r.InputCollectorCriblLake.Collector.Conf.Dataset.IsUnknown() && !r.InputCollectorCriblLake.Collector.Conf.Dataset.IsNull() {
+				*dataset = r.InputCollectorCriblLake.Collector.Conf.Dataset.ValueString()
+			} else {
+				dataset = nil
+			}
+			conf4 = &shared.InputCollectorCriblLakeConf{
+				Dataset: dataset,
+			}
+		}
+		collector4 := shared.InputCollectorCriblLakeCollector{
+			Type: typeVar12,
+			Conf: conf4,
+		}
+		inputCollectorCriblLake = &shared.InputCollectorCriblLake{
+			ID:                   id4,
+			TTL:                  ttl4,
+			IgnoreGroupJobsLimit: ignoreGroupJobsLimit4,
+			RemoveFields:         removeFields4,
+			ResumeOnBoot:         resumeOnBoot4,
+			Environment:          environment4,
+			SavedState:           savedState4,
+			Schedule:             schedule4,
+			Streamtags:           streamtags4,
+			WorkerAffinity:       workerAffinity4,
+			Input:                input4,
+			Collector:            collector4,
+		}
+	}
+	if inputCollectorCriblLake != nil {
+		out = shared.InputCollector{
+			InputCollectorCriblLake: inputCollectorCriblLake,
+		}
+	}
+	var inputCollectorDatabase *shared.InputCollectorDatabase
+	if r.InputCollectorDatabase != nil {
+		id5 := new(string)
+		if !r.InputCollectorDatabase.ID.IsUnknown() && !r.InputCollectorDatabase.ID.IsNull() {
+			*id5 = r.InputCollectorDatabase.ID.ValueString()
+		} else {
+			id5 = nil
+		}
+		ttl5 := new(string)
+		if !r.InputCollectorDatabase.TTL.IsUnknown() && !r.InputCollectorDatabase.TTL.IsNull() {
+			*ttl5 = r.InputCollectorDatabase.TTL.ValueString()
+		} else {
+			ttl5 = nil
+		}
+		ignoreGroupJobsLimit5 := new(bool)
+		if !r.InputCollectorDatabase.IgnoreGroupJobsLimit.IsUnknown() && !r.InputCollectorDatabase.IgnoreGroupJobsLimit.IsNull() {
+			*ignoreGroupJobsLimit5 = r.InputCollectorDatabase.IgnoreGroupJobsLimit.ValueBool()
+		} else {
+			ignoreGroupJobsLimit5 = nil
+		}
+		removeFields5 := make([]string, 0, len(r.InputCollectorDatabase.RemoveFields))
+		for _, removeFieldsItem5 := range r.InputCollectorDatabase.RemoveFields {
+			removeFields5 = append(removeFields5, removeFieldsItem5.ValueString())
+		}
+		resumeOnBoot5 := new(bool)
+		if !r.InputCollectorDatabase.ResumeOnBoot.IsUnknown() && !r.InputCollectorDatabase.ResumeOnBoot.IsNull() {
+			*resumeOnBoot5 = r.InputCollectorDatabase.ResumeOnBoot.ValueBool()
+		} else {
+			resumeOnBoot5 = nil
+		}
+		environment5 := new(string)
+		if !r.InputCollectorDatabase.Environment.IsUnknown() && !r.InputCollectorDatabase.Environment.IsNull() {
+			*environment5 = r.InputCollectorDatabase.Environment.ValueString()
+		} else {
+			environment5 = nil
+		}
+		var savedState5 *shared.InputCollectorDatabaseSavedState
+		if r.InputCollectorDatabase.SavedState != nil {
+			savedState5 = &shared.InputCollectorDatabaseSavedState{}
+		}
+		var schedule5 *shared.InputCollectorDatabaseSchedule
+		if r.InputCollectorDatabase.Schedule != nil {
+			enabled10 := new(bool)
+			if !r.InputCollectorDatabase.Schedule.Enabled.IsUnknown() && !r.InputCollectorDatabase.Schedule.Enabled.IsNull() {
+				*enabled10 = r.InputCollectorDatabase.Schedule.Enabled.ValueBool()
+			} else {
+				enabled10 = nil
+			}
+			cronSchedule5 := new(string)
+			if !r.InputCollectorDatabase.Schedule.CronSchedule.IsUnknown() && !r.InputCollectorDatabase.Schedule.CronSchedule.IsNull() {
+				*cronSchedule5 = r.InputCollectorDatabase.Schedule.CronSchedule.ValueString()
+			} else {
+				cronSchedule5 = nil
+			}
+			maxConcurrentRuns5 := new(float64)
+			if !r.InputCollectorDatabase.Schedule.MaxConcurrentRuns.IsUnknown() && !r.InputCollectorDatabase.Schedule.MaxConcurrentRuns.IsNull() {
+				*maxConcurrentRuns5 = r.InputCollectorDatabase.Schedule.MaxConcurrentRuns.ValueFloat64()
+			} else {
+				maxConcurrentRuns5 = nil
+			}
+			skippable5 := new(bool)
+			if !r.InputCollectorDatabase.Schedule.Skippable.IsUnknown() && !r.InputCollectorDatabase.Schedule.Skippable.IsNull() {
+				*skippable5 = r.InputCollectorDatabase.Schedule.Skippable.ValueBool()
+			} else {
+				skippable5 = nil
+			}
+			resumeMissed5 := new(bool)
+			if !r.InputCollectorDatabase.Schedule.ResumeMissed.IsUnknown() && !r.InputCollectorDatabase.Schedule.ResumeMissed.IsNull() {
+				*resumeMissed5 = r.InputCollectorDatabase.Schedule.ResumeMissed.ValueBool()
+			} else {
+				resumeMissed5 = nil
+			}
+			var run5 *shared.InputCollectorDatabaseRunSettings
+			if r.InputCollectorDatabase.Schedule.Run != nil {
+				rescheduleDroppedTasks5 := new(bool)
+				if !r.InputCollectorDatabase.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.RescheduleDroppedTasks.IsNull() {
+					*rescheduleDroppedTasks5 = r.InputCollectorDatabase.Schedule.Run.RescheduleDroppedTasks.ValueBool()
+				} else {
+					rescheduleDroppedTasks5 = nil
+				}
+				maxTaskReschedule5 := new(float64)
+				if !r.InputCollectorDatabase.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.MaxTaskReschedule.IsNull() {
+					*maxTaskReschedule5 = r.InputCollectorDatabase.Schedule.Run.MaxTaskReschedule.ValueFloat64()
+				} else {
+					maxTaskReschedule5 = nil
+				}
+				logLevel5 := new(shared.InputCollectorDatabaseLogLevel)
+				if !r.InputCollectorDatabase.Schedule.Run.LogLevel.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.LogLevel.IsNull() {
+					*logLevel5 = shared.InputCollectorDatabaseLogLevel(r.InputCollectorDatabase.Schedule.Run.LogLevel.ValueString())
+				} else {
+					logLevel5 = nil
+				}
+				jobTimeout5 := new(string)
+				if !r.InputCollectorDatabase.Schedule.Run.JobTimeout.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.JobTimeout.IsNull() {
+					*jobTimeout5 = r.InputCollectorDatabase.Schedule.Run.JobTimeout.ValueString()
+				} else {
+					jobTimeout5 = nil
+				}
+				mode5 := new(shared.InputCollectorDatabaseMode)
+				if !r.InputCollectorDatabase.Schedule.Run.Mode.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.Mode.IsNull() {
+					*mode5 = shared.InputCollectorDatabaseMode(r.InputCollectorDatabase.Schedule.Run.Mode.ValueString())
+				} else {
+					mode5 = nil
+				}
+				timeRangeType5 := new(shared.InputCollectorDatabaseTimeRange)
+				if !r.InputCollectorDatabase.Schedule.Run.TimeRangeType.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.TimeRangeType.IsNull() {
+					*timeRangeType5 = shared.InputCollectorDatabaseTimeRange(r.InputCollectorDatabase.Schedule.Run.TimeRangeType.ValueString())
+				} else {
+					timeRangeType5 = nil
+				}
+				earliest6 := new(float64)
+				if !r.InputCollectorDatabase.Schedule.Run.Earliest.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.Earliest.IsNull() {
+					*earliest6 = r.InputCollectorDatabase.Schedule.Run.Earliest.ValueFloat64()
+				} else {
+					earliest6 = nil
+				}
+				latest6 := new(float64)
+				if !r.InputCollectorDatabase.Schedule.Run.Latest.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.Latest.IsNull() {
+					*latest6 = r.InputCollectorDatabase.Schedule.Run.Latest.ValueFloat64()
+				} else {
+					latest6 = nil
+				}
+				expression5 := new(string)
+				if !r.InputCollectorDatabase.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.Expression.IsNull() {
+					*expression5 = r.InputCollectorDatabase.Schedule.Run.Expression.ValueString()
+				} else {
+					expression5 = nil
+				}
+				minTaskSize5 := new(string)
+				if !r.InputCollectorDatabase.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.MinTaskSize.IsNull() {
+					*minTaskSize5 = r.InputCollectorDatabase.Schedule.Run.MinTaskSize.ValueString()
+				} else {
+					minTaskSize5 = nil
+				}
+				maxTaskSize5 := new(string)
+				if !r.InputCollectorDatabase.Schedule.Run.MaxTaskSize.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.MaxTaskSize.IsNull() {
+					*maxTaskSize5 = r.InputCollectorDatabase.Schedule.Run.MaxTaskSize.ValueString()
+				} else {
+					maxTaskSize5 = nil
+				}
+				var timeWarning5 *shared.InputCollectorDatabaseTimeWarning
+				if r.InputCollectorDatabase.Schedule.Run.TimeWarning != nil {
+					timeWarning5 = &shared.InputCollectorDatabaseTimeWarning{}
+				}
+				var stateTracking6 *shared.InputCollectorDatabaseStateTracking
+				if r.InputCollectorDatabase.Schedule.Run.StateTracking != nil {
+					stateUpdateExpression5 := new(string)
+					if !r.InputCollectorDatabase.Schedule.Run.StateTracking.StateUpdateExpression.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.StateTracking.StateUpdateExpression.IsNull() {
+						*stateUpdateExpression5 = r.InputCollectorDatabase.Schedule.Run.StateTracking.StateUpdateExpression.ValueString()
+					} else {
+						stateUpdateExpression5 = nil
+					}
+					stateMergeExpression5 := new(string)
+					if !r.InputCollectorDatabase.Schedule.Run.StateTracking.StateMergeExpression.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.StateTracking.StateMergeExpression.IsNull() {
+						*stateMergeExpression5 = r.InputCollectorDatabase.Schedule.Run.StateTracking.StateMergeExpression.ValueString()
+					} else {
+						stateMergeExpression5 = nil
+					}
+					enabled11 := new(bool)
+					if !r.InputCollectorDatabase.Schedule.Run.StateTracking.Enabled.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.StateTracking.Enabled.IsNull() {
+						*enabled11 = r.InputCollectorDatabase.Schedule.Run.StateTracking.Enabled.ValueBool()
+					} else {
+						enabled11 = nil
+					}
+					stateTracking6 = &shared.InputCollectorDatabaseStateTracking{
+						StateUpdateExpression: stateUpdateExpression5,
+						StateMergeExpression:  stateMergeExpression5,
+						Enabled:               enabled11,
+					}
+				}
+				run5 = &shared.InputCollectorDatabaseRunSettings{
+					RescheduleDroppedTasks: rescheduleDroppedTasks5,
+					MaxTaskReschedule:      maxTaskReschedule5,
+					LogLevel:               logLevel5,
+					JobTimeout:             jobTimeout5,
+					Mode:                   mode5,
+					TimeRangeType:          timeRangeType5,
+					Earliest:               earliest6,
+					Latest:                 latest6,
+					Expression:             expression5,
+					MinTaskSize:            minTaskSize5,
+					MaxTaskSize:            maxTaskSize5,
+					TimeWarning:            timeWarning5,
+					StateTracking:          stateTracking6,
+				}
+			}
+			schedule5 = &shared.InputCollectorDatabaseSchedule{
+				Enabled:           enabled10,
+				CronSchedule:      cronSchedule5,
+				MaxConcurrentRuns: maxConcurrentRuns5,
+				Skippable:         skippable5,
+				ResumeMissed:      resumeMissed5,
+				Run:               run5,
+			}
+		}
+		streamtags5 := make([]string, 0, len(r.InputCollectorDatabase.Streamtags))
+		for _, streamtagsItem5 := range r.InputCollectorDatabase.Streamtags {
+			streamtags5 = append(streamtags5, streamtagsItem5.ValueString())
+		}
+		workerAffinity5 := new(bool)
+		if !r.InputCollectorDatabase.WorkerAffinity.IsUnknown() && !r.InputCollectorDatabase.WorkerAffinity.IsNull() {
+			*workerAffinity5 = r.InputCollectorDatabase.WorkerAffinity.ValueBool()
+		} else {
+			workerAffinity5 = nil
+		}
+		var input5 *shared.InputCollectorDatabaseInput
+		if r.InputCollectorDatabase.Input != nil {
+			typeVar13 := new(shared.InputCollectorDatabaseTypeCollection2)
+			if !r.InputCollectorDatabase.Input.Type.IsUnknown() && !r.InputCollectorDatabase.Input.Type.IsNull() {
+				*typeVar13 = shared.InputCollectorDatabaseTypeCollection2(r.InputCollectorDatabase.Input.Type.ValueString())
+			} else {
+				typeVar13 = nil
+			}
+			breakerRulesets5 := make([]string, 0, len(r.InputCollectorDatabase.Input.BreakerRulesets))
+			for _, breakerRulesetsItem5 := range r.InputCollectorDatabase.Input.BreakerRulesets {
+				breakerRulesets5 = append(breakerRulesets5, breakerRulesetsItem5.ValueString())
+			}
+			staleChannelFlushMs5 := new(float64)
+			if !r.InputCollectorDatabase.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorDatabase.Input.StaleChannelFlushMs.IsNull() {
+				*staleChannelFlushMs5 = r.InputCollectorDatabase.Input.StaleChannelFlushMs.ValueFloat64()
+			} else {
+				staleChannelFlushMs5 = nil
+			}
+			sendToRoutes5 := new(bool)
+			if !r.InputCollectorDatabase.Input.SendToRoutes.IsUnknown() && !r.InputCollectorDatabase.Input.SendToRoutes.IsNull() {
+				*sendToRoutes5 = r.InputCollectorDatabase.Input.SendToRoutes.ValueBool()
+			} else {
+				sendToRoutes5 = nil
+			}
+			var preprocess5 *shared.InputCollectorDatabasePreprocess
+			if r.InputCollectorDatabase.Input.Preprocess != nil {
+				disabled5 := new(bool)
+				if !r.InputCollectorDatabase.Input.Preprocess.Disabled.IsUnknown() && !r.InputCollectorDatabase.Input.Preprocess.Disabled.IsNull() {
+					*disabled5 = r.InputCollectorDatabase.Input.Preprocess.Disabled.ValueBool()
+				} else {
+					disabled5 = nil
+				}
+				command5 := new(string)
+				if !r.InputCollectorDatabase.Input.Preprocess.Command.IsUnknown() && !r.InputCollectorDatabase.Input.Preprocess.Command.IsNull() {
+					*command5 = r.InputCollectorDatabase.Input.Preprocess.Command.ValueString()
+				} else {
+					command5 = nil
+				}
+				args5 := make([]string, 0, len(r.InputCollectorDatabase.Input.Preprocess.Args))
+				for _, argsItem5 := range r.InputCollectorDatabase.Input.Preprocess.Args {
+					args5 = append(args5, argsItem5.ValueString())
+				}
+				preprocess5 = &shared.InputCollectorDatabasePreprocess{
+					Disabled: disabled5,
+					Command:  command5,
+					Args:     args5,
+				}
+			}
+			throttleRatePerSec5 := new(string)
+			if !r.InputCollectorDatabase.Input.ThrottleRatePerSec.IsUnknown() && !r.InputCollectorDatabase.Input.ThrottleRatePerSec.IsNull() {
+				*throttleRatePerSec5 = r.InputCollectorDatabase.Input.ThrottleRatePerSec.ValueString()
+			} else {
+				throttleRatePerSec5 = nil
+			}
+			metadata5 := make([]shared.InputCollectorDatabaseMetadatum, 0, len(r.InputCollectorDatabase.Input.Metadata))
+			for _, metadataItem5 := range r.InputCollectorDatabase.Input.Metadata {
+				var name10 string
+				name10 = metadataItem5.Name.ValueString()
+
+				var value10 string
+				value10 = metadataItem5.Value.ValueString()
+
+				metadata5 = append(metadata5, shared.InputCollectorDatabaseMetadatum{
+					Name:  name10,
+					Value: value10,
+				})
+			}
+			pipeline5 := new(string)
+			if !r.InputCollectorDatabase.Input.Pipeline.IsUnknown() && !r.InputCollectorDatabase.Input.Pipeline.IsNull() {
+				*pipeline5 = r.InputCollectorDatabase.Input.Pipeline.ValueString()
+			} else {
+				pipeline5 = nil
+			}
+			output5 := new(string)
+			if !r.InputCollectorDatabase.Input.Output.IsUnknown() && !r.InputCollectorDatabase.Input.Output.IsNull() {
+				*output5 = r.InputCollectorDatabase.Input.Output.ValueString()
+			} else {
+				output5 = nil
+			}
+			input5 = &shared.InputCollectorDatabaseInput{
+				Type:                typeVar13,
+				BreakerRulesets:     breakerRulesets5,
+				StaleChannelFlushMs: staleChannelFlushMs5,
+				SendToRoutes:        sendToRoutes5,
+				Preprocess:          preprocess5,
+				ThrottleRatePerSec:  throttleRatePerSec5,
+				Metadata:            metadata5,
+				Pipeline:            pipeline5,
+				Output:              output5,
+			}
+		}
+		typeVar14 := shared.TypeDatabase(r.InputCollectorDatabase.Collector.Type.ValueString())
+		var conf5 *shared.InputCollectorDatabaseConf
+		if r.InputCollectorDatabase.Collector.Conf != nil {
+			connectionID := new(string)
+			if !r.InputCollectorDatabase.Collector.Conf.ConnectionID.IsUnknown() && !r.InputCollectorDatabase.Collector.Conf.ConnectionID.IsNull() {
+				*connectionID = r.InputCollectorDatabase.Collector.Conf.ConnectionID.ValueString()
+			} else {
+				connectionID = nil
+			}
+			query := new(string)
+			if !r.InputCollectorDatabase.Collector.Conf.Query.IsUnknown() && !r.InputCollectorDatabase.Collector.Conf.Query.IsNull() {
+				*query = r.InputCollectorDatabase.Collector.Conf.Query.ValueString()
+			} else {
+				query = nil
+			}
+			queryValidationEnabled := new(bool)
+			if !r.InputCollectorDatabase.Collector.Conf.QueryValidationEnabled.IsUnknown() && !r.InputCollectorDatabase.Collector.Conf.QueryValidationEnabled.IsNull() {
+				*queryValidationEnabled = r.InputCollectorDatabase.Collector.Conf.QueryValidationEnabled.ValueBool()
+			} else {
+				queryValidationEnabled = nil
+			}
+			conf5 = &shared.InputCollectorDatabaseConf{
+				ConnectionID:           connectionID,
+				Query:                  query,
+				QueryValidationEnabled: queryValidationEnabled,
+			}
+		}
+		collector5 := shared.InputCollectorDatabaseCollector{
+			Type: typeVar14,
+			Conf: conf5,
+		}
+		inputCollectorDatabase = &shared.InputCollectorDatabase{
+			ID:                   id5,
+			TTL:                  ttl5,
+			IgnoreGroupJobsLimit: ignoreGroupJobsLimit5,
+			RemoveFields:         removeFields5,
+			ResumeOnBoot:         resumeOnBoot5,
+			Environment:          environment5,
+			SavedState:           savedState5,
+			Schedule:             schedule5,
+			Streamtags:           streamtags5,
+			WorkerAffinity:       workerAffinity5,
+			Input:                input5,
+			Collector:            collector5,
+		}
+	}
+	if inputCollectorDatabase != nil {
+		out = shared.InputCollector{
+			InputCollectorDatabase: inputCollectorDatabase,
+		}
+	}
+	var inputCollectorGCS *shared.InputCollectorGCS
+	if r.InputCollectorGCS != nil {
+		id6 := new(string)
+		if !r.InputCollectorGCS.ID.IsUnknown() && !r.InputCollectorGCS.ID.IsNull() {
+			*id6 = r.InputCollectorGCS.ID.ValueString()
+		} else {
+			id6 = nil
+		}
+		ttl6 := new(string)
+		if !r.InputCollectorGCS.TTL.IsUnknown() && !r.InputCollectorGCS.TTL.IsNull() {
+			*ttl6 = r.InputCollectorGCS.TTL.ValueString()
+		} else {
+			ttl6 = nil
+		}
+		ignoreGroupJobsLimit6 := new(bool)
+		if !r.InputCollectorGCS.IgnoreGroupJobsLimit.IsUnknown() && !r.InputCollectorGCS.IgnoreGroupJobsLimit.IsNull() {
+			*ignoreGroupJobsLimit6 = r.InputCollectorGCS.IgnoreGroupJobsLimit.ValueBool()
+		} else {
+			ignoreGroupJobsLimit6 = nil
+		}
+		removeFields6 := make([]string, 0, len(r.InputCollectorGCS.RemoveFields))
+		for _, removeFieldsItem6 := range r.InputCollectorGCS.RemoveFields {
+			removeFields6 = append(removeFields6, removeFieldsItem6.ValueString())
+		}
+		resumeOnBoot6 := new(bool)
+		if !r.InputCollectorGCS.ResumeOnBoot.IsUnknown() && !r.InputCollectorGCS.ResumeOnBoot.IsNull() {
+			*resumeOnBoot6 = r.InputCollectorGCS.ResumeOnBoot.ValueBool()
+		} else {
+			resumeOnBoot6 = nil
+		}
+		environment6 := new(string)
+		if !r.InputCollectorGCS.Environment.IsUnknown() && !r.InputCollectorGCS.Environment.IsNull() {
+			*environment6 = r.InputCollectorGCS.Environment.ValueString()
+		} else {
+			environment6 = nil
+		}
+		var savedState6 *shared.InputCollectorGCSSavedState
+		if r.InputCollectorGCS.SavedState != nil {
+			savedState6 = &shared.InputCollectorGCSSavedState{}
+		}
+		var schedule6 *shared.InputCollectorGCSSchedule
+		if r.InputCollectorGCS.Schedule != nil {
+			enabled12 := new(bool)
+			if !r.InputCollectorGCS.Schedule.Enabled.IsUnknown() && !r.InputCollectorGCS.Schedule.Enabled.IsNull() {
+				*enabled12 = r.InputCollectorGCS.Schedule.Enabled.ValueBool()
+			} else {
+				enabled12 = nil
+			}
+			cronSchedule6 := new(string)
+			if !r.InputCollectorGCS.Schedule.CronSchedule.IsUnknown() && !r.InputCollectorGCS.Schedule.CronSchedule.IsNull() {
+				*cronSchedule6 = r.InputCollectorGCS.Schedule.CronSchedule.ValueString()
+			} else {
+				cronSchedule6 = nil
+			}
+			maxConcurrentRuns6 := new(float64)
+			if !r.InputCollectorGCS.Schedule.MaxConcurrentRuns.IsUnknown() && !r.InputCollectorGCS.Schedule.MaxConcurrentRuns.IsNull() {
+				*maxConcurrentRuns6 = r.InputCollectorGCS.Schedule.MaxConcurrentRuns.ValueFloat64()
+			} else {
+				maxConcurrentRuns6 = nil
+			}
+			skippable6 := new(bool)
+			if !r.InputCollectorGCS.Schedule.Skippable.IsUnknown() && !r.InputCollectorGCS.Schedule.Skippable.IsNull() {
+				*skippable6 = r.InputCollectorGCS.Schedule.Skippable.ValueBool()
+			} else {
+				skippable6 = nil
+			}
+			resumeMissed6 := new(bool)
+			if !r.InputCollectorGCS.Schedule.ResumeMissed.IsUnknown() && !r.InputCollectorGCS.Schedule.ResumeMissed.IsNull() {
+				*resumeMissed6 = r.InputCollectorGCS.Schedule.ResumeMissed.ValueBool()
+			} else {
+				resumeMissed6 = nil
+			}
+			var run6 *shared.InputCollectorGCSRunSettings
+			if r.InputCollectorGCS.Schedule.Run != nil {
+				rescheduleDroppedTasks6 := new(bool)
+				if !r.InputCollectorGCS.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.RescheduleDroppedTasks.IsNull() {
+					*rescheduleDroppedTasks6 = r.InputCollectorGCS.Schedule.Run.RescheduleDroppedTasks.ValueBool()
+				} else {
+					rescheduleDroppedTasks6 = nil
+				}
+				maxTaskReschedule6 := new(float64)
+				if !r.InputCollectorGCS.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.MaxTaskReschedule.IsNull() {
+					*maxTaskReschedule6 = r.InputCollectorGCS.Schedule.Run.MaxTaskReschedule.ValueFloat64()
+				} else {
+					maxTaskReschedule6 = nil
+				}
+				logLevel6 := new(shared.InputCollectorGCSLogLevel)
+				if !r.InputCollectorGCS.Schedule.Run.LogLevel.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.LogLevel.IsNull() {
+					*logLevel6 = shared.InputCollectorGCSLogLevel(r.InputCollectorGCS.Schedule.Run.LogLevel.ValueString())
+				} else {
+					logLevel6 = nil
+				}
+				jobTimeout6 := new(string)
+				if !r.InputCollectorGCS.Schedule.Run.JobTimeout.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.JobTimeout.IsNull() {
+					*jobTimeout6 = r.InputCollectorGCS.Schedule.Run.JobTimeout.ValueString()
+				} else {
+					jobTimeout6 = nil
+				}
+				mode6 := new(shared.InputCollectorGCSMode)
+				if !r.InputCollectorGCS.Schedule.Run.Mode.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.Mode.IsNull() {
+					*mode6 = shared.InputCollectorGCSMode(r.InputCollectorGCS.Schedule.Run.Mode.ValueString())
+				} else {
+					mode6 = nil
+				}
+				timeRangeType6 := new(shared.InputCollectorGCSTimeRange)
+				if !r.InputCollectorGCS.Schedule.Run.TimeRangeType.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.TimeRangeType.IsNull() {
+					*timeRangeType6 = shared.InputCollectorGCSTimeRange(r.InputCollectorGCS.Schedule.Run.TimeRangeType.ValueString())
+				} else {
+					timeRangeType6 = nil
+				}
+				earliest7 := new(float64)
+				if !r.InputCollectorGCS.Schedule.Run.Earliest.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.Earliest.IsNull() {
+					*earliest7 = r.InputCollectorGCS.Schedule.Run.Earliest.ValueFloat64()
+				} else {
+					earliest7 = nil
+				}
+				latest7 := new(float64)
+				if !r.InputCollectorGCS.Schedule.Run.Latest.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.Latest.IsNull() {
+					*latest7 = r.InputCollectorGCS.Schedule.Run.Latest.ValueFloat64()
+				} else {
+					latest7 = nil
+				}
+				expression6 := new(string)
+				if !r.InputCollectorGCS.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.Expression.IsNull() {
+					*expression6 = r.InputCollectorGCS.Schedule.Run.Expression.ValueString()
+				} else {
+					expression6 = nil
+				}
+				minTaskSize6 := new(string)
+				if !r.InputCollectorGCS.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.MinTaskSize.IsNull() {
+					*minTaskSize6 = r.InputCollectorGCS.Schedule.Run.MinTaskSize.ValueString()
+				} else {
+					minTaskSize6 = nil
+				}
+				maxTaskSize6 := new(string)
+				if !r.InputCollectorGCS.Schedule.Run.MaxTaskSize.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.MaxTaskSize.IsNull() {
+					*maxTaskSize6 = r.InputCollectorGCS.Schedule.Run.MaxTaskSize.ValueString()
+				} else {
+					maxTaskSize6 = nil
+				}
+				var timeWarning6 *shared.InputCollectorGCSTimeWarning
+				if r.InputCollectorGCS.Schedule.Run.TimeWarning != nil {
+					timeWarning6 = &shared.InputCollectorGCSTimeWarning{}
+				}
+				var stateTracking7 *shared.InputCollectorGCSStateTracking
+				if r.InputCollectorGCS.Schedule.Run.StateTracking != nil {
+					stateUpdateExpression6 := new(string)
+					if !r.InputCollectorGCS.Schedule.Run.StateTracking.StateUpdateExpression.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.StateTracking.StateUpdateExpression.IsNull() {
+						*stateUpdateExpression6 = r.InputCollectorGCS.Schedule.Run.StateTracking.StateUpdateExpression.ValueString()
+					} else {
+						stateUpdateExpression6 = nil
+					}
+					stateMergeExpression6 := new(string)
+					if !r.InputCollectorGCS.Schedule.Run.StateTracking.StateMergeExpression.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.StateTracking.StateMergeExpression.IsNull() {
+						*stateMergeExpression6 = r.InputCollectorGCS.Schedule.Run.StateTracking.StateMergeExpression.ValueString()
+					} else {
+						stateMergeExpression6 = nil
+					}
+					enabled13 := new(bool)
+					if !r.InputCollectorGCS.Schedule.Run.StateTracking.Enabled.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.StateTracking.Enabled.IsNull() {
+						*enabled13 = r.InputCollectorGCS.Schedule.Run.StateTracking.Enabled.ValueBool()
+					} else {
+						enabled13 = nil
+					}
+					stateTracking7 = &shared.InputCollectorGCSStateTracking{
+						StateUpdateExpression: stateUpdateExpression6,
+						StateMergeExpression:  stateMergeExpression6,
+						Enabled:               enabled13,
+					}
+				}
+				run6 = &shared.InputCollectorGCSRunSettings{
+					RescheduleDroppedTasks: rescheduleDroppedTasks6,
+					MaxTaskReschedule:      maxTaskReschedule6,
+					LogLevel:               logLevel6,
+					JobTimeout:             jobTimeout6,
+					Mode:                   mode6,
+					TimeRangeType:          timeRangeType6,
+					Earliest:               earliest7,
+					Latest:                 latest7,
+					Expression:             expression6,
+					MinTaskSize:            minTaskSize6,
+					MaxTaskSize:            maxTaskSize6,
+					TimeWarning:            timeWarning6,
+					StateTracking:          stateTracking7,
+				}
+			}
+			schedule6 = &shared.InputCollectorGCSSchedule{
+				Enabled:           enabled12,
+				CronSchedule:      cronSchedule6,
+				MaxConcurrentRuns: maxConcurrentRuns6,
+				Skippable:         skippable6,
+				ResumeMissed:      resumeMissed6,
+				Run:               run6,
+			}
+		}
+		streamtags6 := make([]string, 0, len(r.InputCollectorGCS.Streamtags))
+		for _, streamtagsItem6 := range r.InputCollectorGCS.Streamtags {
+			streamtags6 = append(streamtags6, streamtagsItem6.ValueString())
+		}
+		workerAffinity6 := new(bool)
+		if !r.InputCollectorGCS.WorkerAffinity.IsUnknown() && !r.InputCollectorGCS.WorkerAffinity.IsNull() {
+			*workerAffinity6 = r.InputCollectorGCS.WorkerAffinity.ValueBool()
+		} else {
+			workerAffinity6 = nil
+		}
+		var input6 *shared.InputCollectorGCSInput
+		if r.InputCollectorGCS.Input != nil {
+			typeVar15 := new(shared.InputCollectorGCSTypeCollection2)
+			if !r.InputCollectorGCS.Input.Type.IsUnknown() && !r.InputCollectorGCS.Input.Type.IsNull() {
+				*typeVar15 = shared.InputCollectorGCSTypeCollection2(r.InputCollectorGCS.Input.Type.ValueString())
+			} else {
+				typeVar15 = nil
+			}
+			breakerRulesets6 := make([]string, 0, len(r.InputCollectorGCS.Input.BreakerRulesets))
+			for _, breakerRulesetsItem6 := range r.InputCollectorGCS.Input.BreakerRulesets {
+				breakerRulesets6 = append(breakerRulesets6, breakerRulesetsItem6.ValueString())
+			}
+			staleChannelFlushMs6 := new(float64)
+			if !r.InputCollectorGCS.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorGCS.Input.StaleChannelFlushMs.IsNull() {
+				*staleChannelFlushMs6 = r.InputCollectorGCS.Input.StaleChannelFlushMs.ValueFloat64()
+			} else {
+				staleChannelFlushMs6 = nil
+			}
+			sendToRoutes6 := new(bool)
+			if !r.InputCollectorGCS.Input.SendToRoutes.IsUnknown() && !r.InputCollectorGCS.Input.SendToRoutes.IsNull() {
+				*sendToRoutes6 = r.InputCollectorGCS.Input.SendToRoutes.ValueBool()
+			} else {
+				sendToRoutes6 = nil
+			}
+			var preprocess6 *shared.InputCollectorGCSPreprocess
+			if r.InputCollectorGCS.Input.Preprocess != nil {
+				disabled6 := new(bool)
+				if !r.InputCollectorGCS.Input.Preprocess.Disabled.IsUnknown() && !r.InputCollectorGCS.Input.Preprocess.Disabled.IsNull() {
+					*disabled6 = r.InputCollectorGCS.Input.Preprocess.Disabled.ValueBool()
+				} else {
+					disabled6 = nil
+				}
+				command6 := new(string)
+				if !r.InputCollectorGCS.Input.Preprocess.Command.IsUnknown() && !r.InputCollectorGCS.Input.Preprocess.Command.IsNull() {
+					*command6 = r.InputCollectorGCS.Input.Preprocess.Command.ValueString()
+				} else {
+					command6 = nil
+				}
+				args6 := make([]string, 0, len(r.InputCollectorGCS.Input.Preprocess.Args))
+				for _, argsItem6 := range r.InputCollectorGCS.Input.Preprocess.Args {
+					args6 = append(args6, argsItem6.ValueString())
+				}
+				preprocess6 = &shared.InputCollectorGCSPreprocess{
+					Disabled: disabled6,
+					Command:  command6,
+					Args:     args6,
+				}
+			}
+			throttleRatePerSec6 := new(string)
+			if !r.InputCollectorGCS.Input.ThrottleRatePerSec.IsUnknown() && !r.InputCollectorGCS.Input.ThrottleRatePerSec.IsNull() {
+				*throttleRatePerSec6 = r.InputCollectorGCS.Input.ThrottleRatePerSec.ValueString()
+			} else {
+				throttleRatePerSec6 = nil
+			}
+			metadata6 := make([]shared.InputCollectorGCSMetadatum, 0, len(r.InputCollectorGCS.Input.Metadata))
+			for _, metadataItem6 := range r.InputCollectorGCS.Input.Metadata {
+				var name11 string
+				name11 = metadataItem6.Name.ValueString()
+
+				var value11 string
+				value11 = metadataItem6.Value.ValueString()
+
+				metadata6 = append(metadata6, shared.InputCollectorGCSMetadatum{
+					Name:  name11,
+					Value: value11,
+				})
+			}
+			pipeline6 := new(string)
+			if !r.InputCollectorGCS.Input.Pipeline.IsUnknown() && !r.InputCollectorGCS.Input.Pipeline.IsNull() {
+				*pipeline6 = r.InputCollectorGCS.Input.Pipeline.ValueString()
+			} else {
+				pipeline6 = nil
+			}
+			output6 := new(string)
+			if !r.InputCollectorGCS.Input.Output.IsUnknown() && !r.InputCollectorGCS.Input.Output.IsNull() {
+				*output6 = r.InputCollectorGCS.Input.Output.ValueString()
+			} else {
+				output6 = nil
+			}
+			input6 = &shared.InputCollectorGCSInput{
+				Type:                typeVar15,
+				BreakerRulesets:     breakerRulesets6,
+				StaleChannelFlushMs: staleChannelFlushMs6,
+				SendToRoutes:        sendToRoutes6,
+				Preprocess:          preprocess6,
+				ThrottleRatePerSec:  throttleRatePerSec6,
+				Metadata:            metadata6,
+				Pipeline:            pipeline6,
+				Output:              output6,
+			}
+		}
+		typeVar16 := shared.TypeGcs(r.InputCollectorGCS.Collector.Type.ValueString())
+		var conf6 *shared.InputCollectorGCSConf
+		if r.InputCollectorGCS.Collector.Conf != nil {
+			serviceAccountCredentials := new(string)
+			if !r.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials.IsNull() {
+				*serviceAccountCredentials = r.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials.ValueString()
+			} else {
+				serviceAccountCredentials = nil
+			}
+			bucket1 := new(string)
+			if !r.InputCollectorGCS.Collector.Conf.Bucket.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.Bucket.IsNull() {
+				*bucket1 = r.InputCollectorGCS.Collector.Conf.Bucket.ValueString()
+			} else {
+				bucket1 = nil
+			}
+			path2 := new(string)
+			if !r.InputCollectorGCS.Collector.Conf.Path.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.Path.IsNull() {
+				*path2 = r.InputCollectorGCS.Collector.Conf.Path.ValueString()
+			} else {
+				path2 = nil
+			}
+			authType1 := new(shared.InputCollectorGCSAuthenticationMethod)
+			if !r.InputCollectorGCS.Collector.Conf.AuthType.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.AuthType.IsNull() {
+				*authType1 = shared.InputCollectorGCSAuthenticationMethod(r.InputCollectorGCS.Collector.Conf.AuthType.ValueString())
+			} else {
+				authType1 = nil
+			}
+			recurse2 := new(bool)
+			if !r.InputCollectorGCS.Collector.Conf.Recurse.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.Recurse.IsNull() {
+				*recurse2 = r.InputCollectorGCS.Collector.Conf.Recurse.ValueBool()
+			} else {
+				recurse2 = nil
+			}
+			extractors2 := make([]shared.InputCollectorGCSExtractor, len(r.InputCollectorGCS.Collector.Conf.Extractors))
+			maxBatchSize2 := new(int64)
+			if !r.InputCollectorGCS.Collector.Conf.MaxBatchSize.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.MaxBatchSize.IsNull() {
+				*maxBatchSize2 = r.InputCollectorGCS.Collector.Conf.MaxBatchSize.ValueInt64()
+			} else {
+				maxBatchSize2 = nil
+			}
+			conf6 = &shared.InputCollectorGCSConf{
+				ServiceAccountCredentials: serviceAccountCredentials,
+				Bucket:                    bucket1,
+				Path:                      path2,
+				AuthType:                  authType1,
+				Recurse:                   recurse2,
+				Extractors:                extractors2,
+				MaxBatchSize:              maxBatchSize2,
+			}
+		}
+		collector6 := shared.InputCollectorGCSCollector{
+			Type: typeVar16,
+			Conf: conf6,
+		}
+		inputCollectorGCS = &shared.InputCollectorGCS{
+			ID:                   id6,
+			TTL:                  ttl6,
+			IgnoreGroupJobsLimit: ignoreGroupJobsLimit6,
+			RemoveFields:         removeFields6,
+			ResumeOnBoot:         resumeOnBoot6,
+			Environment:          environment6,
+			SavedState:           savedState6,
+			Schedule:             schedule6,
+			Streamtags:           streamtags6,
+			WorkerAffinity:       workerAffinity6,
+			Input:                input6,
+			Collector:            collector6,
+		}
+	}
+	if inputCollectorGCS != nil {
+		out = shared.InputCollector{
+			InputCollectorGCS: inputCollectorGCS,
+		}
+	}
+	var inputCollectorHealthCheck *shared.InputCollectorHealthCheck
+	if r.InputCollectorHealthCheck != nil {
+		id7 := new(string)
+		if !r.InputCollectorHealthCheck.ID.IsUnknown() && !r.InputCollectorHealthCheck.ID.IsNull() {
+			*id7 = r.InputCollectorHealthCheck.ID.ValueString()
+		} else {
+			id7 = nil
+		}
+		ttl7 := new(string)
+		if !r.InputCollectorHealthCheck.TTL.IsUnknown() && !r.InputCollectorHealthCheck.TTL.IsNull() {
+			*ttl7 = r.InputCollectorHealthCheck.TTL.ValueString()
+		} else {
+			ttl7 = nil
+		}
+		ignoreGroupJobsLimit7 := new(bool)
+		if !r.InputCollectorHealthCheck.IgnoreGroupJobsLimit.IsUnknown() && !r.InputCollectorHealthCheck.IgnoreGroupJobsLimit.IsNull() {
+			*ignoreGroupJobsLimit7 = r.InputCollectorHealthCheck.IgnoreGroupJobsLimit.ValueBool()
+		} else {
+			ignoreGroupJobsLimit7 = nil
+		}
+		removeFields7 := make([]string, 0, len(r.InputCollectorHealthCheck.RemoveFields))
+		for _, removeFieldsItem7 := range r.InputCollectorHealthCheck.RemoveFields {
+			removeFields7 = append(removeFields7, removeFieldsItem7.ValueString())
+		}
+		resumeOnBoot7 := new(bool)
+		if !r.InputCollectorHealthCheck.ResumeOnBoot.IsUnknown() && !r.InputCollectorHealthCheck.ResumeOnBoot.IsNull() {
+			*resumeOnBoot7 = r.InputCollectorHealthCheck.ResumeOnBoot.ValueBool()
+		} else {
+			resumeOnBoot7 = nil
+		}
+		environment7 := new(string)
+		if !r.InputCollectorHealthCheck.Environment.IsUnknown() && !r.InputCollectorHealthCheck.Environment.IsNull() {
+			*environment7 = r.InputCollectorHealthCheck.Environment.ValueString()
+		} else {
+			environment7 = nil
+		}
+		var savedState7 *shared.InputCollectorHealthCheckSavedState
+		if r.InputCollectorHealthCheck.SavedState != nil {
+			savedState7 = &shared.InputCollectorHealthCheckSavedState{}
+		}
+		var schedule7 *shared.InputCollectorHealthCheckSchedule
+		if r.InputCollectorHealthCheck.Schedule != nil {
+			enabled14 := new(bool)
+			if !r.InputCollectorHealthCheck.Schedule.Enabled.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Enabled.IsNull() {
+				*enabled14 = r.InputCollectorHealthCheck.Schedule.Enabled.ValueBool()
+			} else {
+				enabled14 = nil
+			}
+			cronSchedule7 := new(string)
+			if !r.InputCollectorHealthCheck.Schedule.CronSchedule.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.CronSchedule.IsNull() {
+				*cronSchedule7 = r.InputCollectorHealthCheck.Schedule.CronSchedule.ValueString()
+			} else {
+				cronSchedule7 = nil
+			}
+			maxConcurrentRuns7 := new(float64)
+			if !r.InputCollectorHealthCheck.Schedule.MaxConcurrentRuns.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.MaxConcurrentRuns.IsNull() {
+				*maxConcurrentRuns7 = r.InputCollectorHealthCheck.Schedule.MaxConcurrentRuns.ValueFloat64()
+			} else {
+				maxConcurrentRuns7 = nil
+			}
+			skippable7 := new(bool)
+			if !r.InputCollectorHealthCheck.Schedule.Skippable.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Skippable.IsNull() {
+				*skippable7 = r.InputCollectorHealthCheck.Schedule.Skippable.ValueBool()
+			} else {
+				skippable7 = nil
+			}
+			resumeMissed7 := new(bool)
+			if !r.InputCollectorHealthCheck.Schedule.ResumeMissed.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.ResumeMissed.IsNull() {
+				*resumeMissed7 = r.InputCollectorHealthCheck.Schedule.ResumeMissed.ValueBool()
+			} else {
+				resumeMissed7 = nil
+			}
+			var run7 *shared.InputCollectorHealthCheckRunSettings
+			if r.InputCollectorHealthCheck.Schedule.Run != nil {
+				rescheduleDroppedTasks7 := new(bool)
+				if !r.InputCollectorHealthCheck.Schedule.Run.RescheduleDroppedTasks.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.RescheduleDroppedTasks.IsNull() {
+					*rescheduleDroppedTasks7 = r.InputCollectorHealthCheck.Schedule.Run.RescheduleDroppedTasks.ValueBool()
+				} else {
+					rescheduleDroppedTasks7 = nil
+				}
+				maxTaskReschedule7 := new(float64)
+				if !r.InputCollectorHealthCheck.Schedule.Run.MaxTaskReschedule.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.MaxTaskReschedule.IsNull() {
+					*maxTaskReschedule7 = r.InputCollectorHealthCheck.Schedule.Run.MaxTaskReschedule.ValueFloat64()
+				} else {
+					maxTaskReschedule7 = nil
+				}
+				logLevel7 := new(shared.InputCollectorHealthCheckLogLevel)
+				if !r.InputCollectorHealthCheck.Schedule.Run.LogLevel.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.LogLevel.IsNull() {
+					*logLevel7 = shared.InputCollectorHealthCheckLogLevel(r.InputCollectorHealthCheck.Schedule.Run.LogLevel.ValueString())
+				} else {
+					logLevel7 = nil
+				}
+				jobTimeout7 := new(string)
+				if !r.InputCollectorHealthCheck.Schedule.Run.JobTimeout.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.JobTimeout.IsNull() {
+					*jobTimeout7 = r.InputCollectorHealthCheck.Schedule.Run.JobTimeout.ValueString()
+				} else {
+					jobTimeout7 = nil
+				}
+				mode7 := new(shared.InputCollectorHealthCheckMode)
+				if !r.InputCollectorHealthCheck.Schedule.Run.Mode.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.Mode.IsNull() {
+					*mode7 = shared.InputCollectorHealthCheckMode(r.InputCollectorHealthCheck.Schedule.Run.Mode.ValueString())
+				} else {
+					mode7 = nil
+				}
+				timeRangeType7 := new(shared.InputCollectorHealthCheckTimeRange)
+				if !r.InputCollectorHealthCheck.Schedule.Run.TimeRangeType.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.TimeRangeType.IsNull() {
+					*timeRangeType7 = shared.InputCollectorHealthCheckTimeRange(r.InputCollectorHealthCheck.Schedule.Run.TimeRangeType.ValueString())
+				} else {
+					timeRangeType7 = nil
+				}
+				earliest8 := new(float64)
+				if !r.InputCollectorHealthCheck.Schedule.Run.Earliest.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.Earliest.IsNull() {
+					*earliest8 = r.InputCollectorHealthCheck.Schedule.Run.Earliest.ValueFloat64()
+				} else {
+					earliest8 = nil
+				}
+				latest8 := new(float64)
+				if !r.InputCollectorHealthCheck.Schedule.Run.Latest.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.Latest.IsNull() {
+					*latest8 = r.InputCollectorHealthCheck.Schedule.Run.Latest.ValueFloat64()
+				} else {
+					latest8 = nil
+				}
+				expression7 := new(string)
+				if !r.InputCollectorHealthCheck.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.Expression.IsNull() {
+					*expression7 = r.InputCollectorHealthCheck.Schedule.Run.Expression.ValueString()
+				} else {
+					expression7 = nil
+				}
+				minTaskSize7 := new(string)
+				if !r.InputCollectorHealthCheck.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.MinTaskSize.IsNull() {
+					*minTaskSize7 = r.InputCollectorHealthCheck.Schedule.Run.MinTaskSize.ValueString()
+				} else {
+					minTaskSize7 = nil
+				}
+				maxTaskSize7 := new(string)
+				if !r.InputCollectorHealthCheck.Schedule.Run.MaxTaskSize.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.MaxTaskSize.IsNull() {
+					*maxTaskSize7 = r.InputCollectorHealthCheck.Schedule.Run.MaxTaskSize.ValueString()
+				} else {
+					maxTaskSize7 = nil
+				}
+				var timeWarning7 *shared.InputCollectorHealthCheckTimeWarning
+				if r.InputCollectorHealthCheck.Schedule.Run.TimeWarning != nil {
+					timeWarning7 = &shared.InputCollectorHealthCheckTimeWarning{}
+				}
+				var stateTracking8 *shared.InputCollectorHealthCheckStateTracking
+				if r.InputCollectorHealthCheck.Schedule.Run.StateTracking != nil {
+					stateUpdateExpression7 := new(string)
+					if !r.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateUpdateExpression.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateUpdateExpression.IsNull() {
+						*stateUpdateExpression7 = r.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateUpdateExpression.ValueString()
+					} else {
+						stateUpdateExpression7 = nil
+					}
+					stateMergeExpression7 := new(string)
+					if !r.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateMergeExpression.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateMergeExpression.IsNull() {
+						*stateMergeExpression7 = r.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateMergeExpression.ValueString()
+					} else {
+						stateMergeExpression7 = nil
+					}
+					enabled15 := new(bool)
+					if !r.InputCollectorHealthCheck.Schedule.Run.StateTracking.Enabled.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.StateTracking.Enabled.IsNull() {
+						*enabled15 = r.InputCollectorHealthCheck.Schedule.Run.StateTracking.Enabled.ValueBool()
+					} else {
+						enabled15 = nil
+					}
+					stateTracking8 = &shared.InputCollectorHealthCheckStateTracking{
+						StateUpdateExpression: stateUpdateExpression7,
+						StateMergeExpression:  stateMergeExpression7,
+						Enabled:               enabled15,
+					}
+				}
+				run7 = &shared.InputCollectorHealthCheckRunSettings{
+					RescheduleDroppedTasks: rescheduleDroppedTasks7,
+					MaxTaskReschedule:      maxTaskReschedule7,
+					LogLevel:               logLevel7,
+					JobTimeout:             jobTimeout7,
+					Mode:                   mode7,
+					TimeRangeType:          timeRangeType7,
+					Earliest:               earliest8,
+					Latest:                 latest8,
+					Expression:             expression7,
+					MinTaskSize:            minTaskSize7,
+					MaxTaskSize:            maxTaskSize7,
+					TimeWarning:            timeWarning7,
+					StateTracking:          stateTracking8,
+				}
+			}
+			schedule7 = &shared.InputCollectorHealthCheckSchedule{
+				Enabled:           enabled14,
+				CronSchedule:      cronSchedule7,
+				MaxConcurrentRuns: maxConcurrentRuns7,
+				Skippable:         skippable7,
+				ResumeMissed:      resumeMissed7,
+				Run:               run7,
+			}
+		}
+		streamtags7 := make([]string, 0, len(r.InputCollectorHealthCheck.Streamtags))
+		for _, streamtagsItem7 := range r.InputCollectorHealthCheck.Streamtags {
+			streamtags7 = append(streamtags7, streamtagsItem7.ValueString())
+		}
+		workerAffinity7 := new(bool)
+		if !r.InputCollectorHealthCheck.WorkerAffinity.IsUnknown() && !r.InputCollectorHealthCheck.WorkerAffinity.IsNull() {
+			*workerAffinity7 = r.InputCollectorHealthCheck.WorkerAffinity.ValueBool()
+		} else {
+			workerAffinity7 = nil
+		}
+		var input7 *shared.InputCollectorHealthCheckInput
+		if r.InputCollectorHealthCheck.Input != nil {
+			typeVar17 := new(shared.InputCollectorHealthCheckTypeCollection2)
+			if !r.InputCollectorHealthCheck.Input.Type.IsUnknown() && !r.InputCollectorHealthCheck.Input.Type.IsNull() {
+				*typeVar17 = shared.InputCollectorHealthCheckTypeCollection2(r.InputCollectorHealthCheck.Input.Type.ValueString())
+			} else {
+				typeVar17 = nil
+			}
+			breakerRulesets7 := make([]string, 0, len(r.InputCollectorHealthCheck.Input.BreakerRulesets))
+			for _, breakerRulesetsItem7 := range r.InputCollectorHealthCheck.Input.BreakerRulesets {
+				breakerRulesets7 = append(breakerRulesets7, breakerRulesetsItem7.ValueString())
+			}
+			staleChannelFlushMs7 := new(float64)
+			if !r.InputCollectorHealthCheck.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorHealthCheck.Input.StaleChannelFlushMs.IsNull() {
+				*staleChannelFlushMs7 = r.InputCollectorHealthCheck.Input.StaleChannelFlushMs.ValueFloat64()
+			} else {
+				staleChannelFlushMs7 = nil
+			}
+			sendToRoutes7 := new(bool)
+			if !r.InputCollectorHealthCheck.Input.SendToRoutes.IsUnknown() && !r.InputCollectorHealthCheck.Input.SendToRoutes.IsNull() {
+				*sendToRoutes7 = r.InputCollectorHealthCheck.Input.SendToRoutes.ValueBool()
+			} else {
+				sendToRoutes7 = nil
+			}
+			var preprocess7 *shared.InputCollectorHealthCheckPreprocess
+			if r.InputCollectorHealthCheck.Input.Preprocess != nil {
+				disabled7 := new(bool)
+				if !r.InputCollectorHealthCheck.Input.Preprocess.Disabled.IsUnknown() && !r.InputCollectorHealthCheck.Input.Preprocess.Disabled.IsNull() {
+					*disabled7 = r.InputCollectorHealthCheck.Input.Preprocess.Disabled.ValueBool()
+				} else {
+					disabled7 = nil
+				}
+				command7 := new(string)
+				if !r.InputCollectorHealthCheck.Input.Preprocess.Command.IsUnknown() && !r.InputCollectorHealthCheck.Input.Preprocess.Command.IsNull() {
+					*command7 = r.InputCollectorHealthCheck.Input.Preprocess.Command.ValueString()
+				} else {
+					command7 = nil
+				}
+				args7 := make([]string, 0, len(r.InputCollectorHealthCheck.Input.Preprocess.Args))
+				for _, argsItem7 := range r.InputCollectorHealthCheck.Input.Preprocess.Args {
+					args7 = append(args7, argsItem7.ValueString())
+				}
+				preprocess7 = &shared.InputCollectorHealthCheckPreprocess{
+					Disabled: disabled7,
+					Command:  command7,
+					Args:     args7,
+				}
+			}
+			throttleRatePerSec7 := new(string)
+			if !r.InputCollectorHealthCheck.Input.ThrottleRatePerSec.IsUnknown() && !r.InputCollectorHealthCheck.Input.ThrottleRatePerSec.IsNull() {
+				*throttleRatePerSec7 = r.InputCollectorHealthCheck.Input.ThrottleRatePerSec.ValueString()
+			} else {
+				throttleRatePerSec7 = nil
+			}
+			metadata7 := make([]shared.InputCollectorHealthCheckMetadatum, 0, len(r.InputCollectorHealthCheck.Input.Metadata))
+			for _, metadataItem7 := range r.InputCollectorHealthCheck.Input.Metadata {
+				var name12 string
+				name12 = metadataItem7.Name.ValueString()
+
+				var value12 string
+				value12 = metadataItem7.Value.ValueString()
+
+				metadata7 = append(metadata7, shared.InputCollectorHealthCheckMetadatum{
+					Name:  name12,
+					Value: value12,
+				})
+			}
+			pipeline7 := new(string)
+			if !r.InputCollectorHealthCheck.Input.Pipeline.IsUnknown() && !r.InputCollectorHealthCheck.Input.Pipeline.IsNull() {
+				*pipeline7 = r.InputCollectorHealthCheck.Input.Pipeline.ValueString()
+			} else {
+				pipeline7 = nil
+			}
+			output7 := new(string)
+			if !r.InputCollectorHealthCheck.Input.Output.IsUnknown() && !r.InputCollectorHealthCheck.Input.Output.IsNull() {
+				*output7 = r.InputCollectorHealthCheck.Input.Output.ValueString()
+			} else {
+				output7 = nil
+			}
+			input7 = &shared.InputCollectorHealthCheckInput{
+				Type:                typeVar17,
+				BreakerRulesets:     breakerRulesets7,
+				StaleChannelFlushMs: staleChannelFlushMs7,
+				SendToRoutes:        sendToRoutes7,
+				Preprocess:          preprocess7,
+				ThrottleRatePerSec:  throttleRatePerSec7,
+				Metadata:            metadata7,
+				Pipeline:            pipeline7,
+				Output:              output7,
+			}
+		}
+		typeVar18 := shared.TypeHealthcheck(r.InputCollectorHealthCheck.Collector.Type.ValueString())
+		var conf7 *shared.InputCollectorHealthCheckConf
+		if r.InputCollectorHealthCheck.Collector.Conf != nil {
+			collectUrl1 := new(string)
+			if !r.InputCollectorHealthCheck.Collector.Conf.CollectURL.IsUnknown() && !r.InputCollectorHealthCheck.Collector.Conf.CollectURL.IsNull() {
+				*collectUrl1 = r.InputCollectorHealthCheck.Collector.Conf.CollectURL.ValueString()
+			} else {
+				collectUrl1 = nil
+			}
+			collectMethod1 := new(shared.InputCollectorHealthCheckCollectMethod)
+			if !r.InputCollectorHealthCheck.Collector.Conf.CollectMethod.IsUnknown() && !r.InputCollectorHealthCheck.Collector.Conf.CollectMethod.IsNull() {
+				*collectMethod1 = shared.InputCollectorHealthCheckCollectMethod(r.InputCollectorHealthCheck.Collector.Conf.CollectMethod.ValueString())
+			} else {
+				collectMethod1 = nil
+			}
+			authentication2 := new(shared.InputCollectorHealthCheckAuthentication)
+			if !r.InputCollectorHealthCheck.Collector.Conf.Authentication.IsUnknown() && !r.InputCollectorHealthCheck.Collector.Conf.Authentication.IsNull() {
+				*authentication2 = shared.InputCollectorHealthCheckAuthentication(r.InputCollectorHealthCheck.Collector.Conf.Authentication.ValueString())
+			} else {
+				authentication2 = nil
+			}
+			timeout2 := new(int64)
+			if !r.InputCollectorHealthCheck.Collector.Conf.Timeout.IsUnknown() && !r.InputCollectorHealthCheck.Collector.Conf.Timeout.IsNull() {
+				*timeout2 = r.InputCollectorHealthCheck.Collector.Conf.Timeout.ValueInt64()
+			} else {
+				timeout2 = nil
+			}
+			rejectUnauthorized2 := new(bool)
+			if !r.InputCollectorHealthCheck.Collector.Conf.RejectUnauthorized.IsUnknown() && !r.InputCollectorHealthCheck.Collector.Conf.RejectUnauthorized.IsNull() {
+				*rejectUnauthorized2 = r.InputCollectorHealthCheck.Collector.Conf.RejectUnauthorized.ValueBool()
+			} else {
+				rejectUnauthorized2 = nil
+			}
+			username2 := new(string)
+			if !r.InputCollectorHealthCheck.Collector.Conf.Username.IsUnknown() && !r.InputCollectorHealthCheck.Collector.Conf.Username.IsNull() {
+				*username2 = r.InputCollectorHealthCheck.Collector.Conf.Username.ValueString()
+			} else {
+				username2 = nil
+			}
+			password2 := new(string)
+			if !r.InputCollectorHealthCheck.Collector.Conf.Password.IsUnknown() && !r.InputCollectorHealthCheck.Collector.Conf.Password.IsNull() {
+				*password2 = r.InputCollectorHealthCheck.Collector.Conf.Password.ValueString()
+			} else {
+				password2 = nil
+			}
+			credentialsSecret2 := new(string)
+			if !r.InputCollectorHealthCheck.Collector.Conf.CredentialsSecret.IsUnknown() && !r.InputCollectorHealthCheck.Collector.Conf.CredentialsSecret.IsNull() {
+				*credentialsSecret2 = r.InputCollectorHealthCheck.Collector.Conf.CredentialsSecret.ValueString()
+			} else {
+				credentialsSecret2 = nil
+			}
+			conf7 = &shared.InputCollectorHealthCheckConf{
+				CollectURL:         collectUrl1,
+				CollectMethod:      collectMethod1,
+				Authentication:     authentication2,
+				Timeout:            timeout2,
+				RejectUnauthorized: rejectUnauthorized2,
+				Username:           username2,
+				Password:           password2,
+				CredentialsSecret:  credentialsSecret2,
+			}
+		}
+		collector7 := shared.InputCollectorHealthCheckCollector{
+			Type: typeVar18,
+			Conf: conf7,
+		}
+		inputCollectorHealthCheck = &shared.InputCollectorHealthCheck{
+			ID:                   id7,
+			TTL:                  ttl7,
+			IgnoreGroupJobsLimit: ignoreGroupJobsLimit7,
+			RemoveFields:         removeFields7,
+			ResumeOnBoot:         resumeOnBoot7,
+			Environment:          environment7,
+			SavedState:           savedState7,
+			Schedule:             schedule7,
+			Streamtags:           streamtags7,
+			WorkerAffinity:       workerAffinity7,
+			Input:                input7,
+			Collector:            collector7,
+		}
+	}
+	if inputCollectorHealthCheck != nil {
+		out = shared.InputCollector{
+			InputCollectorHealthCheck: inputCollectorHealthCheck,
+		}
 	}
 
 	return &out, diags

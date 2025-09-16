@@ -3,1117 +3,202 @@
 package shared
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type InputCollectorType1 string
+type InputCollectorType string
 
 const (
-	InputCollectorType1Collection InputCollectorType1 = "collection"
+	InputCollectorTypeInputCollectorSplunk      InputCollectorType = "InputCollectorSplunk"
+	InputCollectorTypeInputCollectorRest        InputCollectorType = "InputCollectorRest"
+	InputCollectorTypeInputCollectorS3          InputCollectorType = "InputCollectorS3"
+	InputCollectorTypeInputCollectorAzureBlob   InputCollectorType = "InputCollectorAzureBlob"
+	InputCollectorTypeInputCollectorCriblLake   InputCollectorType = "InputCollectorCriblLake"
+	InputCollectorTypeInputCollectorDatabase    InputCollectorType = "InputCollectorDatabase"
+	InputCollectorTypeInputCollectorGCS         InputCollectorType = "InputCollectorGCS"
+	InputCollectorTypeInputCollectorHealthCheck InputCollectorType = "InputCollectorHealthCheck"
 )
-
-func (e InputCollectorType1) ToPointer() *InputCollectorType1 {
-	return &e
-}
-func (e *InputCollectorType1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "collection":
-		*e = InputCollectorType1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCollectorType1: %v", v)
-	}
-}
-
-// InputCollectorLogLevel - Level at which to set task logging
-type InputCollectorLogLevel string
-
-const (
-	InputCollectorLogLevelError InputCollectorLogLevel = "error"
-	InputCollectorLogLevelWarn  InputCollectorLogLevel = "warn"
-	InputCollectorLogLevelInfo  InputCollectorLogLevel = "info"
-	InputCollectorLogLevelDebug InputCollectorLogLevel = "debug"
-	InputCollectorLogLevelSilly InputCollectorLogLevel = "silly"
-)
-
-func (e InputCollectorLogLevel) ToPointer() *InputCollectorLogLevel {
-	return &e
-}
-func (e *InputCollectorLogLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "info":
-		fallthrough
-	case "debug":
-		fallthrough
-	case "silly":
-		*e = InputCollectorLogLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCollectorLogLevel: %v", v)
-	}
-}
-
-type InputCollectorRunSettings struct {
-	// Reschedule tasks that failed with non-fatal errors
-	RescheduleDroppedTasks *bool `default:"true" json:"rescheduleDroppedTasks"`
-	// Maximum number of times a task can be rescheduled
-	MaxTaskReschedule *float64 `default:"1" json:"maxTaskReschedule"`
-	// Level at which to set task logging
-	LogLevel *InputCollectorLogLevel `default:"info" json:"logLevel"`
-	// Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
-	JobTimeout *string `default:"0" json:"jobTimeout"`
-	// Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
-	Mode          *string `default:"list" json:"mode"`
-	TimeRangeType *string `default:"relative" json:"timeRangeType"`
-	// Earliest time to collect data for the selected timezone
-	Earliest *float64 `json:"earliest,omitempty"`
-	// Latest time to collect data for the selected timezone
-	Latest *float64 `json:"latest,omitempty"`
-	// A filter for tokens in the provided collect path and/or the events being collected
-	Expression *string `default:"true" json:"expression"`
-	// Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
-	MinTaskSize *string `default:"1MB" json:"minTaskSize"`
-	// Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
-	MaxTaskSize *string `default:"10MB" json:"maxTaskSize"`
-}
-
-func (i InputCollectorRunSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputCollectorRunSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *InputCollectorRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.RescheduleDroppedTasks
-}
-
-func (o *InputCollectorRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxTaskReschedule
-}
-
-func (o *InputCollectorRunSettings) GetLogLevel() *InputCollectorLogLevel {
-	if o == nil {
-		return nil
-	}
-	return o.LogLevel
-}
-
-func (o *InputCollectorRunSettings) GetJobTimeout() *string {
-	if o == nil {
-		return nil
-	}
-	return o.JobTimeout
-}
-
-func (o *InputCollectorRunSettings) GetMode() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Mode
-}
-
-func (o *InputCollectorRunSettings) GetTimeRangeType() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TimeRangeType
-}
-
-func (o *InputCollectorRunSettings) GetEarliest() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Earliest
-}
-
-func (o *InputCollectorRunSettings) GetLatest() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Latest
-}
-
-func (o *InputCollectorRunSettings) GetExpression() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Expression
-}
-
-func (o *InputCollectorRunSettings) GetMinTaskSize() *string {
-	if o == nil {
-		return nil
-	}
-	return o.MinTaskSize
-}
-
-func (o *InputCollectorRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
-		return nil
-	}
-	return o.MaxTaskSize
-}
-
-// InputCollectorSchedule - Configuration for a scheduled job
-type InputCollectorSchedule struct {
-	// Enable to configure scheduling for this Collector
-	Enabled *bool `json:"enabled,omitempty"`
-	// A cron schedule on which to run this job
-	CronSchedule *string `default:"*/5 * * * *" json:"cronSchedule"`
-	// The maximum number of instances of this scheduled job that may be running at any time
-	MaxConcurrentRuns *float64 `default:"1" json:"maxConcurrentRuns"`
-	// Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
-	Skippable *bool                      `default:"true" json:"skippable"`
-	Run       *InputCollectorRunSettings `json:"run,omitempty"`
-}
-
-func (i InputCollectorSchedule) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputCollectorSchedule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *InputCollectorSchedule) GetEnabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Enabled
-}
-
-func (o *InputCollectorSchedule) GetCronSchedule() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CronSchedule
-}
-
-func (o *InputCollectorSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxConcurrentRuns
-}
-
-func (o *InputCollectorSchedule) GetSkippable() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Skippable
-}
-
-func (o *InputCollectorSchedule) GetRun() *InputCollectorRunSettings {
-	if o == nil {
-		return nil
-	}
-	return o.Run
-}
-
-type InputCollectorType2 string
-
-const (
-	InputCollectorType2Collection InputCollectorType2 = "collection"
-)
-
-func (e InputCollectorType2) ToPointer() *InputCollectorType2 {
-	return &e
-}
-func (e *InputCollectorType2) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "collection":
-		*e = InputCollectorType2(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCollectorType2: %v", v)
-	}
-}
-
-type InputCollectorPreprocess struct {
-	Disabled *bool `default:"true" json:"disabled"`
-	// Command to feed the data through (via stdin) and process its output (stdout)
-	Command *string `json:"command,omitempty"`
-	// Arguments to be added to the custom command
-	Args []string `json:"args,omitempty"`
-}
-
-func (i InputCollectorPreprocess) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputCollectorPreprocess) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *InputCollectorPreprocess) GetDisabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Disabled
-}
-
-func (o *InputCollectorPreprocess) GetCommand() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Command
-}
-
-func (o *InputCollectorPreprocess) GetArgs() []string {
-	if o == nil {
-		return nil
-	}
-	return o.Args
-}
-
-type InputCollectorMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (o *InputCollectorMetadatum) GetName() string {
-	if o == nil {
-		return ""
-	}
-	return o.Name
-}
-
-func (o *InputCollectorMetadatum) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-type InputCollectorInput struct {
-	Type *InputCollectorType2 `default:"collection" json:"type"`
-	// A list of event-breaking rulesets that will be applied, in order, to the input data stream
-	BreakerRulesets []string `json:"breakerRulesets,omitempty"`
-	// How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-	StaleChannelFlushMs *float64 `default:"10000" json:"staleChannelFlushMs"`
-	// Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
-	SendToRoutes *bool                     `default:"true" json:"sendToRoutes"`
-	Preprocess   *InputCollectorPreprocess `json:"preprocess,omitempty"`
-	// Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
-	ThrottleRatePerSec *string `default:"0" json:"throttleRatePerSec"`
-	// Fields to add to events from this input
-	Metadata []InputCollectorMetadatum `json:"metadata,omitempty"`
-	// Pipeline to process results
-	Pipeline *string `json:"pipeline,omitempty"`
-	// Destination to send results to
-	Output *string `json:"output,omitempty"`
-}
-
-func (i InputCollectorInput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputCollectorInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *InputCollectorInput) GetType() *InputCollectorType2 {
-	if o == nil {
-		return nil
-	}
-	return o.Type
-}
-
-func (o *InputCollectorInput) GetBreakerRulesets() []string {
-	if o == nil {
-		return nil
-	}
-	return o.BreakerRulesets
-}
-
-func (o *InputCollectorInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.StaleChannelFlushMs
-}
-
-func (o *InputCollectorInput) GetSendToRoutes() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.SendToRoutes
-}
-
-func (o *InputCollectorInput) GetPreprocess() *InputCollectorPreprocess {
-	if o == nil {
-		return nil
-	}
-	return o.Preprocess
-}
-
-func (o *InputCollectorInput) GetThrottleRatePerSec() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ThrottleRatePerSec
-}
-
-func (o *InputCollectorInput) GetMetadata() []InputCollectorMetadatum {
-	if o == nil {
-		return nil
-	}
-	return o.Metadata
-}
-
-func (o *InputCollectorInput) GetPipeline() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Pipeline
-}
-
-func (o *InputCollectorInput) GetOutput() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Output
-}
-
-type CollectorType string
-
-const (
-	CollectorTypeSplunk      CollectorType = "splunk"
-	CollectorTypeS3          CollectorType = "s3"
-	CollectorTypeAzureblob   CollectorType = "azureblob"
-	CollectorTypeCribllake   CollectorType = "cribllake"
-	CollectorTypeDatabase    CollectorType = "database"
-	CollectorTypeGcs         CollectorType = "gcs"
-	CollectorTypeHealthcheck CollectorType = "healthcheck"
-	CollectorTypeRest        CollectorType = "rest"
-)
-
-func (e CollectorType) ToPointer() *CollectorType {
-	return &e
-}
-func (e *CollectorType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "splunk":
-		fallthrough
-	case "s3":
-		fallthrough
-	case "azureblob":
-		fallthrough
-	case "cribllake":
-		fallthrough
-	case "database":
-		fallthrough
-	case "gcs":
-		fallthrough
-	case "healthcheck":
-		fallthrough
-	case "rest":
-		*e = CollectorType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CollectorType: %v", v)
-	}
-}
-
-type InputCollectorOutputMode string
-
-const (
-	InputCollectorOutputModeCsv  InputCollectorOutputMode = "csv"
-	InputCollectorOutputModeJSON InputCollectorOutputMode = "json"
-)
-
-func (e InputCollectorOutputMode) ToPointer() *InputCollectorOutputMode {
-	return &e
-}
-func (e *InputCollectorOutputMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "csv":
-		fallthrough
-	case "json":
-		*e = InputCollectorOutputMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCollectorOutputMode: %v", v)
-	}
-}
-
-type AuthenticationEnum string
-
-const (
-	AuthenticationEnumNone              AuthenticationEnum = "none"
-	AuthenticationEnumBasic             AuthenticationEnum = "basic"
-	AuthenticationEnumBasicSecret       AuthenticationEnum = "basicSecret"
-	AuthenticationEnumToken             AuthenticationEnum = "token"
-	AuthenticationEnumTokenSecret       AuthenticationEnum = "tokenSecret"
-	AuthenticationEnumLogin             AuthenticationEnum = "login"
-	AuthenticationEnumLoginSecret       AuthenticationEnum = "loginSecret"
-	AuthenticationEnumOauth             AuthenticationEnum = "oauth"
-	AuthenticationEnumOauthSecret       AuthenticationEnum = "oauthSecret"
-	AuthenticationEnumGoogleOauth       AuthenticationEnum = "google_oauth"
-	AuthenticationEnumGoogleOauthSecret AuthenticationEnum = "google_oauthSecret"
-	AuthenticationEnumHmac              AuthenticationEnum = "hmac"
-)
-
-func (e AuthenticationEnum) ToPointer() *AuthenticationEnum {
-	return &e
-}
-func (e *AuthenticationEnum) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "basicSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "tokenSecret":
-		fallthrough
-	case "login":
-		fallthrough
-	case "loginSecret":
-		fallthrough
-	case "oauth":
-		fallthrough
-	case "oauthSecret":
-		fallthrough
-	case "google_oauth":
-		fallthrough
-	case "google_oauthSecret":
-		fallthrough
-	case "hmac":
-		*e = AuthenticationEnum(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationEnum: %v", v)
-	}
-}
-
-type InputCollectorAwsAuthenticationMethodAuthenticationMethod string
-
-const (
-	InputCollectorAwsAuthenticationMethodAuthenticationMethodAuto   InputCollectorAwsAuthenticationMethodAuthenticationMethod = "auto"
-	InputCollectorAwsAuthenticationMethodAuthenticationMethodManual InputCollectorAwsAuthenticationMethodAuthenticationMethod = "manual"
-	InputCollectorAwsAuthenticationMethodAuthenticationMethodSecret InputCollectorAwsAuthenticationMethodAuthenticationMethod = "secret"
-)
-
-func (e InputCollectorAwsAuthenticationMethodAuthenticationMethod) ToPointer() *InputCollectorAwsAuthenticationMethodAuthenticationMethod {
-	return &e
-}
-func (e *InputCollectorAwsAuthenticationMethodAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = InputCollectorAwsAuthenticationMethodAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCollectorAwsAuthenticationMethodAuthenticationMethod: %v", v)
-	}
-}
-
-type Extractor struct {
-}
-
-type InputCollectorAuthTypeAuthenticationMethod string
-
-const (
-	InputCollectorAuthTypeAuthenticationMethodManual       InputCollectorAuthTypeAuthenticationMethod = "manual"
-	InputCollectorAuthTypeAuthenticationMethodSecret       InputCollectorAuthTypeAuthenticationMethod = "secret"
-	InputCollectorAuthTypeAuthenticationMethodClientSecret InputCollectorAuthTypeAuthenticationMethod = "clientSecret"
-	InputCollectorAuthTypeAuthenticationMethodClientCert   InputCollectorAuthTypeAuthenticationMethod = "clientCert"
-)
-
-func (e InputCollectorAuthTypeAuthenticationMethod) ToPointer() *InputCollectorAuthTypeAuthenticationMethod {
-	return &e
-}
-func (e *InputCollectorAuthTypeAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "clientSecret":
-		fallthrough
-	case "clientCert":
-		*e = InputCollectorAuthTypeAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCollectorAuthTypeAuthenticationMethod: %v", v)
-	}
-}
-
-type CollectMethod string
-
-const (
-	CollectMethodGet          CollectMethod = "get"
-	CollectMethodPost         CollectMethod = "post"
-	CollectMethodPostWithBody CollectMethod = "post_with_body"
-	CollectMethodOther        CollectMethod = "other"
-)
-
-func (e CollectMethod) ToPointer() *CollectMethod {
-	return &e
-}
-func (e *CollectMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "get":
-		fallthrough
-	case "post":
-		fallthrough
-	case "post_with_body":
-		fallthrough
-	case "other":
-		*e = CollectMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CollectMethod: %v", v)
-	}
-}
-
-type InputCollectorConf struct {
-	// Search head base URL
-	SearchHead *string `json:"searchHead,omitempty"`
-	// Splunk search query
-	Search *string `json:"search,omitempty"`
-	// Earliest time boundary for the search
-	Earliest *string `json:"earliest,omitempty"`
-	// Latest time boundary for the search
-	Latest *string `json:"latest,omitempty"`
-	// REST API endpoint used to create a search
-	Endpoint           *string                   `json:"endpoint,omitempty"`
-	OutputMode         *InputCollectorOutputMode `json:"outputMode,omitempty"`
-	Authentication     *AuthenticationEnum       `json:"authentication,omitempty"`
-	Timeout            *int64                    `json:"timeout,omitempty"`
-	UseRoundRobinDNS   *bool                     `json:"useRoundRobinDns,omitempty"`
-	DisableTimeFilter  *bool                     `json:"disableTimeFilter,omitempty"`
-	RejectUnauthorized *bool                     `json:"rejectUnauthorized,omitempty"`
-	HandleEscapedChars *bool                     `json:"handleEscapedChars,omitempty"`
-	Username           *string                   `json:"username,omitempty"`
-	Password           *string                   `json:"password,omitempty"`
-	CredentialsSecret  *string                   `json:"credentialsSecret,omitempty"`
-	Token              *string                   `json:"token,omitempty"`
-	TokenSecret        *string                   `json:"tokenSecret,omitempty"`
-	// S3 Bucket from which to collect data
-	Bucket *string `json:"bucket,omitempty"`
-	// AWS region from which to retrieve data
-	Region *string `json:"region,omitempty"`
-	// Directory where data will be collected
-	Path                    *string                                                    `json:"path,omitempty"`
-	AwsAuthenticationMethod *InputCollectorAwsAuthenticationMethodAuthenticationMethod `json:"awsAuthenticationMethod,omitempty"`
-	AwsAPIKey               *string                                                    `json:"awsApiKey,omitempty"`
-	AwsSecretKey            *string                                                    `json:"awsSecretKey,omitempty"`
-	AwsSecret               *string                                                    `json:"awsSecret,omitempty"`
-	Recurse                 *bool                                                      `json:"recurse,omitempty"`
-	Extractors              []Extractor                                                `json:"extractors,omitempty"`
-	MaxBatchSize            *int64                                                     `json:"maxBatchSize,omitempty"`
-	// Azure container to collect from
-	ContainerName      *string `json:"containerName,omitempty"`
-	StorageAccountName *string `json:"storageAccountName,omitempty"`
-	// Azure storage account Connection String
-	ConnectionString *string                                     `json:"connectionString,omitempty"`
-	AuthType         *InputCollectorAuthTypeAuthenticationMethod `json:"authType,omitempty"`
-	// Lake dataset to collect data from
-	Dataset *string `json:"dataset,omitempty"`
-	// Select an existing Database Connection
-	ConnectionID *string `json:"connectionId,omitempty"`
-	// Query string for selecting data from the database
-	Query                     *string `json:"query,omitempty"`
-	QueryValidationEnabled    *bool   `json:"queryValidationEnabled,omitempty"`
-	ServiceAccountCredentials *string `json:"serviceAccountCredentials,omitempty"`
-	// URL to use for the Collect operation
-	CollectURL    *string        `json:"collectUrl,omitempty"`
-	CollectMethod *CollectMethod `json:"collectMethod,omitempty"`
-}
-
-func (o *InputCollectorConf) GetSearchHead() *string {
-	if o == nil {
-		return nil
-	}
-	return o.SearchHead
-}
-
-func (o *InputCollectorConf) GetSearch() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Search
-}
-
-func (o *InputCollectorConf) GetEarliest() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Earliest
-}
-
-func (o *InputCollectorConf) GetLatest() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Latest
-}
-
-func (o *InputCollectorConf) GetEndpoint() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Endpoint
-}
-
-func (o *InputCollectorConf) GetOutputMode() *InputCollectorOutputMode {
-	if o == nil {
-		return nil
-	}
-	return o.OutputMode
-}
-
-func (o *InputCollectorConf) GetAuthentication() *AuthenticationEnum {
-	if o == nil {
-		return nil
-	}
-	return o.Authentication
-}
-
-func (o *InputCollectorConf) GetTimeout() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Timeout
-}
-
-func (o *InputCollectorConf) GetUseRoundRobinDNS() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.UseRoundRobinDNS
-}
-
-func (o *InputCollectorConf) GetDisableTimeFilter() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.DisableTimeFilter
-}
-
-func (o *InputCollectorConf) GetRejectUnauthorized() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.RejectUnauthorized
-}
-
-func (o *InputCollectorConf) GetHandleEscapedChars() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.HandleEscapedChars
-}
-
-func (o *InputCollectorConf) GetUsername() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Username
-}
-
-func (o *InputCollectorConf) GetPassword() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Password
-}
-
-func (o *InputCollectorConf) GetCredentialsSecret() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CredentialsSecret
-}
-
-func (o *InputCollectorConf) GetToken() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Token
-}
-
-func (o *InputCollectorConf) GetTokenSecret() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TokenSecret
-}
-
-func (o *InputCollectorConf) GetBucket() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Bucket
-}
-
-func (o *InputCollectorConf) GetRegion() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Region
-}
-
-func (o *InputCollectorConf) GetPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Path
-}
-
-func (o *InputCollectorConf) GetAwsAuthenticationMethod() *InputCollectorAwsAuthenticationMethodAuthenticationMethod {
-	if o == nil {
-		return nil
-	}
-	return o.AwsAuthenticationMethod
-}
-
-func (o *InputCollectorConf) GetAwsAPIKey() *string {
-	if o == nil {
-		return nil
-	}
-	return o.AwsAPIKey
-}
-
-func (o *InputCollectorConf) GetAwsSecretKey() *string {
-	if o == nil {
-		return nil
-	}
-	return o.AwsSecretKey
-}
-
-func (o *InputCollectorConf) GetAwsSecret() *string {
-	if o == nil {
-		return nil
-	}
-	return o.AwsSecret
-}
-
-func (o *InputCollectorConf) GetRecurse() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Recurse
-}
-
-func (o *InputCollectorConf) GetExtractors() []Extractor {
-	if o == nil {
-		return nil
-	}
-	return o.Extractors
-}
-
-func (o *InputCollectorConf) GetMaxBatchSize() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBatchSize
-}
-
-func (o *InputCollectorConf) GetContainerName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ContainerName
-}
-
-func (o *InputCollectorConf) GetStorageAccountName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.StorageAccountName
-}
-
-func (o *InputCollectorConf) GetConnectionString() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ConnectionString
-}
-
-func (o *InputCollectorConf) GetAuthType() *InputCollectorAuthTypeAuthenticationMethod {
-	if o == nil {
-		return nil
-	}
-	return o.AuthType
-}
-
-func (o *InputCollectorConf) GetDataset() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Dataset
-}
-
-func (o *InputCollectorConf) GetConnectionID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ConnectionID
-}
-
-func (o *InputCollectorConf) GetQuery() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Query
-}
-
-func (o *InputCollectorConf) GetQueryValidationEnabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.QueryValidationEnabled
-}
-
-func (o *InputCollectorConf) GetServiceAccountCredentials() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ServiceAccountCredentials
-}
-
-func (o *InputCollectorConf) GetCollectURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CollectURL
-}
-
-func (o *InputCollectorConf) GetCollectMethod() *CollectMethod {
-	if o == nil {
-		return nil
-	}
-	return o.CollectMethod
-}
-
-type InputCollectorCollector struct {
-	Type CollectorType `json:"type"`
-	// Delete any files collected (where applicable)
-	Destructive *bool `default:"false" json:"destructive"`
-	// Character encoding to use when parsing ingested data
-	Encoding *string             `default:"utf8" json:"encoding"`
-	Conf     *InputCollectorConf `json:"conf,omitempty"`
-}
-
-func (i InputCollectorCollector) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputCollectorCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *InputCollectorCollector) GetType() CollectorType {
-	if o == nil {
-		return CollectorType("")
-	}
-	return o.Type
-}
-
-func (o *InputCollectorCollector) GetDestructive() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Destructive
-}
-
-func (o *InputCollectorCollector) GetEncoding() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Encoding
-}
-
-func (o *InputCollectorCollector) GetConf() *InputCollectorConf {
-	if o == nil {
-		return nil
-	}
-	return o.Conf
-}
 
 type InputCollector struct {
-	ID                   *string              `json:"id,omitempty"`
-	Type                 *InputCollectorType1 `default:"collection" json:"type"`
-	TTL                  *string              `default:"4h" json:"ttl"`
-	IgnoreGroupJobsLimit *bool                `default:"false" json:"ignoreGroupJobsLimit"`
-	RemoveFields         []string             `json:"removeFields,omitempty"`
-	ResumeOnBoot         *bool                `default:"true" json:"resumeOnBoot"`
-	Environment          *string              `json:"environment,omitempty"`
-	// Configuration for a scheduled job
-	Schedule *InputCollectorSchedule `json:"schedule,omitempty"`
-	// Tags for filtering and grouping
-	Streamtags []string `json:"streamtags,omitempty"`
-	// If enabled, tasks are created and run by the same Worker Node
-	WorkerAffinity *bool                   `default:"false" json:"workerAffinity"`
-	Input          *InputCollectorInput    `json:"input,omitempty"`
-	Collector      InputCollectorCollector `json:"collector"`
+	InputCollectorSplunk      *InputCollectorSplunk      `queryParam:"inline" name:"InputCollector"`
+	InputCollectorRest        *InputCollectorRest        `queryParam:"inline" name:"InputCollector"`
+	InputCollectorS3          *InputCollectorS3          `queryParam:"inline" name:"InputCollector"`
+	InputCollectorAzureBlob   *InputCollectorAzureBlob   `queryParam:"inline" name:"InputCollector"`
+	InputCollectorCriblLake   *InputCollectorCriblLake   `queryParam:"inline" name:"InputCollector"`
+	InputCollectorDatabase    *InputCollectorDatabase    `queryParam:"inline" name:"InputCollector"`
+	InputCollectorGCS         *InputCollectorGCS         `queryParam:"inline" name:"InputCollector"`
+	InputCollectorHealthCheck *InputCollectorHealthCheck `queryParam:"inline" name:"InputCollector"`
+
+	Type InputCollectorType
 }
 
-func (i InputCollector) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
+func CreateInputCollectorInputCollectorSplunk(inputCollectorSplunk InputCollectorSplunk) InputCollector {
+	typ := InputCollectorTypeInputCollectorSplunk
 
-func (i *InputCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"collector"}); err != nil {
-		return err
+	return InputCollector{
+		InputCollectorSplunk: &inputCollectorSplunk,
+		Type:                 typ,
 	}
-	return nil
 }
 
-func (o *InputCollector) GetID() *string {
-	if o == nil {
+func CreateInputCollectorInputCollectorRest(inputCollectorRest InputCollectorRest) InputCollector {
+	typ := InputCollectorTypeInputCollectorRest
+
+	return InputCollector{
+		InputCollectorRest: &inputCollectorRest,
+		Type:               typ,
+	}
+}
+
+func CreateInputCollectorInputCollectorS3(inputCollectorS3 InputCollectorS3) InputCollector {
+	typ := InputCollectorTypeInputCollectorS3
+
+	return InputCollector{
+		InputCollectorS3: &inputCollectorS3,
+		Type:             typ,
+	}
+}
+
+func CreateInputCollectorInputCollectorAzureBlob(inputCollectorAzureBlob InputCollectorAzureBlob) InputCollector {
+	typ := InputCollectorTypeInputCollectorAzureBlob
+
+	return InputCollector{
+		InputCollectorAzureBlob: &inputCollectorAzureBlob,
+		Type:                    typ,
+	}
+}
+
+func CreateInputCollectorInputCollectorCriblLake(inputCollectorCriblLake InputCollectorCriblLake) InputCollector {
+	typ := InputCollectorTypeInputCollectorCriblLake
+
+	return InputCollector{
+		InputCollectorCriblLake: &inputCollectorCriblLake,
+		Type:                    typ,
+	}
+}
+
+func CreateInputCollectorInputCollectorDatabase(inputCollectorDatabase InputCollectorDatabase) InputCollector {
+	typ := InputCollectorTypeInputCollectorDatabase
+
+	return InputCollector{
+		InputCollectorDatabase: &inputCollectorDatabase,
+		Type:                   typ,
+	}
+}
+
+func CreateInputCollectorInputCollectorGCS(inputCollectorGCS InputCollectorGCS) InputCollector {
+	typ := InputCollectorTypeInputCollectorGCS
+
+	return InputCollector{
+		InputCollectorGCS: &inputCollectorGCS,
+		Type:              typ,
+	}
+}
+
+func CreateInputCollectorInputCollectorHealthCheck(inputCollectorHealthCheck InputCollectorHealthCheck) InputCollector {
+	typ := InputCollectorTypeInputCollectorHealthCheck
+
+	return InputCollector{
+		InputCollectorHealthCheck: &inputCollectorHealthCheck,
+		Type:                      typ,
+	}
+}
+
+func (u *InputCollector) UnmarshalJSON(data []byte) error {
+
+	var inputCollectorSplunk InputCollectorSplunk = InputCollectorSplunk{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorSplunk, "", true, nil); err == nil {
+		u.InputCollectorSplunk = &inputCollectorSplunk
+		u.Type = InputCollectorTypeInputCollectorSplunk
 		return nil
 	}
-	return o.ID
-}
 
-func (o *InputCollector) GetType() *InputCollectorType1 {
-	if o == nil {
+	var inputCollectorRest InputCollectorRest = InputCollectorRest{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorRest, "", true, nil); err == nil {
+		u.InputCollectorRest = &inputCollectorRest
+		u.Type = InputCollectorTypeInputCollectorRest
 		return nil
 	}
-	return o.Type
-}
 
-func (o *InputCollector) GetTTL() *string {
-	if o == nil {
+	var inputCollectorS3 InputCollectorS3 = InputCollectorS3{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorS3, "", true, nil); err == nil {
+		u.InputCollectorS3 = &inputCollectorS3
+		u.Type = InputCollectorTypeInputCollectorS3
 		return nil
 	}
-	return o.TTL
-}
 
-func (o *InputCollector) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+	var inputCollectorAzureBlob InputCollectorAzureBlob = InputCollectorAzureBlob{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorAzureBlob, "", true, nil); err == nil {
+		u.InputCollectorAzureBlob = &inputCollectorAzureBlob
+		u.Type = InputCollectorTypeInputCollectorAzureBlob
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
-}
 
-func (o *InputCollector) GetRemoveFields() []string {
-	if o == nil {
+	var inputCollectorCriblLake InputCollectorCriblLake = InputCollectorCriblLake{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorCriblLake, "", true, nil); err == nil {
+		u.InputCollectorCriblLake = &inputCollectorCriblLake
+		u.Type = InputCollectorTypeInputCollectorCriblLake
 		return nil
 	}
-	return o.RemoveFields
-}
 
-func (o *InputCollector) GetResumeOnBoot() *bool {
-	if o == nil {
+	var inputCollectorDatabase InputCollectorDatabase = InputCollectorDatabase{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorDatabase, "", true, nil); err == nil {
+		u.InputCollectorDatabase = &inputCollectorDatabase
+		u.Type = InputCollectorTypeInputCollectorDatabase
 		return nil
 	}
-	return o.ResumeOnBoot
-}
 
-func (o *InputCollector) GetEnvironment() *string {
-	if o == nil {
+	var inputCollectorGCS InputCollectorGCS = InputCollectorGCS{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorGCS, "", true, nil); err == nil {
+		u.InputCollectorGCS = &inputCollectorGCS
+		u.Type = InputCollectorTypeInputCollectorGCS
 		return nil
 	}
-	return o.Environment
-}
 
-func (o *InputCollector) GetSchedule() *InputCollectorSchedule {
-	if o == nil {
+	var inputCollectorHealthCheck InputCollectorHealthCheck = InputCollectorHealthCheck{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorHealthCheck, "", true, nil); err == nil {
+		u.InputCollectorHealthCheck = &inputCollectorHealthCheck
+		u.Type = InputCollectorTypeInputCollectorHealthCheck
 		return nil
 	}
-	return o.Schedule
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputCollector", string(data))
 }
 
-func (o *InputCollector) GetStreamtags() []string {
-	if o == nil {
-		return nil
+func (u InputCollector) MarshalJSON() ([]byte, error) {
+	if u.InputCollectorSplunk != nil {
+		return utils.MarshalJSON(u.InputCollectorSplunk, "", true)
 	}
-	return o.Streamtags
-}
 
-func (o *InputCollector) GetWorkerAffinity() *bool {
-	if o == nil {
-		return nil
+	if u.InputCollectorRest != nil {
+		return utils.MarshalJSON(u.InputCollectorRest, "", true)
 	}
-	return o.WorkerAffinity
-}
 
-func (o *InputCollector) GetInput() *InputCollectorInput {
-	if o == nil {
-		return nil
+	if u.InputCollectorS3 != nil {
+		return utils.MarshalJSON(u.InputCollectorS3, "", true)
 	}
-	return o.Input
-}
 
-func (o *InputCollector) GetCollector() InputCollectorCollector {
-	if o == nil {
-		return InputCollectorCollector{}
+	if u.InputCollectorAzureBlob != nil {
+		return utils.MarshalJSON(u.InputCollectorAzureBlob, "", true)
 	}
-	return o.Collector
+
+	if u.InputCollectorCriblLake != nil {
+		return utils.MarshalJSON(u.InputCollectorCriblLake, "", true)
+	}
+
+	if u.InputCollectorDatabase != nil {
+		return utils.MarshalJSON(u.InputCollectorDatabase, "", true)
+	}
+
+	if u.InputCollectorGCS != nil {
+		return utils.MarshalJSON(u.InputCollectorGCS, "", true)
+	}
+
+	if u.InputCollectorHealthCheck != nil {
+		return utils.MarshalJSON(u.InputCollectorHealthCheck, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type InputCollector: all fields are null")
 }

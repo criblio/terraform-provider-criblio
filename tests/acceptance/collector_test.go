@@ -14,7 +14,6 @@ func TestCollector(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "id", "splunk-demo-collector"),
 						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "group_id", "default"),

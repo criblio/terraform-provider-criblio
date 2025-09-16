@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type InputCollectorPreprocess struct {
+type InputCollectorS3Preprocess struct {
 	Args     []types.String `tfsdk:"args"`
 	Command  types.String   `tfsdk:"command"`
 	Disabled types.Bool     `tfsdk:"disabled"`
