@@ -20,37 +20,37 @@ type GetSearchJobMetricsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchJobMetricsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchJobMetricsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchJobMetricsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchJobMetricsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchJobMetricsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchJobMetricsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchJobMetricsResponse) GetString() *string {
-	if o == nil {
+func (g *GetSearchJobMetricsResponse) GetString() *string {
+	if g == nil {
 		return nil
 	}
-	return o.String
+	return g.String
 }
 
-func (o *GetSearchJobMetricsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchJobMetricsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

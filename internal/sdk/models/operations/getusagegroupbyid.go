@@ -12,11 +12,11 @@ type GetUsageGroupByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetUsageGroupByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetUsageGroupByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetUsageGroupByIDResponseBody - a list of UsageGroup objects
@@ -24,11 +24,11 @@ type GetUsageGroupByIDResponseBody struct {
 	Items []shared.UsageGroup `json:"items,omitempty"`
 }
 
-func (o *GetUsageGroupByIDResponseBody) GetItems() []shared.UsageGroup {
-	if o == nil {
+func (g *GetUsageGroupByIDResponseBody) GetItems() []shared.UsageGroup {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetUsageGroupByIDResponse struct {
@@ -44,37 +44,37 @@ type GetUsageGroupByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetUsageGroupByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetUsageGroupByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetUsageGroupByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetUsageGroupByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetUsageGroupByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetUsageGroupByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetUsageGroupByIDResponse) GetObject() *GetUsageGroupByIDResponseBody {
-	if o == nil {
+func (g *GetUsageGroupByIDResponse) GetObject() *GetUsageGroupByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetUsageGroupByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetUsageGroupByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

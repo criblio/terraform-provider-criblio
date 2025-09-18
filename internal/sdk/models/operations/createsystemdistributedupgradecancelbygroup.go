@@ -12,11 +12,11 @@ type CreateSystemDistributedUpgradeCancelByGroupRequest struct {
 	Group string `pathParam:"style=simple,explode=false,name=group"`
 }
 
-func (o *CreateSystemDistributedUpgradeCancelByGroupRequest) GetGroup() string {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeCancelByGroupRequest) GetGroup() string {
+	if c == nil {
 		return ""
 	}
-	return o.Group
+	return c.Group
 }
 
 // CreateSystemDistributedUpgradeCancelByGroupResponseBody - a list of any objects
@@ -24,11 +24,11 @@ type CreateSystemDistributedUpgradeCancelByGroupResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemDistributedUpgradeCancelByGroupResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeCancelByGroupResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemDistributedUpgradeCancelByGroupResponse struct {
@@ -44,37 +44,37 @@ type CreateSystemDistributedUpgradeCancelByGroupResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemDistributedUpgradeCancelByGroupResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeCancelByGroupResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemDistributedUpgradeCancelByGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeCancelByGroupResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemDistributedUpgradeCancelByGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeCancelByGroupResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemDistributedUpgradeCancelByGroupResponse) GetObject() *CreateSystemDistributedUpgradeCancelByGroupResponseBody {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeCancelByGroupResponse) GetObject() *CreateSystemDistributedUpgradeCancelByGroupResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemDistributedUpgradeCancelByGroupResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeCancelByGroupResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

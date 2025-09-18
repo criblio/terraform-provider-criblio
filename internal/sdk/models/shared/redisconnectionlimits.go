@@ -7,16 +7,16 @@ type RedisConnectionLimits struct {
 	MaxConnections *float64 `json:"maxConnections,omitempty"`
 }
 
-func (o *RedisConnectionLimits) GetDisabled() *bool {
-	if o == nil {
+func (r *RedisConnectionLimits) GetDisabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Disabled
+	return r.Disabled
 }
 
-func (o *RedisConnectionLimits) GetMaxConnections() *float64 {
-	if o == nil {
+func (r *RedisConnectionLimits) GetMaxConnections() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxConnections
+	return r.MaxConnections
 }

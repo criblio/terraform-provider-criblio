@@ -14,18 +14,18 @@ type CompatibilityChecks struct {
 	StageIds  []string `json:"stageIds,omitempty"`
 }
 
-func (o *CompatibilityChecks) GetDatatypes() *bool {
-	if o == nil {
+func (c *CompatibilityChecks) GetDatatypes() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Datatypes
+	return c.Datatypes
 }
 
-func (o *CompatibilityChecks) GetStageIds() []string {
-	if o == nil {
+func (c *CompatibilityChecks) GetStageIds() []string {
+	if c == nil {
 		return nil
 	}
-	return o.StageIds
+	return c.StageIds
 }
 
 type SearchJobEarliestType string
@@ -271,289 +271,289 @@ type SearchJob struct {
 	User                        string                     `json:"user"`
 }
 
-func (o *SearchJob) GetAccelerated() *bool {
-	if o == nil {
+func (s *SearchJob) GetAccelerated() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Accelerated
+	return s.Accelerated
 }
 
-func (o *SearchJob) GetAliasOfOriginalJobID() *string {
-	if o == nil {
+func (s *SearchJob) GetAliasOfOriginalJobID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AliasOfOriginalJobID
+	return s.AliasOfOriginalJobID
 }
 
-func (o *SearchJob) GetCompatibilityChecks() *CompatibilityChecks {
-	if o == nil {
+func (s *SearchJob) GetCompatibilityChecks() *CompatibilityChecks {
+	if s == nil {
 		return nil
 	}
-	return o.CompatibilityChecks
+	return s.CompatibilityChecks
 }
 
-func (o *SearchJob) GetCompletionInfo() *string {
-	if o == nil {
+func (s *SearchJob) GetCompletionInfo() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CompletionInfo
+	return s.CompletionInfo
 }
 
-func (o *SearchJob) GetContext() *string {
-	if o == nil {
+func (s *SearchJob) GetContext() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Context
+	return s.Context
 }
 
-func (o *SearchJob) GetCorrelationID() *string {
-	if o == nil {
+func (s *SearchJob) GetCorrelationID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CorrelationID
+	return s.CorrelationID
 }
 
-func (o *SearchJob) GetCPUMetrics() *CPUTimeMetric {
-	if o == nil {
+func (s *SearchJob) GetCPUMetrics() *CPUTimeMetric {
+	if s == nil {
 		return nil
 	}
-	return o.CPUMetrics
+	return s.CPUMetrics
 }
 
-func (o *SearchJob) GetDatatypeOverrides() *DatatypeOverrides {
-	if o == nil {
+func (s *SearchJob) GetDatatypeOverrides() *DatatypeOverrides {
+	if s == nil {
 		return nil
 	}
-	return o.DatatypeOverrides
+	return s.DatatypeOverrides
 }
 
-func (o *SearchJob) GetDisableNotifications() *bool {
-	if o == nil {
+func (s *SearchJob) GetDisableNotifications() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.DisableNotifications
+	return s.DisableNotifications
 }
 
-func (o *SearchJob) GetDisplayUsername() string {
-	if o == nil {
+func (s *SearchJob) GetDisplayUsername() string {
+	if s == nil {
 		return ""
 	}
-	return o.DisplayUsername
+	return s.DisplayUsername
 }
 
-func (o *SearchJob) GetEarliest() *SearchJobEarliest {
-	if o == nil {
+func (s *SearchJob) GetEarliest() *SearchJobEarliest {
+	if s == nil {
 		return nil
 	}
-	return o.Earliest
+	return s.Earliest
 }
 
-func (o *SearchJob) GetEarliestEpoch() *float64 {
-	if o == nil {
+func (s *SearchJob) GetEarliestEpoch() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.EarliestEpoch
+	return s.EarliestEpoch
 }
 
-func (o *SearchJob) GetErrorStateConfig() *SearchJobErrorStateConfig {
-	if o == nil {
+func (s *SearchJob) GetErrorStateConfig() *SearchJobErrorStateConfig {
+	if s == nil {
 		return nil
 	}
-	return o.ErrorStateConfig
+	return s.ErrorStateConfig
 }
 
-func (o *SearchJob) GetGroup() string {
-	if o == nil {
+func (s *SearchJob) GetGroup() string {
+	if s == nil {
 		return ""
 	}
-	return o.Group
+	return s.Group
 }
 
-func (o *SearchJob) GetID() string {
-	if o == nil {
+func (s *SearchJob) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SearchJob) GetIsPrivate() *bool {
-	if o == nil {
+func (s *SearchJob) GetIsPrivate() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IsPrivate
+	return s.IsPrivate
 }
 
-func (o *SearchJob) GetLatest() *SearchJobLatest {
-	if o == nil {
+func (s *SearchJob) GetLatest() *SearchJobLatest {
+	if s == nil {
 		return nil
 	}
-	return o.Latest
+	return s.Latest
 }
 
-func (o *SearchJob) GetLatestEpoch() *float64 {
-	if o == nil {
+func (s *SearchJob) GetLatestEpoch() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.LatestEpoch
+	return s.LatestEpoch
 }
 
-func (o *SearchJob) GetMetadata() *SearchJobMetadata {
-	if o == nil {
+func (s *SearchJob) GetMetadata() *SearchJobMetadata {
+	if s == nil {
 		return nil
 	}
-	return o.Metadata
+	return s.Metadata
 }
 
-func (o *SearchJob) GetNumEventsAfter() *float64 {
-	if o == nil {
+func (s *SearchJob) GetNumEventsAfter() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.NumEventsAfter
+	return s.NumEventsAfter
 }
 
-func (o *SearchJob) GetNumEventsBefore() *float64 {
-	if o == nil {
+func (s *SearchJob) GetNumEventsBefore() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.NumEventsBefore
+	return s.NumEventsBefore
 }
 
-func (o *SearchJob) GetQuery() string {
-	if o == nil {
+func (s *SearchJob) GetQuery() string {
+	if s == nil {
 		return ""
 	}
-	return o.Query
+	return s.Query
 }
 
-func (o *SearchJob) GetQueryWithMacrosResolved() *string {
-	if o == nil {
+func (s *SearchJob) GetQueryWithMacrosResolved() *string {
+	if s == nil {
 		return nil
 	}
-	return o.QueryWithMacrosResolved
+	return s.QueryWithMacrosResolved
 }
 
-func (o *SearchJob) GetSampleRate() *float64 {
-	if o == nil {
+func (s *SearchJob) GetSampleRate() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.SampleRate
+	return s.SampleRate
 }
 
-func (o *SearchJob) GetSavedQueryName() *string {
-	if o == nil {
+func (s *SearchJob) GetSavedQueryName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.SavedQueryName
+	return s.SavedQueryName
 }
 
-func (o *SearchJob) GetSearchParameterDeclarations() []SearchParameter {
-	if o == nil {
+func (s *SearchJob) GetSearchParameterDeclarations() []SearchParameter {
+	if s == nil {
 		return nil
 	}
-	return o.SearchParameterDeclarations
+	return s.SearchParameterDeclarations
 }
 
-func (o *SearchJob) GetSearchParameterValues() any {
-	if o == nil {
+func (s *SearchJob) GetSearchParameterValues() any {
+	if s == nil {
 		return nil
 	}
-	return o.SearchParameterValues
+	return s.SearchParameterValues
 }
 
-func (o *SearchJob) GetStages() []SearchJobStageConfig {
-	if o == nil {
+func (s *SearchJob) GetStages() []SearchJobStageConfig {
+	if s == nil {
 		return nil
 	}
-	return o.Stages
+	return s.Stages
 }
 
-func (o *SearchJob) GetStatus() SearchJobStatus {
-	if o == nil {
+func (s *SearchJob) GetStatus() SearchJobStatus {
+	if s == nil {
 		return SearchJobStatus("")
 	}
-	return o.Status
+	return s.Status
 }
 
-func (o *SearchJob) GetTableConfig() *TableViewSettings {
-	if o == nil {
+func (s *SearchJob) GetTableConfig() *TableViewSettings {
+	if s == nil {
 		return nil
 	}
-	return o.TableConfig
+	return s.TableConfig
 }
 
-func (o *SearchJob) GetTargetEventTime() *float64 {
-	if o == nil {
+func (s *SearchJob) GetTargetEventTime() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.TargetEventTime
+	return s.TargetEventTime
 }
 
-func (o *SearchJob) GetTimeCompleted() *float64 {
-	if o == nil {
+func (s *SearchJob) GetTimeCompleted() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.TimeCompleted
+	return s.TimeCompleted
 }
 
-func (o *SearchJob) GetTimeCreated() float64 {
-	if o == nil {
+func (s *SearchJob) GetTimeCreated() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.TimeCreated
+	return s.TimeCreated
 }
 
-func (o *SearchJob) GetTimeStarted() float64 {
-	if o == nil {
+func (s *SearchJob) GetTimeStarted() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.TimeStarted
+	return s.TimeStarted
 }
 
-func (o *SearchJob) GetTimeToFirstByte() *float64 {
-	if o == nil {
+func (s *SearchJob) GetTimeToFirstByte() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.TimeToFirstByte
+	return s.TimeToFirstByte
 }
 
-func (o *SearchJob) GetTotalBytesScanned() *float64 {
-	if o == nil {
+func (s *SearchJob) GetTotalBytesScanned() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.TotalBytesScanned
+	return s.TotalBytesScanned
 }
 
-func (o *SearchJob) GetTotalEventCount() *float64 {
-	if o == nil {
+func (s *SearchJob) GetTotalEventCount() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.TotalEventCount
+	return s.TotalEventCount
 }
 
-func (o *SearchJob) GetType() *SearchJobType {
-	if o == nil {
+func (s *SearchJob) GetType() *SearchJobType {
+	if s == nil {
 		return nil
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SearchJob) GetUsageGroupID() *string {
-	if o == nil {
+func (s *SearchJob) GetUsageGroupID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.UsageGroupID
+	return s.UsageGroupID
 }
 
-func (o *SearchJob) GetUsageMetrics() *SearchAuditMetrics {
-	if o == nil {
+func (s *SearchJob) GetUsageMetrics() *SearchAuditMetrics {
+	if s == nil {
 		return nil
 	}
-	return o.UsageMetrics
+	return s.UsageMetrics
 }
 
-func (o *SearchJob) GetUser() string {
-	if o == nil {
+func (s *SearchJob) GetUser() string {
+	if s == nil {
 		return ""
 	}
-	return o.User
+	return s.User
 }

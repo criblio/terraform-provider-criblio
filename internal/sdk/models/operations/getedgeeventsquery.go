@@ -22,46 +22,46 @@ type GetEdgeEventsQueryRequest struct {
 	Filter *string `queryParam:"style=form,explode=true,name=filter"`
 }
 
-func (o *GetEdgeEventsQueryRequest) GetFiles() *string {
-	if o == nil {
+func (g *GetEdgeEventsQueryRequest) GetFiles() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Files
+	return g.Files
 }
 
-func (o *GetEdgeEventsQueryRequest) GetSource() *string {
-	if o == nil {
+func (g *GetEdgeEventsQueryRequest) GetSource() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Source
+	return g.Source
 }
 
-func (o *GetEdgeEventsQueryRequest) GetLimit() *int64 {
-	if o == nil {
+func (g *GetEdgeEventsQueryRequest) GetLimit() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Limit
+	return g.Limit
 }
 
-func (o *GetEdgeEventsQueryRequest) GetEt() *int64 {
-	if o == nil {
+func (g *GetEdgeEventsQueryRequest) GetEt() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Et
+	return g.Et
 }
 
-func (o *GetEdgeEventsQueryRequest) GetLt() *int64 {
-	if o == nil {
+func (g *GetEdgeEventsQueryRequest) GetLt() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Lt
+	return g.Lt
 }
 
-func (o *GetEdgeEventsQueryRequest) GetFilter() *string {
-	if o == nil {
+func (g *GetEdgeEventsQueryRequest) GetFilter() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Filter
+	return g.Filter
 }
 
 // GetEdgeEventsQueryResponseBody - a list of any objects
@@ -69,11 +69,11 @@ type GetEdgeEventsQueryResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetEdgeEventsQueryResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetEdgeEventsQueryResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeEventsQueryResponse struct {
@@ -89,37 +89,37 @@ type GetEdgeEventsQueryResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeEventsQueryResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeEventsQueryResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeEventsQueryResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeEventsQueryResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeEventsQueryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeEventsQueryResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeEventsQueryResponse) GetObject() *GetEdgeEventsQueryResponseBody {
-	if o == nil {
+func (g *GetEdgeEventsQueryResponse) GetObject() *GetEdgeEventsQueryResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeEventsQueryResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeEventsQueryResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

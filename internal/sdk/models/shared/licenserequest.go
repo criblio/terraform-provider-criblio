@@ -6,9 +6,9 @@ type LicenseRequest struct {
 	License string `json:"license"`
 }
 
-func (o *LicenseRequest) GetLicense() string {
-	if o == nil {
+func (l *LicenseRequest) GetLicense() string {
+	if l == nil {
 		return ""
 	}
-	return o.License
+	return l.License
 }

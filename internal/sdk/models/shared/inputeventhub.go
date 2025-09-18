@@ -47,18 +47,18 @@ func (i *InputEventhubConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEventhubConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputEventhubConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputEventhubConnection) GetOutput() string {
-	if o == nil {
+func (i *InputEventhubConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputEventhubMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputEventhubPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEventhubPq) GetMode() *InputEventhubMode {
-	if o == nil {
+func (i *InputEventhubPq) GetMode() *InputEventhubMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputEventhubPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputEventhubPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputEventhubPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputEventhubPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputEventhubPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputEventhubPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputEventhubPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputEventhubPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputEventhubPq) GetPath() *string {
-	if o == nil {
+func (i *InputEventhubPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputEventhubPq) GetCompress() *InputEventhubCompression {
-	if o == nil {
+func (i *InputEventhubPq) GetCompress() *InputEventhubCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputEventhubSASLMechanism string
@@ -235,18 +235,18 @@ func (i *InputEventhubAuthentication) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEventhubAuthentication) GetDisabled() *bool {
-	if o == nil {
+func (i *InputEventhubAuthentication) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputEventhubAuthentication) GetMechanism() *InputEventhubSASLMechanism {
-	if o == nil {
+func (i *InputEventhubAuthentication) GetMechanism() *InputEventhubSASLMechanism {
+	if i == nil {
 		return nil
 	}
-	return o.Mechanism
+	return i.Mechanism
 }
 
 type InputEventhubTLSSettingsClientSide struct {
@@ -266,18 +266,18 @@ func (i *InputEventhubTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEventhubTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputEventhubTLSSettingsClientSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputEventhubTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputEventhubTLSSettingsClientSide) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
 type InputEventhubMetadatum struct {
@@ -297,18 +297,18 @@ func (i *InputEventhubMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEventhubMetadatum) GetName() string {
-	if o == nil {
+func (i *InputEventhubMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputEventhubMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputEventhubMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputEventhub struct {
@@ -397,247 +397,247 @@ func (i *InputEventhub) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEventhub) GetID() *string {
-	if o == nil {
+func (i *InputEventhub) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputEventhub) GetType() *InputEventhubType {
-	if o == nil {
+func (i *InputEventhub) GetType() *InputEventhubType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputEventhub) GetDisabled() *bool {
-	if o == nil {
+func (i *InputEventhub) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputEventhub) GetPipeline() *string {
-	if o == nil {
+func (i *InputEventhub) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputEventhub) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputEventhub) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputEventhub) GetEnvironment() *string {
-	if o == nil {
+func (i *InputEventhub) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputEventhub) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputEventhub) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputEventhub) GetStreamtags() []string {
-	if o == nil {
+func (i *InputEventhub) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputEventhub) GetConnections() []InputEventhubConnection {
-	if o == nil {
+func (i *InputEventhub) GetConnections() []InputEventhubConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputEventhub) GetPq() *InputEventhubPq {
-	if o == nil {
+func (i *InputEventhub) GetPq() *InputEventhubPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputEventhub) GetBrokers() []string {
-	if o == nil {
+func (i *InputEventhub) GetBrokers() []string {
+	if i == nil {
 		return []string{}
 	}
-	return o.Brokers
+	return i.Brokers
 }
 
-func (o *InputEventhub) GetTopics() []string {
-	if o == nil {
+func (i *InputEventhub) GetTopics() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Topics
+	return i.Topics
 }
 
-func (o *InputEventhub) GetGroupID() *string {
-	if o == nil {
+func (i *InputEventhub) GetGroupID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.GroupID
+	return i.GroupID
 }
 
-func (o *InputEventhub) GetFromBeginning() *bool {
-	if o == nil {
+func (i *InputEventhub) GetFromBeginning() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.FromBeginning
+	return i.FromBeginning
 }
 
-func (o *InputEventhub) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetConnectionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return i.ConnectionTimeout
 }
 
-func (o *InputEventhub) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputEventhub) GetMaxRetries() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetMaxRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRetries
+	return i.MaxRetries
 }
 
-func (o *InputEventhub) GetMaxBackOff() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetMaxBackOff() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBackOff
+	return i.MaxBackOff
 }
 
-func (o *InputEventhub) GetInitialBackoff() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetInitialBackoff() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.InitialBackoff
+	return i.InitialBackoff
 }
 
-func (o *InputEventhub) GetBackoffRate() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetBackoffRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.BackoffRate
+	return i.BackoffRate
 }
 
-func (o *InputEventhub) GetAuthenticationTimeout() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetAuthenticationTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AuthenticationTimeout
+	return i.AuthenticationTimeout
 }
 
-func (o *InputEventhub) GetReauthenticationThreshold() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetReauthenticationThreshold() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ReauthenticationThreshold
+	return i.ReauthenticationThreshold
 }
 
-func (o *InputEventhub) GetSasl() *InputEventhubAuthentication {
-	if o == nil {
+func (i *InputEventhub) GetSasl() *InputEventhubAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.Sasl
+	return i.Sasl
 }
 
-func (o *InputEventhub) GetTLS() *InputEventhubTLSSettingsClientSide {
-	if o == nil {
+func (i *InputEventhub) GetTLS() *InputEventhubTLSSettingsClientSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputEventhub) GetSessionTimeout() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetSessionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SessionTimeout
+	return i.SessionTimeout
 }
 
-func (o *InputEventhub) GetRebalanceTimeout() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetRebalanceTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RebalanceTimeout
+	return i.RebalanceTimeout
 }
 
-func (o *InputEventhub) GetHeartbeatInterval() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetHeartbeatInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.HeartbeatInterval
+	return i.HeartbeatInterval
 }
 
-func (o *InputEventhub) GetAutoCommitInterval() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetAutoCommitInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AutoCommitInterval
+	return i.AutoCommitInterval
 }
 
-func (o *InputEventhub) GetAutoCommitThreshold() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetAutoCommitThreshold() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AutoCommitThreshold
+	return i.AutoCommitThreshold
 }
 
-func (o *InputEventhub) GetMaxBytesPerPartition() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetMaxBytesPerPartition() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBytesPerPartition
+	return i.MaxBytesPerPartition
 }
 
-func (o *InputEventhub) GetMaxBytes() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetMaxBytes() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBytes
+	return i.MaxBytes
 }
 
-func (o *InputEventhub) GetMaxSocketErrors() *float64 {
-	if o == nil {
+func (i *InputEventhub) GetMaxSocketErrors() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSocketErrors
+	return i.MaxSocketErrors
 }
 
-func (o *InputEventhub) GetMinimizeDuplicates() *bool {
-	if o == nil {
+func (i *InputEventhub) GetMinimizeDuplicates() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.MinimizeDuplicates
+	return i.MinimizeDuplicates
 }
 
-func (o *InputEventhub) GetMetadata() []InputEventhubMetadatum {
-	if o == nil {
+func (i *InputEventhub) GetMetadata() []InputEventhubMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputEventhub) GetDescription() *string {
-	if o == nil {
+func (i *InputEventhub) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

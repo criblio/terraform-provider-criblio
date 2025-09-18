@@ -16,25 +16,25 @@ type CreateInputHecTokenByIDRequest struct {
 	AddHecTokenRequest shared.AddHecTokenRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateInputHecTokenByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateInputHecTokenByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateInputHecTokenByIDRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateInputHecTokenByIDRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateInputHecTokenByIDRequest) GetAddHecTokenRequest() shared.AddHecTokenRequest {
-	if o == nil {
+func (c *CreateInputHecTokenByIDRequest) GetAddHecTokenRequest() shared.AddHecTokenRequest {
+	if c == nil {
 		return shared.AddHecTokenRequest{}
 	}
-	return o.AddHecTokenRequest
+	return c.AddHecTokenRequest
 }
 
 // CreateInputHecTokenByIDResponseBody - a list of any objects
@@ -42,11 +42,11 @@ type CreateInputHecTokenByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateInputHecTokenByIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateInputHecTokenByIDResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateInputHecTokenByIDResponse struct {
@@ -62,37 +62,37 @@ type CreateInputHecTokenByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateInputHecTokenByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateInputHecTokenByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateInputHecTokenByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateInputHecTokenByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateInputHecTokenByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateInputHecTokenByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateInputHecTokenByIDResponse) GetObject() *CreateInputHecTokenByIDResponseBody {
-	if o == nil {
+func (c *CreateInputHecTokenByIDResponse) GetObject() *CreateInputHecTokenByIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateInputHecTokenByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateInputHecTokenByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

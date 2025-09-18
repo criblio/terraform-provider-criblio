@@ -12,11 +12,11 @@ type CreateVersionCommitResponseBody struct {
 	Items []shared.GitCommitSummary `json:"items,omitempty"`
 }
 
-func (o *CreateVersionCommitResponseBody) GetItems() []shared.GitCommitSummary {
-	if o == nil {
+func (c *CreateVersionCommitResponseBody) GetItems() []shared.GitCommitSummary {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateVersionCommitResponse struct {
@@ -32,37 +32,37 @@ type CreateVersionCommitResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateVersionCommitResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateVersionCommitResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateVersionCommitResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateVersionCommitResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateVersionCommitResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateVersionCommitResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateVersionCommitResponse) GetObject() *CreateVersionCommitResponseBody {
-	if o == nil {
+func (c *CreateVersionCommitResponse) GetObject() *CreateVersionCommitResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateVersionCommitResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateVersionCommitResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

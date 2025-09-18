@@ -7,16 +7,16 @@ type DatatypeOverrides struct {
 	DisableBreakers bool                  `json:"disableBreakers"`
 }
 
-func (o *DatatypeOverrides) GetBreakerRulesets() []EventBreakerRuleset {
-	if o == nil {
+func (d *DatatypeOverrides) GetBreakerRulesets() []EventBreakerRuleset {
+	if d == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return d.BreakerRulesets
 }
 
-func (o *DatatypeOverrides) GetDisableBreakers() bool {
-	if o == nil {
+func (d *DatatypeOverrides) GetDisableBreakers() bool {
+	if d == nil {
 		return false
 	}
-	return o.DisableBreakers
+	return d.DisableBreakers
 }

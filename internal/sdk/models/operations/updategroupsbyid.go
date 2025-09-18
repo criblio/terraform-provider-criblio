@@ -12,11 +12,11 @@ type UpdateGroupsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *UpdateGroupsByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateGroupsByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
 // UpdateGroupsByIDResponseBody - a list of ConfigGroup objects
@@ -24,11 +24,11 @@ type UpdateGroupsByIDResponseBody struct {
 	Items []shared.Group `json:"items,omitempty"`
 }
 
-func (o *UpdateGroupsByIDResponseBody) GetItems() []shared.Group {
-	if o == nil {
+func (u *UpdateGroupsByIDResponseBody) GetItems() []shared.Group {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateGroupsByIDResponse struct {
@@ -42,30 +42,30 @@ type UpdateGroupsByIDResponse struct {
 	Object *UpdateGroupsByIDResponseBody
 }
 
-func (o *UpdateGroupsByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateGroupsByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateGroupsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateGroupsByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateGroupsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateGroupsByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateGroupsByIDResponse) GetObject() *UpdateGroupsByIDResponseBody {
-	if o == nil {
+func (u *UpdateGroupsByIDResponse) GetObject() *UpdateGroupsByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }

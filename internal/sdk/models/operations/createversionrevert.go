@@ -14,18 +14,18 @@ type CreateVersionRevertRequest struct {
 	GitRevertParams shared.GitRevertParams `request:"mediaType=application/json"`
 }
 
-func (o *CreateVersionRevertRequest) GetGroup() *string {
-	if o == nil {
+func (c *CreateVersionRevertRequest) GetGroup() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Group
+	return c.Group
 }
 
-func (o *CreateVersionRevertRequest) GetGitRevertParams() shared.GitRevertParams {
-	if o == nil {
+func (c *CreateVersionRevertRequest) GetGitRevertParams() shared.GitRevertParams {
+	if c == nil {
 		return shared.GitRevertParams{}
 	}
-	return o.GitRevertParams
+	return c.GitRevertParams
 }
 
 // CreateVersionRevertResponseBody - a list of GitRevertResult objects
@@ -33,11 +33,11 @@ type CreateVersionRevertResponseBody struct {
 	Items []shared.GitRevertResult `json:"items,omitempty"`
 }
 
-func (o *CreateVersionRevertResponseBody) GetItems() []shared.GitRevertResult {
-	if o == nil {
+func (c *CreateVersionRevertResponseBody) GetItems() []shared.GitRevertResult {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateVersionRevertResponse struct {
@@ -53,37 +53,37 @@ type CreateVersionRevertResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateVersionRevertResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateVersionRevertResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateVersionRevertResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateVersionRevertResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateVersionRevertResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateVersionRevertResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateVersionRevertResponse) GetObject() *CreateVersionRevertResponseBody {
-	if o == nil {
+func (c *CreateVersionRevertResponse) GetObject() *CreateVersionRevertResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateVersionRevertResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateVersionRevertResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -78,44 +78,44 @@ func (g *GlobalVar) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GlobalVar) GetID() string {
-	if o == nil {
+func (g *GlobalVar) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GlobalVar) GetLib() *string {
-	if o == nil {
+func (g *GlobalVar) GetLib() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Lib
+	return g.Lib
 }
 
-func (o *GlobalVar) GetDescription() *string {
-	if o == nil {
+func (g *GlobalVar) GetDescription() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Description
+	return g.Description
 }
 
-func (o *GlobalVar) GetType() *GlobalVarType {
-	if o == nil {
+func (g *GlobalVar) GetType() *GlobalVarType {
+	if g == nil {
 		return nil
 	}
-	return o.Type
+	return g.Type
 }
 
-func (o *GlobalVar) GetValue() *string {
-	if o == nil {
+func (g *GlobalVar) GetValue() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Value
+	return g.Value
 }
 
-func (o *GlobalVar) GetTags() *string {
-	if o == nil {
+func (g *GlobalVar) GetTags() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Tags
+	return g.Tags
 }

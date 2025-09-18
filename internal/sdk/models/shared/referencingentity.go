@@ -8,23 +8,23 @@ type ReferencingEntity struct {
 	Type string             `json:"type"`
 }
 
-func (o *ReferencingEntity) GetID() string {
-	if o == nil {
+func (r *ReferencingEntity) GetID() string {
+	if r == nil {
 		return ""
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *ReferencingEntity) GetRefs() []ReferencedEntity {
-	if o == nil {
+func (r *ReferencingEntity) GetRefs() []ReferencedEntity {
+	if r == nil {
 		return []ReferencedEntity{}
 	}
-	return o.Refs
+	return r.Refs
 }
 
-func (o *ReferencingEntity) GetType() string {
-	if o == nil {
+func (r *ReferencingEntity) GetType() string {
+	if r == nil {
 		return ""
 	}
-	return o.Type
+	return r.Type
 }

@@ -7,16 +7,16 @@ type TrustPolicy struct {
 	Policy AMTrustPolicy `json:"policy"`
 }
 
-func (o *TrustPolicy) GetID() string {
-	if o == nil {
+func (t *TrustPolicy) GetID() string {
+	if t == nil {
 		return ""
 	}
-	return o.ID
+	return t.ID
 }
 
-func (o *TrustPolicy) GetPolicy() AMTrustPolicy {
-	if o == nil {
+func (t *TrustPolicy) GetPolicy() AMTrustPolicy {
+	if t == nil {
 		return AMTrustPolicy{}
 	}
-	return o.Policy
+	return t.Policy
 }

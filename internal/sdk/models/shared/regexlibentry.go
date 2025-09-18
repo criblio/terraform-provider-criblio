@@ -12,44 +12,44 @@ type RegexLibEntry struct {
 	Tags       *string `json:"tags,omitempty"`
 }
 
-func (o *RegexLibEntry) GetID() string {
-	if o == nil {
+func (r *RegexLibEntry) GetID() string {
+	if r == nil {
 		return ""
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *RegexLibEntry) GetLib() *string {
-	if o == nil {
+func (r *RegexLibEntry) GetLib() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Lib
+	return r.Lib
 }
 
-func (o *RegexLibEntry) GetDescription() *string {
-	if o == nil {
+func (r *RegexLibEntry) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *RegexLibEntry) GetRegex() string {
-	if o == nil {
+func (r *RegexLibEntry) GetRegex() string {
+	if r == nil {
 		return ""
 	}
-	return o.Regex
+	return r.Regex
 }
 
-func (o *RegexLibEntry) GetSampleData() *string {
-	if o == nil {
+func (r *RegexLibEntry) GetSampleData() *string {
+	if r == nil {
 		return nil
 	}
-	return o.SampleData
+	return r.SampleData
 }
 
-func (o *RegexLibEntry) GetTags() *string {
-	if o == nil {
+func (r *RegexLibEntry) GetTags() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Tags
+	return r.Tags
 }

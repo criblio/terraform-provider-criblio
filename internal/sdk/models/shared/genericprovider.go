@@ -33,39 +33,39 @@ func (g *GcsProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GcsProvider) GetID() string {
-	if o == nil {
+func (g *GcsProvider) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GcsProvider) GetType() string {
-	if o == nil {
+func (g *GcsProvider) GetType() string {
+	if g == nil {
 		return ""
 	}
-	return o.Type
+	return g.Type
 }
 
-func (o *GcsProvider) GetDescription() *string {
-	if o == nil {
+func (g *GcsProvider) GetDescription() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Description
+	return g.Description
 }
 
-func (o *GcsProvider) GetServiceAccountCredentials() string {
-	if o == nil {
+func (g *GcsProvider) GetServiceAccountCredentials() string {
+	if g == nil {
 		return ""
 	}
-	return o.ServiceAccountCredentials
+	return g.ServiceAccountCredentials
 }
 
-func (o *GcsProvider) GetEndpoint() *string {
-	if o == nil {
+func (g *GcsProvider) GetEndpoint() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Endpoint
+	return g.Endpoint
 }
 
 // AzureBlobProviderAuthenticationMethod - Azure Storage authentication method
@@ -116,18 +116,18 @@ func (s *SasConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SasConfig) GetContainerName() string {
-	if o == nil {
+func (s *SasConfig) GetContainerName() string {
+	if s == nil {
 		return ""
 	}
-	return o.ContainerName
+	return s.ContainerName
 }
 
-func (o *SasConfig) GetBlobSasURL() string {
-	if o == nil {
+func (s *SasConfig) GetBlobSasURL() string {
+	if s == nil {
 		return ""
 	}
-	return o.BlobSasURL
+	return s.BlobSasURL
 }
 
 type AzureBlobProvider struct {
@@ -166,81 +166,81 @@ func (a *AzureBlobProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureBlobProvider) GetID() string {
-	if o == nil {
+func (a *AzureBlobProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *AzureBlobProvider) GetType() string {
-	if o == nil {
+func (a *AzureBlobProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AzureBlobProvider) GetDescription() *string {
-	if o == nil {
+func (a *AzureBlobProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AzureBlobProvider) GetAuthenticationMethod() *AzureBlobProviderAuthenticationMethod {
-	if o == nil {
+func (a *AzureBlobProvider) GetAuthenticationMethod() *AzureBlobProviderAuthenticationMethod {
+	if a == nil {
 		return nil
 	}
-	return o.AuthenticationMethod
+	return a.AuthenticationMethod
 }
 
-func (o *AzureBlobProvider) GetLocation() string {
-	if o == nil {
+func (a *AzureBlobProvider) GetLocation() string {
+	if a == nil {
 		return ""
 	}
-	return o.Location
+	return a.Location
 }
 
-func (o *AzureBlobProvider) GetConnectionString() *string {
-	if o == nil {
+func (a *AzureBlobProvider) GetConnectionString() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ConnectionString
+	return a.ConnectionString
 }
 
-func (o *AzureBlobProvider) GetSasConfigs() []SasConfig {
-	if o == nil {
+func (a *AzureBlobProvider) GetSasConfigs() []SasConfig {
+	if a == nil {
 		return nil
 	}
-	return o.SasConfigs
+	return a.SasConfigs
 }
 
-func (o *AzureBlobProvider) GetStorageAccountName() *string {
-	if o == nil {
+func (a *AzureBlobProvider) GetStorageAccountName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageAccountName
+	return a.StorageAccountName
 }
 
-func (o *AzureBlobProvider) GetTenantID() *string {
-	if o == nil {
+func (a *AzureBlobProvider) GetTenantID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.TenantID
+	return a.TenantID
 }
 
-func (o *AzureBlobProvider) GetClientID() *string {
-	if o == nil {
+func (a *AzureBlobProvider) GetClientID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ClientID
+	return a.ClientID
 }
 
-func (o *AzureBlobProvider) GetClientSecret() *string {
-	if o == nil {
+func (a *AzureBlobProvider) GetClientSecret() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ClientSecret
+	return a.ClientSecret
 }
 
 type EdgeProvider struct {
@@ -263,25 +263,25 @@ func (e *EdgeProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EdgeProvider) GetID() string {
-	if o == nil {
+func (e *EdgeProvider) GetID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ID
+	return e.ID
 }
 
-func (o *EdgeProvider) GetType() string {
-	if o == nil {
+func (e *EdgeProvider) GetType() string {
+	if e == nil {
 		return ""
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *EdgeProvider) GetDescription() *string {
-	if o == nil {
+func (e *EdgeProvider) GetDescription() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Description
+	return e.Description
 }
 
 type MetaProvider struct {
@@ -304,25 +304,25 @@ func (m *MetaProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *MetaProvider) GetID() string {
-	if o == nil {
+func (m *MetaProvider) GetID() string {
+	if m == nil {
 		return ""
 	}
-	return o.ID
+	return m.ID
 }
 
-func (o *MetaProvider) GetType() string {
-	if o == nil {
+func (m *MetaProvider) GetType() string {
+	if m == nil {
 		return ""
 	}
-	return o.Type
+	return m.Type
 }
 
-func (o *MetaProvider) GetDescription() *string {
-	if o == nil {
+func (m *MetaProvider) GetDescription() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Description
+	return m.Description
 }
 
 type CriblLeaderProvider struct {
@@ -345,25 +345,25 @@ func (c *CriblLeaderProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CriblLeaderProvider) GetID() string {
-	if o == nil {
+func (c *CriblLeaderProvider) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CriblLeaderProvider) GetType() string {
-	if o == nil {
+func (c *CriblLeaderProvider) GetType() string {
+	if c == nil {
 		return ""
 	}
-	return o.Type
+	return c.Type
 }
 
-func (o *CriblLeaderProvider) GetDescription() *string {
-	if o == nil {
+func (c *CriblLeaderProvider) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
 // S3ProviderAuthenticationMethod - AWS authentication method
@@ -470,130 +470,130 @@ func (s *S3Provider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *S3Provider) GetID() string {
-	if o == nil {
+func (s *S3Provider) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *S3Provider) GetType() string {
-	if o == nil {
+func (s *S3Provider) GetType() string {
+	if s == nil {
 		return ""
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *S3Provider) GetDescription() *string {
-	if o == nil {
+func (s *S3Provider) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *S3Provider) GetAwsAuthenticationMethod() *S3ProviderAuthenticationMethod {
-	if o == nil {
+func (s *S3Provider) GetAwsAuthenticationMethod() *S3ProviderAuthenticationMethod {
+	if s == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return s.AwsAuthenticationMethod
 }
 
-func (o *S3Provider) GetAssumeRoleArn() *string {
-	if o == nil {
+func (s *S3Provider) GetAssumeRoleArn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return s.AssumeRoleArn
 }
 
-func (o *S3Provider) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (s *S3Provider) GetAssumeRoleExternalID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return s.AssumeRoleExternalID
 }
 
-func (o *S3Provider) GetAwsAPIKey() *string {
-	if o == nil {
+func (s *S3Provider) GetAwsAPIKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return s.AwsAPIKey
 }
 
-func (o *S3Provider) GetAwsSecretKey() *string {
-	if o == nil {
+func (s *S3Provider) GetAwsSecretKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return s.AwsSecretKey
 }
 
-func (o *S3Provider) GetBucket() *string {
-	if o == nil {
+func (s *S3Provider) GetBucket() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Bucket
+	return s.Bucket
 }
 
-func (o *S3Provider) GetRegion() *string {
-	if o == nil {
+func (s *S3Provider) GetRegion() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Region
+	return s.Region
 }
 
-func (o *S3Provider) GetEndpoint() *string {
-	if o == nil {
+func (s *S3Provider) GetEndpoint() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Endpoint
+	return s.Endpoint
 }
 
-func (o *S3Provider) GetSignatureVersion() S3ProviderSignatureVersion {
-	if o == nil {
+func (s *S3Provider) GetSignatureVersion() S3ProviderSignatureVersion {
+	if s == nil {
 		return S3ProviderSignatureVersion("")
 	}
-	return o.SignatureVersion
+	return s.SignatureVersion
 }
 
-func (o *S3Provider) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (s *S3Provider) GetRejectUnauthorized() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return s.RejectUnauthorized
 }
 
-func (o *S3Provider) GetReuseConnections() *bool {
-	if o == nil {
+func (s *S3Provider) GetReuseConnections() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return s.ReuseConnections
 }
 
-func (o *S3Provider) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (s *S3Provider) GetEnableAssumeRole() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return s.EnableAssumeRole
 }
 
-func (o *S3Provider) GetBucketPathSuggestion() *string {
-	if o == nil {
+func (s *S3Provider) GetBucketPathSuggestion() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BucketPathSuggestion
+	return s.BucketPathSuggestion
 }
 
-func (o *S3Provider) GetSessionToken() *string {
-	if o == nil {
+func (s *S3Provider) GetSessionToken() *string {
+	if s == nil {
 		return nil
 	}
-	return o.SessionToken
+	return s.SessionToken
 }
 
-func (o *S3Provider) GetEnableAbacTagging() *bool {
-	if o == nil {
+func (s *S3Provider) GetEnableAbacTagging() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.EnableAbacTagging
+	return s.EnableAbacTagging
 }
 
 type AwsSecurityLakeProvider struct {
@@ -616,25 +616,25 @@ func (a *AwsSecurityLakeProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AwsSecurityLakeProvider) GetID() string {
-	if o == nil {
+func (a *AwsSecurityLakeProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *AwsSecurityLakeProvider) GetType() string {
-	if o == nil {
+func (a *AwsSecurityLakeProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AwsSecurityLakeProvider) GetDescription() *string {
-	if o == nil {
+func (a *AwsSecurityLakeProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
 type APIElasticSearchProvider struct {
@@ -663,46 +663,46 @@ func (a *APIElasticSearchProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIElasticSearchProvider) GetID() string {
-	if o == nil {
+func (a *APIElasticSearchProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIElasticSearchProvider) GetType() string {
-	if o == nil {
+func (a *APIElasticSearchProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIElasticSearchProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIElasticSearchProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIElasticSearchProvider) GetUsername() string {
-	if o == nil {
+func (a *APIElasticSearchProvider) GetUsername() string {
+	if a == nil {
 		return ""
 	}
-	return o.Username
+	return a.Username
 }
 
-func (o *APIElasticSearchProvider) GetPassword() string {
-	if o == nil {
+func (a *APIElasticSearchProvider) GetPassword() string {
+	if a == nil {
 		return ""
 	}
-	return o.Password
+	return a.Password
 }
 
-func (o *APIElasticSearchProvider) GetEndpoint() string {
-	if o == nil {
+func (a *APIElasticSearchProvider) GetEndpoint() string {
+	if a == nil {
 		return ""
 	}
-	return o.Endpoint
+	return a.Endpoint
 }
 
 type APIOpenSearchProvider struct {
@@ -731,46 +731,46 @@ func (a *APIOpenSearchProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIOpenSearchProvider) GetID() string {
-	if o == nil {
+func (a *APIOpenSearchProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIOpenSearchProvider) GetType() string {
-	if o == nil {
+func (a *APIOpenSearchProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIOpenSearchProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIOpenSearchProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIOpenSearchProvider) GetUsername() string {
-	if o == nil {
+func (a *APIOpenSearchProvider) GetUsername() string {
+	if a == nil {
 		return ""
 	}
-	return o.Username
+	return a.Username
 }
 
-func (o *APIOpenSearchProvider) GetPassword() string {
-	if o == nil {
+func (a *APIOpenSearchProvider) GetPassword() string {
+	if a == nil {
 		return ""
 	}
-	return o.Password
+	return a.Password
 }
 
-func (o *APIOpenSearchProvider) GetEndpoint() string {
-	if o == nil {
+func (a *APIOpenSearchProvider) GetEndpoint() string {
+	if a == nil {
 		return ""
 	}
-	return o.Endpoint
+	return a.Endpoint
 }
 
 type PrometheusProviderAuthenticationType string
@@ -833,67 +833,67 @@ func (p *PrometheusProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PrometheusProvider) GetID() string {
-	if o == nil {
+func (p *PrometheusProvider) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PrometheusProvider) GetType() string {
-	if o == nil {
+func (p *PrometheusProvider) GetType() string {
+	if p == nil {
 		return ""
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PrometheusProvider) GetDescription() *string {
-	if o == nil {
+func (p *PrometheusProvider) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PrometheusProvider) GetEndpoint() string {
-	if o == nil {
+func (p *PrometheusProvider) GetEndpoint() string {
+	if p == nil {
 		return ""
 	}
-	return o.Endpoint
+	return p.Endpoint
 }
 
-func (o *PrometheusProvider) GetAuthType() *PrometheusProviderAuthenticationType {
-	if o == nil {
+func (p *PrometheusProvider) GetAuthType() *PrometheusProviderAuthenticationType {
+	if p == nil {
 		return nil
 	}
-	return o.AuthType
+	return p.AuthType
 }
 
-func (o *PrometheusProvider) GetUsername() *string {
-	if o == nil {
+func (p *PrometheusProvider) GetUsername() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Username
+	return p.Username
 }
 
-func (o *PrometheusProvider) GetPassword() *string {
-	if o == nil {
+func (p *PrometheusProvider) GetPassword() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Password
+	return p.Password
 }
 
-func (o *PrometheusProvider) GetToken() *string {
-	if o == nil {
+func (p *PrometheusProvider) GetToken() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Token
+	return p.Token
 }
 
-func (o *PrometheusProvider) GetMaxConcurrency() *float64 {
-	if o == nil {
+func (p *PrometheusProvider) GetMaxConcurrency() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.MaxConcurrency
+	return p.MaxConcurrency
 }
 
 type ClickHouseProvider struct {
@@ -922,46 +922,46 @@ func (c *ClickHouseProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ClickHouseProvider) GetID() string {
-	if o == nil {
+func (c *ClickHouseProvider) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *ClickHouseProvider) GetType() string {
-	if o == nil {
+func (c *ClickHouseProvider) GetType() string {
+	if c == nil {
 		return ""
 	}
-	return o.Type
+	return c.Type
 }
 
-func (o *ClickHouseProvider) GetDescription() *string {
-	if o == nil {
+func (c *ClickHouseProvider) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *ClickHouseProvider) GetUsername() string {
-	if o == nil {
+func (c *ClickHouseProvider) GetUsername() string {
+	if c == nil {
 		return ""
 	}
-	return o.Username
+	return c.Username
 }
 
-func (o *ClickHouseProvider) GetPassword() *string {
-	if o == nil {
+func (c *ClickHouseProvider) GetPassword() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Password
+	return c.Password
 }
 
-func (o *ClickHouseProvider) GetEndpoint() string {
-	if o == nil {
+func (c *ClickHouseProvider) GetEndpoint() string {
+	if c == nil {
 		return ""
 	}
-	return o.Endpoint
+	return c.Endpoint
 }
 
 type SnowflakeProvider struct {
@@ -996,67 +996,67 @@ func (s *SnowflakeProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SnowflakeProvider) GetID() string {
-	if o == nil {
+func (s *SnowflakeProvider) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SnowflakeProvider) GetType() string {
-	if o == nil {
+func (s *SnowflakeProvider) GetType() string {
+	if s == nil {
 		return ""
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SnowflakeProvider) GetDescription() *string {
-	if o == nil {
+func (s *SnowflakeProvider) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SnowflakeProvider) GetAccountIdentifier() string {
-	if o == nil {
+func (s *SnowflakeProvider) GetAccountIdentifier() string {
+	if s == nil {
 		return ""
 	}
-	return o.AccountIdentifier
+	return s.AccountIdentifier
 }
 
-func (o *SnowflakeProvider) GetUsername() string {
-	if o == nil {
+func (s *SnowflakeProvider) GetUsername() string {
+	if s == nil {
 		return ""
 	}
-	return o.Username
+	return s.Username
 }
 
-func (o *SnowflakeProvider) GetPrivKey() string {
-	if o == nil {
+func (s *SnowflakeProvider) GetPrivKey() string {
+	if s == nil {
 		return ""
 	}
-	return o.PrivKey
+	return s.PrivKey
 }
 
-func (o *SnowflakeProvider) GetPassphrase() *string {
-	if o == nil {
+func (s *SnowflakeProvider) GetPassphrase() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Passphrase
+	return s.Passphrase
 }
 
-func (o *SnowflakeProvider) GetMaxConcurrency() *int64 {
-	if o == nil {
+func (s *SnowflakeProvider) GetMaxConcurrency() *int64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxConcurrency
+	return s.MaxConcurrency
 }
 
-func (o *SnowflakeProvider) GetEndpoint() *string {
-	if o == nil {
+func (s *SnowflakeProvider) GetEndpoint() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Endpoint
+	return s.Endpoint
 }
 
 type APIAzureDataExplorerProvider struct {
@@ -1085,46 +1085,46 @@ func (a *APIAzureDataExplorerProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIAzureDataExplorerProvider) GetID() string {
-	if o == nil {
+func (a *APIAzureDataExplorerProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIAzureDataExplorerProvider) GetType() string {
-	if o == nil {
+func (a *APIAzureDataExplorerProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIAzureDataExplorerProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIAzureDataExplorerProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIAzureDataExplorerProvider) GetTenantID() string {
-	if o == nil {
+func (a *APIAzureDataExplorerProvider) GetTenantID() string {
+	if a == nil {
 		return ""
 	}
-	return o.TenantID
+	return a.TenantID
 }
 
-func (o *APIAzureDataExplorerProvider) GetClientID() string {
-	if o == nil {
+func (a *APIAzureDataExplorerProvider) GetClientID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ClientID
+	return a.ClientID
 }
 
-func (o *APIAzureDataExplorerProvider) GetClientSecret() string {
-	if o == nil {
+func (a *APIAzureDataExplorerProvider) GetClientSecret() string {
+	if a == nil {
 		return ""
 	}
-	return o.ClientSecret
+	return a.ClientSecret
 }
 
 type APIZoomProvider struct {
@@ -1149,32 +1149,32 @@ func (a *APIZoomProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIZoomProvider) GetID() string {
-	if o == nil {
+func (a *APIZoomProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIZoomProvider) GetType() string {
-	if o == nil {
+func (a *APIZoomProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIZoomProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIZoomProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIZoomProvider) GetAccountConfigs() []ZoomAccountConfig {
-	if o == nil {
+func (a *APIZoomProvider) GetAccountConfigs() []ZoomAccountConfig {
+	if a == nil {
 		return []ZoomAccountConfig{}
 	}
-	return o.AccountConfigs
+	return a.AccountConfigs
 }
 
 type APITailscaleProvider struct {
@@ -1199,32 +1199,32 @@ func (a *APITailscaleProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APITailscaleProvider) GetID() string {
-	if o == nil {
+func (a *APITailscaleProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APITailscaleProvider) GetType() string {
-	if o == nil {
+func (a *APITailscaleProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APITailscaleProvider) GetDescription() *string {
-	if o == nil {
+func (a *APITailscaleProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APITailscaleProvider) GetAccountConfigs() []TailscaleAccountConfig {
-	if o == nil {
+func (a *APITailscaleProvider) GetAccountConfigs() []TailscaleAccountConfig {
+	if a == nil {
 		return []TailscaleAccountConfig{}
 	}
-	return o.AccountConfigs
+	return a.AccountConfigs
 }
 
 type APIOktaProvider struct {
@@ -1249,32 +1249,32 @@ func (a *APIOktaProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIOktaProvider) GetID() string {
-	if o == nil {
+func (a *APIOktaProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIOktaProvider) GetType() string {
-	if o == nil {
+func (a *APIOktaProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIOktaProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIOktaProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIOktaProvider) GetAccountConfigs() []OktaAccountConfig {
-	if o == nil {
+func (a *APIOktaProvider) GetAccountConfigs() []OktaAccountConfig {
+	if a == nil {
 		return []OktaAccountConfig{}
 	}
-	return o.AccountConfigs
+	return a.AccountConfigs
 }
 
 type APIMsGraphProvider struct {
@@ -1299,32 +1299,32 @@ func (a *APIMsGraphProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIMsGraphProvider) GetID() string {
-	if o == nil {
+func (a *APIMsGraphProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIMsGraphProvider) GetType() string {
-	if o == nil {
+func (a *APIMsGraphProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIMsGraphProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIMsGraphProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIMsGraphProvider) GetAccountConfigs() []MsGraphAccountConfig {
-	if o == nil {
+func (a *APIMsGraphProvider) GetAccountConfigs() []MsGraphAccountConfig {
+	if a == nil {
 		return []MsGraphAccountConfig{}
 	}
-	return o.AccountConfigs
+	return a.AccountConfigs
 }
 
 type APIGoogleWorkspaceProvider struct {
@@ -1349,32 +1349,32 @@ func (a *APIGoogleWorkspaceProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIGoogleWorkspaceProvider) GetID() string {
-	if o == nil {
+func (a *APIGoogleWorkspaceProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIGoogleWorkspaceProvider) GetType() string {
-	if o == nil {
+func (a *APIGoogleWorkspaceProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIGoogleWorkspaceProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIGoogleWorkspaceProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIGoogleWorkspaceProvider) GetAccountConfigs() []GoogleWorkspaceAccountConfig {
-	if o == nil {
+func (a *APIGoogleWorkspaceProvider) GetAccountConfigs() []GoogleWorkspaceAccountConfig {
+	if a == nil {
 		return []GoogleWorkspaceAccountConfig{}
 	}
-	return o.AccountConfigs
+	return a.AccountConfigs
 }
 
 type APIGcpProvider struct {
@@ -1399,32 +1399,32 @@ func (a *APIGcpProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIGcpProvider) GetID() string {
-	if o == nil {
+func (a *APIGcpProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIGcpProvider) GetType() string {
-	if o == nil {
+func (a *APIGcpProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIGcpProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIGcpProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIGcpProvider) GetAccountConfigs() []GcpAccountConfig {
-	if o == nil {
+func (a *APIGcpProvider) GetAccountConfigs() []GcpAccountConfig {
+	if a == nil {
 		return []GcpAccountConfig{}
 	}
-	return o.AccountConfigs
+	return a.AccountConfigs
 }
 
 type APIAzureProvider struct {
@@ -1449,32 +1449,32 @@ func (a *APIAzureProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIAzureProvider) GetID() string {
-	if o == nil {
+func (a *APIAzureProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIAzureProvider) GetType() string {
-	if o == nil {
+func (a *APIAzureProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIAzureProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIAzureProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIAzureProvider) GetAccountConfigs() []AzureAccountConfig {
-	if o == nil {
+func (a *APIAzureProvider) GetAccountConfigs() []AzureAccountConfig {
+	if a == nil {
 		return []AzureAccountConfig{}
 	}
-	return o.AccountConfigs
+	return a.AccountConfigs
 }
 
 type APIAwsProvider struct {
@@ -1499,32 +1499,32 @@ func (a *APIAwsProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIAwsProvider) GetID() string {
-	if o == nil {
+func (a *APIAwsProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIAwsProvider) GetType() string {
-	if o == nil {
+func (a *APIAwsProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIAwsProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIAwsProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIAwsProvider) GetAccountConfigs() []AwsAccountConfig {
-	if o == nil {
+func (a *APIAwsProvider) GetAccountConfigs() []AwsAccountConfig {
+	if a == nil {
 		return []AwsAccountConfig{}
 	}
-	return o.AccountConfigs
+	return a.AccountConfigs
 }
 
 // APIHTTPProviderAuthenticationMethod - The authentication method for API calls
@@ -1584,39 +1584,39 @@ func (a *APIHTTPProvider) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIHTTPProvider) GetID() string {
-	if o == nil {
+func (a *APIHTTPProvider) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIHTTPProvider) GetType() string {
-	if o == nil {
+func (a *APIHTTPProvider) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIHTTPProvider) GetDescription() *string {
-	if o == nil {
+func (a *APIHTTPProvider) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIHTTPProvider) GetAvailableEndpoints() []HTTPEndpoint {
-	if o == nil {
+func (a *APIHTTPProvider) GetAvailableEndpoints() []HTTPEndpoint {
+	if a == nil {
 		return []HTTPEndpoint{}
 	}
-	return o.AvailableEndpoints
+	return a.AvailableEndpoints
 }
 
-func (o *APIHTTPProvider) GetAuthenticationMethod() *APIHTTPProviderAuthenticationMethod {
-	if o == nil {
+func (a *APIHTTPProvider) GetAuthenticationMethod() *APIHTTPProviderAuthenticationMethod {
+	if a == nil {
 		return nil
 	}
-	return o.AuthenticationMethod
+	return a.AuthenticationMethod
 }
 
 type GenericProviderType string

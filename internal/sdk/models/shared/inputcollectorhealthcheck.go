@@ -171,25 +171,25 @@ func (i *InputCollectorHealthCheckStateTracking) UnmarshalJSON(data []byte) erro
 	return nil
 }
 
-func (o *InputCollectorHealthCheckStateTracking) GetStateUpdateExpression() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckStateTracking) GetStateUpdateExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateUpdateExpression
+	return i.StateUpdateExpression
 }
 
-func (o *InputCollectorHealthCheckStateTracking) GetStateMergeExpression() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckStateTracking) GetStateMergeExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateMergeExpression
+	return i.StateMergeExpression
 }
 
-func (o *InputCollectorHealthCheckStateTracking) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheckStateTracking) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputCollectorHealthCheckRunSettings struct {
@@ -231,95 +231,95 @@ func (i *InputCollectorHealthCheckRunSettings) UnmarshalJSON(data []byte) error 
 	return nil
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetLogLevel() *InputCollectorHealthCheckLogLevel {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetLogLevel() *InputCollectorHealthCheckLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetMode() *InputCollectorHealthCheckMode {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetMode() *InputCollectorHealthCheckMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetTimeRangeType() *InputCollectorHealthCheckTimeRange {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetTimeRangeType() *InputCollectorHealthCheckTimeRange {
+	if i == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return i.TimeRangeType
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetEarliest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetLatest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetExpression() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Expression
+	return i.Expression
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetMinTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return i.MinTaskSize
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetMaxTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return i.MaxTaskSize
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetTimeWarning() *InputCollectorHealthCheckTimeWarning {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetTimeWarning() *InputCollectorHealthCheckTimeWarning {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return i.TimeWarning
 }
 
-func (o *InputCollectorHealthCheckRunSettings) GetStateTracking() *InputCollectorHealthCheckStateTracking {
-	if o == nil {
+func (i *InputCollectorHealthCheckRunSettings) GetStateTracking() *InputCollectorHealthCheckStateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 // InputCollectorHealthCheckSchedule - Configuration for a scheduled job
@@ -348,46 +348,46 @@ func (i *InputCollectorHealthCheckSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorHealthCheckSchedule) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheckSchedule) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCollectorHealthCheckSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckSchedule) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputCollectorHealthCheckSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (i *InputCollectorHealthCheckSchedule) GetMaxConcurrentRuns() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return i.MaxConcurrentRuns
 }
 
-func (o *InputCollectorHealthCheckSchedule) GetSkippable() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheckSchedule) GetSkippable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Skippable
+	return i.Skippable
 }
 
-func (o *InputCollectorHealthCheckSchedule) GetResumeMissed() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheckSchedule) GetResumeMissed() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return i.ResumeMissed
 }
 
-func (o *InputCollectorHealthCheckSchedule) GetRun() *InputCollectorHealthCheckRunSettings {
-	if o == nil {
+func (i *InputCollectorHealthCheckSchedule) GetRun() *InputCollectorHealthCheckRunSettings {
+	if i == nil {
 		return nil
 	}
-	return o.Run
+	return i.Run
 }
 
 type InputCollectorHealthCheckTypeCollection2 string
@@ -432,25 +432,25 @@ func (i *InputCollectorHealthCheckPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorHealthCheckPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheckPreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectorHealthCheckPreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckPreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectorHealthCheckPreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectorHealthCheckPreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectorHealthCheckMetadatum struct {
@@ -470,18 +470,18 @@ func (i *InputCollectorHealthCheckMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorHealthCheckMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectorHealthCheckMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectorHealthCheckMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectorHealthCheckMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollectorHealthCheckInput struct {
@@ -514,67 +514,67 @@ func (i *InputCollectorHealthCheckInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorHealthCheckInput) GetType() *InputCollectorHealthCheckTypeCollection2 {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetType() *InputCollectorHealthCheckTypeCollection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorHealthCheckInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollectorHealthCheckInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollectorHealthCheckInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollectorHealthCheckInput) GetPreprocess() *InputCollectorHealthCheckPreprocess {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetPreprocess() *InputCollectorHealthCheckPreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollectorHealthCheckInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollectorHealthCheckInput) GetMetadata() []InputCollectorHealthCheckMetadatum {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetMetadata() []InputCollectorHealthCheckMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollectorHealthCheckInput) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectorHealthCheckInput) GetOutput() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckInput) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }
 
 type TypeHealthcheck string
@@ -711,60 +711,60 @@ func (i *InputCollectorHealthCheckConf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorHealthCheckConf) GetCollectURL() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckConf) GetCollectURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CollectURL
+	return i.CollectURL
 }
 
-func (o *InputCollectorHealthCheckConf) GetCollectMethod() *InputCollectorHealthCheckCollectMethod {
-	if o == nil {
+func (i *InputCollectorHealthCheckConf) GetCollectMethod() *InputCollectorHealthCheckCollectMethod {
+	if i == nil {
 		return nil
 	}
-	return o.CollectMethod
+	return i.CollectMethod
 }
 
-func (o *InputCollectorHealthCheckConf) GetAuthentication() *InputCollectorHealthCheckAuthentication {
-	if o == nil {
+func (i *InputCollectorHealthCheckConf) GetAuthentication() *InputCollectorHealthCheckAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.Authentication
+	return i.Authentication
 }
 
-func (o *InputCollectorHealthCheckConf) GetTimeout() *int64 {
-	if o == nil {
+func (i *InputCollectorHealthCheckConf) GetTimeout() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.Timeout
+	return i.Timeout
 }
 
-func (o *InputCollectorHealthCheckConf) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheckConf) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputCollectorHealthCheckConf) GetUsername() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckConf) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputCollectorHealthCheckConf) GetPassword() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckConf) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputCollectorHealthCheckConf) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheckConf) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
 type InputCollectorHealthCheckCollector struct {
@@ -783,18 +783,18 @@ func (i *InputCollectorHealthCheckCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorHealthCheckCollector) GetType() TypeHealthcheck {
-	if o == nil {
+func (i *InputCollectorHealthCheckCollector) GetType() TypeHealthcheck {
+	if i == nil {
 		return TypeHealthcheck("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorHealthCheckCollector) GetConf() *InputCollectorHealthCheckConf {
-	if o == nil {
+func (i *InputCollectorHealthCheckCollector) GetConf() *InputCollectorHealthCheckConf {
+	if i == nil {
 		return nil
 	}
-	return o.Conf
+	return i.Conf
 }
 
 type InputCollectorHealthCheck struct {
@@ -828,93 +828,93 @@ func (i *InputCollectorHealthCheck) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorHealthCheck) GetID() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollectorHealthCheck) GetType() *InputCollectorHealthCheckTypeCollection1 {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetType() *InputCollectorHealthCheckTypeCollection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorHealthCheck) GetTTL() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputCollectorHealthCheck) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputCollectorHealthCheck) GetRemoveFields() []string {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetRemoveFields() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return i.RemoveFields
 }
 
-func (o *InputCollectorHealthCheck) GetResumeOnBoot() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetResumeOnBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return i.ResumeOnBoot
 }
 
-func (o *InputCollectorHealthCheck) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollectorHealthCheck) GetSavedState() *InputCollectorHealthCheckSavedState {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetSavedState() *InputCollectorHealthCheckSavedState {
+	if i == nil {
 		return nil
 	}
-	return o.SavedState
+	return i.SavedState
 }
 
-func (o *InputCollectorHealthCheck) GetSchedule() *InputCollectorHealthCheckSchedule {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetSchedule() *InputCollectorHealthCheckSchedule {
+	if i == nil {
 		return nil
 	}
-	return o.Schedule
+	return i.Schedule
 }
 
-func (o *InputCollectorHealthCheck) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollectorHealthCheck) GetWorkerAffinity() *bool {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetWorkerAffinity() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return i.WorkerAffinity
 }
 
-func (o *InputCollectorHealthCheck) GetInput() *InputCollectorHealthCheckInput {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetInput() *InputCollectorHealthCheckInput {
+	if i == nil {
 		return nil
 	}
-	return o.Input
+	return i.Input
 }
 
-func (o *InputCollectorHealthCheck) GetCollector() InputCollectorHealthCheckCollector {
-	if o == nil {
+func (i *InputCollectorHealthCheck) GetCollector() InputCollectorHealthCheckCollector {
+	if i == nil {
 		return InputCollectorHealthCheckCollector{}
 	}
-	return o.Collector
+	return i.Collector
 }

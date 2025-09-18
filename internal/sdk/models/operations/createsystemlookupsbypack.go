@@ -16,25 +16,25 @@ type CreateSystemLookupsByPackRequest struct {
 	LookupFile shared.LookupFile `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemLookupsByPackRequest) GetPack() string {
-	if o == nil {
+func (c *CreateSystemLookupsByPackRequest) GetPack() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pack
+	return c.Pack
 }
 
-func (o *CreateSystemLookupsByPackRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSystemLookupsByPackRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSystemLookupsByPackRequest) GetLookupFile() shared.LookupFile {
-	if o == nil {
+func (c *CreateSystemLookupsByPackRequest) GetLookupFile() shared.LookupFile {
+	if c == nil {
 		return shared.LookupFile{}
 	}
-	return o.LookupFile
+	return c.LookupFile
 }
 
 // CreateSystemLookupsByPackResponseBody - a list of Routes objects
@@ -42,11 +42,11 @@ type CreateSystemLookupsByPackResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *CreateSystemLookupsByPackResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (c *CreateSystemLookupsByPackResponseBody) GetItems() []shared.Routes {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemLookupsByPackResponse struct {
@@ -62,37 +62,37 @@ type CreateSystemLookupsByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemLookupsByPackResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemLookupsByPackResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemLookupsByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemLookupsByPackResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemLookupsByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemLookupsByPackResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemLookupsByPackResponse) GetObject() *CreateSystemLookupsByPackResponseBody {
-	if o == nil {
+func (c *CreateSystemLookupsByPackResponse) GetObject() *CreateSystemLookupsByPackResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemLookupsByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemLookupsByPackResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

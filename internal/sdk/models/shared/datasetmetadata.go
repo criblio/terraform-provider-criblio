@@ -29,30 +29,30 @@ func (d *DatasetMetadata) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DatasetMetadata) GetCreated() *time.Time {
-	if o == nil {
+func (d *DatasetMetadata) GetCreated() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.Created
+	return d.Created
 }
 
-func (o *DatasetMetadata) GetModified() *time.Time {
-	if o == nil {
+func (d *DatasetMetadata) GetModified() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.Modified
+	return d.Modified
 }
 
-func (o *DatasetMetadata) GetTags() []string {
-	if o == nil {
+func (d *DatasetMetadata) GetTags() []string {
+	if d == nil {
 		return nil
 	}
-	return o.Tags
+	return d.Tags
 }
 
-func (o *DatasetMetadata) GetEnableAcceleration() *bool {
-	if o == nil {
+func (d *DatasetMetadata) GetEnableAcceleration() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.EnableAcceleration
+	return d.EnableAcceleration
 }

@@ -47,18 +47,18 @@ func (i *InputJournalFilesConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputJournalFilesConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputJournalFilesConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputJournalFilesConnection) GetOutput() string {
-	if o == nil {
+func (i *InputJournalFilesConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputJournalFilesMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputJournalFilesPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputJournalFilesPq) GetMode() *InputJournalFilesMode {
-	if o == nil {
+func (i *InputJournalFilesPq) GetMode() *InputJournalFilesMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputJournalFilesPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputJournalFilesPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputJournalFilesPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputJournalFilesPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputJournalFilesPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputJournalFilesPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputJournalFilesPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputJournalFilesPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputJournalFilesPq) GetPath() *string {
-	if o == nil {
+func (i *InputJournalFilesPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputJournalFilesPq) GetCompress() *InputJournalFilesCompression {
-	if o == nil {
+func (i *InputJournalFilesPq) GetCompress() *InputJournalFilesCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputJournalFilesRule struct {
@@ -210,18 +210,18 @@ func (i *InputJournalFilesRule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputJournalFilesRule) GetFilter() string {
-	if o == nil {
+func (i *InputJournalFilesRule) GetFilter() string {
+	if i == nil {
 		return ""
 	}
-	return o.Filter
+	return i.Filter
 }
 
-func (o *InputJournalFilesRule) GetDescription() *string {
-	if o == nil {
+func (i *InputJournalFilesRule) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
 type InputJournalFilesMetadatum struct {
@@ -241,18 +241,18 @@ func (i *InputJournalFilesMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputJournalFilesMetadatum) GetName() string {
-	if o == nil {
+func (i *InputJournalFilesMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputJournalFilesMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputJournalFilesMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputJournalFiles struct {
@@ -301,128 +301,128 @@ func (i *InputJournalFiles) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputJournalFiles) GetID() *string {
-	if o == nil {
+func (i *InputJournalFiles) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputJournalFiles) GetType() *InputJournalFilesType {
-	if o == nil {
+func (i *InputJournalFiles) GetType() *InputJournalFilesType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputJournalFiles) GetDisabled() *bool {
-	if o == nil {
+func (i *InputJournalFiles) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputJournalFiles) GetPipeline() *string {
-	if o == nil {
+func (i *InputJournalFiles) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputJournalFiles) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputJournalFiles) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputJournalFiles) GetEnvironment() *string {
-	if o == nil {
+func (i *InputJournalFiles) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputJournalFiles) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputJournalFiles) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputJournalFiles) GetStreamtags() []string {
-	if o == nil {
+func (i *InputJournalFiles) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputJournalFiles) GetConnections() []InputJournalFilesConnection {
-	if o == nil {
+func (i *InputJournalFiles) GetConnections() []InputJournalFilesConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputJournalFiles) GetPq() *InputJournalFilesPq {
-	if o == nil {
+func (i *InputJournalFiles) GetPq() *InputJournalFilesPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputJournalFiles) GetPath() string {
-	if o == nil {
+func (i *InputJournalFiles) GetPath() string {
+	if i == nil {
 		return ""
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputJournalFiles) GetInterval() *float64 {
-	if o == nil {
+func (i *InputJournalFiles) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputJournalFiles) GetJournals() []string {
-	if o == nil {
+func (i *InputJournalFiles) GetJournals() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Journals
+	return i.Journals
 }
 
-func (o *InputJournalFiles) GetRules() []InputJournalFilesRule {
-	if o == nil {
+func (i *InputJournalFiles) GetRules() []InputJournalFilesRule {
+	if i == nil {
 		return nil
 	}
-	return o.Rules
+	return i.Rules
 }
 
-func (o *InputJournalFiles) GetCurrentBoot() *bool {
-	if o == nil {
+func (i *InputJournalFiles) GetCurrentBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CurrentBoot
+	return i.CurrentBoot
 }
 
-func (o *InputJournalFiles) GetMaxAgeDur() *string {
-	if o == nil {
+func (i *InputJournalFiles) GetMaxAgeDur() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxAgeDur
+	return i.MaxAgeDur
 }
 
-func (o *InputJournalFiles) GetMetadata() []InputJournalFilesMetadatum {
-	if o == nil {
+func (i *InputJournalFiles) GetMetadata() []InputJournalFilesMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputJournalFiles) GetDescription() *string {
-	if o == nil {
+func (i *InputJournalFiles) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

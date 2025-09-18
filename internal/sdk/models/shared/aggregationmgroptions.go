@@ -20,107 +20,107 @@ type AggregationMgrOptions struct {
 	TimeWindowSeconds        float64        `json:"timeWindowSeconds"`
 }
 
-func (o *AggregationMgrOptions) GetAggregations() []string {
-	if o == nil {
+func (a *AggregationMgrOptions) GetAggregations() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.Aggregations
+	return a.Aggregations
 }
 
-func (o *AggregationMgrOptions) GetCumulative() bool {
-	if o == nil {
+func (a *AggregationMgrOptions) GetCumulative() bool {
+	if a == nil {
 		return false
 	}
-	return o.Cumulative
+	return a.Cumulative
 }
 
-func (o *AggregationMgrOptions) GetDotsAsLiterals() *bool {
-	if o == nil {
+func (a *AggregationMgrOptions) GetDotsAsLiterals() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.DotsAsLiterals
+	return a.DotsAsLiterals
 }
 
-func (o *AggregationMgrOptions) GetFlushEventLimit() float64 {
-	if o == nil {
+func (a *AggregationMgrOptions) GetFlushEventLimit() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.FlushEventLimit
+	return a.FlushEventLimit
 }
 
-func (o *AggregationMgrOptions) GetFlushMemLimit() float64 {
-	if o == nil {
+func (a *AggregationMgrOptions) GetFlushMemLimit() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.FlushMemLimit
+	return a.FlushMemLimit
 }
 
-func (o *AggregationMgrOptions) GetHostname() string {
-	if o == nil {
+func (a *AggregationMgrOptions) GetHostname() string {
+	if a == nil {
 		return ""
 	}
-	return o.Hostname
+	return a.Hostname
 }
 
-func (o *AggregationMgrOptions) GetIdleTimeLimitSeconds() *float64 {
-	if o == nil {
+func (a *AggregationMgrOptions) GetIdleTimeLimitSeconds() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.IdleTimeLimitSeconds
+	return a.IdleTimeLimitSeconds
 }
 
-func (o *AggregationMgrOptions) GetLagToleranceSeconds() *float64 {
-	if o == nil {
+func (a *AggregationMgrOptions) GetLagToleranceSeconds() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.LagToleranceSeconds
+	return a.LagToleranceSeconds
 }
 
-func (o *AggregationMgrOptions) GetMetricsMode() bool {
-	if o == nil {
+func (a *AggregationMgrOptions) GetMetricsMode() bool {
+	if a == nil {
 		return false
 	}
-	return o.MetricsMode
+	return a.MetricsMode
 }
 
-func (o *AggregationMgrOptions) GetPrefix() *string {
-	if o == nil {
+func (a *AggregationMgrOptions) GetPrefix() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Prefix
+	return a.Prefix
 }
 
-func (o *AggregationMgrOptions) GetPreserveSplitByStructure() *bool {
-	if o == nil {
+func (a *AggregationMgrOptions) GetPreserveSplitByStructure() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.PreserveSplitByStructure
+	return a.PreserveSplitByStructure
 }
 
-func (o *AggregationMgrOptions) GetSearchAggMode() *SearchAggMode {
-	if o == nil {
+func (a *AggregationMgrOptions) GetSearchAggMode() *SearchAggMode {
+	if a == nil {
 		return nil
 	}
-	return o.SearchAggMode
+	return a.SearchAggMode
 }
 
-func (o *AggregationMgrOptions) GetSplitBys() []string {
-	if o == nil {
+func (a *AggregationMgrOptions) GetSplitBys() []string {
+	if a == nil {
 		return nil
 	}
-	return o.SplitBys
+	return a.SplitBys
 }
 
-func (o *AggregationMgrOptions) GetSufficientStatsOnly() bool {
-	if o == nil {
+func (a *AggregationMgrOptions) GetSufficientStatsOnly() bool {
+	if a == nil {
 		return false
 	}
-	return o.SufficientStatsOnly
+	return a.SufficientStatsOnly
 }
 
-func (o *AggregationMgrOptions) GetTimeWindowSeconds() float64 {
-	if o == nil {
+func (a *AggregationMgrOptions) GetTimeWindowSeconds() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.TimeWindowSeconds
+	return a.TimeWindowSeconds
 }

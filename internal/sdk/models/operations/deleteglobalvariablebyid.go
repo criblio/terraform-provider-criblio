@@ -14,18 +14,18 @@ type DeleteGlobalVariableByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteGlobalVariableByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteGlobalVariableByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteGlobalVariableByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteGlobalVariableByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteGlobalVariableByIDResponseBody - a list of Global Variable objects
@@ -33,11 +33,11 @@ type DeleteGlobalVariableByIDResponseBody struct {
 	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (o *DeleteGlobalVariableByIDResponseBody) GetItems() []shared.GlobalVar {
-	if o == nil {
+func (d *DeleteGlobalVariableByIDResponseBody) GetItems() []shared.GlobalVar {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteGlobalVariableByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteGlobalVariableByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteGlobalVariableByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteGlobalVariableByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteGlobalVariableByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteGlobalVariableByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteGlobalVariableByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteGlobalVariableByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteGlobalVariableByIDResponse) GetObject() *DeleteGlobalVariableByIDResponseBody {
-	if o == nil {
+func (d *DeleteGlobalVariableByIDResponse) GetObject() *DeleteGlobalVariableByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteGlobalVariableByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteGlobalVariableByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

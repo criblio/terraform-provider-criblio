@@ -12,11 +12,11 @@ type DeleteKeyMetadataEntityByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteKeyMetadataEntityByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteKeyMetadataEntityByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteKeyMetadataEntityByIDResponseBody - a list of KeyMetadataEntity objects
@@ -24,11 +24,11 @@ type DeleteKeyMetadataEntityByIDResponseBody struct {
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`
 }
 
-func (o *DeleteKeyMetadataEntityByIDResponseBody) GetItems() []shared.KeyMetadataEntity {
-	if o == nil {
+func (d *DeleteKeyMetadataEntityByIDResponseBody) GetItems() []shared.KeyMetadataEntity {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteKeyMetadataEntityByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteKeyMetadataEntityByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteKeyMetadataEntityByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteKeyMetadataEntityByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteKeyMetadataEntityByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteKeyMetadataEntityByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteKeyMetadataEntityByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteKeyMetadataEntityByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteKeyMetadataEntityByIDResponse) GetObject() *DeleteKeyMetadataEntityByIDResponseBody {
-	if o == nil {
+func (d *DeleteKeyMetadataEntityByIDResponse) GetObject() *DeleteKeyMetadataEntityByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteKeyMetadataEntityByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteKeyMetadataEntityByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -12,11 +12,11 @@ type ListProjectRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListProjectRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListProjectRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListProjectResponseBody - a list of Project objects
@@ -24,11 +24,11 @@ type ListProjectResponseBody struct {
 	Items []shared.ProjectConfig `json:"items,omitempty"`
 }
 
-func (o *ListProjectResponseBody) GetItems() []shared.ProjectConfig {
-	if o == nil {
+func (l *ListProjectResponseBody) GetItems() []shared.ProjectConfig {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListProjectResponse struct {
@@ -44,37 +44,37 @@ type ListProjectResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListProjectResponse) GetContentType() string {
-	if o == nil {
+func (l *ListProjectResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListProjectResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListProjectResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListProjectResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListProjectResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListProjectResponse) GetObject() *ListProjectResponseBody {
-	if o == nil {
+func (l *ListProjectResponse) GetObject() *ListProjectResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListProjectResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListProjectResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

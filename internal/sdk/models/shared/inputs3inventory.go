@@ -47,18 +47,18 @@ func (i *InputS3InventoryConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3InventoryConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputS3InventoryConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputS3InventoryConnection) GetOutput() string {
-	if o == nil {
+func (i *InputS3InventoryConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputS3InventoryMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputS3InventoryPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3InventoryPq) GetMode() *InputS3InventoryMode {
-	if o == nil {
+func (i *InputS3InventoryPq) GetMode() *InputS3InventoryMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputS3InventoryPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputS3InventoryPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputS3InventoryPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputS3InventoryPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputS3InventoryPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputS3InventoryPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputS3InventoryPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputS3InventoryPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputS3InventoryPq) GetPath() *string {
-	if o == nil {
+func (i *InputS3InventoryPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputS3InventoryPq) GetCompress() *InputS3InventoryCompression {
-	if o == nil {
+func (i *InputS3InventoryPq) GetCompress() *InputS3InventoryCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputS3InventoryAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
@@ -268,25 +268,25 @@ func (i *InputS3InventoryPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3InventoryPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputS3InventoryPreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputS3InventoryPreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputS3InventoryPreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputS3InventoryPreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputS3InventoryPreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputS3InventoryMetadatum struct {
@@ -306,18 +306,18 @@ func (i *InputS3InventoryMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3InventoryMetadatum) GetName() string {
-	if o == nil {
+func (i *InputS3InventoryMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputS3InventoryMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputS3InventoryMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputS3InventoryCheckpointing struct {
@@ -338,18 +338,18 @@ func (i *InputS3InventoryCheckpointing) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3InventoryCheckpointing) GetEnabled() *bool {
-	if o == nil {
+func (i *InputS3InventoryCheckpointing) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputS3InventoryCheckpointing) GetRetries() *float64 {
-	if o == nil {
+func (i *InputS3InventoryCheckpointing) GetRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Retries
+	return i.Retries
 }
 
 type InputS3InventoryTagAfterProcessing string
@@ -477,331 +477,331 @@ func (i *InputS3Inventory) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3Inventory) GetID() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputS3Inventory) GetType() InputS3InventoryType {
-	if o == nil {
+func (i *InputS3Inventory) GetType() InputS3InventoryType {
+	if i == nil {
 		return InputS3InventoryType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputS3Inventory) GetDisabled() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputS3Inventory) GetPipeline() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputS3Inventory) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputS3Inventory) GetEnvironment() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputS3Inventory) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputS3Inventory) GetStreamtags() []string {
-	if o == nil {
+func (i *InputS3Inventory) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputS3Inventory) GetConnections() []InputS3InventoryConnection {
-	if o == nil {
+func (i *InputS3Inventory) GetConnections() []InputS3InventoryConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputS3Inventory) GetPq() *InputS3InventoryPq {
-	if o == nil {
+func (i *InputS3Inventory) GetPq() *InputS3InventoryPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputS3Inventory) GetQueueName() string {
-	if o == nil {
+func (i *InputS3Inventory) GetQueueName() string {
+	if i == nil {
 		return ""
 	}
-	return o.QueueName
+	return i.QueueName
 }
 
-func (o *InputS3Inventory) GetFileFilter() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetFileFilter() *string {
+	if i == nil {
 		return nil
 	}
-	return o.FileFilter
+	return i.FileFilter
 }
 
-func (o *InputS3Inventory) GetAwsAccountID() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetAwsAccountID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAccountID
+	return i.AwsAccountID
 }
 
-func (o *InputS3Inventory) GetAwsAuthenticationMethod() *InputS3InventoryAuthenticationMethod {
-	if o == nil {
+func (i *InputS3Inventory) GetAwsAuthenticationMethod() *InputS3InventoryAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputS3Inventory) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputS3Inventory) GetRegion() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputS3Inventory) GetEndpoint() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputS3Inventory) GetSignatureVersion() *InputS3InventorySignatureVersion {
-	if o == nil {
+func (i *InputS3Inventory) GetSignatureVersion() *InputS3InventorySignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputS3Inventory) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputS3Inventory) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputS3Inventory) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputS3Inventory) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputS3Inventory) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputS3Inventory) GetMaxMessages() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetMaxMessages() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMessages
+	return i.MaxMessages
 }
 
-func (o *InputS3Inventory) GetVisibilityTimeout() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetVisibilityTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.VisibilityTimeout
+	return i.VisibilityTimeout
 }
 
-func (o *InputS3Inventory) GetNumReceivers() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetNumReceivers() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.NumReceivers
+	return i.NumReceivers
 }
 
-func (o *InputS3Inventory) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputS3Inventory) GetSkipOnError() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetSkipOnError() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SkipOnError
+	return i.SkipOnError
 }
 
-func (o *InputS3Inventory) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputS3Inventory) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputS3Inventory) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputS3Inventory) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputS3Inventory) GetEnableSQSAssumeRole() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetEnableSQSAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableSQSAssumeRole
+	return i.EnableSQSAssumeRole
 }
 
-func (o *InputS3Inventory) GetPreprocess() *InputS3InventoryPreprocess {
-	if o == nil {
+func (i *InputS3Inventory) GetPreprocess() *InputS3InventoryPreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputS3Inventory) GetMetadata() []InputS3InventoryMetadatum {
-	if o == nil {
+func (i *InputS3Inventory) GetMetadata() []InputS3InventoryMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputS3Inventory) GetParquetChunkSizeMB() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetParquetChunkSizeMB() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ParquetChunkSizeMB
+	return i.ParquetChunkSizeMB
 }
 
-func (o *InputS3Inventory) GetParquetChunkDownloadTimeout() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetParquetChunkDownloadTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ParquetChunkDownloadTimeout
+	return i.ParquetChunkDownloadTimeout
 }
 
-func (o *InputS3Inventory) GetCheckpointing() *InputS3InventoryCheckpointing {
-	if o == nil {
+func (i *InputS3Inventory) GetCheckpointing() *InputS3InventoryCheckpointing {
+	if i == nil {
 		return nil
 	}
-	return o.Checkpointing
+	return i.Checkpointing
 }
 
-func (o *InputS3Inventory) GetPollTimeout() *float64 {
-	if o == nil {
+func (i *InputS3Inventory) GetPollTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.PollTimeout
+	return i.PollTimeout
 }
 
-func (o *InputS3Inventory) GetChecksumSuffix() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetChecksumSuffix() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ChecksumSuffix
+	return i.ChecksumSuffix
 }
 
-func (o *InputS3Inventory) GetMaxManifestSizeKB() *int64 {
-	if o == nil {
+func (i *InputS3Inventory) GetMaxManifestSizeKB() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxManifestSizeKB
+	return i.MaxManifestSizeKB
 }
 
-func (o *InputS3Inventory) GetValidateInventoryFiles() *bool {
-	if o == nil {
+func (i *InputS3Inventory) GetValidateInventoryFiles() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ValidateInventoryFiles
+	return i.ValidateInventoryFiles
 }
 
-func (o *InputS3Inventory) GetDescription() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputS3Inventory) GetAwsAPIKey() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetAwsAPIKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return i.AwsAPIKey
 }
 
-func (o *InputS3Inventory) GetAwsSecret() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetAwsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecret
+	return i.AwsSecret
 }
 
-func (o *InputS3Inventory) GetTagAfterProcessing() *InputS3InventoryTagAfterProcessing {
-	if o == nil {
+func (i *InputS3Inventory) GetTagAfterProcessing() *InputS3InventoryTagAfterProcessing {
+	if i == nil {
 		return nil
 	}
-	return o.TagAfterProcessing
+	return i.TagAfterProcessing
 }
 
-func (o *InputS3Inventory) GetProcessedTagKey() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetProcessedTagKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ProcessedTagKey
+	return i.ProcessedTagKey
 }
 
-func (o *InputS3Inventory) GetProcessedTagValue() *string {
-	if o == nil {
+func (i *InputS3Inventory) GetProcessedTagValue() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ProcessedTagValue
+	return i.ProcessedTagValue
 }

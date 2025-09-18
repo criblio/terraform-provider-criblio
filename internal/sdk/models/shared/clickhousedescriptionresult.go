@@ -8,23 +8,23 @@ type ClickHouseDescriptionResult struct {
 	Success     bool                          `json:"success"`
 }
 
-func (o *ClickHouseDescriptionResult) GetDescription() []ClickHouseDescriptionColumn {
-	if o == nil {
+func (c *ClickHouseDescriptionResult) GetDescription() []ClickHouseDescriptionColumn {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *ClickHouseDescriptionResult) GetErrorMsg() *string {
-	if o == nil {
+func (c *ClickHouseDescriptionResult) GetErrorMsg() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorMsg
+	return c.ErrorMsg
 }
 
-func (o *ClickHouseDescriptionResult) GetSuccess() bool {
-	if o == nil {
+func (c *ClickHouseDescriptionResult) GetSuccess() bool {
+	if c == nil {
 		return false
 	}
-	return o.Success
+	return c.Success
 }

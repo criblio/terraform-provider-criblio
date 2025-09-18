@@ -9,30 +9,30 @@ type JobInfo struct {
 	Status JobStatus   `json:"status"`
 }
 
-func (o *JobInfo) GetArgs() RunnableJob {
-	if o == nil {
+func (j *JobInfo) GetArgs() RunnableJob {
+	if j == nil {
 		return RunnableJob{}
 	}
-	return o.Args
+	return j.Args
 }
 
-func (o *JobInfo) GetID() string {
-	if o == nil {
+func (j *JobInfo) GetID() string {
+	if j == nil {
 		return ""
 	}
-	return o.ID
+	return j.ID
 }
 
-func (o *JobInfo) GetKeep() *bool {
-	if o == nil {
+func (j *JobInfo) GetKeep() *bool {
+	if j == nil {
 		return nil
 	}
-	return o.Keep
+	return j.Keep
 }
 
-func (o *JobInfo) GetStatus() JobStatus {
-	if o == nil {
+func (j *JobInfo) GetStatus() JobStatus {
+	if j == nil {
 		return JobStatus{}
 	}
-	return o.Status
+	return j.Status
 }

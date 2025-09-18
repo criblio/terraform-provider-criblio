@@ -16,58 +16,58 @@ type TLSClientParams struct {
 	Servername          *string              `json:"servername,omitempty"`
 }
 
-func (o *TLSClientParams) GetCaPath() *string {
-	if o == nil {
+func (t *TLSClientParams) GetCaPath() *string {
+	if t == nil {
 		return nil
 	}
-	return o.CaPath
+	return t.CaPath
 }
 
-func (o *TLSClientParams) GetCertPath() *string {
-	if o == nil {
+func (t *TLSClientParams) GetCertPath() *string {
+	if t == nil {
 		return nil
 	}
-	return o.CertPath
+	return t.CertPath
 }
 
-func (o *TLSClientParams) GetCheckServerIdentity() *CheckServerIdentity {
-	if o == nil {
+func (t *TLSClientParams) GetCheckServerIdentity() *CheckServerIdentity {
+	if t == nil {
 		return nil
 	}
-	return o.CheckServerIdentity
+	return t.CheckServerIdentity
 }
 
-func (o *TLSClientParams) GetDisabled() bool {
-	if o == nil {
+func (t *TLSClientParams) GetDisabled() bool {
+	if t == nil {
 		return false
 	}
-	return o.Disabled
+	return t.Disabled
 }
 
-func (o *TLSClientParams) GetPassphrase() *string {
-	if o == nil {
+func (t *TLSClientParams) GetPassphrase() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Passphrase
+	return t.Passphrase
 }
 
-func (o *TLSClientParams) GetPrivKeyPath() *string {
-	if o == nil {
+func (t *TLSClientParams) GetPrivKeyPath() *string {
+	if t == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return t.PrivKeyPath
 }
 
-func (o *TLSClientParams) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (t *TLSClientParams) GetRejectUnauthorized() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return t.RejectUnauthorized
 }
 
-func (o *TLSClientParams) GetServername() *string {
-	if o == nil {
+func (t *TLSClientParams) GetServername() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Servername
+	return t.Servername
 }

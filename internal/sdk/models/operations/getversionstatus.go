@@ -12,11 +12,11 @@ type GetVersionStatusRequest struct {
 	Group *string `queryParam:"style=form,explode=true,name=group"`
 }
 
-func (o *GetVersionStatusRequest) GetGroup() *string {
-	if o == nil {
+func (g *GetVersionStatusRequest) GetGroup() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Group
+	return g.Group
 }
 
 // GetVersionStatusResponseBody - a list of GitStatusResult objects
@@ -24,11 +24,11 @@ type GetVersionStatusResponseBody struct {
 	Items []shared.GitStatusResult `json:"items,omitempty"`
 }
 
-func (o *GetVersionStatusResponseBody) GetItems() []shared.GitStatusResult {
-	if o == nil {
+func (g *GetVersionStatusResponseBody) GetItems() []shared.GitStatusResult {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetVersionStatusResponse struct {
@@ -44,37 +44,37 @@ type GetVersionStatusResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetVersionStatusResponse) GetContentType() string {
-	if o == nil {
+func (g *GetVersionStatusResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetVersionStatusResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetVersionStatusResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetVersionStatusResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetVersionStatusResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetVersionStatusResponse) GetObject() *GetVersionStatusResponseBody {
-	if o == nil {
+func (g *GetVersionStatusResponse) GetObject() *GetVersionStatusResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetVersionStatusResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetVersionStatusResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -7,16 +7,16 @@ type ChangelogState struct {
 	LastViewedUpgrade *string `json:"lastViewedUpgrade,omitempty"`
 }
 
-func (o *ChangelogState) GetLastViewedCurrent() *string {
-	if o == nil {
+func (c *ChangelogState) GetLastViewedCurrent() *string {
+	if c == nil {
 		return nil
 	}
-	return o.LastViewedCurrent
+	return c.LastViewedCurrent
 }
 
-func (o *ChangelogState) GetLastViewedUpgrade() *string {
-	if o == nil {
+func (c *ChangelogState) GetLastViewedUpgrade() *string {
+	if c == nil {
 		return nil
 	}
-	return o.LastViewedUpgrade
+	return c.LastViewedUpgrade
 }

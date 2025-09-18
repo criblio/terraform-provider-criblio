@@ -18,39 +18,39 @@ type SystemSettingsSsl struct {
 	PrivKeyPath string  `json:"privKeyPath"`
 }
 
-func (o *SystemSettingsSsl) GetCaPath() *string {
-	if o == nil {
+func (s *SystemSettingsSsl) GetCaPath() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CaPath
+	return s.CaPath
 }
 
-func (o *SystemSettingsSsl) GetCertPath() string {
-	if o == nil {
+func (s *SystemSettingsSsl) GetCertPath() string {
+	if s == nil {
 		return ""
 	}
-	return o.CertPath
+	return s.CertPath
 }
 
-func (o *SystemSettingsSsl) GetDisabled() bool {
-	if o == nil {
+func (s *SystemSettingsSsl) GetDisabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.Disabled
+	return s.Disabled
 }
 
-func (o *SystemSettingsSsl) GetPassphrase() string {
-	if o == nil {
+func (s *SystemSettingsSsl) GetPassphrase() string {
+	if s == nil {
 		return ""
 	}
-	return o.Passphrase
+	return s.Passphrase
 }
 
-func (o *SystemSettingsSsl) GetPrivKeyPath() string {
-	if o == nil {
+func (s *SystemSettingsSsl) GetPrivKeyPath() string {
+	if s == nil {
 		return ""
 	}
-	return o.PrivKeyPath
+	return s.PrivKeyPath
 }
 
 type SystemSettingsAPI struct {
@@ -71,109 +71,109 @@ type SystemSettingsAPI struct {
 	WorkerRemoteAccess bool                   `json:"workerRemoteAccess"`
 }
 
-func (o *SystemSettingsAPI) GetBaseURL() *string {
-	if o == nil {
+func (s *SystemSettingsAPI) GetBaseURL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BaseURL
+	return s.BaseURL
 }
 
-func (o *SystemSettingsAPI) GetDisableAPICache() *bool {
-	if o == nil {
+func (s *SystemSettingsAPI) GetDisableAPICache() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.DisableAPICache
+	return s.DisableAPICache
 }
 
-func (o *SystemSettingsAPI) GetDisabled() bool {
-	if o == nil {
+func (s *SystemSettingsAPI) GetDisabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.Disabled
+	return s.Disabled
 }
 
-func (o *SystemSettingsAPI) GetHeaders() *SystemSettingsHeaders {
-	if o == nil {
+func (s *SystemSettingsAPI) GetHeaders() *SystemSettingsHeaders {
+	if s == nil {
 		return nil
 	}
-	return o.Headers
+	return s.Headers
 }
 
-func (o *SystemSettingsAPI) GetHost() string {
-	if o == nil {
+func (s *SystemSettingsAPI) GetHost() string {
+	if s == nil {
 		return ""
 	}
-	return o.Host
+	return s.Host
 }
 
-func (o *SystemSettingsAPI) GetIdleSessionTTL() *float64 {
-	if o == nil {
+func (s *SystemSettingsAPI) GetIdleSessionTTL() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.IdleSessionTTL
+	return s.IdleSessionTTL
 }
 
-func (o *SystemSettingsAPI) GetListenOnPort() *bool {
-	if o == nil {
+func (s *SystemSettingsAPI) GetListenOnPort() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.ListenOnPort
+	return s.ListenOnPort
 }
 
-func (o *SystemSettingsAPI) GetLoginRateLimit() *string {
-	if o == nil {
+func (s *SystemSettingsAPI) GetLoginRateLimit() *string {
+	if s == nil {
 		return nil
 	}
-	return o.LoginRateLimit
+	return s.LoginRateLimit
 }
 
-func (o *SystemSettingsAPI) GetPort() float64 {
-	if o == nil {
+func (s *SystemSettingsAPI) GetPort() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Port
+	return s.Port
 }
 
-func (o *SystemSettingsAPI) GetProtocol() string {
-	if o == nil {
+func (s *SystemSettingsAPI) GetProtocol() string {
+	if s == nil {
 		return ""
 	}
-	return o.Protocol
+	return s.Protocol
 }
 
-func (o *SystemSettingsAPI) GetScripts() *bool {
-	if o == nil {
+func (s *SystemSettingsAPI) GetScripts() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Scripts
+	return s.Scripts
 }
 
-func (o *SystemSettingsAPI) GetSensitiveFields() []string {
-	if o == nil {
+func (s *SystemSettingsAPI) GetSensitiveFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.SensitiveFields
+	return s.SensitiveFields
 }
 
-func (o *SystemSettingsAPI) GetSsl() SystemSettingsSsl {
-	if o == nil {
+func (s *SystemSettingsAPI) GetSsl() SystemSettingsSsl {
+	if s == nil {
 		return SystemSettingsSsl{}
 	}
-	return o.Ssl
+	return s.Ssl
 }
 
-func (o *SystemSettingsAPI) GetSsoRateLimit() *string {
-	if o == nil {
+func (s *SystemSettingsAPI) GetSsoRateLimit() *string {
+	if s == nil {
 		return nil
 	}
-	return o.SsoRateLimit
+	return s.SsoRateLimit
 }
 
-func (o *SystemSettingsAPI) GetWorkerRemoteAccess() bool {
-	if o == nil {
+func (s *SystemSettingsAPI) GetWorkerRemoteAccess() bool {
+	if s == nil {
 		return false
 	}
-	return o.WorkerRemoteAccess
+	return s.WorkerRemoteAccess
 }
 
 type SystemSettingsBackups struct {
@@ -181,18 +181,18 @@ type SystemSettingsBackups struct {
 	BackupsDirectory  string `json:"backupsDirectory"`
 }
 
-func (o *SystemSettingsBackups) GetBackupPersistence() string {
-	if o == nil {
+func (s *SystemSettingsBackups) GetBackupPersistence() string {
+	if s == nil {
 		return ""
 	}
-	return o.BackupPersistence
+	return s.BackupPersistence
 }
 
-func (o *SystemSettingsBackups) GetBackupsDirectory() string {
-	if o == nil {
+func (s *SystemSettingsBackups) GetBackupsDirectory() string {
+	if s == nil {
 		return ""
 	}
-	return o.BackupsDirectory
+	return s.BackupsDirectory
 }
 
 type SystemSettingsCustomLogo struct {
@@ -201,58 +201,58 @@ type SystemSettingsCustomLogo struct {
 	LogoImage       string `json:"logoImage"`
 }
 
-func (o *SystemSettingsCustomLogo) GetEnabled() bool {
-	if o == nil {
+func (s *SystemSettingsCustomLogo) GetEnabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.Enabled
+	return s.Enabled
 }
 
-func (o *SystemSettingsCustomLogo) GetLogoDescription() string {
-	if o == nil {
+func (s *SystemSettingsCustomLogo) GetLogoDescription() string {
+	if s == nil {
 		return ""
 	}
-	return o.LogoDescription
+	return s.LogoDescription
 }
 
-func (o *SystemSettingsCustomLogo) GetLogoImage() string {
-	if o == nil {
+func (s *SystemSettingsCustomLogo) GetLogoImage() string {
+	if s == nil {
 		return ""
 	}
-	return o.LogoImage
+	return s.LogoImage
 }
 
 type Distributed struct {
 	Mode AppMode `json:"mode"`
 }
 
-func (o *Distributed) GetMode() AppMode {
-	if o == nil {
+func (d *Distributed) GetMode() AppMode {
+	if d == nil {
 		return AppMode("")
 	}
-	return o.Mode
+	return d.Mode
 }
 
 type SystemSettingsPii struct {
 	EnablePiiDetection bool `json:"enablePiiDetection"`
 }
 
-func (o *SystemSettingsPii) GetEnablePiiDetection() bool {
-	if o == nil {
+func (s *SystemSettingsPii) GetEnablePiiDetection() bool {
+	if s == nil {
 		return false
 	}
-	return o.EnablePiiDetection
+	return s.EnablePiiDetection
 }
 
 type SystemSettingsProxy struct {
 	UseEnvVars bool `json:"useEnvVars"`
 }
 
-func (o *SystemSettingsProxy) GetUseEnvVars() bool {
-	if o == nil {
+func (s *SystemSettingsProxy) GetUseEnvVars() bool {
+	if s == nil {
 		return false
 	}
-	return o.UseEnvVars
+	return s.UseEnvVars
 }
 
 type SystemSettingsRollback struct {
@@ -261,58 +261,58 @@ type SystemSettingsRollback struct {
 	RollbackTimeout *float64 `json:"rollbackTimeout,omitempty"`
 }
 
-func (o *SystemSettingsRollback) GetRollbackEnabled() bool {
-	if o == nil {
+func (s *SystemSettingsRollback) GetRollbackEnabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.RollbackEnabled
+	return s.RollbackEnabled
 }
 
-func (o *SystemSettingsRollback) GetRollbackRetries() *float64 {
-	if o == nil {
+func (s *SystemSettingsRollback) GetRollbackRetries() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.RollbackRetries
+	return s.RollbackRetries
 }
 
-func (o *SystemSettingsRollback) GetRollbackTimeout() *float64 {
-	if o == nil {
+func (s *SystemSettingsRollback) GetRollbackTimeout() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.RollbackTimeout
+	return s.RollbackTimeout
 }
 
 type SystemSettingsShutdown struct {
 	DrainTimeout float64 `json:"drainTimeout"`
 }
 
-func (o *SystemSettingsShutdown) GetDrainTimeout() float64 {
-	if o == nil {
+func (s *SystemSettingsShutdown) GetDrainTimeout() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.DrainTimeout
+	return s.DrainTimeout
 }
 
 type SystemSettingsSni struct {
 	DisableSNIRouting bool `json:"disableSNIRouting"`
 }
 
-func (o *SystemSettingsSni) GetDisableSNIRouting() bool {
-	if o == nil {
+func (s *SystemSettingsSni) GetDisableSNIRouting() bool {
+	if s == nil {
 		return false
 	}
-	return o.DisableSNIRouting
+	return s.DisableSNIRouting
 }
 
 type SystemSettingsSockets struct {
 	Directory *string `json:"directory,omitempty"`
 }
 
-func (o *SystemSettingsSockets) GetDirectory() *string {
-	if o == nil {
+func (s *SystemSettingsSockets) GetDirectory() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Directory
+	return s.Directory
 }
 
 type SystemSettingsUpgrade string
@@ -346,18 +346,18 @@ type SystemSettingsSystem struct {
 	Upgrade  SystemSettingsUpgrade `json:"upgrade"`
 }
 
-func (o *SystemSettingsSystem) GetIntercom() bool {
-	if o == nil {
+func (s *SystemSettingsSystem) GetIntercom() bool {
+	if s == nil {
 		return false
 	}
-	return o.Intercom
+	return s.Intercom
 }
 
-func (o *SystemSettingsSystem) GetUpgrade() SystemSettingsUpgrade {
-	if o == nil {
+func (s *SystemSettingsSystem) GetUpgrade() SystemSettingsUpgrade {
+	if s == nil {
 		return SystemSettingsUpgrade("")
 	}
-	return o.Upgrade
+	return s.Upgrade
 }
 
 type SystemSettingsTLS struct {
@@ -368,39 +368,39 @@ type SystemSettingsTLS struct {
 	RejectUnauthorized bool   `json:"rejectUnauthorized"`
 }
 
-func (o *SystemSettingsTLS) GetDefaultCipherList() string {
-	if o == nil {
+func (s *SystemSettingsTLS) GetDefaultCipherList() string {
+	if s == nil {
 		return ""
 	}
-	return o.DefaultCipherList
+	return s.DefaultCipherList
 }
 
-func (o *SystemSettingsTLS) GetDefaultEcdhCurve() string {
-	if o == nil {
+func (s *SystemSettingsTLS) GetDefaultEcdhCurve() string {
+	if s == nil {
 		return ""
 	}
-	return o.DefaultEcdhCurve
+	return s.DefaultEcdhCurve
 }
 
-func (o *SystemSettingsTLS) GetMaxVersion() string {
-	if o == nil {
+func (s *SystemSettingsTLS) GetMaxVersion() string {
+	if s == nil {
 		return ""
 	}
-	return o.MaxVersion
+	return s.MaxVersion
 }
 
-func (o *SystemSettingsTLS) GetMinVersion() string {
-	if o == nil {
+func (s *SystemSettingsTLS) GetMinVersion() string {
+	if s == nil {
 		return ""
 	}
-	return o.MinVersion
+	return s.MinVersion
 }
 
-func (o *SystemSettingsTLS) GetRejectUnauthorized() bool {
-	if o == nil {
+func (s *SystemSettingsTLS) GetRejectUnauthorized() bool {
+	if s == nil {
 		return false
 	}
-	return o.RejectUnauthorized
+	return s.RejectUnauthorized
 }
 
 type SystemSettingsWorkers struct {
@@ -414,60 +414,60 @@ type SystemSettingsWorkers struct {
 	V8SingleThread         *bool    `json:"v8SingleThread,omitempty"`
 }
 
-func (o *SystemSettingsWorkers) GetCount() float64 {
-	if o == nil {
+func (s *SystemSettingsWorkers) GetCount() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Count
+	return s.Count
 }
 
-func (o *SystemSettingsWorkers) GetEnableHeapSnapshots() *bool {
-	if o == nil {
+func (s *SystemSettingsWorkers) GetEnableHeapSnapshots() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.EnableHeapSnapshots
+	return s.EnableHeapSnapshots
 }
 
-func (o *SystemSettingsWorkers) GetLoadThrottlePerc() *float64 {
-	if o == nil {
+func (s *SystemSettingsWorkers) GetLoadThrottlePerc() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.LoadThrottlePerc
+	return s.LoadThrottlePerc
 }
 
-func (o *SystemSettingsWorkers) GetMemory() float64 {
-	if o == nil {
+func (s *SystemSettingsWorkers) GetMemory() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Memory
+	return s.Memory
 }
 
-func (o *SystemSettingsWorkers) GetMinimum() float64 {
-	if o == nil {
+func (s *SystemSettingsWorkers) GetMinimum() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Minimum
+	return s.Minimum
 }
 
-func (o *SystemSettingsWorkers) GetStartupMaxConns() *float64 {
-	if o == nil {
+func (s *SystemSettingsWorkers) GetStartupMaxConns() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.StartupMaxConns
+	return s.StartupMaxConns
 }
 
-func (o *SystemSettingsWorkers) GetStartupThrottleTimeout() *float64 {
-	if o == nil {
+func (s *SystemSettingsWorkers) GetStartupThrottleTimeout() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.StartupThrottleTimeout
+	return s.StartupThrottleTimeout
 }
 
-func (o *SystemSettingsWorkers) GetV8SingleThread() *bool {
-	if o == nil {
+func (s *SystemSettingsWorkers) GetV8SingleThread() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.V8SingleThread
+	return s.V8SingleThread
 }
 
 type SystemSettings struct {
@@ -497,170 +497,170 @@ type SystemSettings struct {
 	Workers              SystemSettingsWorkers    `json:"workers"`
 }
 
-func (o *SystemSettings) GetAPI() SystemSettingsAPI {
-	if o == nil {
+func (s *SystemSettings) GetAPI() SystemSettingsAPI {
+	if s == nil {
 		return SystemSettingsAPI{}
 	}
-	return o.API
+	return s.API
 }
 
-func (o *SystemSettings) GetAuth() AuthConfig {
-	if o == nil {
+func (s *SystemSettings) GetAuth() AuthConfig {
+	if s == nil {
 		return AuthConfig{}
 	}
-	return o.Auth
+	return s.Auth
 }
 
-func (o *SystemSettings) GetBackups() SystemSettingsBackups {
-	if o == nil {
+func (s *SystemSettings) GetBackups() SystemSettingsBackups {
+	if s == nil {
 		return SystemSettingsBackups{}
 	}
-	return o.Backups
+	return s.Backups
 }
 
-func (o *SystemSettings) GetCustomLogo() SystemSettingsCustomLogo {
-	if o == nil {
+func (s *SystemSettings) GetCustomLogo() SystemSettingsCustomLogo {
+	if s == nil {
 		return SystemSettingsCustomLogo{}
 	}
-	return o.CustomLogo
+	return s.CustomLogo
 }
 
-func (o *SystemSettings) GetDistributed() Distributed {
-	if o == nil {
+func (s *SystemSettings) GetDistributed() Distributed {
+	if s == nil {
 		return Distributed{}
 	}
-	return o.Distributed
+	return s.Distributed
 }
 
-func (o *SystemSettings) GetFips() bool {
-	if o == nil {
+func (s *SystemSettings) GetFips() bool {
+	if s == nil {
 		return false
 	}
-	return o.Fips
+	return s.Fips
 }
 
-func (o *SystemSettings) GetGit() GitSettings {
-	if o == nil {
+func (s *SystemSettings) GetGit() GitSettings {
+	if s == nil {
 		return GitSettings{}
 	}
-	return o.Git
+	return s.Git
 }
 
-func (o *SystemSettings) GetJobLimits() JobSettings {
-	if o == nil {
+func (s *SystemSettings) GetJobLimits() JobSettings {
+	if s == nil {
 		return JobSettings{}
 	}
-	return o.JobLimits
+	return s.JobLimits
 }
 
-func (o *SystemSettings) GetLimits() Limits {
-	if o == nil {
+func (s *SystemSettings) GetLimits() Limits {
+	if s == nil {
 		return Limits{}
 	}
-	return o.Limits
+	return s.Limits
 }
 
-func (o *SystemSettings) GetPii() SystemSettingsPii {
-	if o == nil {
+func (s *SystemSettings) GetPii() SystemSettingsPii {
+	if s == nil {
 		return SystemSettingsPii{}
 	}
-	return o.Pii
+	return s.Pii
 }
 
-func (o *SystemSettings) GetProxy() SystemSettingsProxy {
-	if o == nil {
+func (s *SystemSettings) GetProxy() SystemSettingsProxy {
+	if s == nil {
 		return SystemSettingsProxy{}
 	}
-	return o.Proxy
+	return s.Proxy
 }
 
-func (o *SystemSettings) GetRedisCacheLimits() RedisCacheLimits {
-	if o == nil {
+func (s *SystemSettings) GetRedisCacheLimits() RedisCacheLimits {
+	if s == nil {
 		return RedisCacheLimits{}
 	}
-	return o.RedisCacheLimits
+	return s.RedisCacheLimits
 }
 
-func (o *SystemSettings) GetRedisLimits() RedisLimits {
-	if o == nil {
+func (s *SystemSettings) GetRedisLimits() RedisLimits {
+	if s == nil {
 		return RedisLimits{}
 	}
-	return o.RedisLimits
+	return s.RedisLimits
 }
 
-func (o *SystemSettings) GetRollback() SystemSettingsRollback {
-	if o == nil {
+func (s *SystemSettings) GetRollback() SystemSettingsRollback {
+	if s == nil {
 		return SystemSettingsRollback{}
 	}
-	return o.Rollback
+	return s.Rollback
 }
 
-func (o *SystemSettings) GetSearchLimits() SearchSettings {
-	if o == nil {
+func (s *SystemSettings) GetSearchLimits() SearchSettings {
+	if s == nil {
 		return SearchSettings{}
 	}
-	return o.SearchLimits
+	return s.SearchLimits
 }
 
-func (o *SystemSettings) GetServicesLimits() ServicesLimits {
-	if o == nil {
+func (s *SystemSettings) GetServicesLimits() ServicesLimits {
+	if s == nil {
 		return ServicesLimits{}
 	}
-	return o.ServicesLimits
+	return s.ServicesLimits
 }
 
-func (o *SystemSettings) GetShutdown() SystemSettingsShutdown {
-	if o == nil {
+func (s *SystemSettings) GetShutdown() SystemSettingsShutdown {
+	if s == nil {
 		return SystemSettingsShutdown{}
 	}
-	return o.Shutdown
+	return s.Shutdown
 }
 
-func (o *SystemSettings) GetSni() SystemSettingsSni {
-	if o == nil {
+func (s *SystemSettings) GetSni() SystemSettingsSni {
+	if s == nil {
 		return SystemSettingsSni{}
 	}
-	return o.Sni
+	return s.Sni
 }
 
-func (o *SystemSettings) GetSockets() *SystemSettingsSockets {
-	if o == nil {
+func (s *SystemSettings) GetSockets() *SystemSettingsSockets {
+	if s == nil {
 		return nil
 	}
-	return o.Sockets
+	return s.Sockets
 }
 
-func (o *SystemSettings) GetSystem() SystemSettingsSystem {
-	if o == nil {
+func (s *SystemSettings) GetSystem() SystemSettingsSystem {
+	if s == nil {
 		return SystemSettingsSystem{}
 	}
-	return o.System
+	return s.System
 }
 
-func (o *SystemSettings) GetTLS() SystemSettingsTLS {
-	if o == nil {
+func (s *SystemSettings) GetTLS() SystemSettingsTLS {
+	if s == nil {
 		return SystemSettingsTLS{}
 	}
-	return o.TLS
+	return s.TLS
 }
 
-func (o *SystemSettings) GetUpgradeGroupSettings() UpgradeGroupSettings {
-	if o == nil {
+func (s *SystemSettings) GetUpgradeGroupSettings() UpgradeGroupSettings {
+	if s == nil {
 		return UpgradeGroupSettings{}
 	}
-	return o.UpgradeGroupSettings
+	return s.UpgradeGroupSettings
 }
 
-func (o *SystemSettings) GetUpgradeSettings() UpgradeSettings {
-	if o == nil {
+func (s *SystemSettings) GetUpgradeSettings() UpgradeSettings {
+	if s == nil {
 		return UpgradeSettings{}
 	}
-	return o.UpgradeSettings
+	return s.UpgradeSettings
 }
 
-func (o *SystemSettings) GetWorkers() SystemSettingsWorkers {
-	if o == nil {
+func (s *SystemSettings) GetWorkers() SystemSettingsWorkers {
+	if s == nil {
 		return SystemSettingsWorkers{}
 	}
-	return o.Workers
+	return s.Workers
 }

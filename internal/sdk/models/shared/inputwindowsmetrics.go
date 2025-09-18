@@ -47,18 +47,18 @@ func (i *InputWindowsMetricsConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputWindowsMetricsConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputWindowsMetricsConnection) GetOutput() string {
-	if o == nil {
+func (i *InputWindowsMetricsConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputWindowsMetricsPqMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputWindowsMetricsPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsPq) GetMode() *InputWindowsMetricsPqMode {
-	if o == nil {
+func (i *InputWindowsMetricsPq) GetMode() *InputWindowsMetricsPqMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWindowsMetricsPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputWindowsMetricsPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputWindowsMetricsPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputWindowsMetricsPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputWindowsMetricsPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputWindowsMetricsPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputWindowsMetricsPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputWindowsMetricsPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputWindowsMetricsPq) GetPath() *string {
-	if o == nil {
+func (i *InputWindowsMetricsPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputWindowsMetricsPq) GetCompress() *InputWindowsMetricsCompression {
-	if o == nil {
+func (i *InputWindowsMetricsPq) GetCompress() *InputWindowsMetricsCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputWindowsMetricsHostMode - Select level of detail for host metrics
@@ -276,18 +276,18 @@ func (i *InputWindowsMetricsSystem) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsSystem) GetMode() *InputWindowsMetricsSystemMode {
-	if o == nil {
+func (i *InputWindowsMetricsSystem) GetMode() *InputWindowsMetricsSystemMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWindowsMetricsSystem) GetDetail() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsSystem) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
 // InputWindowsMetricsCPUMode - Select the level of details for CPU metrics
@@ -345,32 +345,32 @@ func (i *InputWindowsMetricsCPU) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsCPU) GetMode() *InputWindowsMetricsCPUMode {
-	if o == nil {
+func (i *InputWindowsMetricsCPU) GetMode() *InputWindowsMetricsCPUMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWindowsMetricsCPU) GetPerCPU() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsCPU) GetPerCPU() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerCPU
+	return i.PerCPU
 }
 
-func (o *InputWindowsMetricsCPU) GetDetail() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsCPU) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
-func (o *InputWindowsMetricsCPU) GetTime() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsCPU) GetTime() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Time
+	return i.Time
 }
 
 // InputWindowsMetricsMemoryMode - Select the level of details for memory metrics
@@ -424,18 +424,18 @@ func (i *InputWindowsMetricsMemory) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsMemory) GetMode() *InputWindowsMetricsMemoryMode {
-	if o == nil {
+func (i *InputWindowsMetricsMemory) GetMode() *InputWindowsMetricsMemoryMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWindowsMetricsMemory) GetDetail() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsMemory) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
 // InputWindowsMetricsNetworkMode - Select the level of details for network metrics
@@ -493,32 +493,32 @@ func (i *InputWindowsMetricsNetwork) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsNetwork) GetMode() *InputWindowsMetricsNetworkMode {
-	if o == nil {
+func (i *InputWindowsMetricsNetwork) GetMode() *InputWindowsMetricsNetworkMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWindowsMetricsNetwork) GetDevices() []string {
-	if o == nil {
+func (i *InputWindowsMetricsNetwork) GetDevices() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Devices
+	return i.Devices
 }
 
-func (o *InputWindowsMetricsNetwork) GetPerInterface() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsNetwork) GetPerInterface() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerInterface
+	return i.PerInterface
 }
 
-func (o *InputWindowsMetricsNetwork) GetDetail() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsNetwork) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
 // InputWindowsMetricsDiskMode - Select the level of details for disk metrics
@@ -574,25 +574,25 @@ func (i *InputWindowsMetricsDisk) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsDisk) GetMode() *InputWindowsMetricsDiskMode {
-	if o == nil {
+func (i *InputWindowsMetricsDisk) GetMode() *InputWindowsMetricsDiskMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWindowsMetricsDisk) GetVolumes() []string {
-	if o == nil {
+func (i *InputWindowsMetricsDisk) GetVolumes() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Volumes
+	return i.Volumes
 }
 
-func (o *InputWindowsMetricsDisk) GetPerVolume() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsDisk) GetPerVolume() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerVolume
+	return i.PerVolume
 }
 
 type InputWindowsMetricsCustom struct {
@@ -614,39 +614,39 @@ func (i *InputWindowsMetricsCustom) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsCustom) GetSystem() *InputWindowsMetricsSystem {
-	if o == nil {
+func (i *InputWindowsMetricsCustom) GetSystem() *InputWindowsMetricsSystem {
+	if i == nil {
 		return nil
 	}
-	return o.System
+	return i.System
 }
 
-func (o *InputWindowsMetricsCustom) GetCPU() *InputWindowsMetricsCPU {
-	if o == nil {
+func (i *InputWindowsMetricsCustom) GetCPU() *InputWindowsMetricsCPU {
+	if i == nil {
 		return nil
 	}
-	return o.CPU
+	return i.CPU
 }
 
-func (o *InputWindowsMetricsCustom) GetMemory() *InputWindowsMetricsMemory {
-	if o == nil {
+func (i *InputWindowsMetricsCustom) GetMemory() *InputWindowsMetricsMemory {
+	if i == nil {
 		return nil
 	}
-	return o.Memory
+	return i.Memory
 }
 
-func (o *InputWindowsMetricsCustom) GetNetwork() *InputWindowsMetricsNetwork {
-	if o == nil {
+func (i *InputWindowsMetricsCustom) GetNetwork() *InputWindowsMetricsNetwork {
+	if i == nil {
 		return nil
 	}
-	return o.Network
+	return i.Network
 }
 
-func (o *InputWindowsMetricsCustom) GetDisk() *InputWindowsMetricsDisk {
-	if o == nil {
+func (i *InputWindowsMetricsCustom) GetDisk() *InputWindowsMetricsDisk {
+	if i == nil {
 		return nil
 	}
-	return o.Disk
+	return i.Disk
 }
 
 type InputWindowsMetricsHost struct {
@@ -666,18 +666,18 @@ func (i *InputWindowsMetricsHost) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsHost) GetMode() *InputWindowsMetricsHostMode {
-	if o == nil {
+func (i *InputWindowsMetricsHost) GetMode() *InputWindowsMetricsHostMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWindowsMetricsHost) GetCustom() *InputWindowsMetricsCustom {
-	if o == nil {
+func (i *InputWindowsMetricsHost) GetCustom() *InputWindowsMetricsCustom {
+	if i == nil {
 		return nil
 	}
-	return o.Custom
+	return i.Custom
 }
 
 type InputWindowsMetricsSet struct {
@@ -697,25 +697,25 @@ func (i *InputWindowsMetricsSet) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsSet) GetName() string {
-	if o == nil {
+func (i *InputWindowsMetricsSet) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputWindowsMetricsSet) GetFilter() string {
-	if o == nil {
+func (i *InputWindowsMetricsSet) GetFilter() string {
+	if i == nil {
 		return ""
 	}
-	return o.Filter
+	return i.Filter
 }
 
-func (o *InputWindowsMetricsSet) GetIncludeChildren() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsSet) GetIncludeChildren() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IncludeChildren
+	return i.IncludeChildren
 }
 
 type InputWindowsMetricsProcess struct {
@@ -734,11 +734,11 @@ func (i *InputWindowsMetricsProcess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsProcess) GetSets() []InputWindowsMetricsSet {
-	if o == nil {
+func (i *InputWindowsMetricsProcess) GetSets() []InputWindowsMetricsSet {
+	if i == nil {
 		return nil
 	}
-	return o.Sets
+	return i.Sets
 }
 
 type InputWindowsMetricsMetadatum struct {
@@ -758,18 +758,18 @@ func (i *InputWindowsMetricsMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsMetadatum) GetName() string {
-	if o == nil {
+func (i *InputWindowsMetricsMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputWindowsMetricsMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputWindowsMetricsMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputWindowsMetricsDataCompressionFormat string
@@ -823,46 +823,46 @@ func (i *InputWindowsMetricsPersistence) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetricsPersistence) GetEnable() *bool {
-	if o == nil {
+func (i *InputWindowsMetricsPersistence) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
-func (o *InputWindowsMetricsPersistence) GetTimeWindow() *string {
-	if o == nil {
+func (i *InputWindowsMetricsPersistence) GetTimeWindow() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWindow
+	return i.TimeWindow
 }
 
-func (o *InputWindowsMetricsPersistence) GetMaxDataSize() *string {
-	if o == nil {
+func (i *InputWindowsMetricsPersistence) GetMaxDataSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataSize
+	return i.MaxDataSize
 }
 
-func (o *InputWindowsMetricsPersistence) GetMaxDataTime() *string {
-	if o == nil {
+func (i *InputWindowsMetricsPersistence) GetMaxDataTime() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataTime
+	return i.MaxDataTime
 }
 
-func (o *InputWindowsMetricsPersistence) GetCompress() *InputWindowsMetricsDataCompressionFormat {
-	if o == nil {
+func (i *InputWindowsMetricsPersistence) GetCompress() *InputWindowsMetricsDataCompressionFormat {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
-func (o *InputWindowsMetricsPersistence) GetDestPath() *string {
-	if o == nil {
+func (i *InputWindowsMetricsPersistence) GetDestPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.DestPath
+	return i.DestPath
 }
 
 type InputWindowsMetrics struct {
@@ -906,121 +906,121 @@ func (i *InputWindowsMetrics) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWindowsMetrics) GetID() string {
-	if o == nil {
+func (i *InputWindowsMetrics) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputWindowsMetrics) GetType() InputWindowsMetricsType {
-	if o == nil {
+func (i *InputWindowsMetrics) GetType() InputWindowsMetricsType {
+	if i == nil {
 		return InputWindowsMetricsType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputWindowsMetrics) GetDisabled() *bool {
-	if o == nil {
+func (i *InputWindowsMetrics) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputWindowsMetrics) GetPipeline() *string {
-	if o == nil {
+func (i *InputWindowsMetrics) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputWindowsMetrics) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputWindowsMetrics) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputWindowsMetrics) GetEnvironment() *string {
-	if o == nil {
+func (i *InputWindowsMetrics) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputWindowsMetrics) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputWindowsMetrics) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputWindowsMetrics) GetStreamtags() []string {
-	if o == nil {
+func (i *InputWindowsMetrics) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputWindowsMetrics) GetConnections() []InputWindowsMetricsConnection {
-	if o == nil {
+func (i *InputWindowsMetrics) GetConnections() []InputWindowsMetricsConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputWindowsMetrics) GetPq() *InputWindowsMetricsPq {
-	if o == nil {
+func (i *InputWindowsMetrics) GetPq() *InputWindowsMetricsPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputWindowsMetrics) GetInterval() *float64 {
-	if o == nil {
+func (i *InputWindowsMetrics) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputWindowsMetrics) GetHost() *InputWindowsMetricsHost {
-	if o == nil {
+func (i *InputWindowsMetrics) GetHost() *InputWindowsMetricsHost {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputWindowsMetrics) GetProcess() *InputWindowsMetricsProcess {
-	if o == nil {
+func (i *InputWindowsMetrics) GetProcess() *InputWindowsMetricsProcess {
+	if i == nil {
 		return nil
 	}
-	return o.Process
+	return i.Process
 }
 
-func (o *InputWindowsMetrics) GetMetadata() []InputWindowsMetricsMetadatum {
-	if o == nil {
+func (i *InputWindowsMetrics) GetMetadata() []InputWindowsMetricsMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputWindowsMetrics) GetPersistence() *InputWindowsMetricsPersistence {
-	if o == nil {
+func (i *InputWindowsMetrics) GetPersistence() *InputWindowsMetricsPersistence {
+	if i == nil {
 		return nil
 	}
-	return o.Persistence
+	return i.Persistence
 }
 
-func (o *InputWindowsMetrics) GetDisableNativeModule() *bool {
-	if o == nil {
+func (i *InputWindowsMetrics) GetDisableNativeModule() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DisableNativeModule
+	return i.DisableNativeModule
 }
 
-func (o *InputWindowsMetrics) GetDescription() *string {
-	if o == nil {
+func (i *InputWindowsMetrics) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

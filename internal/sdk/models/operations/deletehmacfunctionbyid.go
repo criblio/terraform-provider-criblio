@@ -14,18 +14,18 @@ type DeleteHmacFunctionByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteHmacFunctionByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteHmacFunctionByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteHmacFunctionByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteHmacFunctionByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteHmacFunctionByIDResponseBody - a list of HmacFunction objects
@@ -33,11 +33,11 @@ type DeleteHmacFunctionByIDResponseBody struct {
 	Items []shared.HmacFunction `json:"items,omitempty"`
 }
 
-func (o *DeleteHmacFunctionByIDResponseBody) GetItems() []shared.HmacFunction {
-	if o == nil {
+func (d *DeleteHmacFunctionByIDResponseBody) GetItems() []shared.HmacFunction {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteHmacFunctionByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteHmacFunctionByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteHmacFunctionByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteHmacFunctionByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteHmacFunctionByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteHmacFunctionByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteHmacFunctionByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteHmacFunctionByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteHmacFunctionByIDResponse) GetObject() *DeleteHmacFunctionByIDResponseBody {
-	if o == nil {
+func (d *DeleteHmacFunctionByIDResponse) GetObject() *DeleteHmacFunctionByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteHmacFunctionByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteHmacFunctionByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -12,11 +12,11 @@ type UpdateSystemSettingsAuthResponseBody struct {
 	Items []shared.AuthConfig `json:"items,omitempty"`
 }
 
-func (o *UpdateSystemSettingsAuthResponseBody) GetItems() []shared.AuthConfig {
-	if o == nil {
+func (u *UpdateSystemSettingsAuthResponseBody) GetItems() []shared.AuthConfig {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSystemSettingsAuthResponse struct {
@@ -32,37 +32,37 @@ type UpdateSystemSettingsAuthResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSystemSettingsAuthResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSystemSettingsAuthResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSystemSettingsAuthResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSystemSettingsAuthResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSystemSettingsAuthResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSystemSettingsAuthResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSystemSettingsAuthResponse) GetObject() *UpdateSystemSettingsAuthResponseBody {
-	if o == nil {
+func (u *UpdateSystemSettingsAuthResponse) GetObject() *UpdateSystemSettingsAuthResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSystemSettingsAuthResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSystemSettingsAuthResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

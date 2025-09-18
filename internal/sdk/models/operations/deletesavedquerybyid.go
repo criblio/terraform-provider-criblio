@@ -12,11 +12,11 @@ type DeleteSavedQueryByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteSavedQueryByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSavedQueryByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteSavedQueryByIDResponseBody - a list of SavedQuery objects
@@ -24,11 +24,11 @@ type DeleteSavedQueryByIDResponseBody struct {
 	Items []shared.SavedQuery `json:"items,omitempty"`
 }
 
-func (o *DeleteSavedQueryByIDResponseBody) GetItems() []shared.SavedQuery {
-	if o == nil {
+func (d *DeleteSavedQueryByIDResponseBody) GetItems() []shared.SavedQuery {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSavedQueryByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteSavedQueryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSavedQueryByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSavedQueryByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSavedQueryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSavedQueryByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSavedQueryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSavedQueryByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSavedQueryByIDResponse) GetObject() *DeleteSavedQueryByIDResponseBody {
-	if o == nil {
+func (d *DeleteSavedQueryByIDResponse) GetObject() *DeleteSavedQueryByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSavedQueryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSavedQueryByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

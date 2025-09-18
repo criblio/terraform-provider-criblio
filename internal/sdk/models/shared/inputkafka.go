@@ -47,18 +47,18 @@ func (i *InputKafkaConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKafkaConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputKafkaConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKafkaConnection) GetOutput() string {
-	if o == nil {
+func (i *InputKafkaConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputKafkaMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputKafkaPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKafkaPq) GetMode() *InputKafkaMode {
-	if o == nil {
+func (i *InputKafkaPq) GetMode() *InputKafkaMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputKafkaPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputKafkaPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputKafkaPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputKafkaPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputKafkaPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputKafkaPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputKafkaPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputKafkaPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputKafkaPq) GetPath() *string {
-	if o == nil {
+func (i *InputKafkaPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputKafkaPq) GetCompress() *InputKafkaCompression {
-	if o == nil {
+func (i *InputKafkaPq) GetCompress() *InputKafkaCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputKafkaAuth - Credentials to use when authenticating with the schema registry using basic HTTP authentication
@@ -210,18 +210,18 @@ func (i *InputKafkaAuth) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKafkaAuth) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKafkaAuth) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKafkaAuth) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputKafkaAuth) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
 type InputKafkaKafkaSchemaRegistryMinimumTLSVersion string
@@ -320,74 +320,74 @@ func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) UnmarshalJSON(data 
 	return nil
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetServername() *string {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetServername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Servername
+	return i.Servername
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetMinVersion() *InputKafkaKafkaSchemaRegistryMinimumTLSVersion {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetMinVersion() *InputKafkaKafkaSchemaRegistryMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetMaxVersion() *InputKafkaKafkaSchemaRegistryMaximumTLSVersion {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide) GetMaxVersion() *InputKafkaKafkaSchemaRegistryMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputKafkaKafkaSchemaRegistryAuthentication struct {
@@ -416,53 +416,53 @@ func (i *InputKafkaKafkaSchemaRegistryAuthentication) UnmarshalJSON(data []byte)
 	return nil
 }
 
-func (o *InputKafkaKafkaSchemaRegistryAuthentication) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryAuthentication) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKafkaKafkaSchemaRegistryAuthentication) GetSchemaRegistryURL() *string {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryAuthentication) GetSchemaRegistryURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SchemaRegistryURL
+	return i.SchemaRegistryURL
 }
 
-func (o *InputKafkaKafkaSchemaRegistryAuthentication) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryAuthentication) GetConnectionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return i.ConnectionTimeout
 }
 
-func (o *InputKafkaKafkaSchemaRegistryAuthentication) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryAuthentication) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputKafkaKafkaSchemaRegistryAuthentication) GetMaxRetries() *float64 {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryAuthentication) GetMaxRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRetries
+	return i.MaxRetries
 }
 
-func (o *InputKafkaKafkaSchemaRegistryAuthentication) GetAuth() *InputKafkaAuth {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryAuthentication) GetAuth() *InputKafkaAuth {
+	if i == nil {
 		return nil
 	}
-	return o.Auth
+	return i.Auth
 }
 
-func (o *InputKafkaKafkaSchemaRegistryAuthentication) GetTLS() *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide {
-	if o == nil {
+func (i *InputKafkaKafkaSchemaRegistryAuthentication) GetTLS() *InputKafkaKafkaSchemaRegistryTLSSettingsClientSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
 type InputKafkaSASLMechanism string
@@ -514,18 +514,18 @@ func (i *InputKafkaAuthentication) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKafkaAuthentication) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKafkaAuthentication) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKafkaAuthentication) GetMechanism() *InputKafkaSASLMechanism {
-	if o == nil {
+func (i *InputKafkaAuthentication) GetMechanism() *InputKafkaSASLMechanism {
+	if i == nil {
 		return nil
 	}
-	return o.Mechanism
+	return i.Mechanism
 }
 
 type InputKafkaMinimumTLSVersion string
@@ -624,74 +624,74 @@ func (i *InputKafkaTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetServername() *string {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetServername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Servername
+	return i.Servername
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetMinVersion() *InputKafkaMinimumTLSVersion {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetMinVersion() *InputKafkaMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputKafkaTLSSettingsClientSide) GetMaxVersion() *InputKafkaMaximumTLSVersion {
-	if o == nil {
+func (i *InputKafkaTLSSettingsClientSide) GetMaxVersion() *InputKafkaMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputKafkaMetadatum struct {
@@ -711,18 +711,18 @@ func (i *InputKafkaMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKafkaMetadatum) GetName() string {
-	if o == nil {
+func (i *InputKafkaMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputKafkaMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputKafkaMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputKafka struct {
@@ -811,247 +811,247 @@ func (i *InputKafka) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKafka) GetID() *string {
-	if o == nil {
+func (i *InputKafka) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputKafka) GetType() *InputKafkaType {
-	if o == nil {
+func (i *InputKafka) GetType() *InputKafkaType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputKafka) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKafka) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKafka) GetPipeline() *string {
-	if o == nil {
+func (i *InputKafka) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKafka) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputKafka) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputKafka) GetEnvironment() *string {
-	if o == nil {
+func (i *InputKafka) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputKafka) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputKafka) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputKafka) GetStreamtags() []string {
-	if o == nil {
+func (i *InputKafka) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputKafka) GetConnections() []InputKafkaConnection {
-	if o == nil {
+func (i *InputKafka) GetConnections() []InputKafkaConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputKafka) GetPq() *InputKafkaPq {
-	if o == nil {
+func (i *InputKafka) GetPq() *InputKafkaPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputKafka) GetBrokers() []string {
-	if o == nil {
+func (i *InputKafka) GetBrokers() []string {
+	if i == nil {
 		return []string{}
 	}
-	return o.Brokers
+	return i.Brokers
 }
 
-func (o *InputKafka) GetTopics() []string {
-	if o == nil {
+func (i *InputKafka) GetTopics() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Topics
+	return i.Topics
 }
 
-func (o *InputKafka) GetGroupID() *string {
-	if o == nil {
+func (i *InputKafka) GetGroupID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.GroupID
+	return i.GroupID
 }
 
-func (o *InputKafka) GetFromBeginning() *bool {
-	if o == nil {
+func (i *InputKafka) GetFromBeginning() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.FromBeginning
+	return i.FromBeginning
 }
 
-func (o *InputKafka) GetKafkaSchemaRegistry() *InputKafkaKafkaSchemaRegistryAuthentication {
-	if o == nil {
+func (i *InputKafka) GetKafkaSchemaRegistry() *InputKafkaKafkaSchemaRegistryAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.KafkaSchemaRegistry
+	return i.KafkaSchemaRegistry
 }
 
-func (o *InputKafka) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (i *InputKafka) GetConnectionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return i.ConnectionTimeout
 }
 
-func (o *InputKafka) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputKafka) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputKafka) GetMaxRetries() *float64 {
-	if o == nil {
+func (i *InputKafka) GetMaxRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRetries
+	return i.MaxRetries
 }
 
-func (o *InputKafka) GetMaxBackOff() *float64 {
-	if o == nil {
+func (i *InputKafka) GetMaxBackOff() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBackOff
+	return i.MaxBackOff
 }
 
-func (o *InputKafka) GetInitialBackoff() *float64 {
-	if o == nil {
+func (i *InputKafka) GetInitialBackoff() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.InitialBackoff
+	return i.InitialBackoff
 }
 
-func (o *InputKafka) GetBackoffRate() *float64 {
-	if o == nil {
+func (i *InputKafka) GetBackoffRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.BackoffRate
+	return i.BackoffRate
 }
 
-func (o *InputKafka) GetAuthenticationTimeout() *float64 {
-	if o == nil {
+func (i *InputKafka) GetAuthenticationTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AuthenticationTimeout
+	return i.AuthenticationTimeout
 }
 
-func (o *InputKafka) GetReauthenticationThreshold() *float64 {
-	if o == nil {
+func (i *InputKafka) GetReauthenticationThreshold() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ReauthenticationThreshold
+	return i.ReauthenticationThreshold
 }
 
-func (o *InputKafka) GetSasl() *InputKafkaAuthentication {
-	if o == nil {
+func (i *InputKafka) GetSasl() *InputKafkaAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.Sasl
+	return i.Sasl
 }
 
-func (o *InputKafka) GetTLS() *InputKafkaTLSSettingsClientSide {
-	if o == nil {
+func (i *InputKafka) GetTLS() *InputKafkaTLSSettingsClientSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputKafka) GetSessionTimeout() *float64 {
-	if o == nil {
+func (i *InputKafka) GetSessionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SessionTimeout
+	return i.SessionTimeout
 }
 
-func (o *InputKafka) GetRebalanceTimeout() *float64 {
-	if o == nil {
+func (i *InputKafka) GetRebalanceTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RebalanceTimeout
+	return i.RebalanceTimeout
 }
 
-func (o *InputKafka) GetHeartbeatInterval() *float64 {
-	if o == nil {
+func (i *InputKafka) GetHeartbeatInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.HeartbeatInterval
+	return i.HeartbeatInterval
 }
 
-func (o *InputKafka) GetAutoCommitInterval() *float64 {
-	if o == nil {
+func (i *InputKafka) GetAutoCommitInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AutoCommitInterval
+	return i.AutoCommitInterval
 }
 
-func (o *InputKafka) GetAutoCommitThreshold() *float64 {
-	if o == nil {
+func (i *InputKafka) GetAutoCommitThreshold() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AutoCommitThreshold
+	return i.AutoCommitThreshold
 }
 
-func (o *InputKafka) GetMaxBytesPerPartition() *float64 {
-	if o == nil {
+func (i *InputKafka) GetMaxBytesPerPartition() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBytesPerPartition
+	return i.MaxBytesPerPartition
 }
 
-func (o *InputKafka) GetMaxBytes() *float64 {
-	if o == nil {
+func (i *InputKafka) GetMaxBytes() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBytes
+	return i.MaxBytes
 }
 
-func (o *InputKafka) GetMaxSocketErrors() *float64 {
-	if o == nil {
+func (i *InputKafka) GetMaxSocketErrors() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSocketErrors
+	return i.MaxSocketErrors
 }
 
-func (o *InputKafka) GetMetadata() []InputKafkaMetadatum {
-	if o == nil {
+func (i *InputKafka) GetMetadata() []InputKafkaMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputKafka) GetDescription() *string {
-	if o == nil {
+func (i *InputKafka) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

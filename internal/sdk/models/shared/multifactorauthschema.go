@@ -40,51 +40,51 @@ type MultiFactorAuthSchema struct {
 	UsernameRegex            string                    `json:"usernameRegex"`
 }
 
-func (o *MultiFactorAuthSchema) GetAccessControlAllowOrigin() string {
-	if o == nil {
+func (m *MultiFactorAuthSchema) GetAccessControlAllowOrigin() string {
+	if m == nil {
 		return ""
 	}
-	return o.AccessControlAllowOrigin
+	return m.AccessControlAllowOrigin
 }
 
-func (o *MultiFactorAuthSchema) GetAllowLogin() bool {
-	if o == nil {
+func (m *MultiFactorAuthSchema) GetAllowLogin() bool {
+	if m == nil {
 		return false
 	}
-	return o.AllowLogin
+	return m.AllowLogin
 }
 
-func (o *MultiFactorAuthSchema) GetAPIServerURL() string {
-	if o == nil {
+func (m *MultiFactorAuthSchema) GetAPIServerURL() string {
+	if m == nil {
 		return ""
 	}
-	return o.APIServerURL
+	return m.APIServerURL
 }
 
-func (o *MultiFactorAuthSchema) GetDisabled() bool {
-	if o == nil {
+func (m *MultiFactorAuthSchema) GetDisabled() bool {
+	if m == nil {
 		return false
 	}
-	return o.Disabled
+	return m.Disabled
 }
 
-func (o *MultiFactorAuthSchema) GetType() MultiFactorAuthSchemaType {
-	if o == nil {
+func (m *MultiFactorAuthSchema) GetType() MultiFactorAuthSchemaType {
+	if m == nil {
 		return MultiFactorAuthSchemaType("")
 	}
-	return o.Type
+	return m.Type
 }
 
-func (o *MultiFactorAuthSchema) GetUsernameField() string {
-	if o == nil {
+func (m *MultiFactorAuthSchema) GetUsernameField() string {
+	if m == nil {
 		return ""
 	}
-	return o.UsernameField
+	return m.UsernameField
 }
 
-func (o *MultiFactorAuthSchema) GetUsernameRegex() string {
-	if o == nil {
+func (m *MultiFactorAuthSchema) GetUsernameRegex() string {
+	if m == nil {
 		return ""
 	}
-	return o.UsernameRegex
+	return m.UsernameRegex
 }

@@ -14,18 +14,18 @@ type DeleteAppscopeLibEntryByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteAppscopeLibEntryByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteAppscopeLibEntryByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteAppscopeLibEntryByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteAppscopeLibEntryByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteAppscopeLibEntryByIDResponseBody - a list of AppscopeLibEntry objects
@@ -33,11 +33,11 @@ type DeleteAppscopeLibEntryByIDResponseBody struct {
 	Items []shared.AppscopeLibEntry `json:"items,omitempty"`
 }
 
-func (o *DeleteAppscopeLibEntryByIDResponseBody) GetItems() []shared.AppscopeLibEntry {
-	if o == nil {
+func (d *DeleteAppscopeLibEntryByIDResponseBody) GetItems() []shared.AppscopeLibEntry {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteAppscopeLibEntryByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteAppscopeLibEntryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteAppscopeLibEntryByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteAppscopeLibEntryByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteAppscopeLibEntryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteAppscopeLibEntryByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteAppscopeLibEntryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteAppscopeLibEntryByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteAppscopeLibEntryByIDResponse) GetObject() *DeleteAppscopeLibEntryByIDResponseBody {
-	if o == nil {
+func (d *DeleteAppscopeLibEntryByIDResponse) GetObject() *DeleteAppscopeLibEntryByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteAppscopeLibEntryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteAppscopeLibEntryByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

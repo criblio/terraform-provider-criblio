@@ -14,18 +14,18 @@ type UpdateLoggerConfigByIDRequest struct {
 	LoggerConfig shared.LoggerConfig `request:"mediaType=application/json"`
 }
 
-func (o *UpdateLoggerConfigByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateLoggerConfigByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateLoggerConfigByIDRequest) GetLoggerConfig() shared.LoggerConfig {
-	if o == nil {
+func (u *UpdateLoggerConfigByIDRequest) GetLoggerConfig() shared.LoggerConfig {
+	if u == nil {
 		return shared.LoggerConfig{}
 	}
-	return o.LoggerConfig
+	return u.LoggerConfig
 }
 
 // UpdateLoggerConfigByIDResponseBody - a list of LoggerConfig objects
@@ -33,11 +33,11 @@ type UpdateLoggerConfigByIDResponseBody struct {
 	Items []shared.LoggerConfig `json:"items,omitempty"`
 }
 
-func (o *UpdateLoggerConfigByIDResponseBody) GetItems() []shared.LoggerConfig {
-	if o == nil {
+func (u *UpdateLoggerConfigByIDResponseBody) GetItems() []shared.LoggerConfig {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateLoggerConfigByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateLoggerConfigByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateLoggerConfigByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateLoggerConfigByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateLoggerConfigByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateLoggerConfigByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateLoggerConfigByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateLoggerConfigByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateLoggerConfigByIDResponse) GetObject() *UpdateLoggerConfigByIDResponseBody {
-	if o == nil {
+func (u *UpdateLoggerConfigByIDResponse) GetObject() *UpdateLoggerConfigByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateLoggerConfigByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateLoggerConfigByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -9,30 +9,30 @@ type GrokFile struct {
 	Tags    *string `json:"tags,omitempty"`
 }
 
-func (o *GrokFile) GetContent() string {
-	if o == nil {
+func (g *GrokFile) GetContent() string {
+	if g == nil {
 		return ""
 	}
-	return o.Content
+	return g.Content
 }
 
-func (o *GrokFile) GetID() string {
-	if o == nil {
+func (g *GrokFile) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GrokFile) GetSize() float64 {
-	if o == nil {
+func (g *GrokFile) GetSize() float64 {
+	if g == nil {
 		return 0.0
 	}
-	return o.Size
+	return g.Size
 }
 
-func (o *GrokFile) GetTags() *string {
-	if o == nil {
+func (g *GrokFile) GetTags() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Tags
+	return g.Tags
 }

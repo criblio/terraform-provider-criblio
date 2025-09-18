@@ -10,37 +10,37 @@ type NodeUpgradeStatus struct {
 	Timestamp float64                   `json:"timestamp"`
 }
 
-func (o *NodeUpgradeStatus) GetActive() *NodeActiveUpgradeStatus {
-	if o == nil {
+func (n *NodeUpgradeStatus) GetActive() *NodeActiveUpgradeStatus {
+	if n == nil {
 		return nil
 	}
-	return o.Active
+	return n.Active
 }
 
-func (o *NodeUpgradeStatus) GetFailed() *NodeFailedUpgradeStatus {
-	if o == nil {
+func (n *NodeUpgradeStatus) GetFailed() *NodeFailedUpgradeStatus {
+	if n == nil {
 		return nil
 	}
-	return o.Failed
+	return n.Failed
 }
 
-func (o *NodeUpgradeStatus) GetSkipped() *NodeSkippedUpgradeStatus {
-	if o == nil {
+func (n *NodeUpgradeStatus) GetSkipped() *NodeSkippedUpgradeStatus {
+	if n == nil {
 		return nil
 	}
-	return o.Skipped
+	return n.Skipped
 }
 
-func (o *NodeUpgradeStatus) GetState() NodeUpgradeState {
-	if o == nil {
+func (n *NodeUpgradeStatus) GetState() NodeUpgradeState {
+	if n == nil {
 		return NodeUpgradeState(0)
 	}
-	return o.State
+	return n.State
 }
 
-func (o *NodeUpgradeStatus) GetTimestamp() float64 {
-	if o == nil {
+func (n *NodeUpgradeStatus) GetTimestamp() float64 {
+	if n == nil {
 		return 0.0
 	}
-	return o.Timestamp
+	return n.Timestamp
 }

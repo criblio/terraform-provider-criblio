@@ -7,16 +7,16 @@ type AccessControlSchema struct {
 	Rm  *AccessControl `json:"rm,omitempty"`
 }
 
-func (o *AccessControlSchema) GetAdd() *AccessControl {
-	if o == nil {
+func (a *AccessControlSchema) GetAdd() *AccessControl {
+	if a == nil {
 		return nil
 	}
-	return o.Add
+	return a.Add
 }
 
-func (o *AccessControlSchema) GetRm() *AccessControl {
-	if o == nil {
+func (a *AccessControlSchema) GetRm() *AccessControl {
+	if a == nil {
 		return nil
 	}
-	return o.Rm
+	return a.Rm
 }

@@ -35,72 +35,72 @@ func (r *RoutesRouteInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RoutesRouteInput) GetName() string {
-	if o == nil {
+func (r *RoutesRouteInput) GetName() string {
+	if r == nil {
 		return ""
 	}
-	return o.Name
+	return r.Name
 }
 
-func (o *RoutesRouteInput) GetDisabled() *bool {
-	if o == nil {
+func (r *RoutesRouteInput) GetDisabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Disabled
+	return r.Disabled
 }
 
-func (o *RoutesRouteInput) GetFilter() *string {
-	if o == nil {
+func (r *RoutesRouteInput) GetFilter() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Filter
+	return r.Filter
 }
 
-func (o *RoutesRouteInput) GetPipeline() string {
-	if o == nil {
+func (r *RoutesRouteInput) GetPipeline() string {
+	if r == nil {
 		return ""
 	}
-	return o.Pipeline
+	return r.Pipeline
 }
 
-func (o *RoutesRouteInput) GetEnableOutputExpression() *bool {
-	if o == nil {
+func (r *RoutesRouteInput) GetEnableOutputExpression() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.EnableOutputExpression
+	return r.EnableOutputExpression
 }
 
-func (o *RoutesRouteInput) GetOutput() any {
-	if o == nil {
+func (r *RoutesRouteInput) GetOutput() any {
+	if r == nil {
 		return nil
 	}
-	return o.Output
+	return r.Output
 }
 
-func (o *RoutesRouteInput) GetOutputExpression() any {
-	if o == nil {
+func (r *RoutesRouteInput) GetOutputExpression() any {
+	if r == nil {
 		return nil
 	}
-	return o.OutputExpression
+	return r.OutputExpression
 }
 
-func (o *RoutesRouteInput) GetDescription() *string {
-	if o == nil {
+func (r *RoutesRouteInput) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *RoutesRouteInput) GetFinal() *bool {
-	if o == nil {
+func (r *RoutesRouteInput) GetFinal() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Final
+	return r.Final
 }
 
-func (o *RoutesRouteInput) GetAdditionalProperties() any {
-	if o == nil {
+func (r *RoutesRouteInput) GetAdditionalProperties() any {
+	if r == nil {
 		return nil
 	}
-	return o.AdditionalProperties
+	return r.AdditionalProperties
 }

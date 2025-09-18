@@ -12,11 +12,11 @@ type DeleteCertificateByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteCertificateByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteCertificateByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteCertificateByIDResponseBody - a list of Certificate objects
@@ -24,11 +24,11 @@ type DeleteCertificateByIDResponseBody struct {
 	Items []shared.Certificate `json:"items,omitempty"`
 }
 
-func (o *DeleteCertificateByIDResponseBody) GetItems() []shared.Certificate {
-	if o == nil {
+func (d *DeleteCertificateByIDResponseBody) GetItems() []shared.Certificate {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteCertificateByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteCertificateByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteCertificateByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteCertificateByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteCertificateByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteCertificateByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteCertificateByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteCertificateByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteCertificateByIDResponse) GetObject() *DeleteCertificateByIDResponseBody {
-	if o == nil {
+func (d *DeleteCertificateByIDResponse) GetObject() *DeleteCertificateByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteCertificateByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteCertificateByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

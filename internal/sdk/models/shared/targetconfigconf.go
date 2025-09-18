@@ -53,16 +53,16 @@ func (t *TargetConfigConf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *TargetConfigConf) GetIncludeResults() *bool {
-	if o == nil {
+func (t *TargetConfigConf) GetIncludeResults() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.IncludeResults
+	return t.IncludeResults
 }
 
-func (o *TargetConfigConf) GetAttachmentType() *AttachmentType {
-	if o == nil {
+func (t *TargetConfigConf) GetAttachmentType() *AttachmentType {
+	if t == nil {
 		return nil
 	}
-	return o.AttachmentType
+	return t.AttachmentType
 }

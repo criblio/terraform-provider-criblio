@@ -38,18 +38,18 @@ type Cloud struct {
 	Region   string   `json:"region"`
 }
 
-func (o *Cloud) GetProvider() Provider {
-	if o == nil {
+func (c *Cloud) GetProvider() Provider {
+	if c == nil {
 		return Provider("")
 	}
-	return o.Provider
+	return c.Provider
 }
 
-func (o *Cloud) GetRegion() string {
-	if o == nil {
+func (c *Cloud) GetRegion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Region
+	return c.Region
 }
 
 type Group struct {
@@ -65,65 +65,65 @@ type Group struct {
 	ID                  string   `json:"id"`
 }
 
-func (o *Group) GetOnPrem() *bool {
-	if o == nil {
+func (g *Group) GetOnPrem() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.OnPrem
+	return g.OnPrem
 }
 
-func (o *Group) GetWorkerRemoteAccess() *bool {
-	if o == nil {
+func (g *Group) GetWorkerRemoteAccess() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.WorkerRemoteAccess
+	return g.WorkerRemoteAccess
 }
 
-func (o *Group) GetStreamtags() []string {
-	if o == nil {
+func (g *Group) GetStreamtags() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Streamtags
+	return g.Streamtags
 }
 
-func (o *Group) GetCloud() *Cloud {
-	if o == nil {
+func (g *Group) GetCloud() *Cloud {
+	if g == nil {
 		return nil
 	}
-	return o.Cloud
+	return g.Cloud
 }
 
-func (o *Group) GetProvisioned() bool {
-	if o == nil {
+func (g *Group) GetProvisioned() bool {
+	if g == nil {
 		return false
 	}
-	return o.Provisioned
+	return g.Provisioned
 }
 
-func (o *Group) GetIsFleet() *bool {
-	if o == nil {
+func (g *Group) GetIsFleet() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.IsFleet
+	return g.IsFleet
 }
 
-func (o *Group) GetEstimatedIngestRate() *float64 {
-	if o == nil {
+func (g *Group) GetEstimatedIngestRate() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.EstimatedIngestRate
+	return g.EstimatedIngestRate
 }
 
-func (o *Group) GetName() *string {
-	if o == nil {
+func (g *Group) GetName() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Name
+	return g.Name
 }
 
-func (o *Group) GetID() string {
-	if o == nil {
+func (g *Group) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }

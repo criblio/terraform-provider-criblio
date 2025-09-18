@@ -12,11 +12,11 @@ type ListNotificationResponseBody struct {
 	Items []shared.Notification `json:"items,omitempty"`
 }
 
-func (o *ListNotificationResponseBody) GetItems() []shared.Notification {
-	if o == nil {
+func (l *ListNotificationResponseBody) GetItems() []shared.Notification {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListNotificationResponse struct {
@@ -32,37 +32,37 @@ type ListNotificationResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListNotificationResponse) GetContentType() string {
-	if o == nil {
+func (l *ListNotificationResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListNotificationResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListNotificationResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListNotificationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListNotificationResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListNotificationResponse) GetObject() *ListNotificationResponseBody {
-	if o == nil {
+func (l *ListNotificationResponse) GetObject() *ListNotificationResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListNotificationResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListNotificationResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

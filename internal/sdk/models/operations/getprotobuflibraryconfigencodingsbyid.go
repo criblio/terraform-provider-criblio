@@ -12,11 +12,11 @@ type GetProtobufLibraryConfigEncodingsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetProtobufLibraryConfigEncodingsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetProtobufLibraryConfigEncodingsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetProtobufLibraryConfigEncodingsByIDResponseBody - a list of ProtobufEncodingConfig objects
@@ -24,11 +24,11 @@ type GetProtobufLibraryConfigEncodingsByIDResponseBody struct {
 	Items []shared.ProtobufEncodingConfig `json:"items,omitempty"`
 }
 
-func (o *GetProtobufLibraryConfigEncodingsByIDResponseBody) GetItems() []shared.ProtobufEncodingConfig {
-	if o == nil {
+func (g *GetProtobufLibraryConfigEncodingsByIDResponseBody) GetItems() []shared.ProtobufEncodingConfig {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetProtobufLibraryConfigEncodingsByIDResponse struct {
@@ -44,37 +44,37 @@ type GetProtobufLibraryConfigEncodingsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetProtobufLibraryConfigEncodingsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetProtobufLibraryConfigEncodingsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetProtobufLibraryConfigEncodingsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetProtobufLibraryConfigEncodingsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetProtobufLibraryConfigEncodingsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetProtobufLibraryConfigEncodingsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetProtobufLibraryConfigEncodingsByIDResponse) GetObject() *GetProtobufLibraryConfigEncodingsByIDResponseBody {
-	if o == nil {
+func (g *GetProtobufLibraryConfigEncodingsByIDResponse) GetObject() *GetProtobufLibraryConfigEncodingsByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetProtobufLibraryConfigEncodingsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetProtobufLibraryConfigEncodingsByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

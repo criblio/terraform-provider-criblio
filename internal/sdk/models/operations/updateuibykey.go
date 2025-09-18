@@ -14,18 +14,18 @@ type UpdateUIByKeyRequest struct {
 	UIStatePatch shared.UIStatePatch `request:"mediaType=application/json"`
 }
 
-func (o *UpdateUIByKeyRequest) GetKey() string {
-	if o == nil {
+func (u *UpdateUIByKeyRequest) GetKey() string {
+	if u == nil {
 		return ""
 	}
-	return o.Key
+	return u.Key
 }
 
-func (o *UpdateUIByKeyRequest) GetUIStatePatch() shared.UIStatePatch {
-	if o == nil {
+func (u *UpdateUIByKeyRequest) GetUIStatePatch() shared.UIStatePatch {
+	if u == nil {
 		return shared.UIStatePatch{}
 	}
-	return o.UIStatePatch
+	return u.UIStatePatch
 }
 
 // UpdateUIByKeyResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type UpdateUIByKeyResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *UpdateUIByKeyResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (u *UpdateUIByKeyResponseBody) GetItems() []map[string]any {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateUIByKeyResponse struct {
@@ -53,37 +53,37 @@ type UpdateUIByKeyResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateUIByKeyResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateUIByKeyResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateUIByKeyResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateUIByKeyResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateUIByKeyResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateUIByKeyResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateUIByKeyResponse) GetObject() *UpdateUIByKeyResponseBody {
-	if o == nil {
+func (u *UpdateUIByKeyResponse) GetObject() *UpdateUIByKeyResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateUIByKeyResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateUIByKeyResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

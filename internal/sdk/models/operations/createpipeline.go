@@ -14,18 +14,18 @@ type CreatePipelineRequest struct {
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`
 }
 
-func (o *CreatePipelineRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreatePipelineRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreatePipelineRequest) GetPipeline() shared.Pipeline {
-	if o == nil {
+func (c *CreatePipelineRequest) GetPipeline() shared.Pipeline {
+	if c == nil {
 		return shared.Pipeline{}
 	}
-	return o.Pipeline
+	return c.Pipeline
 }
 
 // CreatePipelineResponseBody - a list of Pipeline objects
@@ -33,11 +33,11 @@ type CreatePipelineResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *CreatePipelineResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (c *CreatePipelineResponseBody) GetItems() []shared.Pipeline {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreatePipelineResponse struct {
@@ -53,37 +53,37 @@ type CreatePipelineResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreatePipelineResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePipelineResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePipelineResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePipelineResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePipelineResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePipelineResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePipelineResponse) GetObject() *CreatePipelineResponseBody {
-	if o == nil {
+func (c *CreatePipelineResponse) GetObject() *CreatePipelineResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreatePipelineResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreatePipelineResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

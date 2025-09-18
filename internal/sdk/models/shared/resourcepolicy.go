@@ -9,30 +9,30 @@ type ResourcePolicy struct {
 	Type   RbacResource `json:"type"`
 }
 
-func (o *ResourcePolicy) GetGid() string {
-	if o == nil {
+func (r *ResourcePolicy) GetGid() string {
+	if r == nil {
 		return ""
 	}
-	return o.Gid
+	return r.Gid
 }
 
-func (o *ResourcePolicy) GetID() *string {
-	if o == nil {
+func (r *ResourcePolicy) GetID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *ResourcePolicy) GetPolicy() string {
-	if o == nil {
+func (r *ResourcePolicy) GetPolicy() string {
+	if r == nil {
 		return ""
 	}
-	return o.Policy
+	return r.Policy
 }
 
-func (o *ResourcePolicy) GetType() RbacResource {
-	if o == nil {
+func (r *ResourcePolicy) GetType() RbacResource {
+	if r == nil {
 		return RbacResource("")
 	}
-	return o.Type
+	return r.Type
 }

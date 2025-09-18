@@ -12,11 +12,11 @@ type GetRestSecretByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetRestSecretByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetRestSecretByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetRestSecretByIDResponseBody - a list of RestSecret objects
@@ -24,11 +24,11 @@ type GetRestSecretByIDResponseBody struct {
 	Items []shared.RestSecret `json:"items,omitempty"`
 }
 
-func (o *GetRestSecretByIDResponseBody) GetItems() []shared.RestSecret {
-	if o == nil {
+func (g *GetRestSecretByIDResponseBody) GetItems() []shared.RestSecret {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetRestSecretByIDResponse struct {
@@ -44,37 +44,37 @@ type GetRestSecretByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetRestSecretByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetRestSecretByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetRestSecretByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetRestSecretByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetRestSecretByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetRestSecretByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetRestSecretByIDResponse) GetObject() *GetRestSecretByIDResponseBody {
-	if o == nil {
+func (g *GetRestSecretByIDResponse) GetObject() *GetRestSecretByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetRestSecretByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetRestSecretByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -12,11 +12,11 @@ type ListCertificateResponseBody struct {
 	Items []shared.Certificate `json:"items,omitempty"`
 }
 
-func (o *ListCertificateResponseBody) GetItems() []shared.Certificate {
-	if o == nil {
+func (l *ListCertificateResponseBody) GetItems() []shared.Certificate {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListCertificateResponse struct {
@@ -32,37 +32,37 @@ type ListCertificateResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListCertificateResponse) GetContentType() string {
-	if o == nil {
+func (l *ListCertificateResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListCertificateResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListCertificateResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListCertificateResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListCertificateResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListCertificateResponse) GetObject() *ListCertificateResponseBody {
-	if o == nil {
+func (l *ListCertificateResponse) GetObject() *ListCertificateResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListCertificateResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListCertificateResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

@@ -12,11 +12,11 @@ type GetRoleByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetRoleByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetRoleByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetRoleByIDResponseBody - a list of Role objects
@@ -24,11 +24,11 @@ type GetRoleByIDResponseBody struct {
 	Items []shared.Role `json:"items,omitempty"`
 }
 
-func (o *GetRoleByIDResponseBody) GetItems() []shared.Role {
-	if o == nil {
+func (g *GetRoleByIDResponseBody) GetItems() []shared.Role {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetRoleByIDResponse struct {
@@ -44,37 +44,37 @@ type GetRoleByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetRoleByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetRoleByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetRoleByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetRoleByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetRoleByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetRoleByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetRoleByIDResponse) GetObject() *GetRoleByIDResponseBody {
-	if o == nil {
+func (g *GetRoleByIDResponse) GetObject() *GetRoleByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetRoleByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetRoleByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

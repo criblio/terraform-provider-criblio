@@ -13,58 +13,58 @@ type ProtobufLibraryConversionConfig struct {
 	Oneofs   *bool                    `json:"oneofs,omitempty"`
 }
 
-func (o *ProtobufLibraryConversionConfig) GetArrays() *bool {
-	if o == nil {
+func (p *ProtobufLibraryConversionConfig) GetArrays() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Arrays
+	return p.Arrays
 }
 
-func (o *ProtobufLibraryConversionConfig) GetBytes() *ProtobufBytesConversion {
-	if o == nil {
+func (p *ProtobufLibraryConversionConfig) GetBytes() *ProtobufBytesConversion {
+	if p == nil {
 		return nil
 	}
-	return o.Bytes
+	return p.Bytes
 }
 
-func (o *ProtobufLibraryConversionConfig) GetDefaults() *bool {
-	if o == nil {
+func (p *ProtobufLibraryConversionConfig) GetDefaults() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Defaults
+	return p.Defaults
 }
 
-func (o *ProtobufLibraryConversionConfig) GetEnums() *ProtobufEnumConversion {
-	if o == nil {
+func (p *ProtobufLibraryConversionConfig) GetEnums() *ProtobufEnumConversion {
+	if p == nil {
 		return nil
 	}
-	return o.Enums
+	return p.Enums
 }
 
-func (o *ProtobufLibraryConversionConfig) GetJSON() *bool {
-	if o == nil {
+func (p *ProtobufLibraryConversionConfig) GetJSON() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.JSON
+	return p.JSON
 }
 
-func (o *ProtobufLibraryConversionConfig) GetLongs() *ProtobufLongConversion {
-	if o == nil {
+func (p *ProtobufLibraryConversionConfig) GetLongs() *ProtobufLongConversion {
+	if p == nil {
 		return nil
 	}
-	return o.Longs
+	return p.Longs
 }
 
-func (o *ProtobufLibraryConversionConfig) GetObjects() *bool {
-	if o == nil {
+func (p *ProtobufLibraryConversionConfig) GetObjects() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Objects
+	return p.Objects
 }
 
-func (o *ProtobufLibraryConversionConfig) GetOneofs() *bool {
-	if o == nil {
+func (p *ProtobufLibraryConversionConfig) GetOneofs() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Oneofs
+	return p.Oneofs
 }

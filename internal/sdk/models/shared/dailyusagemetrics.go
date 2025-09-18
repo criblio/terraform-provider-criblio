@@ -14,65 +14,65 @@ type DailyUsageMetrics struct {
 	StartTime              float64  `json:"startTime"`
 }
 
-func (o *DailyUsageMetrics) GetDroppedBytes() *float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetDroppedBytes() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.DroppedBytes
+	return d.DroppedBytes
 }
 
-func (o *DailyUsageMetrics) GetEndTime() float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetEndTime() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.EndTime
+	return d.EndTime
 }
 
-func (o *DailyUsageMetrics) GetExemptedLicenseInBytes() float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetExemptedLicenseInBytes() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.ExemptedLicenseInBytes
+	return d.ExemptedLicenseInBytes
 }
 
-func (o *DailyUsageMetrics) GetInBytes() float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetInBytes() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.InBytes
+	return d.InBytes
 }
 
-func (o *DailyUsageMetrics) GetInEvents() float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetInEvents() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.InEvents
+	return d.InEvents
 }
 
-func (o *DailyUsageMetrics) GetInMetricsEvents() *float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetInMetricsEvents() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.InMetricsEvents
+	return d.InMetricsEvents
 }
 
-func (o *DailyUsageMetrics) GetOutBytes() float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetOutBytes() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.OutBytes
+	return d.OutBytes
 }
 
-func (o *DailyUsageMetrics) GetOutEvents() float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetOutEvents() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.OutEvents
+	return d.OutEvents
 }
 
-func (o *DailyUsageMetrics) GetStartTime() float64 {
-	if o == nil {
+func (d *DailyUsageMetrics) GetStartTime() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.StartTime
+	return d.StartTime
 }

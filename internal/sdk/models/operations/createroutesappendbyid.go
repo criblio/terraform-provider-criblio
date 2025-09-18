@@ -14,18 +14,18 @@ type CreateRoutesAppendByIDRequest struct {
 	RequestBody []shared.RouteConf `request:"mediaType=application/json"`
 }
 
-func (o *CreateRoutesAppendByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateRoutesAppendByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateRoutesAppendByIDRequest) GetRequestBody() []shared.RouteConf {
-	if o == nil {
+func (c *CreateRoutesAppendByIDRequest) GetRequestBody() []shared.RouteConf {
+	if c == nil {
 		return []shared.RouteConf{}
 	}
-	return o.RequestBody
+	return c.RequestBody
 }
 
 // CreateRoutesAppendByIDResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type CreateRoutesAppendByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateRoutesAppendByIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateRoutesAppendByIDResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateRoutesAppendByIDResponse struct {
@@ -53,37 +53,37 @@ type CreateRoutesAppendByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateRoutesAppendByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateRoutesAppendByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateRoutesAppendByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateRoutesAppendByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateRoutesAppendByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateRoutesAppendByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateRoutesAppendByIDResponse) GetObject() *CreateRoutesAppendByIDResponseBody {
-	if o == nil {
+func (c *CreateRoutesAppendByIDResponse) GetObject() *CreateRoutesAppendByIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateRoutesAppendByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateRoutesAppendByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

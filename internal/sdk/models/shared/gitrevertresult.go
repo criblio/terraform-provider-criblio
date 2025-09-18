@@ -9,32 +9,32 @@ type GitRevertResultFiles struct {
 	Renamed  []string `json:"renamed,omitempty"`
 }
 
-func (o *GitRevertResultFiles) GetCreated() []string {
-	if o == nil {
+func (g *GitRevertResultFiles) GetCreated() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Created
+	return g.Created
 }
 
-func (o *GitRevertResultFiles) GetDeleted() []string {
-	if o == nil {
+func (g *GitRevertResultFiles) GetDeleted() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Deleted
+	return g.Deleted
 }
 
-func (o *GitRevertResultFiles) GetModified() []string {
-	if o == nil {
+func (g *GitRevertResultFiles) GetModified() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Modified
+	return g.Modified
 }
 
-func (o *GitRevertResultFiles) GetRenamed() []string {
-	if o == nil {
+func (g *GitRevertResultFiles) GetRenamed() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Renamed
+	return g.Renamed
 }
 
 type Audit struct {
@@ -43,25 +43,25 @@ type Audit struct {
 	ID    string               `json:"id"`
 }
 
-func (o *Audit) GetFiles() GitRevertResultFiles {
-	if o == nil {
+func (a *Audit) GetFiles() GitRevertResultFiles {
+	if a == nil {
 		return GitRevertResultFiles{}
 	}
-	return o.Files
+	return a.Files
 }
 
-func (o *Audit) GetGroup() string {
-	if o == nil {
+func (a *Audit) GetGroup() string {
+	if a == nil {
 		return ""
 	}
-	return o.Group
+	return a.Group
 }
 
-func (o *Audit) GetID() string {
-	if o == nil {
+func (a *Audit) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
 type GitRevertResult struct {
@@ -69,16 +69,16 @@ type GitRevertResult struct {
 	Reverted bool  `json:"reverted"`
 }
 
-func (o *GitRevertResult) GetAudit() Audit {
-	if o == nil {
+func (g *GitRevertResult) GetAudit() Audit {
+	if g == nil {
 		return Audit{}
 	}
-	return o.Audit
+	return g.Audit
 }
 
-func (o *GitRevertResult) GetReverted() bool {
-	if o == nil {
+func (g *GitRevertResult) GetReverted() bool {
+	if g == nil {
 		return false
 	}
-	return o.Reverted
+	return g.Reverted
 }

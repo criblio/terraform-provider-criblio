@@ -12,11 +12,11 @@ type UpdateJobsPauseByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *UpdateJobsPauseByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateJobsPauseByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
 // UpdateJobsPauseByIDResponseBody - a list of JobState objects
@@ -24,11 +24,11 @@ type UpdateJobsPauseByIDResponseBody struct {
 	Items []shared.JobState `json:"items,omitempty"`
 }
 
-func (o *UpdateJobsPauseByIDResponseBody) GetItems() []shared.JobState {
-	if o == nil {
+func (u *UpdateJobsPauseByIDResponseBody) GetItems() []shared.JobState {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateJobsPauseByIDResponse struct {
@@ -44,37 +44,37 @@ type UpdateJobsPauseByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateJobsPauseByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateJobsPauseByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateJobsPauseByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateJobsPauseByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateJobsPauseByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateJobsPauseByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateJobsPauseByIDResponse) GetObject() *UpdateJobsPauseByIDResponseBody {
-	if o == nil {
+func (u *UpdateJobsPauseByIDResponse) GetObject() *UpdateJobsPauseByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateJobsPauseByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateJobsPauseByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

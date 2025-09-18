@@ -11,11 +11,11 @@ type GetJobResultsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetJobResultsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetJobResultsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 type GetJobResultsByIDResponse struct {
@@ -29,30 +29,30 @@ type GetJobResultsByIDResponse struct {
 	Bytes []byte
 }
 
-func (o *GetJobResultsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetJobResultsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetJobResultsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetJobResultsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetJobResultsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetJobResultsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetJobResultsByIDResponse) GetBytes() []byte {
-	if o == nil {
+func (g *GetJobResultsByIDResponse) GetBytes() []byte {
+	if g == nil {
 		return nil
 	}
-	return o.Bytes
+	return g.Bytes
 }

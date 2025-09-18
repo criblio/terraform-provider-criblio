@@ -17,25 +17,25 @@ type UpdateLakehouseDatasetConnectionsRequest struct {
 	RequestBody   *UpdateLakehouseDatasetConnectionsRequestBody `request:"mediaType=application/json"`
 }
 
-func (o *UpdateLakehouseDatasetConnectionsRequest) GetLakehouseID() string {
-	if o == nil {
+func (u *UpdateLakehouseDatasetConnectionsRequest) GetLakehouseID() string {
+	if u == nil {
 		return ""
 	}
-	return o.LakehouseID
+	return u.LakehouseID
 }
 
-func (o *UpdateLakehouseDatasetConnectionsRequest) GetLakeDatasetID() string {
-	if o == nil {
+func (u *UpdateLakehouseDatasetConnectionsRequest) GetLakeDatasetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.LakeDatasetID
+	return u.LakeDatasetID
 }
 
-func (o *UpdateLakehouseDatasetConnectionsRequest) GetRequestBody() *UpdateLakehouseDatasetConnectionsRequestBody {
-	if o == nil {
+func (u *UpdateLakehouseDatasetConnectionsRequest) GetRequestBody() *UpdateLakehouseDatasetConnectionsRequestBody {
+	if u == nil {
 		return nil
 	}
-	return o.RequestBody
+	return u.RequestBody
 }
 
 // UpdateLakehouseDatasetConnectionsResponseBody - Successfully updated dataset connections
@@ -53,30 +53,30 @@ type UpdateLakehouseDatasetConnectionsResponse struct {
 	Object *UpdateLakehouseDatasetConnectionsResponseBody
 }
 
-func (o *UpdateLakehouseDatasetConnectionsResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateLakehouseDatasetConnectionsResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateLakehouseDatasetConnectionsResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateLakehouseDatasetConnectionsResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateLakehouseDatasetConnectionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateLakehouseDatasetConnectionsResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateLakehouseDatasetConnectionsResponse) GetObject() *UpdateLakehouseDatasetConnectionsResponseBody {
-	if o == nil {
+func (u *UpdateLakehouseDatasetConnectionsResponse) GetObject() *UpdateLakehouseDatasetConnectionsResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }

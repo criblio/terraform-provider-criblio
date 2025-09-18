@@ -43,18 +43,18 @@ type CreateProductsGroupsByProductRequest struct {
 	ConfigGroup shared.ConfigGroup `request:"mediaType=application/json"`
 }
 
-func (o *CreateProductsGroupsByProductRequest) GetProduct() CreateProductsGroupsByProductProduct {
-	if o == nil {
+func (c *CreateProductsGroupsByProductRequest) GetProduct() CreateProductsGroupsByProductProduct {
+	if c == nil {
 		return CreateProductsGroupsByProductProduct("")
 	}
-	return o.Product
+	return c.Product
 }
 
-func (o *CreateProductsGroupsByProductRequest) GetConfigGroup() shared.ConfigGroup {
-	if o == nil {
+func (c *CreateProductsGroupsByProductRequest) GetConfigGroup() shared.ConfigGroup {
+	if c == nil {
 		return shared.ConfigGroup{}
 	}
-	return o.ConfigGroup
+	return c.ConfigGroup
 }
 
 // CreateProductsGroupsByProductResponseBody - a list of ConfigGroup objects
@@ -62,11 +62,11 @@ type CreateProductsGroupsByProductResponseBody struct {
 	Items []shared.Group `json:"items,omitempty"`
 }
 
-func (o *CreateProductsGroupsByProductResponseBody) GetItems() []shared.Group {
-	if o == nil {
+func (c *CreateProductsGroupsByProductResponseBody) GetItems() []shared.Group {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateProductsGroupsByProductResponse struct {
@@ -82,37 +82,37 @@ type CreateProductsGroupsByProductResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateProductsGroupsByProductResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateProductsGroupsByProductResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateProductsGroupsByProductResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateProductsGroupsByProductResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateProductsGroupsByProductResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateProductsGroupsByProductResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateProductsGroupsByProductResponse) GetObject() *CreateProductsGroupsByProductResponseBody {
-	if o == nil {
+func (c *CreateProductsGroupsByProductResponse) GetObject() *CreateProductsGroupsByProductResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateProductsGroupsByProductResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateProductsGroupsByProductResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

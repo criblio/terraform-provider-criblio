@@ -14,18 +14,18 @@ type DeleteProjectByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteProjectByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteProjectByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteProjectByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteProjectByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteProjectByIDResponseBody - a list of Project objects
@@ -33,11 +33,11 @@ type DeleteProjectByIDResponseBody struct {
 	Items []shared.ProjectConfig `json:"items,omitempty"`
 }
 
-func (o *DeleteProjectByIDResponseBody) GetItems() []shared.ProjectConfig {
-	if o == nil {
+func (d *DeleteProjectByIDResponseBody) GetItems() []shared.ProjectConfig {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteProjectByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteProjectByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteProjectByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteProjectByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteProjectByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteProjectByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteProjectByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteProjectByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteProjectByIDResponse) GetObject() *DeleteProjectByIDResponseBody {
-	if o == nil {
+func (d *DeleteProjectByIDResponse) GetObject() *DeleteProjectByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteProjectByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteProjectByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -12,51 +12,51 @@ type LoggerConfig struct {
 	RedactLabel         string        `json:"redactLabel"`
 }
 
-func (o *LoggerConfig) GetChannels() []LoggerEntry {
-	if o == nil {
+func (l *LoggerConfig) GetChannels() []LoggerEntry {
+	if l == nil {
 		return []LoggerEntry{}
 	}
-	return o.Channels
+	return l.Channels
 }
 
-func (o *LoggerConfig) GetDefaultRedactFields() []string {
-	if o == nil {
+func (l *LoggerConfig) GetDefaultRedactFields() []string {
+	if l == nil {
 		return nil
 	}
-	return o.DefaultRedactFields
+	return l.DefaultRedactFields
 }
 
-func (o *LoggerConfig) GetID() string {
-	if o == nil {
+func (l *LoggerConfig) GetID() string {
+	if l == nil {
 		return ""
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *LoggerConfig) GetLimitRate() float64 {
-	if o == nil {
+func (l *LoggerConfig) GetLimitRate() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.LimitRate
+	return l.LimitRate
 }
 
-func (o *LoggerConfig) GetMaxSizeBytes() float64 {
-	if o == nil {
+func (l *LoggerConfig) GetMaxSizeBytes() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.MaxSizeBytes
+	return l.MaxSizeBytes
 }
 
-func (o *LoggerConfig) GetRedactFields() []string {
-	if o == nil {
+func (l *LoggerConfig) GetRedactFields() []string {
+	if l == nil {
 		return []string{}
 	}
-	return o.RedactFields
+	return l.RedactFields
 }
 
-func (o *LoggerConfig) GetRedactLabel() string {
-	if o == nil {
+func (l *LoggerConfig) GetRedactLabel() string {
+	if l == nil {
 		return ""
 	}
-	return o.RedactLabel
+	return l.RedactLabel
 }

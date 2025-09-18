@@ -16,25 +16,25 @@ type CreateOutputTestByIDRequest struct {
 	OutputTestRequest shared.OutputTestRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateOutputTestByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateOutputTestByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateOutputTestByIDRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateOutputTestByIDRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateOutputTestByIDRequest) GetOutputTestRequest() shared.OutputTestRequest {
-	if o == nil {
+func (c *CreateOutputTestByIDRequest) GetOutputTestRequest() shared.OutputTestRequest {
+	if c == nil {
 		return shared.OutputTestRequest{}
 	}
-	return o.OutputTestRequest
+	return c.OutputTestRequest
 }
 
 // CreateOutputTestByIDResponseBody - a list of OutputTestResponse objects
@@ -42,11 +42,11 @@ type CreateOutputTestByIDResponseBody struct {
 	Items []shared.OutputTestResponse `json:"items,omitempty"`
 }
 
-func (o *CreateOutputTestByIDResponseBody) GetItems() []shared.OutputTestResponse {
-	if o == nil {
+func (c *CreateOutputTestByIDResponseBody) GetItems() []shared.OutputTestResponse {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateOutputTestByIDResponse struct {
@@ -62,37 +62,37 @@ type CreateOutputTestByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateOutputTestByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOutputTestByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOutputTestByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOutputTestByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOutputTestByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOutputTestByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOutputTestByIDResponse) GetObject() *CreateOutputTestByIDResponseBody {
-	if o == nil {
+func (c *CreateOutputTestByIDResponse) GetObject() *CreateOutputTestByIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateOutputTestByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateOutputTestByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

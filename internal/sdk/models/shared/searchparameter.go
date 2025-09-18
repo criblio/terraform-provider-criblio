@@ -8,23 +8,23 @@ type SearchParameter struct {
 	Type         SearchParameterType   `json:"type"`
 }
 
-func (o *SearchParameter) GetDefaultValue() *SearchParameterValue {
-	if o == nil {
+func (s *SearchParameter) GetDefaultValue() *SearchParameterValue {
+	if s == nil {
 		return nil
 	}
-	return o.DefaultValue
+	return s.DefaultValue
 }
 
-func (o *SearchParameter) GetName() string {
-	if o == nil {
+func (s *SearchParameter) GetName() string {
+	if s == nil {
 		return ""
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SearchParameter) GetType() SearchParameterType {
-	if o == nil {
+func (s *SearchParameter) GetType() SearchParameterType {
+	if s == nil {
 		return SearchParameterType("")
 	}
-	return o.Type
+	return s.Type
 }

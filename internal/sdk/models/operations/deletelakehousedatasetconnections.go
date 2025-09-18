@@ -13,18 +13,18 @@ type DeleteLakehouseDatasetConnectionsRequest struct {
 	LakeDatasetID string `pathParam:"style=simple,explode=false,name=lake_dataset_id"`
 }
 
-func (o *DeleteLakehouseDatasetConnectionsRequest) GetLakehouseID() string {
-	if o == nil {
+func (d *DeleteLakehouseDatasetConnectionsRequest) GetLakehouseID() string {
+	if d == nil {
 		return ""
 	}
-	return o.LakehouseID
+	return d.LakehouseID
 }
 
-func (o *DeleteLakehouseDatasetConnectionsRequest) GetLakeDatasetID() string {
-	if o == nil {
+func (d *DeleteLakehouseDatasetConnectionsRequest) GetLakeDatasetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.LakeDatasetID
+	return d.LakeDatasetID
 }
 
 type Item struct {
@@ -35,11 +35,11 @@ type DeleteLakehouseDatasetConnectionsResponseBody struct {
 	Items []Item `json:"items,omitempty"`
 }
 
-func (o *DeleteLakehouseDatasetConnectionsResponseBody) GetItems() []Item {
-	if o == nil {
+func (d *DeleteLakehouseDatasetConnectionsResponseBody) GetItems() []Item {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteLakehouseDatasetConnectionsResponse struct {
@@ -53,30 +53,30 @@ type DeleteLakehouseDatasetConnectionsResponse struct {
 	Object *DeleteLakehouseDatasetConnectionsResponseBody
 }
 
-func (o *DeleteLakehouseDatasetConnectionsResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteLakehouseDatasetConnectionsResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteLakehouseDatasetConnectionsResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteLakehouseDatasetConnectionsResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteLakehouseDatasetConnectionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteLakehouseDatasetConnectionsResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteLakehouseDatasetConnectionsResponse) GetObject() *DeleteLakehouseDatasetConnectionsResponseBody {
-	if o == nil {
+func (d *DeleteLakehouseDatasetConnectionsResponse) GetObject() *DeleteLakehouseDatasetConnectionsResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }

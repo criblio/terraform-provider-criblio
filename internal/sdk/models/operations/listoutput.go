@@ -12,11 +12,11 @@ type ListOutputRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListOutputRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListOutputRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListOutputResponseBody - a list of Output objects
@@ -36,37 +36,37 @@ type ListOutputResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListOutputResponse) GetContentType() string {
-	if o == nil {
+func (l *ListOutputResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListOutputResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListOutputResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListOutputResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListOutputResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListOutputResponse) GetObject() *ListOutputResponseBody {
-	if o == nil {
+func (l *ListOutputResponse) GetObject() *ListOutputResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListOutputResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListOutputResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

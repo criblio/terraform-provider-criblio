@@ -12,11 +12,11 @@ type GetCollectorByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetCollectorByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetCollectorByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetCollectorByIDResponseBody - a list of Collector objects
@@ -24,11 +24,11 @@ type GetCollectorByIDResponseBody struct {
 	Items []shared.Collector `json:"items,omitempty"`
 }
 
-func (o *GetCollectorByIDResponseBody) GetItems() []shared.Collector {
-	if o == nil {
+func (g *GetCollectorByIDResponseBody) GetItems() []shared.Collector {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetCollectorByIDResponse struct {
@@ -44,37 +44,37 @@ type GetCollectorByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetCollectorByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetCollectorByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetCollectorByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetCollectorByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetCollectorByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetCollectorByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetCollectorByIDResponse) GetObject() *GetCollectorByIDResponseBody {
-	if o == nil {
+func (g *GetCollectorByIDResponse) GetObject() *GetCollectorByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetCollectorByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetCollectorByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

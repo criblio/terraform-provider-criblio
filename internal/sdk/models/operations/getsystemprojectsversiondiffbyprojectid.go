@@ -18,32 +18,32 @@ type GetSystemProjectsVersionDiffByProjectIDRequest struct {
 	DiffLineLimit *float64 `queryParam:"style=form,explode=true,name=diffLineLimit"`
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDRequest) GetProjectID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDRequest) GetCommit() *string {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDRequest) GetCommit() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Commit
+	return g.Commit
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDRequest) GetFilename() *string {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDRequest) GetFilename() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Filename
+	return g.Filename
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDRequest) GetDiffLineLimit() *float64 {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDRequest) GetDiffLineLimit() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.DiffLineLimit
+	return g.DiffLineLimit
 }
 
 // GetSystemProjectsVersionDiffByProjectIDResponseBody - a list of any objects
@@ -51,11 +51,11 @@ type GetSystemProjectsVersionDiffByProjectIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemProjectsVersionDiffByProjectIDResponse struct {
@@ -71,37 +71,37 @@ type GetSystemProjectsVersionDiffByProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDResponse) GetObject() *GetSystemProjectsVersionDiffByProjectIDResponseBody {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDResponse) GetObject() *GetSystemProjectsVersionDiffByProjectIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemProjectsVersionDiffByProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByProjectIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -13,18 +13,18 @@ type UpdateDefaultLakeLakehouseByIDRequest struct {
 	Lakehouse shared.Lakehouse `request:"mediaType=application/json"`
 }
 
-func (o *UpdateDefaultLakeLakehouseByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateDefaultLakeLakehouseByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateDefaultLakeLakehouseByIDRequest) GetLakehouse() shared.Lakehouse {
-	if o == nil {
+func (u *UpdateDefaultLakeLakehouseByIDRequest) GetLakehouse() shared.Lakehouse {
+	if u == nil {
 		return shared.Lakehouse{}
 	}
-	return o.Lakehouse
+	return u.Lakehouse
 }
 
 // UpdateDefaultLakeLakehouseByIDResponseBody - a list of Lakehouse objects
@@ -32,11 +32,11 @@ type UpdateDefaultLakeLakehouseByIDResponseBody struct {
 	Items []shared.Lakehouse `json:"items,omitempty"`
 }
 
-func (o *UpdateDefaultLakeLakehouseByIDResponseBody) GetItems() []shared.Lakehouse {
-	if o == nil {
+func (u *UpdateDefaultLakeLakehouseByIDResponseBody) GetItems() []shared.Lakehouse {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateDefaultLakeLakehouseByIDResponse struct {
@@ -52,37 +52,37 @@ type UpdateDefaultLakeLakehouseByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateDefaultLakeLakehouseByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateDefaultLakeLakehouseByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateDefaultLakeLakehouseByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateDefaultLakeLakehouseByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateDefaultLakeLakehouseByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateDefaultLakeLakehouseByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateDefaultLakeLakehouseByIDResponse) GetObject() *UpdateDefaultLakeLakehouseByIDResponseBody {
-	if o == nil {
+func (u *UpdateDefaultLakeLakehouseByIDResponse) GetObject() *UpdateDefaultLakeLakehouseByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateDefaultLakeLakehouseByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateDefaultLakeLakehouseByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

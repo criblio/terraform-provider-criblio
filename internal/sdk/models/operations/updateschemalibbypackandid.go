@@ -16,25 +16,25 @@ type UpdateSchemaLibByPackAndIDRequest struct {
 	SchemaLibEntry shared.SchemaLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *UpdateSchemaLibByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateSchemaLibByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDRequest) GetPack() string {
+	if u == nil {
 		return ""
 	}
-	return o.Pack
+	return u.Pack
 }
 
-func (o *UpdateSchemaLibByPackAndIDRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
+	if u == nil {
 		return shared.SchemaLibEntry{}
 	}
-	return o.SchemaLibEntry
+	return u.SchemaLibEntry
 }
 
 // UpdateSchemaLibByPackAndIDResponseBody - a list of Schema objects
@@ -42,11 +42,11 @@ type UpdateSchemaLibByPackAndIDResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *UpdateSchemaLibByPackAndIDResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDResponseBody) GetItems() []shared.SchemaLibEntry {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSchemaLibByPackAndIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateSchemaLibByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSchemaLibByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSchemaLibByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSchemaLibByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSchemaLibByPackAndIDResponse) GetObject() *UpdateSchemaLibByPackAndIDResponseBody {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDResponse) GetObject() *UpdateSchemaLibByPackAndIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSchemaLibByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSchemaLibByPackAndIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

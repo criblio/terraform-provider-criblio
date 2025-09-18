@@ -47,18 +47,18 @@ func (i *InputTcpjsonConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTcpjsonConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputTcpjsonConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputTcpjsonConnection) GetOutput() string {
-	if o == nil {
+func (i *InputTcpjsonConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputTcpjsonMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputTcpjsonPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTcpjsonPq) GetMode() *InputTcpjsonMode {
-	if o == nil {
+func (i *InputTcpjsonPq) GetMode() *InputTcpjsonMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputTcpjsonPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputTcpjsonPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputTcpjsonPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputTcpjsonPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputTcpjsonPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputTcpjsonPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputTcpjsonPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputTcpjsonPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputTcpjsonPq) GetPath() *string {
-	if o == nil {
+func (i *InputTcpjsonPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputTcpjsonPq) GetCompress() *InputTcpjsonCompression {
-	if o == nil {
+func (i *InputTcpjsonPq) GetCompress() *InputTcpjsonCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputTcpjsonMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputTcpjsonTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetMinVersion() *InputTcpjsonMinimumTLSVersion {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetMinVersion() *InputTcpjsonMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputTcpjsonTLSSettingsServerSide) GetMaxVersion() *InputTcpjsonMaximumTLSVersion {
-	if o == nil {
+func (i *InputTcpjsonTLSSettingsServerSide) GetMaxVersion() *InputTcpjsonMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputTcpjsonMetadatum struct {
@@ -381,18 +381,18 @@ func (i *InputTcpjsonMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTcpjsonMetadatum) GetName() string {
-	if o == nil {
+func (i *InputTcpjsonMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputTcpjsonMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputTcpjsonMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputTcpjsonAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
@@ -481,177 +481,177 @@ func (i *InputTcpjson) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTcpjson) GetID() *string {
-	if o == nil {
+func (i *InputTcpjson) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputTcpjson) GetType() *InputTcpjsonType {
-	if o == nil {
+func (i *InputTcpjson) GetType() *InputTcpjsonType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputTcpjson) GetDisabled() *bool {
-	if o == nil {
+func (i *InputTcpjson) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputTcpjson) GetPipeline() *string {
-	if o == nil {
+func (i *InputTcpjson) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputTcpjson) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputTcpjson) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputTcpjson) GetEnvironment() *string {
-	if o == nil {
+func (i *InputTcpjson) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputTcpjson) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputTcpjson) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputTcpjson) GetStreamtags() []string {
-	if o == nil {
+func (i *InputTcpjson) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputTcpjson) GetConnections() []InputTcpjsonConnection {
-	if o == nil {
+func (i *InputTcpjson) GetConnections() []InputTcpjsonConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputTcpjson) GetPq() *InputTcpjsonPq {
-	if o == nil {
+func (i *InputTcpjson) GetPq() *InputTcpjsonPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputTcpjson) GetHost() *string {
-	if o == nil {
+func (i *InputTcpjson) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputTcpjson) GetPort() float64 {
-	if o == nil {
+func (i *InputTcpjson) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputTcpjson) GetTLS() *InputTcpjsonTLSSettingsServerSide {
-	if o == nil {
+func (i *InputTcpjson) GetTLS() *InputTcpjsonTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputTcpjson) GetIPWhitelistRegex() *string {
-	if o == nil {
+func (i *InputTcpjson) GetIPWhitelistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPWhitelistRegex
+	return i.IPWhitelistRegex
 }
 
-func (o *InputTcpjson) GetMaxActiveCxn() *float64 {
-	if o == nil {
+func (i *InputTcpjson) GetMaxActiveCxn() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveCxn
+	return i.MaxActiveCxn
 }
 
-func (o *InputTcpjson) GetSocketIdleTimeout() *float64 {
-	if o == nil {
+func (i *InputTcpjson) GetSocketIdleTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketIdleTimeout
+	return i.SocketIdleTimeout
 }
 
-func (o *InputTcpjson) GetSocketEndingMaxWait() *float64 {
-	if o == nil {
+func (i *InputTcpjson) GetSocketEndingMaxWait() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketEndingMaxWait
+	return i.SocketEndingMaxWait
 }
 
-func (o *InputTcpjson) GetSocketMaxLifespan() *float64 {
-	if o == nil {
+func (i *InputTcpjson) GetSocketMaxLifespan() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketMaxLifespan
+	return i.SocketMaxLifespan
 }
 
-func (o *InputTcpjson) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputTcpjson) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputTcpjson) GetMetadata() []InputTcpjsonMetadatum {
-	if o == nil {
+func (i *InputTcpjson) GetMetadata() []InputTcpjsonMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputTcpjson) GetEnableLoadBalancing() *bool {
-	if o == nil {
+func (i *InputTcpjson) GetEnableLoadBalancing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableLoadBalancing
+	return i.EnableLoadBalancing
 }
 
-func (o *InputTcpjson) GetAuthType() *InputTcpjsonAuthenticationMethod {
-	if o == nil {
+func (i *InputTcpjson) GetAuthType() *InputTcpjsonAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputTcpjson) GetDescription() *string {
-	if o == nil {
+func (i *InputTcpjson) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputTcpjson) GetAuthToken() *string {
-	if o == nil {
+func (i *InputTcpjson) GetAuthToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthToken
+	return i.AuthToken
 }
 
-func (o *InputTcpjson) GetTextSecret() *string {
-	if o == nil {
+func (i *InputTcpjson) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }

@@ -8,23 +8,23 @@ type SampleFile struct {
 	Length    float64 `json:"length"`
 }
 
-func (o *SampleFile) GetBytes() string {
-	if o == nil {
+func (s *SampleFile) GetBytes() string {
+	if s == nil {
 		return ""
 	}
-	return o.Bytes
+	return s.Bytes
 }
 
-func (o *SampleFile) GetBytesRead() float64 {
-	if o == nil {
+func (s *SampleFile) GetBytesRead() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.BytesRead
+	return s.BytesRead
 }
 
-func (o *SampleFile) GetLength() float64 {
-	if o == nil {
+func (s *SampleFile) GetLength() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Length
+	return s.Length
 }

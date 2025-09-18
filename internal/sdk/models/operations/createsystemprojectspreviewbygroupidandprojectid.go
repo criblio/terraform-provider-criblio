@@ -16,25 +16,25 @@ type CreateSystemProjectsPreviewByGroupIDAndProjectIDRequest struct {
 	PreviewDataParams shared.PreviewDataParams `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDRequest) GetProjectID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProjectID
+	return c.ProjectID
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDRequest) GetPreviewDataParams() shared.PreviewDataParams {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDRequest) GetPreviewDataParams() shared.PreviewDataParams {
+	if c == nil {
 		return shared.PreviewDataParams{}
 	}
-	return o.PreviewDataParams
+	return c.PreviewDataParams
 }
 
 // CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody - A list of any objects
@@ -42,11 +42,11 @@ type CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse struct {
@@ -62,37 +62,37 @@ type CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetObject() *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetObject() *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemProjectsPreviewByGroupIDAndProjectIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

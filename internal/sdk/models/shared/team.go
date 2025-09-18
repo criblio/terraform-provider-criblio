@@ -10,37 +10,37 @@ type Team struct {
 	SsoGroupIds []string `json:"ssoGroupIds,omitempty"`
 }
 
-func (o *Team) GetDescription() string {
-	if o == nil {
+func (t *Team) GetDescription() string {
+	if t == nil {
 		return ""
 	}
-	return o.Description
+	return t.Description
 }
 
-func (o *Team) GetID() string {
-	if o == nil {
+func (t *Team) GetID() string {
+	if t == nil {
 		return ""
 	}
-	return o.ID
+	return t.ID
 }
 
-func (o *Team) GetName() string {
-	if o == nil {
+func (t *Team) GetName() string {
+	if t == nil {
 		return ""
 	}
-	return o.Name
+	return t.Name
 }
 
-func (o *Team) GetRoles() []string {
-	if o == nil {
+func (t *Team) GetRoles() []string {
+	if t == nil {
 		return []string{}
 	}
-	return o.Roles
+	return t.Roles
 }
 
-func (o *Team) GetSsoGroupIds() []string {
-	if o == nil {
+func (t *Team) GetSsoGroupIds() []string {
+	if t == nil {
 		return nil
 	}
-	return o.SsoGroupIds
+	return t.SsoGroupIds
 }

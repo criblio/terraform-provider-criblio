@@ -47,18 +47,18 @@ func (i *InputRawUDPConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputRawUDPConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputRawUDPConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputRawUDPConnection) GetOutput() string {
-	if o == nil {
+func (i *InputRawUDPConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputRawUDPMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputRawUDPPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputRawUDPPq) GetMode() *InputRawUDPMode {
-	if o == nil {
+func (i *InputRawUDPPq) GetMode() *InputRawUDPMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputRawUDPPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputRawUDPPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputRawUDPPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputRawUDPPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputRawUDPPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputRawUDPPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputRawUDPPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputRawUDPPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputRawUDPPq) GetPath() *string {
-	if o == nil {
+func (i *InputRawUDPPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputRawUDPPq) GetCompress() *InputRawUDPCompression {
-	if o == nil {
+func (i *InputRawUDPPq) GetCompress() *InputRawUDPCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputRawUDPMetadatum struct {
@@ -209,18 +209,18 @@ func (i *InputRawUDPMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputRawUDPMetadatum) GetName() string {
-	if o == nil {
+func (i *InputRawUDPMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputRawUDPMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputRawUDPMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputRawUDP struct {
@@ -271,135 +271,135 @@ func (i *InputRawUDP) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputRawUDP) GetID() *string {
-	if o == nil {
+func (i *InputRawUDP) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputRawUDP) GetType() *InputRawUDPType {
-	if o == nil {
+func (i *InputRawUDP) GetType() *InputRawUDPType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputRawUDP) GetDisabled() *bool {
-	if o == nil {
+func (i *InputRawUDP) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputRawUDP) GetPipeline() *string {
-	if o == nil {
+func (i *InputRawUDP) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputRawUDP) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputRawUDP) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputRawUDP) GetEnvironment() *string {
-	if o == nil {
+func (i *InputRawUDP) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputRawUDP) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputRawUDP) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputRawUDP) GetStreamtags() []string {
-	if o == nil {
+func (i *InputRawUDP) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputRawUDP) GetConnections() []InputRawUDPConnection {
-	if o == nil {
+func (i *InputRawUDP) GetConnections() []InputRawUDPConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputRawUDP) GetPq() *InputRawUDPPq {
-	if o == nil {
+func (i *InputRawUDP) GetPq() *InputRawUDPPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputRawUDP) GetHost() *string {
-	if o == nil {
+func (i *InputRawUDP) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputRawUDP) GetPort() float64 {
-	if o == nil {
+func (i *InputRawUDP) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputRawUDP) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputRawUDP) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputRawUDP) GetIPWhitelistRegex() *string {
-	if o == nil {
+func (i *InputRawUDP) GetIPWhitelistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPWhitelistRegex
+	return i.IPWhitelistRegex
 }
 
-func (o *InputRawUDP) GetSingleMsgUDPPackets() *bool {
-	if o == nil {
+func (i *InputRawUDP) GetSingleMsgUDPPackets() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SingleMsgUDPPackets
+	return i.SingleMsgUDPPackets
 }
 
-func (o *InputRawUDP) GetIngestRawBytes() *bool {
-	if o == nil {
+func (i *InputRawUDP) GetIngestRawBytes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IngestRawBytes
+	return i.IngestRawBytes
 }
 
-func (o *InputRawUDP) GetUDPSocketRxBufSize() *float64 {
-	if o == nil {
+func (i *InputRawUDP) GetUDPSocketRxBufSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.UDPSocketRxBufSize
+	return i.UDPSocketRxBufSize
 }
 
-func (o *InputRawUDP) GetMetadata() []InputRawUDPMetadatum {
-	if o == nil {
+func (i *InputRawUDP) GetMetadata() []InputRawUDPMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputRawUDP) GetDescription() *string {
-	if o == nil {
+func (i *InputRawUDP) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

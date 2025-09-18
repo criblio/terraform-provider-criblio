@@ -13,18 +13,18 @@ type ListPackOutputRequest struct {
 	Pack    string `pathParam:"style=simple,explode=false,name=pack"`
 }
 
-func (o *ListPackOutputRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListPackOutputRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
-func (o *ListPackOutputRequest) GetPack() string {
-	if o == nil {
+func (l *ListPackOutputRequest) GetPack() string {
+	if l == nil {
 		return ""
 	}
-	return o.Pack
+	return l.Pack
 }
 
 // ListPackOutputResponseBody - a list of Output objects
@@ -44,37 +44,37 @@ type ListPackOutputResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListPackOutputResponse) GetContentType() string {
-	if o == nil {
+func (l *ListPackOutputResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListPackOutputResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListPackOutputResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListPackOutputResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListPackOutputResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListPackOutputResponse) GetObject() *ListPackOutputResponseBody {
-	if o == nil {
+func (l *ListPackOutputResponse) GetObject() *ListPackOutputResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListPackOutputResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListPackOutputResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

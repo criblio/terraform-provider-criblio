@@ -16,25 +16,25 @@ type CreateRoutesByPackRequest struct {
 	Routes shared.RoutesInput `request:"mediaType=application/json"`
 }
 
-func (o *CreateRoutesByPackRequest) GetPack() string {
-	if o == nil {
+func (c *CreateRoutesByPackRequest) GetPack() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pack
+	return c.Pack
 }
 
-func (o *CreateRoutesByPackRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateRoutesByPackRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateRoutesByPackRequest) GetRoutes() shared.RoutesInput {
-	if o == nil {
+func (c *CreateRoutesByPackRequest) GetRoutes() shared.RoutesInput {
+	if c == nil {
 		return shared.RoutesInput{}
 	}
-	return o.Routes
+	return c.Routes
 }
 
 // CreateRoutesByPackResponseBody - a list of Routes objects
@@ -42,11 +42,11 @@ type CreateRoutesByPackResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *CreateRoutesByPackResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (c *CreateRoutesByPackResponseBody) GetItems() []shared.Routes {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateRoutesByPackResponse struct {
@@ -62,37 +62,37 @@ type CreateRoutesByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateRoutesByPackResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateRoutesByPackResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateRoutesByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateRoutesByPackResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateRoutesByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateRoutesByPackResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateRoutesByPackResponse) GetObject() *CreateRoutesByPackResponseBody {
-	if o == nil {
+func (c *CreateRoutesByPackResponse) GetObject() *CreateRoutesByPackResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateRoutesByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateRoutesByPackResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -12,11 +12,11 @@ type UndoLastCommitRequest struct {
 	Group *string `queryParam:"style=form,explode=true,name=group"`
 }
 
-func (o *UndoLastCommitRequest) GetGroup() *string {
-	if o == nil {
+func (u *UndoLastCommitRequest) GetGroup() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Group
+	return u.Group
 }
 
 type UndoLastCommitResponse struct {
@@ -30,30 +30,30 @@ type UndoLastCommitResponse struct {
 	Error *shared.Error
 }
 
-func (o *UndoLastCommitResponse) GetContentType() string {
-	if o == nil {
+func (u *UndoLastCommitResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UndoLastCommitResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UndoLastCommitResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UndoLastCommitResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UndoLastCommitResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UndoLastCommitResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UndoLastCommitResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

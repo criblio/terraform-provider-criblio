@@ -12,11 +12,11 @@ type ListParserRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListParserRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListParserRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListParserResponseBody - a list of Parser objects
@@ -24,11 +24,11 @@ type ListParserResponseBody struct {
 	Items []shared.ParserLibEntry `json:"items,omitempty"`
 }
 
-func (o *ListParserResponseBody) GetItems() []shared.ParserLibEntry {
-	if o == nil {
+func (l *ListParserResponseBody) GetItems() []shared.ParserLibEntry {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListParserResponse struct {
@@ -44,37 +44,37 @@ type ListParserResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListParserResponse) GetContentType() string {
-	if o == nil {
+func (l *ListParserResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListParserResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListParserResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListParserResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListParserResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListParserResponse) GetObject() *ListParserResponseBody {
-	if o == nil {
+func (l *ListParserResponse) GetObject() *ListParserResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListParserResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListParserResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

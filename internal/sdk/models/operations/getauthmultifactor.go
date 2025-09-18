@@ -12,11 +12,11 @@ type GetAuthMultiFactorResponseBody struct {
 	Items []shared.MultiFactorAuthSchema `json:"items,omitempty"`
 }
 
-func (o *GetAuthMultiFactorResponseBody) GetItems() []shared.MultiFactorAuthSchema {
-	if o == nil {
+func (g *GetAuthMultiFactorResponseBody) GetItems() []shared.MultiFactorAuthSchema {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetAuthMultiFactorResponse struct {
@@ -32,37 +32,37 @@ type GetAuthMultiFactorResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetAuthMultiFactorResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthMultiFactorResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthMultiFactorResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthMultiFactorResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthMultiFactorResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthMultiFactorResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAuthMultiFactorResponse) GetObject() *GetAuthMultiFactorResponseBody {
-	if o == nil {
+func (g *GetAuthMultiFactorResponse) GetObject() *GetAuthMultiFactorResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetAuthMultiFactorResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetAuthMultiFactorResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

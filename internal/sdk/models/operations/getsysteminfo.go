@@ -12,11 +12,11 @@ type GetSystemInfoResponseBody struct {
 	Items []shared.SystemInfo `json:"items,omitempty"`
 }
 
-func (o *GetSystemInfoResponseBody) GetItems() []shared.SystemInfo {
-	if o == nil {
+func (g *GetSystemInfoResponseBody) GetItems() []shared.SystemInfo {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemInfoResponse struct {
@@ -32,37 +32,37 @@ type GetSystemInfoResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemInfoResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemInfoResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemInfoResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemInfoResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemInfoResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemInfoResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemInfoResponse) GetObject() *GetSystemInfoResponseBody {
-	if o == nil {
+func (g *GetSystemInfoResponse) GetObject() *GetSystemInfoResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemInfoResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemInfoResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

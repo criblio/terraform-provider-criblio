@@ -12,11 +12,11 @@ type GetFeaturesEntryResponseBody struct {
 	Items []shared.FeaturesEntry `json:"items,omitempty"`
 }
 
-func (o *GetFeaturesEntryResponseBody) GetItems() []shared.FeaturesEntry {
-	if o == nil {
+func (g *GetFeaturesEntryResponseBody) GetItems() []shared.FeaturesEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetFeaturesEntryResponse struct {
@@ -32,37 +32,37 @@ type GetFeaturesEntryResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetFeaturesEntryResponse) GetContentType() string {
-	if o == nil {
+func (g *GetFeaturesEntryResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetFeaturesEntryResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetFeaturesEntryResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetFeaturesEntryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetFeaturesEntryResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetFeaturesEntryResponse) GetObject() *GetFeaturesEntryResponseBody {
-	if o == nil {
+func (g *GetFeaturesEntryResponse) GetObject() *GetFeaturesEntryResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetFeaturesEntryResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetFeaturesEntryResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

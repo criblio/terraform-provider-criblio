@@ -24,135 +24,135 @@ type LicenseLimits struct {
 	WorkerProcs           float64  `json:"worker_procs"`
 }
 
-func (o *LicenseLimits) GetEdgeGroups() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetEdgeGroups() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.EdgeGroups
+	return l.EdgeGroups
 }
 
-func (o *LicenseLimits) GetEdgeProcs() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetEdgeProcs() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.EdgeProcs
+	return l.EdgeProcs
 }
 
-func (o *LicenseLimits) GetKms() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetKms() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.Kms
+	return l.Kms
 }
 
-func (o *LicenseLimits) GetLakeDdss() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetLakeDdss() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.LakeDdss
+	return l.LakeDdss
 }
 
-func (o *LicenseLimits) GetLakehouse() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetLakehouse() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.Lakehouse
+	return l.Lakehouse
 }
 
-func (o *LicenseLimits) GetLeaderResiliency() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetLeaderResiliency() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.LeaderResiliency
+	return l.LeaderResiliency
 }
 
-func (o *LicenseLimits) GetMaxExecutorsPerSearch() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetMaxExecutorsPerSearch() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.MaxExecutorsPerSearch
+	return l.MaxExecutorsPerSearch
 }
 
-func (o *LicenseLimits) GetNotifications() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetNotifications() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.Notifications
+	return l.Notifications
 }
 
-func (o *LicenseLimits) GetPersistentQueue() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetPersistentQueue() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.PersistentQueue
+	return l.PersistentQueue
 }
 
-func (o *LicenseLimits) GetProjects() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetProjects() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.Projects
+	return l.Projects
 }
 
-func (o *LicenseLimits) GetRbac() float64 {
-	if o == nil {
+func (l *LicenseLimits) GetRbac() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.Rbac
+	return l.Rbac
 }
 
-func (o *LicenseLimits) GetRemoteAuth() float64 {
-	if o == nil {
+func (l *LicenseLimits) GetRemoteAuth() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.RemoteAuth
+	return l.RemoteAuth
 }
 
-func (o *LicenseLimits) GetRemoteGit() float64 {
-	if o == nil {
+func (l *LicenseLimits) GetRemoteGit() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.RemoteGit
+	return l.RemoteGit
 }
 
-func (o *LicenseLimits) GetS3Bundle() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetS3Bundle() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.S3Bundle
+	return l.S3Bundle
 }
 
-func (o *LicenseLimits) GetSearchAcceleration() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetSearchAcceleration() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.SearchAcceleration
+	return l.SearchAcceleration
 }
 
-func (o *LicenseLimits) GetSearchGroups() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetSearchGroups() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.SearchGroups
+	return l.SearchGroups
 }
 
-func (o *LicenseLimits) GetSystemEmail() *float64 {
-	if o == nil {
+func (l *LicenseLimits) GetSystemEmail() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.SystemEmail
+	return l.SystemEmail
 }
 
-func (o *LicenseLimits) GetWorkerGroups() float64 {
-	if o == nil {
+func (l *LicenseLimits) GetWorkerGroups() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.WorkerGroups
+	return l.WorkerGroups
 }
 
-func (o *LicenseLimits) GetWorkerProcs() float64 {
-	if o == nil {
+func (l *LicenseLimits) GetWorkerProcs() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.WorkerProcs
+	return l.WorkerProcs
 }

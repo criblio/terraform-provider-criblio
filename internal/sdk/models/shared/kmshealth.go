@@ -8,23 +8,23 @@ type KMSHealth struct {
 	System     KMSHealthTest `json:"system"`
 }
 
-func (o *KMSHealth) GetAuth() KMSHealthTest {
-	if o == nil {
+func (k *KMSHealth) GetAuth() KMSHealthTest {
+	if k == nil {
 		return KMSHealthTest{}
 	}
-	return o.Auth
+	return k.Auth
 }
 
-func (o *KMSHealth) GetConnection() KMSHealthTest {
-	if o == nil {
+func (k *KMSHealth) GetConnection() KMSHealthTest {
+	if k == nil {
 		return KMSHealthTest{}
 	}
-	return o.Connection
+	return k.Connection
 }
 
-func (o *KMSHealth) GetSystem() KMSHealthTest {
-	if o == nil {
+func (k *KMSHealth) GetSystem() KMSHealthTest {
+	if k == nil {
 		return KMSHealthTest{}
 	}
-	return o.System
+	return k.System
 }

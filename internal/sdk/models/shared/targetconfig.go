@@ -8,16 +8,16 @@ type TargetConfig struct {
 	Conf *TargetConfigConf `json:"conf,omitempty"`
 }
 
-func (o *TargetConfig) GetID() string {
-	if o == nil {
+func (t *TargetConfig) GetID() string {
+	if t == nil {
 		return ""
 	}
-	return o.ID
+	return t.ID
 }
 
-func (o *TargetConfig) GetConf() *TargetConfigConf {
-	if o == nil {
+func (t *TargetConfig) GetConf() *TargetConfigConf {
+	if t == nil {
 		return nil
 	}
-	return o.Conf
+	return t.Conf
 }

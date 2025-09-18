@@ -14,18 +14,18 @@ type UpdateNotificationByIDRequest struct {
 	Notification shared.Notification `request:"mediaType=application/json"`
 }
 
-func (o *UpdateNotificationByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateNotificationByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateNotificationByIDRequest) GetNotification() shared.Notification {
-	if o == nil {
+func (u *UpdateNotificationByIDRequest) GetNotification() shared.Notification {
+	if u == nil {
 		return shared.Notification{}
 	}
-	return o.Notification
+	return u.Notification
 }
 
 // UpdateNotificationByIDResponseBody - a list of Notification objects
@@ -33,11 +33,11 @@ type UpdateNotificationByIDResponseBody struct {
 	Items []shared.Notification `json:"items,omitempty"`
 }
 
-func (o *UpdateNotificationByIDResponseBody) GetItems() []shared.Notification {
-	if o == nil {
+func (u *UpdateNotificationByIDResponseBody) GetItems() []shared.Notification {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateNotificationByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateNotificationByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateNotificationByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateNotificationByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateNotificationByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateNotificationByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateNotificationByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateNotificationByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateNotificationByIDResponse) GetObject() *UpdateNotificationByIDResponseBody {
-	if o == nil {
+func (u *UpdateNotificationByIDResponse) GetObject() *UpdateNotificationByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateNotificationByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateNotificationByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

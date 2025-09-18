@@ -47,18 +47,18 @@ func (i *InputOffice365MgmtConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MgmtConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputOffice365MgmtConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputOffice365MgmtConnection) GetOutput() string {
-	if o == nil {
+func (i *InputOffice365MgmtConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputOffice365MgmtMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputOffice365MgmtPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MgmtPq) GetMode() *InputOffice365MgmtMode {
-	if o == nil {
+func (i *InputOffice365MgmtPq) GetMode() *InputOffice365MgmtMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputOffice365MgmtPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputOffice365MgmtPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputOffice365MgmtPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputOffice365MgmtPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputOffice365MgmtPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputOffice365MgmtPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputOffice365MgmtPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputOffice365MgmtPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputOffice365MgmtPq) GetPath() *string {
-	if o == nil {
+func (i *InputOffice365MgmtPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputOffice365MgmtPq) GetCompress() *InputOffice365MgmtCompression {
-	if o == nil {
+func (i *InputOffice365MgmtPq) GetCompress() *InputOffice365MgmtCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputOffice365MgmtSubscriptionPlan - Office 365 subscription plan for your organization, typically Office 365 Enterprise
@@ -242,18 +242,18 @@ func (i *InputOffice365MgmtMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MgmtMetadatum) GetName() string {
-	if o == nil {
+func (i *InputOffice365MgmtMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputOffice365MgmtMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputOffice365MgmtMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputOffice365MgmtLogLevel - Collector runtime Log Level
@@ -311,39 +311,39 @@ func (i *InputOffice365MgmtContentConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MgmtContentConfig) GetContentType() *string {
-	if o == nil {
+func (i *InputOffice365MgmtContentConfig) GetContentType() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ContentType
+	return i.ContentType
 }
 
-func (o *InputOffice365MgmtContentConfig) GetDescription() *string {
-	if o == nil {
+func (i *InputOffice365MgmtContentConfig) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputOffice365MgmtContentConfig) GetInterval() *float64 {
-	if o == nil {
+func (i *InputOffice365MgmtContentConfig) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputOffice365MgmtContentConfig) GetLogLevel() *InputOffice365MgmtLogLevel {
-	if o == nil {
+func (i *InputOffice365MgmtContentConfig) GetLogLevel() *InputOffice365MgmtLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputOffice365MgmtContentConfig) GetEnabled() *bool {
-	if o == nil {
+func (i *InputOffice365MgmtContentConfig) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 // InputOffice365MgmtRetryType - The algorithm to use when performing HTTP retries
@@ -406,60 +406,60 @@ func (i *InputOffice365MgmtRetryRules) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MgmtRetryRules) GetType() *InputOffice365MgmtRetryType {
-	if o == nil {
+func (i *InputOffice365MgmtRetryRules) GetType() *InputOffice365MgmtRetryType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputOffice365MgmtRetryRules) GetInterval() *float64 {
-	if o == nil {
+func (i *InputOffice365MgmtRetryRules) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputOffice365MgmtRetryRules) GetLimit() *float64 {
-	if o == nil {
+func (i *InputOffice365MgmtRetryRules) GetLimit() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Limit
+	return i.Limit
 }
 
-func (o *InputOffice365MgmtRetryRules) GetMultiplier() *float64 {
-	if o == nil {
+func (i *InputOffice365MgmtRetryRules) GetMultiplier() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Multiplier
+	return i.Multiplier
 }
 
-func (o *InputOffice365MgmtRetryRules) GetCodes() []float64 {
-	if o == nil {
+func (i *InputOffice365MgmtRetryRules) GetCodes() []float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Codes
+	return i.Codes
 }
 
-func (o *InputOffice365MgmtRetryRules) GetEnableHeader() *bool {
-	if o == nil {
+func (i *InputOffice365MgmtRetryRules) GetEnableHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHeader
+	return i.EnableHeader
 }
 
-func (o *InputOffice365MgmtRetryRules) GetRetryConnectTimeout() *bool {
-	if o == nil {
+func (i *InputOffice365MgmtRetryRules) GetRetryConnectTimeout() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectTimeout
+	return i.RetryConnectTimeout
 }
 
-func (o *InputOffice365MgmtRetryRules) GetRetryConnectReset() *bool {
-	if o == nil {
+func (i *InputOffice365MgmtRetryRules) GetRetryConnectReset() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectReset
+	return i.RetryConnectReset
 }
 
 // InputOffice365MgmtAuthenticationMethod - Enter client secret directly, or select a stored secret
@@ -554,198 +554,198 @@ func (i *InputOffice365Mgmt) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365Mgmt) GetID() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputOffice365Mgmt) GetType() *InputOffice365MgmtType {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetType() *InputOffice365MgmtType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputOffice365Mgmt) GetDisabled() *bool {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputOffice365Mgmt) GetPipeline() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputOffice365Mgmt) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputOffice365Mgmt) GetEnvironment() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputOffice365Mgmt) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputOffice365Mgmt) GetStreamtags() []string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputOffice365Mgmt) GetConnections() []InputOffice365MgmtConnection {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetConnections() []InputOffice365MgmtConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputOffice365Mgmt) GetPq() *InputOffice365MgmtPq {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetPq() *InputOffice365MgmtPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputOffice365Mgmt) GetPlanType() *InputOffice365MgmtSubscriptionPlan {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetPlanType() *InputOffice365MgmtSubscriptionPlan {
+	if i == nil {
 		return nil
 	}
-	return o.PlanType
+	return i.PlanType
 }
 
-func (o *InputOffice365Mgmt) GetTenantID() string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetTenantID() string {
+	if i == nil {
 		return ""
 	}
-	return o.TenantID
+	return i.TenantID
 }
 
-func (o *InputOffice365Mgmt) GetAppID() string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetAppID() string {
+	if i == nil {
 		return ""
 	}
-	return o.AppID
+	return i.AppID
 }
 
-func (o *InputOffice365Mgmt) GetTimeout() *float64 {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Timeout
+	return i.Timeout
 }
 
-func (o *InputOffice365Mgmt) GetKeepAliveTime() *float64 {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetKeepAliveTime() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTime
+	return i.KeepAliveTime
 }
 
-func (o *InputOffice365Mgmt) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputOffice365Mgmt) GetMaxMissedKeepAlives() *float64 {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetMaxMissedKeepAlives() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMissedKeepAlives
+	return i.MaxMissedKeepAlives
 }
 
-func (o *InputOffice365Mgmt) GetTTL() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputOffice365Mgmt) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputOffice365Mgmt) GetMetadata() []InputOffice365MgmtMetadatum {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetMetadata() []InputOffice365MgmtMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputOffice365Mgmt) GetPublisherIdentifier() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetPublisherIdentifier() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PublisherIdentifier
+	return i.PublisherIdentifier
 }
 
-func (o *InputOffice365Mgmt) GetContentConfig() []InputOffice365MgmtContentConfig {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetContentConfig() []InputOffice365MgmtContentConfig {
+	if i == nil {
 		return nil
 	}
-	return o.ContentConfig
+	return i.ContentConfig
 }
 
-func (o *InputOffice365Mgmt) GetIngestionLag() *float64 {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetIngestionLag() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.IngestionLag
+	return i.IngestionLag
 }
 
-func (o *InputOffice365Mgmt) GetRetryRules() *InputOffice365MgmtRetryRules {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetRetryRules() *InputOffice365MgmtRetryRules {
+	if i == nil {
 		return nil
 	}
-	return o.RetryRules
+	return i.RetryRules
 }
 
-func (o *InputOffice365Mgmt) GetAuthType() *InputOffice365MgmtAuthenticationMethod {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetAuthType() *InputOffice365MgmtAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputOffice365Mgmt) GetDescription() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputOffice365Mgmt) GetClientSecret() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetClientSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ClientSecret
+	return i.ClientSecret
 }
 
-func (o *InputOffice365Mgmt) GetTextSecret() *string {
-	if o == nil {
+func (i *InputOffice365Mgmt) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }

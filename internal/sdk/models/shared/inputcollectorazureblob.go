@@ -171,25 +171,25 @@ func (i *InputCollectorAzureBlobStateTracking) UnmarshalJSON(data []byte) error 
 	return nil
 }
 
-func (o *InputCollectorAzureBlobStateTracking) GetStateUpdateExpression() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobStateTracking) GetStateUpdateExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateUpdateExpression
+	return i.StateUpdateExpression
 }
 
-func (o *InputCollectorAzureBlobStateTracking) GetStateMergeExpression() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobStateTracking) GetStateMergeExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateMergeExpression
+	return i.StateMergeExpression
 }
 
-func (o *InputCollectorAzureBlobStateTracking) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlobStateTracking) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputCollectorAzureBlobRunSettings struct {
@@ -231,95 +231,95 @@ func (i *InputCollectorAzureBlobRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetLogLevel() *InputCollectorAzureBlobLogLevel {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetLogLevel() *InputCollectorAzureBlobLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetMode() *InputCollectorAzureBlobMode {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetMode() *InputCollectorAzureBlobMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetTimeRangeType() *InputCollectorAzureBlobTimeRange {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetTimeRangeType() *InputCollectorAzureBlobTimeRange {
+	if i == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return i.TimeRangeType
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetEarliest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetLatest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetExpression() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Expression
+	return i.Expression
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetMinTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return i.MinTaskSize
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetMaxTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return i.MaxTaskSize
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetTimeWarning() *InputCollectorAzureBlobTimeWarning {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetTimeWarning() *InputCollectorAzureBlobTimeWarning {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return i.TimeWarning
 }
 
-func (o *InputCollectorAzureBlobRunSettings) GetStateTracking() *InputCollectorAzureBlobStateTracking {
-	if o == nil {
+func (i *InputCollectorAzureBlobRunSettings) GetStateTracking() *InputCollectorAzureBlobStateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 // InputCollectorAzureBlobSchedule - Configuration for a scheduled job
@@ -348,46 +348,46 @@ func (i *InputCollectorAzureBlobSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorAzureBlobSchedule) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlobSchedule) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCollectorAzureBlobSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobSchedule) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputCollectorAzureBlobSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (i *InputCollectorAzureBlobSchedule) GetMaxConcurrentRuns() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return i.MaxConcurrentRuns
 }
 
-func (o *InputCollectorAzureBlobSchedule) GetSkippable() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlobSchedule) GetSkippable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Skippable
+	return i.Skippable
 }
 
-func (o *InputCollectorAzureBlobSchedule) GetResumeMissed() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlobSchedule) GetResumeMissed() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return i.ResumeMissed
 }
 
-func (o *InputCollectorAzureBlobSchedule) GetRun() *InputCollectorAzureBlobRunSettings {
-	if o == nil {
+func (i *InputCollectorAzureBlobSchedule) GetRun() *InputCollectorAzureBlobRunSettings {
+	if i == nil {
 		return nil
 	}
-	return o.Run
+	return i.Run
 }
 
 type InputCollectorAzureBlobTypeCollection2 string
@@ -432,25 +432,25 @@ func (i *InputCollectorAzureBlobPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorAzureBlobPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlobPreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectorAzureBlobPreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobPreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectorAzureBlobPreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectorAzureBlobPreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectorAzureBlobMetadatum struct {
@@ -470,18 +470,18 @@ func (i *InputCollectorAzureBlobMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorAzureBlobMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectorAzureBlobMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectorAzureBlobMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectorAzureBlobMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollectorAzureBlobInput struct {
@@ -514,67 +514,67 @@ func (i *InputCollectorAzureBlobInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorAzureBlobInput) GetType() *InputCollectorAzureBlobTypeCollection2 {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetType() *InputCollectorAzureBlobTypeCollection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorAzureBlobInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollectorAzureBlobInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollectorAzureBlobInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollectorAzureBlobInput) GetPreprocess() *InputCollectorAzureBlobPreprocess {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetPreprocess() *InputCollectorAzureBlobPreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollectorAzureBlobInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollectorAzureBlobInput) GetMetadata() []InputCollectorAzureBlobMetadatum {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetMetadata() []InputCollectorAzureBlobMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollectorAzureBlobInput) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectorAzureBlobInput) GetOutput() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobInput) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }
 
 type TypeAzureblob string
@@ -671,60 +671,60 @@ func (i *InputCollectorAzureBlobConf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorAzureBlobConf) GetContainerName() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobConf) GetContainerName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ContainerName
+	return i.ContainerName
 }
 
-func (o *InputCollectorAzureBlobConf) GetStorageAccountName() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobConf) GetStorageAccountName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StorageAccountName
+	return i.StorageAccountName
 }
 
-func (o *InputCollectorAzureBlobConf) GetConnectionString() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobConf) GetConnectionString() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionString
+	return i.ConnectionString
 }
 
-func (o *InputCollectorAzureBlobConf) GetAuthType() *InputCollectorAzureBlobAuthenticationMethod {
-	if o == nil {
+func (i *InputCollectorAzureBlobConf) GetAuthType() *InputCollectorAzureBlobAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputCollectorAzureBlobConf) GetPath() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlobConf) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputCollectorAzureBlobConf) GetRecurse() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlobConf) GetRecurse() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Recurse
+	return i.Recurse
 }
 
-func (o *InputCollectorAzureBlobConf) GetExtractors() []InputCollectorAzureBlobExtractor {
-	if o == nil {
+func (i *InputCollectorAzureBlobConf) GetExtractors() []InputCollectorAzureBlobExtractor {
+	if i == nil {
 		return nil
 	}
-	return o.Extractors
+	return i.Extractors
 }
 
-func (o *InputCollectorAzureBlobConf) GetMaxBatchSize() *int64 {
-	if o == nil {
+func (i *InputCollectorAzureBlobConf) GetMaxBatchSize() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBatchSize
+	return i.MaxBatchSize
 }
 
 type InputCollectorAzureBlobCollector struct {
@@ -743,18 +743,18 @@ func (i *InputCollectorAzureBlobCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorAzureBlobCollector) GetType() TypeAzureblob {
-	if o == nil {
+func (i *InputCollectorAzureBlobCollector) GetType() TypeAzureblob {
+	if i == nil {
 		return TypeAzureblob("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorAzureBlobCollector) GetConf() *InputCollectorAzureBlobConf {
-	if o == nil {
+func (i *InputCollectorAzureBlobCollector) GetConf() *InputCollectorAzureBlobConf {
+	if i == nil {
 		return nil
 	}
-	return o.Conf
+	return i.Conf
 }
 
 type InputCollectorAzureBlob struct {
@@ -788,93 +788,93 @@ func (i *InputCollectorAzureBlob) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorAzureBlob) GetID() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollectorAzureBlob) GetType() *InputCollectorAzureBlobTypeCollection1 {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetType() *InputCollectorAzureBlobTypeCollection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorAzureBlob) GetTTL() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputCollectorAzureBlob) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputCollectorAzureBlob) GetRemoveFields() []string {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetRemoveFields() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return i.RemoveFields
 }
 
-func (o *InputCollectorAzureBlob) GetResumeOnBoot() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetResumeOnBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return i.ResumeOnBoot
 }
 
-func (o *InputCollectorAzureBlob) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollectorAzureBlob) GetSavedState() *InputCollectorAzureBlobSavedState {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetSavedState() *InputCollectorAzureBlobSavedState {
+	if i == nil {
 		return nil
 	}
-	return o.SavedState
+	return i.SavedState
 }
 
-func (o *InputCollectorAzureBlob) GetSchedule() *InputCollectorAzureBlobSchedule {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetSchedule() *InputCollectorAzureBlobSchedule {
+	if i == nil {
 		return nil
 	}
-	return o.Schedule
+	return i.Schedule
 }
 
-func (o *InputCollectorAzureBlob) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollectorAzureBlob) GetWorkerAffinity() *bool {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetWorkerAffinity() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return i.WorkerAffinity
 }
 
-func (o *InputCollectorAzureBlob) GetInput() *InputCollectorAzureBlobInput {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetInput() *InputCollectorAzureBlobInput {
+	if i == nil {
 		return nil
 	}
-	return o.Input
+	return i.Input
 }
 
-func (o *InputCollectorAzureBlob) GetCollector() InputCollectorAzureBlobCollector {
-	if o == nil {
+func (i *InputCollectorAzureBlob) GetCollector() InputCollectorAzureBlobCollector {
+	if i == nil {
 		return InputCollectorAzureBlobCollector{}
 	}
-	return o.Collector
+	return i.Collector
 }

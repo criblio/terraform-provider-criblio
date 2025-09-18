@@ -16,25 +16,25 @@ type CreatePipelineByPackRequest struct {
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`
 }
 
-func (o *CreatePipelineByPackRequest) GetPack() string {
-	if o == nil {
+func (c *CreatePipelineByPackRequest) GetPack() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pack
+	return c.Pack
 }
 
-func (o *CreatePipelineByPackRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreatePipelineByPackRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreatePipelineByPackRequest) GetPipeline() shared.Pipeline {
-	if o == nil {
+func (c *CreatePipelineByPackRequest) GetPipeline() shared.Pipeline {
+	if c == nil {
 		return shared.Pipeline{}
 	}
-	return o.Pipeline
+	return c.Pipeline
 }
 
 // CreatePipelineByPackResponseBody - a list of Routes objects
@@ -42,11 +42,11 @@ type CreatePipelineByPackResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *CreatePipelineByPackResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (c *CreatePipelineByPackResponseBody) GetItems() []shared.Routes {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreatePipelineByPackResponse struct {
@@ -62,37 +62,37 @@ type CreatePipelineByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreatePipelineByPackResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePipelineByPackResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePipelineByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePipelineByPackResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePipelineByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePipelineByPackResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePipelineByPackResponse) GetObject() *CreatePipelineByPackResponseBody {
-	if o == nil {
+func (c *CreatePipelineByPackResponse) GetObject() *CreatePipelineByPackResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreatePipelineByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreatePipelineByPackResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

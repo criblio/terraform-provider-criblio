@@ -7,18 +7,18 @@ type Notifications struct {
 	Items    []Notification `json:"items,omitempty"`
 }
 
-func (o *Notifications) GetDisabled() bool {
-	if o == nil {
+func (n *Notifications) GetDisabled() bool {
+	if n == nil {
 		return false
 	}
-	return o.Disabled
+	return n.Disabled
 }
 
-func (o *Notifications) GetItems() []Notification {
-	if o == nil {
+func (n *Notifications) GetItems() []Notification {
+	if n == nil {
 		return nil
 	}
-	return o.Items
+	return n.Items
 }
 
 type SavedQuerySchedule struct {
@@ -31,51 +31,51 @@ type SavedQuerySchedule struct {
 	Tz            string        `json:"tz"`
 }
 
-func (o *SavedQuerySchedule) GetCronSchedule() string {
-	if o == nil {
+func (s *SavedQuerySchedule) GetCronSchedule() string {
+	if s == nil {
 		return ""
 	}
-	return o.CronSchedule
+	return s.CronSchedule
 }
 
-func (o *SavedQuerySchedule) GetEnabled() bool {
-	if o == nil {
+func (s *SavedQuerySchedule) GetEnabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.Enabled
+	return s.Enabled
 }
 
-func (o *SavedQuerySchedule) GetKeepLastN() float64 {
-	if o == nil {
+func (s *SavedQuerySchedule) GetKeepLastN() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.KeepLastN
+	return s.KeepLastN
 }
 
-func (o *SavedQuerySchedule) GetNotifications() Notifications {
-	if o == nil {
+func (s *SavedQuerySchedule) GetNotifications() Notifications {
+	if s == nil {
 		return Notifications{}
 	}
-	return o.Notifications
+	return s.Notifications
 }
 
-func (o *SavedQuerySchedule) GetResumeMissed() *bool {
-	if o == nil {
+func (s *SavedQuerySchedule) GetResumeMissed() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return s.ResumeMissed
 }
 
-func (o *SavedQuerySchedule) GetResumeOnBoot() *bool {
-	if o == nil {
+func (s *SavedQuerySchedule) GetResumeOnBoot() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return s.ResumeOnBoot
 }
 
-func (o *SavedQuerySchedule) GetTz() string {
-	if o == nil {
+func (s *SavedQuerySchedule) GetTz() string {
+	if s == nil {
 		return ""
 	}
-	return o.Tz
+	return s.Tz
 }

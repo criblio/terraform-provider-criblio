@@ -14,18 +14,18 @@ type DeleteCollectorByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteCollectorByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteCollectorByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteCollectorByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteCollectorByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteCollectorByIDResponseBody - a list of Collector objects
@@ -45,37 +45,37 @@ type DeleteCollectorByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteCollectorByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteCollectorByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteCollectorByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteCollectorByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteCollectorByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteCollectorByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteCollectorByIDResponse) GetObject() *DeleteCollectorByIDResponseBody {
-	if o == nil {
+func (d *DeleteCollectorByIDResponse) GetObject() *DeleteCollectorByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteCollectorByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteCollectorByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -12,51 +12,51 @@ type AppscopeCustom struct {
 	Username *string        `json:"username,omitempty"`
 }
 
-func (o *AppscopeCustom) GetAncestor() *string {
-	if o == nil {
+func (a *AppscopeCustom) GetAncestor() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Ancestor
+	return a.Ancestor
 }
 
-func (o *AppscopeCustom) GetArg() *string {
-	if o == nil {
+func (a *AppscopeCustom) GetArg() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Arg
+	return a.Arg
 }
 
-func (o *AppscopeCustom) GetConfig() AppscopeConfig {
-	if o == nil {
+func (a *AppscopeCustom) GetConfig() AppscopeConfig {
+	if a == nil {
 		return AppscopeConfig{}
 	}
-	return o.Config
+	return a.Config
 }
 
-func (o *AppscopeCustom) GetEnv() *string {
-	if o == nil {
+func (a *AppscopeCustom) GetEnv() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Env
+	return a.Env
 }
 
-func (o *AppscopeCustom) GetHostname() *string {
-	if o == nil {
+func (a *AppscopeCustom) GetHostname() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Hostname
+	return a.Hostname
 }
 
-func (o *AppscopeCustom) GetProcname() *string {
-	if o == nil {
+func (a *AppscopeCustom) GetProcname() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Procname
+	return a.Procname
 }
 
-func (o *AppscopeCustom) GetUsername() *string {
-	if o == nil {
+func (a *AppscopeCustom) GetUsername() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Username
+	return a.Username
 }

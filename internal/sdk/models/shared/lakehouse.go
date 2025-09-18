@@ -72,30 +72,30 @@ func (l *Lakehouse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Lakehouse) GetID() string {
-	if o == nil {
+func (l *Lakehouse) GetID() string {
+	if l == nil {
 		return ""
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *Lakehouse) GetDescription() *string {
-	if o == nil {
+func (l *Lakehouse) GetDescription() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Description
+	return l.Description
 }
 
-func (o *Lakehouse) GetStatus() *string {
-	if o == nil {
+func (l *Lakehouse) GetStatus() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Status
+	return l.Status
 }
 
-func (o *Lakehouse) GetTierSize() *TierSize {
-	if o == nil {
+func (l *Lakehouse) GetTierSize() *TierSize {
+	if l == nil {
 		return nil
 	}
-	return o.TierSize
+	return l.TierSize
 }

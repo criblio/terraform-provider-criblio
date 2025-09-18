@@ -31,51 +31,51 @@ func (d *DataSample) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DataSample) GetID() string {
-	if o == nil {
+func (d *DataSample) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DataSample) GetSampleName() string {
-	if o == nil {
+func (d *DataSample) GetSampleName() string {
+	if d == nil {
 		return ""
 	}
-	return o.SampleName
+	return d.SampleName
 }
 
-func (o *DataSample) GetPipelineID() *string {
-	if o == nil {
+func (d *DataSample) GetPipelineID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.PipelineID
+	return d.PipelineID
 }
 
-func (o *DataSample) GetDescription() *string {
-	if o == nil {
+func (d *DataSample) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DataSample) GetTTL() *float64 {
-	if o == nil {
+func (d *DataSample) GetTTL() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.TTL
+	return d.TTL
 }
 
-func (o *DataSample) GetTags() *string {
-	if o == nil {
+func (d *DataSample) GetTags() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Tags
+	return d.Tags
 }
 
-func (o *DataSample) GetAdditionalProperties() any {
-	if o == nil {
+func (d *DataSample) GetAdditionalProperties() any {
+	if d == nil {
 		return nil
 	}
-	return o.AdditionalProperties
+	return d.AdditionalProperties
 }

@@ -61,109 +61,109 @@ func (p *ParserKvp) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ParserKvp) GetAllowedKeyChars() *bool {
-	if o == nil {
+func (p *ParserKvp) GetAllowedKeyChars() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.AllowedKeyChars
+	return p.AllowedKeyChars
 }
 
-func (o *ParserKvp) GetAllowedValueChars() []string {
-	if o == nil {
+func (p *ParserKvp) GetAllowedValueChars() []string {
+	if p == nil {
 		return nil
 	}
-	return o.AllowedValueChars
+	return p.AllowedValueChars
 }
 
-func (o *ParserKvp) GetCleanFields() []string {
-	if o == nil {
+func (p *ParserKvp) GetCleanFields() []string {
+	if p == nil {
 		return nil
 	}
-	return o.CleanFields
+	return p.CleanFields
 }
 
-func (o *ParserKvp) GetDelimChar() *string {
-	if o == nil {
+func (p *ParserKvp) GetDelimChar() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DelimChar
+	return p.DelimChar
 }
 
-func (o *ParserKvp) GetDstField() *string {
-	if o == nil {
+func (p *ParserKvp) GetDstField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DstField
+	return p.DstField
 }
 
-func (o *ParserKvp) GetEscapeChar() *string {
-	if o == nil {
+func (p *ParserKvp) GetEscapeChar() *string {
+	if p == nil {
 		return nil
 	}
-	return o.EscapeChar
+	return p.EscapeChar
 }
 
-func (o *ParserKvp) GetFieldFilterExpr() *string {
-	if o == nil {
+func (p *ParserKvp) GetFieldFilterExpr() *string {
+	if p == nil {
 		return nil
 	}
-	return o.FieldFilterExpr
+	return p.FieldFilterExpr
 }
 
-func (o *ParserKvp) GetFields() []string {
-	if o == nil {
+func (p *ParserKvp) GetFields() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Fields
+	return p.Fields
 }
 
-func (o *ParserKvp) GetKeep() []string {
-	if o == nil {
+func (p *ParserKvp) GetKeep() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Keep
+	return p.Keep
 }
 
-func (o *ParserKvp) GetMode() ParserMode {
-	if o == nil {
+func (p *ParserKvp) GetMode() ParserMode {
+	if p == nil {
 		return ParserMode("")
 	}
-	return o.Mode
+	return p.Mode
 }
 
-func (o *ParserKvp) GetNullValue() *string {
-	if o == nil {
+func (p *ParserKvp) GetNullValue() *string {
+	if p == nil {
 		return nil
 	}
-	return o.NullValue
+	return p.NullValue
 }
 
-func (o *ParserKvp) GetQuoteChar() *string {
-	if o == nil {
+func (p *ParserKvp) GetQuoteChar() *string {
+	if p == nil {
 		return nil
 	}
-	return o.QuoteChar
+	return p.QuoteChar
 }
 
-func (o *ParserKvp) GetRemove() []string {
-	if o == nil {
+func (p *ParserKvp) GetRemove() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Remove
+	return p.Remove
 }
 
-func (o *ParserKvp) GetSrcField() string {
-	if o == nil {
+func (p *ParserKvp) GetSrcField() string {
+	if p == nil {
 		return ""
 	}
-	return o.SrcField
+	return p.SrcField
 }
 
-func (o *ParserKvp) GetType() TypeKvp {
-	if o == nil {
+func (p *ParserKvp) GetType() TypeKvp {
+	if p == nil {
 		return TypeKvp("")
 	}
-	return o.Type
+	return p.Type
 }
 
 type TypeJSON string
@@ -212,67 +212,67 @@ func (p *ParserJSON) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ParserJSON) GetCleanFields() []string {
-	if o == nil {
+func (p *ParserJSON) GetCleanFields() []string {
+	if p == nil {
 		return nil
 	}
-	return o.CleanFields
+	return p.CleanFields
 }
 
-func (o *ParserJSON) GetDstField() *string {
-	if o == nil {
+func (p *ParserJSON) GetDstField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DstField
+	return p.DstField
 }
 
-func (o *ParserJSON) GetFieldFilterExpr() *string {
-	if o == nil {
+func (p *ParserJSON) GetFieldFilterExpr() *string {
+	if p == nil {
 		return nil
 	}
-	return o.FieldFilterExpr
+	return p.FieldFilterExpr
 }
 
-func (o *ParserJSON) GetFields() []string {
-	if o == nil {
+func (p *ParserJSON) GetFields() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Fields
+	return p.Fields
 }
 
-func (o *ParserJSON) GetKeep() []string {
-	if o == nil {
+func (p *ParserJSON) GetKeep() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Keep
+	return p.Keep
 }
 
-func (o *ParserJSON) GetMode() ParserMode {
-	if o == nil {
+func (p *ParserJSON) GetMode() ParserMode {
+	if p == nil {
 		return ParserMode("")
 	}
-	return o.Mode
+	return p.Mode
 }
 
-func (o *ParserJSON) GetRemove() []string {
-	if o == nil {
+func (p *ParserJSON) GetRemove() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Remove
+	return p.Remove
 }
 
-func (o *ParserJSON) GetSrcField() string {
-	if o == nil {
+func (p *ParserJSON) GetSrcField() string {
+	if p == nil {
 		return ""
 	}
-	return o.SrcField
+	return p.SrcField
 }
 
-func (o *ParserJSON) GetType() TypeJSON {
-	if o == nil {
+func (p *ParserJSON) GetType() TypeJSON {
+	if p == nil {
 		return TypeJSON("")
 	}
-	return o.Type
+	return p.Type
 }
 
 type PatternList struct {
@@ -290,11 +290,11 @@ func (p *PatternList) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PatternList) GetPattern() string {
-	if o == nil {
+func (p *PatternList) GetPattern() string {
+	if p == nil {
 		return ""
 	}
-	return o.Pattern
+	return p.Pattern
 }
 
 type TypeGrok string
@@ -341,53 +341,53 @@ func (p *ParserGrok) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ParserGrok) GetDstField() *string {
-	if o == nil {
+func (p *ParserGrok) GetDstField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DstField
+	return p.DstField
 }
 
-func (o *ParserGrok) GetMode() ParserMode {
-	if o == nil {
+func (p *ParserGrok) GetMode() ParserMode {
+	if p == nil {
 		return ParserMode("")
 	}
-	return o.Mode
+	return p.Mode
 }
 
-func (o *ParserGrok) GetPattern() *string {
-	if o == nil {
+func (p *ParserGrok) GetPattern() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Pattern
+	return p.Pattern
 }
 
-func (o *ParserGrok) GetPatternList() []PatternList {
-	if o == nil {
+func (p *ParserGrok) GetPatternList() []PatternList {
+	if p == nil {
 		return nil
 	}
-	return o.PatternList
+	return p.PatternList
 }
 
-func (o *ParserGrok) GetSource() *string {
-	if o == nil {
+func (p *ParserGrok) GetSource() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Source
+	return p.Source
 }
 
-func (o *ParserGrok) GetSrcField() string {
-	if o == nil {
+func (p *ParserGrok) GetSrcField() string {
+	if p == nil {
 		return ""
 	}
-	return o.SrcField
+	return p.SrcField
 }
 
-func (o *ParserGrok) GetType() TypeGrok {
-	if o == nil {
+func (p *ParserGrok) GetType() TypeGrok {
+	if p == nil {
 		return TypeGrok("")
 	}
-	return o.Type
+	return p.Type
 }
 
 type ParserType string
@@ -451,109 +451,109 @@ func (p *Parser) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Parser) GetAllowedKeyChars() *bool {
-	if o == nil {
+func (p *Parser) GetAllowedKeyChars() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.AllowedKeyChars
+	return p.AllowedKeyChars
 }
 
-func (o *Parser) GetAllowedValueChars() []string {
-	if o == nil {
+func (p *Parser) GetAllowedValueChars() []string {
+	if p == nil {
 		return nil
 	}
-	return o.AllowedValueChars
+	return p.AllowedValueChars
 }
 
-func (o *Parser) GetCleanFields() []string {
-	if o == nil {
+func (p *Parser) GetCleanFields() []string {
+	if p == nil {
 		return nil
 	}
-	return o.CleanFields
+	return p.CleanFields
 }
 
-func (o *Parser) GetDelimChar() *string {
-	if o == nil {
+func (p *Parser) GetDelimChar() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DelimChar
+	return p.DelimChar
 }
 
-func (o *Parser) GetDstField() *string {
-	if o == nil {
+func (p *Parser) GetDstField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DstField
+	return p.DstField
 }
 
-func (o *Parser) GetEscapeChar() *string {
-	if o == nil {
+func (p *Parser) GetEscapeChar() *string {
+	if p == nil {
 		return nil
 	}
-	return o.EscapeChar
+	return p.EscapeChar
 }
 
-func (o *Parser) GetFieldFilterExpr() *string {
-	if o == nil {
+func (p *Parser) GetFieldFilterExpr() *string {
+	if p == nil {
 		return nil
 	}
-	return o.FieldFilterExpr
+	return p.FieldFilterExpr
 }
 
-func (o *Parser) GetFields() []string {
-	if o == nil {
+func (p *Parser) GetFields() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Fields
+	return p.Fields
 }
 
-func (o *Parser) GetKeep() []string {
-	if o == nil {
+func (p *Parser) GetKeep() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Keep
+	return p.Keep
 }
 
-func (o *Parser) GetMode() ParserMode {
-	if o == nil {
+func (p *Parser) GetMode() ParserMode {
+	if p == nil {
 		return ParserMode("")
 	}
-	return o.Mode
+	return p.Mode
 }
 
-func (o *Parser) GetNullValue() *string {
-	if o == nil {
+func (p *Parser) GetNullValue() *string {
+	if p == nil {
 		return nil
 	}
-	return o.NullValue
+	return p.NullValue
 }
 
-func (o *Parser) GetQuoteChar() *string {
-	if o == nil {
+func (p *Parser) GetQuoteChar() *string {
+	if p == nil {
 		return nil
 	}
-	return o.QuoteChar
+	return p.QuoteChar
 }
 
-func (o *Parser) GetRemove() []string {
-	if o == nil {
+func (p *Parser) GetRemove() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Remove
+	return p.Remove
 }
 
-func (o *Parser) GetSrcField() string {
-	if o == nil {
+func (p *Parser) GetSrcField() string {
+	if p == nil {
 		return ""
 	}
-	return o.SrcField
+	return p.SrcField
 }
 
-func (o *Parser) GetType() ParserType {
-	if o == nil {
+func (p *Parser) GetType() ParserType {
+	if p == nil {
 		return ParserType("")
 	}
-	return o.Type
+	return p.Type
 }
 
 type ParserUnionType string
@@ -698,25 +698,25 @@ type Timestamp struct {
 	Type   EventBreakerRuleTimestampType `json:"type"`
 }
 
-func (o *Timestamp) GetFormat() *string {
-	if o == nil {
+func (t *Timestamp) GetFormat() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Format
+	return t.Format
 }
 
-func (o *Timestamp) GetLength() *float64 {
-	if o == nil {
+func (t *Timestamp) GetLength() *float64 {
+	if t == nil {
 		return nil
 	}
-	return o.Length
+	return t.Length
 }
 
-func (o *Timestamp) GetType() EventBreakerRuleTimestampType {
-	if o == nil {
+func (t *Timestamp) GetType() EventBreakerRuleTimestampType {
+	if t == nil {
 		return EventBreakerRuleTimestampType("")
 	}
-	return o.Type
+	return t.Type
 }
 
 type TimestampTimezone struct {
@@ -736,25 +736,25 @@ func (t *TimestampTimezone) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *TimestampTimezone) GetName() string {
-	if o == nil {
+func (t *TimestampTimezone) GetName() string {
+	if t == nil {
 		return ""
 	}
-	return o.Name
+	return t.Name
 }
 
-func (o *TimestampTimezone) GetOffsets() []float64 {
-	if o == nil {
+func (t *TimestampTimezone) GetOffsets() []float64 {
+	if t == nil {
 		return []float64{}
 	}
-	return o.Offsets
+	return t.Offsets
 }
 
-func (o *TimestampTimezone) GetUntils() []float64 {
-	if o == nil {
+func (t *TimestampTimezone) GetUntils() []float64 {
+	if t == nil {
 		return []float64{}
 	}
-	return o.Untils
+	return t.Untils
 }
 
 type TimestampTimezoneUnionType string
@@ -906,198 +906,198 @@ func (e *EventBreakerRule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EventBreakerRule) GetCleanFields() *bool {
-	if o == nil {
+func (e *EventBreakerRule) GetCleanFields() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.CleanFields
+	return e.CleanFields
 }
 
-func (o *EventBreakerRule) GetCondition() string {
-	if o == nil {
+func (e *EventBreakerRule) GetCondition() string {
+	if e == nil {
 		return ""
 	}
-	return o.Condition
+	return e.Condition
 }
 
-func (o *EventBreakerRule) GetDelimiter() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetDelimiter() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Delimiter
+	return e.Delimiter
 }
 
-func (o *EventBreakerRule) GetDelimiterRegex() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetDelimiterRegex() *string {
+	if e == nil {
 		return nil
 	}
-	return o.DelimiterRegex
+	return e.DelimiterRegex
 }
 
-func (o *EventBreakerRule) GetDisabled() *bool {
-	if o == nil {
+func (e *EventBreakerRule) GetDisabled() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.Disabled
+	return e.Disabled
 }
 
-func (o *EventBreakerRule) GetEscapeChar() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetEscapeChar() *string {
+	if e == nil {
 		return nil
 	}
-	return o.EscapeChar
+	return e.EscapeChar
 }
 
-func (o *EventBreakerRule) GetEventBreakerRegex() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetEventBreakerRegex() *string {
+	if e == nil {
 		return nil
 	}
-	return o.EventBreakerRegex
+	return e.EventBreakerRegex
 }
 
-func (o *EventBreakerRule) GetFields() []EventBreakerRuleFields {
-	if o == nil {
+func (e *EventBreakerRule) GetFields() []EventBreakerRuleFields {
+	if e == nil {
 		return nil
 	}
-	return o.Fields
+	return e.Fields
 }
 
-func (o *EventBreakerRule) GetFieldsLineRegex() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetFieldsLineRegex() *string {
+	if e == nil {
 		return nil
 	}
-	return o.FieldsLineRegex
+	return e.FieldsLineRegex
 }
 
-func (o *EventBreakerRule) GetHeaderLineRegex() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetHeaderLineRegex() *string {
+	if e == nil {
 		return nil
 	}
-	return o.HeaderLineRegex
+	return e.HeaderLineRegex
 }
 
-func (o *EventBreakerRule) GetIndex() *float64 {
-	if o == nil {
+func (e *EventBreakerRule) GetIndex() *float64 {
+	if e == nil {
 		return nil
 	}
-	return o.Index
+	return e.Index
 }
 
-func (o *EventBreakerRule) GetJSONArrayField() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetJSONArrayField() *string {
+	if e == nil {
 		return nil
 	}
-	return o.JSONArrayField
+	return e.JSONArrayField
 }
 
-func (o *EventBreakerRule) GetJSONExtractAll() *bool {
-	if o == nil {
+func (e *EventBreakerRule) GetJSONExtractAll() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.JSONExtractAll
+	return e.JSONExtractAll
 }
 
-func (o *EventBreakerRule) GetJSONTimeField() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetJSONTimeField() *string {
+	if e == nil {
 		return nil
 	}
-	return o.JSONTimeField
+	return e.JSONTimeField
 }
 
-func (o *EventBreakerRule) GetMaxEventBytes() float64 {
-	if o == nil {
+func (e *EventBreakerRule) GetMaxEventBytes() float64 {
+	if e == nil {
 		return 0.0
 	}
-	return o.MaxEventBytes
+	return e.MaxEventBytes
 }
 
-func (o *EventBreakerRule) GetName() string {
-	if o == nil {
+func (e *EventBreakerRule) GetName() string {
+	if e == nil {
 		return ""
 	}
-	return o.Name
+	return e.Name
 }
 
-func (o *EventBreakerRule) GetNullFieldVal() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetNullFieldVal() *string {
+	if e == nil {
 		return nil
 	}
-	return o.NullFieldVal
+	return e.NullFieldVal
 }
 
-func (o *EventBreakerRule) GetParser() *ParserUnion {
-	if o == nil {
+func (e *EventBreakerRule) GetParser() *ParserUnion {
+	if e == nil {
 		return nil
 	}
-	return o.Parser
+	return e.Parser
 }
 
-func (o *EventBreakerRule) GetParserEnabled() *bool {
-	if o == nil {
+func (e *EventBreakerRule) GetParserEnabled() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.ParserEnabled
+	return e.ParserEnabled
 }
 
-func (o *EventBreakerRule) GetQuoteChar() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetQuoteChar() *string {
+	if e == nil {
 		return nil
 	}
-	return o.QuoteChar
+	return e.QuoteChar
 }
 
-func (o *EventBreakerRule) GetShouldUseDataRaw() *bool {
-	if o == nil {
+func (e *EventBreakerRule) GetShouldUseDataRaw() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.ShouldUseDataRaw
+	return e.ShouldUseDataRaw
 }
 
-func (o *EventBreakerRule) GetTimeField() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetTimeField() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TimeField
+	return e.TimeField
 }
 
-func (o *EventBreakerRule) GetTimestamp() Timestamp {
-	if o == nil {
+func (e *EventBreakerRule) GetTimestamp() Timestamp {
+	if e == nil {
 		return Timestamp{}
 	}
-	return o.Timestamp
+	return e.Timestamp
 }
 
-func (o *EventBreakerRule) GetTimestampAnchorRegex() string {
-	if o == nil {
+func (e *EventBreakerRule) GetTimestampAnchorRegex() string {
+	if e == nil {
 		return ""
 	}
-	return o.TimestampAnchorRegex
+	return e.TimestampAnchorRegex
 }
 
-func (o *EventBreakerRule) GetTimestampEarliest() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetTimestampEarliest() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TimestampEarliest
+	return e.TimestampEarliest
 }
 
-func (o *EventBreakerRule) GetTimestampLatest() *string {
-	if o == nil {
+func (e *EventBreakerRule) GetTimestampLatest() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TimestampLatest
+	return e.TimestampLatest
 }
 
-func (o *EventBreakerRule) GetTimestampTimezone() TimestampTimezoneUnion {
-	if o == nil {
+func (e *EventBreakerRule) GetTimestampTimezone() TimestampTimezoneUnion {
+	if e == nil {
 		return TimestampTimezoneUnion{}
 	}
-	return o.TimestampTimezone
+	return e.TimestampTimezone
 }
 
-func (o *EventBreakerRule) GetType() *EventBreakerRuleType {
-	if o == nil {
+func (e *EventBreakerRule) GetType() *EventBreakerRuleType {
+	if e == nil {
 		return nil
 	}
-	return o.Type
+	return e.Type
 }

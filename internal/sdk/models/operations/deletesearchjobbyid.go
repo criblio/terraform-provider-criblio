@@ -12,11 +12,11 @@ type DeleteSearchJobByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteSearchJobByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSearchJobByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteSearchJobByIDResponseBody - a list of SearchJob objects
@@ -24,11 +24,11 @@ type DeleteSearchJobByIDResponseBody struct {
 	Items []shared.SearchJob `json:"items,omitempty"`
 }
 
-func (o *DeleteSearchJobByIDResponseBody) GetItems() []shared.SearchJob {
-	if o == nil {
+func (d *DeleteSearchJobByIDResponseBody) GetItems() []shared.SearchJob {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSearchJobByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteSearchJobByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSearchJobByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSearchJobByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSearchJobByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSearchJobByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSearchJobByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSearchJobByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSearchJobByIDResponse) GetObject() *DeleteSearchJobByIDResponseBody {
-	if o == nil {
+func (d *DeleteSearchJobByIDResponse) GetObject() *DeleteSearchJobByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSearchJobByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSearchJobByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

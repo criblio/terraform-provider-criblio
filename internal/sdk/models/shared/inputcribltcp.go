@@ -47,18 +47,18 @@ func (i *InputCriblTCPConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblTCPConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputCriblTCPConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCriblTCPConnection) GetOutput() string {
-	if o == nil {
+func (i *InputCriblTCPConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputCriblTCPMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputCriblTCPPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblTCPPq) GetMode() *InputCriblTCPMode {
-	if o == nil {
+func (i *InputCriblTCPPq) GetMode() *InputCriblTCPMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCriblTCPPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputCriblTCPPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputCriblTCPPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputCriblTCPPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputCriblTCPPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputCriblTCPPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputCriblTCPPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputCriblTCPPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputCriblTCPPq) GetPath() *string {
-	if o == nil {
+func (i *InputCriblTCPPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputCriblTCPPq) GetCompress() *InputCriblTCPCompression {
-	if o == nil {
+func (i *InputCriblTCPPq) GetCompress() *InputCriblTCPCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputCriblTCPMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputCriblTCPTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetMinVersion() *InputCriblTCPMinimumTLSVersion {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetMinVersion() *InputCriblTCPMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputCriblTCPTLSSettingsServerSide) GetMaxVersion() *InputCriblTCPMaximumTLSVersion {
-	if o == nil {
+func (i *InputCriblTCPTLSSettingsServerSide) GetMaxVersion() *InputCriblTCPMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputCriblTCPMetadatum struct {
@@ -381,18 +381,18 @@ func (i *InputCriblTCPMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblTCPMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCriblTCPMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCriblTCPMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCriblTCPMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCriblTCP struct {
@@ -446,149 +446,149 @@ func (i *InputCriblTCP) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblTCP) GetID() *string {
-	if o == nil {
+func (i *InputCriblTCP) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCriblTCP) GetType() *InputCriblTCPType {
-	if o == nil {
+func (i *InputCriblTCP) GetType() *InputCriblTCPType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCriblTCP) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCriblTCP) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCriblTCP) GetPipeline() *string {
-	if o == nil {
+func (i *InputCriblTCP) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCriblTCP) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCriblTCP) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCriblTCP) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCriblTCP) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCriblTCP) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputCriblTCP) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputCriblTCP) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCriblTCP) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCriblTCP) GetConnections() []InputCriblTCPConnection {
-	if o == nil {
+func (i *InputCriblTCP) GetConnections() []InputCriblTCPConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputCriblTCP) GetPq() *InputCriblTCPPq {
-	if o == nil {
+func (i *InputCriblTCP) GetPq() *InputCriblTCPPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputCriblTCP) GetHost() *string {
-	if o == nil {
+func (i *InputCriblTCP) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputCriblTCP) GetPort() float64 {
-	if o == nil {
+func (i *InputCriblTCP) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputCriblTCP) GetTLS() *InputCriblTCPTLSSettingsServerSide {
-	if o == nil {
+func (i *InputCriblTCP) GetTLS() *InputCriblTCPTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputCriblTCP) GetMaxActiveCxn() *float64 {
-	if o == nil {
+func (i *InputCriblTCP) GetMaxActiveCxn() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveCxn
+	return i.MaxActiveCxn
 }
 
-func (o *InputCriblTCP) GetSocketIdleTimeout() *float64 {
-	if o == nil {
+func (i *InputCriblTCP) GetSocketIdleTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketIdleTimeout
+	return i.SocketIdleTimeout
 }
 
-func (o *InputCriblTCP) GetSocketEndingMaxWait() *float64 {
-	if o == nil {
+func (i *InputCriblTCP) GetSocketEndingMaxWait() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketEndingMaxWait
+	return i.SocketEndingMaxWait
 }
 
-func (o *InputCriblTCP) GetSocketMaxLifespan() *float64 {
-	if o == nil {
+func (i *InputCriblTCP) GetSocketMaxLifespan() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketMaxLifespan
+	return i.SocketMaxLifespan
 }
 
-func (o *InputCriblTCP) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputCriblTCP) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputCriblTCP) GetMetadata() []InputCriblTCPMetadatum {
-	if o == nil {
+func (i *InputCriblTCP) GetMetadata() []InputCriblTCPMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCriblTCP) GetEnableLoadBalancing() *bool {
-	if o == nil {
+func (i *InputCriblTCP) GetEnableLoadBalancing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableLoadBalancing
+	return i.EnableLoadBalancing
 }
 
-func (o *InputCriblTCP) GetDescription() *string {
-	if o == nil {
+func (i *InputCriblTCP) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

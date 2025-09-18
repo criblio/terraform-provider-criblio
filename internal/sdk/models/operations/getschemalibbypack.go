@@ -12,11 +12,11 @@ type GetSchemaLibByPackRequest struct {
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 }
 
-func (o *GetSchemaLibByPackRequest) GetPack() string {
-	if o == nil {
+func (g *GetSchemaLibByPackRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
 // GetSchemaLibByPackResponseBody - a list of Schema objects
@@ -24,11 +24,11 @@ type GetSchemaLibByPackResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *GetSchemaLibByPackResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (g *GetSchemaLibByPackResponseBody) GetItems() []shared.SchemaLibEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSchemaLibByPackResponse struct {
@@ -44,37 +44,37 @@ type GetSchemaLibByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSchemaLibByPackResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSchemaLibByPackResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSchemaLibByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSchemaLibByPackResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSchemaLibByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSchemaLibByPackResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSchemaLibByPackResponse) GetObject() *GetSchemaLibByPackResponseBody {
-	if o == nil {
+func (g *GetSchemaLibByPackResponse) GetObject() *GetSchemaLibByPackResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSchemaLibByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSchemaLibByPackResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

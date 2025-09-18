@@ -12,11 +12,11 @@ type ListDataSampleResponseBody struct {
 	Items []shared.DataSample `json:"items,omitempty"`
 }
 
-func (o *ListDataSampleResponseBody) GetItems() []shared.DataSample {
-	if o == nil {
+func (l *ListDataSampleResponseBody) GetItems() []shared.DataSample {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListDataSampleResponse struct {
@@ -32,37 +32,37 @@ type ListDataSampleResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListDataSampleResponse) GetContentType() string {
-	if o == nil {
+func (l *ListDataSampleResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDataSampleResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListDataSampleResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDataSampleResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDataSampleResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDataSampleResponse) GetObject() *ListDataSampleResponseBody {
-	if o == nil {
+func (l *ListDataSampleResponse) GetObject() *ListDataSampleResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListDataSampleResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListDataSampleResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

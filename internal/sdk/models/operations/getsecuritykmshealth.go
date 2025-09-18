@@ -12,11 +12,11 @@ type GetSecurityKmsHealthResponseBody struct {
 	Items []shared.KMSHealth `json:"items,omitempty"`
 }
 
-func (o *GetSecurityKmsHealthResponseBody) GetItems() []shared.KMSHealth {
-	if o == nil {
+func (g *GetSecurityKmsHealthResponseBody) GetItems() []shared.KMSHealth {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSecurityKmsHealthResponse struct {
@@ -32,37 +32,37 @@ type GetSecurityKmsHealthResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSecurityKmsHealthResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSecurityKmsHealthResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSecurityKmsHealthResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSecurityKmsHealthResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSecurityKmsHealthResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSecurityKmsHealthResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSecurityKmsHealthResponse) GetObject() *GetSecurityKmsHealthResponseBody {
-	if o == nil {
+func (g *GetSecurityKmsHealthResponse) GetObject() *GetSecurityKmsHealthResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSecurityKmsHealthResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSecurityKmsHealthResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

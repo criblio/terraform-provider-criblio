@@ -12,11 +12,11 @@ type CreateSystemSettingsUpgradeFromPackageResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *CreateSystemSettingsUpgradeFromPackageResponseBody) GetItems() []string {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeFromPackageResponseBody) GetItems() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemSettingsUpgradeFromPackageResponse struct {
@@ -32,37 +32,37 @@ type CreateSystemSettingsUpgradeFromPackageResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemSettingsUpgradeFromPackageResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeFromPackageResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemSettingsUpgradeFromPackageResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeFromPackageResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemSettingsUpgradeFromPackageResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeFromPackageResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemSettingsUpgradeFromPackageResponse) GetObject() *CreateSystemSettingsUpgradeFromPackageResponseBody {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeFromPackageResponse) GetObject() *CreateSystemSettingsUpgradeFromPackageResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemSettingsUpgradeFromPackageResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeFromPackageResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -8,23 +8,23 @@ type CPUTimeMetric struct {
 	TotalExecCPUSeconds float64  `json:"totalExecCPUSeconds"`
 }
 
-func (o *CPUTimeMetric) GetBillableCPUSeconds() *float64 {
-	if o == nil {
+func (c *CPUTimeMetric) GetBillableCPUSeconds() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.BillableCPUSeconds
+	return c.BillableCPUSeconds
 }
 
-func (o *CPUTimeMetric) GetTotalCPUSeconds() float64 {
-	if o == nil {
+func (c *CPUTimeMetric) GetTotalCPUSeconds() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.TotalCPUSeconds
+	return c.TotalCPUSeconds
 }
 
-func (o *CPUTimeMetric) GetTotalExecCPUSeconds() float64 {
-	if o == nil {
+func (c *CPUTimeMetric) GetTotalExecCPUSeconds() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.TotalExecCPUSeconds
+	return c.TotalExecCPUSeconds
 }

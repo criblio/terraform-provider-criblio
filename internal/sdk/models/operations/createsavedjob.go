@@ -16,25 +16,25 @@ type CreateSavedJobRequest struct {
 	InputCollector shared.InputCollector `request:"mediaType=application/json"`
 }
 
-func (o *CreateSavedJobRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSavedJobRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSavedJobRequest) GetID() string {
-	if o == nil {
+func (c *CreateSavedJobRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateSavedJobRequest) GetInputCollector() shared.InputCollector {
-	if o == nil {
+func (c *CreateSavedJobRequest) GetInputCollector() shared.InputCollector {
+	if c == nil {
 		return shared.InputCollector{}
 	}
-	return o.InputCollector
+	return c.InputCollector
 }
 
 // CreateSavedJobResponseBody - a list of Collector objects
@@ -54,37 +54,37 @@ type CreateSavedJobResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSavedJobResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSavedJobResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSavedJobResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSavedJobResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSavedJobResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSavedJobResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSavedJobResponse) GetObject() *CreateSavedJobResponseBody {
-	if o == nil {
+func (c *CreateSavedJobResponse) GetObject() *CreateSavedJobResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSavedJobResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSavedJobResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

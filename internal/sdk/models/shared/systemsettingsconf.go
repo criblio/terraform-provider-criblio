@@ -18,39 +18,39 @@ type SystemSettingsConfSsl struct {
 	PrivKeyPath string  `json:"privKeyPath"`
 }
 
-func (o *SystemSettingsConfSsl) GetCaPath() *string {
-	if o == nil {
+func (s *SystemSettingsConfSsl) GetCaPath() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CaPath
+	return s.CaPath
 }
 
-func (o *SystemSettingsConfSsl) GetCertPath() string {
-	if o == nil {
+func (s *SystemSettingsConfSsl) GetCertPath() string {
+	if s == nil {
 		return ""
 	}
-	return o.CertPath
+	return s.CertPath
 }
 
-func (o *SystemSettingsConfSsl) GetDisabled() bool {
-	if o == nil {
+func (s *SystemSettingsConfSsl) GetDisabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.Disabled
+	return s.Disabled
 }
 
-func (o *SystemSettingsConfSsl) GetPassphrase() string {
-	if o == nil {
+func (s *SystemSettingsConfSsl) GetPassphrase() string {
+	if s == nil {
 		return ""
 	}
-	return o.Passphrase
+	return s.Passphrase
 }
 
-func (o *SystemSettingsConfSsl) GetPrivKeyPath() string {
-	if o == nil {
+func (s *SystemSettingsConfSsl) GetPrivKeyPath() string {
+	if s == nil {
 		return ""
 	}
-	return o.PrivKeyPath
+	return s.PrivKeyPath
 }
 
 type SystemSettingsConfAPI struct {
@@ -71,109 +71,109 @@ type SystemSettingsConfAPI struct {
 	WorkerRemoteAccess bool                       `json:"workerRemoteAccess"`
 }
 
-func (o *SystemSettingsConfAPI) GetBaseURL() *string {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetBaseURL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BaseURL
+	return s.BaseURL
 }
 
-func (o *SystemSettingsConfAPI) GetDisableAPICache() *bool {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetDisableAPICache() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.DisableAPICache
+	return s.DisableAPICache
 }
 
-func (o *SystemSettingsConfAPI) GetDisabled() bool {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetDisabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.Disabled
+	return s.Disabled
 }
 
-func (o *SystemSettingsConfAPI) GetHeaders() *SystemSettingsConfHeaders {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetHeaders() *SystemSettingsConfHeaders {
+	if s == nil {
 		return nil
 	}
-	return o.Headers
+	return s.Headers
 }
 
-func (o *SystemSettingsConfAPI) GetHost() string {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetHost() string {
+	if s == nil {
 		return ""
 	}
-	return o.Host
+	return s.Host
 }
 
-func (o *SystemSettingsConfAPI) GetIdleSessionTTL() *float64 {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetIdleSessionTTL() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.IdleSessionTTL
+	return s.IdleSessionTTL
 }
 
-func (o *SystemSettingsConfAPI) GetListenOnPort() *bool {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetListenOnPort() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.ListenOnPort
+	return s.ListenOnPort
 }
 
-func (o *SystemSettingsConfAPI) GetLoginRateLimit() *string {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetLoginRateLimit() *string {
+	if s == nil {
 		return nil
 	}
-	return o.LoginRateLimit
+	return s.LoginRateLimit
 }
 
-func (o *SystemSettingsConfAPI) GetPort() float64 {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetPort() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Port
+	return s.Port
 }
 
-func (o *SystemSettingsConfAPI) GetProtocol() string {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetProtocol() string {
+	if s == nil {
 		return ""
 	}
-	return o.Protocol
+	return s.Protocol
 }
 
-func (o *SystemSettingsConfAPI) GetScripts() *bool {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetScripts() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Scripts
+	return s.Scripts
 }
 
-func (o *SystemSettingsConfAPI) GetSensitiveFields() []string {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetSensitiveFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.SensitiveFields
+	return s.SensitiveFields
 }
 
-func (o *SystemSettingsConfAPI) GetSsl() SystemSettingsConfSsl {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetSsl() SystemSettingsConfSsl {
+	if s == nil {
 		return SystemSettingsConfSsl{}
 	}
-	return o.Ssl
+	return s.Ssl
 }
 
-func (o *SystemSettingsConfAPI) GetSsoRateLimit() *string {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetSsoRateLimit() *string {
+	if s == nil {
 		return nil
 	}
-	return o.SsoRateLimit
+	return s.SsoRateLimit
 }
 
-func (o *SystemSettingsConfAPI) GetWorkerRemoteAccess() bool {
-	if o == nil {
+func (s *SystemSettingsConfAPI) GetWorkerRemoteAccess() bool {
+	if s == nil {
 		return false
 	}
-	return o.WorkerRemoteAccess
+	return s.WorkerRemoteAccess
 }
 
 type SystemSettingsConfBackups struct {
@@ -181,18 +181,18 @@ type SystemSettingsConfBackups struct {
 	BackupsDirectory  string `json:"backupsDirectory"`
 }
 
-func (o *SystemSettingsConfBackups) GetBackupPersistence() string {
-	if o == nil {
+func (s *SystemSettingsConfBackups) GetBackupPersistence() string {
+	if s == nil {
 		return ""
 	}
-	return o.BackupPersistence
+	return s.BackupPersistence
 }
 
-func (o *SystemSettingsConfBackups) GetBackupsDirectory() string {
-	if o == nil {
+func (s *SystemSettingsConfBackups) GetBackupsDirectory() string {
+	if s == nil {
 		return ""
 	}
-	return o.BackupsDirectory
+	return s.BackupsDirectory
 }
 
 type SystemSettingsConfCustomLogo struct {
@@ -201,47 +201,47 @@ type SystemSettingsConfCustomLogo struct {
 	LogoImage       string `json:"logoImage"`
 }
 
-func (o *SystemSettingsConfCustomLogo) GetEnabled() bool {
-	if o == nil {
+func (s *SystemSettingsConfCustomLogo) GetEnabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.Enabled
+	return s.Enabled
 }
 
-func (o *SystemSettingsConfCustomLogo) GetLogoDescription() string {
-	if o == nil {
+func (s *SystemSettingsConfCustomLogo) GetLogoDescription() string {
+	if s == nil {
 		return ""
 	}
-	return o.LogoDescription
+	return s.LogoDescription
 }
 
-func (o *SystemSettingsConfCustomLogo) GetLogoImage() string {
-	if o == nil {
+func (s *SystemSettingsConfCustomLogo) GetLogoImage() string {
+	if s == nil {
 		return ""
 	}
-	return o.LogoImage
+	return s.LogoImage
 }
 
 type SystemSettingsConfPii struct {
 	EnablePiiDetection bool `json:"enablePiiDetection"`
 }
 
-func (o *SystemSettingsConfPii) GetEnablePiiDetection() bool {
-	if o == nil {
+func (s *SystemSettingsConfPii) GetEnablePiiDetection() bool {
+	if s == nil {
 		return false
 	}
-	return o.EnablePiiDetection
+	return s.EnablePiiDetection
 }
 
 type SystemSettingsConfProxy struct {
 	UseEnvVars bool `json:"useEnvVars"`
 }
 
-func (o *SystemSettingsConfProxy) GetUseEnvVars() bool {
-	if o == nil {
+func (s *SystemSettingsConfProxy) GetUseEnvVars() bool {
+	if s == nil {
 		return false
 	}
-	return o.UseEnvVars
+	return s.UseEnvVars
 }
 
 type SystemSettingsConfRollback struct {
@@ -250,58 +250,58 @@ type SystemSettingsConfRollback struct {
 	RollbackTimeout *float64 `json:"rollbackTimeout,omitempty"`
 }
 
-func (o *SystemSettingsConfRollback) GetRollbackEnabled() bool {
-	if o == nil {
+func (s *SystemSettingsConfRollback) GetRollbackEnabled() bool {
+	if s == nil {
 		return false
 	}
-	return o.RollbackEnabled
+	return s.RollbackEnabled
 }
 
-func (o *SystemSettingsConfRollback) GetRollbackRetries() *float64 {
-	if o == nil {
+func (s *SystemSettingsConfRollback) GetRollbackRetries() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.RollbackRetries
+	return s.RollbackRetries
 }
 
-func (o *SystemSettingsConfRollback) GetRollbackTimeout() *float64 {
-	if o == nil {
+func (s *SystemSettingsConfRollback) GetRollbackTimeout() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.RollbackTimeout
+	return s.RollbackTimeout
 }
 
 type SystemSettingsConfShutdown struct {
 	DrainTimeout float64 `json:"drainTimeout"`
 }
 
-func (o *SystemSettingsConfShutdown) GetDrainTimeout() float64 {
-	if o == nil {
+func (s *SystemSettingsConfShutdown) GetDrainTimeout() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.DrainTimeout
+	return s.DrainTimeout
 }
 
 type SystemSettingsConfSni struct {
 	DisableSNIRouting bool `json:"disableSNIRouting"`
 }
 
-func (o *SystemSettingsConfSni) GetDisableSNIRouting() bool {
-	if o == nil {
+func (s *SystemSettingsConfSni) GetDisableSNIRouting() bool {
+	if s == nil {
 		return false
 	}
-	return o.DisableSNIRouting
+	return s.DisableSNIRouting
 }
 
 type SystemSettingsConfSockets struct {
 	Directory *string `json:"directory,omitempty"`
 }
 
-func (o *SystemSettingsConfSockets) GetDirectory() *string {
-	if o == nil {
+func (s *SystemSettingsConfSockets) GetDirectory() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Directory
+	return s.Directory
 }
 
 type SystemSettingsConfUpgrade string
@@ -335,18 +335,18 @@ type SystemSettingsConfSystem struct {
 	Upgrade  SystemSettingsConfUpgrade `json:"upgrade"`
 }
 
-func (o *SystemSettingsConfSystem) GetIntercom() bool {
-	if o == nil {
+func (s *SystemSettingsConfSystem) GetIntercom() bool {
+	if s == nil {
 		return false
 	}
-	return o.Intercom
+	return s.Intercom
 }
 
-func (o *SystemSettingsConfSystem) GetUpgrade() SystemSettingsConfUpgrade {
-	if o == nil {
+func (s *SystemSettingsConfSystem) GetUpgrade() SystemSettingsConfUpgrade {
+	if s == nil {
 		return SystemSettingsConfUpgrade("")
 	}
-	return o.Upgrade
+	return s.Upgrade
 }
 
 type SystemSettingsConfTLS struct {
@@ -357,39 +357,39 @@ type SystemSettingsConfTLS struct {
 	RejectUnauthorized bool   `json:"rejectUnauthorized"`
 }
 
-func (o *SystemSettingsConfTLS) GetDefaultCipherList() string {
-	if o == nil {
+func (s *SystemSettingsConfTLS) GetDefaultCipherList() string {
+	if s == nil {
 		return ""
 	}
-	return o.DefaultCipherList
+	return s.DefaultCipherList
 }
 
-func (o *SystemSettingsConfTLS) GetDefaultEcdhCurve() string {
-	if o == nil {
+func (s *SystemSettingsConfTLS) GetDefaultEcdhCurve() string {
+	if s == nil {
 		return ""
 	}
-	return o.DefaultEcdhCurve
+	return s.DefaultEcdhCurve
 }
 
-func (o *SystemSettingsConfTLS) GetMaxVersion() string {
-	if o == nil {
+func (s *SystemSettingsConfTLS) GetMaxVersion() string {
+	if s == nil {
 		return ""
 	}
-	return o.MaxVersion
+	return s.MaxVersion
 }
 
-func (o *SystemSettingsConfTLS) GetMinVersion() string {
-	if o == nil {
+func (s *SystemSettingsConfTLS) GetMinVersion() string {
+	if s == nil {
 		return ""
 	}
-	return o.MinVersion
+	return s.MinVersion
 }
 
-func (o *SystemSettingsConfTLS) GetRejectUnauthorized() bool {
-	if o == nil {
+func (s *SystemSettingsConfTLS) GetRejectUnauthorized() bool {
+	if s == nil {
 		return false
 	}
-	return o.RejectUnauthorized
+	return s.RejectUnauthorized
 }
 
 type SystemSettingsConfWorkers struct {
@@ -403,60 +403,60 @@ type SystemSettingsConfWorkers struct {
 	V8SingleThread         *bool    `json:"v8SingleThread,omitempty"`
 }
 
-func (o *SystemSettingsConfWorkers) GetCount() float64 {
-	if o == nil {
+func (s *SystemSettingsConfWorkers) GetCount() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Count
+	return s.Count
 }
 
-func (o *SystemSettingsConfWorkers) GetEnableHeapSnapshots() *bool {
-	if o == nil {
+func (s *SystemSettingsConfWorkers) GetEnableHeapSnapshots() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.EnableHeapSnapshots
+	return s.EnableHeapSnapshots
 }
 
-func (o *SystemSettingsConfWorkers) GetLoadThrottlePerc() *float64 {
-	if o == nil {
+func (s *SystemSettingsConfWorkers) GetLoadThrottlePerc() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.LoadThrottlePerc
+	return s.LoadThrottlePerc
 }
 
-func (o *SystemSettingsConfWorkers) GetMemory() float64 {
-	if o == nil {
+func (s *SystemSettingsConfWorkers) GetMemory() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Memory
+	return s.Memory
 }
 
-func (o *SystemSettingsConfWorkers) GetMinimum() float64 {
-	if o == nil {
+func (s *SystemSettingsConfWorkers) GetMinimum() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Minimum
+	return s.Minimum
 }
 
-func (o *SystemSettingsConfWorkers) GetStartupMaxConns() *float64 {
-	if o == nil {
+func (s *SystemSettingsConfWorkers) GetStartupMaxConns() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.StartupMaxConns
+	return s.StartupMaxConns
 }
 
-func (o *SystemSettingsConfWorkers) GetStartupThrottleTimeout() *float64 {
-	if o == nil {
+func (s *SystemSettingsConfWorkers) GetStartupThrottleTimeout() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.StartupThrottleTimeout
+	return s.StartupThrottleTimeout
 }
 
-func (o *SystemSettingsConfWorkers) GetV8SingleThread() *bool {
-	if o == nil {
+func (s *SystemSettingsConfWorkers) GetV8SingleThread() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.V8SingleThread
+	return s.V8SingleThread
 }
 
 type SystemSettingsConf struct {
@@ -476,100 +476,100 @@ type SystemSettingsConf struct {
 	Workers              SystemSettingsConfWorkers    `json:"workers"`
 }
 
-func (o *SystemSettingsConf) GetAPI() SystemSettingsConfAPI {
-	if o == nil {
+func (s *SystemSettingsConf) GetAPI() SystemSettingsConfAPI {
+	if s == nil {
 		return SystemSettingsConfAPI{}
 	}
-	return o.API
+	return s.API
 }
 
-func (o *SystemSettingsConf) GetBackups() SystemSettingsConfBackups {
-	if o == nil {
+func (s *SystemSettingsConf) GetBackups() SystemSettingsConfBackups {
+	if s == nil {
 		return SystemSettingsConfBackups{}
 	}
-	return o.Backups
+	return s.Backups
 }
 
-func (o *SystemSettingsConf) GetCustomLogo() SystemSettingsConfCustomLogo {
-	if o == nil {
+func (s *SystemSettingsConf) GetCustomLogo() SystemSettingsConfCustomLogo {
+	if s == nil {
 		return SystemSettingsConfCustomLogo{}
 	}
-	return o.CustomLogo
+	return s.CustomLogo
 }
 
-func (o *SystemSettingsConf) GetPii() SystemSettingsConfPii {
-	if o == nil {
+func (s *SystemSettingsConf) GetPii() SystemSettingsConfPii {
+	if s == nil {
 		return SystemSettingsConfPii{}
 	}
-	return o.Pii
+	return s.Pii
 }
 
-func (o *SystemSettingsConf) GetProxy() SystemSettingsConfProxy {
-	if o == nil {
+func (s *SystemSettingsConf) GetProxy() SystemSettingsConfProxy {
+	if s == nil {
 		return SystemSettingsConfProxy{}
 	}
-	return o.Proxy
+	return s.Proxy
 }
 
-func (o *SystemSettingsConf) GetRollback() SystemSettingsConfRollback {
-	if o == nil {
+func (s *SystemSettingsConf) GetRollback() SystemSettingsConfRollback {
+	if s == nil {
 		return SystemSettingsConfRollback{}
 	}
-	return o.Rollback
+	return s.Rollback
 }
 
-func (o *SystemSettingsConf) GetShutdown() SystemSettingsConfShutdown {
-	if o == nil {
+func (s *SystemSettingsConf) GetShutdown() SystemSettingsConfShutdown {
+	if s == nil {
 		return SystemSettingsConfShutdown{}
 	}
-	return o.Shutdown
+	return s.Shutdown
 }
 
-func (o *SystemSettingsConf) GetSni() SystemSettingsConfSni {
-	if o == nil {
+func (s *SystemSettingsConf) GetSni() SystemSettingsConfSni {
+	if s == nil {
 		return SystemSettingsConfSni{}
 	}
-	return o.Sni
+	return s.Sni
 }
 
-func (o *SystemSettingsConf) GetSockets() *SystemSettingsConfSockets {
-	if o == nil {
+func (s *SystemSettingsConf) GetSockets() *SystemSettingsConfSockets {
+	if s == nil {
 		return nil
 	}
-	return o.Sockets
+	return s.Sockets
 }
 
-func (o *SystemSettingsConf) GetSystem() SystemSettingsConfSystem {
-	if o == nil {
+func (s *SystemSettingsConf) GetSystem() SystemSettingsConfSystem {
+	if s == nil {
 		return SystemSettingsConfSystem{}
 	}
-	return o.System
+	return s.System
 }
 
-func (o *SystemSettingsConf) GetTLS() SystemSettingsConfTLS {
-	if o == nil {
+func (s *SystemSettingsConf) GetTLS() SystemSettingsConfTLS {
+	if s == nil {
 		return SystemSettingsConfTLS{}
 	}
-	return o.TLS
+	return s.TLS
 }
 
-func (o *SystemSettingsConf) GetUpgradeGroupSettings() UpgradeGroupSettings {
-	if o == nil {
+func (s *SystemSettingsConf) GetUpgradeGroupSettings() UpgradeGroupSettings {
+	if s == nil {
 		return UpgradeGroupSettings{}
 	}
-	return o.UpgradeGroupSettings
+	return s.UpgradeGroupSettings
 }
 
-func (o *SystemSettingsConf) GetUpgradeSettings() UpgradeSettings {
-	if o == nil {
+func (s *SystemSettingsConf) GetUpgradeSettings() UpgradeSettings {
+	if s == nil {
 		return UpgradeSettings{}
 	}
-	return o.UpgradeSettings
+	return s.UpgradeSettings
 }
 
-func (o *SystemSettingsConf) GetWorkers() SystemSettingsConfWorkers {
-	if o == nil {
+func (s *SystemSettingsConf) GetWorkers() SystemSettingsConfWorkers {
+	if s == nil {
 		return SystemSettingsConfWorkers{}
 	}
-	return o.Workers
+	return s.Workers
 }

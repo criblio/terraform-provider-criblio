@@ -10,37 +10,37 @@ type UpgradeSettings struct {
 	UpgradeSource               string               `json:"upgradeSource"`
 }
 
-func (o *UpgradeSettings) GetAutomaticUpgradeCheckPeriod() *string {
-	if o == nil {
+func (u *UpgradeSettings) GetAutomaticUpgradeCheckPeriod() *string {
+	if u == nil {
 		return nil
 	}
-	return o.AutomaticUpgradeCheckPeriod
+	return u.AutomaticUpgradeCheckPeriod
 }
 
-func (o *UpgradeSettings) GetDisableAutomaticUpgrade() bool {
-	if o == nil {
+func (u *UpgradeSettings) GetDisableAutomaticUpgrade() bool {
+	if u == nil {
 		return false
 	}
-	return o.DisableAutomaticUpgrade
+	return u.DisableAutomaticUpgrade
 }
 
-func (o *UpgradeSettings) GetEnableLegacyEdgeUpgrade() bool {
-	if o == nil {
+func (u *UpgradeSettings) GetEnableLegacyEdgeUpgrade() bool {
+	if u == nil {
 		return false
 	}
-	return o.EnableLegacyEdgeUpgrade
+	return u.EnableLegacyEdgeUpgrade
 }
 
-func (o *UpgradeSettings) GetPackageUrls() []UpgradePackageUrls {
-	if o == nil {
+func (u *UpgradeSettings) GetPackageUrls() []UpgradePackageUrls {
+	if u == nil {
 		return nil
 	}
-	return o.PackageUrls
+	return u.PackageUrls
 }
 
-func (o *UpgradeSettings) GetUpgradeSource() string {
-	if o == nil {
+func (u *UpgradeSettings) GetUpgradeSource() string {
+	if u == nil {
 		return ""
 	}
-	return o.UpgradeSource
+	return u.UpgradeSource
 }

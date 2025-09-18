@@ -14,18 +14,18 @@ type UpdateProfilerItemByIDRequest struct {
 	ProfilerItem shared.ProfilerItem `request:"mediaType=application/json"`
 }
 
-func (o *UpdateProfilerItemByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateProfilerItemByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateProfilerItemByIDRequest) GetProfilerItem() shared.ProfilerItem {
-	if o == nil {
+func (u *UpdateProfilerItemByIDRequest) GetProfilerItem() shared.ProfilerItem {
+	if u == nil {
 		return shared.ProfilerItem{}
 	}
-	return o.ProfilerItem
+	return u.ProfilerItem
 }
 
 // UpdateProfilerItemByIDResponseBody - a list of ProfilerItem objects
@@ -33,11 +33,11 @@ type UpdateProfilerItemByIDResponseBody struct {
 	Items []shared.ProfilerItem `json:"items,omitempty"`
 }
 
-func (o *UpdateProfilerItemByIDResponseBody) GetItems() []shared.ProfilerItem {
-	if o == nil {
+func (u *UpdateProfilerItemByIDResponseBody) GetItems() []shared.ProfilerItem {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateProfilerItemByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateProfilerItemByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateProfilerItemByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateProfilerItemByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateProfilerItemByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateProfilerItemByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateProfilerItemByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateProfilerItemByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateProfilerItemByIDResponse) GetObject() *UpdateProfilerItemByIDResponseBody {
-	if o == nil {
+func (u *UpdateProfilerItemByIDResponse) GetObject() *UpdateProfilerItemByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateProfilerItemByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateProfilerItemByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

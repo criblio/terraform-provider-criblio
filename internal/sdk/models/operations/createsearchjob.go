@@ -12,11 +12,11 @@ type CreateSearchJobResponseBody struct {
 	Items []shared.SearchJob `json:"items,omitempty"`
 }
 
-func (o *CreateSearchJobResponseBody) GetItems() []shared.SearchJob {
-	if o == nil {
+func (c *CreateSearchJobResponseBody) GetItems() []shared.SearchJob {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSearchJobResponse struct {
@@ -32,37 +32,37 @@ type CreateSearchJobResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSearchJobResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSearchJobResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSearchJobResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSearchJobResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSearchJobResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSearchJobResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSearchJobResponse) GetObject() *CreateSearchJobResponseBody {
-	if o == nil {
+func (c *CreateSearchJobResponse) GetObject() *CreateSearchJobResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSearchJobResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSearchJobResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

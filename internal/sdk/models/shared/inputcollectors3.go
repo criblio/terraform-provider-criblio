@@ -171,25 +171,25 @@ func (i *InputCollectorS3StateTracking) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3StateTracking) GetStateUpdateExpression() *string {
-	if o == nil {
+func (i *InputCollectorS3StateTracking) GetStateUpdateExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateUpdateExpression
+	return i.StateUpdateExpression
 }
 
-func (o *InputCollectorS3StateTracking) GetStateMergeExpression() *string {
-	if o == nil {
+func (i *InputCollectorS3StateTracking) GetStateMergeExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateMergeExpression
+	return i.StateMergeExpression
 }
 
-func (o *InputCollectorS3StateTracking) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorS3StateTracking) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputCollectorS3RunSettings struct {
@@ -231,95 +231,95 @@ func (i *InputCollectorS3RunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3RunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputCollectorS3RunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputCollectorS3RunSettings) GetLogLevel() *InputCollectorS3LogLevel {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetLogLevel() *InputCollectorS3LogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputCollectorS3RunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputCollectorS3RunSettings) GetMode() *InputCollectorS3Mode {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetMode() *InputCollectorS3Mode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectorS3RunSettings) GetTimeRangeType() *InputCollectorS3TimeRange {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetTimeRangeType() *InputCollectorS3TimeRange {
+	if i == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return i.TimeRangeType
 }
 
-func (o *InputCollectorS3RunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetEarliest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorS3RunSettings) GetLatest() *float64 {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetLatest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorS3RunSettings) GetExpression() *string {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Expression
+	return i.Expression
 }
 
-func (o *InputCollectorS3RunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetMinTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return i.MinTaskSize
 }
 
-func (o *InputCollectorS3RunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetMaxTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return i.MaxTaskSize
 }
 
-func (o *InputCollectorS3RunSettings) GetTimeWarning() *InputCollectorS3TimeWarning {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetTimeWarning() *InputCollectorS3TimeWarning {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return i.TimeWarning
 }
 
-func (o *InputCollectorS3RunSettings) GetStateTracking() *InputCollectorS3StateTracking {
-	if o == nil {
+func (i *InputCollectorS3RunSettings) GetStateTracking() *InputCollectorS3StateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 // InputCollectorS3Schedule - Configuration for a scheduled job
@@ -348,46 +348,46 @@ func (i *InputCollectorS3Schedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3Schedule) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorS3Schedule) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCollectorS3Schedule) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputCollectorS3Schedule) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputCollectorS3Schedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (i *InputCollectorS3Schedule) GetMaxConcurrentRuns() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return i.MaxConcurrentRuns
 }
 
-func (o *InputCollectorS3Schedule) GetSkippable() *bool {
-	if o == nil {
+func (i *InputCollectorS3Schedule) GetSkippable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Skippable
+	return i.Skippable
 }
 
-func (o *InputCollectorS3Schedule) GetResumeMissed() *bool {
-	if o == nil {
+func (i *InputCollectorS3Schedule) GetResumeMissed() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return i.ResumeMissed
 }
 
-func (o *InputCollectorS3Schedule) GetRun() *InputCollectorS3RunSettings {
-	if o == nil {
+func (i *InputCollectorS3Schedule) GetRun() *InputCollectorS3RunSettings {
+	if i == nil {
 		return nil
 	}
-	return o.Run
+	return i.Run
 }
 
 type InputCollectorS3TypeCollection2 string
@@ -432,25 +432,25 @@ func (i *InputCollectorS3Preprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3Preprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectorS3Preprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectorS3Preprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectorS3Preprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectorS3Preprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectorS3Preprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectorS3Metadatum struct {
@@ -470,18 +470,18 @@ func (i *InputCollectorS3Metadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3Metadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectorS3Metadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectorS3Metadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectorS3Metadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollectorS3Input struct {
@@ -514,67 +514,67 @@ func (i *InputCollectorS3Input) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3Input) GetType() *InputCollectorS3TypeCollection2 {
-	if o == nil {
+func (i *InputCollectorS3Input) GetType() *InputCollectorS3TypeCollection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorS3Input) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollectorS3Input) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollectorS3Input) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollectorS3Input) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollectorS3Input) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollectorS3Input) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollectorS3Input) GetPreprocess() *InputCollectorS3Preprocess {
-	if o == nil {
+func (i *InputCollectorS3Input) GetPreprocess() *InputCollectorS3Preprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollectorS3Input) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollectorS3Input) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollectorS3Input) GetMetadata() []InputCollectorS3Metadatum {
-	if o == nil {
+func (i *InputCollectorS3Input) GetMetadata() []InputCollectorS3Metadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollectorS3Input) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectorS3Input) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectorS3Input) GetOutput() *string {
-	if o == nil {
+func (i *InputCollectorS3Input) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }
 
 type InputCollectorS3TypeS3 string
@@ -670,74 +670,74 @@ func (i *InputCollectorS3Conf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3Conf) GetBucket() *string {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetBucket() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Bucket
+	return i.Bucket
 }
 
-func (o *InputCollectorS3Conf) GetRegion() *string {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputCollectorS3Conf) GetPath() *string {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputCollectorS3Conf) GetAwsAuthenticationMethod() *InputCollectorS3AuthenticationMethod {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetAwsAuthenticationMethod() *InputCollectorS3AuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputCollectorS3Conf) GetAwsAPIKey() *string {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetAwsAPIKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return i.AwsAPIKey
 }
 
-func (o *InputCollectorS3Conf) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputCollectorS3Conf) GetAwsSecret() *string {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetAwsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecret
+	return i.AwsSecret
 }
 
-func (o *InputCollectorS3Conf) GetRecurse() *bool {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetRecurse() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Recurse
+	return i.Recurse
 }
 
-func (o *InputCollectorS3Conf) GetExtractors() []InputCollectorS3Extractor {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetExtractors() []InputCollectorS3Extractor {
+	if i == nil {
 		return nil
 	}
-	return o.Extractors
+	return i.Extractors
 }
 
-func (o *InputCollectorS3Conf) GetMaxBatchSize() *int64 {
-	if o == nil {
+func (i *InputCollectorS3Conf) GetMaxBatchSize() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBatchSize
+	return i.MaxBatchSize
 }
 
 type InputCollectorS3Collector struct {
@@ -756,18 +756,18 @@ func (i *InputCollectorS3Collector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3Collector) GetType() InputCollectorS3TypeS3 {
-	if o == nil {
+func (i *InputCollectorS3Collector) GetType() InputCollectorS3TypeS3 {
+	if i == nil {
 		return InputCollectorS3TypeS3("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorS3Collector) GetConf() *InputCollectorS3Conf {
-	if o == nil {
+func (i *InputCollectorS3Collector) GetConf() *InputCollectorS3Conf {
+	if i == nil {
 		return nil
 	}
-	return o.Conf
+	return i.Conf
 }
 
 type InputCollectorS3 struct {
@@ -801,93 +801,93 @@ func (i *InputCollectorS3) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorS3) GetID() *string {
-	if o == nil {
+func (i *InputCollectorS3) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollectorS3) GetType() *InputCollectorS3TypeCollection1 {
-	if o == nil {
+func (i *InputCollectorS3) GetType() *InputCollectorS3TypeCollection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorS3) GetTTL() *string {
-	if o == nil {
+func (i *InputCollectorS3) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputCollectorS3) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputCollectorS3) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputCollectorS3) GetRemoveFields() []string {
-	if o == nil {
+func (i *InputCollectorS3) GetRemoveFields() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return i.RemoveFields
 }
 
-func (o *InputCollectorS3) GetResumeOnBoot() *bool {
-	if o == nil {
+func (i *InputCollectorS3) GetResumeOnBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return i.ResumeOnBoot
 }
 
-func (o *InputCollectorS3) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollectorS3) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollectorS3) GetSavedState() *InputCollectorS3SavedState {
-	if o == nil {
+func (i *InputCollectorS3) GetSavedState() *InputCollectorS3SavedState {
+	if i == nil {
 		return nil
 	}
-	return o.SavedState
+	return i.SavedState
 }
 
-func (o *InputCollectorS3) GetSchedule() *InputCollectorS3Schedule {
-	if o == nil {
+func (i *InputCollectorS3) GetSchedule() *InputCollectorS3Schedule {
+	if i == nil {
 		return nil
 	}
-	return o.Schedule
+	return i.Schedule
 }
 
-func (o *InputCollectorS3) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollectorS3) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollectorS3) GetWorkerAffinity() *bool {
-	if o == nil {
+func (i *InputCollectorS3) GetWorkerAffinity() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return i.WorkerAffinity
 }
 
-func (o *InputCollectorS3) GetInput() *InputCollectorS3Input {
-	if o == nil {
+func (i *InputCollectorS3) GetInput() *InputCollectorS3Input {
+	if i == nil {
 		return nil
 	}
-	return o.Input
+	return i.Input
 }
 
-func (o *InputCollectorS3) GetCollector() InputCollectorS3Collector {
-	if o == nil {
+func (i *InputCollectorS3) GetCollector() InputCollectorS3Collector {
+	if i == nil {
 		return InputCollectorS3Collector{}
 	}
-	return o.Collector
+	return i.Collector
 }

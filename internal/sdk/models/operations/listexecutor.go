@@ -12,11 +12,11 @@ type ListExecutorResponseBody struct {
 	Items []shared.Executor `json:"items,omitempty"`
 }
 
-func (o *ListExecutorResponseBody) GetItems() []shared.Executor {
-	if o == nil {
+func (l *ListExecutorResponseBody) GetItems() []shared.Executor {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListExecutorResponse struct {
@@ -32,37 +32,37 @@ type ListExecutorResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListExecutorResponse) GetContentType() string {
-	if o == nil {
+func (l *ListExecutorResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListExecutorResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListExecutorResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListExecutorResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListExecutorResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListExecutorResponse) GetObject() *ListExecutorResponseBody {
-	if o == nil {
+func (l *ListExecutorResponse) GetObject() *ListExecutorResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListExecutorResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListExecutorResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

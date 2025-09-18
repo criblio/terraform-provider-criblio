@@ -14,18 +14,18 @@ type DeleteOutputByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteOutputByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteOutputByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteOutputByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteOutputByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteOutputByIDResponseBody - a list of Output objects
@@ -45,37 +45,37 @@ type DeleteOutputByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteOutputByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteOutputByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteOutputByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteOutputByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteOutputByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteOutputByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteOutputByIDResponse) GetObject() *DeleteOutputByIDResponseBody {
-	if o == nil {
+func (d *DeleteOutputByIDResponse) GetObject() *DeleteOutputByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteOutputByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteOutputByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -12,11 +12,11 @@ type DeleteAuthUsersInvalidationByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteAuthUsersInvalidationByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteAuthUsersInvalidationByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteAuthUsersInvalidationByIDResponseBody - a list of any objects
@@ -24,11 +24,11 @@ type DeleteAuthUsersInvalidationByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *DeleteAuthUsersInvalidationByIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (d *DeleteAuthUsersInvalidationByIDResponseBody) GetItems() []map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteAuthUsersInvalidationByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteAuthUsersInvalidationByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteAuthUsersInvalidationByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteAuthUsersInvalidationByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteAuthUsersInvalidationByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteAuthUsersInvalidationByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteAuthUsersInvalidationByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteAuthUsersInvalidationByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteAuthUsersInvalidationByIDResponse) GetObject() *DeleteAuthUsersInvalidationByIDResponseBody {
-	if o == nil {
+func (d *DeleteAuthUsersInvalidationByIDResponse) GetObject() *DeleteAuthUsersInvalidationByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteAuthUsersInvalidationByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteAuthUsersInvalidationByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -7,18 +7,18 @@ type UpdateHecTokenRequestMetadatum struct {
 	Value string `json:"value"`
 }
 
-func (o *UpdateHecTokenRequestMetadatum) GetName() string {
-	if o == nil {
+func (u *UpdateHecTokenRequestMetadatum) GetName() string {
+	if u == nil {
 		return ""
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateHecTokenRequestMetadatum) GetValue() string {
-	if o == nil {
+func (u *UpdateHecTokenRequestMetadatum) GetValue() string {
+	if u == nil {
 		return ""
 	}
-	return o.Value
+	return u.Value
 }
 
 type UpdateHecTokenRequest struct {
@@ -27,23 +27,23 @@ type UpdateHecTokenRequest struct {
 	Metadata    []UpdateHecTokenRequestMetadatum `json:"metadata,omitempty"`
 }
 
-func (o *UpdateHecTokenRequest) GetDescription() *string {
-	if o == nil {
+func (u *UpdateHecTokenRequest) GetDescription() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Description
+	return u.Description
 }
 
-func (o *UpdateHecTokenRequest) GetEnabled() *bool {
-	if o == nil {
+func (u *UpdateHecTokenRequest) GetEnabled() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Enabled
+	return u.Enabled
 }
 
-func (o *UpdateHecTokenRequest) GetMetadata() []UpdateHecTokenRequestMetadatum {
-	if o == nil {
+func (u *UpdateHecTokenRequest) GetMetadata() []UpdateHecTokenRequestMetadatum {
+	if u == nil {
 		return nil
 	}
-	return o.Metadata
+	return u.Metadata
 }

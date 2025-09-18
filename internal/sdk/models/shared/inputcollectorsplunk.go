@@ -171,25 +171,25 @@ func (i *InputCollectorSplunkStateTracking) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunkStateTracking) GetStateUpdateExpression() *string {
-	if o == nil {
+func (i *InputCollectorSplunkStateTracking) GetStateUpdateExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateUpdateExpression
+	return i.StateUpdateExpression
 }
 
-func (o *InputCollectorSplunkStateTracking) GetStateMergeExpression() *string {
-	if o == nil {
+func (i *InputCollectorSplunkStateTracking) GetStateMergeExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateMergeExpression
+	return i.StateMergeExpression
 }
 
-func (o *InputCollectorSplunkStateTracking) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkStateTracking) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputCollectorSplunkRunSettings struct {
@@ -231,95 +231,95 @@ func (i *InputCollectorSplunkRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunkRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputCollectorSplunkRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputCollectorSplunkRunSettings) GetLogLevel() *InputCollectorSplunkLogLevel {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetLogLevel() *InputCollectorSplunkLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputCollectorSplunkRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputCollectorSplunkRunSettings) GetMode() *InputCollectorSplunkMode {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetMode() *InputCollectorSplunkMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectorSplunkRunSettings) GetTimeRangeType() *InputCollectorSplunkTimeRange {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetTimeRangeType() *InputCollectorSplunkTimeRange {
+	if i == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return i.TimeRangeType
 }
 
-func (o *InputCollectorSplunkRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetEarliest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorSplunkRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetLatest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorSplunkRunSettings) GetExpression() *string {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Expression
+	return i.Expression
 }
 
-func (o *InputCollectorSplunkRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetMinTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return i.MinTaskSize
 }
 
-func (o *InputCollectorSplunkRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetMaxTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return i.MaxTaskSize
 }
 
-func (o *InputCollectorSplunkRunSettings) GetTimeWarning() *InputCollectorSplunkTimeWarning {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetTimeWarning() *InputCollectorSplunkTimeWarning {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return i.TimeWarning
 }
 
-func (o *InputCollectorSplunkRunSettings) GetStateTracking() *InputCollectorSplunkStateTracking {
-	if o == nil {
+func (i *InputCollectorSplunkRunSettings) GetStateTracking() *InputCollectorSplunkStateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 // InputCollectorSplunkSchedule - Configuration for a scheduled job
@@ -348,46 +348,46 @@ func (i *InputCollectorSplunkSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunkSchedule) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkSchedule) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCollectorSplunkSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputCollectorSplunkSchedule) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputCollectorSplunkSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (i *InputCollectorSplunkSchedule) GetMaxConcurrentRuns() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return i.MaxConcurrentRuns
 }
 
-func (o *InputCollectorSplunkSchedule) GetSkippable() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkSchedule) GetSkippable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Skippable
+	return i.Skippable
 }
 
-func (o *InputCollectorSplunkSchedule) GetResumeMissed() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkSchedule) GetResumeMissed() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return i.ResumeMissed
 }
 
-func (o *InputCollectorSplunkSchedule) GetRun() *InputCollectorSplunkRunSettings {
-	if o == nil {
+func (i *InputCollectorSplunkSchedule) GetRun() *InputCollectorSplunkRunSettings {
+	if i == nil {
 		return nil
 	}
-	return o.Run
+	return i.Run
 }
 
 type InputCollectorSplunkTypeCollection2 string
@@ -432,25 +432,25 @@ func (i *InputCollectorSplunkPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunkPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkPreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectorSplunkPreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectorSplunkPreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectorSplunkPreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectorSplunkPreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectorSplunkMetadatum struct {
@@ -470,18 +470,18 @@ func (i *InputCollectorSplunkMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunkMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectorSplunkMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectorSplunkMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectorSplunkMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollectorSplunkInput struct {
@@ -514,67 +514,67 @@ func (i *InputCollectorSplunkInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunkInput) GetType() *InputCollectorSplunkTypeCollection2 {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetType() *InputCollectorSplunkTypeCollection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorSplunkInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollectorSplunkInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollectorSplunkInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollectorSplunkInput) GetPreprocess() *InputCollectorSplunkPreprocess {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetPreprocess() *InputCollectorSplunkPreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollectorSplunkInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollectorSplunkInput) GetMetadata() []InputCollectorSplunkMetadatum {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetMetadata() []InputCollectorSplunkMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollectorSplunkInput) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectorSplunkInput) GetOutput() *string {
-	if o == nil {
+func (i *InputCollectorSplunkInput) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }
 
 type InputCollectorSplunkTypeSplunk string
@@ -718,123 +718,123 @@ func (i *InputCollectorSplunkConf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunkConf) GetSearchHead() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetSearchHead() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SearchHead
+	return i.SearchHead
 }
 
-func (o *InputCollectorSplunkConf) GetSearch() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetSearch() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Search
+	return i.Search
 }
 
-func (o *InputCollectorSplunkConf) GetEarliest() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetEarliest() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorSplunkConf) GetLatest() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetLatest() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorSplunkConf) GetEndpoint() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputCollectorSplunkConf) GetOutputMode() *InputCollectorSplunkOutputMode {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetOutputMode() *InputCollectorSplunkOutputMode {
+	if i == nil {
 		return nil
 	}
-	return o.OutputMode
+	return i.OutputMode
 }
 
-func (o *InputCollectorSplunkConf) GetAuthentication() *InputCollectorSplunkAuthentication {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetAuthentication() *InputCollectorSplunkAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.Authentication
+	return i.Authentication
 }
 
-func (o *InputCollectorSplunkConf) GetTimeout() *int64 {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetTimeout() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.Timeout
+	return i.Timeout
 }
 
-func (o *InputCollectorSplunkConf) GetUseRoundRobinDNS() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetUseRoundRobinDNS() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.UseRoundRobinDNS
+	return i.UseRoundRobinDNS
 }
 
-func (o *InputCollectorSplunkConf) GetDisableTimeFilter() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetDisableTimeFilter() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DisableTimeFilter
+	return i.DisableTimeFilter
 }
 
-func (o *InputCollectorSplunkConf) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputCollectorSplunkConf) GetHandleEscapedChars() *bool {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetHandleEscapedChars() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.HandleEscapedChars
+	return i.HandleEscapedChars
 }
 
-func (o *InputCollectorSplunkConf) GetUsername() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputCollectorSplunkConf) GetPassword() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputCollectorSplunkConf) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputCollectorSplunkConf) GetToken() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputCollectorSplunkConf) GetTokenSecret() *string {
-	if o == nil {
+func (i *InputCollectorSplunkConf) GetTokenSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenSecret
+	return i.TokenSecret
 }
 
 type InputCollectorSplunkCollector struct {
@@ -853,18 +853,18 @@ func (i *InputCollectorSplunkCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunkCollector) GetType() InputCollectorSplunkTypeSplunk {
-	if o == nil {
+func (i *InputCollectorSplunkCollector) GetType() InputCollectorSplunkTypeSplunk {
+	if i == nil {
 		return InputCollectorSplunkTypeSplunk("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorSplunkCollector) GetConf() *InputCollectorSplunkConf {
-	if o == nil {
+func (i *InputCollectorSplunkCollector) GetConf() *InputCollectorSplunkConf {
+	if i == nil {
 		return nil
 	}
-	return o.Conf
+	return i.Conf
 }
 
 type InputCollectorSplunk struct {
@@ -898,93 +898,93 @@ func (i *InputCollectorSplunk) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorSplunk) GetID() *string {
-	if o == nil {
+func (i *InputCollectorSplunk) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollectorSplunk) GetType() *InputCollectorSplunkTypeCollection1 {
-	if o == nil {
+func (i *InputCollectorSplunk) GetType() *InputCollectorSplunkTypeCollection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorSplunk) GetTTL() *string {
-	if o == nil {
+func (i *InputCollectorSplunk) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputCollectorSplunk) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputCollectorSplunk) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputCollectorSplunk) GetRemoveFields() []string {
-	if o == nil {
+func (i *InputCollectorSplunk) GetRemoveFields() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return i.RemoveFields
 }
 
-func (o *InputCollectorSplunk) GetResumeOnBoot() *bool {
-	if o == nil {
+func (i *InputCollectorSplunk) GetResumeOnBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return i.ResumeOnBoot
 }
 
-func (o *InputCollectorSplunk) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollectorSplunk) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollectorSplunk) GetSavedState() *InputCollectorSplunkSavedState {
-	if o == nil {
+func (i *InputCollectorSplunk) GetSavedState() *InputCollectorSplunkSavedState {
+	if i == nil {
 		return nil
 	}
-	return o.SavedState
+	return i.SavedState
 }
 
-func (o *InputCollectorSplunk) GetSchedule() *InputCollectorSplunkSchedule {
-	if o == nil {
+func (i *InputCollectorSplunk) GetSchedule() *InputCollectorSplunkSchedule {
+	if i == nil {
 		return nil
 	}
-	return o.Schedule
+	return i.Schedule
 }
 
-func (o *InputCollectorSplunk) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollectorSplunk) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollectorSplunk) GetWorkerAffinity() *bool {
-	if o == nil {
+func (i *InputCollectorSplunk) GetWorkerAffinity() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return i.WorkerAffinity
 }
 
-func (o *InputCollectorSplunk) GetInput() *InputCollectorSplunkInput {
-	if o == nil {
+func (i *InputCollectorSplunk) GetInput() *InputCollectorSplunkInput {
+	if i == nil {
 		return nil
 	}
-	return o.Input
+	return i.Input
 }
 
-func (o *InputCollectorSplunk) GetCollector() InputCollectorSplunkCollector {
-	if o == nil {
+func (i *InputCollectorSplunk) GetCollector() InputCollectorSplunkCollector {
+	if i == nil {
 		return InputCollectorSplunkCollector{}
 	}
-	return o.Collector
+	return i.Collector
 }

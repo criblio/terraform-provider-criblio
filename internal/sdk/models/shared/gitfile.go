@@ -8,23 +8,23 @@ type GitFile struct {
 	State    *string   `json:"state,omitempty"`
 }
 
-func (o *GitFile) GetChildren() []GitFile {
-	if o == nil {
+func (g *GitFile) GetChildren() []GitFile {
+	if g == nil {
 		return nil
 	}
-	return o.Children
+	return g.Children
 }
 
-func (o *GitFile) GetName() string {
-	if o == nil {
+func (g *GitFile) GetName() string {
+	if g == nil {
 		return ""
 	}
-	return o.Name
+	return g.Name
 }
 
-func (o *GitFile) GetState() *string {
-	if o == nil {
+func (g *GitFile) GetState() *string {
+	if g == nil {
 		return nil
 	}
-	return o.State
+	return g.State
 }

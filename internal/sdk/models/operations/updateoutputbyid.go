@@ -16,25 +16,25 @@ type UpdateOutputByIDRequest struct {
 	Output shared.Output `request:"mediaType=application/json"`
 }
 
-func (o *UpdateOutputByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateOutputByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateOutputByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateOutputByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateOutputByIDRequest) GetOutput() shared.Output {
-	if o == nil {
+func (u *UpdateOutputByIDRequest) GetOutput() shared.Output {
+	if u == nil {
 		return shared.Output{}
 	}
-	return o.Output
+	return u.Output
 }
 
 // UpdateOutputByIDResponseBody - a list of Output objects
@@ -54,37 +54,37 @@ type UpdateOutputByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateOutputByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateOutputByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateOutputByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateOutputByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateOutputByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateOutputByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateOutputByIDResponse) GetObject() *UpdateOutputByIDResponseBody {
-	if o == nil {
+func (u *UpdateOutputByIDResponse) GetObject() *UpdateOutputByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateOutputByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateOutputByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

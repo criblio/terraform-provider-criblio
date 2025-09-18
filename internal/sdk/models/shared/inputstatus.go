@@ -43,32 +43,32 @@ type InputStatusStatus struct {
 	UseStatusFromLB *bool             `json:"useStatusFromLB,omitempty"`
 }
 
-func (o *InputStatusStatus) GetHealth() InputStatusHealth {
-	if o == nil {
+func (i *InputStatusStatus) GetHealth() InputStatusHealth {
+	if i == nil {
 		return InputStatusHealth("")
 	}
-	return o.Health
+	return i.Health
 }
 
-func (o *InputStatusStatus) GetMetrics() map[string]any {
-	if o == nil {
+func (i *InputStatusStatus) GetMetrics() map[string]any {
+	if i == nil {
 		return map[string]any{}
 	}
-	return o.Metrics
+	return i.Metrics
 }
 
-func (o *InputStatusStatus) GetTimestamp() float64 {
-	if o == nil {
+func (i *InputStatusStatus) GetTimestamp() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Timestamp
+	return i.Timestamp
 }
 
-func (o *InputStatusStatus) GetUseStatusFromLB() *bool {
-	if o == nil {
+func (i *InputStatusStatus) GetUseStatusFromLB() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.UseStatusFromLB
+	return i.UseStatusFromLB
 }
 
 type InputStatus struct {
@@ -76,16 +76,16 @@ type InputStatus struct {
 	Status InputStatusStatus `json:"status"`
 }
 
-func (o *InputStatus) GetID() string {
-	if o == nil {
+func (i *InputStatus) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputStatus) GetStatus() InputStatusStatus {
-	if o == nil {
+func (i *InputStatus) GetStatus() InputStatusStatus {
+	if i == nil {
 		return InputStatusStatus{}
 	}
-	return o.Status
+	return i.Status
 }

@@ -14,18 +14,18 @@ type CreateSystemProjectsVersionRevertByProjectIDRequest struct {
 	ProjectGitCommitParams shared.ProjectGitCommitParams `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemProjectsVersionRevertByProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (c *CreateSystemProjectsVersionRevertByProjectIDRequest) GetProjectID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProjectID
+	return c.ProjectID
 }
 
-func (o *CreateSystemProjectsVersionRevertByProjectIDRequest) GetProjectGitCommitParams() shared.ProjectGitCommitParams {
-	if o == nil {
+func (c *CreateSystemProjectsVersionRevertByProjectIDRequest) GetProjectGitCommitParams() shared.ProjectGitCommitParams {
+	if c == nil {
 		return shared.ProjectGitCommitParams{}
 	}
-	return o.ProjectGitCommitParams
+	return c.ProjectGitCommitParams
 }
 
 // CreateSystemProjectsVersionRevertByProjectIDResponseBody - a list of GitRevertResult objects
@@ -33,11 +33,11 @@ type CreateSystemProjectsVersionRevertByProjectIDResponseBody struct {
 	Items []shared.GitRevertResult `json:"items,omitempty"`
 }
 
-func (o *CreateSystemProjectsVersionRevertByProjectIDResponseBody) GetItems() []shared.GitRevertResult {
-	if o == nil {
+func (c *CreateSystemProjectsVersionRevertByProjectIDResponseBody) GetItems() []shared.GitRevertResult {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemProjectsVersionRevertByProjectIDResponse struct {
@@ -53,37 +53,37 @@ type CreateSystemProjectsVersionRevertByProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemProjectsVersionRevertByProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemProjectsVersionRevertByProjectIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemProjectsVersionRevertByProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemProjectsVersionRevertByProjectIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemProjectsVersionRevertByProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemProjectsVersionRevertByProjectIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemProjectsVersionRevertByProjectIDResponse) GetObject() *CreateSystemProjectsVersionRevertByProjectIDResponseBody {
-	if o == nil {
+func (c *CreateSystemProjectsVersionRevertByProjectIDResponse) GetObject() *CreateSystemProjectsVersionRevertByProjectIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemProjectsVersionRevertByProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemProjectsVersionRevertByProjectIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -15,23 +15,23 @@ type GetAuthSloResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *GetAuthSloResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthSloResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthSloResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthSloResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthSloResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthSloResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }

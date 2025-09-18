@@ -12,11 +12,11 @@ type CreateDatasetProviderResponseBody struct {
 	Items []shared.GenericProvider `json:"items,omitempty"`
 }
 
-func (o *CreateDatasetProviderResponseBody) GetItems() []shared.GenericProvider {
-	if o == nil {
+func (c *CreateDatasetProviderResponseBody) GetItems() []shared.GenericProvider {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateDatasetProviderResponse struct {
@@ -32,37 +32,37 @@ type CreateDatasetProviderResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateDatasetProviderResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateDatasetProviderResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateDatasetProviderResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateDatasetProviderResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateDatasetProviderResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateDatasetProviderResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateDatasetProviderResponse) GetObject() *CreateDatasetProviderResponseBody {
-	if o == nil {
+func (c *CreateDatasetProviderResponse) GetObject() *CreateDatasetProviderResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateDatasetProviderResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateDatasetProviderResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

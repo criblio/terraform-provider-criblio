@@ -9,23 +9,23 @@ type SchemaLibEntry struct {
 	Schema string `json:"schema"`
 }
 
-func (o *SchemaLibEntry) GetID() string {
-	if o == nil {
+func (s *SchemaLibEntry) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SchemaLibEntry) GetDescription() *string {
-	if o == nil {
+func (s *SchemaLibEntry) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SchemaLibEntry) GetSchema() string {
-	if o == nil {
+func (s *SchemaLibEntry) GetSchema() string {
+	if s == nil {
 		return ""
 	}
-	return o.Schema
+	return s.Schema
 }

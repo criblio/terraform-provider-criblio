@@ -14,18 +14,18 @@ type UpdatePacksRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *UpdatePacksRequest) GetFilename() *string {
-	if o == nil {
+func (u *UpdatePacksRequest) GetFilename() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Filename
+	return u.Filename
 }
 
-func (o *UpdatePacksRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdatePacksRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
 // UpdatePacksResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type UpdatePacksResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *UpdatePacksResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (u *UpdatePacksResponseBody) GetItems() []map[string]any {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdatePacksResponse struct {
@@ -53,37 +53,37 @@ type UpdatePacksResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdatePacksResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdatePacksResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdatePacksResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdatePacksResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdatePacksResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdatePacksResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdatePacksResponse) GetObject() *UpdatePacksResponseBody {
-	if o == nil {
+func (u *UpdatePacksResponse) GetObject() *UpdatePacksResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdatePacksResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdatePacksResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

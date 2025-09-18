@@ -154,72 +154,72 @@ func (w *WebhookTarget) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *WebhookTarget) GetID() string {
-	if o == nil {
+func (w *WebhookTarget) GetID() string {
+	if w == nil {
 		return ""
 	}
-	return o.ID
+	return w.ID
 }
 
-func (o *WebhookTarget) GetType() WebhookTargetType {
-	if o == nil {
+func (w *WebhookTarget) GetType() WebhookTargetType {
+	if w == nil {
 		return WebhookTargetType("")
 	}
-	return o.Type
+	return w.Type
 }
 
-func (o *WebhookTarget) GetSystemFields() []string {
-	if o == nil {
+func (w *WebhookTarget) GetSystemFields() []string {
+	if w == nil {
 		return nil
 	}
-	return o.SystemFields
+	return w.SystemFields
 }
 
-func (o *WebhookTarget) GetURL() string {
-	if o == nil {
+func (w *WebhookTarget) GetURL() string {
+	if w == nil {
 		return ""
 	}
-	return o.URL
+	return w.URL
 }
 
-func (o *WebhookTarget) GetFormat() WebhookTargetFormat {
-	if o == nil {
+func (w *WebhookTarget) GetFormat() WebhookTargetFormat {
+	if w == nil {
 		return WebhookTargetFormat("")
 	}
-	return o.Format
+	return w.Format
 }
 
-func (o *WebhookTarget) GetMethod() HTTPMethod {
-	if o == nil {
+func (w *WebhookTarget) GetMethod() HTTPMethod {
+	if w == nil {
 		return HTTPMethod("")
 	}
-	return o.Method
+	return w.Method
 }
 
-func (o *WebhookTarget) GetAuthType() *WebhookTargetAuthenticationType {
-	if o == nil {
+func (w *WebhookTarget) GetAuthType() *WebhookTargetAuthenticationType {
+	if w == nil {
 		return nil
 	}
-	return o.AuthType
+	return w.AuthType
 }
 
-func (o *WebhookTarget) GetToken() *string {
-	if o == nil {
+func (w *WebhookTarget) GetToken() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Token
+	return w.Token
 }
 
-func (o *WebhookTarget) GetUsername() *string {
-	if o == nil {
+func (w *WebhookTarget) GetUsername() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Username
+	return w.Username
 }
 
-func (o *WebhookTarget) GetPassword() *string {
-	if o == nil {
+func (w *WebhookTarget) GetPassword() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Password
+	return w.Password
 }

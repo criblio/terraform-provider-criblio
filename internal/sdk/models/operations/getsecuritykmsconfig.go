@@ -12,11 +12,11 @@ type GetSecurityKmsConfigResponseBody struct {
 	Items []shared.KMSProviderConfig `json:"items,omitempty"`
 }
 
-func (o *GetSecurityKmsConfigResponseBody) GetItems() []shared.KMSProviderConfig {
-	if o == nil {
+func (g *GetSecurityKmsConfigResponseBody) GetItems() []shared.KMSProviderConfig {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSecurityKmsConfigResponse struct {
@@ -32,37 +32,37 @@ type GetSecurityKmsConfigResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSecurityKmsConfigResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSecurityKmsConfigResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSecurityKmsConfigResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSecurityKmsConfigResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSecurityKmsConfigResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSecurityKmsConfigResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSecurityKmsConfigResponse) GetObject() *GetSecurityKmsConfigResponseBody {
-	if o == nil {
+func (g *GetSecurityKmsConfigResponse) GetObject() *GetSecurityKmsConfigResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSecurityKmsConfigResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSecurityKmsConfigResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -7,16 +7,16 @@ type AuthPolicyEntry struct {
 	Object  string   `json:"object"`
 }
 
-func (o *AuthPolicyEntry) GetActions() []string {
-	if o == nil {
+func (a *AuthPolicyEntry) GetActions() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.Actions
+	return a.Actions
 }
 
-func (o *AuthPolicyEntry) GetObject() string {
-	if o == nil {
+func (a *AuthPolicyEntry) GetObject() string {
+	if a == nil {
 		return ""
 	}
-	return o.Object
+	return a.Object
 }

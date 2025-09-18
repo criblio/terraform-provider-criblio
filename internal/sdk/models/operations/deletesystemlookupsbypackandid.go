@@ -16,25 +16,25 @@ type DeleteSystemLookupsByPackAndIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteSystemLookupsByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteSystemLookupsByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDRequest) GetPack() string {
+	if d == nil {
 		return ""
 	}
-	return o.Pack
+	return d.Pack
 }
 
-func (o *DeleteSystemLookupsByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteSystemLookupsByPackAndIDResponseBody - a list of Pipeline objects
@@ -42,11 +42,11 @@ type DeleteSystemLookupsByPackAndIDResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *DeleteSystemLookupsByPackAndIDResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDResponseBody) GetItems() []shared.Pipeline {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSystemLookupsByPackAndIDResponse struct {
@@ -62,37 +62,37 @@ type DeleteSystemLookupsByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSystemLookupsByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSystemLookupsByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSystemLookupsByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSystemLookupsByPackAndIDResponse) GetObject() *DeleteSystemLookupsByPackAndIDResponseBody {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDResponse) GetObject() *DeleteSystemLookupsByPackAndIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSystemLookupsByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSystemLookupsByPackAndIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

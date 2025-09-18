@@ -12,11 +12,11 @@ type CreateSystemMetricsQueryResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemMetricsQueryResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemMetricsQueryResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemMetricsQueryResponse struct {
@@ -32,37 +32,37 @@ type CreateSystemMetricsQueryResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemMetricsQueryResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemMetricsQueryResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemMetricsQueryResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemMetricsQueryResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemMetricsQueryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemMetricsQueryResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemMetricsQueryResponse) GetObject() *CreateSystemMetricsQueryResponseBody {
-	if o == nil {
+func (c *CreateSystemMetricsQueryResponse) GetObject() *CreateSystemMetricsQueryResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemMetricsQueryResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemMetricsQueryResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

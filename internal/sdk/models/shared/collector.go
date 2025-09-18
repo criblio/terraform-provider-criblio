@@ -16,79 +16,79 @@ type Collector struct {
 	Version  string         `json:"version"`
 }
 
-func (o *Collector) GetConf() map[string]any {
-	if o == nil {
+func (c *Collector) GetConf() map[string]any {
+	if c == nil {
 		return map[string]any{}
 	}
-	return o.Conf
+	return c.Conf
 }
 
-func (o *Collector) GetFilename() string {
-	if o == nil {
+func (c *Collector) GetFilename() string {
+	if c == nil {
 		return ""
 	}
-	return o.Filename
+	return c.Filename
 }
 
-func (o *Collector) GetDisabled() bool {
-	if o == nil {
+func (c *Collector) GetDisabled() bool {
+	if c == nil {
 		return false
 	}
-	return o.Disabled
+	return c.Disabled
 }
 
-func (o *Collector) GetGroup() string {
-	if o == nil {
+func (c *Collector) GetGroup() string {
+	if c == nil {
 		return ""
 	}
-	return o.Group
+	return c.Group
 }
 
-func (o *Collector) GetID() string {
-	if o == nil {
+func (c *Collector) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *Collector) GetInitTime() float64 {
-	if o == nil {
+func (c *Collector) GetInitTime() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.InitTime
+	return c.InitTime
 }
 
-func (o *Collector) GetLoadTime() float64 {
-	if o == nil {
+func (c *Collector) GetLoadTime() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.LoadTime
+	return c.LoadTime
 }
 
-func (o *Collector) GetModTime() float64 {
-	if o == nil {
+func (c *Collector) GetModTime() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.ModTime
+	return c.ModTime
 }
 
-func (o *Collector) GetName() string {
-	if o == nil {
+func (c *Collector) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *Collector) GetUischema() map[string]any {
-	if o == nil {
+func (c *Collector) GetUischema() map[string]any {
+	if c == nil {
 		return map[string]any{}
 	}
-	return o.Uischema
+	return c.Uischema
 }
 
-func (o *Collector) GetVersion() string {
-	if o == nil {
+func (c *Collector) GetVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Version
+	return c.Version
 }

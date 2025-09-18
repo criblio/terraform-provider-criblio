@@ -58760,6 +58760,48 @@ paths:
             schema:
               $ref: "#/components/schemas/Routes"
       responses: *a136
+  "/m/{groupId}/routes/default":
+    get:
+      x-speakeasy-entity-operation: Routes#get
+      operationId: getRoutesByGroupId
+      tags: *a135
+      summary: get routes for a Pack
+      description: get routes for a Pack
+      responses: *a136
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            &a137
+            type: string
+          description: group Id
+          default: default
+          example: default
+    patch:
+      x-speakeasy-entity-operation: Routes#create,update,delete
+      operationId: createRoutesByGroupId
+      tags: *a135
+      summary: Create route for a Pack
+      description: Create route for a Pack
+      responses: *a136
+      requestBody:
+        description: Routes object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Routes"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            &a137
+            type: string
+          description: group Id
+          default: default
+          example: default
   "/routes/{id}/append":
     post:
       operationId: createRoutesAppendById
@@ -59540,7 +59582,7 @@ paths:
             type: string
           description: group Id
     patch:
-      x-speakeasy-entity-operation: PackRoutes#create
+      x-speakeasy-entity-operation: PackRoutes#create,update,delete
       operationId: createRoutesByPack
       tags: *a135
       summary: Create route for a Pack

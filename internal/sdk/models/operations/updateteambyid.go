@@ -14,18 +14,18 @@ type UpdateTeamByIDRequest struct {
 	Team shared.Team `request:"mediaType=application/json"`
 }
 
-func (o *UpdateTeamByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateTeamByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateTeamByIDRequest) GetTeam() shared.Team {
-	if o == nil {
+func (u *UpdateTeamByIDRequest) GetTeam() shared.Team {
+	if u == nil {
 		return shared.Team{}
 	}
-	return o.Team
+	return u.Team
 }
 
 // UpdateTeamByIDResponseBody - a list of Team objects
@@ -33,11 +33,11 @@ type UpdateTeamByIDResponseBody struct {
 	Items []shared.Team `json:"items,omitempty"`
 }
 
-func (o *UpdateTeamByIDResponseBody) GetItems() []shared.Team {
-	if o == nil {
+func (u *UpdateTeamByIDResponseBody) GetItems() []shared.Team {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateTeamByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateTeamByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateTeamByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateTeamByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateTeamByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateTeamByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateTeamByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateTeamByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateTeamByIDResponse) GetObject() *UpdateTeamByIDResponseBody {
-	if o == nil {
+func (u *UpdateTeamByIDResponse) GetObject() *UpdateTeamByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateTeamByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateTeamByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

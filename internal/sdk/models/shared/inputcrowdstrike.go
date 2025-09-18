@@ -47,18 +47,18 @@ func (i *InputCrowdstrikeConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCrowdstrikeConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputCrowdstrikeConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCrowdstrikeConnection) GetOutput() string {
-	if o == nil {
+func (i *InputCrowdstrikeConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputCrowdstrikeMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputCrowdstrikePq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCrowdstrikePq) GetMode() *InputCrowdstrikeMode {
-	if o == nil {
+func (i *InputCrowdstrikePq) GetMode() *InputCrowdstrikeMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCrowdstrikePq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputCrowdstrikePq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputCrowdstrikePq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputCrowdstrikePq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputCrowdstrikePq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputCrowdstrikePq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputCrowdstrikePq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputCrowdstrikePq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputCrowdstrikePq) GetPath() *string {
-	if o == nil {
+func (i *InputCrowdstrikePq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputCrowdstrikePq) GetCompress() *InputCrowdstrikeCompression {
-	if o == nil {
+func (i *InputCrowdstrikePq) GetCompress() *InputCrowdstrikeCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputCrowdstrikeAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
@@ -268,25 +268,25 @@ func (i *InputCrowdstrikePreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCrowdstrikePreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCrowdstrikePreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCrowdstrikePreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCrowdstrikePreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCrowdstrikePreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCrowdstrikePreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCrowdstrikeMetadatum struct {
@@ -306,18 +306,18 @@ func (i *InputCrowdstrikeMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCrowdstrikeMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCrowdstrikeMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCrowdstrikeMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCrowdstrikeMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCrowdstrikeCheckpointing struct {
@@ -338,18 +338,18 @@ func (i *InputCrowdstrikeCheckpointing) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCrowdstrikeCheckpointing) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCrowdstrikeCheckpointing) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCrowdstrikeCheckpointing) GetRetries() *float64 {
-	if o == nil {
+func (i *InputCrowdstrikeCheckpointing) GetRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Retries
+	return i.Retries
 }
 
 type InputCrowdstrikeTagAfterProcessing string
@@ -469,303 +469,303 @@ func (i *InputCrowdstrike) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCrowdstrike) GetID() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCrowdstrike) GetType() InputCrowdstrikeType {
-	if o == nil {
+func (i *InputCrowdstrike) GetType() InputCrowdstrikeType {
+	if i == nil {
 		return InputCrowdstrikeType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCrowdstrike) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCrowdstrike) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCrowdstrike) GetPipeline() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCrowdstrike) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCrowdstrike) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCrowdstrike) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCrowdstrike) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputCrowdstrike) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputCrowdstrike) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCrowdstrike) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCrowdstrike) GetConnections() []InputCrowdstrikeConnection {
-	if o == nil {
+func (i *InputCrowdstrike) GetConnections() []InputCrowdstrikeConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputCrowdstrike) GetPq() *InputCrowdstrikePq {
-	if o == nil {
+func (i *InputCrowdstrike) GetPq() *InputCrowdstrikePq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputCrowdstrike) GetQueueName() string {
-	if o == nil {
+func (i *InputCrowdstrike) GetQueueName() string {
+	if i == nil {
 		return ""
 	}
-	return o.QueueName
+	return i.QueueName
 }
 
-func (o *InputCrowdstrike) GetFileFilter() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetFileFilter() *string {
+	if i == nil {
 		return nil
 	}
-	return o.FileFilter
+	return i.FileFilter
 }
 
-func (o *InputCrowdstrike) GetAwsAccountID() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetAwsAccountID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAccountID
+	return i.AwsAccountID
 }
 
-func (o *InputCrowdstrike) GetAwsAuthenticationMethod() *InputCrowdstrikeAuthenticationMethod {
-	if o == nil {
+func (i *InputCrowdstrike) GetAwsAuthenticationMethod() *InputCrowdstrikeAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputCrowdstrike) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputCrowdstrike) GetRegion() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputCrowdstrike) GetEndpoint() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputCrowdstrike) GetSignatureVersion() *InputCrowdstrikeSignatureVersion {
-	if o == nil {
+func (i *InputCrowdstrike) GetSignatureVersion() *InputCrowdstrikeSignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputCrowdstrike) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputCrowdstrike) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputCrowdstrike) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputCrowdstrike) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputCrowdstrike) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCrowdstrike) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCrowdstrike) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCrowdstrike) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCrowdstrike) GetMaxMessages() *float64 {
-	if o == nil {
+func (i *InputCrowdstrike) GetMaxMessages() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMessages
+	return i.MaxMessages
 }
 
-func (o *InputCrowdstrike) GetVisibilityTimeout() *float64 {
-	if o == nil {
+func (i *InputCrowdstrike) GetVisibilityTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.VisibilityTimeout
+	return i.VisibilityTimeout
 }
 
-func (o *InputCrowdstrike) GetNumReceivers() *float64 {
-	if o == nil {
+func (i *InputCrowdstrike) GetNumReceivers() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.NumReceivers
+	return i.NumReceivers
 }
 
-func (o *InputCrowdstrike) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputCrowdstrike) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputCrowdstrike) GetSkipOnError() *bool {
-	if o == nil {
+func (i *InputCrowdstrike) GetSkipOnError() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SkipOnError
+	return i.SkipOnError
 }
 
-func (o *InputCrowdstrike) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputCrowdstrike) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputCrowdstrike) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputCrowdstrike) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputCrowdstrike) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputCrowdstrike) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputCrowdstrike) GetEnableSQSAssumeRole() *bool {
-	if o == nil {
+func (i *InputCrowdstrike) GetEnableSQSAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableSQSAssumeRole
+	return i.EnableSQSAssumeRole
 }
 
-func (o *InputCrowdstrike) GetPreprocess() *InputCrowdstrikePreprocess {
-	if o == nil {
+func (i *InputCrowdstrike) GetPreprocess() *InputCrowdstrikePreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCrowdstrike) GetMetadata() []InputCrowdstrikeMetadatum {
-	if o == nil {
+func (i *InputCrowdstrike) GetMetadata() []InputCrowdstrikeMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCrowdstrike) GetCheckpointing() *InputCrowdstrikeCheckpointing {
-	if o == nil {
+func (i *InputCrowdstrike) GetCheckpointing() *InputCrowdstrikeCheckpointing {
+	if i == nil {
 		return nil
 	}
-	return o.Checkpointing
+	return i.Checkpointing
 }
 
-func (o *InputCrowdstrike) GetPollTimeout() *float64 {
-	if o == nil {
+func (i *InputCrowdstrike) GetPollTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.PollTimeout
+	return i.PollTimeout
 }
 
-func (o *InputCrowdstrike) GetEncoding() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetEncoding() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Encoding
+	return i.Encoding
 }
 
-func (o *InputCrowdstrike) GetDescription() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputCrowdstrike) GetAwsAPIKey() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetAwsAPIKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return i.AwsAPIKey
 }
 
-func (o *InputCrowdstrike) GetAwsSecret() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetAwsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecret
+	return i.AwsSecret
 }
 
-func (o *InputCrowdstrike) GetTagAfterProcessing() *InputCrowdstrikeTagAfterProcessing {
-	if o == nil {
+func (i *InputCrowdstrike) GetTagAfterProcessing() *InputCrowdstrikeTagAfterProcessing {
+	if i == nil {
 		return nil
 	}
-	return o.TagAfterProcessing
+	return i.TagAfterProcessing
 }
 
-func (o *InputCrowdstrike) GetProcessedTagKey() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetProcessedTagKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ProcessedTagKey
+	return i.ProcessedTagKey
 }
 
-func (o *InputCrowdstrike) GetProcessedTagValue() *string {
-	if o == nil {
+func (i *InputCrowdstrike) GetProcessedTagValue() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ProcessedTagValue
+	return i.ProcessedTagValue
 }

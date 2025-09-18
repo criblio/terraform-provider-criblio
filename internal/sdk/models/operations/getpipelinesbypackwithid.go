@@ -16,25 +16,25 @@ type GetPipelinesByPackWithIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetPipelinesByPackWithIDRequest) GetPack() string {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
-func (o *GetPipelinesByPackWithIDRequest) GetID() string {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetPipelinesByPackWithIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetPipelinesByPackWithIDResponseBody - a list of Routes objects
@@ -42,11 +42,11 @@ type GetPipelinesByPackWithIDResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetPipelinesByPackWithIDResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDResponseBody) GetItems() []shared.Routes {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetPipelinesByPackWithIDResponse struct {
@@ -62,37 +62,37 @@ type GetPipelinesByPackWithIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetPipelinesByPackWithIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPipelinesByPackWithIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPipelinesByPackWithIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetPipelinesByPackWithIDResponse) GetObject() *GetPipelinesByPackWithIDResponseBody {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDResponse) GetObject() *GetPipelinesByPackWithIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetPipelinesByPackWithIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetPipelinesByPackWithIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

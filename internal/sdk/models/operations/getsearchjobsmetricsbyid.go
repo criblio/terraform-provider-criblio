@@ -12,11 +12,11 @@ type GetSearchJobsMetricsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetSearchJobsMetricsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSearchJobsMetricsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 type GetSearchJobsMetricsByIDResponse struct {
@@ -32,37 +32,37 @@ type GetSearchJobsMetricsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchJobsMetricsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchJobsMetricsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchJobsMetricsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchJobsMetricsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchJobsMetricsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchJobsMetricsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchJobsMetricsByIDResponse) GetString() *string {
-	if o == nil {
+func (g *GetSearchJobsMetricsByIDResponse) GetString() *string {
+	if g == nil {
 		return nil
 	}
-	return o.String
+	return g.String
 }
 
-func (o *GetSearchJobsMetricsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchJobsMetricsByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -14,18 +14,18 @@ type GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDRequest struct {
 	ProjectID string `pathParam:"style=simple,explode=false,name=projectId"`
 }
 
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDRequest) GetProjectID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
 // GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody - A list of Subscription objects
@@ -33,11 +33,11 @@ type GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody struct {
 	Items []shared.Subscription `json:"items,omitempty"`
 }
 
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody) GetItems() []shared.Subscription {
-	if o == nil {
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody) GetItems() []shared.Subscription {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse struct {
@@ -53,37 +53,37 @@ type GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetObject() *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody {
-	if o == nil {
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetObject() *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

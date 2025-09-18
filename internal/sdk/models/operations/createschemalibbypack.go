@@ -14,18 +14,18 @@ type CreateSchemaLibByPackRequest struct {
 	SchemaLibEntry shared.SchemaLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *CreateSchemaLibByPackRequest) GetPack() string {
-	if o == nil {
+func (c *CreateSchemaLibByPackRequest) GetPack() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pack
+	return c.Pack
 }
 
-func (o *CreateSchemaLibByPackRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
-	if o == nil {
+func (c *CreateSchemaLibByPackRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
+	if c == nil {
 		return shared.SchemaLibEntry{}
 	}
-	return o.SchemaLibEntry
+	return c.SchemaLibEntry
 }
 
 // CreateSchemaLibByPackResponseBody - a list of Schema objects
@@ -33,11 +33,11 @@ type CreateSchemaLibByPackResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *CreateSchemaLibByPackResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (c *CreateSchemaLibByPackResponseBody) GetItems() []shared.SchemaLibEntry {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSchemaLibByPackResponse struct {
@@ -53,37 +53,37 @@ type CreateSchemaLibByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSchemaLibByPackResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSchemaLibByPackResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSchemaLibByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSchemaLibByPackResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSchemaLibByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSchemaLibByPackResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSchemaLibByPackResponse) GetObject() *CreateSchemaLibByPackResponseBody {
-	if o == nil {
+func (c *CreateSchemaLibByPackResponse) GetObject() *CreateSchemaLibByPackResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSchemaLibByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSchemaLibByPackResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

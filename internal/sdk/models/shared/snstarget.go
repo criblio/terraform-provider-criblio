@@ -160,114 +160,114 @@ func (s *SnsTarget) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SnsTarget) GetID() string {
-	if o == nil {
+func (s *SnsTarget) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SnsTarget) GetType() SnsTargetType {
-	if o == nil {
+func (s *SnsTarget) GetType() SnsTargetType {
+	if s == nil {
 		return SnsTargetType("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SnsTarget) GetSystemFields() []string {
-	if o == nil {
+func (s *SnsTarget) GetSystemFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.SystemFields
+	return s.SystemFields
 }
 
-func (o *SnsTarget) GetAwsAuthenticationMethod() *SnsTargetAuthenticationMethod {
-	if o == nil {
+func (s *SnsTarget) GetAwsAuthenticationMethod() *SnsTargetAuthenticationMethod {
+	if s == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return s.AwsAuthenticationMethod
 }
 
-func (o *SnsTarget) GetAssumeRoleArn() *string {
-	if o == nil {
+func (s *SnsTarget) GetAssumeRoleArn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return s.AssumeRoleArn
 }
 
-func (o *SnsTarget) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (s *SnsTarget) GetAssumeRoleExternalID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return s.AssumeRoleExternalID
 }
 
-func (o *SnsTarget) GetAwsAPIKey() *string {
-	if o == nil {
+func (s *SnsTarget) GetAwsAPIKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return s.AwsAPIKey
 }
 
-func (o *SnsTarget) GetAwsSecretKey() *string {
-	if o == nil {
+func (s *SnsTarget) GetAwsSecretKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return s.AwsSecretKey
 }
 
-func (o *SnsTarget) GetRegion() string {
-	if o == nil {
+func (s *SnsTarget) GetRegion() string {
+	if s == nil {
 		return ""
 	}
-	return o.Region
+	return s.Region
 }
 
-func (o *SnsTarget) GetEndpoint() *string {
-	if o == nil {
+func (s *SnsTarget) GetEndpoint() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Endpoint
+	return s.Endpoint
 }
 
-func (o *SnsTarget) GetAllowlist() []string {
-	if o == nil {
+func (s *SnsTarget) GetAllowlist() []string {
+	if s == nil {
 		return nil
 	}
-	return o.Allowlist
+	return s.Allowlist
 }
 
-func (o *SnsTarget) GetDestinationType() *DestinationType {
-	if o == nil {
+func (s *SnsTarget) GetDestinationType() *DestinationType {
+	if s == nil {
 		return nil
 	}
-	return o.DestinationType
+	return s.DestinationType
 }
 
-func (o *SnsTarget) GetPhoneNumber() *string {
-	if o == nil {
+func (s *SnsTarget) GetPhoneNumber() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PhoneNumber
+	return s.PhoneNumber
 }
 
-func (o *SnsTarget) GetTopicArn() *string {
-	if o == nil {
+func (s *SnsTarget) GetTopicArn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TopicArn
+	return s.TopicArn
 }
 
-func (o *SnsTarget) GetTopicType() *TopicType {
-	if o == nil {
+func (s *SnsTarget) GetTopicType() *TopicType {
+	if s == nil {
 		return nil
 	}
-	return o.TopicType
+	return s.TopicType
 }
 
-func (o *SnsTarget) GetMessageGroupID() *string {
-	if o == nil {
+func (s *SnsTarget) GetMessageGroupID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.MessageGroupID
+	return s.MessageGroupID
 }

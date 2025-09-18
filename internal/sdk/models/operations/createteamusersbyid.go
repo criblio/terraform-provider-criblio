@@ -14,18 +14,18 @@ type CreateTeamUsersByIDRequest struct {
 	MembershipSchema shared.MembershipSchema `request:"mediaType=application/json"`
 }
 
-func (o *CreateTeamUsersByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateTeamUsersByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateTeamUsersByIDRequest) GetMembershipSchema() shared.MembershipSchema {
-	if o == nil {
+func (c *CreateTeamUsersByIDRequest) GetMembershipSchema() shared.MembershipSchema {
+	if c == nil {
 		return shared.MembershipSchema{}
 	}
-	return o.MembershipSchema
+	return c.MembershipSchema
 }
 
 // CreateTeamUsersByIDResponseBody - a list of string objects
@@ -33,11 +33,11 @@ type CreateTeamUsersByIDResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *CreateTeamUsersByIDResponseBody) GetItems() []string {
-	if o == nil {
+func (c *CreateTeamUsersByIDResponseBody) GetItems() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateTeamUsersByIDResponse struct {
@@ -53,37 +53,37 @@ type CreateTeamUsersByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateTeamUsersByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateTeamUsersByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateTeamUsersByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateTeamUsersByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateTeamUsersByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateTeamUsersByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateTeamUsersByIDResponse) GetObject() *CreateTeamUsersByIDResponseBody {
-	if o == nil {
+func (c *CreateTeamUsersByIDResponse) GetObject() *CreateTeamUsersByIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateTeamUsersByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateTeamUsersByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

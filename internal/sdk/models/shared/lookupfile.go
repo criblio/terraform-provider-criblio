@@ -55,37 +55,37 @@ func (l *LookupFile) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LookupFile) GetID() string {
-	if o == nil {
+func (l *LookupFile) GetID() string {
+	if l == nil {
 		return ""
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *LookupFile) GetDescription() *string {
-	if o == nil {
+func (l *LookupFile) GetDescription() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Description
+	return l.Description
 }
 
-func (o *LookupFile) GetTags() *string {
-	if o == nil {
+func (l *LookupFile) GetTags() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Tags
+	return l.Tags
 }
 
-func (o *LookupFile) GetContent() *string {
-	if o == nil {
+func (l *LookupFile) GetContent() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Content
+	return l.Content
 }
 
-func (o *LookupFile) GetMode() *LookupFileMode {
-	if o == nil {
+func (l *LookupFile) GetMode() *LookupFileMode {
+	if l == nil {
 		return nil
 	}
-	return o.Mode
+	return l.Mode
 }

@@ -10,37 +10,37 @@ type FilesystemEntry struct {
 	Type        string         `json:"type"`
 }
 
-func (o *FilesystemEntry) GetMode() *string {
-	if o == nil {
+func (f *FilesystemEntry) GetMode() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Mode
+	return f.Mode
 }
 
-func (o *FilesystemEntry) GetName() string {
-	if o == nil {
+func (f *FilesystemEntry) GetName() string {
+	if f == nil {
 		return ""
 	}
-	return o.Name
+	return f.Name
 }
 
-func (o *FilesystemEntry) GetStats() map[string]any {
-	if o == nil {
+func (f *FilesystemEntry) GetStats() map[string]any {
+	if f == nil {
 		return nil
 	}
-	return o.Stats
+	return f.Stats
 }
 
-func (o *FilesystemEntry) GetSymLinkInfo() *SymLinkInfo {
-	if o == nil {
+func (f *FilesystemEntry) GetSymLinkInfo() *SymLinkInfo {
+	if f == nil {
 		return nil
 	}
-	return o.SymLinkInfo
+	return f.SymLinkInfo
 }
 
-func (o *FilesystemEntry) GetType() string {
-	if o == nil {
+func (f *FilesystemEntry) GetType() string {
+	if f == nil {
 		return ""
 	}
-	return o.Type
+	return f.Type
 }

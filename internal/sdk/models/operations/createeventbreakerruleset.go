@@ -14,18 +14,18 @@ type CreateEventBreakerRulesetRequest struct {
 	EventBreakerRuleset shared.EventBreakerRuleset `request:"mediaType=application/json"`
 }
 
-func (o *CreateEventBreakerRulesetRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateEventBreakerRulesetRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateEventBreakerRulesetRequest) GetEventBreakerRuleset() shared.EventBreakerRuleset {
-	if o == nil {
+func (c *CreateEventBreakerRulesetRequest) GetEventBreakerRuleset() shared.EventBreakerRuleset {
+	if c == nil {
 		return shared.EventBreakerRuleset{}
 	}
-	return o.EventBreakerRuleset
+	return c.EventBreakerRuleset
 }
 
 // CreateEventBreakerRulesetResponseBody - a list of Event Breaker Ruleset objects
@@ -45,37 +45,37 @@ type CreateEventBreakerRulesetResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateEventBreakerRulesetResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateEventBreakerRulesetResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateEventBreakerRulesetResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateEventBreakerRulesetResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateEventBreakerRulesetResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateEventBreakerRulesetResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateEventBreakerRulesetResponse) GetObject() *CreateEventBreakerRulesetResponseBody {
-	if o == nil {
+func (c *CreateEventBreakerRulesetResponse) GetObject() *CreateEventBreakerRulesetResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateEventBreakerRulesetResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateEventBreakerRulesetResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

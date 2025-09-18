@@ -10,37 +10,37 @@ type Subscription struct {
 	Pipeline    string  `json:"pipeline"`
 }
 
-func (o *Subscription) GetDescription() *string {
-	if o == nil {
+func (s *Subscription) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *Subscription) GetDisabled() *bool {
-	if o == nil {
+func (s *Subscription) GetDisabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Disabled
+	return s.Disabled
 }
 
-func (o *Subscription) GetFilter() *string {
-	if o == nil {
+func (s *Subscription) GetFilter() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Filter
+	return s.Filter
 }
 
-func (o *Subscription) GetID() string {
-	if o == nil {
+func (s *Subscription) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *Subscription) GetPipeline() string {
-	if o == nil {
+func (s *Subscription) GetPipeline() string {
+	if s == nil {
 		return ""
 	}
-	return o.Pipeline
+	return s.Pipeline
 }

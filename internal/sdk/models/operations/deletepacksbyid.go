@@ -15,25 +15,25 @@ type DeletePacksByIDRequest struct {
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 }
 
-func (o *DeletePacksByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeletePacksByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeletePacksByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeletePacksByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
-func (o *DeletePacksByIDRequest) GetDisabled() *bool {
-	if o == nil {
+func (d *DeletePacksByIDRequest) GetDisabled() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Disabled
+	return d.Disabled
 }
 
 // DeletePacksByIDResponseBody - a list of Pipeline objects
@@ -41,11 +41,11 @@ type DeletePacksByIDResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *DeletePacksByIDResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (d *DeletePacksByIDResponseBody) GetItems() []shared.Pipeline {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeletePacksByIDResponse struct {
@@ -61,37 +61,37 @@ type DeletePacksByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeletePacksByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeletePacksByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeletePacksByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeletePacksByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeletePacksByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeletePacksByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeletePacksByIDResponse) GetObject() *DeletePacksByIDResponseBody {
-	if o == nil {
+func (d *DeletePacksByIDResponse) GetObject() *DeletePacksByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeletePacksByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeletePacksByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

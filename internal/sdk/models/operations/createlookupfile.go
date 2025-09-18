@@ -14,18 +14,18 @@ type CreateLookupFileRequest struct {
 	LookupFile shared.LookupFile `request:"mediaType=application/json"`
 }
 
-func (o *CreateLookupFileRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateLookupFileRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateLookupFileRequest) GetLookupFile() shared.LookupFile {
-	if o == nil {
+func (c *CreateLookupFileRequest) GetLookupFile() shared.LookupFile {
+	if c == nil {
 		return shared.LookupFile{}
 	}
-	return o.LookupFile
+	return c.LookupFile
 }
 
 // CreateLookupFileResponseBody - a list of LookupFile objects
@@ -45,37 +45,37 @@ type CreateLookupFileResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateLookupFileResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateLookupFileResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateLookupFileResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateLookupFileResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateLookupFileResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateLookupFileResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateLookupFileResponse) GetObject() *CreateLookupFileResponseBody {
-	if o == nil {
+func (c *CreateLookupFileResponse) GetObject() *CreateLookupFileResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateLookupFileResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateLookupFileResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

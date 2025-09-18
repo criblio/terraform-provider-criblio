@@ -12,11 +12,11 @@ type GetLicenseResponseBody struct {
 	Items []shared.DailyUsageMetrics `json:"items,omitempty"`
 }
 
-func (o *GetLicenseResponseBody) GetItems() []shared.DailyUsageMetrics {
-	if o == nil {
+func (g *GetLicenseResponseBody) GetItems() []shared.DailyUsageMetrics {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetLicenseResponse struct {
@@ -32,37 +32,37 @@ type GetLicenseResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetLicenseResponse) GetContentType() string {
-	if o == nil {
+func (g *GetLicenseResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetLicenseResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetLicenseResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetLicenseResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetLicenseResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetLicenseResponse) GetObject() *GetLicenseResponseBody {
-	if o == nil {
+func (g *GetLicenseResponse) GetObject() *GetLicenseResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetLicenseResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetLicenseResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

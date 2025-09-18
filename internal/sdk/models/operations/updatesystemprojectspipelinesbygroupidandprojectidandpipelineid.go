@@ -18,32 +18,32 @@ type UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest stru
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest) GetProjectID() string {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest) GetProjectID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ProjectID
+	return u.ProjectID
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest) GetPipelineID() string {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest) GetPipelineID() string {
+	if u == nil {
 		return ""
 	}
-	return o.PipelineID
+	return u.PipelineID
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest) GetPipeline() shared.Pipeline {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest) GetPipeline() shared.Pipeline {
+	if u == nil {
 		return shared.Pipeline{}
 	}
-	return o.Pipeline
+	return u.Pipeline
 }
 
 // UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody - A list of Pipeline objects for specified Project
@@ -51,11 +51,11 @@ type UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody) GetItems() []shared.Pipeline {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse struct {
@@ -71,37 +71,37 @@ type UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse str
 	Error *shared.Error
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetObject() *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetObject() *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

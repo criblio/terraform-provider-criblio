@@ -14,18 +14,18 @@ type CreateSystemProjectsVersionCommitByProjectIDRequest struct {
 	ProjectGitCommitParams shared.ProjectGitCommitParams `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemProjectsVersionCommitByProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByProjectIDRequest) GetProjectID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProjectID
+	return c.ProjectID
 }
 
-func (o *CreateSystemProjectsVersionCommitByProjectIDRequest) GetProjectGitCommitParams() shared.ProjectGitCommitParams {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByProjectIDRequest) GetProjectGitCommitParams() shared.ProjectGitCommitParams {
+	if c == nil {
 		return shared.ProjectGitCommitParams{}
 	}
-	return o.ProjectGitCommitParams
+	return c.ProjectGitCommitParams
 }
 
 // CreateSystemProjectsVersionCommitByProjectIDResponseBody - a list of GitCommitSummary objects
@@ -33,11 +33,11 @@ type CreateSystemProjectsVersionCommitByProjectIDResponseBody struct {
 	Items []shared.GitCommitSummary `json:"items,omitempty"`
 }
 
-func (o *CreateSystemProjectsVersionCommitByProjectIDResponseBody) GetItems() []shared.GitCommitSummary {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByProjectIDResponseBody) GetItems() []shared.GitCommitSummary {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemProjectsVersionCommitByProjectIDResponse struct {
@@ -53,37 +53,37 @@ type CreateSystemProjectsVersionCommitByProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemProjectsVersionCommitByProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByProjectIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemProjectsVersionCommitByProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByProjectIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemProjectsVersionCommitByProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByProjectIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemProjectsVersionCommitByProjectIDResponse) GetObject() *CreateSystemProjectsVersionCommitByProjectIDResponseBody {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByProjectIDResponse) GetObject() *CreateSystemProjectsVersionCommitByProjectIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemProjectsVersionCommitByProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByProjectIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

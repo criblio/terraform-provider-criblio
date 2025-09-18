@@ -12,51 +12,51 @@ type ProtobufLibraryConfig struct {
 	Tags               *string                          `json:"tags,omitempty"`
 }
 
-func (o *ProtobufLibraryConfig) GetAvailableEncodings() []ProtobufEncodingConfig {
-	if o == nil {
+func (p *ProtobufLibraryConfig) GetAvailableEncodings() []ProtobufEncodingConfig {
+	if p == nil {
 		return nil
 	}
-	return o.AvailableEncodings
+	return p.AvailableEncodings
 }
 
-func (o *ProtobufLibraryConfig) GetConversion() *ProtobufLibraryConversionConfig {
-	if o == nil {
+func (p *ProtobufLibraryConfig) GetConversion() *ProtobufLibraryConversionConfig {
+	if p == nil {
 		return nil
 	}
-	return o.Conversion
+	return p.Conversion
 }
 
-func (o *ProtobufLibraryConfig) GetDependsOn() []string {
-	if o == nil {
+func (p *ProtobufLibraryConfig) GetDependsOn() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.DependsOn
+	return p.DependsOn
 }
 
-func (o *ProtobufLibraryConfig) GetDescription() string {
-	if o == nil {
+func (p *ProtobufLibraryConfig) GetDescription() string {
+	if p == nil {
 		return ""
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *ProtobufLibraryConfig) GetID() string {
-	if o == nil {
+func (p *ProtobufLibraryConfig) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *ProtobufLibraryConfig) GetName() string {
-	if o == nil {
+func (p *ProtobufLibraryConfig) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *ProtobufLibraryConfig) GetTags() *string {
-	if o == nil {
+func (p *ProtobufLibraryConfig) GetTags() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Tags
+	return p.Tags
 }

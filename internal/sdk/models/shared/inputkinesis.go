@@ -47,18 +47,18 @@ func (i *InputKinesisConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKinesisConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputKinesisConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKinesisConnection) GetOutput() string {
-	if o == nil {
+func (i *InputKinesisConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputKinesisMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputKinesisPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKinesisPq) GetMode() *InputKinesisMode {
-	if o == nil {
+func (i *InputKinesisPq) GetMode() *InputKinesisMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputKinesisPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputKinesisPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputKinesisPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputKinesisPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputKinesisPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputKinesisPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputKinesisPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputKinesisPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputKinesisPq) GetPath() *string {
-	if o == nil {
+func (i *InputKinesisPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputKinesisPq) GetCompress() *InputKinesisCompression {
-	if o == nil {
+func (i *InputKinesisPq) GetCompress() *InputKinesisCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // ShardIteratorStart - Location at which to start reading a shard for the first time
@@ -353,18 +353,18 @@ func (i *InputKinesisMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKinesisMetadatum) GetName() string {
-	if o == nil {
+func (i *InputKinesisMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputKinesisMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputKinesisMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputKinesis struct {
@@ -445,247 +445,247 @@ func (i *InputKinesis) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKinesis) GetID() *string {
-	if o == nil {
+func (i *InputKinesis) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputKinesis) GetType() *InputKinesisType {
-	if o == nil {
+func (i *InputKinesis) GetType() *InputKinesisType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputKinesis) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKinesis) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKinesis) GetPipeline() *string {
-	if o == nil {
+func (i *InputKinesis) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKinesis) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputKinesis) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputKinesis) GetEnvironment() *string {
-	if o == nil {
+func (i *InputKinesis) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputKinesis) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputKinesis) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputKinesis) GetStreamtags() []string {
-	if o == nil {
+func (i *InputKinesis) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputKinesis) GetConnections() []InputKinesisConnection {
-	if o == nil {
+func (i *InputKinesis) GetConnections() []InputKinesisConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputKinesis) GetPq() *InputKinesisPq {
-	if o == nil {
+func (i *InputKinesis) GetPq() *InputKinesisPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputKinesis) GetStreamName() string {
-	if o == nil {
+func (i *InputKinesis) GetStreamName() string {
+	if i == nil {
 		return ""
 	}
-	return o.StreamName
+	return i.StreamName
 }
 
-func (o *InputKinesis) GetServiceInterval() *float64 {
-	if o == nil {
+func (i *InputKinesis) GetServiceInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ServiceInterval
+	return i.ServiceInterval
 }
 
-func (o *InputKinesis) GetShardExpr() *string {
-	if o == nil {
+func (i *InputKinesis) GetShardExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ShardExpr
+	return i.ShardExpr
 }
 
-func (o *InputKinesis) GetShardIteratorType() *ShardIteratorStart {
-	if o == nil {
+func (i *InputKinesis) GetShardIteratorType() *ShardIteratorStart {
+	if i == nil {
 		return nil
 	}
-	return o.ShardIteratorType
+	return i.ShardIteratorType
 }
 
-func (o *InputKinesis) GetPayloadFormat() *InputKinesisRecordDataFormat {
-	if o == nil {
+func (i *InputKinesis) GetPayloadFormat() *InputKinesisRecordDataFormat {
+	if i == nil {
 		return nil
 	}
-	return o.PayloadFormat
+	return i.PayloadFormat
 }
 
-func (o *InputKinesis) GetGetRecordsLimit() *float64 {
-	if o == nil {
+func (i *InputKinesis) GetGetRecordsLimit() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.GetRecordsLimit
+	return i.GetRecordsLimit
 }
 
-func (o *InputKinesis) GetGetRecordsLimitTotal() *float64 {
-	if o == nil {
+func (i *InputKinesis) GetGetRecordsLimitTotal() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.GetRecordsLimitTotal
+	return i.GetRecordsLimitTotal
 }
 
-func (o *InputKinesis) GetLoadBalancingAlgorithm() *ShardLoadBalancing {
-	if o == nil {
+func (i *InputKinesis) GetLoadBalancingAlgorithm() *ShardLoadBalancing {
+	if i == nil {
 		return nil
 	}
-	return o.LoadBalancingAlgorithm
+	return i.LoadBalancingAlgorithm
 }
 
-func (o *InputKinesis) GetAwsAuthenticationMethod() *InputKinesisAuthenticationMethod {
-	if o == nil {
+func (i *InputKinesis) GetAwsAuthenticationMethod() *InputKinesisAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputKinesis) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputKinesis) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputKinesis) GetRegion() string {
-	if o == nil {
+func (i *InputKinesis) GetRegion() string {
+	if i == nil {
 		return ""
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputKinesis) GetEndpoint() *string {
-	if o == nil {
+func (i *InputKinesis) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputKinesis) GetSignatureVersion() *InputKinesisSignatureVersion {
-	if o == nil {
+func (i *InputKinesis) GetSignatureVersion() *InputKinesisSignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputKinesis) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputKinesis) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputKinesis) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputKinesis) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputKinesis) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputKinesis) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputKinesis) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputKinesis) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputKinesis) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputKinesis) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputKinesis) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputKinesis) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputKinesis) GetVerifyKPLCheckSums() *bool {
-	if o == nil {
+func (i *InputKinesis) GetVerifyKPLCheckSums() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.VerifyKPLCheckSums
+	return i.VerifyKPLCheckSums
 }
 
-func (o *InputKinesis) GetAvoidDuplicates() *bool {
-	if o == nil {
+func (i *InputKinesis) GetAvoidDuplicates() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.AvoidDuplicates
+	return i.AvoidDuplicates
 }
 
-func (o *InputKinesis) GetMetadata() []InputKinesisMetadatum {
-	if o == nil {
+func (i *InputKinesis) GetMetadata() []InputKinesisMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputKinesis) GetDescription() *string {
-	if o == nil {
+func (i *InputKinesis) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputKinesis) GetAwsAPIKey() *string {
-	if o == nil {
+func (i *InputKinesis) GetAwsAPIKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return i.AwsAPIKey
 }
 
-func (o *InputKinesis) GetAwsSecret() *string {
-	if o == nil {
+func (i *InputKinesis) GetAwsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecret
+	return i.AwsSecret
 }

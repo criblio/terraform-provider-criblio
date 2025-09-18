@@ -6,9 +6,9 @@ type ColumnOrderSettings struct {
 	Order any `json:"order"`
 }
 
-func (o *ColumnOrderSettings) GetOrder() any {
-	if o == nil {
+func (c *ColumnOrderSettings) GetOrder() any {
+	if c == nil {
 		return nil
 	}
-	return o.Order
+	return c.Order
 }

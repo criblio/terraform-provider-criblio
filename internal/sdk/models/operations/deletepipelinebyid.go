@@ -14,18 +14,18 @@ type DeletePipelineByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeletePipelineByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeletePipelineByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeletePipelineByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeletePipelineByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeletePipelineByIDResponseBody - a list of Pipeline objects
@@ -33,11 +33,11 @@ type DeletePipelineByIDResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *DeletePipelineByIDResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (d *DeletePipelineByIDResponseBody) GetItems() []shared.Pipeline {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeletePipelineByIDResponse struct {
@@ -53,37 +53,37 @@ type DeletePipelineByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeletePipelineByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeletePipelineByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeletePipelineByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeletePipelineByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeletePipelineByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeletePipelineByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeletePipelineByIDResponse) GetObject() *DeletePipelineByIDResponseBody {
-	if o == nil {
+func (d *DeletePipelineByIDResponse) GetObject() *DeletePipelineByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeletePipelineByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeletePipelineByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

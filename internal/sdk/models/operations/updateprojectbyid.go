@@ -16,25 +16,25 @@ type UpdateProjectByIDRequest struct {
 	ProjectConfig shared.ProjectConfig `request:"mediaType=application/json"`
 }
 
-func (o *UpdateProjectByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateProjectByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateProjectByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateProjectByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateProjectByIDRequest) GetProjectConfig() shared.ProjectConfig {
-	if o == nil {
+func (u *UpdateProjectByIDRequest) GetProjectConfig() shared.ProjectConfig {
+	if u == nil {
 		return shared.ProjectConfig{}
 	}
-	return o.ProjectConfig
+	return u.ProjectConfig
 }
 
 // UpdateProjectByIDResponseBody - a list of Project objects
@@ -42,11 +42,11 @@ type UpdateProjectByIDResponseBody struct {
 	Items []shared.ProjectConfig `json:"items,omitempty"`
 }
 
-func (o *UpdateProjectByIDResponseBody) GetItems() []shared.ProjectConfig {
-	if o == nil {
+func (u *UpdateProjectByIDResponseBody) GetItems() []shared.ProjectConfig {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateProjectByIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateProjectByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateProjectByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateProjectByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateProjectByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateProjectByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateProjectByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateProjectByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateProjectByIDResponse) GetObject() *UpdateProjectByIDResponseBody {
-	if o == nil {
+func (u *UpdateProjectByIDResponse) GetObject() *UpdateProjectByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateProjectByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateProjectByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -47,18 +47,18 @@ func (i *InputKubeMetricsConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeMetricsConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputKubeMetricsConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKubeMetricsConnection) GetOutput() string {
-	if o == nil {
+func (i *InputKubeMetricsConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputKubeMetricsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputKubeMetricsPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeMetricsPq) GetMode() *InputKubeMetricsMode {
-	if o == nil {
+func (i *InputKubeMetricsPq) GetMode() *InputKubeMetricsMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputKubeMetricsPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputKubeMetricsPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputKubeMetricsPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputKubeMetricsPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputKubeMetricsPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputKubeMetricsPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputKubeMetricsPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputKubeMetricsPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputKubeMetricsPq) GetPath() *string {
-	if o == nil {
+func (i *InputKubeMetricsPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputKubeMetricsPq) GetCompress() *InputKubeMetricsCompression {
-	if o == nil {
+func (i *InputKubeMetricsPq) GetCompress() *InputKubeMetricsCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputKubeMetricsRule struct {
@@ -210,18 +210,18 @@ func (i *InputKubeMetricsRule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeMetricsRule) GetFilter() string {
-	if o == nil {
+func (i *InputKubeMetricsRule) GetFilter() string {
+	if i == nil {
 		return ""
 	}
-	return o.Filter
+	return i.Filter
 }
 
-func (o *InputKubeMetricsRule) GetDescription() *string {
-	if o == nil {
+func (i *InputKubeMetricsRule) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
 type InputKubeMetricsMetadatum struct {
@@ -241,18 +241,18 @@ func (i *InputKubeMetricsMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeMetricsMetadatum) GetName() string {
-	if o == nil {
+func (i *InputKubeMetricsMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputKubeMetricsMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputKubeMetricsMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputKubeMetricsDataCompressionFormat string
@@ -306,46 +306,46 @@ func (i *InputKubeMetricsPersistence) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeMetricsPersistence) GetEnable() *bool {
-	if o == nil {
+func (i *InputKubeMetricsPersistence) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
-func (o *InputKubeMetricsPersistence) GetTimeWindow() *string {
-	if o == nil {
+func (i *InputKubeMetricsPersistence) GetTimeWindow() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWindow
+	return i.TimeWindow
 }
 
-func (o *InputKubeMetricsPersistence) GetMaxDataSize() *string {
-	if o == nil {
+func (i *InputKubeMetricsPersistence) GetMaxDataSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataSize
+	return i.MaxDataSize
 }
 
-func (o *InputKubeMetricsPersistence) GetMaxDataTime() *string {
-	if o == nil {
+func (i *InputKubeMetricsPersistence) GetMaxDataTime() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataTime
+	return i.MaxDataTime
 }
 
-func (o *InputKubeMetricsPersistence) GetCompress() *InputKubeMetricsDataCompressionFormat {
-	if o == nil {
+func (i *InputKubeMetricsPersistence) GetCompress() *InputKubeMetricsDataCompressionFormat {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
-func (o *InputKubeMetricsPersistence) GetDestPath() *string {
-	if o == nil {
+func (i *InputKubeMetricsPersistence) GetDestPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.DestPath
+	return i.DestPath
 }
 
 type InputKubeMetrics struct {
@@ -387,107 +387,107 @@ func (i *InputKubeMetrics) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeMetrics) GetID() string {
-	if o == nil {
+func (i *InputKubeMetrics) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputKubeMetrics) GetType() InputKubeMetricsType {
-	if o == nil {
+func (i *InputKubeMetrics) GetType() InputKubeMetricsType {
+	if i == nil {
 		return InputKubeMetricsType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputKubeMetrics) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKubeMetrics) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKubeMetrics) GetPipeline() *string {
-	if o == nil {
+func (i *InputKubeMetrics) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKubeMetrics) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputKubeMetrics) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputKubeMetrics) GetEnvironment() *string {
-	if o == nil {
+func (i *InputKubeMetrics) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputKubeMetrics) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputKubeMetrics) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputKubeMetrics) GetStreamtags() []string {
-	if o == nil {
+func (i *InputKubeMetrics) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputKubeMetrics) GetConnections() []InputKubeMetricsConnection {
-	if o == nil {
+func (i *InputKubeMetrics) GetConnections() []InputKubeMetricsConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputKubeMetrics) GetPq() *InputKubeMetricsPq {
-	if o == nil {
+func (i *InputKubeMetrics) GetPq() *InputKubeMetricsPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputKubeMetrics) GetInterval() *float64 {
-	if o == nil {
+func (i *InputKubeMetrics) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputKubeMetrics) GetRules() []InputKubeMetricsRule {
-	if o == nil {
+func (i *InputKubeMetrics) GetRules() []InputKubeMetricsRule {
+	if i == nil {
 		return nil
 	}
-	return o.Rules
+	return i.Rules
 }
 
-func (o *InputKubeMetrics) GetMetadata() []InputKubeMetricsMetadatum {
-	if o == nil {
+func (i *InputKubeMetrics) GetMetadata() []InputKubeMetricsMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputKubeMetrics) GetPersistence() *InputKubeMetricsPersistence {
-	if o == nil {
+func (i *InputKubeMetrics) GetPersistence() *InputKubeMetricsPersistence {
+	if i == nil {
 		return nil
 	}
-	return o.Persistence
+	return i.Persistence
 }
 
-func (o *InputKubeMetrics) GetDescription() *string {
-	if o == nil {
+func (i *InputKubeMetrics) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

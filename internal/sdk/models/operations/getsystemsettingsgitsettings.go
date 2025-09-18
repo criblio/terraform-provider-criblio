@@ -12,11 +12,11 @@ type GetSystemSettingsGitSettingsResponseBody struct {
 	Items []shared.GitSettings `json:"items,omitempty"`
 }
 
-func (o *GetSystemSettingsGitSettingsResponseBody) GetItems() []shared.GitSettings {
-	if o == nil {
+func (g *GetSystemSettingsGitSettingsResponseBody) GetItems() []shared.GitSettings {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemSettingsGitSettingsResponse struct {
@@ -32,37 +32,37 @@ type GetSystemSettingsGitSettingsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemSettingsGitSettingsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemSettingsGitSettingsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemSettingsGitSettingsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemSettingsGitSettingsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemSettingsGitSettingsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemSettingsGitSettingsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemSettingsGitSettingsResponse) GetObject() *GetSystemSettingsGitSettingsResponseBody {
-	if o == nil {
+func (g *GetSystemSettingsGitSettingsResponse) GetObject() *GetSystemSettingsGitSettingsResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemSettingsGitSettingsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemSettingsGitSettingsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

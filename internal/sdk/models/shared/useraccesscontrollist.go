@@ -7,16 +7,16 @@ type UserAccessControlList struct {
 	User  string           `json:"user"`
 }
 
-func (o *UserAccessControlList) GetPerms() []ResourcePolicy {
-	if o == nil {
+func (u *UserAccessControlList) GetPerms() []ResourcePolicy {
+	if u == nil {
 		return []ResourcePolicy{}
 	}
-	return o.Perms
+	return u.Perms
 }
 
-func (o *UserAccessControlList) GetUser() string {
-	if o == nil {
+func (u *UserAccessControlList) GetUser() string {
+	if u == nil {
 		return ""
 	}
-	return o.User
+	return u.User
 }

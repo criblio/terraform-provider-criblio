@@ -47,18 +47,18 @@ func (i *InputFirehoseConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFirehoseConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputFirehoseConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputFirehoseConnection) GetOutput() string {
-	if o == nil {
+func (i *InputFirehoseConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputFirehoseMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputFirehosePq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFirehosePq) GetMode() *InputFirehoseMode {
-	if o == nil {
+func (i *InputFirehosePq) GetMode() *InputFirehoseMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputFirehosePq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputFirehosePq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputFirehosePq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputFirehosePq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputFirehosePq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputFirehosePq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputFirehosePq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputFirehosePq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputFirehosePq) GetPath() *string {
-	if o == nil {
+func (i *InputFirehosePq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputFirehosePq) GetCompress() *InputFirehoseCompression {
-	if o == nil {
+func (i *InputFirehosePq) GetCompress() *InputFirehoseCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputFirehoseMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputFirehoseTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetMinVersion() *InputFirehoseMinimumTLSVersion {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetMinVersion() *InputFirehoseMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputFirehoseTLSSettingsServerSide) GetMaxVersion() *InputFirehoseMaximumTLSVersion {
-	if o == nil {
+func (i *InputFirehoseTLSSettingsServerSide) GetMaxVersion() *InputFirehoseMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputFirehoseMetadatum struct {
@@ -381,18 +381,18 @@ func (i *InputFirehoseMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFirehoseMetadatum) GetName() string {
-	if o == nil {
+func (i *InputFirehoseMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputFirehoseMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputFirehoseMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputFirehose struct {
@@ -458,191 +458,191 @@ func (i *InputFirehose) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFirehose) GetID() *string {
-	if o == nil {
+func (i *InputFirehose) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputFirehose) GetType() *InputFirehoseType {
-	if o == nil {
+func (i *InputFirehose) GetType() *InputFirehoseType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputFirehose) GetDisabled() *bool {
-	if o == nil {
+func (i *InputFirehose) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputFirehose) GetPipeline() *string {
-	if o == nil {
+func (i *InputFirehose) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputFirehose) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputFirehose) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputFirehose) GetEnvironment() *string {
-	if o == nil {
+func (i *InputFirehose) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputFirehose) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputFirehose) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputFirehose) GetStreamtags() []string {
-	if o == nil {
+func (i *InputFirehose) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputFirehose) GetConnections() []InputFirehoseConnection {
-	if o == nil {
+func (i *InputFirehose) GetConnections() []InputFirehoseConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputFirehose) GetPq() *InputFirehosePq {
-	if o == nil {
+func (i *InputFirehose) GetPq() *InputFirehosePq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputFirehose) GetHost() *string {
-	if o == nil {
+func (i *InputFirehose) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputFirehose) GetPort() float64 {
-	if o == nil {
+func (i *InputFirehose) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputFirehose) GetAuthTokens() []string {
-	if o == nil {
+func (i *InputFirehose) GetAuthTokens() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthTokens
+	return i.AuthTokens
 }
 
-func (o *InputFirehose) GetTLS() *InputFirehoseTLSSettingsServerSide {
-	if o == nil {
+func (i *InputFirehose) GetTLS() *InputFirehoseTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputFirehose) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputFirehose) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputFirehose) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputFirehose) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputFirehose) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputFirehose) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputFirehose) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputFirehose) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputFirehose) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputFirehose) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputFirehose) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputFirehose) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputFirehose) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputFirehose) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputFirehose) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputFirehose) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputFirehose) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputFirehose) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputFirehose) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputFirehose) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputFirehose) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputFirehose) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputFirehose) GetMetadata() []InputFirehoseMetadatum {
-	if o == nil {
+func (i *InputFirehose) GetMetadata() []InputFirehoseMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputFirehose) GetDescription() *string {
-	if o == nil {
+func (i *InputFirehose) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

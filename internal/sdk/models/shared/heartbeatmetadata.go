@@ -13,39 +13,39 @@ type HeartbeatMetadataAws struct {
 	Zone    string                 `json:"zone"`
 }
 
-func (o *HeartbeatMetadataAws) GetEnabled() bool {
-	if o == nil {
+func (h *HeartbeatMetadataAws) GetEnabled() bool {
+	if h == nil {
 		return false
 	}
-	return o.Enabled
+	return h.Enabled
 }
 
-func (o *HeartbeatMetadataAws) GetRegion() string {
-	if o == nil {
+func (h *HeartbeatMetadataAws) GetRegion() string {
+	if h == nil {
 		return ""
 	}
-	return o.Region
+	return h.Region
 }
 
-func (o *HeartbeatMetadataAws) GetTags() *HeartbeatMetadataTags {
-	if o == nil {
+func (h *HeartbeatMetadataAws) GetTags() *HeartbeatMetadataTags {
+	if h == nil {
 		return nil
 	}
-	return o.Tags
+	return h.Tags
 }
 
-func (o *HeartbeatMetadataAws) GetType() string {
-	if o == nil {
+func (h *HeartbeatMetadataAws) GetType() string {
+	if h == nil {
 		return ""
 	}
-	return o.Type
+	return h.Type
 }
 
-func (o *HeartbeatMetadataAws) GetZone() string {
-	if o == nil {
+func (h *HeartbeatMetadataAws) GetZone() string {
+	if h == nil {
 		return ""
 	}
-	return o.Zone
+	return h.Zone
 }
 
 type HeartbeatMetadataHostOs struct {
@@ -55,32 +55,32 @@ type HeartbeatMetadataHostOs struct {
 	Version   string   `json:"version"`
 }
 
-func (o *HeartbeatMetadataHostOs) GetAddresses() []string {
-	if o == nil {
+func (h *HeartbeatMetadataHostOs) GetAddresses() []string {
+	if h == nil {
 		return []string{}
 	}
-	return o.Addresses
+	return h.Addresses
 }
 
-func (o *HeartbeatMetadataHostOs) GetEnabled() bool {
-	if o == nil {
+func (h *HeartbeatMetadataHostOs) GetEnabled() bool {
+	if h == nil {
 		return false
 	}
-	return o.Enabled
+	return h.Enabled
 }
 
-func (o *HeartbeatMetadataHostOs) GetID() string {
-	if o == nil {
+func (h *HeartbeatMetadataHostOs) GetID() string {
+	if h == nil {
 		return ""
 	}
-	return o.ID
+	return h.ID
 }
 
-func (o *HeartbeatMetadataHostOs) GetVersion() string {
-	if o == nil {
+func (h *HeartbeatMetadataHostOs) GetVersion() string {
+	if h == nil {
 		return ""
 	}
-	return o.Version
+	return h.Version
 }
 
 type HeartbeatMetadataOwner struct {
@@ -88,18 +88,18 @@ type HeartbeatMetadataOwner struct {
 	Name string `json:"name"`
 }
 
-func (o *HeartbeatMetadataOwner) GetKind() string {
-	if o == nil {
+func (h *HeartbeatMetadataOwner) GetKind() string {
+	if h == nil {
 		return ""
 	}
-	return o.Kind
+	return h.Kind
 }
 
-func (o *HeartbeatMetadataOwner) GetName() string {
-	if o == nil {
+func (h *HeartbeatMetadataOwner) GetName() string {
+	if h == nil {
 		return ""
 	}
-	return o.Name
+	return h.Name
 }
 
 type HeartbeatMetadataKube struct {
@@ -111,46 +111,46 @@ type HeartbeatMetadataKube struct {
 	Source    string                  `json:"source"`
 }
 
-func (o *HeartbeatMetadataKube) GetEnabled() bool {
-	if o == nil {
+func (h *HeartbeatMetadataKube) GetEnabled() bool {
+	if h == nil {
 		return false
 	}
-	return o.Enabled
+	return h.Enabled
 }
 
-func (o *HeartbeatMetadataKube) GetNamespace() string {
-	if o == nil {
+func (h *HeartbeatMetadataKube) GetNamespace() string {
+	if h == nil {
 		return ""
 	}
-	return o.Namespace
+	return h.Namespace
 }
 
-func (o *HeartbeatMetadataKube) GetNode() string {
-	if o == nil {
+func (h *HeartbeatMetadataKube) GetNode() string {
+	if h == nil {
 		return ""
 	}
-	return o.Node
+	return h.Node
 }
 
-func (o *HeartbeatMetadataKube) GetOwner() *HeartbeatMetadataOwner {
-	if o == nil {
+func (h *HeartbeatMetadataKube) GetOwner() *HeartbeatMetadataOwner {
+	if h == nil {
 		return nil
 	}
-	return o.Owner
+	return h.Owner
 }
 
-func (o *HeartbeatMetadataKube) GetPod() string {
-	if o == nil {
+func (h *HeartbeatMetadataKube) GetPod() string {
+	if h == nil {
 		return ""
 	}
-	return o.Pod
+	return h.Pod
 }
 
-func (o *HeartbeatMetadataKube) GetSource() string {
-	if o == nil {
+func (h *HeartbeatMetadataKube) GetSource() string {
+	if h == nil {
 		return ""
 	}
-	return o.Source
+	return h.Source
 }
 
 type HeartbeatMetadataOs struct {
@@ -160,32 +160,32 @@ type HeartbeatMetadataOs struct {
 	Version   string   `json:"version"`
 }
 
-func (o *HeartbeatMetadataOs) GetAddresses() []string {
-	if o == nil {
+func (h *HeartbeatMetadataOs) GetAddresses() []string {
+	if h == nil {
 		return []string{}
 	}
-	return o.Addresses
+	return h.Addresses
 }
 
-func (o *HeartbeatMetadataOs) GetEnabled() bool {
-	if o == nil {
+func (h *HeartbeatMetadataOs) GetEnabled() bool {
+	if h == nil {
 		return false
 	}
-	return o.Enabled
+	return h.Enabled
 }
 
-func (o *HeartbeatMetadataOs) GetID() string {
-	if o == nil {
+func (h *HeartbeatMetadataOs) GetID() string {
+	if h == nil {
 		return ""
 	}
-	return o.ID
+	return h.ID
 }
 
-func (o *HeartbeatMetadataOs) GetVersion() string {
-	if o == nil {
+func (h *HeartbeatMetadataOs) GetVersion() string {
+	if h == nil {
 		return ""
 	}
-	return o.Version
+	return h.Version
 }
 
 type HeartbeatMetadata struct {
@@ -195,30 +195,30 @@ type HeartbeatMetadata struct {
 	Os     *HeartbeatMetadataOs     `json:"os,omitempty"`
 }
 
-func (o *HeartbeatMetadata) GetAws() *HeartbeatMetadataAws {
-	if o == nil {
+func (h *HeartbeatMetadata) GetAws() *HeartbeatMetadataAws {
+	if h == nil {
 		return nil
 	}
-	return o.Aws
+	return h.Aws
 }
 
-func (o *HeartbeatMetadata) GetHostOs() *HeartbeatMetadataHostOs {
-	if o == nil {
+func (h *HeartbeatMetadata) GetHostOs() *HeartbeatMetadataHostOs {
+	if h == nil {
 		return nil
 	}
-	return o.HostOs
+	return h.HostOs
 }
 
-func (o *HeartbeatMetadata) GetKube() *HeartbeatMetadataKube {
-	if o == nil {
+func (h *HeartbeatMetadata) GetKube() *HeartbeatMetadataKube {
+	if h == nil {
 		return nil
 	}
-	return o.Kube
+	return h.Kube
 }
 
-func (o *HeartbeatMetadata) GetOs() *HeartbeatMetadataOs {
-	if o == nil {
+func (h *HeartbeatMetadata) GetOs() *HeartbeatMetadataOs {
+	if h == nil {
 		return nil
 	}
-	return o.Os
+	return h.Os
 }

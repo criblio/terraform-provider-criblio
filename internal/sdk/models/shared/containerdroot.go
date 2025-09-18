@@ -6,9 +6,9 @@ type ContainerdRoot struct {
 	Path string `json:"path"`
 }
 
-func (o *ContainerdRoot) GetPath() string {
-	if o == nil {
+func (c *ContainerdRoot) GetPath() string {
+	if c == nil {
 		return ""
 	}
-	return o.Path
+	return c.Path
 }

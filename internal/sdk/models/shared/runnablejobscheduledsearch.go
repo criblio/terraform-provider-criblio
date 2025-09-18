@@ -126,95 +126,95 @@ func (r *RunnableJobScheduledSearchRunSettings) UnmarshalJSON(data []byte) error
 	return nil
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetRescheduleDroppedTasks() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return r.RescheduleDroppedTasks
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetMaxTaskReschedule() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return r.MaxTaskReschedule
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetLogLevel() *RunnableJobScheduledSearchLogLevel {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetLogLevel() *RunnableJobScheduledSearchLogLevel {
+	if r == nil {
 		return nil
 	}
-	return o.LogLevel
+	return r.LogLevel
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetJobTimeout() *string {
+	if r == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return r.JobTimeout
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetMode() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetMode() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Mode
+	return r.Mode
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetTimeRangeType() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetTimeRangeType() *string {
+	if r == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return r.TimeRangeType
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetEarliest() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Earliest
+	return r.Earliest
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetLatest() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Latest
+	return r.Latest
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetTimestampTimezone() any {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetTimestampTimezone() any {
+	if r == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return r.TimestampTimezone
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetTimeWarning() *RunnableJobScheduledSearchTimeWarning {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetTimeWarning() *RunnableJobScheduledSearchTimeWarning {
+	if r == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return r.TimeWarning
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetExpression() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetExpression() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Expression
+	return r.Expression
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetMinTaskSize() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return r.MinTaskSize
 }
 
-func (o *RunnableJobScheduledSearchRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearchRunSettings) GetMaxTaskSize() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return r.MaxTaskSize
 }
 
 // RunnableJobScheduledSearchSchedule - Configuration for a scheduled job
@@ -242,46 +242,46 @@ func (r *RunnableJobScheduledSearchSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobScheduledSearchSchedule) GetEnabled() *bool {
-	if o == nil {
+func (r *RunnableJobScheduledSearchSchedule) GetEnabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Enabled
+	return r.Enabled
 }
 
-func (o *RunnableJobScheduledSearchSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearchSchedule) GetCronSchedule() *string {
+	if r == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return r.CronSchedule
 }
 
-func (o *RunnableJobScheduledSearchSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (r *RunnableJobScheduledSearchSchedule) GetMaxConcurrentRuns() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return r.MaxConcurrentRuns
 }
 
-func (o *RunnableJobScheduledSearchSchedule) GetSkippable() *bool {
-	if o == nil {
+func (r *RunnableJobScheduledSearchSchedule) GetSkippable() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Skippable
+	return r.Skippable
 }
 
-func (o *RunnableJobScheduledSearchSchedule) GetResumeMissed() any {
-	if o == nil {
+func (r *RunnableJobScheduledSearchSchedule) GetResumeMissed() any {
+	if r == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return r.ResumeMissed
 }
 
-func (o *RunnableJobScheduledSearchSchedule) GetRun() *RunnableJobScheduledSearchRunSettings {
-	if o == nil {
+func (r *RunnableJobScheduledSearchSchedule) GetRun() *RunnableJobScheduledSearchRunSettings {
+	if r == nil {
 		return nil
 	}
-	return o.Run
+	return r.Run
 }
 
 type RunnableJobScheduledSearch struct {
@@ -318,79 +318,79 @@ func (r *RunnableJobScheduledSearch) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobScheduledSearch) GetID() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *RunnableJobScheduledSearch) GetDescription() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *RunnableJobScheduledSearch) GetType() RunnableJobScheduledSearchJobType {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetType() RunnableJobScheduledSearchJobType {
+	if r == nil {
 		return RunnableJobScheduledSearchJobType("")
 	}
-	return o.Type
+	return r.Type
 }
 
-func (o *RunnableJobScheduledSearch) GetTTL() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetTTL() *string {
+	if r == nil {
 		return nil
 	}
-	return o.TTL
+	return r.TTL
 }
 
-func (o *RunnableJobScheduledSearch) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetIgnoreGroupJobsLimit() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return r.IgnoreGroupJobsLimit
 }
 
-func (o *RunnableJobScheduledSearch) GetRemoveFields() []string {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetRemoveFields() []string {
+	if r == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return r.RemoveFields
 }
 
-func (o *RunnableJobScheduledSearch) GetResumeOnBoot() *bool {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetResumeOnBoot() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return r.ResumeOnBoot
 }
 
-func (o *RunnableJobScheduledSearch) GetEnvironment() *string {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetEnvironment() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Environment
+	return r.Environment
 }
 
-func (o *RunnableJobScheduledSearch) GetSchedule() *RunnableJobScheduledSearchSchedule {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetSchedule() *RunnableJobScheduledSearchSchedule {
+	if r == nil {
 		return nil
 	}
-	return o.Schedule
+	return r.Schedule
 }
 
-func (o *RunnableJobScheduledSearch) GetStreamtags() []string {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetStreamtags() []string {
+	if r == nil {
 		return nil
 	}
-	return o.Streamtags
+	return r.Streamtags
 }
 
-func (o *RunnableJobScheduledSearch) GetSavedQueryID() string {
-	if o == nil {
+func (r *RunnableJobScheduledSearch) GetSavedQueryID() string {
+	if r == nil {
 		return ""
 	}
-	return o.SavedQueryID
+	return r.SavedQueryID
 }

@@ -11,44 +11,44 @@ type CriblMetadata struct {
 	Version       string   `json:"version"`
 }
 
-func (o *CriblMetadata) GetConfigVersion() *string {
-	if o == nil {
+func (c *CriblMetadata) GetConfigVersion() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ConfigVersion
+	return c.ConfigVersion
 }
 
-func (o *CriblMetadata) GetGroup() *string {
-	if o == nil {
+func (c *CriblMetadata) GetGroup() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Group
+	return c.Group
 }
 
-func (o *CriblMetadata) GetInstallType() *string {
-	if o == nil {
+func (c *CriblMetadata) GetInstallType() *string {
+	if c == nil {
 		return nil
 	}
-	return o.InstallType
+	return c.InstallType
 }
 
-func (o *CriblMetadata) GetMode() string {
-	if o == nil {
+func (c *CriblMetadata) GetMode() string {
+	if c == nil {
 		return ""
 	}
-	return o.Mode
+	return c.Mode
 }
 
-func (o *CriblMetadata) GetTags() []string {
-	if o == nil {
+func (c *CriblMetadata) GetTags() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Tags
+	return c.Tags
 }
 
-func (o *CriblMetadata) GetVersion() string {
-	if o == nil {
+func (c *CriblMetadata) GetVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Version
+	return c.Version
 }

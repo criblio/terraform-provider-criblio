@@ -7,16 +7,16 @@ type KMSHealthTest struct {
 	Status  KMSHealthStatus `json:"status"`
 }
 
-func (o *KMSHealthTest) GetDetails() map[string]any {
-	if o == nil {
+func (k *KMSHealthTest) GetDetails() map[string]any {
+	if k == nil {
 		return nil
 	}
-	return o.Details
+	return k.Details
 }
 
-func (o *KMSHealthTest) GetStatus() KMSHealthStatus {
-	if o == nil {
+func (k *KMSHealthTest) GetStatus() KMSHealthStatus {
+	if k == nil {
 		return KMSHealthStatus(0)
 	}
-	return o.Status
+	return k.Status
 }

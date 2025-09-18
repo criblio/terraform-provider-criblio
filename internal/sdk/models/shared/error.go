@@ -7,9 +7,9 @@ type Error struct {
 	Message *string `json:"message,omitempty"`
 }
 
-func (o *Error) GetMessage() *string {
-	if o == nil {
+func (e *Error) GetMessage() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Message
+	return e.Message
 }

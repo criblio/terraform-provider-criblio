@@ -15,18 +15,18 @@ type PackageURL struct {
 	PackageHashURL *string `json:"packageHashUrl,omitempty"`
 }
 
-func (o *PackageURL) GetPackageURL() string {
-	if o == nil {
+func (p *PackageURL) GetPackageURL() string {
+	if p == nil {
 		return ""
 	}
-	return o.PackageURL
+	return p.PackageURL
 }
 
-func (o *PackageURL) GetPackageHashURL() *string {
-	if o == nil {
+func (p *PackageURL) GetPackageHashURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.PackageHashURL
+	return p.PackageHashURL
 }
 
 type UpgradeMode string
@@ -82,44 +82,44 @@ func (d *DistributedUpgradeRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DistributedUpgradeRequest) GetPackageUrls() []PackageURL {
-	if o == nil {
+func (d *DistributedUpgradeRequest) GetPackageUrls() []PackageURL {
+	if d == nil {
 		return nil
 	}
-	return o.PackageUrls
+	return d.PackageUrls
 }
 
-func (o *DistributedUpgradeRequest) GetUpgradePercentage() *float64 {
-	if o == nil {
+func (d *DistributedUpgradeRequest) GetUpgradePercentage() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.UpgradePercentage
+	return d.UpgradePercentage
 }
 
-func (o *DistributedUpgradeRequest) GetWorkerRetries() *float64 {
-	if o == nil {
+func (d *DistributedUpgradeRequest) GetWorkerRetries() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkerRetries
+	return d.WorkerRetries
 }
 
-func (o *DistributedUpgradeRequest) GetWorkerRetryDelay() *float64 {
-	if o == nil {
+func (d *DistributedUpgradeRequest) GetWorkerRetryDelay() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkerRetryDelay
+	return d.WorkerRetryDelay
 }
 
-func (o *DistributedUpgradeRequest) GetUpgradeMode() *UpgradeMode {
-	if o == nil {
+func (d *DistributedUpgradeRequest) GetUpgradeMode() *UpgradeMode {
+	if d == nil {
 		return nil
 	}
-	return o.UpgradeMode
+	return d.UpgradeMode
 }
 
-func (o *DistributedUpgradeRequest) GetVersionTo() *string {
-	if o == nil {
+func (d *DistributedUpgradeRequest) GetVersionTo() *string {
+	if d == nil {
 		return nil
 	}
-	return o.VersionTo
+	return d.VersionTo
 }

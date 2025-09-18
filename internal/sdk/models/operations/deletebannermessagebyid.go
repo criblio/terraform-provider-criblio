@@ -12,11 +12,11 @@ type DeleteBannerMessageByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteBannerMessageByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteBannerMessageByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteBannerMessageByIDResponseBody - a list of BannerMessage objects
@@ -24,11 +24,11 @@ type DeleteBannerMessageByIDResponseBody struct {
 	Items []shared.BannerMessage `json:"items,omitempty"`
 }
 
-func (o *DeleteBannerMessageByIDResponseBody) GetItems() []shared.BannerMessage {
-	if o == nil {
+func (d *DeleteBannerMessageByIDResponseBody) GetItems() []shared.BannerMessage {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteBannerMessageByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteBannerMessageByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteBannerMessageByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteBannerMessageByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteBannerMessageByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteBannerMessageByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteBannerMessageByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteBannerMessageByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteBannerMessageByIDResponse) GetObject() *DeleteBannerMessageByIDResponseBody {
-	if o == nil {
+func (d *DeleteBannerMessageByIDResponse) GetObject() *DeleteBannerMessageByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteBannerMessageByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteBannerMessageByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

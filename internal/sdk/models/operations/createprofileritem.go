@@ -12,11 +12,11 @@ type CreateProfilerItemResponseBody struct {
 	Items []shared.ProfilerItem `json:"items,omitempty"`
 }
 
-func (o *CreateProfilerItemResponseBody) GetItems() []shared.ProfilerItem {
-	if o == nil {
+func (c *CreateProfilerItemResponseBody) GetItems() []shared.ProfilerItem {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateProfilerItemResponse struct {
@@ -32,37 +32,37 @@ type CreateProfilerItemResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateProfilerItemResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateProfilerItemResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateProfilerItemResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateProfilerItemResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateProfilerItemResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateProfilerItemResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateProfilerItemResponse) GetObject() *CreateProfilerItemResponseBody {
-	if o == nil {
+func (c *CreateProfilerItemResponse) GetObject() *CreateProfilerItemResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateProfilerItemResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateProfilerItemResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

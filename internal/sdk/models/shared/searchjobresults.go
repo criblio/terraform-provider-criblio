@@ -11,44 +11,44 @@ type SearchJobResults struct {
 	TotalEventCount     float64  `json:"totalEventCount"`
 }
 
-func (o *SearchJobResults) GetIsFinished() bool {
-	if o == nil {
+func (s *SearchJobResults) GetIsFinished() bool {
+	if s == nil {
 		return false
 	}
-	return o.IsFinished
+	return s.IsFinished
 }
 
-func (o *SearchJobResults) GetJob() any {
-	if o == nil {
+func (s *SearchJobResults) GetJob() any {
+	if s == nil {
 		return nil
 	}
-	return o.Job
+	return s.Job
 }
 
-func (o *SearchJobResults) GetLimit() *float64 {
-	if o == nil {
+func (s *SearchJobResults) GetLimit() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Limit
+	return s.Limit
 }
 
-func (o *SearchJobResults) GetOffset() float64 {
-	if o == nil {
+func (s *SearchJobResults) GetOffset() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Offset
+	return s.Offset
 }
 
-func (o *SearchJobResults) GetPersistedEventCount() float64 {
-	if o == nil {
+func (s *SearchJobResults) GetPersistedEventCount() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.PersistedEventCount
+	return s.PersistedEventCount
 }
 
-func (o *SearchJobResults) GetTotalEventCount() float64 {
-	if o == nil {
+func (s *SearchJobResults) GetTotalEventCount() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.TotalEventCount
+	return s.TotalEventCount
 }

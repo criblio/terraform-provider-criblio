@@ -48,18 +48,18 @@ func (i *InputGrafanaConnection2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaConnection2) GetPipeline() *string {
-	if o == nil {
+func (i *InputGrafanaConnection2) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputGrafanaConnection2) GetOutput() string {
-	if o == nil {
+func (i *InputGrafanaConnection2) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputGrafanaMode2 - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -144,53 +144,53 @@ func (i *InputGrafanaPq2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaPq2) GetMode() *InputGrafanaMode2 {
-	if o == nil {
+func (i *InputGrafanaPq2) GetMode() *InputGrafanaMode2 {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputGrafanaPq2) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputGrafanaPq2) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputGrafanaPq2) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputGrafanaPq2) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputGrafanaPq2) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputGrafanaPq2) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputGrafanaPq2) GetMaxSize() *string {
-	if o == nil {
+func (i *InputGrafanaPq2) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputGrafanaPq2) GetPath() *string {
-	if o == nil {
+func (i *InputGrafanaPq2) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputGrafanaPq2) GetCompress() *InputGrafanaCompression2 {
-	if o == nil {
+func (i *InputGrafanaPq2) GetCompress() *InputGrafanaCompression2 {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputGrafanaMinimumTLSVersion2 string
@@ -288,81 +288,81 @@ func (i *InputGrafanaTLSSettingsServerSide2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetDisabled() *bool {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetCertificateName() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetPassphrase() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetCertPath() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetCaPath() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetMinVersion() *InputGrafanaMinimumTLSVersion2 {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetMinVersion() *InputGrafanaMinimumTLSVersion2 {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputGrafanaTLSSettingsServerSide2) GetMaxVersion() *InputGrafanaMaximumTLSVersion2 {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide2) GetMaxVersion() *InputGrafanaMaximumTLSVersion2 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 // InputGrafanaPrometheusAuthAuthenticationType2 - Remote Write authentication type
@@ -422,18 +422,18 @@ func (p *PrometheusAuthOauthParam2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PrometheusAuthOauthParam2) GetName() string {
-	if o == nil {
+func (p *PrometheusAuthOauthParam2) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PrometheusAuthOauthParam2) GetValue() string {
-	if o == nil {
+func (p *PrometheusAuthOauthParam2) GetValue() string {
+	if p == nil {
 		return ""
 	}
-	return o.Value
+	return p.Value
 }
 
 type PrometheusAuthOauthHeader2 struct {
@@ -454,18 +454,18 @@ func (p *PrometheusAuthOauthHeader2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PrometheusAuthOauthHeader2) GetName() string {
-	if o == nil {
+func (p *PrometheusAuthOauthHeader2) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PrometheusAuthOauthHeader2) GetValue() string {
-	if o == nil {
+func (p *PrometheusAuthOauthHeader2) GetValue() string {
+	if p == nil {
 		return ""
 	}
-	return o.Value
+	return p.Value
 }
 
 type InputGrafanaPrometheusAuth2 struct {
@@ -508,102 +508,102 @@ func (i *InputGrafanaPrometheusAuth2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetAuthType() *InputGrafanaPrometheusAuthAuthenticationType2 {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetAuthType() *InputGrafanaPrometheusAuthAuthenticationType2 {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetUsername() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetPassword() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetToken() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetTextSecret() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetLoginURL() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetSecretParamName() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SecretParamName
+	return i.SecretParamName
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetSecret() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetTokenAttributeName() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetTokenAttributeName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenAttributeName
+	return i.TokenAttributeName
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetTokenTimeoutSecs() *float64 {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetTokenTimeoutSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TokenTimeoutSecs
+	return i.TokenTimeoutSecs
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetOauthParams() []PrometheusAuthOauthParam2 {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetOauthParams() []PrometheusAuthOauthParam2 {
+	if i == nil {
 		return nil
 	}
-	return o.OauthParams
+	return i.OauthParams
 }
 
-func (o *InputGrafanaPrometheusAuth2) GetOauthHeaders() []PrometheusAuthOauthHeader2 {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth2) GetOauthHeaders() []PrometheusAuthOauthHeader2 {
+	if i == nil {
 		return nil
 	}
-	return o.OauthHeaders
+	return i.OauthHeaders
 }
 
 // InputGrafanaLokiAuthAuthenticationType2 - Loki logs authentication type
@@ -663,18 +663,18 @@ func (l *LokiAuthOauthParam2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LokiAuthOauthParam2) GetName() string {
-	if o == nil {
+func (l *LokiAuthOauthParam2) GetName() string {
+	if l == nil {
 		return ""
 	}
-	return o.Name
+	return l.Name
 }
 
-func (o *LokiAuthOauthParam2) GetValue() string {
-	if o == nil {
+func (l *LokiAuthOauthParam2) GetValue() string {
+	if l == nil {
 		return ""
 	}
-	return o.Value
+	return l.Value
 }
 
 type LokiAuthOauthHeader2 struct {
@@ -695,18 +695,18 @@ func (l *LokiAuthOauthHeader2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LokiAuthOauthHeader2) GetName() string {
-	if o == nil {
+func (l *LokiAuthOauthHeader2) GetName() string {
+	if l == nil {
 		return ""
 	}
-	return o.Name
+	return l.Name
 }
 
-func (o *LokiAuthOauthHeader2) GetValue() string {
-	if o == nil {
+func (l *LokiAuthOauthHeader2) GetValue() string {
+	if l == nil {
 		return ""
 	}
-	return o.Value
+	return l.Value
 }
 
 type InputGrafanaLokiAuth2 struct {
@@ -749,102 +749,102 @@ func (i *InputGrafanaLokiAuth2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaLokiAuth2) GetAuthType() *InputGrafanaLokiAuthAuthenticationType2 {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetAuthType() *InputGrafanaLokiAuthAuthenticationType2 {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputGrafanaLokiAuth2) GetUsername() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputGrafanaLokiAuth2) GetPassword() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputGrafanaLokiAuth2) GetToken() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputGrafanaLokiAuth2) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputGrafanaLokiAuth2) GetTextSecret() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputGrafanaLokiAuth2) GetLoginURL() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputGrafanaLokiAuth2) GetSecretParamName() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SecretParamName
+	return i.SecretParamName
 }
 
-func (o *InputGrafanaLokiAuth2) GetSecret() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputGrafanaLokiAuth2) GetTokenAttributeName() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetTokenAttributeName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenAttributeName
+	return i.TokenAttributeName
 }
 
-func (o *InputGrafanaLokiAuth2) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputGrafanaLokiAuth2) GetTokenTimeoutSecs() *float64 {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetTokenTimeoutSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TokenTimeoutSecs
+	return i.TokenTimeoutSecs
 }
 
-func (o *InputGrafanaLokiAuth2) GetOauthParams() []LokiAuthOauthParam2 {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetOauthParams() []LokiAuthOauthParam2 {
+	if i == nil {
 		return nil
 	}
-	return o.OauthParams
+	return i.OauthParams
 }
 
-func (o *InputGrafanaLokiAuth2) GetOauthHeaders() []LokiAuthOauthHeader2 {
-	if o == nil {
+func (i *InputGrafanaLokiAuth2) GetOauthHeaders() []LokiAuthOauthHeader2 {
+	if i == nil {
 		return nil
 	}
-	return o.OauthHeaders
+	return i.OauthHeaders
 }
 
 type InputGrafanaMetadatum2 struct {
@@ -864,18 +864,18 @@ func (i *InputGrafanaMetadatum2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaMetadatum2) GetName() string {
-	if o == nil {
+func (i *InputGrafanaMetadatum2) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputGrafanaMetadatum2) GetValue() string {
-	if o == nil {
+func (i *InputGrafanaMetadatum2) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputGrafanaGrafana2 struct {
@@ -945,214 +945,214 @@ func (i *InputGrafanaGrafana2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaGrafana2) GetID() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputGrafanaGrafana2) GetType() *InputGrafanaType2 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetType() *InputGrafanaType2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputGrafanaGrafana2) GetDisabled() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputGrafanaGrafana2) GetPipeline() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputGrafanaGrafana2) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputGrafanaGrafana2) GetEnvironment() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputGrafanaGrafana2) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputGrafanaGrafana2) GetStreamtags() []string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputGrafanaGrafana2) GetConnections() []InputGrafanaConnection2 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetConnections() []InputGrafanaConnection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputGrafanaGrafana2) GetPq() *InputGrafanaPq2 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetPq() *InputGrafanaPq2 {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputGrafanaGrafana2) GetHost() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputGrafanaGrafana2) GetPort() float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputGrafanaGrafana2) GetTLS() *InputGrafanaTLSSettingsServerSide2 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetTLS() *InputGrafanaTLSSettingsServerSide2 {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputGrafanaGrafana2) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputGrafanaGrafana2) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputGrafanaGrafana2) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputGrafanaGrafana2) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputGrafanaGrafana2) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputGrafanaGrafana2) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputGrafanaGrafana2) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputGrafanaGrafana2) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputGrafanaGrafana2) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputGrafanaGrafana2) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputGrafanaGrafana2) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputGrafanaGrafana2) GetPrometheusAPI() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetPrometheusAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrometheusAPI
+	return i.PrometheusAPI
 }
 
-func (o *InputGrafanaGrafana2) GetLokiAPI() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetLokiAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LokiAPI
+	return i.LokiAPI
 }
 
-func (o *InputGrafanaGrafana2) GetPrometheusAuth() *InputGrafanaPrometheusAuth2 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetPrometheusAuth() *InputGrafanaPrometheusAuth2 {
+	if i == nil {
 		return nil
 	}
-	return o.PrometheusAuth
+	return i.PrometheusAuth
 }
 
-func (o *InputGrafanaGrafana2) GetLokiAuth() *InputGrafanaLokiAuth2 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetLokiAuth() *InputGrafanaLokiAuth2 {
+	if i == nil {
 		return nil
 	}
-	return o.LokiAuth
+	return i.LokiAuth
 }
 
-func (o *InputGrafanaGrafana2) GetMetadata() []InputGrafanaMetadatum2 {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetMetadata() []InputGrafanaMetadatum2 {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputGrafanaGrafana2) GetDescription() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana2) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
 type InputGrafanaType1 string
@@ -1194,18 +1194,18 @@ func (i *InputGrafanaConnection1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaConnection1) GetPipeline() *string {
-	if o == nil {
+func (i *InputGrafanaConnection1) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputGrafanaConnection1) GetOutput() string {
-	if o == nil {
+func (i *InputGrafanaConnection1) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputGrafanaMode1 - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -1290,53 +1290,53 @@ func (i *InputGrafanaPq1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaPq1) GetMode() *InputGrafanaMode1 {
-	if o == nil {
+func (i *InputGrafanaPq1) GetMode() *InputGrafanaMode1 {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputGrafanaPq1) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputGrafanaPq1) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputGrafanaPq1) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputGrafanaPq1) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputGrafanaPq1) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputGrafanaPq1) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputGrafanaPq1) GetMaxSize() *string {
-	if o == nil {
+func (i *InputGrafanaPq1) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputGrafanaPq1) GetPath() *string {
-	if o == nil {
+func (i *InputGrafanaPq1) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputGrafanaPq1) GetCompress() *InputGrafanaCompression1 {
-	if o == nil {
+func (i *InputGrafanaPq1) GetCompress() *InputGrafanaCompression1 {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputGrafanaMinimumTLSVersion1 string
@@ -1434,81 +1434,81 @@ func (i *InputGrafanaTLSSettingsServerSide1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetDisabled() *bool {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetCertificateName() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetPassphrase() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetCertPath() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetCaPath() *string {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetMinVersion() *InputGrafanaMinimumTLSVersion1 {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetMinVersion() *InputGrafanaMinimumTLSVersion1 {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputGrafanaTLSSettingsServerSide1) GetMaxVersion() *InputGrafanaMaximumTLSVersion1 {
-	if o == nil {
+func (i *InputGrafanaTLSSettingsServerSide1) GetMaxVersion() *InputGrafanaMaximumTLSVersion1 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 // InputGrafanaPrometheusAuthAuthenticationType1 - Remote Write authentication type
@@ -1568,18 +1568,18 @@ func (p *PrometheusAuthOauthParam1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PrometheusAuthOauthParam1) GetName() string {
-	if o == nil {
+func (p *PrometheusAuthOauthParam1) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PrometheusAuthOauthParam1) GetValue() string {
-	if o == nil {
+func (p *PrometheusAuthOauthParam1) GetValue() string {
+	if p == nil {
 		return ""
 	}
-	return o.Value
+	return p.Value
 }
 
 type PrometheusAuthOauthHeader1 struct {
@@ -1600,18 +1600,18 @@ func (p *PrometheusAuthOauthHeader1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PrometheusAuthOauthHeader1) GetName() string {
-	if o == nil {
+func (p *PrometheusAuthOauthHeader1) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PrometheusAuthOauthHeader1) GetValue() string {
-	if o == nil {
+func (p *PrometheusAuthOauthHeader1) GetValue() string {
+	if p == nil {
 		return ""
 	}
-	return o.Value
+	return p.Value
 }
 
 type InputGrafanaPrometheusAuth1 struct {
@@ -1654,102 +1654,102 @@ func (i *InputGrafanaPrometheusAuth1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetAuthType() *InputGrafanaPrometheusAuthAuthenticationType1 {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetAuthType() *InputGrafanaPrometheusAuthAuthenticationType1 {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetUsername() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetPassword() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetToken() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetTextSecret() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetLoginURL() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetSecretParamName() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SecretParamName
+	return i.SecretParamName
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetSecret() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetTokenAttributeName() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetTokenAttributeName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenAttributeName
+	return i.TokenAttributeName
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetTokenTimeoutSecs() *float64 {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetTokenTimeoutSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TokenTimeoutSecs
+	return i.TokenTimeoutSecs
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetOauthParams() []PrometheusAuthOauthParam1 {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetOauthParams() []PrometheusAuthOauthParam1 {
+	if i == nil {
 		return nil
 	}
-	return o.OauthParams
+	return i.OauthParams
 }
 
-func (o *InputGrafanaPrometheusAuth1) GetOauthHeaders() []PrometheusAuthOauthHeader1 {
-	if o == nil {
+func (i *InputGrafanaPrometheusAuth1) GetOauthHeaders() []PrometheusAuthOauthHeader1 {
+	if i == nil {
 		return nil
 	}
-	return o.OauthHeaders
+	return i.OauthHeaders
 }
 
 // InputGrafanaLokiAuthAuthenticationType1 - Loki logs authentication type
@@ -1809,18 +1809,18 @@ func (l *LokiAuthOauthParam1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LokiAuthOauthParam1) GetName() string {
-	if o == nil {
+func (l *LokiAuthOauthParam1) GetName() string {
+	if l == nil {
 		return ""
 	}
-	return o.Name
+	return l.Name
 }
 
-func (o *LokiAuthOauthParam1) GetValue() string {
-	if o == nil {
+func (l *LokiAuthOauthParam1) GetValue() string {
+	if l == nil {
 		return ""
 	}
-	return o.Value
+	return l.Value
 }
 
 type LokiAuthOauthHeader1 struct {
@@ -1841,18 +1841,18 @@ func (l *LokiAuthOauthHeader1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LokiAuthOauthHeader1) GetName() string {
-	if o == nil {
+func (l *LokiAuthOauthHeader1) GetName() string {
+	if l == nil {
 		return ""
 	}
-	return o.Name
+	return l.Name
 }
 
-func (o *LokiAuthOauthHeader1) GetValue() string {
-	if o == nil {
+func (l *LokiAuthOauthHeader1) GetValue() string {
+	if l == nil {
 		return ""
 	}
-	return o.Value
+	return l.Value
 }
 
 type InputGrafanaLokiAuth1 struct {
@@ -1895,102 +1895,102 @@ func (i *InputGrafanaLokiAuth1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaLokiAuth1) GetAuthType() *InputGrafanaLokiAuthAuthenticationType1 {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetAuthType() *InputGrafanaLokiAuthAuthenticationType1 {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputGrafanaLokiAuth1) GetUsername() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputGrafanaLokiAuth1) GetPassword() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputGrafanaLokiAuth1) GetToken() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputGrafanaLokiAuth1) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputGrafanaLokiAuth1) GetTextSecret() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputGrafanaLokiAuth1) GetLoginURL() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputGrafanaLokiAuth1) GetSecretParamName() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SecretParamName
+	return i.SecretParamName
 }
 
-func (o *InputGrafanaLokiAuth1) GetSecret() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputGrafanaLokiAuth1) GetTokenAttributeName() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetTokenAttributeName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenAttributeName
+	return i.TokenAttributeName
 }
 
-func (o *InputGrafanaLokiAuth1) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputGrafanaLokiAuth1) GetTokenTimeoutSecs() *float64 {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetTokenTimeoutSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TokenTimeoutSecs
+	return i.TokenTimeoutSecs
 }
 
-func (o *InputGrafanaLokiAuth1) GetOauthParams() []LokiAuthOauthParam1 {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetOauthParams() []LokiAuthOauthParam1 {
+	if i == nil {
 		return nil
 	}
-	return o.OauthParams
+	return i.OauthParams
 }
 
-func (o *InputGrafanaLokiAuth1) GetOauthHeaders() []LokiAuthOauthHeader1 {
-	if o == nil {
+func (i *InputGrafanaLokiAuth1) GetOauthHeaders() []LokiAuthOauthHeader1 {
+	if i == nil {
 		return nil
 	}
-	return o.OauthHeaders
+	return i.OauthHeaders
 }
 
 type InputGrafanaMetadatum1 struct {
@@ -2010,18 +2010,18 @@ func (i *InputGrafanaMetadatum1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaMetadatum1) GetName() string {
-	if o == nil {
+func (i *InputGrafanaMetadatum1) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputGrafanaMetadatum1) GetValue() string {
-	if o == nil {
+func (i *InputGrafanaMetadatum1) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputGrafanaGrafana1 struct {
@@ -2091,214 +2091,214 @@ func (i *InputGrafanaGrafana1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGrafanaGrafana1) GetID() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputGrafanaGrafana1) GetType() *InputGrafanaType1 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetType() *InputGrafanaType1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputGrafanaGrafana1) GetDisabled() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputGrafanaGrafana1) GetPipeline() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputGrafanaGrafana1) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputGrafanaGrafana1) GetEnvironment() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputGrafanaGrafana1) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputGrafanaGrafana1) GetStreamtags() []string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputGrafanaGrafana1) GetConnections() []InputGrafanaConnection1 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetConnections() []InputGrafanaConnection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputGrafanaGrafana1) GetPq() *InputGrafanaPq1 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetPq() *InputGrafanaPq1 {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputGrafanaGrafana1) GetHost() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputGrafanaGrafana1) GetPort() float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputGrafanaGrafana1) GetTLS() *InputGrafanaTLSSettingsServerSide1 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetTLS() *InputGrafanaTLSSettingsServerSide1 {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputGrafanaGrafana1) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputGrafanaGrafana1) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputGrafanaGrafana1) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputGrafanaGrafana1) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputGrafanaGrafana1) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputGrafanaGrafana1) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputGrafanaGrafana1) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputGrafanaGrafana1) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputGrafanaGrafana1) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputGrafanaGrafana1) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputGrafanaGrafana1) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputGrafanaGrafana1) GetPrometheusAPI() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetPrometheusAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrometheusAPI
+	return i.PrometheusAPI
 }
 
-func (o *InputGrafanaGrafana1) GetLokiAPI() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetLokiAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LokiAPI
+	return i.LokiAPI
 }
 
-func (o *InputGrafanaGrafana1) GetPrometheusAuth() *InputGrafanaPrometheusAuth1 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetPrometheusAuth() *InputGrafanaPrometheusAuth1 {
+	if i == nil {
 		return nil
 	}
-	return o.PrometheusAuth
+	return i.PrometheusAuth
 }
 
-func (o *InputGrafanaGrafana1) GetLokiAuth() *InputGrafanaLokiAuth1 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetLokiAuth() *InputGrafanaLokiAuth1 {
+	if i == nil {
 		return nil
 	}
-	return o.LokiAuth
+	return i.LokiAuth
 }
 
-func (o *InputGrafanaGrafana1) GetMetadata() []InputGrafanaMetadatum1 {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetMetadata() []InputGrafanaMetadatum1 {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputGrafanaGrafana1) GetDescription() *string {
-	if o == nil {
+func (i *InputGrafanaGrafana1) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
 type InputGrafanaType string

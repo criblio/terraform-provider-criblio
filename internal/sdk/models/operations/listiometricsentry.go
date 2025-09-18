@@ -12,11 +12,11 @@ type ListIoMetricsEntryResponseBody struct {
 	Items []shared.IoMetricsEntry `json:"items,omitempty"`
 }
 
-func (o *ListIoMetricsEntryResponseBody) GetItems() []shared.IoMetricsEntry {
-	if o == nil {
+func (l *ListIoMetricsEntryResponseBody) GetItems() []shared.IoMetricsEntry {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListIoMetricsEntryResponse struct {
@@ -32,37 +32,37 @@ type ListIoMetricsEntryResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListIoMetricsEntryResponse) GetContentType() string {
-	if o == nil {
+func (l *ListIoMetricsEntryResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListIoMetricsEntryResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListIoMetricsEntryResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListIoMetricsEntryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListIoMetricsEntryResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListIoMetricsEntryResponse) GetObject() *ListIoMetricsEntryResponseBody {
-	if o == nil {
+func (l *ListIoMetricsEntryResponse) GetObject() *ListIoMetricsEntryResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListIoMetricsEntryResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListIoMetricsEntryResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

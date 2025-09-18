@@ -12,11 +12,11 @@ type GetGroupsConfigVersionByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetGroupsConfigVersionByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetGroupsConfigVersionByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetGroupsConfigVersionByIDResponseBody - a list of string objects
@@ -24,11 +24,11 @@ type GetGroupsConfigVersionByIDResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *GetGroupsConfigVersionByIDResponseBody) GetItems() []string {
-	if o == nil {
+func (g *GetGroupsConfigVersionByIDResponseBody) GetItems() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetGroupsConfigVersionByIDResponse struct {
@@ -44,37 +44,37 @@ type GetGroupsConfigVersionByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetGroupsConfigVersionByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetGroupsConfigVersionByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetGroupsConfigVersionByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetGroupsConfigVersionByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetGroupsConfigVersionByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetGroupsConfigVersionByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetGroupsConfigVersionByIDResponse) GetObject() *GetGroupsConfigVersionByIDResponseBody {
-	if o == nil {
+func (g *GetGroupsConfigVersionByIDResponse) GetObject() *GetGroupsConfigVersionByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetGroupsConfigVersionByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetGroupsConfigVersionByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

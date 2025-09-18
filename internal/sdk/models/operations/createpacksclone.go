@@ -14,18 +14,18 @@ type CreatePacksCloneRequest struct {
 	PackClone shared.PackClone `request:"mediaType=application/json"`
 }
 
-func (o *CreatePacksCloneRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreatePacksCloneRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreatePacksCloneRequest) GetPackClone() shared.PackClone {
-	if o == nil {
+func (c *CreatePacksCloneRequest) GetPackClone() shared.PackClone {
+	if c == nil {
 		return shared.PackClone{}
 	}
-	return o.PackClone
+	return c.PackClone
 }
 
 // CreatePacksCloneResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type CreatePacksCloneResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreatePacksCloneResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreatePacksCloneResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreatePacksCloneResponse struct {
@@ -53,37 +53,37 @@ type CreatePacksCloneResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreatePacksCloneResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePacksCloneResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePacksCloneResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePacksCloneResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePacksCloneResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePacksCloneResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePacksCloneResponse) GetObject() *CreatePacksCloneResponseBody {
-	if o == nil {
+func (c *CreatePacksCloneResponse) GetObject() *CreatePacksCloneResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreatePacksCloneResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreatePacksCloneResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

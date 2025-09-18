@@ -12,11 +12,11 @@ type DeletePolicyRuleByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeletePolicyRuleByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeletePolicyRuleByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeletePolicyRuleByIDResponseBody - a list of PolicyRule objects
@@ -24,11 +24,11 @@ type DeletePolicyRuleByIDResponseBody struct {
 	Items []shared.PolicyRule `json:"items,omitempty"`
 }
 
-func (o *DeletePolicyRuleByIDResponseBody) GetItems() []shared.PolicyRule {
-	if o == nil {
+func (d *DeletePolicyRuleByIDResponseBody) GetItems() []shared.PolicyRule {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeletePolicyRuleByIDResponse struct {
@@ -44,37 +44,37 @@ type DeletePolicyRuleByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeletePolicyRuleByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeletePolicyRuleByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeletePolicyRuleByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeletePolicyRuleByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeletePolicyRuleByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeletePolicyRuleByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeletePolicyRuleByIDResponse) GetObject() *DeletePolicyRuleByIDResponseBody {
-	if o == nil {
+func (d *DeletePolicyRuleByIDResponse) GetObject() *DeletePolicyRuleByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeletePolicyRuleByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeletePolicyRuleByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

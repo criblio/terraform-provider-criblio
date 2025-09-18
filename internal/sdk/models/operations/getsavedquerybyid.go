@@ -12,11 +12,11 @@ type GetSavedQueryByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetSavedQueryByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSavedQueryByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetSavedQueryByIDResponseBody - a list of SavedQuery objects
@@ -24,11 +24,11 @@ type GetSavedQueryByIDResponseBody struct {
 	Items []shared.SavedQuery `json:"items,omitempty"`
 }
 
-func (o *GetSavedQueryByIDResponseBody) GetItems() []shared.SavedQuery {
-	if o == nil {
+func (g *GetSavedQueryByIDResponseBody) GetItems() []shared.SavedQuery {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSavedQueryByIDResponse struct {
@@ -44,37 +44,37 @@ type GetSavedQueryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSavedQueryByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSavedQueryByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSavedQueryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSavedQueryByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSavedQueryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSavedQueryByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSavedQueryByIDResponse) GetObject() *GetSavedQueryByIDResponseBody {
-	if o == nil {
+func (g *GetSavedQueryByIDResponse) GetObject() *GetSavedQueryByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSavedQueryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSavedQueryByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

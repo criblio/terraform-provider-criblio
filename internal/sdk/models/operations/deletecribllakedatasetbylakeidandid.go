@@ -40,18 +40,18 @@ type DeleteCriblLakeDatasetByLakeIDAndIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() DeleteCriblLakeDatasetByLakeIDAndIDLakeID {
-	if o == nil {
+func (d *DeleteCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() DeleteCriblLakeDatasetByLakeIDAndIDLakeID {
+	if d == nil {
 		return DeleteCriblLakeDatasetByLakeIDAndIDLakeID("")
 	}
-	return o.LakeID
+	return d.LakeID
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteCriblLakeDatasetByLakeIDAndIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteCriblLakeDatasetByLakeIDAndIDResponseBody - a list of CriblLakeDataset objects
@@ -59,11 +59,11 @@ type DeleteCriblLakeDatasetByLakeIDAndIDResponseBody struct {
 	Items []shared.CriblLakeDataset `json:"items,omitempty"`
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDResponseBody) GetItems() []shared.CriblLakeDataset {
-	if o == nil {
+func (d *DeleteCriblLakeDatasetByLakeIDAndIDResponseBody) GetItems() []shared.CriblLakeDataset {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteCriblLakeDatasetByLakeIDAndIDResponse struct {
@@ -79,37 +79,37 @@ type DeleteCriblLakeDatasetByLakeIDAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetObject() *DeleteCriblLakeDatasetByLakeIDAndIDResponseBody {
-	if o == nil {
+func (d *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetObject() *DeleteCriblLakeDatasetByLakeIDAndIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteCriblLakeDatasetByLakeIDAndIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

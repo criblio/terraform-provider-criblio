@@ -47,18 +47,18 @@ func (i *InputAzureBlobConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAzureBlobConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputAzureBlobConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputAzureBlobConnection) GetOutput() string {
-	if o == nil {
+func (i *InputAzureBlobConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputAzureBlobMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputAzureBlobPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAzureBlobPq) GetMode() *InputAzureBlobMode {
-	if o == nil {
+func (i *InputAzureBlobPq) GetMode() *InputAzureBlobMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputAzureBlobPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputAzureBlobPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputAzureBlobPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputAzureBlobPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputAzureBlobPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputAzureBlobPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputAzureBlobPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputAzureBlobPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputAzureBlobPq) GetPath() *string {
-	if o == nil {
+func (i *InputAzureBlobPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputAzureBlobPq) GetCompress() *InputAzureBlobCompression {
-	if o == nil {
+func (i *InputAzureBlobPq) GetCompress() *InputAzureBlobCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputAzureBlobMetadatum struct {
@@ -209,18 +209,18 @@ func (i *InputAzureBlobMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAzureBlobMetadatum) GetName() string {
-	if o == nil {
+func (i *InputAzureBlobMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputAzureBlobMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputAzureBlobMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputAzureBlobAuthenticationMethod string
@@ -271,11 +271,11 @@ func (i *InputAzureBlobCertificate) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAzureBlobCertificate) GetCertificateName() string {
-	if o == nil {
+func (i *InputAzureBlobCertificate) GetCertificateName() string {
+	if i == nil {
 		return ""
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
 type InputAzureBlob struct {
@@ -352,233 +352,233 @@ func (i *InputAzureBlob) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAzureBlob) GetID() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputAzureBlob) GetType() InputAzureBlobType {
-	if o == nil {
+func (i *InputAzureBlob) GetType() InputAzureBlobType {
+	if i == nil {
 		return InputAzureBlobType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputAzureBlob) GetDisabled() *bool {
-	if o == nil {
+func (i *InputAzureBlob) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputAzureBlob) GetPipeline() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputAzureBlob) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputAzureBlob) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputAzureBlob) GetEnvironment() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputAzureBlob) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputAzureBlob) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputAzureBlob) GetStreamtags() []string {
-	if o == nil {
+func (i *InputAzureBlob) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputAzureBlob) GetConnections() []InputAzureBlobConnection {
-	if o == nil {
+func (i *InputAzureBlob) GetConnections() []InputAzureBlobConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputAzureBlob) GetPq() *InputAzureBlobPq {
-	if o == nil {
+func (i *InputAzureBlob) GetPq() *InputAzureBlobPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputAzureBlob) GetQueueName() string {
-	if o == nil {
+func (i *InputAzureBlob) GetQueueName() string {
+	if i == nil {
 		return ""
 	}
-	return o.QueueName
+	return i.QueueName
 }
 
-func (o *InputAzureBlob) GetFileFilter() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetFileFilter() *string {
+	if i == nil {
 		return nil
 	}
-	return o.FileFilter
+	return i.FileFilter
 }
 
-func (o *InputAzureBlob) GetVisibilityTimeout() *float64 {
-	if o == nil {
+func (i *InputAzureBlob) GetVisibilityTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.VisibilityTimeout
+	return i.VisibilityTimeout
 }
 
-func (o *InputAzureBlob) GetNumReceivers() *float64 {
-	if o == nil {
+func (i *InputAzureBlob) GetNumReceivers() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.NumReceivers
+	return i.NumReceivers
 }
 
-func (o *InputAzureBlob) GetMaxMessages() *float64 {
-	if o == nil {
+func (i *InputAzureBlob) GetMaxMessages() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMessages
+	return i.MaxMessages
 }
 
-func (o *InputAzureBlob) GetServicePeriodSecs() *float64 {
-	if o == nil {
+func (i *InputAzureBlob) GetServicePeriodSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ServicePeriodSecs
+	return i.ServicePeriodSecs
 }
 
-func (o *InputAzureBlob) GetSkipOnError() *bool {
-	if o == nil {
+func (i *InputAzureBlob) GetSkipOnError() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SkipOnError
+	return i.SkipOnError
 }
 
-func (o *InputAzureBlob) GetMetadata() []InputAzureBlobMetadatum {
-	if o == nil {
+func (i *InputAzureBlob) GetMetadata() []InputAzureBlobMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputAzureBlob) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputAzureBlob) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputAzureBlob) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputAzureBlob) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputAzureBlob) GetParquetChunkSizeMB() *float64 {
-	if o == nil {
+func (i *InputAzureBlob) GetParquetChunkSizeMB() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ParquetChunkSizeMB
+	return i.ParquetChunkSizeMB
 }
 
-func (o *InputAzureBlob) GetParquetChunkDownloadTimeout() *float64 {
-	if o == nil {
+func (i *InputAzureBlob) GetParquetChunkDownloadTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ParquetChunkDownloadTimeout
+	return i.ParquetChunkDownloadTimeout
 }
 
-func (o *InputAzureBlob) GetAuthType() *InputAzureBlobAuthenticationMethod {
-	if o == nil {
+func (i *InputAzureBlob) GetAuthType() *InputAzureBlobAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputAzureBlob) GetDescription() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputAzureBlob) GetConnectionString() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetConnectionString() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionString
+	return i.ConnectionString
 }
 
-func (o *InputAzureBlob) GetTextSecret() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputAzureBlob) GetStorageAccountName() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetStorageAccountName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StorageAccountName
+	return i.StorageAccountName
 }
 
-func (o *InputAzureBlob) GetTenantID() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetTenantID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TenantID
+	return i.TenantID
 }
 
-func (o *InputAzureBlob) GetClientID() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetClientID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ClientID
+	return i.ClientID
 }
 
-func (o *InputAzureBlob) GetAzureCloud() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetAzureCloud() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AzureCloud
+	return i.AzureCloud
 }
 
-func (o *InputAzureBlob) GetEndpointSuffix() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetEndpointSuffix() *string {
+	if i == nil {
 		return nil
 	}
-	return o.EndpointSuffix
+	return i.EndpointSuffix
 }
 
-func (o *InputAzureBlob) GetClientTextSecret() *string {
-	if o == nil {
+func (i *InputAzureBlob) GetClientTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ClientTextSecret
+	return i.ClientTextSecret
 }
 
-func (o *InputAzureBlob) GetCertificate() *InputAzureBlobCertificate {
-	if o == nil {
+func (i *InputAzureBlob) GetCertificate() *InputAzureBlobCertificate {
+	if i == nil {
 		return nil
 	}
-	return o.Certificate
+	return i.Certificate
 }

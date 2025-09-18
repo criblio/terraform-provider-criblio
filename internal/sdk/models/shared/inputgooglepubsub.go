@@ -47,18 +47,18 @@ func (i *InputGooglePubsubConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGooglePubsubConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputGooglePubsubConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputGooglePubsubConnection) GetOutput() string {
-	if o == nil {
+func (i *InputGooglePubsubConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputGooglePubsubMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputGooglePubsubPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGooglePubsubPq) GetMode() *InputGooglePubsubMode {
-	if o == nil {
+func (i *InputGooglePubsubPq) GetMode() *InputGooglePubsubMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputGooglePubsubPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputGooglePubsubPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputGooglePubsubPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputGooglePubsubPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputGooglePubsubPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputGooglePubsubPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputGooglePubsubPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputGooglePubsubPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputGooglePubsubPq) GetPath() *string {
-	if o == nil {
+func (i *InputGooglePubsubPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputGooglePubsubPq) GetCompress() *InputGooglePubsubCompression {
-	if o == nil {
+func (i *InputGooglePubsubPq) GetCompress() *InputGooglePubsubCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputGooglePubsubGoogleAuthenticationMethod - Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
@@ -239,18 +239,18 @@ func (i *InputGooglePubsubMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGooglePubsubMetadatum) GetName() string {
-	if o == nil {
+func (i *InputGooglePubsubMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputGooglePubsubMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputGooglePubsubMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputGooglePubsub struct {
@@ -311,170 +311,170 @@ func (i *InputGooglePubsub) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputGooglePubsub) GetID() *string {
-	if o == nil {
+func (i *InputGooglePubsub) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputGooglePubsub) GetType() *InputGooglePubsubType {
-	if o == nil {
+func (i *InputGooglePubsub) GetType() *InputGooglePubsubType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputGooglePubsub) GetDisabled() *bool {
-	if o == nil {
+func (i *InputGooglePubsub) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputGooglePubsub) GetPipeline() *string {
-	if o == nil {
+func (i *InputGooglePubsub) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputGooglePubsub) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputGooglePubsub) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputGooglePubsub) GetEnvironment() *string {
-	if o == nil {
+func (i *InputGooglePubsub) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputGooglePubsub) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputGooglePubsub) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputGooglePubsub) GetStreamtags() []string {
-	if o == nil {
+func (i *InputGooglePubsub) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputGooglePubsub) GetConnections() []InputGooglePubsubConnection {
-	if o == nil {
+func (i *InputGooglePubsub) GetConnections() []InputGooglePubsubConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputGooglePubsub) GetPq() *InputGooglePubsubPq {
-	if o == nil {
+func (i *InputGooglePubsub) GetPq() *InputGooglePubsubPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputGooglePubsub) GetTopicName() string {
-	if o == nil {
+func (i *InputGooglePubsub) GetTopicName() string {
+	if i == nil {
 		return ""
 	}
-	return o.TopicName
+	return i.TopicName
 }
 
-func (o *InputGooglePubsub) GetSubscriptionName() string {
-	if o == nil {
+func (i *InputGooglePubsub) GetSubscriptionName() string {
+	if i == nil {
 		return ""
 	}
-	return o.SubscriptionName
+	return i.SubscriptionName
 }
 
-func (o *InputGooglePubsub) GetCreateTopic() *bool {
-	if o == nil {
+func (i *InputGooglePubsub) GetCreateTopic() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CreateTopic
+	return i.CreateTopic
 }
 
-func (o *InputGooglePubsub) GetCreateSubscription() *bool {
-	if o == nil {
+func (i *InputGooglePubsub) GetCreateSubscription() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CreateSubscription
+	return i.CreateSubscription
 }
 
-func (o *InputGooglePubsub) GetRegion() *string {
-	if o == nil {
+func (i *InputGooglePubsub) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputGooglePubsub) GetGoogleAuthMethod() *InputGooglePubsubGoogleAuthenticationMethod {
-	if o == nil {
+func (i *InputGooglePubsub) GetGoogleAuthMethod() *InputGooglePubsubGoogleAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.GoogleAuthMethod
+	return i.GoogleAuthMethod
 }
 
-func (o *InputGooglePubsub) GetServiceAccountCredentials() *string {
-	if o == nil {
+func (i *InputGooglePubsub) GetServiceAccountCredentials() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ServiceAccountCredentials
+	return i.ServiceAccountCredentials
 }
 
-func (o *InputGooglePubsub) GetSecret() *string {
-	if o == nil {
+func (i *InputGooglePubsub) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputGooglePubsub) GetMaxBacklog() *float64 {
-	if o == nil {
+func (i *InputGooglePubsub) GetMaxBacklog() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBacklog
+	return i.MaxBacklog
 }
 
-func (o *InputGooglePubsub) GetConcurrency() *float64 {
-	if o == nil {
+func (i *InputGooglePubsub) GetConcurrency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Concurrency
+	return i.Concurrency
 }
 
-func (o *InputGooglePubsub) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputGooglePubsub) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputGooglePubsub) GetMetadata() []InputGooglePubsubMetadatum {
-	if o == nil {
+func (i *InputGooglePubsub) GetMetadata() []InputGooglePubsubMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputGooglePubsub) GetDescription() *string {
-	if o == nil {
+func (i *InputGooglePubsub) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputGooglePubsub) GetOrderedDelivery() *bool {
-	if o == nil {
+func (i *InputGooglePubsub) GetOrderedDelivery() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.OrderedDelivery
+	return i.OrderedDelivery
 }

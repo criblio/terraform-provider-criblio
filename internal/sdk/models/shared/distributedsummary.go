@@ -10,39 +10,39 @@ type DistributedSummaryGroups struct {
 	Sources      float64 `json:"sources"`
 }
 
-func (o *DistributedSummaryGroups) GetCount() float64 {
-	if o == nil {
+func (d *DistributedSummaryGroups) GetCount() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Count
+	return d.Count
 }
 
-func (o *DistributedSummaryGroups) GetDestinations() float64 {
-	if o == nil {
+func (d *DistributedSummaryGroups) GetDestinations() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Destinations
+	return d.Destinations
 }
 
-func (o *DistributedSummaryGroups) GetPipelines() float64 {
-	if o == nil {
+func (d *DistributedSummaryGroups) GetPipelines() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Pipelines
+	return d.Pipelines
 }
 
-func (o *DistributedSummaryGroups) GetRoutes() float64 {
-	if o == nil {
+func (d *DistributedSummaryGroups) GetRoutes() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Routes
+	return d.Routes
 }
 
-func (o *DistributedSummaryGroups) GetSources() float64 {
-	if o == nil {
+func (d *DistributedSummaryGroups) GetSources() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Sources
+	return d.Sources
 }
 
 type DistributedSummaryWorkers struct {
@@ -54,46 +54,46 @@ type DistributedSummaryWorkers struct {
 	Unhealthy        float64 `json:"unhealthy"`
 }
 
-func (o *DistributedSummaryWorkers) GetAlive() float64 {
-	if o == nil {
+func (d *DistributedSummaryWorkers) GetAlive() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Alive
+	return d.Alive
 }
 
-func (o *DistributedSummaryWorkers) GetConfVersions() float64 {
-	if o == nil {
+func (d *DistributedSummaryWorkers) GetConfVersions() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.ConfVersions
+	return d.ConfVersions
 }
 
-func (o *DistributedSummaryWorkers) GetCount() float64 {
-	if o == nil {
+func (d *DistributedSummaryWorkers) GetCount() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Count
+	return d.Count
 }
 
-func (o *DistributedSummaryWorkers) GetGroups() float64 {
-	if o == nil {
+func (d *DistributedSummaryWorkers) GetGroups() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Groups
+	return d.Groups
 }
 
-func (o *DistributedSummaryWorkers) GetSoftwareVersions() float64 {
-	if o == nil {
+func (d *DistributedSummaryWorkers) GetSoftwareVersions() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.SoftwareVersions
+	return d.SoftwareVersions
 }
 
-func (o *DistributedSummaryWorkers) GetUnhealthy() float64 {
-	if o == nil {
+func (d *DistributedSummaryWorkers) GetUnhealthy() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Unhealthy
+	return d.Unhealthy
 }
 
 type DistributedSummary struct {
@@ -101,16 +101,16 @@ type DistributedSummary struct {
 	Workers DistributedSummaryWorkers `json:"workers"`
 }
 
-func (o *DistributedSummary) GetGroups() DistributedSummaryGroups {
-	if o == nil {
+func (d *DistributedSummary) GetGroups() DistributedSummaryGroups {
+	if d == nil {
 		return DistributedSummaryGroups{}
 	}
-	return o.Groups
+	return d.Groups
 }
 
-func (o *DistributedSummary) GetWorkers() DistributedSummaryWorkers {
-	if o == nil {
+func (d *DistributedSummary) GetWorkers() DistributedSummaryWorkers {
+	if d == nil {
 		return DistributedSummaryWorkers{}
 	}
-	return o.Workers
+	return d.Workers
 }

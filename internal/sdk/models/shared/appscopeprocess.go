@@ -8,25 +8,25 @@ type Interface struct {
 	Name      *string `json:"name,omitempty"`
 }
 
-func (o *Interface) GetConfig() *string {
-	if o == nil {
+func (i *Interface) GetConfig() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Config
+	return i.Config
 }
 
-func (o *Interface) GetConnected() *bool {
-	if o == nil {
+func (i *Interface) GetConnected() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Connected
+	return i.Connected
 }
 
-func (o *Interface) GetName() *string {
-	if o == nil {
+func (i *Interface) GetName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Name
+	return i.Name
 }
 
 type AppScopeProcessProcess struct {
@@ -37,39 +37,39 @@ type AppScopeProcessProcess struct {
 	UUID      *string  `json:"uuid,omitempty"`
 }
 
-func (o *AppScopeProcessProcess) GetHostPid() *float64 {
-	if o == nil {
+func (a *AppScopeProcessProcess) GetHostPid() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.HostPid
+	return a.HostPid
 }
 
-func (o *AppScopeProcessProcess) GetID() *string {
-	if o == nil {
+func (a *AppScopeProcessProcess) GetID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *AppScopeProcessProcess) GetMachineID() *string {
-	if o == nil {
+func (a *AppScopeProcessProcess) GetMachineID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.MachineID
+	return a.MachineID
 }
 
-func (o *AppScopeProcessProcess) GetPid() float64 {
-	if o == nil {
+func (a *AppScopeProcessProcess) GetPid() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.Pid
+	return a.Pid
 }
 
-func (o *AppScopeProcessProcess) GetUUID() *string {
-	if o == nil {
+func (a *AppScopeProcessProcess) GetUUID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.UUID
+	return a.UUID
 }
 
 type AppScopeProcess struct {
@@ -84,65 +84,65 @@ type AppScopeProcess struct {
 	Status           *AppScopeProcessStatus    `json:"status,omitempty"`
 }
 
-func (o *AppScopeProcess) GetCfg() *AppscopeConfigWithCustom {
-	if o == nil {
+func (a *AppScopeProcess) GetCfg() *AppscopeConfigWithCustom {
+	if a == nil {
 		return nil
 	}
-	return o.Cfg
+	return a.Cfg
 }
 
-func (o *AppScopeProcess) GetConfigID() *string {
-	if o == nil {
+func (a *AppScopeProcess) GetConfigID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ConfigID
+	return a.ConfigID
 }
 
-func (o *AppScopeProcess) GetID() string {
-	if o == nil {
+func (a *AppScopeProcess) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *AppScopeProcess) GetInterfaces() []Interface {
-	if o == nil {
+func (a *AppScopeProcess) GetInterfaces() []Interface {
+	if a == nil {
 		return nil
 	}
-	return o.Interfaces
+	return a.Interfaces
 }
 
-func (o *AppScopeProcess) GetLastError() *string {
-	if o == nil {
+func (a *AppScopeProcess) GetLastError() *string {
+	if a == nil {
 		return nil
 	}
-	return o.LastError
+	return a.LastError
 }
 
-func (o *AppScopeProcess) GetProcess() *AppScopeProcessProcess {
-	if o == nil {
+func (a *AppScopeProcess) GetProcess() *AppScopeProcessProcess {
+	if a == nil {
 		return nil
 	}
-	return o.Process
+	return a.Process
 }
 
-func (o *AppScopeProcess) GetProcessingStatus() *AppScopeProcessingStatus {
-	if o == nil {
+func (a *AppScopeProcess) GetProcessingStatus() *AppScopeProcessingStatus {
+	if a == nil {
 		return nil
 	}
-	return o.ProcessingStatus
+	return a.ProcessingStatus
 }
 
-func (o *AppScopeProcess) GetSourceID() *string {
-	if o == nil {
+func (a *AppScopeProcess) GetSourceID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.SourceID
+	return a.SourceID
 }
 
-func (o *AppScopeProcess) GetStatus() *AppScopeProcessStatus {
-	if o == nil {
+func (a *AppScopeProcess) GetStatus() *AppScopeProcessStatus {
+	if a == nil {
 		return nil
 	}
-	return o.Status
+	return a.Status
 }

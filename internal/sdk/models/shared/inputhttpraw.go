@@ -47,18 +47,18 @@ func (i *InputHTTPRawConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputHTTPRawConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputHTTPRawConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputHTTPRawConnection) GetOutput() string {
-	if o == nil {
+func (i *InputHTTPRawConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputHTTPRawMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputHTTPRawPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputHTTPRawPq) GetMode() *InputHTTPRawMode {
-	if o == nil {
+func (i *InputHTTPRawPq) GetMode() *InputHTTPRawMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputHTTPRawPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputHTTPRawPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputHTTPRawPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputHTTPRawPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputHTTPRawPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputHTTPRawPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputHTTPRawPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputHTTPRawPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputHTTPRawPq) GetPath() *string {
-	if o == nil {
+func (i *InputHTTPRawPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputHTTPRawPq) GetCompress() *InputHTTPRawCompression {
-	if o == nil {
+func (i *InputHTTPRawPq) GetCompress() *InputHTTPRawCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputHTTPRawMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputHTTPRawTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetMinVersion() *InputHTTPRawMinimumTLSVersion {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetMinVersion() *InputHTTPRawMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputHTTPRawTLSSettingsServerSide) GetMaxVersion() *InputHTTPRawMaximumTLSVersion {
-	if o == nil {
+func (i *InputHTTPRawTLSSettingsServerSide) GetMaxVersion() *InputHTTPRawMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputHTTPRawMetadatum struct {
@@ -381,18 +381,18 @@ func (i *InputHTTPRawMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputHTTPRawMetadatum) GetName() string {
-	if o == nil {
+func (i *InputHTTPRawMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputHTTPRawMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputHTTPRawMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputHTTPRawAuthTokensExtMetadatum struct {
@@ -412,18 +412,18 @@ func (i *InputHTTPRawAuthTokensExtMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputHTTPRawAuthTokensExtMetadatum) GetName() string {
-	if o == nil {
+func (i *InputHTTPRawAuthTokensExtMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputHTTPRawAuthTokensExtMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputHTTPRawAuthTokensExtMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputHTTPRawAuthTokensExt struct {
@@ -445,25 +445,25 @@ func (i *InputHTTPRawAuthTokensExt) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputHTTPRawAuthTokensExt) GetToken() string {
-	if o == nil {
+func (i *InputHTTPRawAuthTokensExt) GetToken() string {
+	if i == nil {
 		return ""
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputHTTPRawAuthTokensExt) GetDescription() *string {
-	if o == nil {
+func (i *InputHTTPRawAuthTokensExt) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputHTTPRawAuthTokensExt) GetMetadata() []InputHTTPRawAuthTokensExtMetadatum {
-	if o == nil {
+func (i *InputHTTPRawAuthTokensExt) GetMetadata() []InputHTTPRawAuthTokensExtMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
 type InputHTTPRaw struct {
@@ -539,226 +539,226 @@ func (i *InputHTTPRaw) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputHTTPRaw) GetID() *string {
-	if o == nil {
+func (i *InputHTTPRaw) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputHTTPRaw) GetType() *InputHTTPRawType {
-	if o == nil {
+func (i *InputHTTPRaw) GetType() *InputHTTPRawType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputHTTPRaw) GetDisabled() *bool {
-	if o == nil {
+func (i *InputHTTPRaw) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputHTTPRaw) GetPipeline() *string {
-	if o == nil {
+func (i *InputHTTPRaw) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputHTTPRaw) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputHTTPRaw) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputHTTPRaw) GetEnvironment() *string {
-	if o == nil {
+func (i *InputHTTPRaw) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputHTTPRaw) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputHTTPRaw) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputHTTPRaw) GetStreamtags() []string {
-	if o == nil {
+func (i *InputHTTPRaw) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputHTTPRaw) GetConnections() []InputHTTPRawConnection {
-	if o == nil {
+func (i *InputHTTPRaw) GetConnections() []InputHTTPRawConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputHTTPRaw) GetPq() *InputHTTPRawPq {
-	if o == nil {
+func (i *InputHTTPRaw) GetPq() *InputHTTPRawPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputHTTPRaw) GetHost() *string {
-	if o == nil {
+func (i *InputHTTPRaw) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputHTTPRaw) GetPort() float64 {
-	if o == nil {
+func (i *InputHTTPRaw) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputHTTPRaw) GetAuthTokens() []string {
-	if o == nil {
+func (i *InputHTTPRaw) GetAuthTokens() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthTokens
+	return i.AuthTokens
 }
 
-func (o *InputHTTPRaw) GetTLS() *InputHTTPRawTLSSettingsServerSide {
-	if o == nil {
+func (i *InputHTTPRaw) GetTLS() *InputHTTPRawTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputHTTPRaw) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputHTTPRaw) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputHTTPRaw) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputHTTPRaw) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputHTTPRaw) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputHTTPRaw) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputHTTPRaw) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputHTTPRaw) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputHTTPRaw) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputHTTPRaw) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputHTTPRaw) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputHTTPRaw) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputHTTPRaw) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputHTTPRaw) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputHTTPRaw) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputHTTPRaw) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputHTTPRaw) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputHTTPRaw) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputHTTPRaw) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputHTTPRaw) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputHTTPRaw) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputHTTPRaw) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputHTTPRaw) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputHTTPRaw) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputHTTPRaw) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputHTTPRaw) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputHTTPRaw) GetMetadata() []InputHTTPRawMetadatum {
-	if o == nil {
+func (i *InputHTTPRaw) GetMetadata() []InputHTTPRawMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputHTTPRaw) GetAllowedPaths() []string {
-	if o == nil {
+func (i *InputHTTPRaw) GetAllowedPaths() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AllowedPaths
+	return i.AllowedPaths
 }
 
-func (o *InputHTTPRaw) GetAllowedMethods() []string {
-	if o == nil {
+func (i *InputHTTPRaw) GetAllowedMethods() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AllowedMethods
+	return i.AllowedMethods
 }
 
-func (o *InputHTTPRaw) GetAuthTokensExt() []InputHTTPRawAuthTokensExt {
-	if o == nil {
+func (i *InputHTTPRaw) GetAuthTokensExt() []InputHTTPRawAuthTokensExt {
+	if i == nil {
 		return nil
 	}
-	return o.AuthTokensExt
+	return i.AuthTokensExt
 }
 
-func (o *InputHTTPRaw) GetDescription() *string {
-	if o == nil {
+func (i *InputHTTPRaw) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

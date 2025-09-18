@@ -44,37 +44,37 @@ type LicenseInfo struct {
 	Type         LicenseInfoType `json:"type"`
 }
 
-func (o *LicenseInfo) GetEmail() *string {
-	if o == nil {
+func (l *LicenseInfo) GetEmail() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Email
+	return l.Email
 }
 
-func (o *LicenseInfo) GetIsRegistered() bool {
-	if o == nil {
+func (l *LicenseInfo) GetIsRegistered() bool {
+	if l == nil {
 		return false
 	}
-	return o.IsRegistered
+	return l.IsRegistered
 }
 
-func (o *LicenseInfo) GetIsSplunkApp() *bool {
-	if o == nil {
+func (l *LicenseInfo) GetIsSplunkApp() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.IsSplunkApp
+	return l.IsSplunkApp
 }
 
-func (o *LicenseInfo) GetLimits() LicenseLimits {
-	if o == nil {
+func (l *LicenseInfo) GetLimits() LicenseLimits {
+	if l == nil {
 		return LicenseLimits{}
 	}
-	return o.Limits
+	return l.Limits
 }
 
-func (o *LicenseInfo) GetType() LicenseInfoType {
-	if o == nil {
+func (l *LicenseInfo) GetType() LicenseInfoType {
+	if l == nil {
 		return LicenseInfoType("")
 	}
-	return o.Type
+	return l.Type
 }

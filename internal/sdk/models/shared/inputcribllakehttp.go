@@ -47,18 +47,18 @@ func (i *InputCriblLakeHTTPConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblLakeHTTPConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCriblLakeHTTPConnection) GetOutput() string {
-	if o == nil {
+func (i *InputCriblLakeHTTPConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputCriblLakeHTTPMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputCriblLakeHTTPPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblLakeHTTPPq) GetMode() *InputCriblLakeHTTPMode {
-	if o == nil {
+func (i *InputCriblLakeHTTPPq) GetMode() *InputCriblLakeHTTPMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCriblLakeHTTPPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputCriblLakeHTTPPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputCriblLakeHTTPPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputCriblLakeHTTPPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputCriblLakeHTTPPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputCriblLakeHTTPPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputCriblLakeHTTPPq) GetPath() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputCriblLakeHTTPPq) GetCompress() *InputCriblLakeHTTPCompression {
-	if o == nil {
+func (i *InputCriblLakeHTTPPq) GetCompress() *InputCriblLakeHTTPCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputCriblLakeHTTPMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputCriblLakeHTTPTLSSettingsServerSide) UnmarshalJSON(data []byte) err
 	return nil
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetMinVersion() *InputCriblLakeHTTPMinimumTLSVersion {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetMinVersion() *InputCriblLakeHTTPMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputCriblLakeHTTPTLSSettingsServerSide) GetMaxVersion() *InputCriblLakeHTTPMaximumTLSVersion {
-	if o == nil {
+func (i *InputCriblLakeHTTPTLSSettingsServerSide) GetMaxVersion() *InputCriblLakeHTTPMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputCriblLakeHTTPMetadatum struct {
@@ -381,18 +381,18 @@ func (i *InputCriblLakeHTTPMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblLakeHTTPMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCriblLakeHTTPMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCriblLakeHTTPMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCriblLakeHTTPMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCriblLakeHTTP struct {
@@ -458,191 +458,191 @@ func (i *InputCriblLakeHTTP) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblLakeHTTP) GetID() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCriblLakeHTTP) GetType() *InputCriblLakeHTTPType {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetType() *InputCriblLakeHTTPType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCriblLakeHTTP) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCriblLakeHTTP) GetPipeline() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCriblLakeHTTP) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCriblLakeHTTP) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCriblLakeHTTP) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputCriblLakeHTTP) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCriblLakeHTTP) GetConnections() []InputCriblLakeHTTPConnection {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetConnections() []InputCriblLakeHTTPConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputCriblLakeHTTP) GetPq() *InputCriblLakeHTTPPq {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetPq() *InputCriblLakeHTTPPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputCriblLakeHTTP) GetHost() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputCriblLakeHTTP) GetPort() float64 {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputCriblLakeHTTP) GetAuthTokens() []string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetAuthTokens() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthTokens
+	return i.AuthTokens
 }
 
-func (o *InputCriblLakeHTTP) GetTLS() *InputCriblLakeHTTPTLSSettingsServerSide {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetTLS() *InputCriblLakeHTTPTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputCriblLakeHTTP) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputCriblLakeHTTP) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputCriblLakeHTTP) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputCriblLakeHTTP) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputCriblLakeHTTP) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputCriblLakeHTTP) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputCriblLakeHTTP) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputCriblLakeHTTP) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputCriblLakeHTTP) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputCriblLakeHTTP) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputCriblLakeHTTP) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputCriblLakeHTTP) GetMetadata() []InputCriblLakeHTTPMetadatum {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetMetadata() []InputCriblLakeHTTPMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCriblLakeHTTP) GetDescription() *string {
-	if o == nil {
+func (i *InputCriblLakeHTTP) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

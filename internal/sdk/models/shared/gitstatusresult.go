@@ -8,25 +8,25 @@ type File struct {
 	WorkingDir string `json:"working_dir"`
 }
 
-func (o *File) GetIndex() string {
-	if o == nil {
+func (f *File) GetIndex() string {
+	if f == nil {
 		return ""
 	}
-	return o.Index
+	return f.Index
 }
 
-func (o *File) GetPath() string {
-	if o == nil {
+func (f *File) GetPath() string {
+	if f == nil {
 		return ""
 	}
-	return o.Path
+	return f.Path
 }
 
-func (o *File) GetWorkingDir() string {
-	if o == nil {
+func (f *File) GetWorkingDir() string {
+	if f == nil {
 		return ""
 	}
-	return o.WorkingDir
+	return f.WorkingDir
 }
 
 type Renamed struct {
@@ -34,18 +34,18 @@ type Renamed struct {
 	To   string `json:"to"`
 }
 
-func (o *Renamed) GetFrom() string {
-	if o == nil {
+func (r *Renamed) GetFrom() string {
+	if r == nil {
 		return ""
 	}
-	return o.From
+	return r.From
 }
 
-func (o *Renamed) GetTo() string {
-	if o == nil {
+func (r *Renamed) GetTo() string {
+	if r == nil {
 		return ""
 	}
-	return o.To
+	return r.To
 }
 
 type GitStatusResult struct {
@@ -63,86 +63,86 @@ type GitStatusResult struct {
 	Tracking   string    `json:"tracking"`
 }
 
-func (o *GitStatusResult) GetAhead() float64 {
-	if o == nil {
+func (g *GitStatusResult) GetAhead() float64 {
+	if g == nil {
 		return 0.0
 	}
-	return o.Ahead
+	return g.Ahead
 }
 
-func (o *GitStatusResult) GetBehind() float64 {
-	if o == nil {
+func (g *GitStatusResult) GetBehind() float64 {
+	if g == nil {
 		return 0.0
 	}
-	return o.Behind
+	return g.Behind
 }
 
-func (o *GitStatusResult) GetConflicted() []string {
-	if o == nil {
+func (g *GitStatusResult) GetConflicted() []string {
+	if g == nil {
 		return []string{}
 	}
-	return o.Conflicted
+	return g.Conflicted
 }
 
-func (o *GitStatusResult) GetCreated() []string {
-	if o == nil {
+func (g *GitStatusResult) GetCreated() []string {
+	if g == nil {
 		return []string{}
 	}
-	return o.Created
+	return g.Created
 }
 
-func (o *GitStatusResult) GetCurrent() string {
-	if o == nil {
+func (g *GitStatusResult) GetCurrent() string {
+	if g == nil {
 		return ""
 	}
-	return o.Current
+	return g.Current
 }
 
-func (o *GitStatusResult) GetDeleted() []string {
-	if o == nil {
+func (g *GitStatusResult) GetDeleted() []string {
+	if g == nil {
 		return []string{}
 	}
-	return o.Deleted
+	return g.Deleted
 }
 
-func (o *GitStatusResult) GetFiles() []File {
-	if o == nil {
+func (g *GitStatusResult) GetFiles() []File {
+	if g == nil {
 		return []File{}
 	}
-	return o.Files
+	return g.Files
 }
 
-func (o *GitStatusResult) GetModified() []string {
-	if o == nil {
+func (g *GitStatusResult) GetModified() []string {
+	if g == nil {
 		return []string{}
 	}
-	return o.Modified
+	return g.Modified
 }
 
-func (o *GitStatusResult) GetNotAdded() []string {
-	if o == nil {
+func (g *GitStatusResult) GetNotAdded() []string {
+	if g == nil {
 		return []string{}
 	}
-	return o.NotAdded
+	return g.NotAdded
 }
 
-func (o *GitStatusResult) GetRenamed() []Renamed {
-	if o == nil {
+func (g *GitStatusResult) GetRenamed() []Renamed {
+	if g == nil {
 		return []Renamed{}
 	}
-	return o.Renamed
+	return g.Renamed
 }
 
-func (o *GitStatusResult) GetStaged() []string {
-	if o == nil {
+func (g *GitStatusResult) GetStaged() []string {
+	if g == nil {
 		return []string{}
 	}
-	return o.Staged
+	return g.Staged
 }
 
-func (o *GitStatusResult) GetTracking() string {
-	if o == nil {
+func (g *GitStatusResult) GetTracking() string {
+	if g == nil {
 		return ""
 	}
-	return o.Tracking
+	return g.Tracking
 }

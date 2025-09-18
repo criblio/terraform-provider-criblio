@@ -9,30 +9,30 @@ type SymLinkInfo struct {
 	SymLinkTargetIsFile       *bool  `json:"symLinkTargetIsFile,omitempty"`
 }
 
-func (o *SymLinkInfo) GetSymLinkTarget() string {
-	if o == nil {
+func (s *SymLinkInfo) GetSymLinkTarget() string {
+	if s == nil {
 		return ""
 	}
-	return o.SymLinkTarget
+	return s.SymLinkTarget
 }
 
-func (o *SymLinkInfo) GetSymLinkTargetAbsolutePath() string {
-	if o == nil {
+func (s *SymLinkInfo) GetSymLinkTargetAbsolutePath() string {
+	if s == nil {
 		return ""
 	}
-	return o.SymLinkTargetAbsolutePath
+	return s.SymLinkTargetAbsolutePath
 }
 
-func (o *SymLinkInfo) GetSymLinkTargetIsDirectory() *bool {
-	if o == nil {
+func (s *SymLinkInfo) GetSymLinkTargetIsDirectory() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.SymLinkTargetIsDirectory
+	return s.SymLinkTargetIsDirectory
 }
 
-func (o *SymLinkInfo) GetSymLinkTargetIsFile() *bool {
-	if o == nil {
+func (s *SymLinkInfo) GetSymLinkTargetIsFile() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.SymLinkTargetIsFile
+	return s.SymLinkTargetIsFile
 }

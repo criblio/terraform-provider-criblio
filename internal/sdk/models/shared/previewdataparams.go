@@ -51,86 +51,86 @@ type PreviewDataParams struct {
 	Timeout              *float64              `json:"timeout,omitempty"`
 }
 
-func (o *PreviewDataParams) GetCPUProfile() *bool {
-	if o == nil {
+func (p *PreviewDataParams) GetCPUProfile() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.CPUProfile
+	return p.CPUProfile
 }
 
-func (o *PreviewDataParams) GetDropped() *bool {
-	if o == nil {
+func (p *PreviewDataParams) GetDropped() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Dropped
+	return p.Dropped
 }
 
-func (o *PreviewDataParams) GetEnhanceMetricsOutput() *bool {
-	if o == nil {
+func (p *PreviewDataParams) GetEnhanceMetricsOutput() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.EnhanceMetricsOutput
+	return p.EnhanceMetricsOutput
 }
 
-func (o *PreviewDataParams) GetEvents() []map[string]any {
-	if o == nil {
+func (p *PreviewDataParams) GetEvents() []map[string]any {
+	if p == nil {
 		return nil
 	}
-	return o.Events
+	return p.Events
 }
 
-func (o *PreviewDataParams) GetInputID() *string {
-	if o == nil {
+func (p *PreviewDataParams) GetInputID() *string {
+	if p == nil {
 		return nil
 	}
-	return o.InputID
+	return p.InputID
 }
 
-func (o *PreviewDataParams) GetLevel() *float64 {
-	if o == nil {
+func (p *PreviewDataParams) GetLevel() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Level
+	return p.Level
 }
 
-func (o *PreviewDataParams) GetMemory() *float64 {
-	if o == nil {
+func (p *PreviewDataParams) GetMemory() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Memory
+	return p.Memory
 }
 
-func (o *PreviewDataParams) GetMode() PreviewDataParamsMode {
-	if o == nil {
+func (p *PreviewDataParams) GetMode() PreviewDataParamsMode {
+	if p == nil {
 		return PreviewDataParamsMode("")
 	}
-	return o.Mode
+	return p.Mode
 }
 
-func (o *PreviewDataParams) GetPipelineID() string {
-	if o == nil {
+func (p *PreviewDataParams) GetPipelineID() string {
+	if p == nil {
 		return ""
 	}
-	return o.PipelineID
+	return p.PipelineID
 }
 
-func (o *PreviewDataParams) GetSampleID() string {
-	if o == nil {
+func (p *PreviewDataParams) GetSampleID() string {
+	if p == nil {
 		return ""
 	}
-	return o.SampleID
+	return p.SampleID
 }
 
-func (o *PreviewDataParams) GetSamplePipelineID() *string {
-	if o == nil {
+func (p *PreviewDataParams) GetSamplePipelineID() *string {
+	if p == nil {
 		return nil
 	}
-	return o.SamplePipelineID
+	return p.SamplePipelineID
 }
 
-func (o *PreviewDataParams) GetTimeout() *float64 {
-	if o == nil {
+func (p *PreviewDataParams) GetTimeout() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Timeout
+	return p.Timeout
 }

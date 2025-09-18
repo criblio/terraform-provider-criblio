@@ -7,18 +7,18 @@ type Author struct {
 	Name  string `json:"name"`
 }
 
-func (o *Author) GetEmail() string {
-	if o == nil {
+func (a *Author) GetEmail() string {
+	if a == nil {
 		return ""
 	}
-	return o.Email
+	return a.Email
 }
 
-func (o *Author) GetName() string {
-	if o == nil {
+func (a *Author) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
 type GitCommitSummaryFiles struct {
@@ -28,32 +28,32 @@ type GitCommitSummaryFiles struct {
 	Renamed  []string `json:"renamed,omitempty"`
 }
 
-func (o *GitCommitSummaryFiles) GetCreated() []string {
-	if o == nil {
+func (g *GitCommitSummaryFiles) GetCreated() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Created
+	return g.Created
 }
 
-func (o *GitCommitSummaryFiles) GetDeleted() []string {
-	if o == nil {
+func (g *GitCommitSummaryFiles) GetDeleted() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Deleted
+	return g.Deleted
 }
 
-func (o *GitCommitSummaryFiles) GetModified() []string {
-	if o == nil {
+func (g *GitCommitSummaryFiles) GetModified() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Modified
+	return g.Modified
 }
 
-func (o *GitCommitSummaryFiles) GetRenamed() []string {
-	if o == nil {
+func (g *GitCommitSummaryFiles) GetRenamed() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Renamed
+	return g.Renamed
 }
 
 type Summary struct {
@@ -62,25 +62,25 @@ type Summary struct {
 	Insertions float64 `json:"insertions"`
 }
 
-func (o *Summary) GetChanges() float64 {
-	if o == nil {
+func (s *Summary) GetChanges() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Changes
+	return s.Changes
 }
 
-func (o *Summary) GetDeletions() float64 {
-	if o == nil {
+func (s *Summary) GetDeletions() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Deletions
+	return s.Deletions
 }
 
-func (o *Summary) GetInsertions() float64 {
-	if o == nil {
+func (s *Summary) GetInsertions() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Insertions
+	return s.Insertions
 }
 
 type GitCommitSummary struct {
@@ -91,37 +91,37 @@ type GitCommitSummary struct {
 	Summary Summary               `json:"summary"`
 }
 
-func (o *GitCommitSummary) GetAuthor() Author {
-	if o == nil {
+func (g *GitCommitSummary) GetAuthor() Author {
+	if g == nil {
 		return Author{}
 	}
-	return o.Author
+	return g.Author
 }
 
-func (o *GitCommitSummary) GetBranch() string {
-	if o == nil {
+func (g *GitCommitSummary) GetBranch() string {
+	if g == nil {
 		return ""
 	}
-	return o.Branch
+	return g.Branch
 }
 
-func (o *GitCommitSummary) GetCommit() string {
-	if o == nil {
+func (g *GitCommitSummary) GetCommit() string {
+	if g == nil {
 		return ""
 	}
-	return o.Commit
+	return g.Commit
 }
 
-func (o *GitCommitSummary) GetFiles() GitCommitSummaryFiles {
-	if o == nil {
+func (g *GitCommitSummary) GetFiles() GitCommitSummaryFiles {
+	if g == nil {
 		return GitCommitSummaryFiles{}
 	}
-	return o.Files
+	return g.Files
 }
 
-func (o *GitCommitSummary) GetSummary() Summary {
-	if o == nil {
+func (g *GitCommitSummary) GetSummary() Summary {
+	if g == nil {
 		return Summary{}
 	}
-	return o.Summary
+	return g.Summary
 }

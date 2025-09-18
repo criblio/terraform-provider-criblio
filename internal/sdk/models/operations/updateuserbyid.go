@@ -14,18 +14,18 @@ type UpdateUserByIDRequest struct {
 	UserProfile shared.UserProfile `request:"mediaType=application/json"`
 }
 
-func (o *UpdateUserByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateUserByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateUserByIDRequest) GetUserProfile() shared.UserProfile {
-	if o == nil {
+func (u *UpdateUserByIDRequest) GetUserProfile() shared.UserProfile {
+	if u == nil {
 		return shared.UserProfile{}
 	}
-	return o.UserProfile
+	return u.UserProfile
 }
 
 // UpdateUserByIDResponseBody - a list of UserProfile objects
@@ -33,11 +33,11 @@ type UpdateUserByIDResponseBody struct {
 	Items []shared.UserProfile `json:"items,omitempty"`
 }
 
-func (o *UpdateUserByIDResponseBody) GetItems() []shared.UserProfile {
-	if o == nil {
+func (u *UpdateUserByIDResponseBody) GetItems() []shared.UserProfile {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateUserByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateUserByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateUserByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateUserByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateUserByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateUserByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateUserByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateUserByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateUserByIDResponse) GetObject() *UpdateUserByIDResponseBody {
-	if o == nil {
+func (u *UpdateUserByIDResponse) GetObject() *UpdateUserByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateUserByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateUserByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

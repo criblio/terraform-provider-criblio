@@ -14,18 +14,18 @@ type GetVersionFilesRequest struct {
 	ID *string `queryParam:"style=form,explode=true,name=ID"`
 }
 
-func (o *GetVersionFilesRequest) GetGroup() *string {
-	if o == nil {
+func (g *GetVersionFilesRequest) GetGroup() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Group
+	return g.Group
 }
 
-func (o *GetVersionFilesRequest) GetID() *string {
-	if o == nil {
+func (g *GetVersionFilesRequest) GetID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetVersionFilesResponseBody - a list of GitFilesResponse objects
@@ -33,11 +33,11 @@ type GetVersionFilesResponseBody struct {
 	Items []shared.GitFilesResponse `json:"items,omitempty"`
 }
 
-func (o *GetVersionFilesResponseBody) GetItems() []shared.GitFilesResponse {
-	if o == nil {
+func (g *GetVersionFilesResponseBody) GetItems() []shared.GitFilesResponse {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetVersionFilesResponse struct {
@@ -53,37 +53,37 @@ type GetVersionFilesResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetVersionFilesResponse) GetContentType() string {
-	if o == nil {
+func (g *GetVersionFilesResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetVersionFilesResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetVersionFilesResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetVersionFilesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetVersionFilesResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetVersionFilesResponse) GetObject() *GetVersionFilesResponseBody {
-	if o == nil {
+func (g *GetVersionFilesResponse) GetObject() *GetVersionFilesResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetVersionFilesResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetVersionFilesResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

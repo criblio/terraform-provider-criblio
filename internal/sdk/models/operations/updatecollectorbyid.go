@@ -16,25 +16,25 @@ type UpdateCollectorByIDRequest struct {
 	InputCollector shared.InputCollector `request:"mediaType=application/json"`
 }
 
-func (o *UpdateCollectorByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateCollectorByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateCollectorByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateCollectorByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateCollectorByIDRequest) GetInputCollector() shared.InputCollector {
-	if o == nil {
+func (u *UpdateCollectorByIDRequest) GetInputCollector() shared.InputCollector {
+	if u == nil {
 		return shared.InputCollector{}
 	}
-	return o.InputCollector
+	return u.InputCollector
 }
 
 // UpdateCollectorByIDResponseBody - a list of Collector objects
@@ -54,37 +54,37 @@ type UpdateCollectorByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateCollectorByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateCollectorByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateCollectorByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateCollectorByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateCollectorByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateCollectorByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateCollectorByIDResponse) GetObject() *UpdateCollectorByIDResponseBody {
-	if o == nil {
+func (u *UpdateCollectorByIDResponse) GetObject() *UpdateCollectorByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateCollectorByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateCollectorByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

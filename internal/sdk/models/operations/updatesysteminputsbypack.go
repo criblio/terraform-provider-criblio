@@ -18,39 +18,39 @@ type UpdateSystemInputsByPackRequest struct {
 	Input shared.Input `request:"mediaType=application/json"`
 }
 
-func (o *UpdateSystemInputsByPackRequest) GetPack() string {
-	if o == nil {
+func (u *UpdateSystemInputsByPackRequest) GetPack() string {
+	if u == nil {
 		return ""
 	}
-	return o.Pack
+	return u.Pack
 }
 
-func (o *UpdateSystemInputsByPackRequest) GetDisabled() *bool {
-	if o == nil {
+func (u *UpdateSystemInputsByPackRequest) GetDisabled() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Disabled
+	return u.Disabled
 }
 
-func (o *UpdateSystemInputsByPackRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateSystemInputsByPackRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateSystemInputsByPackRequest) GetID() string {
-	if o == nil {
+func (u *UpdateSystemInputsByPackRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateSystemInputsByPackRequest) GetInput() shared.Input {
-	if o == nil {
+func (u *UpdateSystemInputsByPackRequest) GetInput() shared.Input {
+	if u == nil {
 		return shared.Input{}
 	}
-	return o.Input
+	return u.Input
 }
 
 // UpdateSystemInputsByPackResponseBody - a list of Pipeline objects
@@ -58,11 +58,11 @@ type UpdateSystemInputsByPackResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *UpdateSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (u *UpdateSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSystemInputsByPackResponse struct {
@@ -78,37 +78,37 @@ type UpdateSystemInputsByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSystemInputsByPackResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSystemInputsByPackResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSystemInputsByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSystemInputsByPackResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSystemInputsByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSystemInputsByPackResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSystemInputsByPackResponse) GetObject() *UpdateSystemInputsByPackResponseBody {
-	if o == nil {
+func (u *UpdateSystemInputsByPackResponse) GetObject() *UpdateSystemInputsByPackResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSystemInputsByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSystemInputsByPackResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

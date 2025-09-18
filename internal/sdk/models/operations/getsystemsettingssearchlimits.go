@@ -12,11 +12,11 @@ type GetSystemSettingsSearchLimitsResponseBody struct {
 	Items []shared.SearchSettings `json:"items,omitempty"`
 }
 
-func (o *GetSystemSettingsSearchLimitsResponseBody) GetItems() []shared.SearchSettings {
-	if o == nil {
+func (g *GetSystemSettingsSearchLimitsResponseBody) GetItems() []shared.SearchSettings {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemSettingsSearchLimitsResponse struct {
@@ -32,37 +32,37 @@ type GetSystemSettingsSearchLimitsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemSettingsSearchLimitsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemSettingsSearchLimitsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemSettingsSearchLimitsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemSettingsSearchLimitsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemSettingsSearchLimitsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemSettingsSearchLimitsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemSettingsSearchLimitsResponse) GetObject() *GetSystemSettingsSearchLimitsResponseBody {
-	if o == nil {
+func (g *GetSystemSettingsSearchLimitsResponse) GetObject() *GetSystemSettingsSearchLimitsResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemSettingsSearchLimitsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemSettingsSearchLimitsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -7,16 +7,16 @@ type EventBreakerRuleFields struct {
 	Value string `json:"value"`
 }
 
-func (o *EventBreakerRuleFields) GetName() string {
-	if o == nil {
+func (e *EventBreakerRuleFields) GetName() string {
+	if e == nil {
 		return ""
 	}
-	return o.Name
+	return e.Name
 }
 
-func (o *EventBreakerRuleFields) GetValue() string {
-	if o == nil {
+func (e *EventBreakerRuleFields) GetValue() string {
+	if e == nil {
 		return ""
 	}
-	return o.Value
+	return e.Value
 }

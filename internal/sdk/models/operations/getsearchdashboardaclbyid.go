@@ -12,11 +12,11 @@ type GetSearchDashboardACLByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetSearchDashboardACLByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSearchDashboardACLByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetSearchDashboardACLByIDResponseBody - a list of UserAccessControlList objects
@@ -24,11 +24,11 @@ type GetSearchDashboardACLByIDResponseBody struct {
 	Items []shared.UserAccessControlList `json:"items,omitempty"`
 }
 
-func (o *GetSearchDashboardACLByIDResponseBody) GetItems() []shared.UserAccessControlList {
-	if o == nil {
+func (g *GetSearchDashboardACLByIDResponseBody) GetItems() []shared.UserAccessControlList {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSearchDashboardACLByIDResponse struct {
@@ -44,37 +44,37 @@ type GetSearchDashboardACLByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchDashboardACLByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchDashboardACLByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchDashboardACLByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchDashboardACLByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchDashboardACLByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchDashboardACLByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchDashboardACLByIDResponse) GetObject() *GetSearchDashboardACLByIDResponseBody {
-	if o == nil {
+func (g *GetSearchDashboardACLByIDResponse) GetObject() *GetSearchDashboardACLByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSearchDashboardACLByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchDashboardACLByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

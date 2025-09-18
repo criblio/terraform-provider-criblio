@@ -60,25 +60,25 @@ type CHOutConfigColumnMapping struct {
 	ColumnValueExpression string `json:"columnValueExpression"`
 }
 
-func (o *CHOutConfigColumnMapping) GetColumnName() string {
-	if o == nil {
+func (c *CHOutConfigColumnMapping) GetColumnName() string {
+	if c == nil {
 		return ""
 	}
-	return o.ColumnName
+	return c.ColumnName
 }
 
-func (o *CHOutConfigColumnMapping) GetColumnType() string {
-	if o == nil {
+func (c *CHOutConfigColumnMapping) GetColumnType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ColumnType
+	return c.ColumnType
 }
 
-func (o *CHOutConfigColumnMapping) GetColumnValueExpression() string {
-	if o == nil {
+func (c *CHOutConfigColumnMapping) GetColumnValueExpression() string {
+	if c == nil {
 		return ""
 	}
-	return o.ColumnValueExpression
+	return c.ColumnValueExpression
 }
 
 type CHOutConfig struct {
@@ -124,282 +124,282 @@ type CHOutConfig struct {
 	WaitForAsyncInserts           *bool                        `json:"waitForAsyncInserts,omitempty"`
 }
 
-func (o *CHOutConfig) GetAsyncInserts() bool {
-	if o == nil {
+func (c *CHOutConfig) GetAsyncInserts() bool {
+	if c == nil {
 		return false
 	}
-	return o.AsyncInserts
+	return c.AsyncInserts
 }
 
-func (o *CHOutConfig) GetAuth() *HTTPOutAuthConfig {
-	if o == nil {
+func (c *CHOutConfig) GetAuth() *HTTPOutAuthConfig {
+	if c == nil {
 		return nil
 	}
-	return o.Auth
+	return c.Auth
 }
 
-func (o *CHOutConfig) GetAuthType() *CHOutConfigAuthType {
-	if o == nil {
+func (c *CHOutConfig) GetAuthType() *CHOutConfigAuthType {
+	if c == nil {
 		return nil
 	}
-	return o.AuthType
+	return c.AuthType
 }
 
-func (o *CHOutConfig) GetColumnMappings() []CHOutConfigColumnMapping {
-	if o == nil {
+func (c *CHOutConfig) GetColumnMappings() []CHOutConfigColumnMapping {
+	if c == nil {
 		return nil
 	}
-	return o.ColumnMappings
+	return c.ColumnMappings
 }
 
-func (o *CHOutConfig) GetCompress() *bool {
-	if o == nil {
+func (c *CHOutConfig) GetCompress() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Compress
+	return c.Compress
 }
 
-func (o *CHOutConfig) GetConcurrency() *float64 {
-	if o == nil {
+func (c *CHOutConfig) GetConcurrency() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.Concurrency
+	return c.Concurrency
 }
 
-func (o *CHOutConfig) GetDatabase() string {
-	if o == nil {
+func (c *CHOutConfig) GetDatabase() string {
+	if c == nil {
 		return ""
 	}
-	return o.Database
+	return c.Database
 }
 
-func (o *CHOutConfig) GetDumpFormatErrorsToDisk() *bool {
-	if o == nil {
+func (c *CHOutConfig) GetDumpFormatErrorsToDisk() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.DumpFormatErrorsToDisk
+	return c.DumpFormatErrorsToDisk
 }
 
-func (o *CHOutConfig) GetExcludeMappingFields() []string {
-	if o == nil {
+func (c *CHOutConfig) GetExcludeMappingFields() []string {
+	if c == nil {
 		return nil
 	}
-	return o.ExcludeMappingFields
+	return c.ExcludeMappingFields
 }
 
-func (o *CHOutConfig) GetExtraHTTPHeaders() []NameValue {
-	if o == nil {
+func (c *CHOutConfig) GetExtraHTTPHeaders() []NameValue {
+	if c == nil {
 		return nil
 	}
-	return o.ExtraHTTPHeaders
+	return c.ExtraHTTPHeaders
 }
 
-func (o *CHOutConfig) GetExtraParams() []HTTPOutExtraParamConfig {
-	if o == nil {
+func (c *CHOutConfig) GetExtraParams() []HTTPOutExtraParamConfig {
+	if c == nil {
 		return nil
 	}
-	return o.ExtraParams
+	return c.ExtraParams
 }
 
-func (o *CHOutConfig) GetFailedRequestLoggingMode() *string {
-	if o == nil {
+func (c *CHOutConfig) GetFailedRequestLoggingMode() *string {
+	if c == nil {
 		return nil
 	}
-	return o.FailedRequestLoggingMode
+	return c.FailedRequestLoggingMode
 }
 
-func (o *CHOutConfig) GetFlushPeriodSec() float64 {
-	if o == nil {
+func (c *CHOutConfig) GetFlushPeriodSec() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.FlushPeriodSec
+	return c.FlushPeriodSec
 }
 
-func (o *CHOutConfig) GetFormat() FormatEnum {
-	if o == nil {
+func (c *CHOutConfig) GetFormat() FormatEnum {
+	if c == nil {
 		return FormatEnum("")
 	}
-	return o.Format
+	return c.Format
 }
 
-func (o *CHOutConfig) GetKeepAlive() *bool {
-	if o == nil {
+func (c *CHOutConfig) GetKeepAlive() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.KeepAlive
+	return c.KeepAlive
 }
 
-func (o *CHOutConfig) GetLoadBalanced() bool {
-	if o == nil {
+func (c *CHOutConfig) GetLoadBalanced() bool {
+	if c == nil {
 		return false
 	}
-	return o.LoadBalanced
+	return c.LoadBalanced
 }
 
-func (o *CHOutConfig) GetMappingType() MappingType {
-	if o == nil {
+func (c *CHOutConfig) GetMappingType() MappingType {
+	if c == nil {
 		return MappingType("")
 	}
-	return o.MappingType
+	return c.MappingType
 }
 
-func (o *CHOutConfig) GetMaxConnectionReuseSec() *float64 {
-	if o == nil {
+func (c *CHOutConfig) GetMaxConnectionReuseSec() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.MaxConnectionReuseSec
+	return c.MaxConnectionReuseSec
 }
 
-func (o *CHOutConfig) GetMaxPayloadEvents() *float64 {
-	if o == nil {
+func (c *CHOutConfig) GetMaxPayloadEvents() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.MaxPayloadEvents
+	return c.MaxPayloadEvents
 }
 
-func (o *CHOutConfig) GetMaxPayloadSizeKB() *float64 {
-	if o == nil {
+func (c *CHOutConfig) GetMaxPayloadSizeKB() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.MaxPayloadSizeKB
+	return c.MaxPayloadSizeKB
 }
 
-func (o *CHOutConfig) GetMaxSockets() *float64 {
-	if o == nil {
+func (c *CHOutConfig) GetMaxSockets() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.MaxSockets
+	return c.MaxSockets
 }
 
-func (o *CHOutConfig) GetMethod() *string {
-	if o == nil {
+func (c *CHOutConfig) GetMethod() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Method
+	return c.Method
 }
 
-func (o *CHOutConfig) GetPassword() *string {
-	if o == nil {
+func (c *CHOutConfig) GetPassword() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Password
+	return c.Password
 }
 
-func (o *CHOutConfig) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (c *CHOutConfig) GetRejectUnauthorized() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return c.RejectUnauthorized
 }
 
-func (o *CHOutConfig) GetResponseHonorRetryAfterHeader() *bool {
-	if o == nil {
+func (c *CHOutConfig) GetResponseHonorRetryAfterHeader() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.ResponseHonorRetryAfterHeader
+	return c.ResponseHonorRetryAfterHeader
 }
 
-func (o *CHOutConfig) GetResponseRetrySettings() []HTTPOutResponseRetryConfig {
-	if o == nil {
+func (c *CHOutConfig) GetResponseRetrySettings() []HTTPOutResponseRetryConfig {
+	if c == nil {
 		return nil
 	}
-	return o.ResponseRetrySettings
+	return c.ResponseRetrySettings
 }
 
-func (o *CHOutConfig) GetSafeHeaders() []string {
-	if o == nil {
+func (c *CHOutConfig) GetSafeHeaders() []string {
+	if c == nil {
 		return nil
 	}
-	return o.SafeHeaders
+	return c.SafeHeaders
 }
 
-func (o *CHOutConfig) GetSQLUsername() *string {
-	if o == nil {
+func (c *CHOutConfig) GetSQLUsername() *string {
+	if c == nil {
 		return nil
 	}
-	return o.SQLUsername
+	return c.SQLUsername
 }
 
-func (o *CHOutConfig) GetTableName() string {
-	if o == nil {
+func (c *CHOutConfig) GetTableName() string {
+	if c == nil {
 		return ""
 	}
-	return o.TableName
+	return c.TableName
 }
 
-func (o *CHOutConfig) GetTableNameExpression() *string {
-	if o == nil {
+func (c *CHOutConfig) GetTableNameExpression() *string {
+	if c == nil {
 		return nil
 	}
-	return o.TableNameExpression
+	return c.TableNameExpression
 }
 
-func (o *CHOutConfig) GetTimeoutRetrySettings() *RetryBackoffOptions {
-	if o == nil {
+func (c *CHOutConfig) GetTimeoutRetrySettings() *RetryBackoffOptions {
+	if c == nil {
 		return nil
 	}
-	return o.TimeoutRetrySettings
+	return c.TimeoutRetrySettings
 }
 
-func (o *CHOutConfig) GetTimeoutSec() *float64 {
-	if o == nil {
+func (c *CHOutConfig) GetTimeoutSec() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.TimeoutSec
+	return c.TimeoutSec
 }
 
-func (o *CHOutConfig) GetTLS() *TLSClientParams {
-	if o == nil {
+func (c *CHOutConfig) GetTLS() *TLSClientParams {
+	if c == nil {
 		return nil
 	}
-	return o.TLS
+	return c.TLS
 }
 
-func (o *CHOutConfig) GetToken() *string {
-	if o == nil {
+func (c *CHOutConfig) GetToken() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Token
+	return c.Token
 }
 
-func (o *CHOutConfig) GetTotalMemoryLimitKB() *float64 {
-	if o == nil {
+func (c *CHOutConfig) GetTotalMemoryLimitKB() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.TotalMemoryLimitKB
+	return c.TotalMemoryLimitKB
 }
 
-func (o *CHOutConfig) GetURL() string {
-	if o == nil {
+func (c *CHOutConfig) GetURL() string {
+	if c == nil {
 		return ""
 	}
-	return o.URL
+	return c.URL
 }
 
-func (o *CHOutConfig) GetUrls() []string {
-	if o == nil {
+func (c *CHOutConfig) GetUrls() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Urls
+	return c.Urls
 }
 
-func (o *CHOutConfig) GetUseRoundRobinDNS() *bool {
-	if o == nil {
+func (c *CHOutConfig) GetUseRoundRobinDNS() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.UseRoundRobinDNS
+	return c.UseRoundRobinDNS
 }
 
-func (o *CHOutConfig) GetUsername() *string {
-	if o == nil {
+func (c *CHOutConfig) GetUsername() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Username
+	return c.Username
 }
 
-func (o *CHOutConfig) GetWaitForAsyncInserts() *bool {
-	if o == nil {
+func (c *CHOutConfig) GetWaitForAsyncInserts() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.WaitForAsyncInserts
+	return c.WaitForAsyncInserts
 }

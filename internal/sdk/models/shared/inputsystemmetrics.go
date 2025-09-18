@@ -47,18 +47,18 @@ func (i *InputSystemMetricsConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputSystemMetricsConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSystemMetricsConnection) GetOutput() string {
-	if o == nil {
+func (i *InputSystemMetricsConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSystemMetricsPqMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputSystemMetricsPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsPq) GetMode() *InputSystemMetricsPqMode {
-	if o == nil {
+func (i *InputSystemMetricsPq) GetMode() *InputSystemMetricsPqMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemMetricsPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSystemMetricsPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSystemMetricsPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSystemMetricsPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSystemMetricsPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSystemMetricsPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSystemMetricsPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSystemMetricsPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSystemMetricsPq) GetPath() *string {
-	if o == nil {
+func (i *InputSystemMetricsPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSystemMetricsPq) GetCompress() *InputSystemMetricsCompression {
-	if o == nil {
+func (i *InputSystemMetricsPq) GetCompress() *InputSystemMetricsCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputSystemMetricsHostMode - Select level of detail for host metrics
@@ -276,18 +276,18 @@ func (i *InputSystemMetricsSystem) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsSystem) GetMode() *InputSystemMetricsSystemMode {
-	if o == nil {
+func (i *InputSystemMetricsSystem) GetMode() *InputSystemMetricsSystemMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemMetricsSystem) GetProcesses() *bool {
-	if o == nil {
+func (i *InputSystemMetricsSystem) GetProcesses() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Processes
+	return i.Processes
 }
 
 // InputSystemMetricsCPUMode - Select the level of detail for CPU metrics
@@ -345,32 +345,32 @@ func (i *InputSystemMetricsCPU) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsCPU) GetMode() *InputSystemMetricsCPUMode {
-	if o == nil {
+func (i *InputSystemMetricsCPU) GetMode() *InputSystemMetricsCPUMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemMetricsCPU) GetPerCPU() *bool {
-	if o == nil {
+func (i *InputSystemMetricsCPU) GetPerCPU() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerCPU
+	return i.PerCPU
 }
 
-func (o *InputSystemMetricsCPU) GetDetail() *bool {
-	if o == nil {
+func (i *InputSystemMetricsCPU) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
-func (o *InputSystemMetricsCPU) GetTime() *bool {
-	if o == nil {
+func (i *InputSystemMetricsCPU) GetTime() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Time
+	return i.Time
 }
 
 // InputSystemMetricsMemoryMode - Select the level of detail for memory metrics
@@ -424,18 +424,18 @@ func (i *InputSystemMetricsMemory) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsMemory) GetMode() *InputSystemMetricsMemoryMode {
-	if o == nil {
+func (i *InputSystemMetricsMemory) GetMode() *InputSystemMetricsMemoryMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemMetricsMemory) GetDetail() *bool {
-	if o == nil {
+func (i *InputSystemMetricsMemory) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
 // InputSystemMetricsNetworkMode - Select the level of detail for network metrics
@@ -493,32 +493,32 @@ func (i *InputSystemMetricsNetwork) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsNetwork) GetMode() *InputSystemMetricsNetworkMode {
-	if o == nil {
+func (i *InputSystemMetricsNetwork) GetMode() *InputSystemMetricsNetworkMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemMetricsNetwork) GetDevices() []string {
-	if o == nil {
+func (i *InputSystemMetricsNetwork) GetDevices() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Devices
+	return i.Devices
 }
 
-func (o *InputSystemMetricsNetwork) GetPerInterface() *bool {
-	if o == nil {
+func (i *InputSystemMetricsNetwork) GetPerInterface() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerInterface
+	return i.PerInterface
 }
 
-func (o *InputSystemMetricsNetwork) GetDetail() *bool {
-	if o == nil {
+func (i *InputSystemMetricsNetwork) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
 // InputSystemMetricsDiskMode - Select the level of detail for disk metrics
@@ -580,46 +580,46 @@ func (i *InputSystemMetricsDisk) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsDisk) GetMode() *InputSystemMetricsDiskMode {
-	if o == nil {
+func (i *InputSystemMetricsDisk) GetMode() *InputSystemMetricsDiskMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemMetricsDisk) GetDevices() []string {
-	if o == nil {
+func (i *InputSystemMetricsDisk) GetDevices() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Devices
+	return i.Devices
 }
 
-func (o *InputSystemMetricsDisk) GetMountpoints() []string {
-	if o == nil {
+func (i *InputSystemMetricsDisk) GetMountpoints() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Mountpoints
+	return i.Mountpoints
 }
 
-func (o *InputSystemMetricsDisk) GetFstypes() []string {
-	if o == nil {
+func (i *InputSystemMetricsDisk) GetFstypes() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Fstypes
+	return i.Fstypes
 }
 
-func (o *InputSystemMetricsDisk) GetPerDevice() *bool {
-	if o == nil {
+func (i *InputSystemMetricsDisk) GetPerDevice() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerDevice
+	return i.PerDevice
 }
 
-func (o *InputSystemMetricsDisk) GetDetail() *bool {
-	if o == nil {
+func (i *InputSystemMetricsDisk) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
 type InputSystemMetricsCustom struct {
@@ -641,39 +641,39 @@ func (i *InputSystemMetricsCustom) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsCustom) GetSystem() *InputSystemMetricsSystem {
-	if o == nil {
+func (i *InputSystemMetricsCustom) GetSystem() *InputSystemMetricsSystem {
+	if i == nil {
 		return nil
 	}
-	return o.System
+	return i.System
 }
 
-func (o *InputSystemMetricsCustom) GetCPU() *InputSystemMetricsCPU {
-	if o == nil {
+func (i *InputSystemMetricsCustom) GetCPU() *InputSystemMetricsCPU {
+	if i == nil {
 		return nil
 	}
-	return o.CPU
+	return i.CPU
 }
 
-func (o *InputSystemMetricsCustom) GetMemory() *InputSystemMetricsMemory {
-	if o == nil {
+func (i *InputSystemMetricsCustom) GetMemory() *InputSystemMetricsMemory {
+	if i == nil {
 		return nil
 	}
-	return o.Memory
+	return i.Memory
 }
 
-func (o *InputSystemMetricsCustom) GetNetwork() *InputSystemMetricsNetwork {
-	if o == nil {
+func (i *InputSystemMetricsCustom) GetNetwork() *InputSystemMetricsNetwork {
+	if i == nil {
 		return nil
 	}
-	return o.Network
+	return i.Network
 }
 
-func (o *InputSystemMetricsCustom) GetDisk() *InputSystemMetricsDisk {
-	if o == nil {
+func (i *InputSystemMetricsCustom) GetDisk() *InputSystemMetricsDisk {
+	if i == nil {
 		return nil
 	}
-	return o.Disk
+	return i.Disk
 }
 
 type InputSystemMetricsHost struct {
@@ -693,18 +693,18 @@ func (i *InputSystemMetricsHost) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsHost) GetMode() *InputSystemMetricsHostMode {
-	if o == nil {
+func (i *InputSystemMetricsHost) GetMode() *InputSystemMetricsHostMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemMetricsHost) GetCustom() *InputSystemMetricsCustom {
-	if o == nil {
+func (i *InputSystemMetricsHost) GetCustom() *InputSystemMetricsCustom {
+	if i == nil {
 		return nil
 	}
-	return o.Custom
+	return i.Custom
 }
 
 type InputSystemMetricsSet struct {
@@ -724,25 +724,25 @@ func (i *InputSystemMetricsSet) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsSet) GetName() string {
-	if o == nil {
+func (i *InputSystemMetricsSet) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSystemMetricsSet) GetFilter() string {
-	if o == nil {
+func (i *InputSystemMetricsSet) GetFilter() string {
+	if i == nil {
 		return ""
 	}
-	return o.Filter
+	return i.Filter
 }
 
-func (o *InputSystemMetricsSet) GetIncludeChildren() *bool {
-	if o == nil {
+func (i *InputSystemMetricsSet) GetIncludeChildren() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IncludeChildren
+	return i.IncludeChildren
 }
 
 type InputSystemMetricsProcess struct {
@@ -761,11 +761,11 @@ func (i *InputSystemMetricsProcess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsProcess) GetSets() []InputSystemMetricsSet {
-	if o == nil {
+func (i *InputSystemMetricsProcess) GetSets() []InputSystemMetricsSet {
+	if i == nil {
 		return nil
 	}
-	return o.Sets
+	return i.Sets
 }
 
 // ContainerMode - Select the level of detail for container metrics
@@ -816,11 +816,11 @@ func (i *InputSystemMetricsFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsFilter) GetExpr() string {
-	if o == nil {
+func (i *InputSystemMetricsFilter) GetExpr() string {
+	if i == nil {
 		return ""
 	}
-	return o.Expr
+	return i.Expr
 }
 
 type InputSystemMetricsContainer struct {
@@ -851,53 +851,53 @@ func (i *InputSystemMetricsContainer) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsContainer) GetMode() *ContainerMode {
-	if o == nil {
+func (i *InputSystemMetricsContainer) GetMode() *ContainerMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemMetricsContainer) GetDockerSocket() []string {
-	if o == nil {
+func (i *InputSystemMetricsContainer) GetDockerSocket() []string {
+	if i == nil {
 		return nil
 	}
-	return o.DockerSocket
+	return i.DockerSocket
 }
 
-func (o *InputSystemMetricsContainer) GetDockerTimeout() *float64 {
-	if o == nil {
+func (i *InputSystemMetricsContainer) GetDockerTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DockerTimeout
+	return i.DockerTimeout
 }
 
-func (o *InputSystemMetricsContainer) GetFilters() []InputSystemMetricsFilter {
-	if o == nil {
+func (i *InputSystemMetricsContainer) GetFilters() []InputSystemMetricsFilter {
+	if i == nil {
 		return nil
 	}
-	return o.Filters
+	return i.Filters
 }
 
-func (o *InputSystemMetricsContainer) GetAllContainers() *bool {
-	if o == nil {
+func (i *InputSystemMetricsContainer) GetAllContainers() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.AllContainers
+	return i.AllContainers
 }
 
-func (o *InputSystemMetricsContainer) GetPerDevice() *bool {
-	if o == nil {
+func (i *InputSystemMetricsContainer) GetPerDevice() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerDevice
+	return i.PerDevice
 }
 
-func (o *InputSystemMetricsContainer) GetDetail() *bool {
-	if o == nil {
+func (i *InputSystemMetricsContainer) GetDetail() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Detail
+	return i.Detail
 }
 
 type InputSystemMetricsMetadatum struct {
@@ -917,18 +917,18 @@ func (i *InputSystemMetricsMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsMetadatum) GetName() string {
-	if o == nil {
+func (i *InputSystemMetricsMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSystemMetricsMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputSystemMetricsMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSystemMetricsDataCompressionFormat string
@@ -982,46 +982,46 @@ func (i *InputSystemMetricsPersistence) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetricsPersistence) GetEnable() *bool {
-	if o == nil {
+func (i *InputSystemMetricsPersistence) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
-func (o *InputSystemMetricsPersistence) GetTimeWindow() *string {
-	if o == nil {
+func (i *InputSystemMetricsPersistence) GetTimeWindow() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWindow
+	return i.TimeWindow
 }
 
-func (o *InputSystemMetricsPersistence) GetMaxDataSize() *string {
-	if o == nil {
+func (i *InputSystemMetricsPersistence) GetMaxDataSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataSize
+	return i.MaxDataSize
 }
 
-func (o *InputSystemMetricsPersistence) GetMaxDataTime() *string {
-	if o == nil {
+func (i *InputSystemMetricsPersistence) GetMaxDataTime() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataTime
+	return i.MaxDataTime
 }
 
-func (o *InputSystemMetricsPersistence) GetCompress() *InputSystemMetricsDataCompressionFormat {
-	if o == nil {
+func (i *InputSystemMetricsPersistence) GetCompress() *InputSystemMetricsDataCompressionFormat {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
-func (o *InputSystemMetricsPersistence) GetDestPath() *string {
-	if o == nil {
+func (i *InputSystemMetricsPersistence) GetDestPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.DestPath
+	return i.DestPath
 }
 
 type InputSystemMetrics struct {
@@ -1064,121 +1064,121 @@ func (i *InputSystemMetrics) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemMetrics) GetID() string {
-	if o == nil {
+func (i *InputSystemMetrics) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSystemMetrics) GetType() InputSystemMetricsType {
-	if o == nil {
+func (i *InputSystemMetrics) GetType() InputSystemMetricsType {
+	if i == nil {
 		return InputSystemMetricsType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSystemMetrics) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSystemMetrics) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSystemMetrics) GetPipeline() *string {
-	if o == nil {
+func (i *InputSystemMetrics) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSystemMetrics) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSystemMetrics) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSystemMetrics) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSystemMetrics) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSystemMetrics) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSystemMetrics) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSystemMetrics) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSystemMetrics) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSystemMetrics) GetConnections() []InputSystemMetricsConnection {
-	if o == nil {
+func (i *InputSystemMetrics) GetConnections() []InputSystemMetricsConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSystemMetrics) GetPq() *InputSystemMetricsPq {
-	if o == nil {
+func (i *InputSystemMetrics) GetPq() *InputSystemMetricsPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSystemMetrics) GetInterval() *float64 {
-	if o == nil {
+func (i *InputSystemMetrics) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputSystemMetrics) GetHost() *InputSystemMetricsHost {
-	if o == nil {
+func (i *InputSystemMetrics) GetHost() *InputSystemMetricsHost {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputSystemMetrics) GetProcess() *InputSystemMetricsProcess {
-	if o == nil {
+func (i *InputSystemMetrics) GetProcess() *InputSystemMetricsProcess {
+	if i == nil {
 		return nil
 	}
-	return o.Process
+	return i.Process
 }
 
-func (o *InputSystemMetrics) GetContainer() *InputSystemMetricsContainer {
-	if o == nil {
+func (i *InputSystemMetrics) GetContainer() *InputSystemMetricsContainer {
+	if i == nil {
 		return nil
 	}
-	return o.Container
+	return i.Container
 }
 
-func (o *InputSystemMetrics) GetMetadata() []InputSystemMetricsMetadatum {
-	if o == nil {
+func (i *InputSystemMetrics) GetMetadata() []InputSystemMetricsMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSystemMetrics) GetPersistence() *InputSystemMetricsPersistence {
-	if o == nil {
+func (i *InputSystemMetrics) GetPersistence() *InputSystemMetricsPersistence {
+	if i == nil {
 		return nil
 	}
-	return o.Persistence
+	return i.Persistence
 }
 
-func (o *InputSystemMetrics) GetDescription() *string {
-	if o == nil {
+func (i *InputSystemMetrics) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

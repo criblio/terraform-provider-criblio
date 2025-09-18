@@ -8,23 +8,23 @@ type GitRevertParams struct {
 	Message string `json:"message"`
 }
 
-func (o *GitRevertParams) GetCommit() string {
-	if o == nil {
+func (g *GitRevertParams) GetCommit() string {
+	if g == nil {
 		return ""
 	}
-	return o.Commit
+	return g.Commit
 }
 
-func (o *GitRevertParams) GetForce() *bool {
-	if o == nil {
+func (g *GitRevertParams) GetForce() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Force
+	return g.Force
 }
 
-func (o *GitRevertParams) GetMessage() string {
-	if o == nil {
+func (g *GitRevertParams) GetMessage() string {
+	if g == nil {
 		return ""
 	}
-	return o.Message
+	return g.Message
 }

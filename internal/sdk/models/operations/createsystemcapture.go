@@ -12,11 +12,11 @@ type CreateSystemCaptureResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemCaptureResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemCaptureResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemCaptureResponse struct {
@@ -32,37 +32,37 @@ type CreateSystemCaptureResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemCaptureResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemCaptureResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemCaptureResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemCaptureResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemCaptureResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemCaptureResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemCaptureResponse) GetObject() *CreateSystemCaptureResponseBody {
-	if o == nil {
+func (c *CreateSystemCaptureResponse) GetObject() *CreateSystemCaptureResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemCaptureResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemCaptureResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -22,46 +22,46 @@ type GetSystemMetricsRequest struct {
 	FilterExpr *string `queryParam:"style=form,explode=true,name=filterExpr"`
 }
 
-func (o *GetSystemMetricsRequest) GetWp() *string {
-	if o == nil {
+func (g *GetSystemMetricsRequest) GetWp() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Wp
+	return g.Wp
 }
 
-func (o *GetSystemMetricsRequest) GetNumBuckets() *float64 {
-	if o == nil {
+func (g *GetSystemMetricsRequest) GetNumBuckets() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.NumBuckets
+	return g.NumBuckets
 }
 
-func (o *GetSystemMetricsRequest) GetEarliest() *string {
-	if o == nil {
+func (g *GetSystemMetricsRequest) GetEarliest() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Earliest
+	return g.Earliest
 }
 
-func (o *GetSystemMetricsRequest) GetLatest() *string {
-	if o == nil {
+func (g *GetSystemMetricsRequest) GetLatest() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Latest
+	return g.Latest
 }
 
-func (o *GetSystemMetricsRequest) GetMetricNameFilter() *string {
-	if o == nil {
+func (g *GetSystemMetricsRequest) GetMetricNameFilter() *string {
+	if g == nil {
 		return nil
 	}
-	return o.MetricNameFilter
+	return g.MetricNameFilter
 }
 
-func (o *GetSystemMetricsRequest) GetFilterExpr() *string {
-	if o == nil {
+func (g *GetSystemMetricsRequest) GetFilterExpr() *string {
+	if g == nil {
 		return nil
 	}
-	return o.FilterExpr
+	return g.FilterExpr
 }
 
 // GetSystemMetricsResponseBody - a list of Response objects
@@ -69,11 +69,11 @@ type GetSystemMetricsResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetSystemMetricsResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetSystemMetricsResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemMetricsResponse struct {
@@ -89,37 +89,37 @@ type GetSystemMetricsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemMetricsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemMetricsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemMetricsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemMetricsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemMetricsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemMetricsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemMetricsResponse) GetObject() *GetSystemMetricsResponseBody {
-	if o == nil {
+func (g *GetSystemMetricsResponse) GetObject() *GetSystemMetricsResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemMetricsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemMetricsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

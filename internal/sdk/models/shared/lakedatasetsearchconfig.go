@@ -7,16 +7,16 @@ type LakeDatasetSearchConfig struct {
 	Metadata  *DatasetMetadata `json:"metadata,omitempty"`
 }
 
-func (o *LakeDatasetSearchConfig) GetDatatypes() []string {
-	if o == nil {
+func (l *LakeDatasetSearchConfig) GetDatatypes() []string {
+	if l == nil {
 		return nil
 	}
-	return o.Datatypes
+	return l.Datatypes
 }
 
-func (o *LakeDatasetSearchConfig) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (l *LakeDatasetSearchConfig) GetMetadata() *DatasetMetadata {
+	if l == nil {
 		return nil
 	}
-	return o.Metadata
+	return l.Metadata
 }

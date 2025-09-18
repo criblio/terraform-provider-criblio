@@ -14,18 +14,18 @@ type GetOutputSamplesByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetOutputSamplesByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetOutputSamplesByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetOutputSamplesByIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetOutputSamplesByIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetOutputSamplesByIDResponseBody - a list of OutputSamplesResponse objects
@@ -33,11 +33,11 @@ type GetOutputSamplesByIDResponseBody struct {
 	Items []shared.OutputSamplesResponse `json:"items,omitempty"`
 }
 
-func (o *GetOutputSamplesByIDResponseBody) GetItems() []shared.OutputSamplesResponse {
-	if o == nil {
+func (g *GetOutputSamplesByIDResponseBody) GetItems() []shared.OutputSamplesResponse {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetOutputSamplesByIDResponse struct {
@@ -53,37 +53,37 @@ type GetOutputSamplesByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetOutputSamplesByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetOutputSamplesByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetOutputSamplesByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetOutputSamplesByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetOutputSamplesByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetOutputSamplesByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetOutputSamplesByIDResponse) GetObject() *GetOutputSamplesByIDResponseBody {
-	if o == nil {
+func (g *GetOutputSamplesByIDResponse) GetObject() *GetOutputSamplesByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetOutputSamplesByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetOutputSamplesByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

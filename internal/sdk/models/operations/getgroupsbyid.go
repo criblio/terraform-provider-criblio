@@ -14,18 +14,18 @@ type GetGroupsByIDRequest struct {
 	Fields *string `queryParam:"style=form,explode=true,name=fields"`
 }
 
-func (o *GetGroupsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetGroupsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetGroupsByIDRequest) GetFields() *string {
-	if o == nil {
+func (g *GetGroupsByIDRequest) GetFields() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Fields
+	return g.Fields
 }
 
 // GetGroupsByIDResponseBody - a list of ConfigGroup objects
@@ -33,11 +33,11 @@ type GetGroupsByIDResponseBody struct {
 	Items []shared.Group `json:"items,omitempty"`
 }
 
-func (o *GetGroupsByIDResponseBody) GetItems() []shared.Group {
-	if o == nil {
+func (g *GetGroupsByIDResponseBody) GetItems() []shared.Group {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetGroupsByIDResponse struct {
@@ -53,37 +53,37 @@ type GetGroupsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetGroupsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetGroupsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetGroupsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetGroupsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetGroupsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetGroupsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetGroupsByIDResponse) GetObject() *GetGroupsByIDResponseBody {
-	if o == nil {
+func (g *GetGroupsByIDResponse) GetObject() *GetGroupsByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetGroupsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetGroupsByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

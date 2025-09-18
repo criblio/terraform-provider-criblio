@@ -12,11 +12,11 @@ type ListLicenseResponseBody struct {
 	Items []shared.License `json:"items,omitempty"`
 }
 
-func (o *ListLicenseResponseBody) GetItems() []shared.License {
-	if o == nil {
+func (l *ListLicenseResponseBody) GetItems() []shared.License {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListLicenseResponse struct {
@@ -32,37 +32,37 @@ type ListLicenseResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListLicenseResponse) GetContentType() string {
-	if o == nil {
+func (l *ListLicenseResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListLicenseResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListLicenseResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListLicenseResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListLicenseResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListLicenseResponse) GetObject() *ListLicenseResponseBody {
-	if o == nil {
+func (l *ListLicenseResponse) GetObject() *ListLicenseResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListLicenseResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListLicenseResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

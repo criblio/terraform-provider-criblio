@@ -8,23 +8,23 @@ type ServicesLimits struct {
 	Notifications CommonServiceLimitConfigs `json:"notifications"`
 }
 
-func (o *ServicesLimits) GetConnections() CommonServiceLimitConfigs {
-	if o == nil {
+func (s *ServicesLimits) GetConnections() CommonServiceLimitConfigs {
+	if s == nil {
 		return CommonServiceLimitConfigs{}
 	}
-	return o.Connections
+	return s.Connections
 }
 
-func (o *ServicesLimits) GetMetrics() CommonServiceLimitConfigs {
-	if o == nil {
+func (s *ServicesLimits) GetMetrics() CommonServiceLimitConfigs {
+	if s == nil {
 		return CommonServiceLimitConfigs{}
 	}
-	return o.Metrics
+	return s.Metrics
 }
 
-func (o *ServicesLimits) GetNotifications() CommonServiceLimitConfigs {
-	if o == nil {
+func (s *ServicesLimits) GetNotifications() CommonServiceLimitConfigs {
+	if s == nil {
 		return CommonServiceLimitConfigs{}
 	}
-	return o.Notifications
+	return s.Notifications
 }

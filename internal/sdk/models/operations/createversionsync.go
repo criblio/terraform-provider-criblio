@@ -12,11 +12,11 @@ type CreateVersionSyncResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateVersionSyncResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateVersionSyncResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateVersionSyncResponse struct {
@@ -32,37 +32,37 @@ type CreateVersionSyncResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateVersionSyncResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateVersionSyncResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateVersionSyncResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateVersionSyncResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateVersionSyncResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateVersionSyncResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateVersionSyncResponse) GetObject() *CreateVersionSyncResponseBody {
-	if o == nil {
+func (c *CreateVersionSyncResponse) GetObject() *CreateVersionSyncResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateVersionSyncResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateVersionSyncResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

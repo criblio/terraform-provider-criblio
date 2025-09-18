@@ -14,18 +14,18 @@ type CreateRegexLibEntryRequest struct {
 	RegexLibEntry shared.RegexLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *CreateRegexLibEntryRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateRegexLibEntryRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateRegexLibEntryRequest) GetRegexLibEntry() shared.RegexLibEntry {
-	if o == nil {
+func (c *CreateRegexLibEntryRequest) GetRegexLibEntry() shared.RegexLibEntry {
+	if c == nil {
 		return shared.RegexLibEntry{}
 	}
-	return o.RegexLibEntry
+	return c.RegexLibEntry
 }
 
 // CreateRegexLibEntryResponseBody - a list of RegexLibEntry objects
@@ -33,11 +33,11 @@ type CreateRegexLibEntryResponseBody struct {
 	Items []shared.RegexLibEntry `json:"items,omitempty"`
 }
 
-func (o *CreateRegexLibEntryResponseBody) GetItems() []shared.RegexLibEntry {
-	if o == nil {
+func (c *CreateRegexLibEntryResponseBody) GetItems() []shared.RegexLibEntry {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateRegexLibEntryResponse struct {
@@ -53,37 +53,37 @@ type CreateRegexLibEntryResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateRegexLibEntryResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateRegexLibEntryResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateRegexLibEntryResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateRegexLibEntryResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateRegexLibEntryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateRegexLibEntryResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateRegexLibEntryResponse) GetObject() *CreateRegexLibEntryResponseBody {
-	if o == nil {
+func (c *CreateRegexLibEntryResponse) GetObject() *CreateRegexLibEntryResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateRegexLibEntryResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateRegexLibEntryResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

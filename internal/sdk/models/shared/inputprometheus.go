@@ -47,18 +47,18 @@ func (i *InputPrometheusConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputPrometheusConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputPrometheusConnection) GetOutput() string {
-	if o == nil {
+func (i *InputPrometheusConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputPrometheusMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputPrometheusPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusPq) GetMode() *InputPrometheusMode {
-	if o == nil {
+func (i *InputPrometheusPq) GetMode() *InputPrometheusMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputPrometheusPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputPrometheusPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputPrometheusPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputPrometheusPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputPrometheusPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputPrometheusPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputPrometheusPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputPrometheusPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputPrometheusPq) GetPath() *string {
-	if o == nil {
+func (i *InputPrometheusPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputPrometheusPq) GetCompress() *InputPrometheusCompression {
-	if o == nil {
+func (i *InputPrometheusPq) GetCompress() *InputPrometheusCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputPrometheusDiscoveryType - Target discovery mechanism. Use static to manually enter a list of targets.
@@ -272,18 +272,18 @@ func (i *InputPrometheusMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusMetadatum) GetName() string {
-	if o == nil {
+func (i *InputPrometheusMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputPrometheusMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputPrometheusMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputPrometheusAuthTypeAuthenticationMethod - Enter credentials directly, or select a stored secret
@@ -388,18 +388,18 @@ func (i *InputPrometheusSearchFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusSearchFilter) GetName() string {
-	if o == nil {
+func (i *InputPrometheusSearchFilter) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputPrometheusSearchFilter) GetValues() []string {
-	if o == nil {
+func (i *InputPrometheusSearchFilter) GetValues() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Values
+	return i.Values
 }
 
 // InputPrometheusAwsAuthenticationMethodAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
@@ -556,310 +556,310 @@ func (i *InputPrometheus) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheus) GetID() *string {
-	if o == nil {
+func (i *InputPrometheus) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputPrometheus) GetType() *InputPrometheusType {
-	if o == nil {
+func (i *InputPrometheus) GetType() *InputPrometheusType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputPrometheus) GetDisabled() *bool {
-	if o == nil {
+func (i *InputPrometheus) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputPrometheus) GetPipeline() *string {
-	if o == nil {
+func (i *InputPrometheus) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputPrometheus) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputPrometheus) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputPrometheus) GetEnvironment() *string {
-	if o == nil {
+func (i *InputPrometheus) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputPrometheus) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputPrometheus) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputPrometheus) GetStreamtags() []string {
-	if o == nil {
+func (i *InputPrometheus) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputPrometheus) GetConnections() []InputPrometheusConnection {
-	if o == nil {
+func (i *InputPrometheus) GetConnections() []InputPrometheusConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputPrometheus) GetPq() *InputPrometheusPq {
-	if o == nil {
+func (i *InputPrometheus) GetPq() *InputPrometheusPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputPrometheus) GetDimensionList() []string {
-	if o == nil {
+func (i *InputPrometheus) GetDimensionList() []string {
+	if i == nil {
 		return nil
 	}
-	return o.DimensionList
+	return i.DimensionList
 }
 
-func (o *InputPrometheus) GetDiscoveryType() *InputPrometheusDiscoveryType {
-	if o == nil {
+func (i *InputPrometheus) GetDiscoveryType() *InputPrometheusDiscoveryType {
+	if i == nil {
 		return nil
 	}
-	return o.DiscoveryType
+	return i.DiscoveryType
 }
 
-func (o *InputPrometheus) GetInterval() *float64 {
-	if o == nil {
+func (i *InputPrometheus) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputPrometheus) GetLogLevel() *InputPrometheusLogLevel {
-	if o == nil {
+func (i *InputPrometheus) GetLogLevel() *InputPrometheusLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputPrometheus) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputPrometheus) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputPrometheus) GetKeepAliveTime() *float64 {
-	if o == nil {
+func (i *InputPrometheus) GetKeepAliveTime() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTime
+	return i.KeepAliveTime
 }
 
-func (o *InputPrometheus) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputPrometheus) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputPrometheus) GetMaxMissedKeepAlives() *float64 {
-	if o == nil {
+func (i *InputPrometheus) GetMaxMissedKeepAlives() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMissedKeepAlives
+	return i.MaxMissedKeepAlives
 }
 
-func (o *InputPrometheus) GetTTL() *string {
-	if o == nil {
+func (i *InputPrometheus) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputPrometheus) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputPrometheus) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputPrometheus) GetMetadata() []InputPrometheusMetadatum {
-	if o == nil {
+func (i *InputPrometheus) GetMetadata() []InputPrometheusMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputPrometheus) GetAuthType() *InputPrometheusAuthTypeAuthenticationMethod {
-	if o == nil {
+func (i *InputPrometheus) GetAuthType() *InputPrometheusAuthTypeAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputPrometheus) GetDescription() *string {
-	if o == nil {
+func (i *InputPrometheus) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputPrometheus) GetTargetList() []string {
-	if o == nil {
+func (i *InputPrometheus) GetTargetList() []string {
+	if i == nil {
 		return nil
 	}
-	return o.TargetList
+	return i.TargetList
 }
 
-func (o *InputPrometheus) GetNameList() []string {
-	if o == nil {
+func (i *InputPrometheus) GetNameList() []string {
+	if i == nil {
 		return nil
 	}
-	return o.NameList
+	return i.NameList
 }
 
-func (o *InputPrometheus) GetRecordType() *InputPrometheusRecordType {
-	if o == nil {
+func (i *InputPrometheus) GetRecordType() *InputPrometheusRecordType {
+	if i == nil {
 		return nil
 	}
-	return o.RecordType
+	return i.RecordType
 }
 
-func (o *InputPrometheus) GetScrapeProtocol() *MetricsProtocol {
-	if o == nil {
+func (i *InputPrometheus) GetScrapeProtocol() *MetricsProtocol {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapeProtocol
+	return i.ScrapeProtocol
 }
 
-func (o *InputPrometheus) GetScrapePath() *string {
-	if o == nil {
+func (i *InputPrometheus) GetScrapePath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapePath
+	return i.ScrapePath
 }
 
-func (o *InputPrometheus) GetUsePublicIP() *bool {
-	if o == nil {
+func (i *InputPrometheus) GetUsePublicIP() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.UsePublicIP
+	return i.UsePublicIP
 }
 
-func (o *InputPrometheus) GetScrapePort() *float64 {
-	if o == nil {
+func (i *InputPrometheus) GetScrapePort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapePort
+	return i.ScrapePort
 }
 
-func (o *InputPrometheus) GetSearchFilter() []InputPrometheusSearchFilter {
-	if o == nil {
+func (i *InputPrometheus) GetSearchFilter() []InputPrometheusSearchFilter {
+	if i == nil {
 		return nil
 	}
-	return o.SearchFilter
+	return i.SearchFilter
 }
 
-func (o *InputPrometheus) GetAwsAuthenticationMethod() *InputPrometheusAwsAuthenticationMethodAuthenticationMethod {
-	if o == nil {
+func (i *InputPrometheus) GetAwsAuthenticationMethod() *InputPrometheusAwsAuthenticationMethodAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputPrometheus) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputPrometheus) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputPrometheus) GetRegion() *string {
-	if o == nil {
+func (i *InputPrometheus) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputPrometheus) GetEndpoint() *string {
-	if o == nil {
+func (i *InputPrometheus) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputPrometheus) GetSignatureVersion() *InputPrometheusSignatureVersion {
-	if o == nil {
+func (i *InputPrometheus) GetSignatureVersion() *InputPrometheusSignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputPrometheus) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputPrometheus) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputPrometheus) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputPrometheus) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputPrometheus) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputPrometheus) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputPrometheus) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputPrometheus) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputPrometheus) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputPrometheus) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputPrometheus) GetUsername() *string {
-	if o == nil {
+func (i *InputPrometheus) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputPrometheus) GetPassword() *string {
-	if o == nil {
+func (i *InputPrometheus) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputPrometheus) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputPrometheus) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }

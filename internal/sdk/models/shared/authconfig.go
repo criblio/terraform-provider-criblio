@@ -55,51 +55,51 @@ type AuthConfig struct {
 	Type             AuthConfigType `json:"type"`
 }
 
-func (o *AuthConfig) GetFallback() bool {
-	if o == nil {
+func (a *AuthConfig) GetFallback() bool {
+	if a == nil {
 		return false
 	}
-	return o.Fallback
+	return a.Fallback
 }
 
-func (o *AuthConfig) GetFallbackBadLogin() bool {
-	if o == nil {
+func (a *AuthConfig) GetFallbackBadLogin() bool {
+	if a == nil {
 		return false
 	}
-	return o.FallbackBadLogin
+	return a.FallbackBadLogin
 }
 
-func (o *AuthConfig) GetFilterType() *string {
-	if o == nil {
+func (a *AuthConfig) GetFilterType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.FilterType
+	return a.FilterType
 }
 
-func (o *AuthConfig) GetHost() string {
-	if o == nil {
+func (a *AuthConfig) GetHost() string {
+	if a == nil {
 		return ""
 	}
-	return o.Host
+	return a.Host
 }
 
-func (o *AuthConfig) GetPort() float64 {
-	if o == nil {
+func (a *AuthConfig) GetPort() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.Port
+	return a.Port
 }
 
-func (o *AuthConfig) GetSsl() bool {
-	if o == nil {
+func (a *AuthConfig) GetSsl() bool {
+	if a == nil {
 		return false
 	}
-	return o.Ssl
+	return a.Ssl
 }
 
-func (o *AuthConfig) GetType() AuthConfigType {
-	if o == nil {
+func (a *AuthConfig) GetType() AuthConfigType {
+	if a == nil {
 		return AuthConfigType("")
 	}
-	return o.Type
+	return a.Type
 }

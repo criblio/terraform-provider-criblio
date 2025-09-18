@@ -16,25 +16,25 @@ type UpdateGlobalVariableByIDRequest struct {
 	GlobalVar shared.GlobalVar `request:"mediaType=application/json"`
 }
 
-func (o *UpdateGlobalVariableByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateGlobalVariableByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateGlobalVariableByIDRequest) GetGlobalVar() shared.GlobalVar {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDRequest) GetGlobalVar() shared.GlobalVar {
+	if u == nil {
 		return shared.GlobalVar{}
 	}
-	return o.GlobalVar
+	return u.GlobalVar
 }
 
 // UpdateGlobalVariableByIDResponseBody - a list of Global Variable objects
@@ -42,11 +42,11 @@ type UpdateGlobalVariableByIDResponseBody struct {
 	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (o *UpdateGlobalVariableByIDResponseBody) GetItems() []shared.GlobalVar {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDResponseBody) GetItems() []shared.GlobalVar {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateGlobalVariableByIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateGlobalVariableByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateGlobalVariableByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateGlobalVariableByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateGlobalVariableByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateGlobalVariableByIDResponse) GetObject() *UpdateGlobalVariableByIDResponseBody {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDResponse) GetObject() *UpdateGlobalVariableByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateGlobalVariableByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateGlobalVariableByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

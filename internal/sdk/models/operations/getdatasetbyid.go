@@ -12,11 +12,11 @@ type GetDatasetByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetDatasetByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetDatasetByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetDatasetByIDResponseBody - a list of Dataset objects
@@ -24,11 +24,11 @@ type GetDatasetByIDResponseBody struct {
 	Items []shared.GenericDataset `json:"items,omitempty"`
 }
 
-func (o *GetDatasetByIDResponseBody) GetItems() []shared.GenericDataset {
-	if o == nil {
+func (g *GetDatasetByIDResponseBody) GetItems() []shared.GenericDataset {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetDatasetByIDResponse struct {
@@ -44,37 +44,37 @@ type GetDatasetByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetDatasetByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDatasetByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDatasetByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDatasetByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDatasetByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDatasetByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDatasetByIDResponse) GetObject() *GetDatasetByIDResponseBody {
-	if o == nil {
+func (g *GetDatasetByIDResponse) GetObject() *GetDatasetByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetDatasetByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetDatasetByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

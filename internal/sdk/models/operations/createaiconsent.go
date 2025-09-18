@@ -12,11 +12,11 @@ type CreateAiConsentResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateAiConsentResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateAiConsentResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateAiConsentResponse struct {
@@ -32,37 +32,37 @@ type CreateAiConsentResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateAiConsentResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateAiConsentResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateAiConsentResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateAiConsentResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateAiConsentResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateAiConsentResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateAiConsentResponse) GetObject() *CreateAiConsentResponseBody {
-	if o == nil {
+func (c *CreateAiConsentResponse) GetObject() *CreateAiConsentResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateAiConsentResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateAiConsentResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -12,11 +12,11 @@ type UpdateSystemSettingsGitSettingsResponseBody struct {
 	Items []shared.GitSettings `json:"items,omitempty"`
 }
 
-func (o *UpdateSystemSettingsGitSettingsResponseBody) GetItems() []shared.GitSettings {
-	if o == nil {
+func (u *UpdateSystemSettingsGitSettingsResponseBody) GetItems() []shared.GitSettings {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSystemSettingsGitSettingsResponse struct {
@@ -32,37 +32,37 @@ type UpdateSystemSettingsGitSettingsResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSystemSettingsGitSettingsResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSystemSettingsGitSettingsResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSystemSettingsGitSettingsResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSystemSettingsGitSettingsResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSystemSettingsGitSettingsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSystemSettingsGitSettingsResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSystemSettingsGitSettingsResponse) GetObject() *UpdateSystemSettingsGitSettingsResponseBody {
-	if o == nil {
+func (u *UpdateSystemSettingsGitSettingsResponse) GetObject() *UpdateSystemSettingsGitSettingsResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSystemSettingsGitSettingsResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSystemSettingsGitSettingsResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -51,72 +51,72 @@ type BannerMessage struct {
 	CustomThemes []string `json:"customThemes,omitempty"`
 }
 
-func (o *BannerMessage) GetID() *string {
-	if o == nil {
+func (b *BannerMessage) GetID() *string {
+	if b == nil {
 		return nil
 	}
-	return o.ID
+	return b.ID
 }
 
-func (o *BannerMessage) GetEnabled() bool {
-	if o == nil {
+func (b *BannerMessage) GetEnabled() bool {
+	if b == nil {
 		return false
 	}
-	return o.Enabled
+	return b.Enabled
 }
 
-func (o *BannerMessage) GetType() BannerType {
-	if o == nil {
+func (b *BannerMessage) GetType() BannerType {
+	if b == nil {
 		return BannerType("")
 	}
-	return o.Type
+	return b.Type
 }
 
-func (o *BannerMessage) GetCreated() *float64 {
-	if o == nil {
+func (b *BannerMessage) GetCreated() *float64 {
+	if b == nil {
 		return nil
 	}
-	return o.Created
+	return b.Created
 }
 
-func (o *BannerMessage) GetTheme() string {
-	if o == nil {
+func (b *BannerMessage) GetTheme() string {
+	if b == nil {
 		return ""
 	}
-	return o.Theme
+	return b.Theme
 }
 
-func (o *BannerMessage) GetInvertFontColor() *bool {
-	if o == nil {
+func (b *BannerMessage) GetInvertFontColor() *bool {
+	if b == nil {
 		return nil
 	}
-	return o.InvertFontColor
+	return b.InvertFontColor
 }
 
-func (o *BannerMessage) GetMessage() string {
-	if o == nil {
+func (b *BannerMessage) GetMessage() string {
+	if b == nil {
 		return ""
 	}
-	return o.Message
+	return b.Message
 }
 
-func (o *BannerMessage) GetLink() *string {
-	if o == nil {
+func (b *BannerMessage) GetLink() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Link
+	return b.Link
 }
 
-func (o *BannerMessage) GetLinkDisplay() *string {
-	if o == nil {
+func (b *BannerMessage) GetLinkDisplay() *string {
+	if b == nil {
 		return nil
 	}
-	return o.LinkDisplay
+	return b.LinkDisplay
 }
 
-func (o *BannerMessage) GetCustomThemes() []string {
-	if o == nil {
+func (b *BannerMessage) GetCustomThemes() []string {
+	if b == nil {
 		return nil
 	}
-	return o.CustomThemes
+	return b.CustomThemes
 }

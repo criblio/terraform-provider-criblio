@@ -12,11 +12,11 @@ type ListRegexLibEntryRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListRegexLibEntryRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListRegexLibEntryRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListRegexLibEntryResponseBody - a list of RegexLibEntry objects
@@ -24,11 +24,11 @@ type ListRegexLibEntryResponseBody struct {
 	Items []shared.RegexLibEntry `json:"items,omitempty"`
 }
 
-func (o *ListRegexLibEntryResponseBody) GetItems() []shared.RegexLibEntry {
-	if o == nil {
+func (l *ListRegexLibEntryResponseBody) GetItems() []shared.RegexLibEntry {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListRegexLibEntryResponse struct {
@@ -44,37 +44,37 @@ type ListRegexLibEntryResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListRegexLibEntryResponse) GetContentType() string {
-	if o == nil {
+func (l *ListRegexLibEntryResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListRegexLibEntryResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListRegexLibEntryResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListRegexLibEntryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListRegexLibEntryResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListRegexLibEntryResponse) GetObject() *ListRegexLibEntryResponseBody {
-	if o == nil {
+func (l *ListRegexLibEntryResponse) GetObject() *ListRegexLibEntryResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListRegexLibEntryResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListRegexLibEntryResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

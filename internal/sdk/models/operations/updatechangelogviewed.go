@@ -12,11 +12,11 @@ type UpdateChangelogViewedResponseBody struct {
 	Items []shared.ChangelogState `json:"items,omitempty"`
 }
 
-func (o *UpdateChangelogViewedResponseBody) GetItems() []shared.ChangelogState {
-	if o == nil {
+func (u *UpdateChangelogViewedResponseBody) GetItems() []shared.ChangelogState {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateChangelogViewedResponse struct {
@@ -32,37 +32,37 @@ type UpdateChangelogViewedResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateChangelogViewedResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateChangelogViewedResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateChangelogViewedResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateChangelogViewedResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateChangelogViewedResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateChangelogViewedResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateChangelogViewedResponse) GetObject() *UpdateChangelogViewedResponseBody {
-	if o == nil {
+func (u *UpdateChangelogViewedResponse) GetObject() *UpdateChangelogViewedResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateChangelogViewedResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateChangelogViewedResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

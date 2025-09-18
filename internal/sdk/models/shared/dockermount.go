@@ -7,16 +7,16 @@ type DockerMount struct {
 	Source      string `json:"Source"`
 }
 
-func (o *DockerMount) GetDestination() string {
-	if o == nil {
+func (d *DockerMount) GetDestination() string {
+	if d == nil {
 		return ""
 	}
-	return o.Destination
+	return d.Destination
 }
 
-func (o *DockerMount) GetSource() string {
-	if o == nil {
+func (d *DockerMount) GetSource() string {
+	if d == nil {
 		return ""
 	}
-	return o.Source
+	return d.Source
 }

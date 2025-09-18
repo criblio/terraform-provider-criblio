@@ -23,23 +23,23 @@ func (s *SchemeClientOauth) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SchemeClientOauth) GetClientID() string {
-	if o == nil {
+func (s *SchemeClientOauth) GetClientID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ClientID
+	return s.ClientID
 }
 
-func (o *SchemeClientOauth) GetClientSecret() string {
-	if o == nil {
+func (s *SchemeClientOauth) GetClientSecret() string {
+	if s == nil {
 		return ""
 	}
-	return o.ClientSecret
+	return s.ClientSecret
 }
 
-func (o *SchemeClientOauth) GetTokenURL() string {
-	if o == nil {
+func (s *SchemeClientOauth) GetTokenURL() string {
+	if s == nil {
 		return ""
 	}
-	return o.TokenURL
+	return s.TokenURL
 }

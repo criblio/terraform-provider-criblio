@@ -79,74 +79,74 @@ func (e *ElementMarkdown) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ElementMarkdown) GetDescription() *string {
-	if o == nil {
+func (e *ElementMarkdown) GetDescription() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Description
+	return e.Description
 }
 
-func (o *ElementMarkdown) GetEmpty() *bool {
-	if o == nil {
+func (e *ElementMarkdown) GetEmpty() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.Empty
+	return e.Empty
 }
 
-func (o *ElementMarkdown) GetHidePanel() *bool {
-	if o == nil {
+func (e *ElementMarkdown) GetHidePanel() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.HidePanel
+	return e.HidePanel
 }
 
-func (o *ElementMarkdown) GetID() string {
-	if o == nil {
+func (e *ElementMarkdown) GetID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ID
+	return e.ID
 }
 
-func (o *ElementMarkdown) GetIndex() *float64 {
-	if o == nil {
+func (e *ElementMarkdown) GetIndex() *float64 {
+	if e == nil {
 		return nil
 	}
-	return o.Index
+	return e.Index
 }
 
-func (o *ElementMarkdown) GetLayout() DashboardLayout {
-	if o == nil {
+func (e *ElementMarkdown) GetLayout() DashboardLayout {
+	if e == nil {
 		return DashboardLayout{}
 	}
-	return o.Layout
+	return e.Layout
 }
 
-func (o *ElementMarkdown) GetTitle() *string {
-	if o == nil {
+func (e *ElementMarkdown) GetTitle() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Title
+	return e.Title
 }
 
-func (o *ElementMarkdown) GetType() SearchDashboardType {
-	if o == nil {
+func (e *ElementMarkdown) GetType() SearchDashboardType {
+	if e == nil {
 		return SearchDashboardType("")
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *ElementMarkdown) GetValue() *string {
-	if o == nil {
+func (e *ElementMarkdown) GetValue() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Value
+	return e.Value
 }
 
-func (o *ElementMarkdown) GetVariant() Variant {
-	if o == nil {
+func (e *ElementMarkdown) GetVariant() Variant {
+	if e == nil {
 		return Variant("")
 	}
-	return o.Variant
+	return e.Variant
 }
 
 type Element struct {
@@ -176,95 +176,95 @@ func (e *Element) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Element) GetDescription() *string {
-	if o == nil {
+func (e *Element) GetDescription() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Description
+	return e.Description
 }
 
-func (o *Element) GetEmpty() *bool {
-	if o == nil {
+func (e *Element) GetEmpty() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.Empty
+	return e.Empty
 }
 
-func (o *Element) GetHidePanel() *bool {
-	if o == nil {
+func (e *Element) GetHidePanel() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.HidePanel
+	return e.HidePanel
 }
 
-func (o *Element) GetHorizontalChart() *bool {
-	if o == nil {
+func (e *Element) GetHorizontalChart() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.HorizontalChart
+	return e.HorizontalChart
 }
 
-func (o *Element) GetID() string {
-	if o == nil {
+func (e *Element) GetID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ID
+	return e.ID
 }
 
-func (o *Element) GetIndex() *float64 {
-	if o == nil {
+func (e *Element) GetIndex() *float64 {
+	if e == nil {
 		return nil
 	}
-	return o.Index
+	return e.Index
 }
 
-func (o *Element) GetInputID() *string {
-	if o == nil {
+func (e *Element) GetInputID() *string {
+	if e == nil {
 		return nil
 	}
-	return o.InputID
+	return e.InputID
 }
 
-func (o *Element) GetLayout() DashboardLayout {
-	if o == nil {
+func (e *Element) GetLayout() DashboardLayout {
+	if e == nil {
 		return DashboardLayout{}
 	}
-	return o.Layout
+	return e.Layout
 }
 
-func (o *Element) GetSearch() SearchQuery {
-	if o == nil {
+func (e *Element) GetSearch() SearchQuery {
+	if e == nil {
 		return SearchQuery{}
 	}
-	return o.Search
+	return e.Search
 }
 
-func (o *Element) GetTitle() *string {
-	if o == nil {
+func (e *Element) GetTitle() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Title
+	return e.Title
 }
 
-func (o *Element) GetType() DashboardElementType {
-	if o == nil {
+func (e *Element) GetType() DashboardElementType {
+	if e == nil {
 		return DashboardElementType("")
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *Element) GetValue() map[string]any {
-	if o == nil {
+func (e *Element) GetValue() map[string]any {
+	if e == nil {
 		return nil
 	}
-	return o.Value
+	return e.Value
 }
 
-func (o *Element) GetVariant() *DashboardElementVariant {
-	if o == nil {
+func (e *Element) GetVariant() *DashboardElementVariant {
+	if e == nil {
 		return nil
 	}
-	return o.Variant
+	return e.Variant
 }
 
 type ElementUnionType string
@@ -349,114 +349,114 @@ type SearchDashboard struct {
 	Schedule           *SavedQuerySchedule `json:"schedule,omitempty"`
 }
 
-func (o *SearchDashboard) GetCacheTTLSeconds() *float64 {
-	if o == nil {
+func (s *SearchDashboard) GetCacheTTLSeconds() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.CacheTTLSeconds
+	return s.CacheTTLSeconds
 }
 
-func (o *SearchDashboard) GetCategory() *string {
-	if o == nil {
+func (s *SearchDashboard) GetCategory() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Category
+	return s.Category
 }
 
-func (o *SearchDashboard) GetCreated() float64 {
-	if o == nil {
+func (s *SearchDashboard) GetCreated() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Created
+	return s.Created
 }
 
-func (o *SearchDashboard) GetCreatedBy() string {
-	if o == nil {
+func (s *SearchDashboard) GetCreatedBy() string {
+	if s == nil {
 		return ""
 	}
-	return o.CreatedBy
+	return s.CreatedBy
 }
 
-func (o *SearchDashboard) GetDescription() *string {
-	if o == nil {
+func (s *SearchDashboard) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SearchDashboard) GetDisplayCreatedBy() *string {
-	if o == nil {
+func (s *SearchDashboard) GetDisplayCreatedBy() *string {
+	if s == nil {
 		return nil
 	}
-	return o.DisplayCreatedBy
+	return s.DisplayCreatedBy
 }
 
-func (o *SearchDashboard) GetDisplayModifiedBy() *string {
-	if o == nil {
+func (s *SearchDashboard) GetDisplayModifiedBy() *string {
+	if s == nil {
 		return nil
 	}
-	return o.DisplayModifiedBy
+	return s.DisplayModifiedBy
 }
 
-func (o *SearchDashboard) GetElements() []ElementUnion {
-	if o == nil {
+func (s *SearchDashboard) GetElements() []ElementUnion {
+	if s == nil {
 		return []ElementUnion{}
 	}
-	return o.Elements
+	return s.Elements
 }
 
-func (o *SearchDashboard) GetID() string {
-	if o == nil {
+func (s *SearchDashboard) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SearchDashboard) GetModified() float64 {
-	if o == nil {
+func (s *SearchDashboard) GetModified() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Modified
+	return s.Modified
 }
 
-func (o *SearchDashboard) GetModifiedBy() *string {
-	if o == nil {
+func (s *SearchDashboard) GetModifiedBy() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ModifiedBy
+	return s.ModifiedBy
 }
 
-func (o *SearchDashboard) GetName() string {
-	if o == nil {
+func (s *SearchDashboard) GetName() string {
+	if s == nil {
 		return ""
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SearchDashboard) GetPackID() *string {
-	if o == nil {
+func (s *SearchDashboard) GetPackID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PackID
+	return s.PackID
 }
 
-func (o *SearchDashboard) GetRefreshRate() *float64 {
-	if o == nil {
+func (s *SearchDashboard) GetRefreshRate() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.RefreshRate
+	return s.RefreshRate
 }
 
-func (o *SearchDashboard) GetResolvedDatasetIds() []string {
-	if o == nil {
+func (s *SearchDashboard) GetResolvedDatasetIds() []string {
+	if s == nil {
 		return nil
 	}
-	return o.ResolvedDatasetIds
+	return s.ResolvedDatasetIds
 }
 
-func (o *SearchDashboard) GetSchedule() *SavedQuerySchedule {
-	if o == nil {
+func (s *SearchDashboard) GetSchedule() *SavedQuerySchedule {
+	if s == nil {
 		return nil
 	}
-	return o.Schedule
+	return s.Schedule
 }

@@ -24,53 +24,53 @@ type CreateSubscriptionRequest struct {
 	Subscription shared.Subscription `request:"mediaType=application/json"`
 }
 
-func (o *CreateSubscriptionRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSubscriptionRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSubscriptionRequest) GetDisabled() *bool {
-	if o == nil {
+func (c *CreateSubscriptionRequest) GetDisabled() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Disabled
+	return c.Disabled
 }
 
-func (o *CreateSubscriptionRequest) GetDescription() *string {
-	if o == nil {
+func (c *CreateSubscriptionRequest) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *CreateSubscriptionRequest) GetFilter() *string {
-	if o == nil {
+func (c *CreateSubscriptionRequest) GetFilter() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Filter
+	return c.Filter
 }
 
-func (o *CreateSubscriptionRequest) GetPipeline() string {
-	if o == nil {
+func (c *CreateSubscriptionRequest) GetPipeline() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pipeline
+	return c.Pipeline
 }
 
-func (o *CreateSubscriptionRequest) GetID() string {
-	if o == nil {
+func (c *CreateSubscriptionRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateSubscriptionRequest) GetSubscription() shared.Subscription {
-	if o == nil {
+func (c *CreateSubscriptionRequest) GetSubscription() shared.Subscription {
+	if c == nil {
 		return shared.Subscription{}
 	}
-	return o.Subscription
+	return c.Subscription
 }
 
 // CreateSubscriptionResponseBody - a list of Subscription objects
@@ -78,11 +78,11 @@ type CreateSubscriptionResponseBody struct {
 	Items []shared.Subscription `json:"items,omitempty"`
 }
 
-func (o *CreateSubscriptionResponseBody) GetItems() []shared.Subscription {
-	if o == nil {
+func (c *CreateSubscriptionResponseBody) GetItems() []shared.Subscription {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSubscriptionResponse struct {
@@ -98,37 +98,37 @@ type CreateSubscriptionResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSubscriptionResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSubscriptionResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSubscriptionResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSubscriptionResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSubscriptionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSubscriptionResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSubscriptionResponse) GetObject() *CreateSubscriptionResponseBody {
-	if o == nil {
+func (c *CreateSubscriptionResponse) GetObject() *CreateSubscriptionResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSubscriptionResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSubscriptionResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

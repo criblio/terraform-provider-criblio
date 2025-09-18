@@ -12,11 +12,11 @@ type CreateEdgeAppscopeProcessesRequest struct {
 	Pid string `queryParam:"style=form,explode=true,name=pid"`
 }
 
-func (o *CreateEdgeAppscopeProcessesRequest) GetPid() string {
-	if o == nil {
+func (c *CreateEdgeAppscopeProcessesRequest) GetPid() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pid
+	return c.Pid
 }
 
 // CreateEdgeAppscopeProcessesResponseBody - a list of AppScopeProcess objects
@@ -24,11 +24,11 @@ type CreateEdgeAppscopeProcessesResponseBody struct {
 	Items []shared.AppScopeProcess `json:"items,omitempty"`
 }
 
-func (o *CreateEdgeAppscopeProcessesResponseBody) GetItems() []shared.AppScopeProcess {
-	if o == nil {
+func (c *CreateEdgeAppscopeProcessesResponseBody) GetItems() []shared.AppScopeProcess {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateEdgeAppscopeProcessesResponse struct {
@@ -44,37 +44,37 @@ type CreateEdgeAppscopeProcessesResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateEdgeAppscopeProcessesResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateEdgeAppscopeProcessesResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateEdgeAppscopeProcessesResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateEdgeAppscopeProcessesResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateEdgeAppscopeProcessesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateEdgeAppscopeProcessesResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateEdgeAppscopeProcessesResponse) GetObject() *CreateEdgeAppscopeProcessesResponseBody {
-	if o == nil {
+func (c *CreateEdgeAppscopeProcessesResponse) GetObject() *CreateEdgeAppscopeProcessesResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateEdgeAppscopeProcessesResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateEdgeAppscopeProcessesResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

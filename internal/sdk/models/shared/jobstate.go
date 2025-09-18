@@ -7,16 +7,16 @@ type JobState struct {
 	State string `json:"state"`
 }
 
-func (o *JobState) GetID() string {
-	if o == nil {
+func (j *JobState) GetID() string {
+	if j == nil {
 		return ""
 	}
-	return o.ID
+	return j.ID
 }
 
-func (o *JobState) GetState() string {
-	if o == nil {
+func (j *JobState) GetState() string {
+	if j == nil {
 		return ""
 	}
-	return o.State
+	return j.State
 }

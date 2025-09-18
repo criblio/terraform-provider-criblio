@@ -14,18 +14,18 @@ type DeleteEventBreakerRulesetByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteEventBreakerRulesetByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteEventBreakerRulesetByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
-func (o *DeleteEventBreakerRulesetByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteEventBreakerRulesetByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteEventBreakerRulesetByIDResponseBody - a list of Event Breaker Ruleset objects
@@ -45,37 +45,37 @@ type DeleteEventBreakerRulesetByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteEventBreakerRulesetByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteEventBreakerRulesetByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteEventBreakerRulesetByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteEventBreakerRulesetByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteEventBreakerRulesetByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteEventBreakerRulesetByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteEventBreakerRulesetByIDResponse) GetObject() *DeleteEventBreakerRulesetByIDResponseBody {
-	if o == nil {
+func (d *DeleteEventBreakerRulesetByIDResponse) GetObject() *DeleteEventBreakerRulesetByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteEventBreakerRulesetByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteEventBreakerRulesetByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

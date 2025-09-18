@@ -9,30 +9,30 @@ type DashboardCategory struct {
 	Name        string  `json:"name"`
 }
 
-func (o *DashboardCategory) GetDescription() *string {
-	if o == nil {
+func (d *DashboardCategory) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DashboardCategory) GetID() string {
-	if o == nil {
+func (d *DashboardCategory) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DashboardCategory) GetIsPack() *bool {
-	if o == nil {
+func (d *DashboardCategory) GetIsPack() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.IsPack
+	return d.IsPack
 }
 
-func (o *DashboardCategory) GetName() string {
-	if o == nil {
+func (d *DashboardCategory) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return o.Name
+	return d.Name
 }

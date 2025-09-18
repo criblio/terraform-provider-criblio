@@ -12,11 +12,11 @@ type UpdateSystemSettingsResponseBody struct {
 	Items []shared.SystemSettings `json:"items,omitempty"`
 }
 
-func (o *UpdateSystemSettingsResponseBody) GetItems() []shared.SystemSettings {
-	if o == nil {
+func (u *UpdateSystemSettingsResponseBody) GetItems() []shared.SystemSettings {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSystemSettingsResponse struct {
@@ -32,37 +32,37 @@ type UpdateSystemSettingsResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSystemSettingsResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSystemSettingsResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSystemSettingsResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSystemSettingsResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSystemSettingsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSystemSettingsResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSystemSettingsResponse) GetObject() *UpdateSystemSettingsResponseBody {
-	if o == nil {
+func (u *UpdateSystemSettingsResponse) GetObject() *UpdateSystemSettingsResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSystemSettingsResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSystemSettingsResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

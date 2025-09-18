@@ -12,11 +12,11 @@ type GetDatasetACLByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetDatasetACLByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetDatasetACLByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetDatasetACLByIDResponseBody - a list of UserAccessControlList objects
@@ -24,11 +24,11 @@ type GetDatasetACLByIDResponseBody struct {
 	Items []shared.UserAccessControlList `json:"items,omitempty"`
 }
 
-func (o *GetDatasetACLByIDResponseBody) GetItems() []shared.UserAccessControlList {
-	if o == nil {
+func (g *GetDatasetACLByIDResponseBody) GetItems() []shared.UserAccessControlList {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetDatasetACLByIDResponse struct {
@@ -44,37 +44,37 @@ type GetDatasetACLByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetDatasetACLByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDatasetACLByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDatasetACLByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDatasetACLByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDatasetACLByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDatasetACLByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDatasetACLByIDResponse) GetObject() *GetDatasetACLByIDResponseBody {
-	if o == nil {
+func (g *GetDatasetACLByIDResponse) GetObject() *GetDatasetACLByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetDatasetACLByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetDatasetACLByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

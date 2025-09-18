@@ -187,79 +187,79 @@ type SearchJobStageConfig struct {
 	SubQueryText           string                        `json:"subQueryText"`
 }
 
-func (o *SearchJobStageConfig) GetCacheStatusByDatasetID() any {
-	if o == nil {
+func (s *SearchJobStageConfig) GetCacheStatusByDatasetID() any {
+	if s == nil {
 		return nil
 	}
-	return o.CacheStatusByDatasetID
+	return s.CacheStatusByDatasetID
 }
 
-func (o *SearchJobStageConfig) GetDependencies() []StageDependency {
-	if o == nil {
+func (s *SearchJobStageConfig) GetDependencies() []StageDependency {
+	if s == nil {
 		return []StageDependency{}
 	}
-	return o.Dependencies
+	return s.Dependencies
 }
 
-func (o *SearchJobStageConfig) GetEarliest() *SearchJobStageConfigEarliest {
-	if o == nil {
+func (s *SearchJobStageConfig) GetEarliest() *SearchJobStageConfigEarliest {
+	if s == nil {
 		return nil
 	}
-	return o.Earliest
+	return s.Earliest
 }
 
-func (o *SearchJobStageConfig) GetExecutionWarnings() []JobExecutionWarning {
-	if o == nil {
+func (s *SearchJobStageConfig) GetExecutionWarnings() []JobExecutionWarning {
+	if s == nil {
 		return nil
 	}
-	return o.ExecutionWarnings
+	return s.ExecutionWarnings
 }
 
-func (o *SearchJobStageConfig) GetFilter() string {
-	if o == nil {
+func (s *SearchJobStageConfig) GetFilter() string {
+	if s == nil {
 		return ""
 	}
-	return o.Filter
+	return s.Filter
 }
 
-func (o *SearchJobStageConfig) GetID() string {
-	if o == nil {
+func (s *SearchJobStageConfig) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SearchJobStageConfig) GetLatest() *SearchJobStageConfigLatest {
-	if o == nil {
+func (s *SearchJobStageConfig) GetLatest() *SearchJobStageConfigLatest {
+	if s == nil {
 		return nil
 	}
-	return o.Latest
+	return s.Latest
 }
 
-func (o *SearchJobStageConfig) GetResolvedDatasetIds() []string {
-	if o == nil {
+func (s *SearchJobStageConfig) GetResolvedDatasetIds() []string {
+	if s == nil {
 		return []string{}
 	}
-	return o.ResolvedDatasetIds
+	return s.ResolvedDatasetIds
 }
 
-func (o *SearchJobStageConfig) GetSearchConfig() SearchConfig {
-	if o == nil {
+func (s *SearchJobStageConfig) GetSearchConfig() SearchConfig {
+	if s == nil {
 		return SearchConfig{}
 	}
-	return o.SearchConfig
+	return s.SearchConfig
 }
 
-func (o *SearchJobStageConfig) GetStatus() SearchJobStageConfigStatus {
-	if o == nil {
+func (s *SearchJobStageConfig) GetStatus() SearchJobStageConfigStatus {
+	if s == nil {
 		return SearchJobStageConfigStatus("")
 	}
-	return o.Status
+	return s.Status
 }
 
-func (o *SearchJobStageConfig) GetSubQueryText() string {
-	if o == nil {
+func (s *SearchJobStageConfig) GetSubQueryText() string {
+	if s == nil {
 		return ""
 	}
-	return o.SubQueryText
+	return s.SubQueryText
 }

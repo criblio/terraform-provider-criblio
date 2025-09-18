@@ -48,18 +48,18 @@ func (d *DatatypePreviewInputRawData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DatatypePreviewInputRawData) GetRawData() string {
-	if o == nil {
+func (d *DatatypePreviewInputRawData) GetRawData() string {
+	if d == nil {
 		return ""
 	}
-	return o.RawData
+	return d.RawData
 }
 
-func (o *DatatypePreviewInputRawData) GetType() TypeRawData {
-	if o == nil {
+func (d *DatatypePreviewInputRawData) GetType() TypeRawData {
+	if d == nil {
 		return TypeRawData("")
 	}
-	return o.Type
+	return d.Type
 }
 
 type DatatypePreviewInputTypeDataset string
@@ -101,18 +101,18 @@ func (d *DatatypePreviewInputDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DatatypePreviewInputDataset) GetDataset() string {
-	if o == nil {
+func (d *DatatypePreviewInputDataset) GetDataset() string {
+	if d == nil {
 		return ""
 	}
-	return o.Dataset
+	return d.Dataset
 }
 
-func (o *DatatypePreviewInputDataset) GetType() DatatypePreviewInputTypeDataset {
-	if o == nil {
+func (d *DatatypePreviewInputDataset) GetType() DatatypePreviewInputTypeDataset {
+	if d == nil {
 		return DatatypePreviewInputTypeDataset("")
 	}
-	return o.Type
+	return d.Type
 }
 
 type DatatypePreviewInputType string

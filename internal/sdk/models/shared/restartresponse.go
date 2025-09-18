@@ -39,23 +39,23 @@ type RestartResponse struct {
 	Status  RestartResponseStatus `json:"status"`
 }
 
-func (o *RestartResponse) GetID() string {
-	if o == nil {
+func (r *RestartResponse) GetID() string {
+	if r == nil {
 		return ""
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *RestartResponse) GetMessage() *string {
-	if o == nil {
+func (r *RestartResponse) GetMessage() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Message
+	return r.Message
 }
 
-func (o *RestartResponse) GetStatus() RestartResponseStatus {
-	if o == nil {
+func (r *RestartResponse) GetStatus() RestartResponseStatus {
+	if r == nil {
 		return RestartResponseStatus("")
 	}
-	return o.Status
+	return r.Status
 }

@@ -20,107 +20,107 @@ type GitSettings struct {
 	User                         *string     `json:"user,omitempty"`
 }
 
-func (o *GitSettings) GetAuthType() *string {
-	if o == nil {
+func (g *GitSettings) GetAuthType() *string {
+	if g == nil {
 		return nil
 	}
-	return o.AuthType
+	return g.AuthType
 }
 
-func (o *GitSettings) GetAutoAction() *string {
-	if o == nil {
+func (g *GitSettings) GetAutoAction() *string {
+	if g == nil {
 		return nil
 	}
-	return o.AutoAction
+	return g.AutoAction
 }
 
-func (o *GitSettings) GetAutoActionMessage() *string {
-	if o == nil {
+func (g *GitSettings) GetAutoActionMessage() *string {
+	if g == nil {
 		return nil
 	}
-	return o.AutoActionMessage
+	return g.AutoActionMessage
 }
 
-func (o *GitSettings) GetAutoActionSchedule() *string {
-	if o == nil {
+func (g *GitSettings) GetAutoActionSchedule() *string {
+	if g == nil {
 		return nil
 	}
-	return o.AutoActionSchedule
+	return g.AutoActionSchedule
 }
 
-func (o *GitSettings) GetBranch() *string {
-	if o == nil {
+func (g *GitSettings) GetBranch() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Branch
+	return g.Branch
 }
 
-func (o *GitSettings) GetCommitDeploySingleAction() *bool {
-	if o == nil {
+func (g *GitSettings) GetCommitDeploySingleAction() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.CommitDeploySingleAction
+	return g.CommitDeploySingleAction
 }
 
-func (o *GitSettings) GetCopilotAutoGitCommitMessages() *bool {
-	if o == nil {
+func (g *GitSettings) GetCopilotAutoGitCommitMessages() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.CopilotAutoGitCommitMessages
+	return g.CopilotAutoGitCommitMessages
 }
 
-func (o *GitSettings) GetDefaultCommitMessage() *string {
-	if o == nil {
+func (g *GitSettings) GetDefaultCommitMessage() *string {
+	if g == nil {
 		return nil
 	}
-	return o.DefaultCommitMessage
+	return g.DefaultCommitMessage
 }
 
-func (o *GitSettings) GetGitOps() *GitOpsType {
-	if o == nil {
+func (g *GitSettings) GetGitOps() *GitOpsType {
+	if g == nil {
 		return nil
 	}
-	return o.GitOps
+	return g.GitOps
 }
 
-func (o *GitSettings) GetPassword() *string {
-	if o == nil {
+func (g *GitSettings) GetPassword() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Password
+	return g.Password
 }
 
-func (o *GitSettings) GetRemote() *string {
-	if o == nil {
+func (g *GitSettings) GetRemote() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Remote
+	return g.Remote
 }
 
-func (o *GitSettings) GetSSHKey() *string {
-	if o == nil {
+func (g *GitSettings) GetSSHKey() *string {
+	if g == nil {
 		return nil
 	}
-	return o.SSHKey
+	return g.SSHKey
 }
 
-func (o *GitSettings) GetStrictHostKeyChecking() *bool {
-	if o == nil {
+func (g *GitSettings) GetStrictHostKeyChecking() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.StrictHostKeyChecking
+	return g.StrictHostKeyChecking
 }
 
-func (o *GitSettings) GetTimeout() *float64 {
-	if o == nil {
+func (g *GitSettings) GetTimeout() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.Timeout
+	return g.Timeout
 }
 
-func (o *GitSettings) GetUser() *string {
-	if o == nil {
+func (g *GitSettings) GetUser() *string {
+	if g == nil {
 		return nil
 	}
-	return o.User
+	return g.User
 }

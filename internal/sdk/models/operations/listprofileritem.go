@@ -12,11 +12,11 @@ type ListProfilerItemResponseBody struct {
 	Items []shared.ProfilerItem `json:"items,omitempty"`
 }
 
-func (o *ListProfilerItemResponseBody) GetItems() []shared.ProfilerItem {
-	if o == nil {
+func (l *ListProfilerItemResponseBody) GetItems() []shared.ProfilerItem {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListProfilerItemResponse struct {
@@ -32,37 +32,37 @@ type ListProfilerItemResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListProfilerItemResponse) GetContentType() string {
-	if o == nil {
+func (l *ListProfilerItemResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListProfilerItemResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListProfilerItemResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListProfilerItemResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListProfilerItemResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListProfilerItemResponse) GetObject() *ListProfilerItemResponseBody {
-	if o == nil {
+func (l *ListProfilerItemResponse) GetObject() *ListProfilerItemResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListProfilerItemResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListProfilerItemResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

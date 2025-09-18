@@ -24,16 +24,16 @@ func (g *GcpEndpointConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GcpEndpointConfig) GetEndpointName() string {
-	if o == nil {
+func (g *GcpEndpointConfig) GetEndpointName() string {
+	if g == nil {
 		return ""
 	}
-	return o.EndpointName
+	return g.EndpointName
 }
 
-func (o *GcpEndpointConfig) GetRegion() *string {
-	if o == nil {
+func (g *GcpEndpointConfig) GetRegion() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Region
+	return g.Region
 }

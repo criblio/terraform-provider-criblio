@@ -47,18 +47,18 @@ func (i *InputNetflowConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputNetflowConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputNetflowConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputNetflowConnection) GetOutput() string {
-	if o == nil {
+func (i *InputNetflowConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputNetflowMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputNetflowPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputNetflowPq) GetMode() *InputNetflowMode {
-	if o == nil {
+func (i *InputNetflowPq) GetMode() *InputNetflowMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputNetflowPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputNetflowPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputNetflowPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputNetflowPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputNetflowPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputNetflowPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputNetflowPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputNetflowPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputNetflowPq) GetPath() *string {
-	if o == nil {
+func (i *InputNetflowPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputNetflowPq) GetCompress() *InputNetflowCompression {
-	if o == nil {
+func (i *InputNetflowPq) GetCompress() *InputNetflowCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputNetflowMetadatum struct {
@@ -209,18 +209,18 @@ func (i *InputNetflowMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputNetflowMetadatum) GetName() string {
-	if o == nil {
+func (i *InputNetflowMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputNetflowMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputNetflowMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputNetflow struct {
@@ -277,156 +277,156 @@ func (i *InputNetflow) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputNetflow) GetID() *string {
-	if o == nil {
+func (i *InputNetflow) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputNetflow) GetType() *InputNetflowType {
-	if o == nil {
+func (i *InputNetflow) GetType() *InputNetflowType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputNetflow) GetDisabled() *bool {
-	if o == nil {
+func (i *InputNetflow) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputNetflow) GetPipeline() *string {
-	if o == nil {
+func (i *InputNetflow) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputNetflow) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputNetflow) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputNetflow) GetEnvironment() *string {
-	if o == nil {
+func (i *InputNetflow) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputNetflow) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputNetflow) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputNetflow) GetStreamtags() []string {
-	if o == nil {
+func (i *InputNetflow) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputNetflow) GetConnections() []InputNetflowConnection {
-	if o == nil {
+func (i *InputNetflow) GetConnections() []InputNetflowConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputNetflow) GetPq() *InputNetflowPq {
-	if o == nil {
+func (i *InputNetflow) GetPq() *InputNetflowPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputNetflow) GetHost() *string {
-	if o == nil {
+func (i *InputNetflow) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputNetflow) GetPort() *float64 {
-	if o == nil {
+func (i *InputNetflow) GetPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputNetflow) GetEnablePassThrough() *bool {
-	if o == nil {
+func (i *InputNetflow) GetEnablePassThrough() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnablePassThrough
+	return i.EnablePassThrough
 }
 
-func (o *InputNetflow) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputNetflow) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputNetflow) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputNetflow) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputNetflow) GetUDPSocketRxBufSize() *float64 {
-	if o == nil {
+func (i *InputNetflow) GetUDPSocketRxBufSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.UDPSocketRxBufSize
+	return i.UDPSocketRxBufSize
 }
 
-func (o *InputNetflow) GetTemplateCacheMinutes() *float64 {
-	if o == nil {
+func (i *InputNetflow) GetTemplateCacheMinutes() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TemplateCacheMinutes
+	return i.TemplateCacheMinutes
 }
 
-func (o *InputNetflow) GetV5Enabled() *bool {
-	if o == nil {
+func (i *InputNetflow) GetV5Enabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.V5Enabled
+	return i.V5Enabled
 }
 
-func (o *InputNetflow) GetV9Enabled() *bool {
-	if o == nil {
+func (i *InputNetflow) GetV9Enabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.V9Enabled
+	return i.V9Enabled
 }
 
-func (o *InputNetflow) GetIpfixEnabled() *bool {
-	if o == nil {
+func (i *InputNetflow) GetIpfixEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IpfixEnabled
+	return i.IpfixEnabled
 }
 
-func (o *InputNetflow) GetMetadata() []InputNetflowMetadatum {
-	if o == nil {
+func (i *InputNetflow) GetMetadata() []InputNetflowMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputNetflow) GetDescription() *string {
-	if o == nil {
+func (i *InputNetflow) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

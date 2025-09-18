@@ -14,18 +14,18 @@ type GetSystemProjectsVersionFilesByProjectIDRequest struct {
 	ID *string `queryParam:"style=form,explode=true,name=ID"`
 }
 
-func (o *GetSystemProjectsVersionFilesByProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionFilesByProjectIDRequest) GetProjectID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
-func (o *GetSystemProjectsVersionFilesByProjectIDRequest) GetID() *string {
-	if o == nil {
+func (g *GetSystemProjectsVersionFilesByProjectIDRequest) GetID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetSystemProjectsVersionFilesByProjectIDResponseBody - a list of GitFilesResponse objects
@@ -33,11 +33,11 @@ type GetSystemProjectsVersionFilesByProjectIDResponseBody struct {
 	Items []shared.GitFilesResponse `json:"items,omitempty"`
 }
 
-func (o *GetSystemProjectsVersionFilesByProjectIDResponseBody) GetItems() []shared.GitFilesResponse {
-	if o == nil {
+func (g *GetSystemProjectsVersionFilesByProjectIDResponseBody) GetItems() []shared.GitFilesResponse {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemProjectsVersionFilesByProjectIDResponse struct {
@@ -53,37 +53,37 @@ type GetSystemProjectsVersionFilesByProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemProjectsVersionFilesByProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionFilesByProjectIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemProjectsVersionFilesByProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemProjectsVersionFilesByProjectIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemProjectsVersionFilesByProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemProjectsVersionFilesByProjectIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemProjectsVersionFilesByProjectIDResponse) GetObject() *GetSystemProjectsVersionFilesByProjectIDResponseBody {
-	if o == nil {
+func (g *GetSystemProjectsVersionFilesByProjectIDResponse) GetObject() *GetSystemProjectsVersionFilesByProjectIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemProjectsVersionFilesByProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemProjectsVersionFilesByProjectIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

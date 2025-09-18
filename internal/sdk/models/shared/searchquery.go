@@ -48,18 +48,18 @@ func (s *SearchQueryValues) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SearchQueryValues) GetType() TypeValues {
-	if o == nil {
+func (s *SearchQueryValues) GetType() TypeValues {
+	if s == nil {
 		return TypeValues("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SearchQueryValues) GetValues() []string {
-	if o == nil {
+func (s *SearchQueryValues) GetValues() []string {
+	if s == nil {
 		return []string{}
 	}
-	return o.Values
+	return s.Values
 }
 
 type SearchQueryEarliestType string
@@ -232,53 +232,53 @@ func (s *SearchQueryInline) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SearchQueryInline) GetEarliest() *SearchQueryEarliest {
-	if o == nil {
+func (s *SearchQueryInline) GetEarliest() *SearchQueryEarliest {
+	if s == nil {
 		return nil
 	}
-	return o.Earliest
+	return s.Earliest
 }
 
-func (o *SearchQueryInline) GetLatest() *SearchQueryLatest {
-	if o == nil {
+func (s *SearchQueryInline) GetLatest() *SearchQueryLatest {
+	if s == nil {
 		return nil
 	}
-	return o.Latest
+	return s.Latest
 }
 
-func (o *SearchQueryInline) GetParentSearchID() *string {
-	if o == nil {
+func (s *SearchQueryInline) GetParentSearchID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ParentSearchID
+	return s.ParentSearchID
 }
 
-func (o *SearchQueryInline) GetQuery() *string {
-	if o == nil {
+func (s *SearchQueryInline) GetQuery() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Query
+	return s.Query
 }
 
-func (o *SearchQueryInline) GetSampleRate() *float64 {
-	if o == nil {
+func (s *SearchQueryInline) GetSampleRate() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.SampleRate
+	return s.SampleRate
 }
 
-func (o *SearchQueryInline) GetTimezone() *string {
-	if o == nil {
+func (s *SearchQueryInline) GetTimezone() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Timezone
+	return s.Timezone
 }
 
-func (o *SearchQueryInline) GetType() TypeInline {
-	if o == nil {
+func (s *SearchQueryInline) GetType() TypeInline {
+	if s == nil {
 		return TypeInline("")
 	}
-	return o.Type
+	return s.Type
 }
 
 type TypeSaved string
@@ -322,32 +322,32 @@ func (s *SearchQuerySaved) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SearchQuerySaved) GetQuery() *string {
-	if o == nil {
+func (s *SearchQuerySaved) GetQuery() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Query
+	return s.Query
 }
 
-func (o *SearchQuerySaved) GetQueryID() string {
-	if o == nil {
+func (s *SearchQuerySaved) GetQueryID() string {
+	if s == nil {
 		return ""
 	}
-	return o.QueryID
+	return s.QueryID
 }
 
-func (o *SearchQuerySaved) GetRunMode() *SavesSearchRunMode {
-	if o == nil {
+func (s *SearchQuerySaved) GetRunMode() *SavesSearchRunMode {
+	if s == nil {
 		return nil
 	}
-	return o.RunMode
+	return s.RunMode
 }
 
-func (o *SearchQuerySaved) GetType() TypeSaved {
-	if o == nil {
+func (s *SearchQuerySaved) GetType() TypeSaved {
+	if s == nil {
 		return TypeSaved("")
 	}
-	return o.Type
+	return s.Type
 }
 
 type SearchQueryType string

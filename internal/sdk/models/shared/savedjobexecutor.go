@@ -126,95 +126,95 @@ func (s *SavedJobExecutorRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobExecutorRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetRescheduleDroppedTasks() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return s.RescheduleDroppedTasks
 }
 
-func (o *SavedJobExecutorRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetMaxTaskReschedule() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return s.MaxTaskReschedule
 }
 
-func (o *SavedJobExecutorRunSettings) GetLogLevel() *SavedJobExecutorLogLevel {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetLogLevel() *SavedJobExecutorLogLevel {
+	if s == nil {
 		return nil
 	}
-	return o.LogLevel
+	return s.LogLevel
 }
 
-func (o *SavedJobExecutorRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetJobTimeout() *string {
+	if s == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return s.JobTimeout
 }
 
-func (o *SavedJobExecutorRunSettings) GetMode() *string {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetMode() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Mode
+	return s.Mode
 }
 
-func (o *SavedJobExecutorRunSettings) GetTimeRangeType() *string {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetTimeRangeType() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return s.TimeRangeType
 }
 
-func (o *SavedJobExecutorRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetEarliest() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Earliest
+	return s.Earliest
 }
 
-func (o *SavedJobExecutorRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetLatest() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Latest
+	return s.Latest
 }
 
-func (o *SavedJobExecutorRunSettings) GetTimestampTimezone() any {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetTimestampTimezone() any {
+	if s == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return s.TimestampTimezone
 }
 
-func (o *SavedJobExecutorRunSettings) GetTimeWarning() *SavedJobExecutorTimeWarning {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetTimeWarning() *SavedJobExecutorTimeWarning {
+	if s == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return s.TimeWarning
 }
 
-func (o *SavedJobExecutorRunSettings) GetExpression() *string {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetExpression() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Expression
+	return s.Expression
 }
 
-func (o *SavedJobExecutorRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetMinTaskSize() *string {
+	if s == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return s.MinTaskSize
 }
 
-func (o *SavedJobExecutorRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (s *SavedJobExecutorRunSettings) GetMaxTaskSize() *string {
+	if s == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return s.MaxTaskSize
 }
 
 // SavedJobExecutorSchedule - Configuration for a scheduled job
@@ -242,46 +242,46 @@ func (s *SavedJobExecutorSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobExecutorSchedule) GetEnabled() *bool {
-	if o == nil {
+func (s *SavedJobExecutorSchedule) GetEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Enabled
+	return s.Enabled
 }
 
-func (o *SavedJobExecutorSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (s *SavedJobExecutorSchedule) GetCronSchedule() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return s.CronSchedule
 }
 
-func (o *SavedJobExecutorSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (s *SavedJobExecutorSchedule) GetMaxConcurrentRuns() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return s.MaxConcurrentRuns
 }
 
-func (o *SavedJobExecutorSchedule) GetSkippable() *bool {
-	if o == nil {
+func (s *SavedJobExecutorSchedule) GetSkippable() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Skippable
+	return s.Skippable
 }
 
-func (o *SavedJobExecutorSchedule) GetResumeMissed() any {
-	if o == nil {
+func (s *SavedJobExecutorSchedule) GetResumeMissed() any {
+	if s == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return s.ResumeMissed
 }
 
-func (o *SavedJobExecutorSchedule) GetRun() *SavedJobExecutorRunSettings {
-	if o == nil {
+func (s *SavedJobExecutorSchedule) GetRun() *SavedJobExecutorRunSettings {
+	if s == nil {
 		return nil
 	}
-	return o.Run
+	return s.Run
 }
 
 type SavedJobExecutorExecutorSpecificSettings struct {
@@ -317,25 +317,25 @@ func (s *SavedJobExecutorExecutor) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobExecutorExecutor) GetType() string {
-	if o == nil {
+func (s *SavedJobExecutorExecutor) GetType() string {
+	if s == nil {
 		return ""
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SavedJobExecutorExecutor) GetStoreTaskResults() *bool {
-	if o == nil {
+func (s *SavedJobExecutorExecutor) GetStoreTaskResults() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.StoreTaskResults
+	return s.StoreTaskResults
 }
 
-func (o *SavedJobExecutorExecutor) GetConf() *SavedJobExecutorExecutorSpecificSettings {
-	if o == nil {
+func (s *SavedJobExecutorExecutor) GetConf() *SavedJobExecutorExecutorSpecificSettings {
+	if s == nil {
 		return nil
 	}
-	return o.Conf
+	return s.Conf
 }
 
 type SavedJobExecutor struct {
@@ -371,79 +371,79 @@ func (s *SavedJobExecutor) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobExecutor) GetID() *string {
-	if o == nil {
+func (s *SavedJobExecutor) GetID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SavedJobExecutor) GetDescription() *string {
-	if o == nil {
+func (s *SavedJobExecutor) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SavedJobExecutor) GetType() SavedJobExecutorJobType {
-	if o == nil {
+func (s *SavedJobExecutor) GetType() SavedJobExecutorJobType {
+	if s == nil {
 		return SavedJobExecutorJobType("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SavedJobExecutor) GetTTL() *string {
-	if o == nil {
+func (s *SavedJobExecutor) GetTTL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TTL
+	return s.TTL
 }
 
-func (o *SavedJobExecutor) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (s *SavedJobExecutor) GetIgnoreGroupJobsLimit() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return s.IgnoreGroupJobsLimit
 }
 
-func (o *SavedJobExecutor) GetRemoveFields() []string {
-	if o == nil {
+func (s *SavedJobExecutor) GetRemoveFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return s.RemoveFields
 }
 
-func (o *SavedJobExecutor) GetResumeOnBoot() *bool {
-	if o == nil {
+func (s *SavedJobExecutor) GetResumeOnBoot() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return s.ResumeOnBoot
 }
 
-func (o *SavedJobExecutor) GetEnvironment() *string {
-	if o == nil {
+func (s *SavedJobExecutor) GetEnvironment() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Environment
+	return s.Environment
 }
 
-func (o *SavedJobExecutor) GetSchedule() *SavedJobExecutorSchedule {
-	if o == nil {
+func (s *SavedJobExecutor) GetSchedule() *SavedJobExecutorSchedule {
+	if s == nil {
 		return nil
 	}
-	return o.Schedule
+	return s.Schedule
 }
 
-func (o *SavedJobExecutor) GetStreamtags() []string {
-	if o == nil {
+func (s *SavedJobExecutor) GetStreamtags() []string {
+	if s == nil {
 		return nil
 	}
-	return o.Streamtags
+	return s.Streamtags
 }
 
-func (o *SavedJobExecutor) GetExecutor() SavedJobExecutorExecutor {
-	if o == nil {
+func (s *SavedJobExecutor) GetExecutor() SavedJobExecutorExecutor {
+	if s == nil {
 		return SavedJobExecutorExecutor{}
 	}
-	return o.Executor
+	return s.Executor
 }

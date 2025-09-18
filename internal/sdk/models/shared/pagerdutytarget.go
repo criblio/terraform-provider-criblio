@@ -93,58 +93,58 @@ func (p *PagerDutyTarget) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PagerDutyTarget) GetID() string {
-	if o == nil {
+func (p *PagerDutyTarget) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PagerDutyTarget) GetType() PagerDutyTargetType {
-	if o == nil {
+func (p *PagerDutyTarget) GetType() PagerDutyTargetType {
+	if p == nil {
 		return PagerDutyTargetType("")
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PagerDutyTarget) GetSystemFields() []string {
-	if o == nil {
+func (p *PagerDutyTarget) GetSystemFields() []string {
+	if p == nil {
 		return nil
 	}
-	return o.SystemFields
+	return p.SystemFields
 }
 
-func (o *PagerDutyTarget) GetRoutingKey() string {
-	if o == nil {
+func (p *PagerDutyTarget) GetRoutingKey() string {
+	if p == nil {
 		return ""
 	}
-	return o.RoutingKey
+	return p.RoutingKey
 }
 
-func (o *PagerDutyTarget) GetGroup() *string {
-	if o == nil {
+func (p *PagerDutyTarget) GetGroup() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Group
+	return p.Group
 }
 
-func (o *PagerDutyTarget) GetClass() *string {
-	if o == nil {
+func (p *PagerDutyTarget) GetClass() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Class
+	return p.Class
 }
 
-func (o *PagerDutyTarget) GetComponent() *string {
-	if o == nil {
+func (p *PagerDutyTarget) GetComponent() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Component
+	return p.Component
 }
 
-func (o *PagerDutyTarget) GetSeverity() *PagerDutyTargetSeverity {
-	if o == nil {
+func (p *PagerDutyTarget) GetSeverity() *PagerDutyTargetSeverity {
+	if p == nil {
 		return nil
 	}
-	return o.Severity
+	return p.Severity
 }

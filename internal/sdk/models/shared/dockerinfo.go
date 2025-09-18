@@ -13,58 +13,58 @@ type DockerInfo struct {
 	Stats           map[string]any     `json:"Stats,omitempty"`
 }
 
-func (o *DockerInfo) GetConfig() map[string]any {
-	if o == nil {
+func (d *DockerInfo) GetConfig() map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.Config
+	return d.Config
 }
 
-func (o *DockerInfo) GetGraphDriver() *DockerGraphDriver {
-	if o == nil {
+func (d *DockerInfo) GetGraphDriver() *DockerGraphDriver {
+	if d == nil {
 		return nil
 	}
-	return o.GraphDriver
+	return d.GraphDriver
 }
 
-func (o *DockerInfo) GetLogPath() *string {
-	if o == nil {
+func (d *DockerInfo) GetLogPath() *string {
+	if d == nil {
 		return nil
 	}
-	return o.LogPath
+	return d.LogPath
 }
 
-func (o *DockerInfo) GetMounts() []DockerMount {
-	if o == nil {
+func (d *DockerInfo) GetMounts() []DockerMount {
+	if d == nil {
 		return nil
 	}
-	return o.Mounts
+	return d.Mounts
 }
 
-func (o *DockerInfo) GetNetworkSettings() map[string]any {
-	if o == nil {
+func (d *DockerInfo) GetNetworkSettings() map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.NetworkSettings
+	return d.NetworkSettings
 }
 
-func (o *DockerInfo) GetPath() *string {
-	if o == nil {
+func (d *DockerInfo) GetPath() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Path
+	return d.Path
 }
 
-func (o *DockerInfo) GetState() map[string]any {
-	if o == nil {
+func (d *DockerInfo) GetState() map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.State
+	return d.State
 }
 
-func (o *DockerInfo) GetStats() map[string]any {
-	if o == nil {
+func (d *DockerInfo) GetStats() map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.Stats
+	return d.Stats
 }

@@ -12,11 +12,11 @@ type GetEdgeAppscopeProcessesResponseBody struct {
 	Items []shared.AppScopeProcess `json:"items,omitempty"`
 }
 
-func (o *GetEdgeAppscopeProcessesResponseBody) GetItems() []shared.AppScopeProcess {
-	if o == nil {
+func (g *GetEdgeAppscopeProcessesResponseBody) GetItems() []shared.AppScopeProcess {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeAppscopeProcessesResponse struct {
@@ -32,37 +32,37 @@ type GetEdgeAppscopeProcessesResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeAppscopeProcessesResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeAppscopeProcessesResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeAppscopeProcessesResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeAppscopeProcessesResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeAppscopeProcessesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeAppscopeProcessesResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeAppscopeProcessesResponse) GetObject() *GetEdgeAppscopeProcessesResponseBody {
-	if o == nil {
+func (g *GetEdgeAppscopeProcessesResponse) GetObject() *GetEdgeAppscopeProcessesResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeAppscopeProcessesResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeAppscopeProcessesResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

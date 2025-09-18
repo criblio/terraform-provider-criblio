@@ -12,11 +12,11 @@ type DeleteLoggerConfigByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteLoggerConfigByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteLoggerConfigByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteLoggerConfigByIDResponseBody - a list of LoggerConfig objects
@@ -24,11 +24,11 @@ type DeleteLoggerConfigByIDResponseBody struct {
 	Items []shared.LoggerConfig `json:"items,omitempty"`
 }
 
-func (o *DeleteLoggerConfigByIDResponseBody) GetItems() []shared.LoggerConfig {
-	if o == nil {
+func (d *DeleteLoggerConfigByIDResponseBody) GetItems() []shared.LoggerConfig {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteLoggerConfigByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteLoggerConfigByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteLoggerConfigByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteLoggerConfigByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteLoggerConfigByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteLoggerConfigByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteLoggerConfigByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteLoggerConfigByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteLoggerConfigByIDResponse) GetObject() *DeleteLoggerConfigByIDResponseBody {
-	if o == nil {
+func (d *DeleteLoggerConfigByIDResponse) GetObject() *DeleteLoggerConfigByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteLoggerConfigByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteLoggerConfigByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

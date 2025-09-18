@@ -8,23 +8,23 @@ type RedirectInfo struct {
 	Token       *string `json:"token,omitempty"`
 }
 
-func (o *RedirectInfo) GetName() string {
-	if o == nil {
+func (r *RedirectInfo) GetName() string {
+	if r == nil {
 		return ""
 	}
-	return o.Name
+	return r.Name
 }
 
-func (o *RedirectInfo) GetRedirectURL() *string {
-	if o == nil {
+func (r *RedirectInfo) GetRedirectURL() *string {
+	if r == nil {
 		return nil
 	}
-	return o.RedirectURL
+	return r.RedirectURL
 }
 
-func (o *RedirectInfo) GetToken() *string {
-	if o == nil {
+func (r *RedirectInfo) GetToken() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Token
+	return r.Token
 }

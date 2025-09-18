@@ -12,11 +12,11 @@ type GetNotificationByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetNotificationByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetNotificationByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetNotificationByIDResponseBody - a list of Notification objects
@@ -24,11 +24,11 @@ type GetNotificationByIDResponseBody struct {
 	Items []shared.Notification `json:"items,omitempty"`
 }
 
-func (o *GetNotificationByIDResponseBody) GetItems() []shared.Notification {
-	if o == nil {
+func (g *GetNotificationByIDResponseBody) GetItems() []shared.Notification {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetNotificationByIDResponse struct {
@@ -44,37 +44,37 @@ type GetNotificationByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetNotificationByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetNotificationByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetNotificationByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetNotificationByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetNotificationByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetNotificationByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetNotificationByIDResponse) GetObject() *GetNotificationByIDResponseBody {
-	if o == nil {
+func (g *GetNotificationByIDResponse) GetObject() *GetNotificationByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetNotificationByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetNotificationByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -14,18 +14,18 @@ type UpdateDashboardCategoryByIDRequest struct {
 	DashboardCategory shared.DashboardCategory `request:"mediaType=application/json"`
 }
 
-func (o *UpdateDashboardCategoryByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateDashboardCategoryByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateDashboardCategoryByIDRequest) GetDashboardCategory() shared.DashboardCategory {
-	if o == nil {
+func (u *UpdateDashboardCategoryByIDRequest) GetDashboardCategory() shared.DashboardCategory {
+	if u == nil {
 		return shared.DashboardCategory{}
 	}
-	return o.DashboardCategory
+	return u.DashboardCategory
 }
 
 // UpdateDashboardCategoryByIDResponseBody - a list of DashboardCategory objects
@@ -33,11 +33,11 @@ type UpdateDashboardCategoryByIDResponseBody struct {
 	Items []shared.DashboardCategory `json:"items,omitempty"`
 }
 
-func (o *UpdateDashboardCategoryByIDResponseBody) GetItems() []shared.DashboardCategory {
-	if o == nil {
+func (u *UpdateDashboardCategoryByIDResponseBody) GetItems() []shared.DashboardCategory {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateDashboardCategoryByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateDashboardCategoryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateDashboardCategoryByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateDashboardCategoryByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateDashboardCategoryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateDashboardCategoryByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateDashboardCategoryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateDashboardCategoryByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateDashboardCategoryByIDResponse) GetObject() *UpdateDashboardCategoryByIDResponseBody {
-	if o == nil {
+func (u *UpdateDashboardCategoryByIDResponse) GetObject() *UpdateDashboardCategoryByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateDashboardCategoryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateDashboardCategoryByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

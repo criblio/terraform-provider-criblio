@@ -18,32 +18,32 @@ type UpdateGlobalVariableLibVarsByPackAndIDRequest struct {
 	GlobalVar shared.GlobalVar `request:"mediaType=application/json"`
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
+	if u == nil {
 		return ""
 	}
-	return o.Pack
+	return u.Pack
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetGlobalVar() shared.GlobalVar {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetGlobalVar() shared.GlobalVar {
+	if u == nil {
 		return shared.GlobalVar{}
 	}
-	return o.GlobalVar
+	return u.GlobalVar
 }
 
 // UpdateGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects
@@ -51,11 +51,11 @@ type UpdateGlobalVariableLibVarsByPackAndIDResponseBody struct {
 	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateGlobalVariableLibVarsByPackAndIDResponse struct {
@@ -71,37 +71,37 @@ type UpdateGlobalVariableLibVarsByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetObject() *UpdateGlobalVariableLibVarsByPackAndIDResponseBody {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetObject() *UpdateGlobalVariableLibVarsByPackAndIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

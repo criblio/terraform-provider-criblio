@@ -122,86 +122,86 @@ func (k *KeyMetadataEntity) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *KeyMetadataEntity) GetKeyID() string {
-	if o == nil {
+func (k *KeyMetadataEntity) GetKeyID() string {
+	if k == nil {
 		return ""
 	}
-	return o.KeyID
+	return k.KeyID
 }
 
-func (o *KeyMetadataEntity) GetDescription() *string {
-	if o == nil {
+func (k *KeyMetadataEntity) GetDescription() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Description
+	return k.Description
 }
 
-func (o *KeyMetadataEntity) GetAlgorithm() *EncryptionAlgorithm {
-	if o == nil {
+func (k *KeyMetadataEntity) GetAlgorithm() *EncryptionAlgorithm {
+	if k == nil {
 		return nil
 	}
-	return o.Algorithm
+	return k.Algorithm
 }
 
-func (o *KeyMetadataEntity) GetKms() *KMSForThisKey {
-	if o == nil {
+func (k *KeyMetadataEntity) GetKms() *KMSForThisKey {
+	if k == nil {
 		return nil
 	}
-	return o.Kms
+	return k.Kms
 }
 
-func (o *KeyMetadataEntity) GetKeyclass() *float64 {
-	if o == nil {
+func (k *KeyMetadataEntity) GetKeyclass() *float64 {
+	if k == nil {
 		return nil
 	}
-	return o.Keyclass
+	return k.Keyclass
 }
 
-func (o *KeyMetadataEntity) GetCreated() *float64 {
-	if o == nil {
+func (k *KeyMetadataEntity) GetCreated() *float64 {
+	if k == nil {
 		return nil
 	}
-	return o.Created
+	return k.Created
 }
 
-func (o *KeyMetadataEntity) GetExpires() *float64 {
-	if o == nil {
+func (k *KeyMetadataEntity) GetExpires() *float64 {
+	if k == nil {
 		return nil
 	}
-	return o.Expires
+	return k.Expires
 }
 
-func (o *KeyMetadataEntity) GetPlainKey() *string {
-	if o == nil {
+func (k *KeyMetadataEntity) GetPlainKey() *string {
+	if k == nil {
 		return nil
 	}
-	return o.PlainKey
+	return k.PlainKey
 }
 
-func (o *KeyMetadataEntity) GetCipherKey() *string {
-	if o == nil {
+func (k *KeyMetadataEntity) GetCipherKey() *string {
+	if k == nil {
 		return nil
 	}
-	return o.CipherKey
+	return k.CipherKey
 }
 
-func (o *KeyMetadataEntity) GetUseIV() *bool {
-	if o == nil {
+func (k *KeyMetadataEntity) GetUseIV() *bool {
+	if k == nil {
 		return nil
 	}
-	return o.UseIV
+	return k.UseIV
 }
 
-func (o *KeyMetadataEntity) GetIvSize() *InitializationVectorSize {
-	if o == nil {
+func (k *KeyMetadataEntity) GetIvSize() *InitializationVectorSize {
+	if k == nil {
 		return nil
 	}
-	return o.IvSize
+	return k.IvSize
 }
 
-func (o *KeyMetadataEntity) GetGroup() *string {
-	if o == nil {
+func (k *KeyMetadataEntity) GetGroup() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Group
+	return k.Group
 }

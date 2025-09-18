@@ -14,18 +14,18 @@ type DeleteInputByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteInputByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteInputByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteInputByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteInputByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteInputByIDResponseBody - a list of Input objects
@@ -45,37 +45,37 @@ type DeleteInputByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteInputByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteInputByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteInputByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteInputByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteInputByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteInputByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteInputByIDResponse) GetObject() *DeleteInputByIDResponseBody {
-	if o == nil {
+func (d *DeleteInputByIDResponse) GetObject() *DeleteInputByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteInputByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteInputByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

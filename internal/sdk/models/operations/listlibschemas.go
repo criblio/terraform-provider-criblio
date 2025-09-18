@@ -12,11 +12,11 @@ type ListLibSchemasRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListLibSchemasRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListLibSchemasRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListLibSchemasResponseBody - a list of Schema objects
@@ -24,11 +24,11 @@ type ListLibSchemasResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *ListLibSchemasResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (l *ListLibSchemasResponseBody) GetItems() []shared.SchemaLibEntry {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListLibSchemasResponse struct {
@@ -44,37 +44,37 @@ type ListLibSchemasResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListLibSchemasResponse) GetContentType() string {
-	if o == nil {
+func (l *ListLibSchemasResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListLibSchemasResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListLibSchemasResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListLibSchemasResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListLibSchemasResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListLibSchemasResponse) GetObject() *ListLibSchemasResponseBody {
-	if o == nil {
+func (l *ListLibSchemasResponse) GetObject() *ListLibSchemasResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListLibSchemasResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListLibSchemasResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

@@ -14,18 +14,18 @@ type CreateHmacFunctionRequest struct {
 	HmacFunction shared.HmacFunction `request:"mediaType=application/json"`
 }
 
-func (o *CreateHmacFunctionRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateHmacFunctionRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateHmacFunctionRequest) GetHmacFunction() shared.HmacFunction {
-	if o == nil {
+func (c *CreateHmacFunctionRequest) GetHmacFunction() shared.HmacFunction {
+	if c == nil {
 		return shared.HmacFunction{}
 	}
-	return o.HmacFunction
+	return c.HmacFunction
 }
 
 // CreateHmacFunctionResponseBody - a list of HmacFunction objects
@@ -33,11 +33,11 @@ type CreateHmacFunctionResponseBody struct {
 	Items []shared.HmacFunction `json:"items,omitempty"`
 }
 
-func (o *CreateHmacFunctionResponseBody) GetItems() []shared.HmacFunction {
-	if o == nil {
+func (c *CreateHmacFunctionResponseBody) GetItems() []shared.HmacFunction {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateHmacFunctionResponse struct {
@@ -53,37 +53,37 @@ type CreateHmacFunctionResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateHmacFunctionResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateHmacFunctionResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateHmacFunctionResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateHmacFunctionResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateHmacFunctionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateHmacFunctionResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateHmacFunctionResponse) GetObject() *CreateHmacFunctionResponseBody {
-	if o == nil {
+func (c *CreateHmacFunctionResponse) GetObject() *CreateHmacFunctionResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateHmacFunctionResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateHmacFunctionResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

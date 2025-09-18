@@ -6,9 +6,9 @@ type ColumnFilterSettings struct {
 	Contains any `json:"contains"`
 }
 
-func (o *ColumnFilterSettings) GetContains() any {
-	if o == nil {
+func (c *ColumnFilterSettings) GetContains() any {
+	if c == nil {
 		return nil
 	}
-	return o.Contains
+	return c.Contains
 }

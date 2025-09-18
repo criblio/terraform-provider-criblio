@@ -74,37 +74,37 @@ func (p *ParserLibEntry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ParserLibEntry) GetID() string {
-	if o == nil {
+func (p *ParserLibEntry) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *ParserLibEntry) GetLib() *string {
-	if o == nil {
+func (p *ParserLibEntry) GetLib() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Lib
+	return p.Lib
 }
 
-func (o *ParserLibEntry) GetDescription() *string {
-	if o == nil {
+func (p *ParserLibEntry) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *ParserLibEntry) GetTags() *string {
-	if o == nil {
+func (p *ParserLibEntry) GetTags() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Tags
+	return p.Tags
 }
 
-func (o *ParserLibEntry) GetType() *ParserLibEntryType {
-	if o == nil {
+func (p *ParserLibEntry) GetType() *ParserLibEntryType {
+	if p == nil {
 		return nil
 	}
-	return o.Type
+	return p.Type
 }

@@ -24,16 +24,16 @@ func (h *HTTPHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *HTTPHeader) GetName() string {
-	if o == nil {
+func (h *HTTPHeader) GetName() string {
+	if h == nil {
 		return ""
 	}
-	return o.Name
+	return h.Name
 }
 
-func (o *HTTPHeader) GetValue() string {
-	if o == nil {
+func (h *HTTPHeader) GetValue() string {
+	if h == nil {
 		return ""
 	}
-	return o.Value
+	return h.Value
 }

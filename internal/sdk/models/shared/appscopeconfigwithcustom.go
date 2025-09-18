@@ -14,32 +14,32 @@ type AppscopeConfigWithCustomCribl struct {
 	UseScopeSourceTransport *bool              `json:"useScopeSourceTransport,omitempty"`
 }
 
-func (o *AppscopeConfigWithCustomCribl) GetAuthtoken() *string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomCribl) GetAuthtoken() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Authtoken
+	return a.Authtoken
 }
 
-func (o *AppscopeConfigWithCustomCribl) GetEnable() *bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomCribl) GetEnable() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Enable
+	return a.Enable
 }
 
-func (o *AppscopeConfigWithCustomCribl) GetTransport() *AppscopeTransport {
-	if o == nil {
+func (a *AppscopeConfigWithCustomCribl) GetTransport() *AppscopeTransport {
+	if a == nil {
 		return nil
 	}
-	return o.Transport
+	return a.Transport
 }
 
-func (o *AppscopeConfigWithCustomCribl) GetUseScopeSourceTransport() *bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomCribl) GetUseScopeSourceTransport() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.UseScopeSourceTransport
+	return a.UseScopeSourceTransport
 }
 
 type AppscopeConfigWithCustomFormatNdjson struct {
@@ -47,18 +47,18 @@ type AppscopeConfigWithCustomFormatNdjson struct {
 	Maxeventpersec float64 `json:"maxeventpersec"`
 }
 
-func (o *AppscopeConfigWithCustomFormatNdjson) GetEnhancefs() bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomFormatNdjson) GetEnhancefs() bool {
+	if a == nil {
 		return false
 	}
-	return o.Enhancefs
+	return a.Enhancefs
 }
 
-func (o *AppscopeConfigWithCustomFormatNdjson) GetMaxeventpersec() float64 {
-	if o == nil {
+func (a *AppscopeConfigWithCustomFormatNdjson) GetMaxeventpersec() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.Maxeventpersec
+	return a.Maxeventpersec
 }
 
 type AppscopeConfigWithCustomType string
@@ -94,53 +94,53 @@ type AppscopeConfigWithCustomWatchNdjson struct {
 	Value       *string  `json:"value,omitempty"`
 }
 
-func (o *AppscopeConfigWithCustomWatchNdjson) GetAllowbinary() *bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomWatchNdjson) GetAllowbinary() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Allowbinary
+	return a.Allowbinary
 }
 
-func (o *AppscopeConfigWithCustomWatchNdjson) GetEnabled() *bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomWatchNdjson) GetEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Enabled
+	return a.Enabled
 }
 
-func (o *AppscopeConfigWithCustomWatchNdjson) GetField() *string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomWatchNdjson) GetField() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Field
+	return a.Field
 }
 
-func (o *AppscopeConfigWithCustomWatchNdjson) GetHeaders() []string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomWatchNdjson) GetHeaders() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Headers
+	return a.Headers
 }
 
-func (o *AppscopeConfigWithCustomWatchNdjson) GetName() *string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomWatchNdjson) GetName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AppscopeConfigWithCustomWatchNdjson) GetType() string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomWatchNdjson) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AppscopeConfigWithCustomWatchNdjson) GetValue() *string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomWatchNdjson) GetValue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Value
+	return a.Value
 }
 
 type AppscopeConfigWithCustomEvent struct {
@@ -151,39 +151,39 @@ type AppscopeConfigWithCustomEvent struct {
 	Watch     []AppscopeConfigWithCustomWatchNdjson `json:"watch"`
 }
 
-func (o *AppscopeConfigWithCustomEvent) GetEnable() bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomEvent) GetEnable() bool {
+	if a == nil {
 		return false
 	}
-	return o.Enable
+	return a.Enable
 }
 
-func (o *AppscopeConfigWithCustomEvent) GetFormat() AppscopeConfigWithCustomFormatNdjson {
-	if o == nil {
+func (a *AppscopeConfigWithCustomEvent) GetFormat() AppscopeConfigWithCustomFormatNdjson {
+	if a == nil {
 		return AppscopeConfigWithCustomFormatNdjson{}
 	}
-	return o.Format
+	return a.Format
 }
 
-func (o *AppscopeConfigWithCustomEvent) GetTransport() AppscopeTransport {
-	if o == nil {
+func (a *AppscopeConfigWithCustomEvent) GetTransport() AppscopeTransport {
+	if a == nil {
 		return AppscopeTransport{}
 	}
-	return o.Transport
+	return a.Transport
 }
 
-func (o *AppscopeConfigWithCustomEvent) GetType() AppscopeConfigWithCustomType {
-	if o == nil {
+func (a *AppscopeConfigWithCustomEvent) GetType() AppscopeConfigWithCustomType {
+	if a == nil {
 		return AppscopeConfigWithCustomType("")
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AppscopeConfigWithCustomEvent) GetWatch() []AppscopeConfigWithCustomWatchNdjson {
-	if o == nil {
+func (a *AppscopeConfigWithCustomEvent) GetWatch() []AppscopeConfigWithCustomWatchNdjson {
+	if a == nil {
 		return []AppscopeConfigWithCustomWatchNdjson{}
 	}
-	return o.Watch
+	return a.Watch
 }
 
 type AppscopeConfigWithCustomLevel string
@@ -226,18 +226,18 @@ type AppscopeConfigWithCustomLog struct {
 	Transport *AppscopeTransport             `json:"transport,omitempty"`
 }
 
-func (o *AppscopeConfigWithCustomLog) GetLevel() *AppscopeConfigWithCustomLevel {
-	if o == nil {
+func (a *AppscopeConfigWithCustomLog) GetLevel() *AppscopeConfigWithCustomLevel {
+	if a == nil {
 		return nil
 	}
-	return o.Level
+	return a.Level
 }
 
-func (o *AppscopeConfigWithCustomLog) GetTransport() *AppscopeTransport {
-	if o == nil {
+func (a *AppscopeConfigWithCustomLog) GetTransport() *AppscopeTransport {
+	if a == nil {
 		return nil
 	}
-	return o.Transport
+	return a.Transport
 }
 
 type AppscopeConfigWithCustomLibscope struct {
@@ -247,32 +247,32 @@ type AppscopeConfigWithCustomLibscope struct {
 	Summaryperiod *float64                     `json:"summaryperiod,omitempty"`
 }
 
-func (o *AppscopeConfigWithCustomLibscope) GetCommanddir() *string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomLibscope) GetCommanddir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Commanddir
+	return a.Commanddir
 }
 
-func (o *AppscopeConfigWithCustomLibscope) GetConfigevent() *bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomLibscope) GetConfigevent() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Configevent
+	return a.Configevent
 }
 
-func (o *AppscopeConfigWithCustomLibscope) GetLog() *AppscopeConfigWithCustomLog {
-	if o == nil {
+func (a *AppscopeConfigWithCustomLibscope) GetLog() *AppscopeConfigWithCustomLog {
+	if a == nil {
 		return nil
 	}
-	return o.Log
+	return a.Log
 }
 
-func (o *AppscopeConfigWithCustomLibscope) GetSummaryperiod() *float64 {
-	if o == nil {
+func (a *AppscopeConfigWithCustomLibscope) GetSummaryperiod() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.Summaryperiod
+	return a.Summaryperiod
 }
 
 type AppscopeConfigWithCustomMetricFormat struct {
@@ -282,32 +282,32 @@ type AppscopeConfigWithCustomMetricFormat struct {
 	Verbosity    *float64 `json:"verbosity,omitempty"`
 }
 
-func (o *AppscopeConfigWithCustomMetricFormat) GetStatsdmaxlen() *float64 {
-	if o == nil {
+func (a *AppscopeConfigWithCustomMetricFormat) GetStatsdmaxlen() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.Statsdmaxlen
+	return a.Statsdmaxlen
 }
 
-func (o *AppscopeConfigWithCustomMetricFormat) GetStatsdprefix() *string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomMetricFormat) GetStatsdprefix() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Statsdprefix
+	return a.Statsdprefix
 }
 
-func (o *AppscopeConfigWithCustomMetricFormat) GetType() *string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomMetricFormat) GetType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AppscopeConfigWithCustomMetricFormat) GetVerbosity() *float64 {
-	if o == nil {
+func (a *AppscopeConfigWithCustomMetricFormat) GetVerbosity() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.Verbosity
+	return a.Verbosity
 }
 
 type AppscopeConfigWithCustomMetricWatch struct {
@@ -320,32 +320,32 @@ type AppscopeConfigWithCustomMetric struct {
 	Watch     []AppscopeConfigWithCustomMetricWatch `json:"watch"`
 }
 
-func (o *AppscopeConfigWithCustomMetric) GetEnable() bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomMetric) GetEnable() bool {
+	if a == nil {
 		return false
 	}
-	return o.Enable
+	return a.Enable
 }
 
-func (o *AppscopeConfigWithCustomMetric) GetFormat() AppscopeConfigWithCustomMetricFormat {
-	if o == nil {
+func (a *AppscopeConfigWithCustomMetric) GetFormat() AppscopeConfigWithCustomMetricFormat {
+	if a == nil {
 		return AppscopeConfigWithCustomMetricFormat{}
 	}
-	return o.Format
+	return a.Format
 }
 
-func (o *AppscopeConfigWithCustomMetric) GetTransport() AppscopeTransport {
-	if o == nil {
+func (a *AppscopeConfigWithCustomMetric) GetTransport() AppscopeTransport {
+	if a == nil {
 		return AppscopeTransport{}
 	}
-	return o.Transport
+	return a.Transport
 }
 
-func (o *AppscopeConfigWithCustomMetric) GetWatch() []AppscopeConfigWithCustomMetricWatch {
-	if o == nil {
+func (a *AppscopeConfigWithCustomMetric) GetWatch() []AppscopeConfigWithCustomMetricWatch {
+	if a == nil {
 		return []AppscopeConfigWithCustomMetricWatch{}
 	}
-	return o.Watch
+	return a.Watch
 }
 
 type AppscopeConfigWithCustomPayload struct {
@@ -353,18 +353,18 @@ type AppscopeConfigWithCustomPayload struct {
 	Enable bool   `json:"enable"`
 }
 
-func (o *AppscopeConfigWithCustomPayload) GetDir() string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomPayload) GetDir() string {
+	if a == nil {
 		return ""
 	}
-	return o.Dir
+	return a.Dir
 }
 
-func (o *AppscopeConfigWithCustomPayload) GetEnable() bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomPayload) GetEnable() bool {
+	if a == nil {
 		return false
 	}
-	return o.Enable
+	return a.Enable
 }
 
 type AppscopeConfigWithCustomProtocol struct {
@@ -376,46 +376,46 @@ type AppscopeConfigWithCustomProtocol struct {
 	Regex   string  `json:"regex"`
 }
 
-func (o *AppscopeConfigWithCustomProtocol) GetBinary() bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomProtocol) GetBinary() bool {
+	if a == nil {
 		return false
 	}
-	return o.Binary
+	return a.Binary
 }
 
-func (o *AppscopeConfigWithCustomProtocol) GetDetect() bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomProtocol) GetDetect() bool {
+	if a == nil {
 		return false
 	}
-	return o.Detect
+	return a.Detect
 }
 
-func (o *AppscopeConfigWithCustomProtocol) GetLen() float64 {
-	if o == nil {
+func (a *AppscopeConfigWithCustomProtocol) GetLen() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.Len
+	return a.Len
 }
 
-func (o *AppscopeConfigWithCustomProtocol) GetName() string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomProtocol) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AppscopeConfigWithCustomProtocol) GetPayload() bool {
-	if o == nil {
+func (a *AppscopeConfigWithCustomProtocol) GetPayload() bool {
+	if a == nil {
 		return false
 	}
-	return o.Payload
+	return a.Payload
 }
 
-func (o *AppscopeConfigWithCustomProtocol) GetRegex() string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomProtocol) GetRegex() string {
+	if a == nil {
 		return ""
 	}
-	return o.Regex
+	return a.Regex
 }
 
 type AppscopeConfigWithCustomTag struct {
@@ -423,18 +423,18 @@ type AppscopeConfigWithCustomTag struct {
 	Value string `json:"value"`
 }
 
-func (o *AppscopeConfigWithCustomTag) GetKey() string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomTag) GetKey() string {
+	if a == nil {
 		return ""
 	}
-	return o.Key
+	return a.Key
 }
 
-func (o *AppscopeConfigWithCustomTag) GetValue() string {
-	if o == nil {
+func (a *AppscopeConfigWithCustomTag) GetValue() string {
+	if a == nil {
 		return ""
 	}
-	return o.Value
+	return a.Value
 }
 
 type AppscopeConfigWithCustom struct {
@@ -448,58 +448,58 @@ type AppscopeConfigWithCustom struct {
 	Tags     []AppscopeConfigWithCustomTag      `json:"tags,omitempty"`
 }
 
-func (o *AppscopeConfigWithCustom) GetCribl() *AppscopeConfigWithCustomCribl {
-	if o == nil {
+func (a *AppscopeConfigWithCustom) GetCribl() *AppscopeConfigWithCustomCribl {
+	if a == nil {
 		return nil
 	}
-	return o.Cribl
+	return a.Cribl
 }
 
-func (o *AppscopeConfigWithCustom) GetCustom() []AppscopeCustom {
-	if o == nil {
+func (a *AppscopeConfigWithCustom) GetCustom() []AppscopeCustom {
+	if a == nil {
 		return nil
 	}
-	return o.Custom
+	return a.Custom
 }
 
-func (o *AppscopeConfigWithCustom) GetEvent() *AppscopeConfigWithCustomEvent {
-	if o == nil {
+func (a *AppscopeConfigWithCustom) GetEvent() *AppscopeConfigWithCustomEvent {
+	if a == nil {
 		return nil
 	}
-	return o.Event
+	return a.Event
 }
 
-func (o *AppscopeConfigWithCustom) GetLibscope() *AppscopeConfigWithCustomLibscope {
-	if o == nil {
+func (a *AppscopeConfigWithCustom) GetLibscope() *AppscopeConfigWithCustomLibscope {
+	if a == nil {
 		return nil
 	}
-	return o.Libscope
+	return a.Libscope
 }
 
-func (o *AppscopeConfigWithCustom) GetMetric() *AppscopeConfigWithCustomMetric {
-	if o == nil {
+func (a *AppscopeConfigWithCustom) GetMetric() *AppscopeConfigWithCustomMetric {
+	if a == nil {
 		return nil
 	}
-	return o.Metric
+	return a.Metric
 }
 
-func (o *AppscopeConfigWithCustom) GetPayload() *AppscopeConfigWithCustomPayload {
-	if o == nil {
+func (a *AppscopeConfigWithCustom) GetPayload() *AppscopeConfigWithCustomPayload {
+	if a == nil {
 		return nil
 	}
-	return o.Payload
+	return a.Payload
 }
 
-func (o *AppscopeConfigWithCustom) GetProtocol() []AppscopeConfigWithCustomProtocol {
-	if o == nil {
+func (a *AppscopeConfigWithCustom) GetProtocol() []AppscopeConfigWithCustomProtocol {
+	if a == nil {
 		return nil
 	}
-	return o.Protocol
+	return a.Protocol
 }
 
-func (o *AppscopeConfigWithCustom) GetTags() []AppscopeConfigWithCustomTag {
-	if o == nil {
+func (a *AppscopeConfigWithCustom) GetTags() []AppscopeConfigWithCustomTag {
+	if a == nil {
 		return nil
 	}
-	return o.Tags
+	return a.Tags
 }

@@ -14,18 +14,18 @@ type GetProjectByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetProjectByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetProjectByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetProjectByIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetProjectByIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetProjectByIDResponseBody - a list of Project objects
@@ -33,11 +33,11 @@ type GetProjectByIDResponseBody struct {
 	Items []shared.ProjectConfig `json:"items,omitempty"`
 }
 
-func (o *GetProjectByIDResponseBody) GetItems() []shared.ProjectConfig {
-	if o == nil {
+func (g *GetProjectByIDResponseBody) GetItems() []shared.ProjectConfig {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetProjectByIDResponse struct {
@@ -53,37 +53,37 @@ type GetProjectByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetProjectByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetProjectByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetProjectByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetProjectByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetProjectByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetProjectByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetProjectByIDResponse) GetObject() *GetProjectByIDResponseBody {
-	if o == nil {
+func (g *GetProjectByIDResponse) GetObject() *GetProjectByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetProjectByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetProjectByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

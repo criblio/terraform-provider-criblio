@@ -143,44 +143,44 @@ type MetricsAggOpts struct {
 	Where        *string                 `json:"where,omitempty"`
 }
 
-func (o *MetricsAggOpts) GetAggs() AggregationMgrOptions {
-	if o == nil {
+func (m *MetricsAggOpts) GetAggs() AggregationMgrOptions {
+	if m == nil {
 		return AggregationMgrOptions{}
 	}
-	return o.Aggs
+	return m.Aggs
 }
 
-func (o *MetricsAggOpts) GetAlwaysBounds() *bool {
-	if o == nil {
+func (m *MetricsAggOpts) GetAlwaysBounds() *bool {
+	if m == nil {
 		return nil
 	}
-	return o.AlwaysBounds
+	return m.AlwaysBounds
 }
 
-func (o *MetricsAggOpts) GetEarliest() *MetricsAggOptsEarliest {
-	if o == nil {
+func (m *MetricsAggOpts) GetEarliest() *MetricsAggOptsEarliest {
+	if m == nil {
 		return nil
 	}
-	return o.Earliest
+	return m.Earliest
 }
 
-func (o *MetricsAggOpts) GetLatest() *MetricsAggOptsLatest {
-	if o == nil {
+func (m *MetricsAggOpts) GetLatest() *MetricsAggOptsLatest {
+	if m == nil {
 		return nil
 	}
-	return o.Latest
+	return m.Latest
 }
 
-func (o *MetricsAggOpts) GetMetrics() *MetricsStore {
-	if o == nil {
+func (m *MetricsAggOpts) GetMetrics() *MetricsStore {
+	if m == nil {
 		return nil
 	}
-	return o.Metrics
+	return m.Metrics
 }
 
-func (o *MetricsAggOpts) GetWhere() *string {
-	if o == nil {
+func (m *MetricsAggOpts) GetWhere() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Where
+	return m.Where
 }

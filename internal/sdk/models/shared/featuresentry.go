@@ -7,16 +7,16 @@ type FeaturesEntry struct {
 	ID       string `json:"id"`
 }
 
-func (o *FeaturesEntry) GetDisabled() bool {
-	if o == nil {
+func (f *FeaturesEntry) GetDisabled() bool {
+	if f == nil {
 		return false
 	}
-	return o.Disabled
+	return f.Disabled
 }
 
-func (o *FeaturesEntry) GetID() string {
-	if o == nil {
+func (f *FeaturesEntry) GetID() string {
+	if f == nil {
 		return ""
 	}
-	return o.ID
+	return f.ID
 }

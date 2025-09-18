@@ -12,51 +12,51 @@ type SearchMacro struct {
 	Tags        *string  `json:"tags,omitempty"`
 }
 
-func (o *SearchMacro) GetCreated() *float64 {
-	if o == nil {
+func (s *SearchMacro) GetCreated() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Created
+	return s.Created
 }
 
-func (o *SearchMacro) GetCreatedBy() *string {
-	if o == nil {
+func (s *SearchMacro) GetCreatedBy() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CreatedBy
+	return s.CreatedBy
 }
 
-func (o *SearchMacro) GetDescription() *string {
-	if o == nil {
+func (s *SearchMacro) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SearchMacro) GetID() string {
-	if o == nil {
+func (s *SearchMacro) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SearchMacro) GetModified() *float64 {
-	if o == nil {
+func (s *SearchMacro) GetModified() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Modified
+	return s.Modified
 }
 
-func (o *SearchMacro) GetReplacement() string {
-	if o == nil {
+func (s *SearchMacro) GetReplacement() string {
+	if s == nil {
 		return ""
 	}
-	return o.Replacement
+	return s.Replacement
 }
 
-func (o *SearchMacro) GetTags() *string {
-	if o == nil {
+func (s *SearchMacro) GetTags() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Tags
+	return s.Tags
 }

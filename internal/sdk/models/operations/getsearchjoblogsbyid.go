@@ -12,11 +12,11 @@ type GetSearchJobLogsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetSearchJobLogsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSearchJobLogsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetSearchJobLogsByIDResponseBody - a list of string objects
@@ -24,11 +24,11 @@ type GetSearchJobLogsByIDResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *GetSearchJobLogsByIDResponseBody) GetItems() []string {
-	if o == nil {
+func (g *GetSearchJobLogsByIDResponseBody) GetItems() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSearchJobLogsByIDResponse struct {
@@ -44,37 +44,37 @@ type GetSearchJobLogsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchJobLogsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchJobLogsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchJobLogsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchJobLogsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchJobLogsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchJobLogsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchJobLogsByIDResponse) GetObject() *GetSearchJobLogsByIDResponseBody {
-	if o == nil {
+func (g *GetSearchJobLogsByIDResponse) GetObject() *GetSearchJobLogsByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSearchJobLogsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchJobLogsByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

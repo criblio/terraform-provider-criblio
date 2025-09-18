@@ -14,18 +14,18 @@ type GetGlobalVariableRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetGlobalVariableRequest) GetWith() *string {
-	if o == nil {
+func (g *GetGlobalVariableRequest) GetWith() *string {
+	if g == nil {
 		return nil
 	}
-	return o.With
+	return g.With
 }
 
-func (o *GetGlobalVariableRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetGlobalVariableRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetGlobalVariableResponseBody - a list of Global Variable objects
@@ -33,11 +33,11 @@ type GetGlobalVariableResponseBody struct {
 	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (o *GetGlobalVariableResponseBody) GetItems() []shared.GlobalVar {
-	if o == nil {
+func (g *GetGlobalVariableResponseBody) GetItems() []shared.GlobalVar {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetGlobalVariableResponse struct {
@@ -53,37 +53,37 @@ type GetGlobalVariableResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetGlobalVariableResponse) GetContentType() string {
-	if o == nil {
+func (g *GetGlobalVariableResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetGlobalVariableResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetGlobalVariableResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetGlobalVariableResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetGlobalVariableResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetGlobalVariableResponse) GetObject() *GetGlobalVariableResponseBody {
-	if o == nil {
+func (g *GetGlobalVariableResponse) GetObject() *GetGlobalVariableResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetGlobalVariableResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetGlobalVariableResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

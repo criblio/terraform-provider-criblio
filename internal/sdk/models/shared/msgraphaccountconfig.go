@@ -25,30 +25,30 @@ func (m *MsGraphAccountConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *MsGraphAccountConfig) GetName() string {
-	if o == nil {
+func (m *MsGraphAccountConfig) GetName() string {
+	if m == nil {
 		return ""
 	}
-	return o.Name
+	return m.Name
 }
 
-func (o *MsGraphAccountConfig) GetTenantID() string {
-	if o == nil {
+func (m *MsGraphAccountConfig) GetTenantID() string {
+	if m == nil {
 		return ""
 	}
-	return o.TenantID
+	return m.TenantID
 }
 
-func (o *MsGraphAccountConfig) GetClientID() string {
-	if o == nil {
+func (m *MsGraphAccountConfig) GetClientID() string {
+	if m == nil {
 		return ""
 	}
-	return o.ClientID
+	return m.ClientID
 }
 
-func (o *MsGraphAccountConfig) GetClientSecret() string {
-	if o == nil {
+func (m *MsGraphAccountConfig) GetClientSecret() string {
+	if m == nil {
 		return ""
 	}
-	return o.ClientSecret
+	return m.ClientSecret
 }

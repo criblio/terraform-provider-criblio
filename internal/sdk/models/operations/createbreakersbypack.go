@@ -16,25 +16,25 @@ type CreateBreakersByPackRequest struct {
 	EventBreakerRuleset shared.EventBreakerRuleset `request:"mediaType=application/json"`
 }
 
-func (o *CreateBreakersByPackRequest) GetPack() string {
-	if o == nil {
+func (c *CreateBreakersByPackRequest) GetPack() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pack
+	return c.Pack
 }
 
-func (o *CreateBreakersByPackRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateBreakersByPackRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateBreakersByPackRequest) GetEventBreakerRuleset() shared.EventBreakerRuleset {
-	if o == nil {
+func (c *CreateBreakersByPackRequest) GetEventBreakerRuleset() shared.EventBreakerRuleset {
+	if c == nil {
 		return shared.EventBreakerRuleset{}
 	}
-	return o.EventBreakerRuleset
+	return c.EventBreakerRuleset
 }
 
 // CreateBreakersByPackResponseBody - a list of Routes objects
@@ -42,11 +42,11 @@ type CreateBreakersByPackResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *CreateBreakersByPackResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (c *CreateBreakersByPackResponseBody) GetItems() []shared.Routes {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateBreakersByPackResponse struct {
@@ -62,37 +62,37 @@ type CreateBreakersByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateBreakersByPackResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateBreakersByPackResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateBreakersByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateBreakersByPackResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateBreakersByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateBreakersByPackResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateBreakersByPackResponse) GetObject() *CreateBreakersByPackResponseBody {
-	if o == nil {
+func (c *CreateBreakersByPackResponse) GetObject() *CreateBreakersByPackResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateBreakersByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateBreakersByPackResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

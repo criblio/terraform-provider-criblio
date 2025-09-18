@@ -12,11 +12,11 @@ type GetDefaultLakeLakehouseByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetDefaultLakeLakehouseByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetDefaultLakeLakehouseByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetDefaultLakeLakehouseByIDResponseBody - a list of Lakehouse objects
@@ -24,11 +24,11 @@ type GetDefaultLakeLakehouseByIDResponseBody struct {
 	Items []shared.Lakehouse `json:"items,omitempty"`
 }
 
-func (o *GetDefaultLakeLakehouseByIDResponseBody) GetItems() []shared.Lakehouse {
-	if o == nil {
+func (g *GetDefaultLakeLakehouseByIDResponseBody) GetItems() []shared.Lakehouse {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetDefaultLakeLakehouseByIDResponse struct {
@@ -44,37 +44,37 @@ type GetDefaultLakeLakehouseByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetDefaultLakeLakehouseByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDefaultLakeLakehouseByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDefaultLakeLakehouseByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDefaultLakeLakehouseByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDefaultLakeLakehouseByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDefaultLakeLakehouseByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDefaultLakeLakehouseByIDResponse) GetObject() *GetDefaultLakeLakehouseByIDResponseBody {
-	if o == nil {
+func (g *GetDefaultLakeLakehouseByIDResponse) GetObject() *GetDefaultLakeLakehouseByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetDefaultLakeLakehouseByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetDefaultLakeLakehouseByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

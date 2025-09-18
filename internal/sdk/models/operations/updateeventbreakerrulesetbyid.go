@@ -16,25 +16,25 @@ type UpdateEventBreakerRulesetByIDRequest struct {
 	EventBreakerRuleset shared.EventBreakerRuleset `request:"mediaType=application/json"`
 }
 
-func (o *UpdateEventBreakerRulesetByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateEventBreakerRulesetByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateEventBreakerRulesetByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateEventBreakerRulesetByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateEventBreakerRulesetByIDRequest) GetEventBreakerRuleset() shared.EventBreakerRuleset {
-	if o == nil {
+func (u *UpdateEventBreakerRulesetByIDRequest) GetEventBreakerRuleset() shared.EventBreakerRuleset {
+	if u == nil {
 		return shared.EventBreakerRuleset{}
 	}
-	return o.EventBreakerRuleset
+	return u.EventBreakerRuleset
 }
 
 // UpdateEventBreakerRulesetByIDResponseBody - a list of Event Breaker Ruleset objects
@@ -54,37 +54,37 @@ type UpdateEventBreakerRulesetByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateEventBreakerRulesetByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateEventBreakerRulesetByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateEventBreakerRulesetByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateEventBreakerRulesetByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateEventBreakerRulesetByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateEventBreakerRulesetByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateEventBreakerRulesetByIDResponse) GetObject() *UpdateEventBreakerRulesetByIDResponseBody {
-	if o == nil {
+func (u *UpdateEventBreakerRulesetByIDResponse) GetObject() *UpdateEventBreakerRulesetByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateEventBreakerRulesetByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateEventBreakerRulesetByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -14,18 +14,18 @@ type UpdateSearchMacroByIDRequest struct {
 	SearchMacro shared.SearchMacro `request:"mediaType=application/json"`
 }
 
-func (o *UpdateSearchMacroByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateSearchMacroByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateSearchMacroByIDRequest) GetSearchMacro() shared.SearchMacro {
-	if o == nil {
+func (u *UpdateSearchMacroByIDRequest) GetSearchMacro() shared.SearchMacro {
+	if u == nil {
 		return shared.SearchMacro{}
 	}
-	return o.SearchMacro
+	return u.SearchMacro
 }
 
 // UpdateSearchMacroByIDResponseBody - a list of SearchMacro objects
@@ -33,11 +33,11 @@ type UpdateSearchMacroByIDResponseBody struct {
 	Items []shared.SearchMacro `json:"items,omitempty"`
 }
 
-func (o *UpdateSearchMacroByIDResponseBody) GetItems() []shared.SearchMacro {
-	if o == nil {
+func (u *UpdateSearchMacroByIDResponseBody) GetItems() []shared.SearchMacro {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSearchMacroByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateSearchMacroByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSearchMacroByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSearchMacroByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSearchMacroByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSearchMacroByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSearchMacroByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSearchMacroByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSearchMacroByIDResponse) GetObject() *UpdateSearchMacroByIDResponseBody {
-	if o == nil {
+func (u *UpdateSearchMacroByIDResponse) GetObject() *UpdateSearchMacroByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSearchMacroByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSearchMacroByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

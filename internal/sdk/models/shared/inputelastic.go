@@ -47,18 +47,18 @@ func (i *InputElasticConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputElasticConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputElasticConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputElasticConnection) GetOutput() string {
-	if o == nil {
+func (i *InputElasticConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputElasticMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputElasticPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputElasticPq) GetMode() *InputElasticMode {
-	if o == nil {
+func (i *InputElasticPq) GetMode() *InputElasticMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputElasticPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputElasticPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputElasticPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputElasticPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputElasticPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputElasticPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputElasticPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputElasticPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputElasticPq) GetPath() *string {
-	if o == nil {
+func (i *InputElasticPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputElasticPq) GetCompress() *InputElasticCompression {
-	if o == nil {
+func (i *InputElasticPq) GetCompress() *InputElasticCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputElasticMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputElasticTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetMinVersion() *InputElasticMinimumTLSVersion {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetMinVersion() *InputElasticMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputElasticTLSSettingsServerSide) GetMaxVersion() *InputElasticMaximumTLSVersion {
-	if o == nil {
+func (i *InputElasticTLSSettingsServerSide) GetMaxVersion() *InputElasticMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputElasticAuthenticationType string
@@ -442,18 +442,18 @@ func (i *InputElasticExtraHTTPHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputElasticExtraHTTPHeader) GetName() *string {
-	if o == nil {
+func (i *InputElasticExtraHTTPHeader) GetName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputElasticExtraHTTPHeader) GetValue() string {
-	if o == nil {
+func (i *InputElasticExtraHTTPHeader) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputElasticMetadatum struct {
@@ -473,18 +473,18 @@ func (i *InputElasticMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputElasticMetadatum) GetName() string {
-	if o == nil {
+func (i *InputElasticMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputElasticMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputElasticMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputElasticAuthenticationMethod - Enter credentials directly, or select a stored secret
@@ -543,46 +543,46 @@ func (i *InputElasticProxyMode) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputElasticProxyMode) GetEnabled() *bool {
-	if o == nil {
+func (i *InputElasticProxyMode) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputElasticProxyMode) GetURL() *string {
-	if o == nil {
+func (i *InputElasticProxyMode) GetURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.URL
+	return i.URL
 }
 
-func (o *InputElasticProxyMode) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputElasticProxyMode) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputElasticProxyMode) GetRemoveHeaders() []string {
-	if o == nil {
+func (i *InputElasticProxyMode) GetRemoveHeaders() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveHeaders
+	return i.RemoveHeaders
 }
 
-func (o *InputElasticProxyMode) GetTimeoutSec() *float64 {
-	if o == nil {
+func (i *InputElasticProxyMode) GetTimeoutSec() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TimeoutSec
+	return i.TimeoutSec
 }
 
-func (o *InputElasticProxyMode) GetAuthType() *InputElasticAuthenticationMethod {
-	if o == nil {
+func (i *InputElasticProxyMode) GetAuthType() *InputElasticAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
 type InputElastic struct {
@@ -662,254 +662,254 @@ func (i *InputElastic) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputElastic) GetID() *string {
-	if o == nil {
+func (i *InputElastic) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputElastic) GetType() *InputElasticType {
-	if o == nil {
+func (i *InputElastic) GetType() *InputElasticType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputElastic) GetDisabled() *bool {
-	if o == nil {
+func (i *InputElastic) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputElastic) GetPipeline() *string {
-	if o == nil {
+func (i *InputElastic) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputElastic) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputElastic) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputElastic) GetEnvironment() *string {
-	if o == nil {
+func (i *InputElastic) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputElastic) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputElastic) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputElastic) GetStreamtags() []string {
-	if o == nil {
+func (i *InputElastic) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputElastic) GetConnections() []InputElasticConnection {
-	if o == nil {
+func (i *InputElastic) GetConnections() []InputElasticConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputElastic) GetPq() *InputElasticPq {
-	if o == nil {
+func (i *InputElastic) GetPq() *InputElasticPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputElastic) GetHost() *string {
-	if o == nil {
+func (i *InputElastic) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputElastic) GetPort() float64 {
-	if o == nil {
+func (i *InputElastic) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputElastic) GetTLS() *InputElasticTLSSettingsServerSide {
-	if o == nil {
+func (i *InputElastic) GetTLS() *InputElasticTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputElastic) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputElastic) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputElastic) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputElastic) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputElastic) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputElastic) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputElastic) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputElastic) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputElastic) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputElastic) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputElastic) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputElastic) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputElastic) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputElastic) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputElastic) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputElastic) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputElastic) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputElastic) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputElastic) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputElastic) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputElastic) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputElastic) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputElastic) GetElasticAPI() *string {
-	if o == nil {
+func (i *InputElastic) GetElasticAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ElasticAPI
+	return i.ElasticAPI
 }
 
-func (o *InputElastic) GetAuthType() *InputElasticAuthenticationType {
-	if o == nil {
+func (i *InputElastic) GetAuthType() *InputElasticAuthenticationType {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputElastic) GetAPIVersion() *InputElasticAPIVersion {
-	if o == nil {
+func (i *InputElastic) GetAPIVersion() *InputElasticAPIVersion {
+	if i == nil {
 		return nil
 	}
-	return o.APIVersion
+	return i.APIVersion
 }
 
-func (o *InputElastic) GetExtraHTTPHeaders() []InputElasticExtraHTTPHeader {
-	if o == nil {
+func (i *InputElastic) GetExtraHTTPHeaders() []InputElasticExtraHTTPHeader {
+	if i == nil {
 		return nil
 	}
-	return o.ExtraHTTPHeaders
+	return i.ExtraHTTPHeaders
 }
 
-func (o *InputElastic) GetMetadata() []InputElasticMetadatum {
-	if o == nil {
+func (i *InputElastic) GetMetadata() []InputElasticMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputElastic) GetProxyMode() *InputElasticProxyMode {
-	if o == nil {
+func (i *InputElastic) GetProxyMode() *InputElasticProxyMode {
+	if i == nil {
 		return nil
 	}
-	return o.ProxyMode
+	return i.ProxyMode
 }
 
-func (o *InputElastic) GetDescription() *string {
-	if o == nil {
+func (i *InputElastic) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputElastic) GetUsername() *string {
-	if o == nil {
+func (i *InputElastic) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputElastic) GetPassword() *string {
-	if o == nil {
+func (i *InputElastic) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputElastic) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputElastic) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputElastic) GetAuthTokens() []string {
-	if o == nil {
+func (i *InputElastic) GetAuthTokens() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthTokens
+	return i.AuthTokens
 }
 
-func (o *InputElastic) GetCustomAPIVersion() *string {
-	if o == nil {
+func (i *InputElastic) GetCustomAPIVersion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CustomAPIVersion
+	return i.CustomAPIVersion
 }

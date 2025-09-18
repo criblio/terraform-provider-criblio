@@ -14,18 +14,18 @@ type CreateSchemaRequest struct {
 	SchemaLibEntry shared.SchemaLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *CreateSchemaRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSchemaRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSchemaRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
-	if o == nil {
+func (c *CreateSchemaRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
+	if c == nil {
 		return shared.SchemaLibEntry{}
 	}
-	return o.SchemaLibEntry
+	return c.SchemaLibEntry
 }
 
 // CreateSchemaResponseBody - a list of Schema objects
@@ -33,11 +33,11 @@ type CreateSchemaResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *CreateSchemaResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (c *CreateSchemaResponseBody) GetItems() []shared.SchemaLibEntry {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSchemaResponse struct {
@@ -53,37 +53,37 @@ type CreateSchemaResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSchemaResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSchemaResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSchemaResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSchemaResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSchemaResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSchemaResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSchemaResponse) GetObject() *CreateSchemaResponseBody {
-	if o == nil {
+func (c *CreateSchemaResponse) GetObject() *CreateSchemaResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSchemaResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSchemaResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -12,11 +12,11 @@ type DeleteSearchMacroByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteSearchMacroByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSearchMacroByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteSearchMacroByIDResponseBody - a list of SearchMacro objects
@@ -24,11 +24,11 @@ type DeleteSearchMacroByIDResponseBody struct {
 	Items []shared.SearchMacro `json:"items,omitempty"`
 }
 
-func (o *DeleteSearchMacroByIDResponseBody) GetItems() []shared.SearchMacro {
-	if o == nil {
+func (d *DeleteSearchMacroByIDResponseBody) GetItems() []shared.SearchMacro {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSearchMacroByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteSearchMacroByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSearchMacroByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSearchMacroByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSearchMacroByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSearchMacroByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSearchMacroByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSearchMacroByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSearchMacroByIDResponse) GetObject() *DeleteSearchMacroByIDResponseBody {
-	if o == nil {
+func (d *DeleteSearchMacroByIDResponse) GetObject() *DeleteSearchMacroByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSearchMacroByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSearchMacroByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

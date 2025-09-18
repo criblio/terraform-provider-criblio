@@ -22,121 +22,121 @@ type JobSettings struct {
 	TaskPollTimeoutMs           float64 `json:"taskPollTimeoutMs"`
 }
 
-func (o *JobSettings) GetConcurrentJobLimit() float64 {
-	if o == nil {
+func (j *JobSettings) GetConcurrentJobLimit() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.ConcurrentJobLimit
+	return j.ConcurrentJobLimit
 }
 
-func (o *JobSettings) GetConcurrentScheduledJobLimit() float64 {
-	if o == nil {
+func (j *JobSettings) GetConcurrentScheduledJobLimit() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.ConcurrentScheduledJobLimit
+	return j.ConcurrentScheduledJobLimit
 }
 
-func (o *JobSettings) GetConcurrentSystemJobLimit() float64 {
-	if o == nil {
+func (j *JobSettings) GetConcurrentSystemJobLimit() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.ConcurrentSystemJobLimit
+	return j.ConcurrentSystemJobLimit
 }
 
-func (o *JobSettings) GetConcurrentSystemTaskLimit() float64 {
-	if o == nil {
+func (j *JobSettings) GetConcurrentSystemTaskLimit() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.ConcurrentSystemTaskLimit
+	return j.ConcurrentSystemTaskLimit
 }
 
-func (o *JobSettings) GetConcurrentTaskLimit() float64 {
-	if o == nil {
+func (j *JobSettings) GetConcurrentTaskLimit() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.ConcurrentTaskLimit
+	return j.ConcurrentTaskLimit
 }
 
-func (o *JobSettings) GetDisableTasks() *bool {
-	if o == nil {
+func (j *JobSettings) GetDisableTasks() *bool {
+	if j == nil {
 		return nil
 	}
-	return o.DisableTasks
+	return j.DisableTasks
 }
 
-func (o *JobSettings) GetFinishedJobArtifactsLimit() float64 {
-	if o == nil {
+func (j *JobSettings) GetFinishedJobArtifactsLimit() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.FinishedJobArtifactsLimit
+	return j.FinishedJobArtifactsLimit
 }
 
-func (o *JobSettings) GetFinishedTaskArtifactsLimit() float64 {
-	if o == nil {
+func (j *JobSettings) GetFinishedTaskArtifactsLimit() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.FinishedTaskArtifactsLimit
+	return j.FinishedTaskArtifactsLimit
 }
 
-func (o *JobSettings) GetJobArtifactsReaperPeriod() string {
-	if o == nil {
+func (j *JobSettings) GetJobArtifactsReaperPeriod() string {
+	if j == nil {
 		return ""
 	}
-	return o.JobArtifactsReaperPeriod
+	return j.JobArtifactsReaperPeriod
 }
 
-func (o *JobSettings) GetJobTimeout() string {
-	if o == nil {
+func (j *JobSettings) GetJobTimeout() string {
+	if j == nil {
 		return ""
 	}
-	return o.JobTimeout
+	return j.JobTimeout
 }
 
-func (o *JobSettings) GetMaxTaskPerc() float64 {
-	if o == nil {
+func (j *JobSettings) GetMaxTaskPerc() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.MaxTaskPerc
+	return j.MaxTaskPerc
 }
 
-func (o *JobSettings) GetSchedulingPolicy() string {
-	if o == nil {
+func (j *JobSettings) GetSchedulingPolicy() string {
+	if j == nil {
 		return ""
 	}
-	return o.SchedulingPolicy
+	return j.SchedulingPolicy
 }
 
-func (o *JobSettings) GetTaskHeartbeatPeriod() float64 {
-	if o == nil {
+func (j *JobSettings) GetTaskHeartbeatPeriod() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.TaskHeartbeatPeriod
+	return j.TaskHeartbeatPeriod
 }
 
-func (o *JobSettings) GetTaskManifestFlushPeriodMs() float64 {
-	if o == nil {
+func (j *JobSettings) GetTaskManifestFlushPeriodMs() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.TaskManifestFlushPeriodMs
+	return j.TaskManifestFlushPeriodMs
 }
 
-func (o *JobSettings) GetTaskManifestMaxBufferSize() float64 {
-	if o == nil {
+func (j *JobSettings) GetTaskManifestMaxBufferSize() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.TaskManifestMaxBufferSize
+	return j.TaskManifestMaxBufferSize
 }
 
-func (o *JobSettings) GetTaskManifestReadBufferSize() string {
-	if o == nil {
+func (j *JobSettings) GetTaskManifestReadBufferSize() string {
+	if j == nil {
 		return ""
 	}
-	return o.TaskManifestReadBufferSize
+	return j.TaskManifestReadBufferSize
 }
 
-func (o *JobSettings) GetTaskPollTimeoutMs() float64 {
-	if o == nil {
+func (j *JobSettings) GetTaskPollTimeoutMs() float64 {
+	if j == nil {
 		return 0.0
 	}
-	return o.TaskPollTimeoutMs
+	return j.TaskPollTimeoutMs
 }

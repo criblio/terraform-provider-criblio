@@ -16,25 +16,25 @@ type CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRequest
 	CaptureParams shared.CaptureParams `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRequest) GetProjectID() string {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRequest) GetProjectID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProjectID
+	return c.ProjectID
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRequest) GetSubscriptionID() string {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRequest) GetSubscriptionID() string {
+	if c == nil {
 		return ""
 	}
-	return o.SubscriptionID
+	return c.SubscriptionID
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRequest) GetCaptureParams() shared.CaptureParams {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRequest) GetCaptureParams() shared.CaptureParams {
+	if c == nil {
 		return shared.CaptureParams{}
 	}
-	return o.CaptureParams
+	return c.CaptureParams
 }
 
 // CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponseBody - a list of any objects
@@ -42,11 +42,11 @@ type CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRespons
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse struct {
@@ -62,37 +62,37 @@ type CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDRespons
 	Error *shared.Error
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetObject() *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponseBody {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetObject() *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemProjectsSubscriptionsCaptureByProjectIDAndSubscriptionIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

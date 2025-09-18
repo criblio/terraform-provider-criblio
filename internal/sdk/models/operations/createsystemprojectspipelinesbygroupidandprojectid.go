@@ -16,25 +16,25 @@ type CreateSystemProjectsPipelinesByGroupIDAndProjectIDRequest struct {
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDRequest) GetProjectID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProjectID
+	return c.ProjectID
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDRequest) GetPipeline() shared.Pipeline {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDRequest) GetPipeline() shared.Pipeline {
+	if c == nil {
 		return shared.Pipeline{}
 	}
-	return o.Pipeline
+	return c.Pipeline
 }
 
 // CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody - A list of Pipeline objects for specified Project
@@ -42,11 +42,11 @@ type CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody) GetItems() []shared.Pipeline {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse struct {
@@ -62,37 +62,37 @@ type CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetObject() *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetObject() *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemProjectsPipelinesByGroupIDAndProjectIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

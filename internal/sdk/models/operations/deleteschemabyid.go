@@ -14,18 +14,18 @@ type DeleteSchemaByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteSchemaByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSchemaByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteSchemaByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteSchemaByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteSchemaByIDResponseBody - a list of Schema objects
@@ -33,11 +33,11 @@ type DeleteSchemaByIDResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *DeleteSchemaByIDResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (d *DeleteSchemaByIDResponseBody) GetItems() []shared.SchemaLibEntry {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSchemaByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteSchemaByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSchemaByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSchemaByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSchemaByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSchemaByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSchemaByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSchemaByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSchemaByIDResponse) GetObject() *DeleteSchemaByIDResponseBody {
-	if o == nil {
+func (d *DeleteSchemaByIDResponse) GetObject() *DeleteSchemaByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSchemaByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSchemaByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

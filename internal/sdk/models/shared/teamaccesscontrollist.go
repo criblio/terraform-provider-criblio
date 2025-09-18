@@ -7,16 +7,16 @@ type TeamAccessControlList struct {
 	Team  string           `json:"team"`
 }
 
-func (o *TeamAccessControlList) GetPerms() []ResourcePolicy {
-	if o == nil {
+func (t *TeamAccessControlList) GetPerms() []ResourcePolicy {
+	if t == nil {
 		return []ResourcePolicy{}
 	}
-	return o.Perms
+	return t.Perms
 }
 
-func (o *TeamAccessControlList) GetTeam() string {
-	if o == nil {
+func (t *TeamAccessControlList) GetTeam() string {
+	if t == nil {
 		return ""
 	}
-	return o.Team
+	return t.Team
 }

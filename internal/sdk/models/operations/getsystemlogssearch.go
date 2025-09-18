@@ -24,53 +24,53 @@ type GetSystemLogsSearchRequest struct {
 	Filter *string `queryParam:"style=form,explode=true,name=filter"`
 }
 
-func (o *GetSystemLogsSearchRequest) GetType() string {
-	if o == nil {
+func (g *GetSystemLogsSearchRequest) GetType() string {
+	if g == nil {
 		return ""
 	}
-	return o.Type
+	return g.Type
 }
 
-func (o *GetSystemLogsSearchRequest) GetGroupID() *string {
-	if o == nil {
+func (g *GetSystemLogsSearchRequest) GetGroupID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
-func (o *GetSystemLogsSearchRequest) GetFiles() *string {
-	if o == nil {
+func (g *GetSystemLogsSearchRequest) GetFiles() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Files
+	return g.Files
 }
 
-func (o *GetSystemLogsSearchRequest) GetLimit() *int64 {
-	if o == nil {
+func (g *GetSystemLogsSearchRequest) GetLimit() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Limit
+	return g.Limit
 }
 
-func (o *GetSystemLogsSearchRequest) GetEt() *int64 {
-	if o == nil {
+func (g *GetSystemLogsSearchRequest) GetEt() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Et
+	return g.Et
 }
 
-func (o *GetSystemLogsSearchRequest) GetLt() *int64 {
-	if o == nil {
+func (g *GetSystemLogsSearchRequest) GetLt() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Lt
+	return g.Lt
 }
 
-func (o *GetSystemLogsSearchRequest) GetFilter() *string {
-	if o == nil {
+func (g *GetSystemLogsSearchRequest) GetFilter() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Filter
+	return g.Filter
 }
 
 // GetSystemLogsSearchResponseBody - a list of any objects
@@ -78,11 +78,11 @@ type GetSystemLogsSearchResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetSystemLogsSearchResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetSystemLogsSearchResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemLogsSearchResponse struct {
@@ -98,37 +98,37 @@ type GetSystemLogsSearchResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemLogsSearchResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemLogsSearchResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemLogsSearchResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemLogsSearchResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemLogsSearchResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemLogsSearchResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemLogsSearchResponse) GetObject() *GetSystemLogsSearchResponseBody {
-	if o == nil {
+func (g *GetSystemLogsSearchResponse) GetObject() *GetSystemLogsSearchResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemLogsSearchResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemLogsSearchResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

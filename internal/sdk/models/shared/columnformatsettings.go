@@ -9,30 +9,30 @@ type ColumnFormatSettings struct {
 	Suffix    any `json:"suffix"`
 }
 
-func (o *ColumnFormatSettings) GetPalette() any {
-	if o == nil {
+func (c *ColumnFormatSettings) GetPalette() any {
+	if c == nil {
 		return nil
 	}
-	return o.Palette
+	return c.Palette
 }
 
-func (o *ColumnFormatSettings) GetPrecision() any {
-	if o == nil {
+func (c *ColumnFormatSettings) GetPrecision() any {
+	if c == nil {
 		return nil
 	}
-	return o.Precision
+	return c.Precision
 }
 
-func (o *ColumnFormatSettings) GetPrefix() any {
-	if o == nil {
+func (c *ColumnFormatSettings) GetPrefix() any {
+	if c == nil {
 		return nil
 	}
-	return o.Prefix
+	return c.Prefix
 }
 
-func (o *ColumnFormatSettings) GetSuffix() any {
-	if o == nil {
+func (c *ColumnFormatSettings) GetSuffix() any {
+	if c == nil {
 		return nil
 	}
-	return o.Suffix
+	return c.Suffix
 }

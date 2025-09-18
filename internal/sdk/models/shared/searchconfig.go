@@ -13,58 +13,58 @@ type SearchConfig struct {
 	UseFormattedVisualization        bool          `json:"useFormattedVisualization"`
 }
 
-func (o *SearchConfig) GetCanComputeMetadataDistributively() *bool {
-	if o == nil {
+func (s *SearchConfig) GetCanComputeMetadataDistributively() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.CanComputeMetadataDistributively
+	return s.CanComputeMetadataDistributively
 }
 
-func (o *SearchConfig) GetDatasets() []string {
-	if o == nil {
+func (s *SearchConfig) GetDatasets() []string {
+	if s == nil {
 		return []string{}
 	}
-	return o.Datasets
+	return s.Datasets
 }
 
-func (o *SearchConfig) GetHasSendOperator() bool {
-	if o == nil {
+func (s *SearchConfig) GetHasSendOperator() bool {
+	if s == nil {
 		return false
 	}
-	return o.HasSendOperator
+	return s.HasSendOperator
 }
 
-func (o *SearchConfig) GetOrderedFieldNames() []string {
-	if o == nil {
+func (s *SearchConfig) GetOrderedFieldNames() []string {
+	if s == nil {
 		return []string{}
 	}
-	return o.OrderedFieldNames
+	return s.OrderedFieldNames
 }
 
-func (o *SearchConfig) GetReferencedFieldNames() []string {
-	if o == nil {
+func (s *SearchConfig) GetReferencedFieldNames() []string {
+	if s == nil {
 		return nil
 	}
-	return o.ReferencedFieldNames
+	return s.ReferencedFieldNames
 }
 
-func (o *SearchConfig) GetSearchTerms() []SearchTerm {
-	if o == nil {
+func (s *SearchConfig) GetSearchTerms() []SearchTerm {
+	if s == nil {
 		return []SearchTerm{}
 	}
-	return o.SearchTerms
+	return s.SearchTerms
 }
 
-func (o *SearchConfig) GetSortFields() []SortByField {
-	if o == nil {
+func (s *SearchConfig) GetSortFields() []SortByField {
+	if s == nil {
 		return nil
 	}
-	return o.SortFields
+	return s.SortFields
 }
 
-func (o *SearchConfig) GetUseFormattedVisualization() bool {
-	if o == nil {
+func (s *SearchConfig) GetUseFormattedVisualization() bool {
+	if s == nil {
 		return false
 	}
-	return o.UseFormattedVisualization
+	return s.UseFormattedVisualization
 }

@@ -52,15 +52,15 @@ resource "criblio_pack_routes" "my_packroutes" {
 
 ### Required
 
-- `group_id` (String) group Id. Requires replacement if changed.
-- `pack` (String) pack ID to GET. Requires replacement if changed.
-- `routes` (Attributes List) Pipeline routing rules. Requires replacement if changed. (see [below for nested schema](#nestedatt--routes))
+- `group_id` (String) group Id
+- `pack` (String) pack ID to GET
+- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--routes))
 
 ### Optional
 
-- `comments` (Attributes List) Comments. Requires replacement if changed. (see [below for nested schema](#nestedatt--comments))
-- `groups` (Attributes Map) Requires replacement if changed. (see [below for nested schema](#nestedatt--groups))
-- `id` (String) Routes ID. Requires replacement if changed.
+- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--comments))
+- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))
+- `id` (String) Routes ID
 
 ### Read-Only
 
@@ -71,19 +71,19 @@ resource "criblio_pack_routes" "my_packroutes" {
 
 Required:
 
-- `name` (String) Requires replacement if changed.
-- `pipeline` (String) Pipeline to send the matching data to. Requires replacement if changed.
+- `name` (String)
+- `pipeline` (String) Pipeline to send the matching data to
 
 Optional:
 
-- `additional_properties` (String) Requires replacement if changed.; Parsed as JSON.
-- `description` (String) Requires replacement if changed.
-- `disabled` (Boolean) Disable this routing rule. Requires replacement if changed.
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false; Requires replacement if changed.
-- `filter` (String) JavaScript expression to select data to route. Default: "true"; Requires replacement if changed.
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true; Requires replacement if changed.
-- `output` (String) Requires replacement if changed.; Parsed as JSON.
-- `output_expression` (String) Requires replacement if changed.; Parsed as JSON.
+- `additional_properties` (String) Parsed as JSON.
+- `description` (String)
+- `disabled` (Boolean) Disable this routing rule
+- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false
+- `filter` (String) JavaScript expression to select data to route. Default: "true"
+- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true
+- `output` (String) Parsed as JSON.
+- `output_expression` (String) Parsed as JSON.
 
 
 <a id="nestedatt--comments"></a>
@@ -91,8 +91,8 @@ Optional:
 
 Optional:
 
-- `additional_properties` (String) Requires replacement if changed.; Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose. Requires replacement if changed.
+- `additional_properties` (String) Parsed as JSON.
+- `comment` (String) Optional, short description of this Route's purpose
 
 
 <a id="nestedatt--groups"></a>
@@ -100,12 +100,12 @@ Optional:
 
 Required:
 
-- `name` (String) Requires replacement if changed.
+- `name` (String)
 
 Optional:
 
-- `description` (String) Short description of this group. Requires replacement if changed.
-- `disabled` (Boolean) Whether this group is disabled. Requires replacement if changed.
+- `description` (String) Short description of this group
+- `disabled` (Boolean) Whether this group is disabled
 
 
 <a id="nestedatt--items"></a>

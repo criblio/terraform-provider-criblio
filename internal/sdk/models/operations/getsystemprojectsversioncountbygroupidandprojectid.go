@@ -14,18 +14,18 @@ type GetSystemProjectsVersionCountByGroupIDAndProjectIDRequest struct {
 	ProjectID string `pathParam:"style=simple,explode=false,name=projectId"`
 }
 
-func (o *GetSystemProjectsVersionCountByGroupIDAndProjectIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionCountByGroupIDAndProjectIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
-func (o *GetSystemProjectsVersionCountByGroupIDAndProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionCountByGroupIDAndProjectIDRequest) GetProjectID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
 // GetSystemProjectsVersionCountByGroupIDAndProjectIDResponseBody - A list of any objects
@@ -33,11 +33,11 @@ type GetSystemProjectsVersionCountByGroupIDAndProjectIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse struct {
@@ -53,37 +53,37 @@ type GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetObject() *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponseBody {
-	if o == nil {
+func (g *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetObject() *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemProjectsVersionCountByGroupIDAndProjectIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

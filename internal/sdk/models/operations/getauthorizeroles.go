@@ -12,11 +12,11 @@ type GetAuthorizeRolesResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *GetAuthorizeRolesResponseBody) GetItems() []string {
-	if o == nil {
+func (g *GetAuthorizeRolesResponseBody) GetItems() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetAuthorizeRolesResponse struct {
@@ -32,37 +32,37 @@ type GetAuthorizeRolesResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetAuthorizeRolesResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthorizeRolesResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthorizeRolesResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthorizeRolesResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthorizeRolesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthorizeRolesResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAuthorizeRolesResponse) GetObject() *GetAuthorizeRolesResponseBody {
-	if o == nil {
+func (g *GetAuthorizeRolesResponse) GetObject() *GetAuthorizeRolesResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetAuthorizeRolesResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetAuthorizeRolesResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

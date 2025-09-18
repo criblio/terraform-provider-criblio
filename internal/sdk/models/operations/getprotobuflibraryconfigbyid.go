@@ -12,11 +12,11 @@ type GetProtobufLibraryConfigByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetProtobufLibraryConfigByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetProtobufLibraryConfigByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetProtobufLibraryConfigByIDResponseBody - a list of ProtobufLibraryConfig objects
@@ -24,11 +24,11 @@ type GetProtobufLibraryConfigByIDResponseBody struct {
 	Items []shared.ProtobufLibraryConfig `json:"items,omitempty"`
 }
 
-func (o *GetProtobufLibraryConfigByIDResponseBody) GetItems() []shared.ProtobufLibraryConfig {
-	if o == nil {
+func (g *GetProtobufLibraryConfigByIDResponseBody) GetItems() []shared.ProtobufLibraryConfig {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetProtobufLibraryConfigByIDResponse struct {
@@ -44,37 +44,37 @@ type GetProtobufLibraryConfigByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetProtobufLibraryConfigByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetProtobufLibraryConfigByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetProtobufLibraryConfigByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetProtobufLibraryConfigByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetProtobufLibraryConfigByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetProtobufLibraryConfigByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetProtobufLibraryConfigByIDResponse) GetObject() *GetProtobufLibraryConfigByIDResponseBody {
-	if o == nil {
+func (g *GetProtobufLibraryConfigByIDResponse) GetObject() *GetProtobufLibraryConfigByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetProtobufLibraryConfigByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetProtobufLibraryConfigByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -14,18 +14,18 @@ type DeleteSchemaLibByPackAndIDRequest struct {
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 }
 
-func (o *DeleteSchemaLibByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSchemaLibByPackAndIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteSchemaLibByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (d *DeleteSchemaLibByPackAndIDRequest) GetPack() string {
+	if d == nil {
 		return ""
 	}
-	return o.Pack
+	return d.Pack
 }
 
 // DeleteSchemaLibByPackAndIDResponseBody - a list of Schema objects
@@ -33,11 +33,11 @@ type DeleteSchemaLibByPackAndIDResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *DeleteSchemaLibByPackAndIDResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (d *DeleteSchemaLibByPackAndIDResponseBody) GetItems() []shared.SchemaLibEntry {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSchemaLibByPackAndIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteSchemaLibByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSchemaLibByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSchemaLibByPackAndIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSchemaLibByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSchemaLibByPackAndIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSchemaLibByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSchemaLibByPackAndIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSchemaLibByPackAndIDResponse) GetObject() *DeleteSchemaLibByPackAndIDResponseBody {
-	if o == nil {
+func (d *DeleteSchemaLibByPackAndIDResponse) GetObject() *DeleteSchemaLibByPackAndIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSchemaLibByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSchemaLibByPackAndIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

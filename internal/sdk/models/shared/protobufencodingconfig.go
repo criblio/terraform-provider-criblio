@@ -39,25 +39,25 @@ type Wrapping struct {
 	WrapperModel     string           `json:"wrapperModel"`
 }
 
-func (o *Wrapping) GetWrapperField() string {
-	if o == nil {
+func (w *Wrapping) GetWrapperField() string {
+	if w == nil {
 		return ""
 	}
-	return o.WrapperField
+	return w.WrapperField
 }
 
-func (o *Wrapping) GetWrapperFieldType() WrapperFieldType {
-	if o == nil {
+func (w *Wrapping) GetWrapperFieldType() WrapperFieldType {
+	if w == nil {
 		return WrapperFieldType("")
 	}
-	return o.WrapperFieldType
+	return w.WrapperFieldType
 }
 
-func (o *Wrapping) GetWrapperModel() string {
-	if o == nil {
+func (w *Wrapping) GetWrapperModel() string {
+	if w == nil {
 		return ""
 	}
-	return o.WrapperModel
+	return w.WrapperModel
 }
 
 type ProtobufEncodingConfig struct {
@@ -67,30 +67,30 @@ type ProtobufEncodingConfig struct {
 	Wrapping   *Wrapping `json:"wrapping,omitempty"`
 }
 
-func (o *ProtobufEncodingConfig) GetEventModel() string {
-	if o == nil {
+func (p *ProtobufEncodingConfig) GetEventModel() string {
+	if p == nil {
 		return ""
 	}
-	return o.EventModel
+	return p.EventModel
 }
 
-func (o *ProtobufEncodingConfig) GetID() string {
-	if o == nil {
+func (p *ProtobufEncodingConfig) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *ProtobufEncodingConfig) GetName() string {
-	if o == nil {
+func (p *ProtobufEncodingConfig) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *ProtobufEncodingConfig) GetWrapping() *Wrapping {
-	if o == nil {
+func (p *ProtobufEncodingConfig) GetWrapping() *Wrapping {
+	if p == nil {
 		return nil
 	}
-	return o.Wrapping
+	return p.Wrapping
 }

@@ -14,18 +14,18 @@ type CreateSystemDistributedUpgradeStageByGroupRequest struct {
 	UpgradePercentage *string `queryParam:"style=form,explode=true,name=upgradePercentage"`
 }
 
-func (o *CreateSystemDistributedUpgradeStageByGroupRequest) GetGroup() string {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeStageByGroupRequest) GetGroup() string {
+	if c == nil {
 		return ""
 	}
-	return o.Group
+	return c.Group
 }
 
-func (o *CreateSystemDistributedUpgradeStageByGroupRequest) GetUpgradePercentage() *string {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeStageByGroupRequest) GetUpgradePercentage() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UpgradePercentage
+	return c.UpgradePercentage
 }
 
 // CreateSystemDistributedUpgradeStageByGroupResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type CreateSystemDistributedUpgradeStageByGroupResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemDistributedUpgradeStageByGroupResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeStageByGroupResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemDistributedUpgradeStageByGroupResponse struct {
@@ -53,37 +53,37 @@ type CreateSystemDistributedUpgradeStageByGroupResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemDistributedUpgradeStageByGroupResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeStageByGroupResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemDistributedUpgradeStageByGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeStageByGroupResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemDistributedUpgradeStageByGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeStageByGroupResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemDistributedUpgradeStageByGroupResponse) GetObject() *CreateSystemDistributedUpgradeStageByGroupResponseBody {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeStageByGroupResponse) GetObject() *CreateSystemDistributedUpgradeStageByGroupResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemDistributedUpgradeStageByGroupResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeStageByGroupResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

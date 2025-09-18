@@ -17,32 +17,32 @@ type UpdatePackOutputByIDRequest struct {
 	Output shared.Output `request:"mediaType=application/json"`
 }
 
-func (o *UpdatePackOutputByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdatePackOutputByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdatePackOutputByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdatePackOutputByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdatePackOutputByIDRequest) GetPack() string {
-	if o == nil {
+func (u *UpdatePackOutputByIDRequest) GetPack() string {
+	if u == nil {
 		return ""
 	}
-	return o.Pack
+	return u.Pack
 }
 
-func (o *UpdatePackOutputByIDRequest) GetOutput() shared.Output {
-	if o == nil {
+func (u *UpdatePackOutputByIDRequest) GetOutput() shared.Output {
+	if u == nil {
 		return shared.Output{}
 	}
-	return o.Output
+	return u.Output
 }
 
 // UpdatePackOutputByIDResponseBody - a list of Output objects
@@ -62,37 +62,37 @@ type UpdatePackOutputByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdatePackOutputByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdatePackOutputByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdatePackOutputByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdatePackOutputByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdatePackOutputByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdatePackOutputByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdatePackOutputByIDResponse) GetObject() *UpdatePackOutputByIDResponseBody {
-	if o == nil {
+func (u *UpdatePackOutputByIDResponse) GetObject() *UpdatePackOutputByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdatePackOutputByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdatePackOutputByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

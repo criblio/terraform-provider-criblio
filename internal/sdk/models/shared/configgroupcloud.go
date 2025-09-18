@@ -7,16 +7,16 @@ type ConfigGroupCloud struct {
 	Region   string         `json:"region"`
 }
 
-func (o *ConfigGroupCloud) GetProvider() *CloudProvider {
-	if o == nil {
+func (c *ConfigGroupCloud) GetProvider() *CloudProvider {
+	if c == nil {
 		return nil
 	}
-	return o.Provider
+	return c.Provider
 }
 
-func (o *ConfigGroupCloud) GetRegion() string {
-	if o == nil {
+func (c *ConfigGroupCloud) GetRegion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Region
+	return c.Region
 }

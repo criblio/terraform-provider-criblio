@@ -12,11 +12,11 @@ type GetInputStatusByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetInputStatusByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetInputStatusByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetInputStatusByIDResponseBody - a list of InputStatus objects
@@ -24,11 +24,11 @@ type GetInputStatusByIDResponseBody struct {
 	Items []shared.InputStatus `json:"items,omitempty"`
 }
 
-func (o *GetInputStatusByIDResponseBody) GetItems() []shared.InputStatus {
-	if o == nil {
+func (g *GetInputStatusByIDResponseBody) GetItems() []shared.InputStatus {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetInputStatusByIDResponse struct {
@@ -44,37 +44,37 @@ type GetInputStatusByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetInputStatusByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetInputStatusByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetInputStatusByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetInputStatusByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetInputStatusByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetInputStatusByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetInputStatusByIDResponse) GetObject() *GetInputStatusByIDResponseBody {
-	if o == nil {
+func (g *GetInputStatusByIDResponse) GetObject() *GetInputStatusByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetInputStatusByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetInputStatusByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

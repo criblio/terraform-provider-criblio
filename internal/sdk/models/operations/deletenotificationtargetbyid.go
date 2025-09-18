@@ -12,11 +12,11 @@ type DeleteNotificationTargetByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteNotificationTargetByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteNotificationTargetByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteNotificationTargetByIDResponseBody - a list of NotificationTarget objects
@@ -36,37 +36,37 @@ type DeleteNotificationTargetByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteNotificationTargetByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteNotificationTargetByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteNotificationTargetByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteNotificationTargetByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteNotificationTargetByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteNotificationTargetByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteNotificationTargetByIDResponse) GetObject() *DeleteNotificationTargetByIDResponseBody {
-	if o == nil {
+func (d *DeleteNotificationTargetByIDResponse) GetObject() *DeleteNotificationTargetByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteNotificationTargetByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteNotificationTargetByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

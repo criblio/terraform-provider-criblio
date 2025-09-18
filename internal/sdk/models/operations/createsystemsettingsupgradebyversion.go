@@ -12,11 +12,11 @@ type CreateSystemSettingsUpgradeByVersionRequest struct {
 	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *CreateSystemSettingsUpgradeByVersionRequest) GetVersion() string {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeByVersionRequest) GetVersion() string {
+	if c == nil {
 		return ""
 	}
-	return o.Version
+	return c.Version
 }
 
 // CreateSystemSettingsUpgradeByVersionResponseBody - a list of string objects
@@ -24,11 +24,11 @@ type CreateSystemSettingsUpgradeByVersionResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *CreateSystemSettingsUpgradeByVersionResponseBody) GetItems() []string {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeByVersionResponseBody) GetItems() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemSettingsUpgradeByVersionResponse struct {
@@ -44,37 +44,37 @@ type CreateSystemSettingsUpgradeByVersionResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemSettingsUpgradeByVersionResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeByVersionResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemSettingsUpgradeByVersionResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeByVersionResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemSettingsUpgradeByVersionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeByVersionResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemSettingsUpgradeByVersionResponse) GetObject() *CreateSystemSettingsUpgradeByVersionResponseBody {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeByVersionResponse) GetObject() *CreateSystemSettingsUpgradeByVersionResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemSettingsUpgradeByVersionResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemSettingsUpgradeByVersionResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

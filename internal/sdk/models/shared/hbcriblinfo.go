@@ -10,39 +10,39 @@ type Config struct {
 	Version         *string  `json:"version,omitempty"`
 }
 
-func (o *Config) GetFeaturesRev() *string {
-	if o == nil {
+func (c *Config) GetFeaturesRev() *string {
+	if c == nil {
 		return nil
 	}
-	return o.FeaturesRev
+	return c.FeaturesRev
 }
 
-func (o *Config) GetHbPeriodSeconds() *float64 {
-	if o == nil {
+func (c *Config) GetHbPeriodSeconds() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.HbPeriodSeconds
+	return c.HbPeriodSeconds
 }
 
-func (o *Config) GetLogStreamEnv() *string {
-	if o == nil {
+func (c *Config) GetLogStreamEnv() *string {
+	if c == nil {
 		return nil
 	}
-	return o.LogStreamEnv
+	return c.LogStreamEnv
 }
 
-func (o *Config) GetPolicyRev() *string {
-	if o == nil {
+func (c *Config) GetPolicyRev() *string {
+	if c == nil {
 		return nil
 	}
-	return o.PolicyRev
+	return c.PolicyRev
 }
 
-func (o *Config) GetVersion() *string {
-	if o == nil {
+func (c *Config) GetVersion() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Version
+	return c.Version
 }
 
 type HBCriblInfo struct {
@@ -61,93 +61,93 @@ type HBCriblInfo struct {
 	Version        *string         `json:"version,omitempty"`
 }
 
-func (o *HBCriblInfo) GetConfig() Config {
-	if o == nil {
+func (h *HBCriblInfo) GetConfig() Config {
+	if h == nil {
 		return Config{}
 	}
-	return o.Config
+	return h.Config
 }
 
-func (o *HBCriblInfo) GetDeploymentID() *string {
-	if o == nil {
+func (h *HBCriblInfo) GetDeploymentID() *string {
+	if h == nil {
 		return nil
 	}
-	return o.DeploymentID
+	return h.DeploymentID
 }
 
-func (o *HBCriblInfo) GetDistMode() AppMode {
-	if o == nil {
+func (h *HBCriblInfo) GetDistMode() AppMode {
+	if h == nil {
 		return AppMode("")
 	}
-	return o.DistMode
+	return h.DistMode
 }
 
-func (o *HBCriblInfo) GetEdgeNodes() *float64 {
-	if o == nil {
+func (h *HBCriblInfo) GetEdgeNodes() *float64 {
+	if h == nil {
 		return nil
 	}
-	return o.EdgeNodes
+	return h.EdgeNodes
 }
 
-func (o *HBCriblInfo) GetGroup() string {
-	if o == nil {
+func (h *HBCriblInfo) GetGroup() string {
+	if h == nil {
 		return ""
 	}
-	return o.Group
+	return h.Group
 }
 
-func (o *HBCriblInfo) GetGUID() string {
-	if o == nil {
+func (h *HBCriblInfo) GetGUID() string {
+	if h == nil {
 		return ""
 	}
-	return o.GUID
+	return h.GUID
 }
 
-func (o *HBCriblInfo) GetInstallType() *string {
-	if o == nil {
+func (h *HBCriblInfo) GetInstallType() *string {
+	if h == nil {
 		return nil
 	}
-	return o.InstallType
+	return h.InstallType
 }
 
-func (o *HBCriblInfo) GetLookupVersions() *LookupVersions {
-	if o == nil {
+func (h *HBCriblInfo) GetLookupVersions() *LookupVersions {
+	if h == nil {
 		return nil
 	}
-	return o.LookupVersions
+	return h.LookupVersions
 }
 
-func (o *HBCriblInfo) GetMaster() *HBLeaderInfo {
-	if o == nil {
+func (h *HBCriblInfo) GetMaster() *HBLeaderInfo {
+	if h == nil {
 		return nil
 	}
-	return o.Master
+	return h.Master
 }
 
-func (o *HBCriblInfo) GetPid() *float64 {
-	if o == nil {
+func (h *HBCriblInfo) GetPid() *float64 {
+	if h == nil {
 		return nil
 	}
-	return o.Pid
+	return h.Pid
 }
 
-func (o *HBCriblInfo) GetStartTime() float64 {
-	if o == nil {
+func (h *HBCriblInfo) GetStartTime() float64 {
+	if h == nil {
 		return 0.0
 	}
-	return o.StartTime
+	return h.StartTime
 }
 
-func (o *HBCriblInfo) GetTags() []string {
-	if o == nil {
+func (h *HBCriblInfo) GetTags() []string {
+	if h == nil {
 		return []string{}
 	}
-	return o.Tags
+	return h.Tags
 }
 
-func (o *HBCriblInfo) GetVersion() *string {
-	if o == nil {
+func (h *HBCriblInfo) GetVersion() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Version
+	return h.Version
 }

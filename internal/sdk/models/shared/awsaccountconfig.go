@@ -30,37 +30,37 @@ func (a *AwsAccountConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AwsAccountConfig) GetName() string {
-	if o == nil {
+func (a *AwsAccountConfig) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AwsAccountConfig) GetAssumeRoleArn() *string {
-	if o == nil {
+func (a *AwsAccountConfig) GetAssumeRoleArn() *string {
+	if a == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return a.AssumeRoleArn
 }
 
-func (o *AwsAccountConfig) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (a *AwsAccountConfig) GetAssumeRoleExternalID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return a.AssumeRoleExternalID
 }
 
-func (o *AwsAccountConfig) GetAwsAPIKey() *string {
-	if o == nil {
+func (a *AwsAccountConfig) GetAwsAPIKey() *string {
+	if a == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return a.AwsAPIKey
 }
 
-func (o *AwsAccountConfig) GetAwsSecretKey() *string {
-	if o == nil {
+func (a *AwsAccountConfig) GetAwsSecretKey() *string {
+	if a == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return a.AwsSecretKey
 }

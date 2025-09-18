@@ -36,32 +36,32 @@ type Time struct {
 	TaskReceivingTotalSec  float64 `json:"taskReceivingTotalSec"`
 }
 
-func (o *Time) GetQueuedSec() float64 {
-	if o == nil {
+func (t *Time) GetQueuedSec() float64 {
+	if t == nil {
 		return 0.0
 	}
-	return o.QueuedSec
+	return t.QueuedSec
 }
 
-func (o *Time) GetRunningSec() float64 {
-	if o == nil {
+func (t *Time) GetRunningSec() float64 {
+	if t == nil {
 		return 0.0
 	}
-	return o.RunningSec
+	return t.RunningSec
 }
 
-func (o *Time) GetTaskCompletionTotalSec() float64 {
-	if o == nil {
+func (t *Time) GetTaskCompletionTotalSec() float64 {
+	if t == nil {
 		return 0.0
 	}
-	return o.TaskCompletionTotalSec
+	return t.TaskCompletionTotalSec
 }
 
-func (o *Time) GetTaskReceivingTotalSec() float64 {
-	if o == nil {
+func (t *Time) GetTaskReceivingTotalSec() float64 {
+	if t == nil {
 		return 0.0
 	}
-	return o.TaskReceivingTotalSec
+	return t.TaskReceivingTotalSec
 }
 
 type SearchAuditMetrics struct {
@@ -73,44 +73,44 @@ type SearchAuditMetrics struct {
 	Time      Time    `json:"time"`
 }
 
-func (o *SearchAuditMetrics) GetBytesIn() float64 {
-	if o == nil {
+func (s *SearchAuditMetrics) GetBytesIn() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.BytesIn
+	return s.BytesIn
 }
 
-func (o *SearchAuditMetrics) GetBytesOut() float64 {
-	if o == nil {
+func (s *SearchAuditMetrics) GetBytesOut() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.BytesOut
+	return s.BytesOut
 }
 
-func (o *SearchAuditMetrics) GetEventsIn() float64 {
-	if o == nil {
+func (s *SearchAuditMetrics) GetEventsIn() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.EventsIn
+	return s.EventsIn
 }
 
-func (o *SearchAuditMetrics) GetEventsOut() float64 {
-	if o == nil {
+func (s *SearchAuditMetrics) GetEventsOut() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.EventsOut
+	return s.EventsOut
 }
 
-func (o *SearchAuditMetrics) GetObjects() Objects {
-	if o == nil {
+func (s *SearchAuditMetrics) GetObjects() Objects {
+	if s == nil {
 		return Objects{}
 	}
-	return o.Objects
+	return s.Objects
 }
 
-func (o *SearchAuditMetrics) GetTime() Time {
-	if o == nil {
+func (s *SearchAuditMetrics) GetTime() Time {
+	if s == nil {
 		return Time{}
 	}
-	return o.Time
+	return s.Time
 }

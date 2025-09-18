@@ -12,11 +12,11 @@ type ListRoutesResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *ListRoutesResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (l *ListRoutesResponseBody) GetItems() []shared.Routes {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListRoutesResponse struct {
@@ -32,37 +32,37 @@ type ListRoutesResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListRoutesResponse) GetContentType() string {
-	if o == nil {
+func (l *ListRoutesResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListRoutesResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListRoutesResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListRoutesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListRoutesResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListRoutesResponse) GetObject() *ListRoutesResponseBody {
-	if o == nil {
+func (l *ListRoutesResponse) GetObject() *ListRoutesResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListRoutesResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListRoutesResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

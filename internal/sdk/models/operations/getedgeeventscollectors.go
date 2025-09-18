@@ -12,11 +12,11 @@ type GetEdgeEventsCollectorsResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetEdgeEventsCollectorsResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetEdgeEventsCollectorsResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeEventsCollectorsResponse struct {
@@ -32,37 +32,37 @@ type GetEdgeEventsCollectorsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeEventsCollectorsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeEventsCollectorsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeEventsCollectorsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeEventsCollectorsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeEventsCollectorsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeEventsCollectorsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeEventsCollectorsResponse) GetObject() *GetEdgeEventsCollectorsResponseBody {
-	if o == nil {
+func (g *GetEdgeEventsCollectorsResponse) GetObject() *GetEdgeEventsCollectorsResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeEventsCollectorsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeEventsCollectorsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

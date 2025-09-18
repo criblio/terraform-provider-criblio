@@ -25,23 +25,23 @@ func (g *GoogleWorkspaceAccountConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GoogleWorkspaceAccountConfig) GetName() string {
-	if o == nil {
+func (g *GoogleWorkspaceAccountConfig) GetName() string {
+	if g == nil {
 		return ""
 	}
-	return o.Name
+	return g.Name
 }
 
-func (o *GoogleWorkspaceAccountConfig) GetSubject() string {
-	if o == nil {
+func (g *GoogleWorkspaceAccountConfig) GetSubject() string {
+	if g == nil {
 		return ""
 	}
-	return o.Subject
+	return g.Subject
 }
 
-func (o *GoogleWorkspaceAccountConfig) GetServiceAccountCredentials() string {
-	if o == nil {
+func (g *GoogleWorkspaceAccountConfig) GetServiceAccountCredentials() string {
+	if g == nil {
 		return ""
 	}
-	return o.ServiceAccountCredentials
+	return g.ServiceAccountCredentials
 }

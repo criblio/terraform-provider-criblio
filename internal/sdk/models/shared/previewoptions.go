@@ -139,16 +139,16 @@ type PreviewOptions struct {
 	Latest   *PreviewOptionsLatest   `json:"latest,omitempty"`
 }
 
-func (o *PreviewOptions) GetEarliest() *PreviewOptionsEarliest {
-	if o == nil {
+func (p *PreviewOptions) GetEarliest() *PreviewOptionsEarliest {
+	if p == nil {
 		return nil
 	}
-	return o.Earliest
+	return p.Earliest
 }
 
-func (o *PreviewOptions) GetLatest() *PreviewOptionsLatest {
-	if o == nil {
+func (p *PreviewOptions) GetLatest() *PreviewOptionsLatest {
+	if p == nil {
 		return nil
 	}
-	return o.Latest
+	return p.Latest
 }

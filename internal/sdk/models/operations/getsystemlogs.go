@@ -12,11 +12,11 @@ type GetSystemLogsResponseBody struct {
 	Items []shared.LogFileInfo `json:"items,omitempty"`
 }
 
-func (o *GetSystemLogsResponseBody) GetItems() []shared.LogFileInfo {
-	if o == nil {
+func (g *GetSystemLogsResponseBody) GetItems() []shared.LogFileInfo {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemLogsResponse struct {
@@ -32,37 +32,37 @@ type GetSystemLogsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemLogsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemLogsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemLogsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemLogsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemLogsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemLogsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemLogsResponse) GetObject() *GetSystemLogsResponseBody {
-	if o == nil {
+func (g *GetSystemLogsResponse) GetObject() *GetSystemLogsResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemLogsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemLogsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

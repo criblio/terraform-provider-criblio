@@ -12,11 +12,11 @@ type GetPacksRefsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetPacksRefsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetPacksRefsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetPacksRefsByIDResponseBody - a list of ReferencingEntity objects
@@ -24,11 +24,11 @@ type GetPacksRefsByIDResponseBody struct {
 	Items []shared.ReferencingEntity `json:"items,omitempty"`
 }
 
-func (o *GetPacksRefsByIDResponseBody) GetItems() []shared.ReferencingEntity {
-	if o == nil {
+func (g *GetPacksRefsByIDResponseBody) GetItems() []shared.ReferencingEntity {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetPacksRefsByIDResponse struct {
@@ -44,37 +44,37 @@ type GetPacksRefsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetPacksRefsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPacksRefsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPacksRefsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPacksRefsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPacksRefsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPacksRefsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetPacksRefsByIDResponse) GetObject() *GetPacksRefsByIDResponseBody {
-	if o == nil {
+func (g *GetPacksRefsByIDResponse) GetObject() *GetPacksRefsByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetPacksRefsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetPacksRefsByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

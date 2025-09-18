@@ -12,11 +12,11 @@ type DeleteDatasetProviderByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteDatasetProviderByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteDatasetProviderByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteDatasetProviderByIDResponseBody - a list of DatasetProvider objects
@@ -24,11 +24,11 @@ type DeleteDatasetProviderByIDResponseBody struct {
 	Items []shared.GenericProvider `json:"items,omitempty"`
 }
 
-func (o *DeleteDatasetProviderByIDResponseBody) GetItems() []shared.GenericProvider {
-	if o == nil {
+func (d *DeleteDatasetProviderByIDResponseBody) GetItems() []shared.GenericProvider {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteDatasetProviderByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteDatasetProviderByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteDatasetProviderByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteDatasetProviderByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteDatasetProviderByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteDatasetProviderByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteDatasetProviderByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteDatasetProviderByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteDatasetProviderByIDResponse) GetObject() *DeleteDatasetProviderByIDResponseBody {
-	if o == nil {
+func (d *DeleteDatasetProviderByIDResponse) GetObject() *DeleteDatasetProviderByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteDatasetProviderByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteDatasetProviderByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

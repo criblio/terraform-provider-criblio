@@ -14,18 +14,18 @@ type UpdateIoMetricsEntryByIDRequest struct {
 	IoMetricsEntry shared.IoMetricsEntry `request:"mediaType=application/json"`
 }
 
-func (o *UpdateIoMetricsEntryByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateIoMetricsEntryByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateIoMetricsEntryByIDRequest) GetIoMetricsEntry() shared.IoMetricsEntry {
-	if o == nil {
+func (u *UpdateIoMetricsEntryByIDRequest) GetIoMetricsEntry() shared.IoMetricsEntry {
+	if u == nil {
 		return shared.IoMetricsEntry{}
 	}
-	return o.IoMetricsEntry
+	return u.IoMetricsEntry
 }
 
 // UpdateIoMetricsEntryByIDResponseBody - a list of IoMetricsEntry objects
@@ -33,11 +33,11 @@ type UpdateIoMetricsEntryByIDResponseBody struct {
 	Items []shared.IoMetricsEntry `json:"items,omitempty"`
 }
 
-func (o *UpdateIoMetricsEntryByIDResponseBody) GetItems() []shared.IoMetricsEntry {
-	if o == nil {
+func (u *UpdateIoMetricsEntryByIDResponseBody) GetItems() []shared.IoMetricsEntry {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateIoMetricsEntryByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateIoMetricsEntryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateIoMetricsEntryByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateIoMetricsEntryByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateIoMetricsEntryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateIoMetricsEntryByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateIoMetricsEntryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateIoMetricsEntryByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateIoMetricsEntryByIDResponse) GetObject() *UpdateIoMetricsEntryByIDResponseBody {
-	if o == nil {
+func (u *UpdateIoMetricsEntryByIDResponse) GetObject() *UpdateIoMetricsEntryByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateIoMetricsEntryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateIoMetricsEntryByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

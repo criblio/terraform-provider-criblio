@@ -12,11 +12,11 @@ type GetEdgeMetadataResponseBody struct {
 	Items []shared.Metadata `json:"items,omitempty"`
 }
 
-func (o *GetEdgeMetadataResponseBody) GetItems() []shared.Metadata {
-	if o == nil {
+func (g *GetEdgeMetadataResponseBody) GetItems() []shared.Metadata {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeMetadataResponse struct {
@@ -32,37 +32,37 @@ type GetEdgeMetadataResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeMetadataResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeMetadataResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeMetadataResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeMetadataResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeMetadataResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeMetadataResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeMetadataResponse) GetObject() *GetEdgeMetadataResponseBody {
-	if o == nil {
+func (g *GetEdgeMetadataResponse) GetObject() *GetEdgeMetadataResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeMetadataResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeMetadataResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

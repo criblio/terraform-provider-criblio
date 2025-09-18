@@ -18,93 +18,93 @@ type RouteConf struct {
 	Pipeline               string           `json:"pipeline"`
 }
 
-func (o *RouteConf) GetClones() []RouteCloneConf {
-	if o == nil {
+func (r *RouteConf) GetClones() []RouteCloneConf {
+	if r == nil {
 		return nil
 	}
-	return o.Clones
+	return r.Clones
 }
 
-func (o *RouteConf) GetContext() *string {
-	if o == nil {
+func (r *RouteConf) GetContext() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Context
+	return r.Context
 }
 
-func (o *RouteConf) GetDescription() *string {
-	if o == nil {
+func (r *RouteConf) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *RouteConf) GetDisabled() *bool {
-	if o == nil {
+func (r *RouteConf) GetDisabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Disabled
+	return r.Disabled
 }
 
-func (o *RouteConf) GetEnableOutputExpression() *bool {
-	if o == nil {
+func (r *RouteConf) GetEnableOutputExpression() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.EnableOutputExpression
+	return r.EnableOutputExpression
 }
 
-func (o *RouteConf) GetFilter() *string {
-	if o == nil {
+func (r *RouteConf) GetFilter() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Filter
+	return r.Filter
 }
 
-func (o *RouteConf) GetFinal() bool {
-	if o == nil {
+func (r *RouteConf) GetFinal() bool {
+	if r == nil {
 		return false
 	}
-	return o.Final
+	return r.Final
 }
 
-func (o *RouteConf) GetGroupID() *string {
-	if o == nil {
+func (r *RouteConf) GetGroupID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.GroupID
+	return r.GroupID
 }
 
-func (o *RouteConf) GetID() string {
-	if o == nil {
+func (r *RouteConf) GetID() string {
+	if r == nil {
 		return ""
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *RouteConf) GetName() string {
-	if o == nil {
+func (r *RouteConf) GetName() string {
+	if r == nil {
 		return ""
 	}
-	return o.Name
+	return r.Name
 }
 
-func (o *RouteConf) GetOutput() *string {
-	if o == nil {
+func (r *RouteConf) GetOutput() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Output
+	return r.Output
 }
 
-func (o *RouteConf) GetOutputExpression() *string {
-	if o == nil {
+func (r *RouteConf) GetOutputExpression() *string {
+	if r == nil {
 		return nil
 	}
-	return o.OutputExpression
+	return r.OutputExpression
 }
 
-func (o *RouteConf) GetPipeline() string {
-	if o == nil {
+func (r *RouteConf) GetPipeline() string {
+	if r == nil {
 		return ""
 	}
-	return o.Pipeline
+	return r.Pipeline
 }

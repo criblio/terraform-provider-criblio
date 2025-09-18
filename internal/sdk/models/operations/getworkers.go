@@ -22,46 +22,46 @@ type GetWorkersRequest struct {
 	Filter *string `queryParam:"style=form,explode=true,name=filter"`
 }
 
-func (o *GetWorkersRequest) GetFilterExp() *string {
-	if o == nil {
+func (g *GetWorkersRequest) GetFilterExp() *string {
+	if g == nil {
 		return nil
 	}
-	return o.FilterExp
+	return g.FilterExp
 }
 
-func (o *GetWorkersRequest) GetSort() *string {
-	if o == nil {
+func (g *GetWorkersRequest) GetSort() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Sort
+	return g.Sort
 }
 
-func (o *GetWorkersRequest) GetSortExp() *string {
-	if o == nil {
+func (g *GetWorkersRequest) GetSortExp() *string {
+	if g == nil {
 		return nil
 	}
-	return o.SortExp
+	return g.SortExp
 }
 
-func (o *GetWorkersRequest) GetLimit() *int64 {
-	if o == nil {
+func (g *GetWorkersRequest) GetLimit() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Limit
+	return g.Limit
 }
 
-func (o *GetWorkersRequest) GetOffset() *int64 {
-	if o == nil {
+func (g *GetWorkersRequest) GetOffset() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Offset
+	return g.Offset
 }
 
-func (o *GetWorkersRequest) GetFilter() *string {
-	if o == nil {
+func (g *GetWorkersRequest) GetFilter() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Filter
+	return g.Filter
 }
 
 // GetWorkersResponseBody - a list of MasterWorkerEntry objects
@@ -69,11 +69,11 @@ type GetWorkersResponseBody struct {
 	Items []shared.MasterWorkerEntry `json:"items,omitempty"`
 }
 
-func (o *GetWorkersResponseBody) GetItems() []shared.MasterWorkerEntry {
-	if o == nil {
+func (g *GetWorkersResponseBody) GetItems() []shared.MasterWorkerEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetWorkersResponse struct {
@@ -89,37 +89,37 @@ type GetWorkersResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetWorkersResponse) GetContentType() string {
-	if o == nil {
+func (g *GetWorkersResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetWorkersResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetWorkersResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetWorkersResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetWorkersResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetWorkersResponse) GetObject() *GetWorkersResponseBody {
-	if o == nil {
+func (g *GetWorkersResponse) GetObject() *GetWorkersResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetWorkersResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetWorkersResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

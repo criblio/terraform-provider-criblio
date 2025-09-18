@@ -47,18 +47,18 @@ func (i *InputOffice365ServiceConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365ServiceConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputOffice365ServiceConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputOffice365ServiceConnection) GetOutput() string {
-	if o == nil {
+func (i *InputOffice365ServiceConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputOffice365ServiceMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputOffice365ServicePq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365ServicePq) GetMode() *InputOffice365ServiceMode {
-	if o == nil {
+func (i *InputOffice365ServicePq) GetMode() *InputOffice365ServiceMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputOffice365ServicePq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputOffice365ServicePq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputOffice365ServicePq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputOffice365ServicePq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputOffice365ServicePq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputOffice365ServicePq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputOffice365ServicePq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputOffice365ServicePq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputOffice365ServicePq) GetPath() *string {
-	if o == nil {
+func (i *InputOffice365ServicePq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputOffice365ServicePq) GetCompress() *InputOffice365ServiceCompression {
-	if o == nil {
+func (i *InputOffice365ServicePq) GetCompress() *InputOffice365ServiceCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputOffice365ServiceSubscriptionPlan - Office 365 subscription plan for your organization, typically Office 365 Enterprise
@@ -242,18 +242,18 @@ func (i *InputOffice365ServiceMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365ServiceMetadatum) GetName() string {
-	if o == nil {
+func (i *InputOffice365ServiceMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputOffice365ServiceMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputOffice365ServiceMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputOffice365ServiceLogLevel - Collector runtime Log Level
@@ -311,39 +311,39 @@ func (i *InputOffice365ServiceContentConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365ServiceContentConfig) GetContentType() *string {
-	if o == nil {
+func (i *InputOffice365ServiceContentConfig) GetContentType() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ContentType
+	return i.ContentType
 }
 
-func (o *InputOffice365ServiceContentConfig) GetDescription() *string {
-	if o == nil {
+func (i *InputOffice365ServiceContentConfig) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputOffice365ServiceContentConfig) GetInterval() *float64 {
-	if o == nil {
+func (i *InputOffice365ServiceContentConfig) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputOffice365ServiceContentConfig) GetLogLevel() *InputOffice365ServiceLogLevel {
-	if o == nil {
+func (i *InputOffice365ServiceContentConfig) GetLogLevel() *InputOffice365ServiceLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputOffice365ServiceContentConfig) GetEnabled() *bool {
-	if o == nil {
+func (i *InputOffice365ServiceContentConfig) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 // InputOffice365ServiceRetryType - The algorithm to use when performing HTTP retries
@@ -406,60 +406,60 @@ func (i *InputOffice365ServiceRetryRules) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365ServiceRetryRules) GetType() *InputOffice365ServiceRetryType {
-	if o == nil {
+func (i *InputOffice365ServiceRetryRules) GetType() *InputOffice365ServiceRetryType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputOffice365ServiceRetryRules) GetInterval() *float64 {
-	if o == nil {
+func (i *InputOffice365ServiceRetryRules) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputOffice365ServiceRetryRules) GetLimit() *float64 {
-	if o == nil {
+func (i *InputOffice365ServiceRetryRules) GetLimit() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Limit
+	return i.Limit
 }
 
-func (o *InputOffice365ServiceRetryRules) GetMultiplier() *float64 {
-	if o == nil {
+func (i *InputOffice365ServiceRetryRules) GetMultiplier() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Multiplier
+	return i.Multiplier
 }
 
-func (o *InputOffice365ServiceRetryRules) GetCodes() []float64 {
-	if o == nil {
+func (i *InputOffice365ServiceRetryRules) GetCodes() []float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Codes
+	return i.Codes
 }
 
-func (o *InputOffice365ServiceRetryRules) GetEnableHeader() *bool {
-	if o == nil {
+func (i *InputOffice365ServiceRetryRules) GetEnableHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHeader
+	return i.EnableHeader
 }
 
-func (o *InputOffice365ServiceRetryRules) GetRetryConnectTimeout() *bool {
-	if o == nil {
+func (i *InputOffice365ServiceRetryRules) GetRetryConnectTimeout() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectTimeout
+	return i.RetryConnectTimeout
 }
 
-func (o *InputOffice365ServiceRetryRules) GetRetryConnectReset() *bool {
-	if o == nil {
+func (i *InputOffice365ServiceRetryRules) GetRetryConnectReset() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectReset
+	return i.RetryConnectReset
 }
 
 // InputOffice365ServiceAuthenticationMethod - Enter client secret directly, or select a stored secret
@@ -550,184 +550,184 @@ func (i *InputOffice365Service) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365Service) GetID() *string {
-	if o == nil {
+func (i *InputOffice365Service) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputOffice365Service) GetType() *InputOffice365ServiceType {
-	if o == nil {
+func (i *InputOffice365Service) GetType() *InputOffice365ServiceType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputOffice365Service) GetDisabled() *bool {
-	if o == nil {
+func (i *InputOffice365Service) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputOffice365Service) GetPipeline() *string {
-	if o == nil {
+func (i *InputOffice365Service) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputOffice365Service) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputOffice365Service) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputOffice365Service) GetEnvironment() *string {
-	if o == nil {
+func (i *InputOffice365Service) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputOffice365Service) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputOffice365Service) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputOffice365Service) GetStreamtags() []string {
-	if o == nil {
+func (i *InputOffice365Service) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputOffice365Service) GetConnections() []InputOffice365ServiceConnection {
-	if o == nil {
+func (i *InputOffice365Service) GetConnections() []InputOffice365ServiceConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputOffice365Service) GetPq() *InputOffice365ServicePq {
-	if o == nil {
+func (i *InputOffice365Service) GetPq() *InputOffice365ServicePq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputOffice365Service) GetPlanType() *InputOffice365ServiceSubscriptionPlan {
-	if o == nil {
+func (i *InputOffice365Service) GetPlanType() *InputOffice365ServiceSubscriptionPlan {
+	if i == nil {
 		return nil
 	}
-	return o.PlanType
+	return i.PlanType
 }
 
-func (o *InputOffice365Service) GetTenantID() string {
-	if o == nil {
+func (i *InputOffice365Service) GetTenantID() string {
+	if i == nil {
 		return ""
 	}
-	return o.TenantID
+	return i.TenantID
 }
 
-func (o *InputOffice365Service) GetAppID() string {
-	if o == nil {
+func (i *InputOffice365Service) GetAppID() string {
+	if i == nil {
 		return ""
 	}
-	return o.AppID
+	return i.AppID
 }
 
-func (o *InputOffice365Service) GetTimeout() *float64 {
-	if o == nil {
+func (i *InputOffice365Service) GetTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Timeout
+	return i.Timeout
 }
 
-func (o *InputOffice365Service) GetKeepAliveTime() *float64 {
-	if o == nil {
+func (i *InputOffice365Service) GetKeepAliveTime() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTime
+	return i.KeepAliveTime
 }
 
-func (o *InputOffice365Service) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputOffice365Service) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputOffice365Service) GetMaxMissedKeepAlives() *float64 {
-	if o == nil {
+func (i *InputOffice365Service) GetMaxMissedKeepAlives() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMissedKeepAlives
+	return i.MaxMissedKeepAlives
 }
 
-func (o *InputOffice365Service) GetTTL() *string {
-	if o == nil {
+func (i *InputOffice365Service) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputOffice365Service) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputOffice365Service) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputOffice365Service) GetMetadata() []InputOffice365ServiceMetadatum {
-	if o == nil {
+func (i *InputOffice365Service) GetMetadata() []InputOffice365ServiceMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputOffice365Service) GetContentConfig() []InputOffice365ServiceContentConfig {
-	if o == nil {
+func (i *InputOffice365Service) GetContentConfig() []InputOffice365ServiceContentConfig {
+	if i == nil {
 		return nil
 	}
-	return o.ContentConfig
+	return i.ContentConfig
 }
 
-func (o *InputOffice365Service) GetRetryRules() *InputOffice365ServiceRetryRules {
-	if o == nil {
+func (i *InputOffice365Service) GetRetryRules() *InputOffice365ServiceRetryRules {
+	if i == nil {
 		return nil
 	}
-	return o.RetryRules
+	return i.RetryRules
 }
 
-func (o *InputOffice365Service) GetAuthType() *InputOffice365ServiceAuthenticationMethod {
-	if o == nil {
+func (i *InputOffice365Service) GetAuthType() *InputOffice365ServiceAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputOffice365Service) GetDescription() *string {
-	if o == nil {
+func (i *InputOffice365Service) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputOffice365Service) GetClientSecret() *string {
-	if o == nil {
+func (i *InputOffice365Service) GetClientSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ClientSecret
+	return i.ClientSecret
 }
 
-func (o *InputOffice365Service) GetTextSecret() *string {
-	if o == nil {
+func (i *InputOffice365Service) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }

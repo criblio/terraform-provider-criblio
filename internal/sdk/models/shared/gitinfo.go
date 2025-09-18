@@ -76,16 +76,16 @@ type GitInfo struct {
 	Versioning bool   `json:"versioning"`
 }
 
-func (o *GitInfo) GetRemote() Remote {
-	if o == nil {
+func (g *GitInfo) GetRemote() Remote {
+	if g == nil {
 		return Remote{}
 	}
-	return o.Remote
+	return g.Remote
 }
 
-func (o *GitInfo) GetVersioning() bool {
-	if o == nil {
+func (g *GitInfo) GetVersioning() bool {
+	if g == nil {
 		return false
 	}
-	return o.Versioning
+	return g.Versioning
 }

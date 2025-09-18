@@ -58,37 +58,37 @@ func (h *HTTPEndpoint) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *HTTPEndpoint) GetName() string {
-	if o == nil {
+func (h *HTTPEndpoint) GetName() string {
+	if h == nil {
 		return ""
 	}
-	return o.Name
+	return h.Name
 }
 
-func (o *HTTPEndpoint) GetDataField() *string {
-	if o == nil {
+func (h *HTTPEndpoint) GetDataField() *string {
+	if h == nil {
 		return nil
 	}
-	return o.DataField
+	return h.DataField
 }
 
-func (o *HTTPEndpoint) GetMethod() *HTTPEndpointMethod {
-	if o == nil {
+func (h *HTTPEndpoint) GetMethod() *HTTPEndpointMethod {
+	if h == nil {
 		return nil
 	}
-	return o.Method
+	return h.Method
 }
 
-func (o *HTTPEndpoint) GetURL() string {
-	if o == nil {
+func (h *HTTPEndpoint) GetURL() string {
+	if h == nil {
 		return ""
 	}
-	return o.URL
+	return h.URL
 }
 
-func (o *HTTPEndpoint) GetHeaders() []HTTPHeader {
-	if o == nil {
+func (h *HTTPEndpoint) GetHeaders() []HTTPHeader {
+	if h == nil {
 		return nil
 	}
-	return o.Headers
+	return h.Headers
 }

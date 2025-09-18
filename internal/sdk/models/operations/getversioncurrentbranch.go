@@ -12,11 +12,11 @@ type GetVersionCurrentBranchResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetVersionCurrentBranchResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetVersionCurrentBranchResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetVersionCurrentBranchResponse struct {
@@ -32,37 +32,37 @@ type GetVersionCurrentBranchResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetVersionCurrentBranchResponse) GetContentType() string {
-	if o == nil {
+func (g *GetVersionCurrentBranchResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetVersionCurrentBranchResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetVersionCurrentBranchResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetVersionCurrentBranchResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetVersionCurrentBranchResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetVersionCurrentBranchResponse) GetObject() *GetVersionCurrentBranchResponseBody {
-	if o == nil {
+func (g *GetVersionCurrentBranchResponse) GetObject() *GetVersionCurrentBranchResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetVersionCurrentBranchResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetVersionCurrentBranchResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

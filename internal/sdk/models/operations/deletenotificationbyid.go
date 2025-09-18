@@ -12,11 +12,11 @@ type DeleteNotificationByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteNotificationByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteNotificationByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteNotificationByIDResponseBody - a list of Notification objects
@@ -24,11 +24,11 @@ type DeleteNotificationByIDResponseBody struct {
 	Items []shared.Notification `json:"items,omitempty"`
 }
 
-func (o *DeleteNotificationByIDResponseBody) GetItems() []shared.Notification {
-	if o == nil {
+func (d *DeleteNotificationByIDResponseBody) GetItems() []shared.Notification {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteNotificationByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteNotificationByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteNotificationByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteNotificationByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteNotificationByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteNotificationByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteNotificationByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteNotificationByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteNotificationByIDResponse) GetObject() *DeleteNotificationByIDResponseBody {
-	if o == nil {
+func (d *DeleteNotificationByIDResponse) GetObject() *DeleteNotificationByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteNotificationByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteNotificationByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

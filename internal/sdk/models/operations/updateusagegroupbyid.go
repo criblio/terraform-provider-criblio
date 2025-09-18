@@ -14,18 +14,18 @@ type UpdateUsageGroupByIDRequest struct {
 	UsageGroup shared.UsageGroup `request:"mediaType=application/json"`
 }
 
-func (o *UpdateUsageGroupByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateUsageGroupByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateUsageGroupByIDRequest) GetUsageGroup() shared.UsageGroup {
-	if o == nil {
+func (u *UpdateUsageGroupByIDRequest) GetUsageGroup() shared.UsageGroup {
+	if u == nil {
 		return shared.UsageGroup{}
 	}
-	return o.UsageGroup
+	return u.UsageGroup
 }
 
 // UpdateUsageGroupByIDResponseBody - a list of UsageGroup objects
@@ -33,11 +33,11 @@ type UpdateUsageGroupByIDResponseBody struct {
 	Items []shared.UsageGroup `json:"items,omitempty"`
 }
 
-func (o *UpdateUsageGroupByIDResponseBody) GetItems() []shared.UsageGroup {
-	if o == nil {
+func (u *UpdateUsageGroupByIDResponseBody) GetItems() []shared.UsageGroup {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateUsageGroupByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateUsageGroupByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateUsageGroupByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateUsageGroupByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateUsageGroupByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateUsageGroupByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateUsageGroupByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateUsageGroupByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateUsageGroupByIDResponse) GetObject() *UpdateUsageGroupByIDResponseBody {
-	if o == nil {
+func (u *UpdateUsageGroupByIDResponse) GetObject() *UpdateUsageGroupByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateUsageGroupByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateUsageGroupByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

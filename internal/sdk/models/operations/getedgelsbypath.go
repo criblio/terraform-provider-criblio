@@ -12,11 +12,11 @@ type GetEdgeLsByPathRequest struct {
 	Path string `pathParam:"style=simple,explode=false,name=path"`
 }
 
-func (o *GetEdgeLsByPathRequest) GetPath() string {
-	if o == nil {
+func (g *GetEdgeLsByPathRequest) GetPath() string {
+	if g == nil {
 		return ""
 	}
-	return o.Path
+	return g.Path
 }
 
 // GetEdgeLsByPathResponseBody - a list of FilesystemEntry objects
@@ -24,11 +24,11 @@ type GetEdgeLsByPathResponseBody struct {
 	Items []shared.FilesystemEntry `json:"items,omitempty"`
 }
 
-func (o *GetEdgeLsByPathResponseBody) GetItems() []shared.FilesystemEntry {
-	if o == nil {
+func (g *GetEdgeLsByPathResponseBody) GetItems() []shared.FilesystemEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeLsByPathResponse struct {
@@ -44,37 +44,37 @@ type GetEdgeLsByPathResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeLsByPathResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeLsByPathResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeLsByPathResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeLsByPathResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeLsByPathResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeLsByPathResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeLsByPathResponse) GetObject() *GetEdgeLsByPathResponseBody {
-	if o == nil {
+func (g *GetEdgeLsByPathResponse) GetObject() *GetEdgeLsByPathResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeLsByPathResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeLsByPathResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

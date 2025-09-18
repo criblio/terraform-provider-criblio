@@ -24,37 +24,37 @@ type ListNotificationTargetResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListNotificationTargetResponse) GetContentType() string {
-	if o == nil {
+func (l *ListNotificationTargetResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListNotificationTargetResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListNotificationTargetResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListNotificationTargetResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListNotificationTargetResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListNotificationTargetResponse) GetObject() *ListNotificationTargetResponseBody {
-	if o == nil {
+func (l *ListNotificationTargetResponse) GetObject() *ListNotificationTargetResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListNotificationTargetResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListNotificationTargetResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

@@ -14,18 +14,18 @@ type CreateGlobalVariableRequest struct {
 	GlobalVar shared.GlobalVar `request:"mediaType=application/json"`
 }
 
-func (o *CreateGlobalVariableRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateGlobalVariableRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateGlobalVariableRequest) GetGlobalVar() shared.GlobalVar {
-	if o == nil {
+func (c *CreateGlobalVariableRequest) GetGlobalVar() shared.GlobalVar {
+	if c == nil {
 		return shared.GlobalVar{}
 	}
-	return o.GlobalVar
+	return c.GlobalVar
 }
 
 // CreateGlobalVariableResponseBody - a list of Global Variable objects
@@ -33,11 +33,11 @@ type CreateGlobalVariableResponseBody struct {
 	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (o *CreateGlobalVariableResponseBody) GetItems() []shared.GlobalVar {
-	if o == nil {
+func (c *CreateGlobalVariableResponseBody) GetItems() []shared.GlobalVar {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateGlobalVariableResponse struct {
@@ -53,37 +53,37 @@ type CreateGlobalVariableResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateGlobalVariableResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateGlobalVariableResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateGlobalVariableResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateGlobalVariableResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateGlobalVariableResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateGlobalVariableResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateGlobalVariableResponse) GetObject() *CreateGlobalVariableResponseBody {
-	if o == nil {
+func (c *CreateGlobalVariableResponse) GetObject() *CreateGlobalVariableResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateGlobalVariableResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateGlobalVariableResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

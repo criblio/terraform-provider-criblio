@@ -8,23 +8,23 @@ type LoggerEntry struct {
 	Level     string `json:"level"`
 }
 
-func (o *LoggerEntry) GetCanDelete() *bool {
-	if o == nil {
+func (l *LoggerEntry) GetCanDelete() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.CanDelete
+	return l.CanDelete
 }
 
-func (o *LoggerEntry) GetID() string {
-	if o == nil {
+func (l *LoggerEntry) GetID() string {
+	if l == nil {
 		return ""
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *LoggerEntry) GetLevel() string {
-	if o == nil {
+func (l *LoggerEntry) GetLevel() string {
+	if l == nil {
 		return ""
 	}
-	return o.Level
+	return l.Level
 }

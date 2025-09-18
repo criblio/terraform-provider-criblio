@@ -14,18 +14,18 @@ type CreateLibSchemasRequest struct {
 	SchemaLibEntry shared.SchemaLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *CreateLibSchemasRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateLibSchemasRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateLibSchemasRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
-	if o == nil {
+func (c *CreateLibSchemasRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
+	if c == nil {
 		return shared.SchemaLibEntry{}
 	}
-	return o.SchemaLibEntry
+	return c.SchemaLibEntry
 }
 
 // CreateLibSchemasResponseBody - a list of Schema objects
@@ -33,11 +33,11 @@ type CreateLibSchemasResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *CreateLibSchemasResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (c *CreateLibSchemasResponseBody) GetItems() []shared.SchemaLibEntry {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateLibSchemasResponse struct {
@@ -53,37 +53,37 @@ type CreateLibSchemasResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateLibSchemasResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateLibSchemasResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateLibSchemasResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateLibSchemasResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateLibSchemasResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateLibSchemasResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateLibSchemasResponse) GetObject() *CreateLibSchemasResponseBody {
-	if o == nil {
+func (c *CreateLibSchemasResponse) GetObject() *CreateLibSchemasResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateLibSchemasResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateLibSchemasResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

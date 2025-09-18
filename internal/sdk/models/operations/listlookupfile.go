@@ -12,11 +12,11 @@ type ListLookupFileRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListLookupFileRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListLookupFileRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListLookupFileResponseBody - a list of LookupFile objects
@@ -36,37 +36,37 @@ type ListLookupFileResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListLookupFileResponse) GetContentType() string {
-	if o == nil {
+func (l *ListLookupFileResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListLookupFileResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListLookupFileResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListLookupFileResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListLookupFileResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListLookupFileResponse) GetObject() *ListLookupFileResponseBody {
-	if o == nil {
+func (l *ListLookupFileResponse) GetObject() *ListLookupFileResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListLookupFileResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListLookupFileResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

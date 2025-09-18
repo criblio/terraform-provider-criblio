@@ -47,18 +47,18 @@ func (i *InputSqsConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSqsConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputSqsConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSqsConnection) GetOutput() string {
-	if o == nil {
+func (i *InputSqsConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSqsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputSqsPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSqsPq) GetMode() *InputSqsMode {
-	if o == nil {
+func (i *InputSqsPq) GetMode() *InputSqsMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSqsPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSqsPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSqsPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSqsPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSqsPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSqsPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSqsPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSqsPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSqsPq) GetPath() *string {
-	if o == nil {
+func (i *InputSqsPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSqsPq) GetCompress() *InputSqsCompression {
-	if o == nil {
+func (i *InputSqsPq) GetCompress() *InputSqsCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputSqsQueueType - The queue type used (or created)
@@ -293,18 +293,18 @@ func (i *InputSqsMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSqsMetadatum) GetName() string {
-	if o == nil {
+func (i *InputSqsMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSqsMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputSqsMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSqs struct {
@@ -381,233 +381,233 @@ func (i *InputSqs) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSqs) GetID() *string {
-	if o == nil {
+func (i *InputSqs) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSqs) GetType() *InputSqsType {
-	if o == nil {
+func (i *InputSqs) GetType() *InputSqsType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSqs) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSqs) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSqs) GetPipeline() *string {
-	if o == nil {
+func (i *InputSqs) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSqs) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSqs) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSqs) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSqs) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSqs) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSqs) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSqs) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSqs) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSqs) GetConnections() []InputSqsConnection {
-	if o == nil {
+func (i *InputSqs) GetConnections() []InputSqsConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSqs) GetPq() *InputSqsPq {
-	if o == nil {
+func (i *InputSqs) GetPq() *InputSqsPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSqs) GetQueueName() string {
-	if o == nil {
+func (i *InputSqs) GetQueueName() string {
+	if i == nil {
 		return ""
 	}
-	return o.QueueName
+	return i.QueueName
 }
 
-func (o *InputSqs) GetQueueType() *InputSqsQueueType {
-	if o == nil {
+func (i *InputSqs) GetQueueType() *InputSqsQueueType {
+	if i == nil {
 		return nil
 	}
-	return o.QueueType
+	return i.QueueType
 }
 
-func (o *InputSqs) GetAwsAccountID() *string {
-	if o == nil {
+func (i *InputSqs) GetAwsAccountID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAccountID
+	return i.AwsAccountID
 }
 
-func (o *InputSqs) GetCreateQueue() *bool {
-	if o == nil {
+func (i *InputSqs) GetCreateQueue() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CreateQueue
+	return i.CreateQueue
 }
 
-func (o *InputSqs) GetAwsAuthenticationMethod() *InputSqsAuthenticationMethod {
-	if o == nil {
+func (i *InputSqs) GetAwsAuthenticationMethod() *InputSqsAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputSqs) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputSqs) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputSqs) GetRegion() *string {
-	if o == nil {
+func (i *InputSqs) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputSqs) GetEndpoint() *string {
-	if o == nil {
+func (i *InputSqs) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputSqs) GetSignatureVersion() *InputSqsSignatureVersion {
-	if o == nil {
+func (i *InputSqs) GetSignatureVersion() *InputSqsSignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputSqs) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputSqs) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputSqs) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputSqs) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputSqs) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputSqs) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputSqs) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputSqs) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputSqs) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputSqs) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputSqs) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputSqs) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputSqs) GetMaxMessages() *float64 {
-	if o == nil {
+func (i *InputSqs) GetMaxMessages() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMessages
+	return i.MaxMessages
 }
 
-func (o *InputSqs) GetVisibilityTimeout() *float64 {
-	if o == nil {
+func (i *InputSqs) GetVisibilityTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.VisibilityTimeout
+	return i.VisibilityTimeout
 }
 
-func (o *InputSqs) GetMetadata() []InputSqsMetadatum {
-	if o == nil {
+func (i *InputSqs) GetMetadata() []InputSqsMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSqs) GetPollTimeout() *float64 {
-	if o == nil {
+func (i *InputSqs) GetPollTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.PollTimeout
+	return i.PollTimeout
 }
 
-func (o *InputSqs) GetDescription() *string {
-	if o == nil {
+func (i *InputSqs) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputSqs) GetAwsAPIKey() *string {
-	if o == nil {
+func (i *InputSqs) GetAwsAPIKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return i.AwsAPIKey
 }
 
-func (o *InputSqs) GetAwsSecret() *string {
-	if o == nil {
+func (i *InputSqs) GetAwsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecret
+	return i.AwsSecret
 }
 
-func (o *InputSqs) GetNumReceivers() *float64 {
-	if o == nil {
+func (i *InputSqs) GetNumReceivers() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.NumReceivers
+	return i.NumReceivers
 }

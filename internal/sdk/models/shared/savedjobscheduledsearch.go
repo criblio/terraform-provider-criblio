@@ -126,95 +126,95 @@ func (s *SavedJobScheduledSearchRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetRescheduleDroppedTasks() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return s.RescheduleDroppedTasks
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetMaxTaskReschedule() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return s.MaxTaskReschedule
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetLogLevel() *SavedJobScheduledSearchLogLevel {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetLogLevel() *SavedJobScheduledSearchLogLevel {
+	if s == nil {
 		return nil
 	}
-	return o.LogLevel
+	return s.LogLevel
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetJobTimeout() *string {
+	if s == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return s.JobTimeout
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetMode() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetMode() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Mode
+	return s.Mode
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetTimeRangeType() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetTimeRangeType() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return s.TimeRangeType
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetEarliest() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Earliest
+	return s.Earliest
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetLatest() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Latest
+	return s.Latest
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetTimestampTimezone() any {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetTimestampTimezone() any {
+	if s == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return s.TimestampTimezone
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetTimeWarning() *SavedJobScheduledSearchTimeWarning {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetTimeWarning() *SavedJobScheduledSearchTimeWarning {
+	if s == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return s.TimeWarning
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetExpression() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetExpression() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Expression
+	return s.Expression
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetMinTaskSize() *string {
+	if s == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return s.MinTaskSize
 }
 
-func (o *SavedJobScheduledSearchRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearchRunSettings) GetMaxTaskSize() *string {
+	if s == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return s.MaxTaskSize
 }
 
 // SavedJobScheduledSearchSchedule - Configuration for a scheduled job
@@ -242,46 +242,46 @@ func (s *SavedJobScheduledSearchSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobScheduledSearchSchedule) GetEnabled() *bool {
-	if o == nil {
+func (s *SavedJobScheduledSearchSchedule) GetEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Enabled
+	return s.Enabled
 }
 
-func (o *SavedJobScheduledSearchSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearchSchedule) GetCronSchedule() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return s.CronSchedule
 }
 
-func (o *SavedJobScheduledSearchSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (s *SavedJobScheduledSearchSchedule) GetMaxConcurrentRuns() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return s.MaxConcurrentRuns
 }
 
-func (o *SavedJobScheduledSearchSchedule) GetSkippable() *bool {
-	if o == nil {
+func (s *SavedJobScheduledSearchSchedule) GetSkippable() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Skippable
+	return s.Skippable
 }
 
-func (o *SavedJobScheduledSearchSchedule) GetResumeMissed() any {
-	if o == nil {
+func (s *SavedJobScheduledSearchSchedule) GetResumeMissed() any {
+	if s == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return s.ResumeMissed
 }
 
-func (o *SavedJobScheduledSearchSchedule) GetRun() *SavedJobScheduledSearchRunSettings {
-	if o == nil {
+func (s *SavedJobScheduledSearchSchedule) GetRun() *SavedJobScheduledSearchRunSettings {
+	if s == nil {
 		return nil
 	}
-	return o.Run
+	return s.Run
 }
 
 type SavedJobScheduledSearch struct {
@@ -318,79 +318,79 @@ func (s *SavedJobScheduledSearch) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobScheduledSearch) GetID() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SavedJobScheduledSearch) GetDescription() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SavedJobScheduledSearch) GetType() SavedJobScheduledSearchJobType {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetType() SavedJobScheduledSearchJobType {
+	if s == nil {
 		return SavedJobScheduledSearchJobType("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SavedJobScheduledSearch) GetTTL() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetTTL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TTL
+	return s.TTL
 }
 
-func (o *SavedJobScheduledSearch) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetIgnoreGroupJobsLimit() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return s.IgnoreGroupJobsLimit
 }
 
-func (o *SavedJobScheduledSearch) GetRemoveFields() []string {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetRemoveFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return s.RemoveFields
 }
 
-func (o *SavedJobScheduledSearch) GetResumeOnBoot() *bool {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetResumeOnBoot() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return s.ResumeOnBoot
 }
 
-func (o *SavedJobScheduledSearch) GetEnvironment() *string {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetEnvironment() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Environment
+	return s.Environment
 }
 
-func (o *SavedJobScheduledSearch) GetSchedule() *SavedJobScheduledSearchSchedule {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetSchedule() *SavedJobScheduledSearchSchedule {
+	if s == nil {
 		return nil
 	}
-	return o.Schedule
+	return s.Schedule
 }
 
-func (o *SavedJobScheduledSearch) GetStreamtags() []string {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetStreamtags() []string {
+	if s == nil {
 		return nil
 	}
-	return o.Streamtags
+	return s.Streamtags
 }
 
-func (o *SavedJobScheduledSearch) GetSavedQueryID() string {
-	if o == nil {
+func (s *SavedJobScheduledSearch) GetSavedQueryID() string {
+	if s == nil {
 		return ""
 	}
-	return o.SavedQueryID
+	return s.SavedQueryID
 }

@@ -12,11 +12,11 @@ type DeleteIoMetricsEntryByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteIoMetricsEntryByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteIoMetricsEntryByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteIoMetricsEntryByIDResponseBody - a list of IoMetricsEntry objects
@@ -24,11 +24,11 @@ type DeleteIoMetricsEntryByIDResponseBody struct {
 	Items []shared.IoMetricsEntry `json:"items,omitempty"`
 }
 
-func (o *DeleteIoMetricsEntryByIDResponseBody) GetItems() []shared.IoMetricsEntry {
-	if o == nil {
+func (d *DeleteIoMetricsEntryByIDResponseBody) GetItems() []shared.IoMetricsEntry {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteIoMetricsEntryByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteIoMetricsEntryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteIoMetricsEntryByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteIoMetricsEntryByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteIoMetricsEntryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteIoMetricsEntryByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteIoMetricsEntryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteIoMetricsEntryByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteIoMetricsEntryByIDResponse) GetObject() *DeleteIoMetricsEntryByIDResponseBody {
-	if o == nil {
+func (d *DeleteIoMetricsEntryByIDResponse) GetObject() *DeleteIoMetricsEntryByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteIoMetricsEntryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteIoMetricsEntryByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -12,11 +12,11 @@ type GetEdgeKubeProxyRequest struct {
 	Path *string `queryParam:"style=form,explode=true,name=path"`
 }
 
-func (o *GetEdgeKubeProxyRequest) GetPath() *string {
-	if o == nil {
+func (g *GetEdgeKubeProxyRequest) GetPath() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Path
+	return g.Path
 }
 
 // GetEdgeKubeProxyResponseBody - a list of object objects
@@ -24,11 +24,11 @@ type GetEdgeKubeProxyResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *GetEdgeKubeProxyResponseBody) GetItems() []string {
-	if o == nil {
+func (g *GetEdgeKubeProxyResponseBody) GetItems() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeKubeProxyResponse struct {
@@ -44,37 +44,37 @@ type GetEdgeKubeProxyResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeKubeProxyResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeKubeProxyResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeKubeProxyResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeKubeProxyResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeKubeProxyResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeKubeProxyResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeKubeProxyResponse) GetObject() *GetEdgeKubeProxyResponseBody {
-	if o == nil {
+func (g *GetEdgeKubeProxyResponse) GetObject() *GetEdgeKubeProxyResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeKubeProxyResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeKubeProxyResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

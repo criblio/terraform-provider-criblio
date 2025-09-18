@@ -16,25 +16,25 @@ type UpdateGrokFileByIDRequest struct {
 	GrokFile shared.GrokFile `request:"mediaType=application/json"`
 }
 
-func (o *UpdateGrokFileByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateGrokFileByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateGrokFileByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateGrokFileByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateGrokFileByIDRequest) GetGrokFile() shared.GrokFile {
-	if o == nil {
+func (u *UpdateGrokFileByIDRequest) GetGrokFile() shared.GrokFile {
+	if u == nil {
 		return shared.GrokFile{}
 	}
-	return o.GrokFile
+	return u.GrokFile
 }
 
 // UpdateGrokFileByIDResponseBody - a list of GrokFile objects
@@ -42,11 +42,11 @@ type UpdateGrokFileByIDResponseBody struct {
 	Items []shared.GrokFile `json:"items,omitempty"`
 }
 
-func (o *UpdateGrokFileByIDResponseBody) GetItems() []shared.GrokFile {
-	if o == nil {
+func (u *UpdateGrokFileByIDResponseBody) GetItems() []shared.GrokFile {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateGrokFileByIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateGrokFileByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateGrokFileByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateGrokFileByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateGrokFileByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateGrokFileByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateGrokFileByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateGrokFileByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateGrokFileByIDResponse) GetObject() *UpdateGrokFileByIDResponseBody {
-	if o == nil {
+func (u *UpdateGrokFileByIDResponse) GetObject() *UpdateGrokFileByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateGrokFileByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateGrokFileByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

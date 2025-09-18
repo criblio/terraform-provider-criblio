@@ -12,11 +12,11 @@ type GetPolicyRuleByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetPolicyRuleByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetPolicyRuleByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetPolicyRuleByIDResponseBody - a list of PolicyRule objects
@@ -24,11 +24,11 @@ type GetPolicyRuleByIDResponseBody struct {
 	Items []shared.PolicyRule `json:"items,omitempty"`
 }
 
-func (o *GetPolicyRuleByIDResponseBody) GetItems() []shared.PolicyRule {
-	if o == nil {
+func (g *GetPolicyRuleByIDResponseBody) GetItems() []shared.PolicyRule {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetPolicyRuleByIDResponse struct {
@@ -44,37 +44,37 @@ type GetPolicyRuleByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetPolicyRuleByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPolicyRuleByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPolicyRuleByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPolicyRuleByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPolicyRuleByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPolicyRuleByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetPolicyRuleByIDResponse) GetObject() *GetPolicyRuleByIDResponseBody {
-	if o == nil {
+func (g *GetPolicyRuleByIDResponse) GetObject() *GetPolicyRuleByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetPolicyRuleByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetPolicyRuleByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

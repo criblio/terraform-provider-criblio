@@ -47,18 +47,18 @@ func (i *InputDatagenConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatagenConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputDatagenConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputDatagenConnection) GetOutput() string {
-	if o == nil {
+func (i *InputDatagenConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputDatagenMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputDatagenPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatagenPq) GetMode() *InputDatagenMode {
-	if o == nil {
+func (i *InputDatagenPq) GetMode() *InputDatagenMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputDatagenPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputDatagenPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputDatagenPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputDatagenPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputDatagenPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputDatagenPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputDatagenPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputDatagenPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputDatagenPq) GetPath() *string {
-	if o == nil {
+func (i *InputDatagenPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputDatagenPq) GetCompress() *InputDatagenCompression {
-	if o == nil {
+func (i *InputDatagenPq) GetCompress() *InputDatagenCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type Sample struct {
@@ -209,18 +209,18 @@ func (s *Sample) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Sample) GetSample() string {
-	if o == nil {
+func (s *Sample) GetSample() string {
+	if s == nil {
 		return ""
 	}
-	return o.Sample
+	return s.Sample
 }
 
-func (o *Sample) GetEventsPerSec() *float64 {
-	if o == nil {
+func (s *Sample) GetEventsPerSec() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.EventsPerSec
+	return s.EventsPerSec
 }
 
 type InputDatagenMetadatum struct {
@@ -240,18 +240,18 @@ func (i *InputDatagenMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatagenMetadatum) GetName() string {
-	if o == nil {
+func (i *InputDatagenMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputDatagenMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputDatagenMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputDatagen struct {
@@ -289,93 +289,93 @@ func (i *InputDatagen) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatagen) GetID() *string {
-	if o == nil {
+func (i *InputDatagen) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputDatagen) GetType() InputDatagenType {
-	if o == nil {
+func (i *InputDatagen) GetType() InputDatagenType {
+	if i == nil {
 		return InputDatagenType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputDatagen) GetDisabled() *bool {
-	if o == nil {
+func (i *InputDatagen) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputDatagen) GetPipeline() *string {
-	if o == nil {
+func (i *InputDatagen) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputDatagen) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputDatagen) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputDatagen) GetEnvironment() *string {
-	if o == nil {
+func (i *InputDatagen) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputDatagen) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputDatagen) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputDatagen) GetStreamtags() []string {
-	if o == nil {
+func (i *InputDatagen) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputDatagen) GetConnections() []InputDatagenConnection {
-	if o == nil {
+func (i *InputDatagen) GetConnections() []InputDatagenConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputDatagen) GetPq() *InputDatagenPq {
-	if o == nil {
+func (i *InputDatagen) GetPq() *InputDatagenPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputDatagen) GetSamples() []Sample {
-	if o == nil {
+func (i *InputDatagen) GetSamples() []Sample {
+	if i == nil {
 		return []Sample{}
 	}
-	return o.Samples
+	return i.Samples
 }
 
-func (o *InputDatagen) GetMetadata() []InputDatagenMetadatum {
-	if o == nil {
+func (i *InputDatagen) GetMetadata() []InputDatagenMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputDatagen) GetDescription() *string {
-	if o == nil {
+func (i *InputDatagen) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

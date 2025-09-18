@@ -52,93 +52,93 @@ type License struct {
 	Title   string  `json:"title"`
 }
 
-func (o *License) GetCls() Cls {
-	if o == nil {
+func (l *License) GetCls() Cls {
+	if l == nil {
 		return Cls("")
 	}
-	return o.Cls
+	return l.Cls
 }
 
-func (o *License) GetEmail() string {
-	if o == nil {
+func (l *License) GetEmail() string {
+	if l == nil {
 		return ""
 	}
-	return o.Email
+	return l.Email
 }
 
-func (o *License) GetExp() float64 {
-	if o == nil {
+func (l *License) GetExp() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.Exp
+	return l.Exp
 }
 
-func (o *License) GetFPh() float64 {
-	if o == nil {
+func (l *License) GetFPh() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.FPh
+	return l.FPh
 }
 
-func (o *License) GetFPhg() float64 {
-	if o == nil {
+func (l *License) GetFPhg() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.FPhg
+	return l.FPhg
 }
 
-func (o *License) GetGUID() string {
-	if o == nil {
+func (l *License) GetGUID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GUID
+	return l.GUID
 }
 
-func (o *License) GetIat() float64 {
-	if o == nil {
+func (l *License) GetIat() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.Iat
+	return l.Iat
 }
 
-func (o *License) GetID() string {
-	if o == nil {
+func (l *License) GetID() string {
+	if l == nil {
 		return ""
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *License) GetIss() string {
-	if o == nil {
+func (l *License) GetIss() string {
+	if l == nil {
 		return ""
 	}
-	return o.Iss
+	return l.Iss
 }
 
-func (o *License) GetLicense() string {
-	if o == nil {
+func (l *License) GetLicense() string {
+	if l == nil {
 		return ""
 	}
-	return o.License
+	return l.License
 }
 
-func (o *License) GetQuota() float64 {
-	if o == nil {
+func (l *License) GetQuota() float64 {
+	if l == nil {
 		return 0.0
 	}
-	return o.Quota
+	return l.Quota
 }
 
-func (o *License) GetSub() *string {
-	if o == nil {
+func (l *License) GetSub() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Sub
+	return l.Sub
 }
 
-func (o *License) GetTitle() string {
-	if o == nil {
+func (l *License) GetTitle() string {
+	if l == nil {
 		return ""
 	}
-	return o.Title
+	return l.Title
 }

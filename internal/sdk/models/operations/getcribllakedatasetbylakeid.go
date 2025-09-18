@@ -38,11 +38,11 @@ type GetCriblLakeDatasetByLakeIDRequest struct {
 	LakeID GetCriblLakeDatasetByLakeIDLakeID `pathParam:"style=simple,explode=false,name=lakeId"`
 }
 
-func (o *GetCriblLakeDatasetByLakeIDRequest) GetLakeID() GetCriblLakeDatasetByLakeIDLakeID {
-	if o == nil {
+func (g *GetCriblLakeDatasetByLakeIDRequest) GetLakeID() GetCriblLakeDatasetByLakeIDLakeID {
+	if g == nil {
 		return GetCriblLakeDatasetByLakeIDLakeID("")
 	}
-	return o.LakeID
+	return g.LakeID
 }
 
 // GetCriblLakeDatasetByLakeIDResponseBody - a list of CriblLakeDataset objects
@@ -50,11 +50,11 @@ type GetCriblLakeDatasetByLakeIDResponseBody struct {
 	Items []shared.CriblLakeDataset `json:"items,omitempty"`
 }
 
-func (o *GetCriblLakeDatasetByLakeIDResponseBody) GetItems() []shared.CriblLakeDataset {
-	if o == nil {
+func (g *GetCriblLakeDatasetByLakeIDResponseBody) GetItems() []shared.CriblLakeDataset {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetCriblLakeDatasetByLakeIDResponse struct {
@@ -70,37 +70,37 @@ type GetCriblLakeDatasetByLakeIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetCriblLakeDatasetByLakeIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetCriblLakeDatasetByLakeIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetCriblLakeDatasetByLakeIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetCriblLakeDatasetByLakeIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetCriblLakeDatasetByLakeIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetCriblLakeDatasetByLakeIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetCriblLakeDatasetByLakeIDResponse) GetObject() *GetCriblLakeDatasetByLakeIDResponseBody {
-	if o == nil {
+func (g *GetCriblLakeDatasetByLakeIDResponse) GetObject() *GetCriblLakeDatasetByLakeIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetCriblLakeDatasetByLakeIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetCriblLakeDatasetByLakeIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

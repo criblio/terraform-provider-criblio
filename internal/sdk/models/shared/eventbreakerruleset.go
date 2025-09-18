@@ -125,25 +125,25 @@ func (e *EventBreakerRulesetTimestampFormat) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EventBreakerRulesetTimestampFormat) GetType() *EventBreakerRulesetRuleTimestampTypeTimestampType {
-	if o == nil {
+func (e *EventBreakerRulesetTimestampFormat) GetType() *EventBreakerRulesetRuleTimestampTypeTimestampType {
+	if e == nil {
 		return nil
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *EventBreakerRulesetTimestampFormat) GetLength() *float64 {
-	if o == nil {
+func (e *EventBreakerRulesetTimestampFormat) GetLength() *float64 {
+	if e == nil {
 		return nil
 	}
-	return o.Length
+	return e.Length
 }
 
-func (o *EventBreakerRulesetTimestampFormat) GetFormat() *string {
-	if o == nil {
+func (e *EventBreakerRulesetTimestampFormat) GetFormat() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Format
+	return e.Format
 }
 
 type Field struct {
@@ -152,18 +152,18 @@ type Field struct {
 	Value string `json:"value"`
 }
 
-func (o *Field) GetName() *string {
-	if o == nil {
+func (f *Field) GetName() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Name
+	return f.Name
 }
 
-func (o *Field) GetValue() string {
-	if o == nil {
+func (f *Field) GetValue() string {
+	if f == nil {
 		return ""
 	}
-	return o.Value
+	return f.Value
 }
 
 type EventBreakerRulesetRule struct {
@@ -205,102 +205,102 @@ func (e *EventBreakerRulesetRule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EventBreakerRulesetRule) GetName() string {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetName() string {
+	if e == nil {
 		return ""
 	}
-	return o.Name
+	return e.Name
 }
 
-func (o *EventBreakerRulesetRule) GetCondition() *string {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetCondition() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Condition
+	return e.Condition
 }
 
-func (o *EventBreakerRulesetRule) GetType() *EventBreakerType {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetType() *EventBreakerType {
+	if e == nil {
 		return nil
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *EventBreakerRulesetRule) GetTimestampAnchorRegex() *string {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetTimestampAnchorRegex() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TimestampAnchorRegex
+	return e.TimestampAnchorRegex
 }
 
-func (o *EventBreakerRulesetRule) GetEventBreakerRegex() *string {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetEventBreakerRegex() *string {
+	if e == nil {
 		return nil
 	}
-	return o.EventBreakerRegex
+	return e.EventBreakerRegex
 }
 
-func (o *EventBreakerRulesetRule) GetTimestamp() EventBreakerRulesetTimestampFormat {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetTimestamp() EventBreakerRulesetTimestampFormat {
+	if e == nil {
 		return EventBreakerRulesetTimestampFormat{}
 	}
-	return o.Timestamp
+	return e.Timestamp
 }
 
-func (o *EventBreakerRulesetRule) GetTimestampTimezone() *string {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetTimestampTimezone() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return e.TimestampTimezone
 }
 
-func (o *EventBreakerRulesetRule) GetTimestampEarliest() *string {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetTimestampEarliest() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TimestampEarliest
+	return e.TimestampEarliest
 }
 
-func (o *EventBreakerRulesetRule) GetTimestampLatest() *string {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetTimestampLatest() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TimestampLatest
+	return e.TimestampLatest
 }
 
-func (o *EventBreakerRulesetRule) GetMaxEventBytes() *float64 {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetMaxEventBytes() *float64 {
+	if e == nil {
 		return nil
 	}
-	return o.MaxEventBytes
+	return e.MaxEventBytes
 }
 
-func (o *EventBreakerRulesetRule) GetFields() []Field {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetFields() []Field {
+	if e == nil {
 		return nil
 	}
-	return o.Fields
+	return e.Fields
 }
 
-func (o *EventBreakerRulesetRule) GetDisabled() *bool {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetDisabled() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.Disabled
+	return e.Disabled
 }
 
-func (o *EventBreakerRulesetRule) GetParserEnabled() *bool {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetParserEnabled() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.ParserEnabled
+	return e.ParserEnabled
 }
 
-func (o *EventBreakerRulesetRule) GetShouldUseDataRaw() *bool {
-	if o == nil {
+func (e *EventBreakerRulesetRule) GetShouldUseDataRaw() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.ShouldUseDataRaw
+	return e.ShouldUseDataRaw
 }
 
 type EventBreakerRuleset struct {
@@ -325,44 +325,44 @@ func (e *EventBreakerRuleset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EventBreakerRuleset) GetID() string {
-	if o == nil {
+func (e *EventBreakerRuleset) GetID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ID
+	return e.ID
 }
 
-func (o *EventBreakerRuleset) GetLib() *Library {
-	if o == nil {
+func (e *EventBreakerRuleset) GetLib() *Library {
+	if e == nil {
 		return nil
 	}
-	return o.Lib
+	return e.Lib
 }
 
-func (o *EventBreakerRuleset) GetDescription() *string {
-	if o == nil {
+func (e *EventBreakerRuleset) GetDescription() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Description
+	return e.Description
 }
 
-func (o *EventBreakerRuleset) GetTags() *string {
-	if o == nil {
+func (e *EventBreakerRuleset) GetTags() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Tags
+	return e.Tags
 }
 
-func (o *EventBreakerRuleset) GetMinRawLength() *float64 {
-	if o == nil {
+func (e *EventBreakerRuleset) GetMinRawLength() *float64 {
+	if e == nil {
 		return nil
 	}
-	return o.MinRawLength
+	return e.MinRawLength
 }
 
-func (o *EventBreakerRuleset) GetRules() []EventBreakerRulesetRule {
-	if o == nil {
+func (e *EventBreakerRuleset) GetRules() []EventBreakerRulesetRule {
+	if e == nil {
 		return nil
 	}
-	return o.Rules
+	return e.Rules
 }

@@ -11,7 +11,7 @@ description: |-
 
 Cribl Terraform Provider: The Cribl Terraform provider offers a streamlined, repeatable approach for configuring end-to-end infrastructure as code (IaC) and managing resources consistently across Cribl Organizations and Workspaces.
 
-**⚠️ WARNING:  This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.**
+This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.
 
 Complementary API reference documentation is available at https://docs.cribl.io/api-reference/. Product documentation is available at https://docs.cribl.io.
 
@@ -22,7 +22,7 @@ terraform {
   required_providers {
     criblio = {
       source  = "criblio/criblio"
-      version = "1.11.23"
+      version = "1.12.2"
     }
   }
 }

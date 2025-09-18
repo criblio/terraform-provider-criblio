@@ -13,58 +13,58 @@ type DatabaseConnectionTest struct {
 	User              *string  `json:"user,omitempty"`
 }
 
-func (o *DatabaseConnectionTest) GetAuthType() string {
-	if o == nil {
+func (d *DatabaseConnectionTest) GetAuthType() string {
+	if d == nil {
 		return ""
 	}
-	return o.AuthType
+	return d.AuthType
 }
 
-func (o *DatabaseConnectionTest) GetConfigObj() *string {
-	if o == nil {
+func (d *DatabaseConnectionTest) GetConfigObj() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ConfigObj
+	return d.ConfigObj
 }
 
-func (o *DatabaseConnectionTest) GetConnectionString() *string {
-	if o == nil {
+func (d *DatabaseConnectionTest) GetConnectionString() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ConnectionString
+	return d.ConnectionString
 }
 
-func (o *DatabaseConnectionTest) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (d *DatabaseConnectionTest) GetConnectionTimeout() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return d.ConnectionTimeout
 }
 
-func (o *DatabaseConnectionTest) GetDatabaseType() string {
-	if o == nil {
+func (d *DatabaseConnectionTest) GetDatabaseType() string {
+	if d == nil {
 		return ""
 	}
-	return o.DatabaseType
+	return d.DatabaseType
 }
 
-func (o *DatabaseConnectionTest) GetPassword() *string {
-	if o == nil {
+func (d *DatabaseConnectionTest) GetPassword() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Password
+	return d.Password
 }
 
-func (o *DatabaseConnectionTest) GetTextSecret() *string {
-	if o == nil {
+func (d *DatabaseConnectionTest) GetTextSecret() *string {
+	if d == nil {
 		return nil
 	}
-	return o.TextSecret
+	return d.TextSecret
 }
 
-func (o *DatabaseConnectionTest) GetUser() *string {
-	if o == nil {
+func (d *DatabaseConnectionTest) GetUser() *string {
+	if d == nil {
 		return nil
 	}
-	return o.User
+	return d.User
 }

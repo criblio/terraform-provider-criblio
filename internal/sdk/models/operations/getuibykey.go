@@ -12,11 +12,11 @@ type GetUIByKeyRequest struct {
 	Key string `pathParam:"style=simple,explode=false,name=key"`
 }
 
-func (o *GetUIByKeyRequest) GetKey() string {
-	if o == nil {
+func (g *GetUIByKeyRequest) GetKey() string {
+	if g == nil {
 		return ""
 	}
-	return o.Key
+	return g.Key
 }
 
 // GetUIByKeyResponseBody - a list of any objects
@@ -24,11 +24,11 @@ type GetUIByKeyResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetUIByKeyResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetUIByKeyResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetUIByKeyResponse struct {
@@ -44,37 +44,37 @@ type GetUIByKeyResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetUIByKeyResponse) GetContentType() string {
-	if o == nil {
+func (g *GetUIByKeyResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetUIByKeyResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetUIByKeyResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetUIByKeyResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetUIByKeyResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetUIByKeyResponse) GetObject() *GetUIByKeyResponseBody {
-	if o == nil {
+func (g *GetUIByKeyResponse) GetObject() *GetUIByKeyResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetUIByKeyResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetUIByKeyResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

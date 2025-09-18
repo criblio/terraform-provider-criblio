@@ -269,18 +269,18 @@ func (e *ExtentTag) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ExtentTag) GetPrefix() *PrefixOptional {
-	if o == nil {
+func (e *ExtentTag) GetPrefix() *PrefixOptional {
+	if e == nil {
 		return nil
 	}
-	return o.Prefix
+	return e.Prefix
 }
 
-func (o *ExtentTag) GetValue() string {
-	if o == nil {
+func (e *ExtentTag) GetValue() string {
+	if e == nil {
 		return ""
 	}
-	return o.Value
+	return e.Value
 }
 
 type IngestIfNotExist struct {
@@ -298,11 +298,11 @@ func (i *IngestIfNotExist) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *IngestIfNotExist) GetValue() string {
-	if o == nil {
+func (i *IngestIfNotExist) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // ReportLevel - Level of ingestion status reporting. Defaults to FailuresOnly.
@@ -381,18 +381,18 @@ func (a *AdditionalProperty) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AdditionalProperty) GetKey() string {
-	if o == nil {
+func (a *AdditionalProperty) GetKey() string {
+	if a == nil {
 		return ""
 	}
-	return o.Key
+	return a.Key
 }
 
-func (o *AdditionalProperty) GetValue() string {
-	if o == nil {
+func (a *AdditionalProperty) GetValue() string {
+	if a == nil {
 		return ""
 	}
-	return o.Value
+	return a.Value
 }
 
 type OutputAzureDataExplorerResponseRetrySetting struct {

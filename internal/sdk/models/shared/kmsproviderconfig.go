@@ -28,46 +28,46 @@ func (k *KMSProviderConfigAuth2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *KMSProviderConfigAuth2) GetAssumeRoleArn() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth2) GetAssumeRoleArn() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return k.AssumeRoleArn
 }
 
-func (o *KMSProviderConfigAuth2) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth2) GetAssumeRoleExternalID() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return k.AssumeRoleExternalID
 }
 
-func (o *KMSProviderConfigAuth2) GetAwsAPIKey() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth2) GetAwsAPIKey() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return k.AwsAPIKey
 }
 
-func (o *KMSProviderConfigAuth2) GetAwsAuthenticationMethod() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth2) GetAwsAuthenticationMethod() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return k.AwsAuthenticationMethod
 }
 
-func (o *KMSProviderConfigAuth2) GetAwsSecretKey() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth2) GetAwsSecretKey() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return k.AwsSecretKey
 }
 
-func (o *KMSProviderConfigAuth2) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (k *KMSProviderConfigAuth2) GetEnableAssumeRole() *bool {
+	if k == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return k.EnableAssumeRole
 }
 
 type KMSProviderConfigAuth1 struct {
@@ -94,74 +94,74 @@ func (k *KMSProviderConfigAuth1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *KMSProviderConfigAuth1) GetAssumeRoleArn() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetAssumeRoleArn() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return k.AssumeRoleArn
 }
 
-func (o *KMSProviderConfigAuth1) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetAssumeRoleExternalID() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return k.AssumeRoleExternalID
 }
 
-func (o *KMSProviderConfigAuth1) GetAwsAPIKey() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetAwsAPIKey() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return k.AwsAPIKey
 }
 
-func (o *KMSProviderConfigAuth1) GetAwsAuthenticationMethod() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetAwsAuthenticationMethod() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return k.AwsAuthenticationMethod
 }
 
-func (o *KMSProviderConfigAuth1) GetAwsSecretKey() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetAwsSecretKey() *string {
+	if k == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return k.AwsSecretKey
 }
 
-func (o *KMSProviderConfigAuth1) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetEnableAssumeRole() *bool {
+	if k == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return k.EnableAssumeRole
 }
 
-func (o *KMSProviderConfigAuth1) GetProvider() AuthProvider {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetProvider() AuthProvider {
+	if k == nil {
 		return AuthProvider("")
 	}
-	return o.Provider
+	return k.Provider
 }
 
-func (o *KMSProviderConfigAuth1) GetToken() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetToken() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Token
+	return k.Token
 }
 
-func (o *KMSProviderConfigAuth1) GetVaultAWSIAMServerID() string {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetVaultAWSIAMServerID() string {
+	if k == nil {
 		return ""
 	}
-	return o.VaultAWSIAMServerID
+	return k.VaultAWSIAMServerID
 }
 
-func (o *KMSProviderConfigAuth1) GetVaultRole() *string {
-	if o == nil {
+func (k *KMSProviderConfigAuth1) GetVaultRole() *string {
+	if k == nil {
 		return nil
 	}
-	return o.VaultRole
+	return k.VaultRole
 }
 
 type AuthType string
@@ -239,65 +239,65 @@ type KMSProviderConfig struct {
 	URL                 *string                  `json:"url,omitempty"`
 }
 
-func (o *KMSProviderConfig) GetAuth() *Auth {
-	if o == nil {
+func (k *KMSProviderConfig) GetAuth() *Auth {
+	if k == nil {
 		return nil
 	}
-	return o.Auth
+	return k.Auth
 }
 
-func (o *KMSProviderConfig) GetEnableHealthCheck() bool {
-	if o == nil {
+func (k *KMSProviderConfig) GetEnableHealthCheck() bool {
+	if k == nil {
 		return false
 	}
-	return o.EnableHealthCheck
+	return k.EnableHealthCheck
 }
 
-func (o *KMSProviderConfig) GetHealthCheckEndpoint() *string {
-	if o == nil {
+func (k *KMSProviderConfig) GetHealthCheckEndpoint() *string {
+	if k == nil {
 		return nil
 	}
-	return o.HealthCheckEndpoint
+	return k.HealthCheckEndpoint
 }
 
-func (o *KMSProviderConfig) GetNamespace() *string {
-	if o == nil {
+func (k *KMSProviderConfig) GetNamespace() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Namespace
+	return k.Namespace
 }
 
-func (o *KMSProviderConfig) GetProvider() SecretProvider {
-	if o == nil {
+func (k *KMSProviderConfig) GetProvider() SecretProvider {
+	if k == nil {
 		return SecretProvider("")
 	}
-	return o.Provider
+	return k.Provider
 }
 
-func (o *KMSProviderConfig) GetSecretDir() *string {
-	if o == nil {
+func (k *KMSProviderConfig) GetSecretDir() *string {
+	if k == nil {
 		return nil
 	}
-	return o.SecretDir
+	return k.SecretDir
 }
 
-func (o *KMSProviderConfig) GetService() *AWSKMSServiceConfig {
-	if o == nil {
+func (k *KMSProviderConfig) GetService() *AWSKMSServiceConfig {
+	if k == nil {
 		return nil
 	}
-	return o.Service
+	return k.Service
 }
 
-func (o *KMSProviderConfig) GetTLS() *VaultKMSTLSClientConfig {
-	if o == nil {
+func (k *KMSProviderConfig) GetTLS() *VaultKMSTLSClientConfig {
+	if k == nil {
 		return nil
 	}
-	return o.TLS
+	return k.TLS
 }
 
-func (o *KMSProviderConfig) GetURL() *string {
-	if o == nil {
+func (k *KMSProviderConfig) GetURL() *string {
+	if k == nil {
 		return nil
 	}
-	return o.URL
+	return k.URL
 }

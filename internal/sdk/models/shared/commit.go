@@ -11,44 +11,44 @@ type Commit struct {
 	Short       string  `json:"short"`
 }
 
-func (o *Commit) GetAuthorEmail() *string {
-	if o == nil {
+func (c *Commit) GetAuthorEmail() *string {
+	if c == nil {
 		return nil
 	}
-	return o.AuthorEmail
+	return c.AuthorEmail
 }
 
-func (o *Commit) GetAuthorName() *string {
-	if o == nil {
+func (c *Commit) GetAuthorName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.AuthorName
+	return c.AuthorName
 }
 
-func (o *Commit) GetDate() string {
-	if o == nil {
+func (c *Commit) GetDate() string {
+	if c == nil {
 		return ""
 	}
-	return o.Date
+	return c.Date
 }
 
-func (o *Commit) GetHash() string {
-	if o == nil {
+func (c *Commit) GetHash() string {
+	if c == nil {
 		return ""
 	}
-	return o.Hash
+	return c.Hash
 }
 
-func (o *Commit) GetMessage() string {
-	if o == nil {
+func (c *Commit) GetMessage() string {
+	if c == nil {
 		return ""
 	}
-	return o.Message
+	return c.Message
 }
 
-func (o *Commit) GetShort() string {
-	if o == nil {
+func (c *Commit) GetShort() string {
+	if c == nil {
 		return ""
 	}
-	return o.Short
+	return c.Short
 }

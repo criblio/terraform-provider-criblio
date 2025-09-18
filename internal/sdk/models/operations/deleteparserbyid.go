@@ -14,18 +14,18 @@ type DeleteParserByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteParserByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteParserByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteParserByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteParserByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteParserByIDResponseBody - a list of Parser objects
@@ -33,11 +33,11 @@ type DeleteParserByIDResponseBody struct {
 	Items []shared.ParserLibEntry `json:"items,omitempty"`
 }
 
-func (o *DeleteParserByIDResponseBody) GetItems() []shared.ParserLibEntry {
-	if o == nil {
+func (d *DeleteParserByIDResponseBody) GetItems() []shared.ParserLibEntry {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteParserByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteParserByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteParserByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteParserByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteParserByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteParserByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteParserByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteParserByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteParserByIDResponse) GetObject() *DeleteParserByIDResponseBody {
-	if o == nil {
+func (d *DeleteParserByIDResponse) GetObject() *DeleteParserByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteParserByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteParserByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

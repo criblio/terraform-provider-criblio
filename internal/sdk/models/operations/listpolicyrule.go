@@ -12,11 +12,11 @@ type ListPolicyRuleResponseBody struct {
 	Items []shared.PolicyRule `json:"items,omitempty"`
 }
 
-func (o *ListPolicyRuleResponseBody) GetItems() []shared.PolicyRule {
-	if o == nil {
+func (l *ListPolicyRuleResponseBody) GetItems() []shared.PolicyRule {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListPolicyRuleResponse struct {
@@ -32,37 +32,37 @@ type ListPolicyRuleResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListPolicyRuleResponse) GetContentType() string {
-	if o == nil {
+func (l *ListPolicyRuleResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListPolicyRuleResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListPolicyRuleResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListPolicyRuleResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListPolicyRuleResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListPolicyRuleResponse) GetObject() *ListPolicyRuleResponseBody {
-	if o == nil {
+func (l *ListPolicyRuleResponse) GetObject() *ListPolicyRuleResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListPolicyRuleResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListPolicyRuleResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

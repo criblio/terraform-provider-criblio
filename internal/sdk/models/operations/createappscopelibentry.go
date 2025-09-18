@@ -14,18 +14,18 @@ type CreateAppscopeLibEntryRequest struct {
 	AppscopeLibEntry shared.AppscopeLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *CreateAppscopeLibEntryRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateAppscopeLibEntryRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateAppscopeLibEntryRequest) GetAppscopeLibEntry() shared.AppscopeLibEntry {
-	if o == nil {
+func (c *CreateAppscopeLibEntryRequest) GetAppscopeLibEntry() shared.AppscopeLibEntry {
+	if c == nil {
 		return shared.AppscopeLibEntry{}
 	}
-	return o.AppscopeLibEntry
+	return c.AppscopeLibEntry
 }
 
 // CreateAppscopeLibEntryResponseBody - a list of AppscopeLibEntry objects
@@ -33,11 +33,11 @@ type CreateAppscopeLibEntryResponseBody struct {
 	Items []shared.AppscopeLibEntry `json:"items,omitempty"`
 }
 
-func (o *CreateAppscopeLibEntryResponseBody) GetItems() []shared.AppscopeLibEntry {
-	if o == nil {
+func (c *CreateAppscopeLibEntryResponseBody) GetItems() []shared.AppscopeLibEntry {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateAppscopeLibEntryResponse struct {
@@ -53,37 +53,37 @@ type CreateAppscopeLibEntryResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateAppscopeLibEntryResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateAppscopeLibEntryResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateAppscopeLibEntryResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateAppscopeLibEntryResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateAppscopeLibEntryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateAppscopeLibEntryResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateAppscopeLibEntryResponse) GetObject() *CreateAppscopeLibEntryResponseBody {
-	if o == nil {
+func (c *CreateAppscopeLibEntryResponse) GetObject() *CreateAppscopeLibEntryResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateAppscopeLibEntryResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateAppscopeLibEntryResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

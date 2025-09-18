@@ -52,30 +52,30 @@ func (s *SlackTarget) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SlackTarget) GetID() string {
-	if o == nil {
+func (s *SlackTarget) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SlackTarget) GetType() SlackTargetType {
-	if o == nil {
+func (s *SlackTarget) GetType() SlackTargetType {
+	if s == nil {
 		return SlackTargetType("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SlackTarget) GetSystemFields() []string {
-	if o == nil {
+func (s *SlackTarget) GetSystemFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.SystemFields
+	return s.SystemFields
 }
 
-func (o *SlackTarget) GetURL() string {
-	if o == nil {
+func (s *SlackTarget) GetURL() string {
+	if s == nil {
 		return ""
 	}
-	return o.URL
+	return s.URL
 }

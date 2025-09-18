@@ -12,11 +12,11 @@ type GetDatasetProviderTypeByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetDatasetProviderTypeByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetDatasetProviderTypeByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetDatasetProviderTypeByIDResponseBody - a list of DatasetProviderType objects
@@ -24,11 +24,11 @@ type GetDatasetProviderTypeByIDResponseBody struct {
 	Items []shared.DatasetProviderType `json:"items,omitempty"`
 }
 
-func (o *GetDatasetProviderTypeByIDResponseBody) GetItems() []shared.DatasetProviderType {
-	if o == nil {
+func (g *GetDatasetProviderTypeByIDResponseBody) GetItems() []shared.DatasetProviderType {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetDatasetProviderTypeByIDResponse struct {
@@ -44,37 +44,37 @@ type GetDatasetProviderTypeByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetDatasetProviderTypeByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDatasetProviderTypeByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDatasetProviderTypeByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDatasetProviderTypeByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDatasetProviderTypeByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDatasetProviderTypeByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDatasetProviderTypeByIDResponse) GetObject() *GetDatasetProviderTypeByIDResponseBody {
-	if o == nil {
+func (g *GetDatasetProviderTypeByIDResponse) GetObject() *GetDatasetProviderTypeByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetDatasetProviderTypeByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetDatasetProviderTypeByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

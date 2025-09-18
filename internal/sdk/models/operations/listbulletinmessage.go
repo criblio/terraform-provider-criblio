@@ -12,11 +12,11 @@ type ListBulletinMessageResponseBody struct {
 	Items []shared.BulletinMessage `json:"items,omitempty"`
 }
 
-func (o *ListBulletinMessageResponseBody) GetItems() []shared.BulletinMessage {
-	if o == nil {
+func (l *ListBulletinMessageResponseBody) GetItems() []shared.BulletinMessage {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListBulletinMessageResponse struct {
@@ -32,37 +32,37 @@ type ListBulletinMessageResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListBulletinMessageResponse) GetContentType() string {
-	if o == nil {
+func (l *ListBulletinMessageResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListBulletinMessageResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListBulletinMessageResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListBulletinMessageResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListBulletinMessageResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListBulletinMessageResponse) GetObject() *ListBulletinMessageResponseBody {
-	if o == nil {
+func (l *ListBulletinMessageResponse) GetObject() *ListBulletinMessageResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListBulletinMessageResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListBulletinMessageResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

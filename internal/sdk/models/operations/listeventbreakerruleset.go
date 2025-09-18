@@ -12,11 +12,11 @@ type ListEventBreakerRulesetRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListEventBreakerRulesetRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListEventBreakerRulesetRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListEventBreakerRulesetResponseBody - a list of Event Breaker Ruleset objects
@@ -36,37 +36,37 @@ type ListEventBreakerRulesetResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListEventBreakerRulesetResponse) GetContentType() string {
-	if o == nil {
+func (l *ListEventBreakerRulesetResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListEventBreakerRulesetResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListEventBreakerRulesetResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListEventBreakerRulesetResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListEventBreakerRulesetResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListEventBreakerRulesetResponse) GetObject() *ListEventBreakerRulesetResponseBody {
-	if o == nil {
+func (l *ListEventBreakerRulesetResponse) GetObject() *ListEventBreakerRulesetResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListEventBreakerRulesetResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListEventBreakerRulesetResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

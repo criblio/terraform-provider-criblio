@@ -12,11 +12,11 @@ type CreateProductsEdgeMapQueryResponseBody struct {
 	Items []shared.EdgeMapQueryResult `json:"items,omitempty"`
 }
 
-func (o *CreateProductsEdgeMapQueryResponseBody) GetItems() []shared.EdgeMapQueryResult {
-	if o == nil {
+func (c *CreateProductsEdgeMapQueryResponseBody) GetItems() []shared.EdgeMapQueryResult {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateProductsEdgeMapQueryResponse struct {
@@ -32,37 +32,37 @@ type CreateProductsEdgeMapQueryResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateProductsEdgeMapQueryResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateProductsEdgeMapQueryResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateProductsEdgeMapQueryResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateProductsEdgeMapQueryResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateProductsEdgeMapQueryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateProductsEdgeMapQueryResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateProductsEdgeMapQueryResponse) GetObject() *CreateProductsEdgeMapQueryResponseBody {
-	if o == nil {
+func (c *CreateProductsEdgeMapQueryResponse) GetObject() *CreateProductsEdgeMapQueryResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateProductsEdgeMapQueryResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateProductsEdgeMapQueryResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

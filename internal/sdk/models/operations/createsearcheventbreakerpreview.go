@@ -12,11 +12,11 @@ type CreateSearchEventBreakerPreviewResponseBody struct {
 	Items []shared.PreviewResponseBody `json:"items,omitempty"`
 }
 
-func (o *CreateSearchEventBreakerPreviewResponseBody) GetItems() []shared.PreviewResponseBody {
-	if o == nil {
+func (c *CreateSearchEventBreakerPreviewResponseBody) GetItems() []shared.PreviewResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSearchEventBreakerPreviewResponse struct {
@@ -32,37 +32,37 @@ type CreateSearchEventBreakerPreviewResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSearchEventBreakerPreviewResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSearchEventBreakerPreviewResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSearchEventBreakerPreviewResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSearchEventBreakerPreviewResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSearchEventBreakerPreviewResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSearchEventBreakerPreviewResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSearchEventBreakerPreviewResponse) GetObject() *CreateSearchEventBreakerPreviewResponseBody {
-	if o == nil {
+func (c *CreateSearchEventBreakerPreviewResponse) GetObject() *CreateSearchEventBreakerPreviewResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSearchEventBreakerPreviewResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSearchEventBreakerPreviewResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -12,11 +12,11 @@ type GetEdgeProcessesResponseBody struct {
 	Items []shared.Process `json:"items,omitempty"`
 }
 
-func (o *GetEdgeProcessesResponseBody) GetItems() []shared.Process {
-	if o == nil {
+func (g *GetEdgeProcessesResponseBody) GetItems() []shared.Process {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeProcessesResponse struct {
@@ -32,37 +32,37 @@ type GetEdgeProcessesResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeProcessesResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeProcessesResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeProcessesResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeProcessesResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeProcessesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeProcessesResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeProcessesResponse) GetObject() *GetEdgeProcessesResponseBody {
-	if o == nil {
+func (g *GetEdgeProcessesResponse) GetObject() *GetEdgeProcessesResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeProcessesResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeProcessesResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

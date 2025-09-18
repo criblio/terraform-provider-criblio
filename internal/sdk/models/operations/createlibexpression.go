@@ -12,11 +12,11 @@ type CreateLibExpressionResponseBody struct {
 	Items []shared.ExprLibEntry `json:"items,omitempty"`
 }
 
-func (o *CreateLibExpressionResponseBody) GetItems() []shared.ExprLibEntry {
-	if o == nil {
+func (c *CreateLibExpressionResponseBody) GetItems() []shared.ExprLibEntry {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateLibExpressionResponse struct {
@@ -32,37 +32,37 @@ type CreateLibExpressionResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateLibExpressionResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateLibExpressionResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateLibExpressionResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateLibExpressionResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateLibExpressionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateLibExpressionResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateLibExpressionResponse) GetObject() *CreateLibExpressionResponseBody {
-	if o == nil {
+func (c *CreateLibExpressionResponse) GetObject() *CreateLibExpressionResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateLibExpressionResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateLibExpressionResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

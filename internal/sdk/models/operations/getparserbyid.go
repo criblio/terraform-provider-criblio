@@ -14,18 +14,18 @@ type GetParserByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetParserByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetParserByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetParserByIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetParserByIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetParserByIDResponseBody - a list of Parser objects
@@ -33,11 +33,11 @@ type GetParserByIDResponseBody struct {
 	Items []shared.ParserLibEntry `json:"items,omitempty"`
 }
 
-func (o *GetParserByIDResponseBody) GetItems() []shared.ParserLibEntry {
-	if o == nil {
+func (g *GetParserByIDResponseBody) GetItems() []shared.ParserLibEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetParserByIDResponse struct {
@@ -53,37 +53,37 @@ type GetParserByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetParserByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetParserByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetParserByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetParserByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetParserByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetParserByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetParserByIDResponse) GetObject() *GetParserByIDResponseBody {
-	if o == nil {
+func (g *GetParserByIDResponse) GetObject() *GetParserByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetParserByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetParserByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

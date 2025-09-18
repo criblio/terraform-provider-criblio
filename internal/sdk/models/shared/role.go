@@ -10,37 +10,37 @@ type Role struct {
 	Title       *string  `json:"title,omitempty"`
 }
 
-func (o *Role) GetDescription() *string {
-	if o == nil {
+func (r *Role) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *Role) GetID() string {
-	if o == nil {
+func (r *Role) GetID() string {
+	if r == nil {
 		return ""
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *Role) GetPolicy() []string {
-	if o == nil {
+func (r *Role) GetPolicy() []string {
+	if r == nil {
 		return []string{}
 	}
-	return o.Policy
+	return r.Policy
 }
 
-func (o *Role) GetTags() []string {
-	if o == nil {
+func (r *Role) GetTags() []string {
+	if r == nil {
 		return nil
 	}
-	return o.Tags
+	return r.Tags
 }
 
-func (o *Role) GetTitle() *string {
-	if o == nil {
+func (r *Role) GetTitle() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Title
+	return r.Title
 }

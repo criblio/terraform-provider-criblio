@@ -12,11 +12,11 @@ type GetCertificateByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetCertificateByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetCertificateByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetCertificateByIDResponseBody - a list of Certificate objects
@@ -24,11 +24,11 @@ type GetCertificateByIDResponseBody struct {
 	Items []shared.Certificate `json:"items,omitempty"`
 }
 
-func (o *GetCertificateByIDResponseBody) GetItems() []shared.Certificate {
-	if o == nil {
+func (g *GetCertificateByIDResponseBody) GetItems() []shared.Certificate {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetCertificateByIDResponse struct {
@@ -44,37 +44,37 @@ type GetCertificateByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetCertificateByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetCertificateByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetCertificateByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetCertificateByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetCertificateByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetCertificateByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetCertificateByIDResponse) GetObject() *GetCertificateByIDResponseBody {
-	if o == nil {
+func (g *GetCertificateByIDResponse) GetObject() *GetCertificateByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetCertificateByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetCertificateByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

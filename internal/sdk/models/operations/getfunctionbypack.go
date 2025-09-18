@@ -12,11 +12,11 @@ type GetFunctionByPackRequest struct {
 	Pack string `pathParam:"style=simple,explode=false,name=pack"`
 }
 
-func (o *GetFunctionByPackRequest) GetPack() string {
-	if o == nil {
+func (g *GetFunctionByPackRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
 // GetFunctionByPackResponseBody - a list of Function objects
@@ -24,11 +24,11 @@ type GetFunctionByPackResponseBody struct {
 	Items []shared.Function `json:"items,omitempty"`
 }
 
-func (o *GetFunctionByPackResponseBody) GetItems() []shared.Function {
-	if o == nil {
+func (g *GetFunctionByPackResponseBody) GetItems() []shared.Function {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetFunctionByPackResponse struct {
@@ -44,37 +44,37 @@ type GetFunctionByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetFunctionByPackResponse) GetContentType() string {
-	if o == nil {
+func (g *GetFunctionByPackResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetFunctionByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetFunctionByPackResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetFunctionByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetFunctionByPackResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetFunctionByPackResponse) GetObject() *GetFunctionByPackResponseBody {
-	if o == nil {
+func (g *GetFunctionByPackResponse) GetObject() *GetFunctionByPackResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetFunctionByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetFunctionByPackResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

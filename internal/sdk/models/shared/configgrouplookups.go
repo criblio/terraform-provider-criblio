@@ -8,25 +8,25 @@ type Lookup struct {
 	Version         *string `json:"version,omitempty"`
 }
 
-func (o *Lookup) GetDeployedVersion() *string {
-	if o == nil {
+func (l *Lookup) GetDeployedVersion() *string {
+	if l == nil {
 		return nil
 	}
-	return o.DeployedVersion
+	return l.DeployedVersion
 }
 
-func (o *Lookup) GetFile() string {
-	if o == nil {
+func (l *Lookup) GetFile() string {
+	if l == nil {
 		return ""
 	}
-	return o.File
+	return l.File
 }
 
-func (o *Lookup) GetVersion() *string {
-	if o == nil {
+func (l *Lookup) GetVersion() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Version
+	return l.Version
 }
 
 type ConfigGroupLookups struct {
@@ -34,16 +34,16 @@ type ConfigGroupLookups struct {
 	Lookups []Lookup `json:"lookups"`
 }
 
-func (o *ConfigGroupLookups) GetContext() string {
-	if o == nil {
+func (c *ConfigGroupLookups) GetContext() string {
+	if c == nil {
 		return ""
 	}
-	return o.Context
+	return c.Context
 }
 
-func (o *ConfigGroupLookups) GetLookups() []Lookup {
-	if o == nil {
+func (c *ConfigGroupLookups) GetLookups() []Lookup {
+	if c == nil {
 		return []Lookup{}
 	}
-	return o.Lookups
+	return c.Lookups
 }

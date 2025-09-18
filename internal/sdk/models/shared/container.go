@@ -112,79 +112,79 @@ type Container struct {
 	Type       ContainerType   `json:"type"`
 }
 
-func (o *Container) GetCommand() Command {
-	if o == nil {
+func (c *Container) GetCommand() Command {
+	if c == nil {
 		return Command{}
 	}
-	return o.Command
+	return c.Command
 }
 
-func (o *Container) GetContainerd() *ContainerdInfo {
-	if o == nil {
+func (c *Container) GetContainerd() *ContainerdInfo {
+	if c == nil {
 		return nil
 	}
-	return o.Containerd
+	return c.Containerd
 }
 
-func (o *Container) GetCreated() float64 {
-	if o == nil {
+func (c *Container) GetCreated() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.Created
+	return c.Created
 }
 
-func (o *Container) GetDocker() *DockerInfo {
-	if o == nil {
+func (c *Container) GetDocker() *DockerInfo {
+	if c == nil {
 		return nil
 	}
-	return o.Docker
+	return c.Docker
 }
 
-func (o *Container) GetID() string {
-	if o == nil {
+func (c *Container) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *Container) GetImage() string {
-	if o == nil {
+func (c *Container) GetImage() string {
+	if c == nil {
 		return ""
 	}
-	return o.Image
+	return c.Image
 }
 
-func (o *Container) GetIps() []string {
-	if o == nil {
+func (c *Container) GetIps() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Ips
+	return c.Ips
 }
 
-func (o *Container) GetName() string {
-	if o == nil {
+func (c *Container) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *Container) GetPorts() []ContainerPort {
-	if o == nil {
+func (c *Container) GetPorts() []ContainerPort {
+	if c == nil {
 		return nil
 	}
-	return o.Ports
+	return c.Ports
 }
 
-func (o *Container) GetStatus() string {
-	if o == nil {
+func (c *Container) GetStatus() string {
+	if c == nil {
 		return ""
 	}
-	return o.Status
+	return c.Status
 }
 
-func (o *Container) GetType() ContainerType {
-	if o == nil {
+func (c *Container) GetType() ContainerType {
+	if c == nil {
 		return ContainerType("")
 	}
-	return o.Type
+	return c.Type
 }

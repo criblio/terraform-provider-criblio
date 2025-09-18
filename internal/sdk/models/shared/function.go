@@ -16,79 +16,79 @@ type Function struct {
 	Version  string         `json:"version"`
 }
 
-func (o *Function) GetConf() map[string]any {
-	if o == nil {
+func (f *Function) GetConf() map[string]any {
+	if f == nil {
 		return map[string]any{}
 	}
-	return o.Conf
+	return f.Conf
 }
 
-func (o *Function) GetFilename() string {
-	if o == nil {
+func (f *Function) GetFilename() string {
+	if f == nil {
 		return ""
 	}
-	return o.Filename
+	return f.Filename
 }
 
-func (o *Function) GetDisabled() bool {
-	if o == nil {
+func (f *Function) GetDisabled() bool {
+	if f == nil {
 		return false
 	}
-	return o.Disabled
+	return f.Disabled
 }
 
-func (o *Function) GetGroup() string {
-	if o == nil {
+func (f *Function) GetGroup() string {
+	if f == nil {
 		return ""
 	}
-	return o.Group
+	return f.Group
 }
 
-func (o *Function) GetID() string {
-	if o == nil {
+func (f *Function) GetID() string {
+	if f == nil {
 		return ""
 	}
-	return o.ID
+	return f.ID
 }
 
-func (o *Function) GetInitTime() float64 {
-	if o == nil {
+func (f *Function) GetInitTime() float64 {
+	if f == nil {
 		return 0.0
 	}
-	return o.InitTime
+	return f.InitTime
 }
 
-func (o *Function) GetLoadTime() float64 {
-	if o == nil {
+func (f *Function) GetLoadTime() float64 {
+	if f == nil {
 		return 0.0
 	}
-	return o.LoadTime
+	return f.LoadTime
 }
 
-func (o *Function) GetModTime() float64 {
-	if o == nil {
+func (f *Function) GetModTime() float64 {
+	if f == nil {
 		return 0.0
 	}
-	return o.ModTime
+	return f.ModTime
 }
 
-func (o *Function) GetName() string {
-	if o == nil {
+func (f *Function) GetName() string {
+	if f == nil {
 		return ""
 	}
-	return o.Name
+	return f.Name
 }
 
-func (o *Function) GetUischema() map[string]any {
-	if o == nil {
+func (f *Function) GetUischema() map[string]any {
+	if f == nil {
 		return map[string]any{}
 	}
-	return o.Uischema
+	return f.Uischema
 }
 
-func (o *Function) GetVersion() string {
-	if o == nil {
+func (f *Function) GetVersion() string {
+	if f == nil {
 		return ""
 	}
-	return o.Version
+	return f.Version
 }

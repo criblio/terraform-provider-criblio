@@ -47,18 +47,18 @@ func (i *InputAppscopeConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAppscopeConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputAppscopeConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputAppscopeConnection) GetOutput() string {
-	if o == nil {
+func (i *InputAppscopeConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputAppscopeMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputAppscopePq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAppscopePq) GetMode() *InputAppscopeMode {
-	if o == nil {
+func (i *InputAppscopePq) GetMode() *InputAppscopeMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputAppscopePq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputAppscopePq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputAppscopePq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputAppscopePq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputAppscopePq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputAppscopePq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputAppscopePq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputAppscopePq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputAppscopePq) GetPath() *string {
-	if o == nil {
+func (i *InputAppscopePq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputAppscopePq) GetCompress() *InputAppscopeCompression {
-	if o == nil {
+func (i *InputAppscopePq) GetCompress() *InputAppscopeCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputAppscopeMetadatum struct {
@@ -209,18 +209,18 @@ func (i *InputAppscopeMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAppscopeMetadatum) GetName() string {
-	if o == nil {
+func (i *InputAppscopeMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputAppscopeMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputAppscopeMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type Allow struct {
@@ -243,25 +243,25 @@ func (a *Allow) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Allow) GetProcname() string {
-	if o == nil {
+func (a *Allow) GetProcname() string {
+	if a == nil {
 		return ""
 	}
-	return o.Procname
+	return a.Procname
 }
 
-func (o *Allow) GetArg() *string {
-	if o == nil {
+func (a *Allow) GetArg() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Arg
+	return a.Arg
 }
 
-func (o *Allow) GetConfig() string {
-	if o == nil {
+func (a *Allow) GetConfig() string {
+	if a == nil {
 		return ""
 	}
-	return o.Config
+	return a.Config
 }
 
 type InputAppscopeFilter struct {
@@ -282,18 +282,18 @@ func (i *InputAppscopeFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAppscopeFilter) GetAllow() []Allow {
-	if o == nil {
+func (i *InputAppscopeFilter) GetAllow() []Allow {
+	if i == nil {
 		return nil
 	}
-	return o.Allow
+	return i.Allow
 }
 
-func (o *InputAppscopeFilter) GetTransportURL() *string {
-	if o == nil {
+func (i *InputAppscopeFilter) GetTransportURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TransportURL
+	return i.TransportURL
 }
 
 type InputAppscopeDataCompressionFormat string
@@ -347,46 +347,46 @@ func (i *InputAppscopePersistence) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAppscopePersistence) GetEnable() *bool {
-	if o == nil {
+func (i *InputAppscopePersistence) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
-func (o *InputAppscopePersistence) GetTimeWindow() *string {
-	if o == nil {
+func (i *InputAppscopePersistence) GetTimeWindow() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWindow
+	return i.TimeWindow
 }
 
-func (o *InputAppscopePersistence) GetMaxDataSize() *string {
-	if o == nil {
+func (i *InputAppscopePersistence) GetMaxDataSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataSize
+	return i.MaxDataSize
 }
 
-func (o *InputAppscopePersistence) GetMaxDataTime() *string {
-	if o == nil {
+func (i *InputAppscopePersistence) GetMaxDataTime() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataTime
+	return i.MaxDataTime
 }
 
-func (o *InputAppscopePersistence) GetCompress() *InputAppscopeDataCompressionFormat {
-	if o == nil {
+func (i *InputAppscopePersistence) GetCompress() *InputAppscopeDataCompressionFormat {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
-func (o *InputAppscopePersistence) GetDestPath() *string {
-	if o == nil {
+func (i *InputAppscopePersistence) GetDestPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.DestPath
+	return i.DestPath
 }
 
 // InputAppscopeAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
@@ -511,81 +511,81 @@ func (i *InputAppscopeTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetMinVersion() *InputAppscopeMinimumTLSVersion {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetMinVersion() *InputAppscopeMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputAppscopeTLSSettingsServerSide) GetMaxVersion() *InputAppscopeMaximumTLSVersion {
-	if o == nil {
+func (i *InputAppscopeTLSSettingsServerSide) GetMaxVersion() *InputAppscopeMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputAppscope struct {
@@ -657,219 +657,219 @@ func (i *InputAppscope) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputAppscope) GetID() string {
-	if o == nil {
+func (i *InputAppscope) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputAppscope) GetType() InputAppscopeType {
-	if o == nil {
+func (i *InputAppscope) GetType() InputAppscopeType {
+	if i == nil {
 		return InputAppscopeType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputAppscope) GetDisabled() *bool {
-	if o == nil {
+func (i *InputAppscope) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputAppscope) GetPipeline() *string {
-	if o == nil {
+func (i *InputAppscope) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputAppscope) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputAppscope) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputAppscope) GetEnvironment() *string {
-	if o == nil {
+func (i *InputAppscope) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputAppscope) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputAppscope) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputAppscope) GetStreamtags() []string {
-	if o == nil {
+func (i *InputAppscope) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputAppscope) GetConnections() []InputAppscopeConnection {
-	if o == nil {
+func (i *InputAppscope) GetConnections() []InputAppscopeConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputAppscope) GetPq() *InputAppscopePq {
-	if o == nil {
+func (i *InputAppscope) GetPq() *InputAppscopePq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputAppscope) GetIPWhitelistRegex() *string {
-	if o == nil {
+func (i *InputAppscope) GetIPWhitelistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPWhitelistRegex
+	return i.IPWhitelistRegex
 }
 
-func (o *InputAppscope) GetMaxActiveCxn() *float64 {
-	if o == nil {
+func (i *InputAppscope) GetMaxActiveCxn() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveCxn
+	return i.MaxActiveCxn
 }
 
-func (o *InputAppscope) GetSocketIdleTimeout() *float64 {
-	if o == nil {
+func (i *InputAppscope) GetSocketIdleTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketIdleTimeout
+	return i.SocketIdleTimeout
 }
 
-func (o *InputAppscope) GetSocketEndingMaxWait() *float64 {
-	if o == nil {
+func (i *InputAppscope) GetSocketEndingMaxWait() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketEndingMaxWait
+	return i.SocketEndingMaxWait
 }
 
-func (o *InputAppscope) GetSocketMaxLifespan() *float64 {
-	if o == nil {
+func (i *InputAppscope) GetSocketMaxLifespan() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketMaxLifespan
+	return i.SocketMaxLifespan
 }
 
-func (o *InputAppscope) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputAppscope) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputAppscope) GetMetadata() []InputAppscopeMetadatum {
-	if o == nil {
+func (i *InputAppscope) GetMetadata() []InputAppscopeMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputAppscope) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputAppscope) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputAppscope) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputAppscope) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputAppscope) GetEnableUnixPath() *bool {
-	if o == nil {
+func (i *InputAppscope) GetEnableUnixPath() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableUnixPath
+	return i.EnableUnixPath
 }
 
-func (o *InputAppscope) GetFilter() *InputAppscopeFilter {
-	if o == nil {
+func (i *InputAppscope) GetFilter() *InputAppscopeFilter {
+	if i == nil {
 		return nil
 	}
-	return o.Filter
+	return i.Filter
 }
 
-func (o *InputAppscope) GetPersistence() *InputAppscopePersistence {
-	if o == nil {
+func (i *InputAppscope) GetPersistence() *InputAppscopePersistence {
+	if i == nil {
 		return nil
 	}
-	return o.Persistence
+	return i.Persistence
 }
 
-func (o *InputAppscope) GetAuthType() *InputAppscopeAuthenticationMethod {
-	if o == nil {
+func (i *InputAppscope) GetAuthType() *InputAppscopeAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputAppscope) GetDescription() *string {
-	if o == nil {
+func (i *InputAppscope) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputAppscope) GetHost() *string {
-	if o == nil {
+func (i *InputAppscope) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputAppscope) GetPort() *float64 {
-	if o == nil {
+func (i *InputAppscope) GetPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputAppscope) GetTLS() *InputAppscopeTLSSettingsServerSide {
-	if o == nil {
+func (i *InputAppscope) GetTLS() *InputAppscopeTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputAppscope) GetUnixSocketPath() *string {
-	if o == nil {
+func (i *InputAppscope) GetUnixSocketPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.UnixSocketPath
+	return i.UnixSocketPath
 }
 
-func (o *InputAppscope) GetUnixSocketPerms() *string {
-	if o == nil {
+func (i *InputAppscope) GetUnixSocketPerms() *string {
+	if i == nil {
 		return nil
 	}
-	return o.UnixSocketPerms
+	return i.UnixSocketPerms
 }
 
-func (o *InputAppscope) GetAuthToken() *string {
-	if o == nil {
+func (i *InputAppscope) GetAuthToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthToken
+	return i.AuthToken
 }
 
-func (o *InputAppscope) GetTextSecret() *string {
-	if o == nil {
+func (i *InputAppscope) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }

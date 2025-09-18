@@ -20,39 +20,39 @@ type ConditionSpecificConfigs struct {
 	TriggerCount *float64 `json:"triggerCount,omitempty"`
 }
 
-func (o *ConditionSpecificConfigs) GetSavedQueryID() string {
-	if o == nil {
+func (c *ConditionSpecificConfigs) GetSavedQueryID() string {
+	if c == nil {
 		return ""
 	}
-	return o.SavedQueryID
+	return c.SavedQueryID
 }
 
-func (o *ConditionSpecificConfigs) GetMessage() string {
-	if o == nil {
+func (c *ConditionSpecificConfigs) GetMessage() string {
+	if c == nil {
 		return ""
 	}
-	return o.Message
+	return c.Message
 }
 
-func (o *ConditionSpecificConfigs) GetTriggerType() *string {
-	if o == nil {
+func (c *ConditionSpecificConfigs) GetTriggerType() *string {
+	if c == nil {
 		return nil
 	}
-	return o.TriggerType
+	return c.TriggerType
 }
 
-func (o *ConditionSpecificConfigs) GetTriggerComparator() *string {
-	if o == nil {
+func (c *ConditionSpecificConfigs) GetTriggerComparator() *string {
+	if c == nil {
 		return nil
 	}
-	return o.TriggerComparator
+	return c.TriggerComparator
 }
 
-func (o *ConditionSpecificConfigs) GetTriggerCount() *float64 {
-	if o == nil {
+func (c *ConditionSpecificConfigs) GetTriggerCount() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.TriggerCount
+	return c.TriggerCount
 }
 
 type Notification struct {
@@ -85,58 +85,58 @@ func (n *Notification) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Notification) GetID() string {
-	if o == nil {
+func (n *Notification) GetID() string {
+	if n == nil {
 		return ""
 	}
-	return o.ID
+	return n.ID
 }
 
-func (o *Notification) GetDisabled() *bool {
-	if o == nil {
+func (n *Notification) GetDisabled() *bool {
+	if n == nil {
 		return nil
 	}
-	return o.Disabled
+	return n.Disabled
 }
 
-func (o *Notification) GetCondition() string {
-	if o == nil {
+func (n *Notification) GetCondition() string {
+	if n == nil {
 		return ""
 	}
-	return o.Condition
+	return n.Condition
 }
 
-func (o *Notification) GetTargets() []string {
-	if o == nil {
+func (n *Notification) GetTargets() []string {
+	if n == nil {
 		return nil
 	}
-	return o.Targets
+	return n.Targets
 }
 
-func (o *Notification) GetTargetConfigs() []TargetConfig {
-	if o == nil {
+func (n *Notification) GetTargetConfigs() []TargetConfig {
+	if n == nil {
 		return nil
 	}
-	return o.TargetConfigs
+	return n.TargetConfigs
 }
 
-func (o *Notification) GetConf() *ConditionSpecificConfigs {
-	if o == nil {
+func (n *Notification) GetConf() *ConditionSpecificConfigs {
+	if n == nil {
 		return nil
 	}
-	return o.Conf
+	return n.Conf
 }
 
-func (o *Notification) GetMetadata() []MetadataItem {
-	if o == nil {
+func (n *Notification) GetMetadata() []MetadataItem {
+	if n == nil {
 		return nil
 	}
-	return o.Metadata
+	return n.Metadata
 }
 
-func (o *Notification) GetGroup() *string {
-	if o == nil {
+func (n *Notification) GetGroup() *string {
+	if n == nil {
 		return nil
 	}
-	return o.Group
+	return n.Group
 }

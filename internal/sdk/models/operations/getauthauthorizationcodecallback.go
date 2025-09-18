@@ -12,18 +12,18 @@ type GetAuthAuthorizationCodeCallbackRequest struct {
 	State *string `queryParam:"style=form,explode=true,name=state"`
 }
 
-func (o *GetAuthAuthorizationCodeCallbackRequest) GetCode() *string {
-	if o == nil {
+func (g *GetAuthAuthorizationCodeCallbackRequest) GetCode() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Code
+	return g.Code
 }
 
-func (o *GetAuthAuthorizationCodeCallbackRequest) GetState() *string {
-	if o == nil {
+func (g *GetAuthAuthorizationCodeCallbackRequest) GetState() *string {
+	if g == nil {
 		return nil
 	}
-	return o.State
+	return g.State
 }
 
 type GetAuthAuthorizationCodeCallbackResponse struct {
@@ -35,23 +35,23 @@ type GetAuthAuthorizationCodeCallbackResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *GetAuthAuthorizationCodeCallbackResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthAuthorizationCodeCallbackResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthAuthorizationCodeCallbackResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthAuthorizationCodeCallbackResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthAuthorizationCodeCallbackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthAuthorizationCodeCallbackResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }

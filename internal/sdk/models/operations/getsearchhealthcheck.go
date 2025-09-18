@@ -12,11 +12,11 @@ type GetSearchHealthcheckResponseBody struct {
 	Items []shared.SearchHealthCheckStatus `json:"items,omitempty"`
 }
 
-func (o *GetSearchHealthcheckResponseBody) GetItems() []shared.SearchHealthCheckStatus {
-	if o == nil {
+func (g *GetSearchHealthcheckResponseBody) GetItems() []shared.SearchHealthCheckStatus {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSearchHealthcheckResponse struct {
@@ -32,37 +32,37 @@ type GetSearchHealthcheckResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchHealthcheckResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchHealthcheckResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchHealthcheckResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchHealthcheckResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchHealthcheckResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchHealthcheckResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchHealthcheckResponse) GetObject() *GetSearchHealthcheckResponseBody {
-	if o == nil {
+func (g *GetSearchHealthcheckResponse) GetObject() *GetSearchHealthcheckResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSearchHealthcheckResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchHealthcheckResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

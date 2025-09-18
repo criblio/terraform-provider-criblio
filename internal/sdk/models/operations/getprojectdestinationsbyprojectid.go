@@ -12,11 +12,11 @@ type GetProjectDestinationsByProjectIDRequest struct {
 	ProjectID string `pathParam:"style=simple,explode=false,name=projectId"`
 }
 
-func (o *GetProjectDestinationsByProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (g *GetProjectDestinationsByProjectIDRequest) GetProjectID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
 // GetProjectDestinationsByProjectIDResponseBody - a list of ProjectDestination objects
@@ -24,11 +24,11 @@ type GetProjectDestinationsByProjectIDResponseBody struct {
 	Items []shared.ProjectDestination `json:"items,omitempty"`
 }
 
-func (o *GetProjectDestinationsByProjectIDResponseBody) GetItems() []shared.ProjectDestination {
-	if o == nil {
+func (g *GetProjectDestinationsByProjectIDResponseBody) GetItems() []shared.ProjectDestination {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetProjectDestinationsByProjectIDResponse struct {
@@ -44,37 +44,37 @@ type GetProjectDestinationsByProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetProjectDestinationsByProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetProjectDestinationsByProjectIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetProjectDestinationsByProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetProjectDestinationsByProjectIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetProjectDestinationsByProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetProjectDestinationsByProjectIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetProjectDestinationsByProjectIDResponse) GetObject() *GetProjectDestinationsByProjectIDResponseBody {
-	if o == nil {
+func (g *GetProjectDestinationsByProjectIDResponse) GetObject() *GetProjectDestinationsByProjectIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetProjectDestinationsByProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetProjectDestinationsByProjectIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

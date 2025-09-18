@@ -12,51 +12,51 @@ type CaptureParams struct {
 	WorkerThreshold *float64 `json:"workerThreshold,omitempty"`
 }
 
-func (o *CaptureParams) GetDuration() float64 {
-	if o == nil {
+func (c *CaptureParams) GetDuration() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.Duration
+	return c.Duration
 }
 
-func (o *CaptureParams) GetFilter() string {
-	if o == nil {
+func (c *CaptureParams) GetFilter() string {
+	if c == nil {
 		return ""
 	}
-	return o.Filter
+	return c.Filter
 }
 
-func (o *CaptureParams) GetLevel() float64 {
-	if o == nil {
+func (c *CaptureParams) GetLevel() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.Level
+	return c.Level
 }
 
-func (o *CaptureParams) GetMaxEvents() float64 {
-	if o == nil {
+func (c *CaptureParams) GetMaxEvents() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.MaxEvents
+	return c.MaxEvents
 }
 
-func (o *CaptureParams) GetStepDuration() *float64 {
-	if o == nil {
+func (c *CaptureParams) GetStepDuration() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.StepDuration
+	return c.StepDuration
 }
 
-func (o *CaptureParams) GetWorkerID() *string {
-	if o == nil {
+func (c *CaptureParams) GetWorkerID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.WorkerID
+	return c.WorkerID
 }
 
-func (o *CaptureParams) GetWorkerThreshold() *float64 {
-	if o == nil {
+func (c *CaptureParams) GetWorkerThreshold() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkerThreshold
+	return c.WorkerThreshold
 }

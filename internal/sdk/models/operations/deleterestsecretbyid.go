@@ -12,11 +12,11 @@ type DeleteRestSecretByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteRestSecretByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteRestSecretByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteRestSecretByIDResponseBody - a list of RestSecret objects
@@ -24,11 +24,11 @@ type DeleteRestSecretByIDResponseBody struct {
 	Items []shared.RestSecret `json:"items,omitempty"`
 }
 
-func (o *DeleteRestSecretByIDResponseBody) GetItems() []shared.RestSecret {
-	if o == nil {
+func (d *DeleteRestSecretByIDResponseBody) GetItems() []shared.RestSecret {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteRestSecretByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteRestSecretByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteRestSecretByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteRestSecretByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteRestSecretByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteRestSecretByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteRestSecretByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteRestSecretByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteRestSecretByIDResponse) GetObject() *DeleteRestSecretByIDResponseBody {
-	if o == nil {
+func (d *DeleteRestSecretByIDResponse) GetObject() *DeleteRestSecretByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteRestSecretByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteRestSecretByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -16,25 +16,25 @@ type UpdateHmacFunctionByIDRequest struct {
 	HmacFunction shared.HmacFunction `request:"mediaType=application/json"`
 }
 
-func (o *UpdateHmacFunctionByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateHmacFunctionByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateHmacFunctionByIDRequest) GetHmacFunction() shared.HmacFunction {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDRequest) GetHmacFunction() shared.HmacFunction {
+	if u == nil {
 		return shared.HmacFunction{}
 	}
-	return o.HmacFunction
+	return u.HmacFunction
 }
 
 // UpdateHmacFunctionByIDResponseBody - a list of HmacFunction objects
@@ -42,11 +42,11 @@ type UpdateHmacFunctionByIDResponseBody struct {
 	Items []shared.HmacFunction `json:"items,omitempty"`
 }
 
-func (o *UpdateHmacFunctionByIDResponseBody) GetItems() []shared.HmacFunction {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDResponseBody) GetItems() []shared.HmacFunction {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateHmacFunctionByIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateHmacFunctionByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateHmacFunctionByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateHmacFunctionByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateHmacFunctionByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateHmacFunctionByIDResponse) GetObject() *UpdateHmacFunctionByIDResponseBody {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDResponse) GetObject() *UpdateHmacFunctionByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateHmacFunctionByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateHmacFunctionByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

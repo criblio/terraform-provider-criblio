@@ -10,37 +10,37 @@ type ContainerdInfo struct {
 	Task      *ContainerdTask     `json:"task,omitempty"`
 }
 
-func (o *ContainerdInfo) GetContainer() ContainerdContainer {
-	if o == nil {
+func (c *ContainerdInfo) GetContainer() ContainerdContainer {
+	if c == nil {
 		return ContainerdContainer{}
 	}
-	return o.Container
+	return c.Container
 }
 
-func (o *ContainerdInfo) GetImage() map[string]any {
-	if o == nil {
+func (c *ContainerdInfo) GetImage() map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Image
+	return c.Image
 }
 
-func (o *ContainerdInfo) GetMetrics() map[string]any {
-	if o == nil {
+func (c *ContainerdInfo) GetMetrics() map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Metrics
+	return c.Metrics
 }
 
-func (o *ContainerdInfo) GetNamespace() map[string]any {
-	if o == nil {
+func (c *ContainerdInfo) GetNamespace() map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Namespace
+	return c.Namespace
 }
 
-func (o *ContainerdInfo) GetTask() *ContainerdTask {
-	if o == nil {
+func (c *ContainerdInfo) GetTask() *ContainerdTask {
+	if c == nil {
 		return nil
 	}
-	return o.Task
+	return c.Task
 }

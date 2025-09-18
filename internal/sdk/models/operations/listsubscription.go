@@ -20,39 +20,39 @@ type ListSubscriptionRequest struct {
 	Pipeline *string `queryParam:"style=form,explode=true,name=pipeline"`
 }
 
-func (o *ListSubscriptionRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListSubscriptionRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
-func (o *ListSubscriptionRequest) GetDisabled() *bool {
-	if o == nil {
+func (l *ListSubscriptionRequest) GetDisabled() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Disabled
+	return l.Disabled
 }
 
-func (o *ListSubscriptionRequest) GetDescription() *string {
-	if o == nil {
+func (l *ListSubscriptionRequest) GetDescription() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Description
+	return l.Description
 }
 
-func (o *ListSubscriptionRequest) GetFilter() *string {
-	if o == nil {
+func (l *ListSubscriptionRequest) GetFilter() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Filter
+	return l.Filter
 }
 
-func (o *ListSubscriptionRequest) GetPipeline() *string {
-	if o == nil {
+func (l *ListSubscriptionRequest) GetPipeline() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Pipeline
+	return l.Pipeline
 }
 
 // ListSubscriptionResponseBody - a list of Subscription objects
@@ -60,11 +60,11 @@ type ListSubscriptionResponseBody struct {
 	Items []shared.Subscription `json:"items,omitempty"`
 }
 
-func (o *ListSubscriptionResponseBody) GetItems() []shared.Subscription {
-	if o == nil {
+func (l *ListSubscriptionResponseBody) GetItems() []shared.Subscription {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListSubscriptionResponse struct {
@@ -80,37 +80,37 @@ type ListSubscriptionResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListSubscriptionResponse) GetContentType() string {
-	if o == nil {
+func (l *ListSubscriptionResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListSubscriptionResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListSubscriptionResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListSubscriptionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListSubscriptionResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListSubscriptionResponse) GetObject() *ListSubscriptionResponseBody {
-	if o == nil {
+func (l *ListSubscriptionResponse) GetObject() *ListSubscriptionResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListSubscriptionResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListSubscriptionResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

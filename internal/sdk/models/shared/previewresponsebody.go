@@ -9,30 +9,30 @@ type PreviewResponseBody struct {
 	UseFormattedVisualization bool    `json:"useFormattedVisualization"`
 }
 
-func (o *PreviewResponseBody) GetCount() float64 {
-	if o == nil {
+func (p *PreviewResponseBody) GetCount() float64 {
+	if p == nil {
 		return 0.0
 	}
-	return o.Count
+	return p.Count
 }
 
-func (o *PreviewResponseBody) GetEvents() []any {
-	if o == nil {
+func (p *PreviewResponseBody) GetEvents() []any {
+	if p == nil {
 		return []any{}
 	}
-	return o.Events
+	return p.Events
 }
 
-func (o *PreviewResponseBody) GetProcessingTimeMS() float64 {
-	if o == nil {
+func (p *PreviewResponseBody) GetProcessingTimeMS() float64 {
+	if p == nil {
 		return 0.0
 	}
-	return o.ProcessingTimeMS
+	return p.ProcessingTimeMS
 }
 
-func (o *PreviewResponseBody) GetUseFormattedVisualization() bool {
-	if o == nil {
+func (p *PreviewResponseBody) GetUseFormattedVisualization() bool {
+	if p == nil {
 		return false
 	}
-	return o.UseFormattedVisualization
+	return p.UseFormattedVisualization
 }

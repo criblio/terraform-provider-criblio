@@ -12,11 +12,11 @@ type UpdateJobsResumeByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *UpdateJobsResumeByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateJobsResumeByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
 // UpdateJobsResumeByIDResponseBody - a list of JobState objects
@@ -24,11 +24,11 @@ type UpdateJobsResumeByIDResponseBody struct {
 	Items []shared.JobState `json:"items,omitempty"`
 }
 
-func (o *UpdateJobsResumeByIDResponseBody) GetItems() []shared.JobState {
-	if o == nil {
+func (u *UpdateJobsResumeByIDResponseBody) GetItems() []shared.JobState {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateJobsResumeByIDResponse struct {
@@ -44,37 +44,37 @@ type UpdateJobsResumeByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateJobsResumeByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateJobsResumeByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateJobsResumeByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateJobsResumeByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateJobsResumeByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateJobsResumeByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateJobsResumeByIDResponse) GetObject() *UpdateJobsResumeByIDResponseBody {
-	if o == nil {
+func (u *UpdateJobsResumeByIDResponse) GetObject() *UpdateJobsResumeByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateJobsResumeByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateJobsResumeByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

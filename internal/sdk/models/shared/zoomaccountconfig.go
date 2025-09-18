@@ -28,30 +28,30 @@ func (z *ZoomAccountConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ZoomAccountConfig) GetName() string {
-	if o == nil {
+func (z *ZoomAccountConfig) GetName() string {
+	if z == nil {
 		return ""
 	}
-	return o.Name
+	return z.Name
 }
 
-func (o *ZoomAccountConfig) GetAccountID() string {
-	if o == nil {
+func (z *ZoomAccountConfig) GetAccountID() string {
+	if z == nil {
 		return ""
 	}
-	return o.AccountID
+	return z.AccountID
 }
 
-func (o *ZoomAccountConfig) GetClientID() string {
-	if o == nil {
+func (z *ZoomAccountConfig) GetClientID() string {
+	if z == nil {
 		return ""
 	}
-	return o.ClientID
+	return z.ClientID
 }
 
-func (o *ZoomAccountConfig) GetClientSecret() string {
-	if o == nil {
+func (z *ZoomAccountConfig) GetClientSecret() string {
+	if z == nil {
 		return ""
 	}
-	return o.ClientSecret
+	return z.ClientSecret
 }

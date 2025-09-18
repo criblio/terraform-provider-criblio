@@ -22,46 +22,46 @@ type GetSearchJobsResultsPollByIDRequest struct {
 	LastJobStatus *string `queryParam:"style=form,explode=true,name=lastJobStatus"`
 }
 
-func (o *GetSearchJobsResultsPollByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetSearchJobsResultsPollByIDRequest) GetLimit() *float64 {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDRequest) GetLimit() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.Limit
+	return g.Limit
 }
 
-func (o *GetSearchJobsResultsPollByIDRequest) GetOffset() *float64 {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDRequest) GetOffset() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.Offset
+	return g.Offset
 }
 
-func (o *GetSearchJobsResultsPollByIDRequest) GetLowerBound() *float64 {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDRequest) GetLowerBound() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.LowerBound
+	return g.LowerBound
 }
 
-func (o *GetSearchJobsResultsPollByIDRequest) GetUpperBound() *float64 {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDRequest) GetUpperBound() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.UpperBound
+	return g.UpperBound
 }
 
-func (o *GetSearchJobsResultsPollByIDRequest) GetLastJobStatus() *string {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDRequest) GetLastJobStatus() *string {
+	if g == nil {
 		return nil
 	}
-	return o.LastJobStatus
+	return g.LastJobStatus
 }
 
 type GetSearchJobsResultsPollByIDResponse struct {
@@ -77,37 +77,37 @@ type GetSearchJobsResultsPollByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchJobsResultsPollByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchJobsResultsPollByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchJobsResultsPollByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchJobsResultsPollByIDResponse) GetSearchJobResults() *shared.SearchJobResults {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDResponse) GetSearchJobResults() *shared.SearchJobResults {
+	if g == nil {
 		return nil
 	}
-	return o.SearchJobResults
+	return g.SearchJobResults
 }
 
-func (o *GetSearchJobsResultsPollByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchJobsResultsPollByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

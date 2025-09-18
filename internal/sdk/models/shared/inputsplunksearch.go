@@ -47,18 +47,18 @@ func (i *InputSplunkSearchConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkSearchConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputSplunkSearchConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSplunkSearchConnection) GetOutput() string {
-	if o == nil {
+func (i *InputSplunkSearchConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSplunkSearchMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputSplunkSearchPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkSearchPq) GetMode() *InputSplunkSearchMode {
-	if o == nil {
+func (i *InputSplunkSearchPq) GetMode() *InputSplunkSearchMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSplunkSearchPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSplunkSearchPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSplunkSearchPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSplunkSearchPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSplunkSearchPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSplunkSearchPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSplunkSearchPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSplunkSearchPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSplunkSearchPq) GetPath() *string {
-	if o == nil {
+func (i *InputSplunkSearchPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSplunkSearchPq) GetCompress() *InputSplunkSearchCompression {
-	if o == nil {
+func (i *InputSplunkSearchPq) GetCompress() *InputSplunkSearchCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputSplunkSearchOutputMode - Format of the returned output
@@ -236,18 +236,18 @@ func (e *EndpointParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EndpointParam) GetName() string {
-	if o == nil {
+func (e *EndpointParam) GetName() string {
+	if e == nil {
 		return ""
 	}
-	return o.Name
+	return e.Name
 }
 
-func (o *EndpointParam) GetValue() string {
-	if o == nil {
+func (e *EndpointParam) GetValue() string {
+	if e == nil {
 		return ""
 	}
-	return o.Value
+	return e.Value
 }
 
 type EndpointHeader struct {
@@ -267,18 +267,18 @@ func (e *EndpointHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EndpointHeader) GetName() string {
-	if o == nil {
+func (e *EndpointHeader) GetName() string {
+	if e == nil {
 		return ""
 	}
-	return o.Name
+	return e.Name
 }
 
-func (o *EndpointHeader) GetValue() string {
-	if o == nil {
+func (e *EndpointHeader) GetValue() string {
+	if e == nil {
 		return ""
 	}
-	return o.Value
+	return e.Value
 }
 
 // InputSplunkSearchLogLevel - Collector runtime log level (verbosity)
@@ -331,18 +331,18 @@ func (i *InputSplunkSearchMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkSearchMetadatum) GetName() string {
-	if o == nil {
+func (i *InputSplunkSearchMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSplunkSearchMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputSplunkSearchMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputSplunkSearchRetryType - The algorithm to use when performing HTTP retries
@@ -405,60 +405,60 @@ func (i *InputSplunkSearchRetryRules) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkSearchRetryRules) GetType() *InputSplunkSearchRetryType {
-	if o == nil {
+func (i *InputSplunkSearchRetryRules) GetType() *InputSplunkSearchRetryType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSplunkSearchRetryRules) GetInterval() *float64 {
-	if o == nil {
+func (i *InputSplunkSearchRetryRules) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputSplunkSearchRetryRules) GetLimit() *float64 {
-	if o == nil {
+func (i *InputSplunkSearchRetryRules) GetLimit() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Limit
+	return i.Limit
 }
 
-func (o *InputSplunkSearchRetryRules) GetMultiplier() *float64 {
-	if o == nil {
+func (i *InputSplunkSearchRetryRules) GetMultiplier() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Multiplier
+	return i.Multiplier
 }
 
-func (o *InputSplunkSearchRetryRules) GetCodes() []float64 {
-	if o == nil {
+func (i *InputSplunkSearchRetryRules) GetCodes() []float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Codes
+	return i.Codes
 }
 
-func (o *InputSplunkSearchRetryRules) GetEnableHeader() *bool {
-	if o == nil {
+func (i *InputSplunkSearchRetryRules) GetEnableHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHeader
+	return i.EnableHeader
 }
 
-func (o *InputSplunkSearchRetryRules) GetRetryConnectTimeout() *bool {
-	if o == nil {
+func (i *InputSplunkSearchRetryRules) GetRetryConnectTimeout() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectTimeout
+	return i.RetryConnectTimeout
 }
 
-func (o *InputSplunkSearchRetryRules) GetRetryConnectReset() *bool {
-	if o == nil {
+func (i *InputSplunkSearchRetryRules) GetRetryConnectReset() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectReset
+	return i.RetryConnectReset
 }
 
 // InputSplunkSearchAuthenticationType - Splunk Search authentication type
@@ -518,18 +518,18 @@ func (i *InputSplunkSearchOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkSearchOauthParam) GetName() string {
-	if o == nil {
+func (i *InputSplunkSearchOauthParam) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSplunkSearchOauthParam) GetValue() string {
-	if o == nil {
+func (i *InputSplunkSearchOauthParam) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSplunkSearchOauthHeader struct {
@@ -550,18 +550,18 @@ func (i *InputSplunkSearchOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkSearchOauthHeader) GetName() string {
-	if o == nil {
+func (i *InputSplunkSearchOauthHeader) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSplunkSearchOauthHeader) GetValue() string {
-	if o == nil {
+func (i *InputSplunkSearchOauthHeader) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSplunkSearch struct {
@@ -667,338 +667,338 @@ func (i *InputSplunkSearch) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkSearch) GetID() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSplunkSearch) GetType() *InputSplunkSearchType {
-	if o == nil {
+func (i *InputSplunkSearch) GetType() *InputSplunkSearchType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSplunkSearch) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSplunkSearch) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSplunkSearch) GetPipeline() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSplunkSearch) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSplunkSearch) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSplunkSearch) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSplunkSearch) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSplunkSearch) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSplunkSearch) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSplunkSearch) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSplunkSearch) GetConnections() []InputSplunkSearchConnection {
-	if o == nil {
+func (i *InputSplunkSearch) GetConnections() []InputSplunkSearchConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSplunkSearch) GetPq() *InputSplunkSearchPq {
-	if o == nil {
+func (i *InputSplunkSearch) GetPq() *InputSplunkSearchPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSplunkSearch) GetSearchHead() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetSearchHead() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SearchHead
+	return i.SearchHead
 }
 
-func (o *InputSplunkSearch) GetSearch() string {
-	if o == nil {
+func (i *InputSplunkSearch) GetSearch() string {
+	if i == nil {
 		return ""
 	}
-	return o.Search
+	return i.Search
 }
 
-func (o *InputSplunkSearch) GetEarliest() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetEarliest() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputSplunkSearch) GetLatest() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetLatest() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputSplunkSearch) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputSplunkSearch) GetEndpoint() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputSplunkSearch) GetOutputMode() *InputSplunkSearchOutputMode {
-	if o == nil {
+func (i *InputSplunkSearch) GetOutputMode() *InputSplunkSearchOutputMode {
+	if i == nil {
 		return nil
 	}
-	return o.OutputMode
+	return i.OutputMode
 }
 
-func (o *InputSplunkSearch) GetEndpointParams() []EndpointParam {
-	if o == nil {
+func (i *InputSplunkSearch) GetEndpointParams() []EndpointParam {
+	if i == nil {
 		return nil
 	}
-	return o.EndpointParams
+	return i.EndpointParams
 }
 
-func (o *InputSplunkSearch) GetEndpointHeaders() []EndpointHeader {
-	if o == nil {
+func (i *InputSplunkSearch) GetEndpointHeaders() []EndpointHeader {
+	if i == nil {
 		return nil
 	}
-	return o.EndpointHeaders
+	return i.EndpointHeaders
 }
 
-func (o *InputSplunkSearch) GetLogLevel() *InputSplunkSearchLogLevel {
-	if o == nil {
+func (i *InputSplunkSearch) GetLogLevel() *InputSplunkSearchLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputSplunkSearch) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputSplunkSearch) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputSplunkSearch) GetUseRoundRobinDNS() *bool {
-	if o == nil {
+func (i *InputSplunkSearch) GetUseRoundRobinDNS() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.UseRoundRobinDNS
+	return i.UseRoundRobinDNS
 }
 
-func (o *InputSplunkSearch) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputSplunkSearch) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputSplunkSearch) GetEncoding() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetEncoding() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Encoding
+	return i.Encoding
 }
 
-func (o *InputSplunkSearch) GetKeepAliveTime() *float64 {
-	if o == nil {
+func (i *InputSplunkSearch) GetKeepAliveTime() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTime
+	return i.KeepAliveTime
 }
 
-func (o *InputSplunkSearch) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputSplunkSearch) GetMaxMissedKeepAlives() *float64 {
-	if o == nil {
+func (i *InputSplunkSearch) GetMaxMissedKeepAlives() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMissedKeepAlives
+	return i.MaxMissedKeepAlives
 }
 
-func (o *InputSplunkSearch) GetTTL() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputSplunkSearch) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputSplunkSearch) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputSplunkSearch) GetMetadata() []InputSplunkSearchMetadatum {
-	if o == nil {
+func (i *InputSplunkSearch) GetMetadata() []InputSplunkSearchMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSplunkSearch) GetRetryRules() *InputSplunkSearchRetryRules {
-	if o == nil {
+func (i *InputSplunkSearch) GetRetryRules() *InputSplunkSearchRetryRules {
+	if i == nil {
 		return nil
 	}
-	return o.RetryRules
+	return i.RetryRules
 }
 
-func (o *InputSplunkSearch) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputSplunkSearch) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputSplunkSearch) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputSplunkSearch) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputSplunkSearch) GetAuthType() *InputSplunkSearchAuthenticationType {
-	if o == nil {
+func (i *InputSplunkSearch) GetAuthType() *InputSplunkSearchAuthenticationType {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputSplunkSearch) GetDescription() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputSplunkSearch) GetUsername() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputSplunkSearch) GetPassword() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputSplunkSearch) GetToken() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputSplunkSearch) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputSplunkSearch) GetTextSecret() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputSplunkSearch) GetLoginURL() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputSplunkSearch) GetSecretParamName() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SecretParamName
+	return i.SecretParamName
 }
 
-func (o *InputSplunkSearch) GetSecret() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputSplunkSearch) GetTokenAttributeName() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetTokenAttributeName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenAttributeName
+	return i.TokenAttributeName
 }
 
-func (o *InputSplunkSearch) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputSplunkSearch) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputSplunkSearch) GetTokenTimeoutSecs() *float64 {
-	if o == nil {
+func (i *InputSplunkSearch) GetTokenTimeoutSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TokenTimeoutSecs
+	return i.TokenTimeoutSecs
 }
 
-func (o *InputSplunkSearch) GetOauthParams() []InputSplunkSearchOauthParam {
-	if o == nil {
+func (i *InputSplunkSearch) GetOauthParams() []InputSplunkSearchOauthParam {
+	if i == nil {
 		return nil
 	}
-	return o.OauthParams
+	return i.OauthParams
 }
 
-func (o *InputSplunkSearch) GetOauthHeaders() []InputSplunkSearchOauthHeader {
-	if o == nil {
+func (i *InputSplunkSearch) GetOauthHeaders() []InputSplunkSearchOauthHeader {
+	if i == nil {
 		return nil
 	}
-	return o.OauthHeaders
+	return i.OauthHeaders
 }

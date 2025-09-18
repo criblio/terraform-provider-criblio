@@ -12,11 +12,11 @@ type GetSystemSettingsCriblResponseBody struct {
 	Items []shared.PublicSettings `json:"items,omitempty"`
 }
 
-func (o *GetSystemSettingsCriblResponseBody) GetItems() []shared.PublicSettings {
-	if o == nil {
+func (g *GetSystemSettingsCriblResponseBody) GetItems() []shared.PublicSettings {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemSettingsCriblResponse struct {
@@ -32,37 +32,37 @@ type GetSystemSettingsCriblResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemSettingsCriblResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemSettingsCriblResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemSettingsCriblResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemSettingsCriblResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemSettingsCriblResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemSettingsCriblResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemSettingsCriblResponse) GetObject() *GetSystemSettingsCriblResponseBody {
-	if o == nil {
+func (g *GetSystemSettingsCriblResponse) GetObject() *GetSystemSettingsCriblResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemSettingsCriblResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemSettingsCriblResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

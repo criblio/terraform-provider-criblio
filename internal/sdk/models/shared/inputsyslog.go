@@ -48,18 +48,18 @@ func (i *InputSyslogConnection2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogConnection2) GetPipeline() *string {
-	if o == nil {
+func (i *InputSyslogConnection2) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSyslogConnection2) GetOutput() string {
-	if o == nil {
+func (i *InputSyslogConnection2) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSyslogMode2 - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -144,53 +144,53 @@ func (i *InputSyslogPq2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogPq2) GetMode() *InputSyslogMode2 {
-	if o == nil {
+func (i *InputSyslogPq2) GetMode() *InputSyslogMode2 {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSyslogPq2) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSyslogPq2) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSyslogPq2) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSyslogPq2) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSyslogPq2) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSyslogPq2) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSyslogPq2) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSyslogPq2) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSyslogPq2) GetPath() *string {
-	if o == nil {
+func (i *InputSyslogPq2) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSyslogPq2) GetCompress() *InputSyslogCompression2 {
-	if o == nil {
+func (i *InputSyslogPq2) GetCompress() *InputSyslogCompression2 {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputSyslogMinimumTLSVersion2 string
@@ -288,81 +288,81 @@ func (i *InputSyslogTLSSettingsServerSide2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetCertificateName() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetPassphrase() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetCertPath() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetCaPath() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetMinVersion() *InputSyslogMinimumTLSVersion2 {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetMinVersion() *InputSyslogMinimumTLSVersion2 {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputSyslogTLSSettingsServerSide2) GetMaxVersion() *InputSyslogMaximumTLSVersion2 {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide2) GetMaxVersion() *InputSyslogMaximumTLSVersion2 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputSyslogMetadatum2 struct {
@@ -382,18 +382,18 @@ func (i *InputSyslogMetadatum2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogMetadatum2) GetName() string {
-	if o == nil {
+func (i *InputSyslogMetadatum2) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSyslogMetadatum2) GetValue() string {
-	if o == nil {
+func (i *InputSyslogMetadatum2) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSyslogSyslog2 struct {
@@ -471,235 +471,235 @@ func (i *InputSyslogSyslog2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogSyslog2) GetID() *string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSyslogSyslog2) GetType() InputSyslogType2 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetType() InputSyslogType2 {
+	if i == nil {
 		return InputSyslogType2("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSyslogSyslog2) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSyslogSyslog2) GetPipeline() *string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSyslogSyslog2) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSyslogSyslog2) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSyslogSyslog2) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSyslogSyslog2) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSyslogSyslog2) GetConnections() []InputSyslogConnection2 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetConnections() []InputSyslogConnection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSyslogSyslog2) GetPq() *InputSyslogPq2 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetPq() *InputSyslogPq2 {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSyslogSyslog2) GetHost() *string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputSyslogSyslog2) GetUDPPort() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetUDPPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.UDPPort
+	return i.UDPPort
 }
 
-func (o *InputSyslogSyslog2) GetTCPPort() float64 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetTCPPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.TCPPort
+	return i.TCPPort
 }
 
-func (o *InputSyslogSyslog2) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSyslogSyslog2) GetIPWhitelistRegex() *string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetIPWhitelistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPWhitelistRegex
+	return i.IPWhitelistRegex
 }
 
-func (o *InputSyslogSyslog2) GetTimestampTimezone() *string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetTimestampTimezone() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return i.TimestampTimezone
 }
 
-func (o *InputSyslogSyslog2) GetSingleMsgUDPPackets() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetSingleMsgUDPPackets() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SingleMsgUDPPackets
+	return i.SingleMsgUDPPackets
 }
 
-func (o *InputSyslogSyslog2) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputSyslogSyslog2) GetKeepFieldsList() []string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetKeepFieldsList() []string {
+	if i == nil {
 		return nil
 	}
-	return o.KeepFieldsList
+	return i.KeepFieldsList
 }
 
-func (o *InputSyslogSyslog2) GetOctetCounting() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetOctetCounting() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.OctetCounting
+	return i.OctetCounting
 }
 
-func (o *InputSyslogSyslog2) GetInferFraming() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetInferFraming() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.InferFraming
+	return i.InferFraming
 }
 
-func (o *InputSyslogSyslog2) GetStrictlyInferOctetCounting() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetStrictlyInferOctetCounting() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.StrictlyInferOctetCounting
+	return i.StrictlyInferOctetCounting
 }
 
-func (o *InputSyslogSyslog2) GetAllowNonStandardAppName() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetAllowNonStandardAppName() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.AllowNonStandardAppName
+	return i.AllowNonStandardAppName
 }
 
-func (o *InputSyslogSyslog2) GetMaxActiveCxn() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetMaxActiveCxn() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveCxn
+	return i.MaxActiveCxn
 }
 
-func (o *InputSyslogSyslog2) GetSocketIdleTimeout() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetSocketIdleTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketIdleTimeout
+	return i.SocketIdleTimeout
 }
 
-func (o *InputSyslogSyslog2) GetSocketEndingMaxWait() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetSocketEndingMaxWait() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketEndingMaxWait
+	return i.SocketEndingMaxWait
 }
 
-func (o *InputSyslogSyslog2) GetSocketMaxLifespan() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetSocketMaxLifespan() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketMaxLifespan
+	return i.SocketMaxLifespan
 }
 
-func (o *InputSyslogSyslog2) GetTLS() *InputSyslogTLSSettingsServerSide2 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetTLS() *InputSyslogTLSSettingsServerSide2 {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputSyslogSyslog2) GetMetadata() []InputSyslogMetadatum2 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetMetadata() []InputSyslogMetadatum2 {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSyslogSyslog2) GetUDPSocketRxBufSize() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetUDPSocketRxBufSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.UDPSocketRxBufSize
+	return i.UDPSocketRxBufSize
 }
 
-func (o *InputSyslogSyslog2) GetEnableLoadBalancing() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetEnableLoadBalancing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableLoadBalancing
+	return i.EnableLoadBalancing
 }
 
-func (o *InputSyslogSyslog2) GetDescription() *string {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputSyslogSyslog2) GetEnableEnhancedProxyHeaderParsing() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog2) GetEnableEnhancedProxyHeaderParsing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableEnhancedProxyHeaderParsing
+	return i.EnableEnhancedProxyHeaderParsing
 }
 
 type InputSyslogType1 string
@@ -741,18 +741,18 @@ func (i *InputSyslogConnection1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogConnection1) GetPipeline() *string {
-	if o == nil {
+func (i *InputSyslogConnection1) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSyslogConnection1) GetOutput() string {
-	if o == nil {
+func (i *InputSyslogConnection1) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSyslogMode1 - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -837,53 +837,53 @@ func (i *InputSyslogPq1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogPq1) GetMode() *InputSyslogMode1 {
-	if o == nil {
+func (i *InputSyslogPq1) GetMode() *InputSyslogMode1 {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSyslogPq1) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSyslogPq1) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSyslogPq1) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSyslogPq1) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSyslogPq1) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSyslogPq1) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSyslogPq1) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSyslogPq1) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSyslogPq1) GetPath() *string {
-	if o == nil {
+func (i *InputSyslogPq1) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSyslogPq1) GetCompress() *InputSyslogCompression1 {
-	if o == nil {
+func (i *InputSyslogPq1) GetCompress() *InputSyslogCompression1 {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputSyslogMinimumTLSVersion1 string
@@ -981,81 +981,81 @@ func (i *InputSyslogTLSSettingsServerSide1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetCertificateName() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetPassphrase() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetCertPath() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetCaPath() *string {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetMinVersion() *InputSyslogMinimumTLSVersion1 {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetMinVersion() *InputSyslogMinimumTLSVersion1 {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputSyslogTLSSettingsServerSide1) GetMaxVersion() *InputSyslogMaximumTLSVersion1 {
-	if o == nil {
+func (i *InputSyslogTLSSettingsServerSide1) GetMaxVersion() *InputSyslogMaximumTLSVersion1 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputSyslogMetadatum1 struct {
@@ -1075,18 +1075,18 @@ func (i *InputSyslogMetadatum1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogMetadatum1) GetName() string {
-	if o == nil {
+func (i *InputSyslogMetadatum1) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSyslogMetadatum1) GetValue() string {
-	if o == nil {
+func (i *InputSyslogMetadatum1) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSyslogSyslog1 struct {
@@ -1164,235 +1164,235 @@ func (i *InputSyslogSyslog1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSyslogSyslog1) GetID() *string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSyslogSyslog1) GetType() InputSyslogType1 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetType() InputSyslogType1 {
+	if i == nil {
 		return InputSyslogType1("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSyslogSyslog1) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSyslogSyslog1) GetPipeline() *string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSyslogSyslog1) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSyslogSyslog1) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSyslogSyslog1) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSyslogSyslog1) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSyslogSyslog1) GetConnections() []InputSyslogConnection1 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetConnections() []InputSyslogConnection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSyslogSyslog1) GetPq() *InputSyslogPq1 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetPq() *InputSyslogPq1 {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSyslogSyslog1) GetHost() *string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputSyslogSyslog1) GetUDPPort() float64 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetUDPPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.UDPPort
+	return i.UDPPort
 }
 
-func (o *InputSyslogSyslog1) GetTCPPort() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetTCPPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TCPPort
+	return i.TCPPort
 }
 
-func (o *InputSyslogSyslog1) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSyslogSyslog1) GetIPWhitelistRegex() *string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetIPWhitelistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPWhitelistRegex
+	return i.IPWhitelistRegex
 }
 
-func (o *InputSyslogSyslog1) GetTimestampTimezone() *string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetTimestampTimezone() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return i.TimestampTimezone
 }
 
-func (o *InputSyslogSyslog1) GetSingleMsgUDPPackets() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetSingleMsgUDPPackets() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SingleMsgUDPPackets
+	return i.SingleMsgUDPPackets
 }
 
-func (o *InputSyslogSyslog1) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputSyslogSyslog1) GetKeepFieldsList() []string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetKeepFieldsList() []string {
+	if i == nil {
 		return nil
 	}
-	return o.KeepFieldsList
+	return i.KeepFieldsList
 }
 
-func (o *InputSyslogSyslog1) GetOctetCounting() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetOctetCounting() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.OctetCounting
+	return i.OctetCounting
 }
 
-func (o *InputSyslogSyslog1) GetInferFraming() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetInferFraming() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.InferFraming
+	return i.InferFraming
 }
 
-func (o *InputSyslogSyslog1) GetStrictlyInferOctetCounting() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetStrictlyInferOctetCounting() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.StrictlyInferOctetCounting
+	return i.StrictlyInferOctetCounting
 }
 
-func (o *InputSyslogSyslog1) GetAllowNonStandardAppName() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetAllowNonStandardAppName() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.AllowNonStandardAppName
+	return i.AllowNonStandardAppName
 }
 
-func (o *InputSyslogSyslog1) GetMaxActiveCxn() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetMaxActiveCxn() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveCxn
+	return i.MaxActiveCxn
 }
 
-func (o *InputSyslogSyslog1) GetSocketIdleTimeout() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetSocketIdleTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketIdleTimeout
+	return i.SocketIdleTimeout
 }
 
-func (o *InputSyslogSyslog1) GetSocketEndingMaxWait() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetSocketEndingMaxWait() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketEndingMaxWait
+	return i.SocketEndingMaxWait
 }
 
-func (o *InputSyslogSyslog1) GetSocketMaxLifespan() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetSocketMaxLifespan() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketMaxLifespan
+	return i.SocketMaxLifespan
 }
 
-func (o *InputSyslogSyslog1) GetTLS() *InputSyslogTLSSettingsServerSide1 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetTLS() *InputSyslogTLSSettingsServerSide1 {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputSyslogSyslog1) GetMetadata() []InputSyslogMetadatum1 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetMetadata() []InputSyslogMetadatum1 {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSyslogSyslog1) GetUDPSocketRxBufSize() *float64 {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetUDPSocketRxBufSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.UDPSocketRxBufSize
+	return i.UDPSocketRxBufSize
 }
 
-func (o *InputSyslogSyslog1) GetEnableLoadBalancing() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetEnableLoadBalancing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableLoadBalancing
+	return i.EnableLoadBalancing
 }
 
-func (o *InputSyslogSyslog1) GetDescription() *string {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputSyslogSyslog1) GetEnableEnhancedProxyHeaderParsing() *bool {
-	if o == nil {
+func (i *InputSyslogSyslog1) GetEnableEnhancedProxyHeaderParsing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableEnhancedProxyHeaderParsing
+	return i.EnableEnhancedProxyHeaderParsing
 }
 
 type InputSyslogType string

@@ -126,95 +126,95 @@ func (r *RunnableJobExecutorRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobExecutorRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetRescheduleDroppedTasks() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return r.RescheduleDroppedTasks
 }
 
-func (o *RunnableJobExecutorRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetMaxTaskReschedule() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return r.MaxTaskReschedule
 }
 
-func (o *RunnableJobExecutorRunSettings) GetLogLevel() *RunnableJobExecutorScheduleLogLevel {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetLogLevel() *RunnableJobExecutorScheduleLogLevel {
+	if r == nil {
 		return nil
 	}
-	return o.LogLevel
+	return r.LogLevel
 }
 
-func (o *RunnableJobExecutorRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetJobTimeout() *string {
+	if r == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return r.JobTimeout
 }
 
-func (o *RunnableJobExecutorRunSettings) GetMode() *string {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetMode() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Mode
+	return r.Mode
 }
 
-func (o *RunnableJobExecutorRunSettings) GetTimeRangeType() *string {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetTimeRangeType() *string {
+	if r == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return r.TimeRangeType
 }
 
-func (o *RunnableJobExecutorRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetEarliest() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Earliest
+	return r.Earliest
 }
 
-func (o *RunnableJobExecutorRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetLatest() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Latest
+	return r.Latest
 }
 
-func (o *RunnableJobExecutorRunSettings) GetTimestampTimezone() any {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetTimestampTimezone() any {
+	if r == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return r.TimestampTimezone
 }
 
-func (o *RunnableJobExecutorRunSettings) GetTimeWarning() *RunnableJobExecutorTimeWarning {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetTimeWarning() *RunnableJobExecutorTimeWarning {
+	if r == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return r.TimeWarning
 }
 
-func (o *RunnableJobExecutorRunSettings) GetExpression() *string {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetExpression() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Expression
+	return r.Expression
 }
 
-func (o *RunnableJobExecutorRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetMinTaskSize() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return r.MinTaskSize
 }
 
-func (o *RunnableJobExecutorRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (r *RunnableJobExecutorRunSettings) GetMaxTaskSize() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return r.MaxTaskSize
 }
 
 // RunnableJobExecutorSchedule - Configuration for a scheduled job
@@ -242,46 +242,46 @@ func (r *RunnableJobExecutorSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobExecutorSchedule) GetEnabled() *bool {
-	if o == nil {
+func (r *RunnableJobExecutorSchedule) GetEnabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Enabled
+	return r.Enabled
 }
 
-func (o *RunnableJobExecutorSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (r *RunnableJobExecutorSchedule) GetCronSchedule() *string {
+	if r == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return r.CronSchedule
 }
 
-func (o *RunnableJobExecutorSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (r *RunnableJobExecutorSchedule) GetMaxConcurrentRuns() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return r.MaxConcurrentRuns
 }
 
-func (o *RunnableJobExecutorSchedule) GetSkippable() *bool {
-	if o == nil {
+func (r *RunnableJobExecutorSchedule) GetSkippable() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Skippable
+	return r.Skippable
 }
 
-func (o *RunnableJobExecutorSchedule) GetResumeMissed() any {
-	if o == nil {
+func (r *RunnableJobExecutorSchedule) GetResumeMissed() any {
+	if r == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return r.ResumeMissed
 }
 
-func (o *RunnableJobExecutorSchedule) GetRun() *RunnableJobExecutorRunSettings {
-	if o == nil {
+func (r *RunnableJobExecutorSchedule) GetRun() *RunnableJobExecutorRunSettings {
+	if r == nil {
 		return nil
 	}
-	return o.Run
+	return r.Run
 }
 
 type RunnableJobExecutorExecutorSpecificSettings struct {
@@ -317,25 +317,25 @@ func (r *RunnableJobExecutorExecutor) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobExecutorExecutor) GetType() string {
-	if o == nil {
+func (r *RunnableJobExecutorExecutor) GetType() string {
+	if r == nil {
 		return ""
 	}
-	return o.Type
+	return r.Type
 }
 
-func (o *RunnableJobExecutorExecutor) GetStoreTaskResults() *bool {
-	if o == nil {
+func (r *RunnableJobExecutorExecutor) GetStoreTaskResults() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.StoreTaskResults
+	return r.StoreTaskResults
 }
 
-func (o *RunnableJobExecutorExecutor) GetConf() *RunnableJobExecutorExecutorSpecificSettings {
-	if o == nil {
+func (r *RunnableJobExecutorExecutor) GetConf() *RunnableJobExecutorExecutorSpecificSettings {
+	if r == nil {
 		return nil
 	}
-	return o.Conf
+	return r.Conf
 }
 
 // RunnableJobExecutorLogLevel - Level at which to set task logging
@@ -396,32 +396,32 @@ func (r *RunnableJobExecutorRun) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobExecutorRun) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (r *RunnableJobExecutorRun) GetRescheduleDroppedTasks() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return r.RescheduleDroppedTasks
 }
 
-func (o *RunnableJobExecutorRun) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (r *RunnableJobExecutorRun) GetMaxTaskReschedule() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return r.MaxTaskReschedule
 }
 
-func (o *RunnableJobExecutorRun) GetLogLevel() *RunnableJobExecutorLogLevel {
-	if o == nil {
+func (r *RunnableJobExecutorRun) GetLogLevel() *RunnableJobExecutorLogLevel {
+	if r == nil {
 		return nil
 	}
-	return o.LogLevel
+	return r.LogLevel
 }
 
-func (o *RunnableJobExecutorRun) GetJobTimeout() *string {
-	if o == nil {
+func (r *RunnableJobExecutorRun) GetJobTimeout() *string {
+	if r == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return r.JobTimeout
 }
 
 type RunnableJobExecutor struct {
@@ -458,86 +458,86 @@ func (r *RunnableJobExecutor) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobExecutor) GetID() *string {
-	if o == nil {
+func (r *RunnableJobExecutor) GetID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *RunnableJobExecutor) GetDescription() *string {
-	if o == nil {
+func (r *RunnableJobExecutor) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *RunnableJobExecutor) GetType() *RunnableJobExecutorJobType {
-	if o == nil {
+func (r *RunnableJobExecutor) GetType() *RunnableJobExecutorJobType {
+	if r == nil {
 		return nil
 	}
-	return o.Type
+	return r.Type
 }
 
-func (o *RunnableJobExecutor) GetTTL() *string {
-	if o == nil {
+func (r *RunnableJobExecutor) GetTTL() *string {
+	if r == nil {
 		return nil
 	}
-	return o.TTL
+	return r.TTL
 }
 
-func (o *RunnableJobExecutor) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (r *RunnableJobExecutor) GetIgnoreGroupJobsLimit() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return r.IgnoreGroupJobsLimit
 }
 
-func (o *RunnableJobExecutor) GetRemoveFields() []string {
-	if o == nil {
+func (r *RunnableJobExecutor) GetRemoveFields() []string {
+	if r == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return r.RemoveFields
 }
 
-func (o *RunnableJobExecutor) GetResumeOnBoot() *bool {
-	if o == nil {
+func (r *RunnableJobExecutor) GetResumeOnBoot() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return r.ResumeOnBoot
 }
 
-func (o *RunnableJobExecutor) GetEnvironment() *string {
-	if o == nil {
+func (r *RunnableJobExecutor) GetEnvironment() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Environment
+	return r.Environment
 }
 
-func (o *RunnableJobExecutor) GetSchedule() *RunnableJobExecutorSchedule {
-	if o == nil {
+func (r *RunnableJobExecutor) GetSchedule() *RunnableJobExecutorSchedule {
+	if r == nil {
 		return nil
 	}
-	return o.Schedule
+	return r.Schedule
 }
 
-func (o *RunnableJobExecutor) GetStreamtags() []string {
-	if o == nil {
+func (r *RunnableJobExecutor) GetStreamtags() []string {
+	if r == nil {
 		return nil
 	}
-	return o.Streamtags
+	return r.Streamtags
 }
 
-func (o *RunnableJobExecutor) GetExecutor() RunnableJobExecutorExecutor {
-	if o == nil {
+func (r *RunnableJobExecutor) GetExecutor() RunnableJobExecutorExecutor {
+	if r == nil {
 		return RunnableJobExecutorExecutor{}
 	}
-	return o.Executor
+	return r.Executor
 }
 
-func (o *RunnableJobExecutor) GetRun() RunnableJobExecutorRun {
-	if o == nil {
+func (r *RunnableJobExecutor) GetRun() RunnableJobExecutorRun {
+	if r == nil {
 		return RunnableJobExecutorRun{}
 	}
-	return o.Run
+	return r.Run
 }

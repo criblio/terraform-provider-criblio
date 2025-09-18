@@ -6,11 +6,11 @@ type LimitsSamples struct {
 	MaxSize string `json:"maxSize"`
 }
 
-func (o *LimitsSamples) GetMaxSize() string {
-	if o == nil {
+func (l *LimitsSamples) GetMaxSize() string {
+	if l == nil {
 		return ""
 	}
-	return o.MaxSize
+	return l.MaxSize
 }
 
 type Limits struct {
@@ -36,142 +36,142 @@ type Limits struct {
 	Samples                     LimitsSamples             `json:"samples"`
 }
 
-func (o *Limits) GetCPUProfileTTL() string {
-	if o == nil {
+func (l *Limits) GetCPUProfileTTL() string {
+	if l == nil {
 		return ""
 	}
-	return o.CPUProfileTTL
+	return l.CPUProfileTTL
 }
 
-func (o *Limits) GetEdgeMetricsCustomExpression() *string {
-	if o == nil {
+func (l *Limits) GetEdgeMetricsCustomExpression() *string {
+	if l == nil {
 		return nil
 	}
-	return o.EdgeMetricsCustomExpression
+	return l.EdgeMetricsCustomExpression
 }
 
-func (o *Limits) GetEdgeMetricsMode() *EdgeHeartbeatMetricsMode {
-	if o == nil {
+func (l *Limits) GetEdgeMetricsMode() *EdgeHeartbeatMetricsMode {
+	if l == nil {
 		return nil
 	}
-	return o.EdgeMetricsMode
+	return l.EdgeMetricsMode
 }
 
-func (o *Limits) GetEdgeNodesCount() *float64 {
-	if o == nil {
+func (l *Limits) GetEdgeNodesCount() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.EdgeNodesCount
+	return l.EdgeNodesCount
 }
 
-func (o *Limits) GetEnableMetricsPersistence() bool {
-	if o == nil {
+func (l *Limits) GetEnableMetricsPersistence() bool {
+	if l == nil {
 		return false
 	}
-	return o.EnableMetricsPersistence
+	return l.EnableMetricsPersistence
 }
 
-func (o *Limits) GetEventsMetadataSources() []string {
-	if o == nil {
+func (l *Limits) GetEventsMetadataSources() []string {
+	if l == nil {
 		return nil
 	}
-	return o.EventsMetadataSources
+	return l.EventsMetadataSources
 }
 
-func (o *Limits) GetLookupMaxSize() *string {
-	if o == nil {
+func (l *Limits) GetLookupMaxSize() *string {
+	if l == nil {
 		return nil
 	}
-	return o.LookupMaxSize
+	return l.LookupMaxSize
 }
 
-func (o *Limits) GetLookupMaxTotalSize() *string {
-	if o == nil {
+func (l *Limits) GetLookupMaxTotalSize() *string {
+	if l == nil {
 		return nil
 	}
-	return o.LookupMaxTotalSize
+	return l.LookupMaxTotalSize
 }
 
-func (o *Limits) GetMaxMetrics() *float64 {
-	if o == nil {
+func (l *Limits) GetMaxMetrics() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.MaxMetrics
+	return l.MaxMetrics
 }
 
-func (o *Limits) GetMaxPQSize() *string {
-	if o == nil {
+func (l *Limits) GetMaxPQSize() *string {
+	if l == nil {
 		return nil
 	}
-	return o.MaxPQSize
+	return l.MaxPQSize
 }
 
-func (o *Limits) GetMetricsDirectory() string {
-	if o == nil {
+func (l *Limits) GetMetricsDirectory() string {
+	if l == nil {
 		return ""
 	}
-	return o.MetricsDirectory
+	return l.MetricsDirectory
 }
 
-func (o *Limits) GetMetricsDropList() []string {
-	if o == nil {
+func (l *Limits) GetMetricsDropList() []string {
+	if l == nil {
 		return nil
 	}
-	return o.MetricsDropList
+	return l.MetricsDropList
 }
 
-func (o *Limits) GetMetricsFieldsBlacklist() []string {
-	if o == nil {
+func (l *Limits) GetMetricsFieldsBlacklist() []string {
+	if l == nil {
 		return []string{}
 	}
-	return o.MetricsFieldsBlacklist
+	return l.MetricsFieldsBlacklist
 }
 
-func (o *Limits) GetMetricsGCPeriod() string {
-	if o == nil {
+func (l *Limits) GetMetricsGCPeriod() string {
+	if l == nil {
 		return ""
 	}
-	return o.MetricsGCPeriod
+	return l.MetricsGCPeriod
 }
 
-func (o *Limits) GetMetricsMaxCardinality() *float64 {
-	if o == nil {
+func (l *Limits) GetMetricsMaxCardinality() *float64 {
+	if l == nil {
 		return nil
 	}
-	return o.MetricsMaxCardinality
+	return l.MetricsMaxCardinality
 }
 
-func (o *Limits) GetMetricsMaxDiskSpace() *string {
-	if o == nil {
+func (l *Limits) GetMetricsMaxDiskSpace() *string {
+	if l == nil {
 		return nil
 	}
-	return o.MetricsMaxDiskSpace
+	return l.MetricsMaxDiskSpace
 }
 
-func (o *Limits) GetMetricsNeverDropList() []string {
-	if o == nil {
+func (l *Limits) GetMetricsNeverDropList() []string {
+	if l == nil {
 		return []string{}
 	}
-	return o.MetricsNeverDropList
+	return l.MetricsNeverDropList
 }
 
-func (o *Limits) GetMetricsWorkerIDBlacklist() []string {
-	if o == nil {
+func (l *Limits) GetMetricsWorkerIDBlacklist() []string {
+	if l == nil {
 		return []string{}
 	}
-	return o.MetricsWorkerIDBlacklist
+	return l.MetricsWorkerIDBlacklist
 }
 
-func (o *Limits) GetMinFreeSpace() string {
-	if o == nil {
+func (l *Limits) GetMinFreeSpace() string {
+	if l == nil {
 		return ""
 	}
-	return o.MinFreeSpace
+	return l.MinFreeSpace
 }
 
-func (o *Limits) GetSamples() LimitsSamples {
-	if o == nil {
+func (l *Limits) GetSamples() LimitsSamples {
+	if l == nil {
 		return LimitsSamples{}
 	}
-	return o.Samples
+	return l.Samples
 }

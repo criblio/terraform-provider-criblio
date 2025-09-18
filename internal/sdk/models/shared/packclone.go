@@ -11,44 +11,44 @@ type PackClone struct {
 	SrcGroup   string   `json:"srcGroup"`
 }
 
-func (o *PackClone) GetDest() *string {
-	if o == nil {
+func (p *PackClone) GetDest() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Dest
+	return p.Dest
 }
 
-func (o *PackClone) GetDstGroups() []string {
-	if o == nil {
+func (p *PackClone) GetDstGroups() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.DstGroups
+	return p.DstGroups
 }
 
-func (o *PackClone) GetForce() *bool {
-	if o == nil {
+func (p *PackClone) GetForce() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Force
+	return p.Force
 }
 
-func (o *PackClone) GetIsDisabled() *bool {
-	if o == nil {
+func (p *PackClone) GetIsDisabled() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.IsDisabled
+	return p.IsDisabled
 }
 
-func (o *PackClone) GetPacks() []string {
-	if o == nil {
+func (p *PackClone) GetPacks() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Packs
+	return p.Packs
 }
 
-func (o *PackClone) GetSrcGroup() string {
-	if o == nil {
+func (p *PackClone) GetSrcGroup() string {
+	if p == nil {
 		return ""
 	}
-	return o.SrcGroup
+	return p.SrcGroup
 }

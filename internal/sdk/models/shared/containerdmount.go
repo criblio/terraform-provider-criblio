@@ -7,16 +7,16 @@ type ContainerdMount struct {
 	Source      string `json:"source"`
 }
 
-func (o *ContainerdMount) GetDestination() string {
-	if o == nil {
+func (c *ContainerdMount) GetDestination() string {
+	if c == nil {
 		return ""
 	}
-	return o.Destination
+	return c.Destination
 }
 
-func (o *ContainerdMount) GetSource() string {
-	if o == nil {
+func (c *ContainerdMount) GetSource() string {
+	if c == nil {
 		return ""
 	}
-	return o.Source
+	return c.Source
 }

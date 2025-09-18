@@ -108,18 +108,18 @@ func (l *LogLabel) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LogLabel) GetLabel() string {
-	if o == nil {
+func (l *LogLabel) GetLabel() string {
+	if l == nil {
 		return ""
 	}
-	return o.Label
+	return l.Label
 }
 
-func (o *LogLabel) GetValueExpression() string {
-	if o == nil {
+func (l *LogLabel) GetValueExpression() string {
+	if l == nil {
 		return ""
 	}
-	return o.ValueExpression
+	return l.ValueExpression
 }
 
 type ResourceTypeLabel struct {
@@ -140,18 +140,18 @@ func (r *ResourceTypeLabel) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ResourceTypeLabel) GetLabel() string {
-	if o == nil {
+func (r *ResourceTypeLabel) GetLabel() string {
+	if r == nil {
 		return ""
 	}
-	return o.Label
+	return r.Label
 }
 
-func (o *ResourceTypeLabel) GetValueExpression() string {
-	if o == nil {
+func (r *ResourceTypeLabel) GetValueExpression() string {
+	if r == nil {
 		return ""
 	}
-	return o.ValueExpression
+	return r.ValueExpression
 }
 
 // OutputGoogleCloudLoggingGoogleAuthenticationMethod - Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.

@@ -47,18 +47,18 @@ func (i *InputMetricsConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMetricsConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputMetricsConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputMetricsConnection) GetOutput() string {
-	if o == nil {
+func (i *InputMetricsConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputMetricsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputMetricsPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMetricsPq) GetMode() *InputMetricsMode {
-	if o == nil {
+func (i *InputMetricsPq) GetMode() *InputMetricsMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputMetricsPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputMetricsPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputMetricsPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputMetricsPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputMetricsPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputMetricsPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputMetricsPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputMetricsPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputMetricsPq) GetPath() *string {
-	if o == nil {
+func (i *InputMetricsPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputMetricsPq) GetCompress() *InputMetricsCompression {
-	if o == nil {
+func (i *InputMetricsPq) GetCompress() *InputMetricsCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputMetricsMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputMetricsTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetMinVersion() *InputMetricsMinimumTLSVersion {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetMinVersion() *InputMetricsMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputMetricsTLSSettingsServerSide) GetMaxVersion() *InputMetricsMaximumTLSVersion {
-	if o == nil {
+func (i *InputMetricsTLSSettingsServerSide) GetMaxVersion() *InputMetricsMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputMetricsMetadatum struct {
@@ -381,18 +381,18 @@ func (i *InputMetricsMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMetricsMetadatum) GetName() string {
-	if o == nil {
+func (i *InputMetricsMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputMetricsMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputMetricsMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputMetrics struct {
@@ -444,142 +444,142 @@ func (i *InputMetrics) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMetrics) GetID() *string {
-	if o == nil {
+func (i *InputMetrics) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputMetrics) GetType() InputMetricsType {
-	if o == nil {
+func (i *InputMetrics) GetType() InputMetricsType {
+	if i == nil {
 		return InputMetricsType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputMetrics) GetDisabled() *bool {
-	if o == nil {
+func (i *InputMetrics) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputMetrics) GetPipeline() *string {
-	if o == nil {
+func (i *InputMetrics) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputMetrics) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputMetrics) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputMetrics) GetEnvironment() *string {
-	if o == nil {
+func (i *InputMetrics) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputMetrics) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputMetrics) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputMetrics) GetStreamtags() []string {
-	if o == nil {
+func (i *InputMetrics) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputMetrics) GetConnections() []InputMetricsConnection {
-	if o == nil {
+func (i *InputMetrics) GetConnections() []InputMetricsConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputMetrics) GetPq() *InputMetricsPq {
-	if o == nil {
+func (i *InputMetrics) GetPq() *InputMetricsPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputMetrics) GetHost() *string {
-	if o == nil {
+func (i *InputMetrics) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputMetrics) GetUDPPort() *float64 {
-	if o == nil {
+func (i *InputMetrics) GetUDPPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.UDPPort
+	return i.UDPPort
 }
 
-func (o *InputMetrics) GetTCPPort() *float64 {
-	if o == nil {
+func (i *InputMetrics) GetTCPPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TCPPort
+	return i.TCPPort
 }
 
-func (o *InputMetrics) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputMetrics) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputMetrics) GetIPWhitelistRegex() *string {
-	if o == nil {
+func (i *InputMetrics) GetIPWhitelistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPWhitelistRegex
+	return i.IPWhitelistRegex
 }
 
-func (o *InputMetrics) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputMetrics) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputMetrics) GetTLS() *InputMetricsTLSSettingsServerSide {
-	if o == nil {
+func (i *InputMetrics) GetTLS() *InputMetricsTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputMetrics) GetMetadata() []InputMetricsMetadatum {
-	if o == nil {
+func (i *InputMetrics) GetMetadata() []InputMetricsMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputMetrics) GetUDPSocketRxBufSize() *float64 {
-	if o == nil {
+func (i *InputMetrics) GetUDPSocketRxBufSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.UDPSocketRxBufSize
+	return i.UDPSocketRxBufSize
 }
 
-func (o *InputMetrics) GetDescription() *string {
-	if o == nil {
+func (i *InputMetrics) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

@@ -14,18 +14,18 @@ type UpdateSearchJobByIDRequest struct {
 	SearchJob shared.SearchJob `request:"mediaType=application/json"`
 }
 
-func (o *UpdateSearchJobByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateSearchJobByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateSearchJobByIDRequest) GetSearchJob() shared.SearchJob {
-	if o == nil {
+func (u *UpdateSearchJobByIDRequest) GetSearchJob() shared.SearchJob {
+	if u == nil {
 		return shared.SearchJob{}
 	}
-	return o.SearchJob
+	return u.SearchJob
 }
 
 // UpdateSearchJobByIDResponseBody - a list of SearchJob objects
@@ -33,11 +33,11 @@ type UpdateSearchJobByIDResponseBody struct {
 	Items []shared.SearchJob `json:"items,omitempty"`
 }
 
-func (o *UpdateSearchJobByIDResponseBody) GetItems() []shared.SearchJob {
-	if o == nil {
+func (u *UpdateSearchJobByIDResponseBody) GetItems() []shared.SearchJob {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSearchJobByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateSearchJobByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSearchJobByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSearchJobByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSearchJobByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSearchJobByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSearchJobByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSearchJobByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSearchJobByIDResponse) GetObject() *UpdateSearchJobByIDResponseBody {
-	if o == nil {
+func (u *UpdateSearchJobByIDResponse) GetObject() *UpdateSearchJobByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSearchJobByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSearchJobByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -126,95 +126,95 @@ func (s *SavedJobCollectionRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobCollectionRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetRescheduleDroppedTasks() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return s.RescheduleDroppedTasks
 }
 
-func (o *SavedJobCollectionRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetMaxTaskReschedule() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return s.MaxTaskReschedule
 }
 
-func (o *SavedJobCollectionRunSettings) GetLogLevel() *SavedJobCollectionLogLevel {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetLogLevel() *SavedJobCollectionLogLevel {
+	if s == nil {
 		return nil
 	}
-	return o.LogLevel
+	return s.LogLevel
 }
 
-func (o *SavedJobCollectionRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetJobTimeout() *string {
+	if s == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return s.JobTimeout
 }
 
-func (o *SavedJobCollectionRunSettings) GetMode() *string {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetMode() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Mode
+	return s.Mode
 }
 
-func (o *SavedJobCollectionRunSettings) GetTimeRangeType() *string {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetTimeRangeType() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return s.TimeRangeType
 }
 
-func (o *SavedJobCollectionRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetEarliest() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Earliest
+	return s.Earliest
 }
 
-func (o *SavedJobCollectionRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetLatest() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Latest
+	return s.Latest
 }
 
-func (o *SavedJobCollectionRunSettings) GetTimestampTimezone() any {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetTimestampTimezone() any {
+	if s == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return s.TimestampTimezone
 }
 
-func (o *SavedJobCollectionRunSettings) GetTimeWarning() *SavedJobCollectionTimeWarning {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetTimeWarning() *SavedJobCollectionTimeWarning {
+	if s == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return s.TimeWarning
 }
 
-func (o *SavedJobCollectionRunSettings) GetExpression() *string {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetExpression() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Expression
+	return s.Expression
 }
 
-func (o *SavedJobCollectionRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetMinTaskSize() *string {
+	if s == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return s.MinTaskSize
 }
 
-func (o *SavedJobCollectionRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (s *SavedJobCollectionRunSettings) GetMaxTaskSize() *string {
+	if s == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return s.MaxTaskSize
 }
 
 // SavedJobCollectionSchedule - Configuration for a scheduled job
@@ -242,46 +242,46 @@ func (s *SavedJobCollectionSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobCollectionSchedule) GetEnabled() *bool {
-	if o == nil {
+func (s *SavedJobCollectionSchedule) GetEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Enabled
+	return s.Enabled
 }
 
-func (o *SavedJobCollectionSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (s *SavedJobCollectionSchedule) GetCronSchedule() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return s.CronSchedule
 }
 
-func (o *SavedJobCollectionSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (s *SavedJobCollectionSchedule) GetMaxConcurrentRuns() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return s.MaxConcurrentRuns
 }
 
-func (o *SavedJobCollectionSchedule) GetSkippable() *bool {
-	if o == nil {
+func (s *SavedJobCollectionSchedule) GetSkippable() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Skippable
+	return s.Skippable
 }
 
-func (o *SavedJobCollectionSchedule) GetResumeMissed() any {
-	if o == nil {
+func (s *SavedJobCollectionSchedule) GetResumeMissed() any {
+	if s == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return s.ResumeMissed
 }
 
-func (o *SavedJobCollectionSchedule) GetRun() *SavedJobCollectionRunSettings {
-	if o == nil {
+func (s *SavedJobCollectionSchedule) GetRun() *SavedJobCollectionRunSettings {
+	if s == nil {
 		return nil
 	}
-	return o.Run
+	return s.Run
 }
 
 type SavedJobCollectionCollectorSpecificSettings struct {
@@ -319,32 +319,32 @@ func (s *SavedJobCollectionCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobCollectionCollector) GetType() string {
-	if o == nil {
+func (s *SavedJobCollectionCollector) GetType() string {
+	if s == nil {
 		return ""
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SavedJobCollectionCollector) GetConf() SavedJobCollectionCollectorSpecificSettings {
-	if o == nil {
+func (s *SavedJobCollectionCollector) GetConf() SavedJobCollectionCollectorSpecificSettings {
+	if s == nil {
 		return SavedJobCollectionCollectorSpecificSettings{}
 	}
-	return o.Conf
+	return s.Conf
 }
 
-func (o *SavedJobCollectionCollector) GetDestructive() *bool {
-	if o == nil {
+func (s *SavedJobCollectionCollector) GetDestructive() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Destructive
+	return s.Destructive
 }
 
-func (o *SavedJobCollectionCollector) GetEncoding() *string {
-	if o == nil {
+func (s *SavedJobCollectionCollector) GetEncoding() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Encoding
+	return s.Encoding
 }
 
 type SavedJobCollectionType string
@@ -389,25 +389,25 @@ func (s *SavedJobCollectionPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobCollectionPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (s *SavedJobCollectionPreprocess) GetDisabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Disabled
+	return s.Disabled
 }
 
-func (o *SavedJobCollectionPreprocess) GetCommand() *string {
-	if o == nil {
+func (s *SavedJobCollectionPreprocess) GetCommand() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Command
+	return s.Command
 }
 
-func (o *SavedJobCollectionPreprocess) GetArgs() []string {
-	if o == nil {
+func (s *SavedJobCollectionPreprocess) GetArgs() []string {
+	if s == nil {
 		return nil
 	}
-	return o.Args
+	return s.Args
 }
 
 type SavedJobCollectionMetadatum struct {
@@ -427,18 +427,18 @@ func (s *SavedJobCollectionMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobCollectionMetadatum) GetName() string {
-	if o == nil {
+func (s *SavedJobCollectionMetadatum) GetName() string {
+	if s == nil {
 		return ""
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SavedJobCollectionMetadatum) GetValue() string {
-	if o == nil {
+func (s *SavedJobCollectionMetadatum) GetValue() string {
+	if s == nil {
 		return ""
 	}
-	return o.Value
+	return s.Value
 }
 
 type SavedJobCollectionInput struct {
@@ -471,67 +471,67 @@ func (s *SavedJobCollectionInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobCollectionInput) GetType() *SavedJobCollectionType {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetType() *SavedJobCollectionType {
+	if s == nil {
 		return nil
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SavedJobCollectionInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetBreakerRulesets() []string {
+	if s == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return s.BreakerRulesets
 }
 
-func (o *SavedJobCollectionInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetStaleChannelFlushMs() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return s.StaleChannelFlushMs
 }
 
-func (o *SavedJobCollectionInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetSendToRoutes() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return s.SendToRoutes
 }
 
-func (o *SavedJobCollectionInput) GetPreprocess() *SavedJobCollectionPreprocess {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetPreprocess() *SavedJobCollectionPreprocess {
+	if s == nil {
 		return nil
 	}
-	return o.Preprocess
+	return s.Preprocess
 }
 
-func (o *SavedJobCollectionInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetThrottleRatePerSec() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return s.ThrottleRatePerSec
 }
 
-func (o *SavedJobCollectionInput) GetMetadata() []SavedJobCollectionMetadatum {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetMetadata() []SavedJobCollectionMetadatum {
+	if s == nil {
 		return nil
 	}
-	return o.Metadata
+	return s.Metadata
 }
 
-func (o *SavedJobCollectionInput) GetPipeline() *string {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetPipeline() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Pipeline
+	return s.Pipeline
 }
 
-func (o *SavedJobCollectionInput) GetOutput() *string {
-	if o == nil {
+func (s *SavedJobCollectionInput) GetOutput() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Output
+	return s.Output
 }
 
 type SavedJobCollection struct {
@@ -570,93 +570,93 @@ func (s *SavedJobCollection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SavedJobCollection) GetID() *string {
-	if o == nil {
+func (s *SavedJobCollection) GetID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SavedJobCollection) GetDescription() *string {
-	if o == nil {
+func (s *SavedJobCollection) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SavedJobCollection) GetType() SavedJobCollectionJobType {
-	if o == nil {
+func (s *SavedJobCollection) GetType() SavedJobCollectionJobType {
+	if s == nil {
 		return SavedJobCollectionJobType("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SavedJobCollection) GetTTL() *string {
-	if o == nil {
+func (s *SavedJobCollection) GetTTL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TTL
+	return s.TTL
 }
 
-func (o *SavedJobCollection) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (s *SavedJobCollection) GetIgnoreGroupJobsLimit() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return s.IgnoreGroupJobsLimit
 }
 
-func (o *SavedJobCollection) GetRemoveFields() []string {
-	if o == nil {
+func (s *SavedJobCollection) GetRemoveFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return s.RemoveFields
 }
 
-func (o *SavedJobCollection) GetResumeOnBoot() *bool {
-	if o == nil {
+func (s *SavedJobCollection) GetResumeOnBoot() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return s.ResumeOnBoot
 }
 
-func (o *SavedJobCollection) GetEnvironment() *string {
-	if o == nil {
+func (s *SavedJobCollection) GetEnvironment() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Environment
+	return s.Environment
 }
 
-func (o *SavedJobCollection) GetSchedule() *SavedJobCollectionSchedule {
-	if o == nil {
+func (s *SavedJobCollection) GetSchedule() *SavedJobCollectionSchedule {
+	if s == nil {
 		return nil
 	}
-	return o.Schedule
+	return s.Schedule
 }
 
-func (o *SavedJobCollection) GetStreamtags() []string {
-	if o == nil {
+func (s *SavedJobCollection) GetStreamtags() []string {
+	if s == nil {
 		return nil
 	}
-	return o.Streamtags
+	return s.Streamtags
 }
 
-func (o *SavedJobCollection) GetWorkerAffinity() *bool {
-	if o == nil {
+func (s *SavedJobCollection) GetWorkerAffinity() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return s.WorkerAffinity
 }
 
-func (o *SavedJobCollection) GetCollector() SavedJobCollectionCollector {
-	if o == nil {
+func (s *SavedJobCollection) GetCollector() SavedJobCollectionCollector {
+	if s == nil {
 		return SavedJobCollectionCollector{}
 	}
-	return o.Collector
+	return s.Collector
 }
 
-func (o *SavedJobCollection) GetInput() *SavedJobCollectionInput {
-	if o == nil {
+func (s *SavedJobCollection) GetInput() *SavedJobCollectionInput {
+	if s == nil {
 		return nil
 	}
-	return o.Input
+	return s.Input
 }

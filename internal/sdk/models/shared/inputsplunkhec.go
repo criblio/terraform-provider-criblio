@@ -47,18 +47,18 @@ func (i *InputSplunkHecConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkHecConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputSplunkHecConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSplunkHecConnection) GetOutput() string {
-	if o == nil {
+func (i *InputSplunkHecConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSplunkHecMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputSplunkHecPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkHecPq) GetMode() *InputSplunkHecMode {
-	if o == nil {
+func (i *InputSplunkHecPq) GetMode() *InputSplunkHecMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSplunkHecPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSplunkHecPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSplunkHecPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSplunkHecPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSplunkHecPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSplunkHecPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSplunkHecPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSplunkHecPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSplunkHecPq) GetPath() *string {
-	if o == nil {
+func (i *InputSplunkHecPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSplunkHecPq) GetCompress() *InputSplunkHecCompression {
-	if o == nil {
+func (i *InputSplunkHecPq) GetCompress() *InputSplunkHecCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputSplunkHecAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
@@ -236,18 +236,18 @@ func (i *InputSplunkHecAuthTokenMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkHecAuthTokenMetadatum) GetName() string {
-	if o == nil {
+func (i *InputSplunkHecAuthTokenMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSplunkHecAuthTokenMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputSplunkHecAuthTokenMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSplunkHecAuthToken struct {
@@ -275,53 +275,53 @@ func (i *InputSplunkHecAuthToken) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkHecAuthToken) GetAuthType() *InputSplunkHecAuthenticationMethod {
-	if o == nil {
+func (i *InputSplunkHecAuthToken) GetAuthType() *InputSplunkHecAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputSplunkHecAuthToken) GetTokenSecret() any {
-	if o == nil {
+func (i *InputSplunkHecAuthToken) GetTokenSecret() any {
+	if i == nil {
 		return nil
 	}
-	return o.TokenSecret
+	return i.TokenSecret
 }
 
-func (o *InputSplunkHecAuthToken) GetToken() any {
-	if o == nil {
+func (i *InputSplunkHecAuthToken) GetToken() any {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputSplunkHecAuthToken) GetEnabled() *bool {
-	if o == nil {
+func (i *InputSplunkHecAuthToken) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputSplunkHecAuthToken) GetDescription() *string {
-	if o == nil {
+func (i *InputSplunkHecAuthToken) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputSplunkHecAuthToken) GetAllowedIndexesAtToken() []string {
-	if o == nil {
+func (i *InputSplunkHecAuthToken) GetAllowedIndexesAtToken() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AllowedIndexesAtToken
+	return i.AllowedIndexesAtToken
 }
 
-func (o *InputSplunkHecAuthToken) GetMetadata() []InputSplunkHecAuthTokenMetadatum {
-	if o == nil {
+func (i *InputSplunkHecAuthToken) GetMetadata() []InputSplunkHecAuthTokenMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
 type InputSplunkHecMinimumTLSVersion string
@@ -419,81 +419,81 @@ func (i *InputSplunkHecTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetMinVersion() *InputSplunkHecMinimumTLSVersion {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetMinVersion() *InputSplunkHecMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputSplunkHecTLSSettingsServerSide) GetMaxVersion() *InputSplunkHecMaximumTLSVersion {
-	if o == nil {
+func (i *InputSplunkHecTLSSettingsServerSide) GetMaxVersion() *InputSplunkHecMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputSplunkHecMetadatum struct {
@@ -513,18 +513,18 @@ func (i *InputSplunkHecMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkHecMetadatum) GetName() string {
-	if o == nil {
+func (i *InputSplunkHecMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSplunkHecMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputSplunkHecMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSplunkHec struct {
@@ -611,268 +611,268 @@ func (i *InputSplunkHec) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSplunkHec) GetID() *string {
-	if o == nil {
+func (i *InputSplunkHec) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSplunkHec) GetType() *InputSplunkHecType {
-	if o == nil {
+func (i *InputSplunkHec) GetType() *InputSplunkHecType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSplunkHec) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSplunkHec) GetPipeline() *string {
-	if o == nil {
+func (i *InputSplunkHec) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSplunkHec) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSplunkHec) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSplunkHec) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSplunkHec) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSplunkHec) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSplunkHec) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSplunkHec) GetConnections() []InputSplunkHecConnection {
-	if o == nil {
+func (i *InputSplunkHec) GetConnections() []InputSplunkHecConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSplunkHec) GetPq() *InputSplunkHecPq {
-	if o == nil {
+func (i *InputSplunkHec) GetPq() *InputSplunkHecPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSplunkHec) GetHost() *string {
-	if o == nil {
+func (i *InputSplunkHec) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputSplunkHec) GetPort() float64 {
-	if o == nil {
+func (i *InputSplunkHec) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputSplunkHec) GetAuthTokens() []InputSplunkHecAuthToken {
-	if o == nil {
+func (i *InputSplunkHec) GetAuthTokens() []InputSplunkHecAuthToken {
+	if i == nil {
 		return nil
 	}
-	return o.AuthTokens
+	return i.AuthTokens
 }
 
-func (o *InputSplunkHec) GetTLS() *InputSplunkHecTLSSettingsServerSide {
-	if o == nil {
+func (i *InputSplunkHec) GetTLS() *InputSplunkHecTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputSplunkHec) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputSplunkHec) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputSplunkHec) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputSplunkHec) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputSplunkHec) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputSplunkHec) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputSplunkHec) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputSplunkHec) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputSplunkHec) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputSplunkHec) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputSplunkHec) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputSplunkHec) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputSplunkHec) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputSplunkHec) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputSplunkHec) GetEnableHealthCheck() any {
-	if o == nil {
+func (i *InputSplunkHec) GetEnableHealthCheck() any {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputSplunkHec) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputSplunkHec) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputSplunkHec) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputSplunkHec) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputSplunkHec) GetSplunkHecAPI() *string {
-	if o == nil {
+func (i *InputSplunkHec) GetSplunkHecAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SplunkHecAPI
+	return i.SplunkHecAPI
 }
 
-func (o *InputSplunkHec) GetMetadata() []InputSplunkHecMetadatum {
-	if o == nil {
+func (i *InputSplunkHec) GetMetadata() []InputSplunkHecMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSplunkHec) GetAllowedIndexes() []string {
-	if o == nil {
+func (i *InputSplunkHec) GetAllowedIndexes() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AllowedIndexes
+	return i.AllowedIndexes
 }
 
-func (o *InputSplunkHec) GetSplunkHecAcks() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetSplunkHecAcks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SplunkHecAcks
+	return i.SplunkHecAcks
 }
 
-func (o *InputSplunkHec) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputSplunkHec) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputSplunkHec) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputSplunkHec) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputSplunkHec) GetUseFwdTimezone() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetUseFwdTimezone() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.UseFwdTimezone
+	return i.UseFwdTimezone
 }
 
-func (o *InputSplunkHec) GetDropControlFields() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetDropControlFields() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DropControlFields
+	return i.DropControlFields
 }
 
-func (o *InputSplunkHec) GetExtractMetrics() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetExtractMetrics() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ExtractMetrics
+	return i.ExtractMetrics
 }
 
-func (o *InputSplunkHec) GetAccessControlAllowOrigin() []string {
-	if o == nil {
+func (i *InputSplunkHec) GetAccessControlAllowOrigin() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AccessControlAllowOrigin
+	return i.AccessControlAllowOrigin
 }
 
-func (o *InputSplunkHec) GetAccessControlAllowHeaders() []string {
-	if o == nil {
+func (i *InputSplunkHec) GetAccessControlAllowHeaders() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AccessControlAllowHeaders
+	return i.AccessControlAllowHeaders
 }
 
-func (o *InputSplunkHec) GetEmitTokenMetrics() *bool {
-	if o == nil {
+func (i *InputSplunkHec) GetEmitTokenMetrics() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EmitTokenMetrics
+	return i.EmitTokenMetrics
 }
 
-func (o *InputSplunkHec) GetDescription() *string {
-	if o == nil {
+func (i *InputSplunkHec) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

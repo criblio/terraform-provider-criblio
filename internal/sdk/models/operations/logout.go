@@ -15,23 +15,23 @@ type LogoutResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *LogoutResponse) GetContentType() string {
-	if o == nil {
+func (l *LogoutResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *LogoutResponse) GetStatusCode() int {
-	if o == nil {
+func (l *LogoutResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *LogoutResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *LogoutResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }

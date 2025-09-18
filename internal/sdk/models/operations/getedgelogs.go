@@ -18,32 +18,32 @@ type GetEdgeLogsRequest struct {
 	Depth *float64 `queryParam:"style=form,explode=true,name=depth"`
 }
 
-func (o *GetEdgeLogsRequest) GetMode() *string {
-	if o == nil {
+func (g *GetEdgeLogsRequest) GetMode() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Mode
+	return g.Mode
 }
 
-func (o *GetEdgeLogsRequest) GetAllow() *string {
-	if o == nil {
+func (g *GetEdgeLogsRequest) GetAllow() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Allow
+	return g.Allow
 }
 
-func (o *GetEdgeLogsRequest) GetPath() *string {
-	if o == nil {
+func (g *GetEdgeLogsRequest) GetPath() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Path
+	return g.Path
 }
 
-func (o *GetEdgeLogsRequest) GetDepth() *float64 {
-	if o == nil {
+func (g *GetEdgeLogsRequest) GetDepth() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.Depth
+	return g.Depth
 }
 
 // GetEdgeLogsResponseBody - a list of EdgeFile objects
@@ -51,11 +51,11 @@ type GetEdgeLogsResponseBody struct {
 	Items []shared.EdgeFile `json:"items,omitempty"`
 }
 
-func (o *GetEdgeLogsResponseBody) GetItems() []shared.EdgeFile {
-	if o == nil {
+func (g *GetEdgeLogsResponseBody) GetItems() []shared.EdgeFile {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeLogsResponse struct {
@@ -71,37 +71,37 @@ type GetEdgeLogsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeLogsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeLogsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeLogsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeLogsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeLogsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeLogsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeLogsResponse) GetObject() *GetEdgeLogsResponseBody {
-	if o == nil {
+func (g *GetEdgeLogsResponse) GetObject() *GetEdgeLogsResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeLogsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeLogsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

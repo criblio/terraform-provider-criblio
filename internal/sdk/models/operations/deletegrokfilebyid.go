@@ -14,18 +14,18 @@ type DeleteGrokFileByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteGrokFileByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteGrokFileByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteGrokFileByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteGrokFileByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteGrokFileByIDResponseBody - a list of GrokFile objects
@@ -33,11 +33,11 @@ type DeleteGrokFileByIDResponseBody struct {
 	Items []shared.GrokFile `json:"items,omitempty"`
 }
 
-func (o *DeleteGrokFileByIDResponseBody) GetItems() []shared.GrokFile {
-	if o == nil {
+func (d *DeleteGrokFileByIDResponseBody) GetItems() []shared.GrokFile {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteGrokFileByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteGrokFileByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteGrokFileByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteGrokFileByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteGrokFileByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteGrokFileByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteGrokFileByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteGrokFileByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteGrokFileByIDResponse) GetObject() *DeleteGrokFileByIDResponseBody {
-	if o == nil {
+func (d *DeleteGrokFileByIDResponse) GetObject() *DeleteGrokFileByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteGrokFileByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteGrokFileByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

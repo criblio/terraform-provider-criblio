@@ -16,25 +16,25 @@ type GetSystemLookupsByPackAndIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetSystemLookupsByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetSystemLookupsByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
-func (o *GetSystemLookupsByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetSystemLookupsByPackAndIDResponseBody - a list of Routes objects
@@ -42,11 +42,11 @@ type GetSystemLookupsByPackAndIDResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetSystemLookupsByPackAndIDResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDResponseBody) GetItems() []shared.Routes {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemLookupsByPackAndIDResponse struct {
@@ -62,37 +62,37 @@ type GetSystemLookupsByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemLookupsByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemLookupsByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemLookupsByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemLookupsByPackAndIDResponse) GetObject() *GetSystemLookupsByPackAndIDResponseBody {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDResponse) GetObject() *GetSystemLookupsByPackAndIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemLookupsByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemLookupsByPackAndIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -12,11 +12,11 @@ type CreateScriptResponseBody struct {
 	Items []shared.ScriptLibEntry `json:"items,omitempty"`
 }
 
-func (o *CreateScriptResponseBody) GetItems() []shared.ScriptLibEntry {
-	if o == nil {
+func (c *CreateScriptResponseBody) GetItems() []shared.ScriptLibEntry {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateScriptResponse struct {
@@ -32,37 +32,37 @@ type CreateScriptResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateScriptResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateScriptResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateScriptResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateScriptResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateScriptResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateScriptResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateScriptResponse) GetObject() *CreateScriptResponseBody {
-	if o == nil {
+func (c *CreateScriptResponse) GetObject() *CreateScriptResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateScriptResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateScriptResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

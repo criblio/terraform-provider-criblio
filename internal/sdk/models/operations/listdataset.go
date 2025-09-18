@@ -12,11 +12,11 @@ type ListDatasetResponseBody struct {
 	Items []shared.GenericDataset `json:"items,omitempty"`
 }
 
-func (o *ListDatasetResponseBody) GetItems() []shared.GenericDataset {
-	if o == nil {
+func (l *ListDatasetResponseBody) GetItems() []shared.GenericDataset {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListDatasetResponse struct {
@@ -32,37 +32,37 @@ type ListDatasetResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListDatasetResponse) GetContentType() string {
-	if o == nil {
+func (l *ListDatasetResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDatasetResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListDatasetResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDatasetResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDatasetResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDatasetResponse) GetObject() *ListDatasetResponseBody {
-	if o == nil {
+func (l *ListDatasetResponse) GetObject() *ListDatasetResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListDatasetResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListDatasetResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

@@ -15,23 +15,23 @@ type ReloadSettingsResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *ReloadSettingsResponse) GetContentType() string {
-	if o == nil {
+func (r *ReloadSettingsResponse) GetContentType() string {
+	if r == nil {
 		return ""
 	}
-	return o.ContentType
+	return r.ContentType
 }
 
-func (o *ReloadSettingsResponse) GetStatusCode() int {
-	if o == nil {
+func (r *ReloadSettingsResponse) GetStatusCode() int {
+	if r == nil {
 		return 0
 	}
-	return o.StatusCode
+	return r.StatusCode
 }
 
-func (o *ReloadSettingsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (r *ReloadSettingsResponse) GetRawResponse() *http.Response {
+	if r == nil {
 		return nil
 	}
-	return o.RawResponse
+	return r.RawResponse
 }

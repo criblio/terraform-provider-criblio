@@ -47,18 +47,18 @@ func (i *InputMskConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMskConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputMskConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputMskConnection) GetOutput() string {
-	if o == nil {
+func (i *InputMskConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputMskMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputMskPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMskPq) GetMode() *InputMskMode {
-	if o == nil {
+func (i *InputMskPq) GetMode() *InputMskMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputMskPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputMskPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputMskPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputMskPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputMskPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputMskPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputMskPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputMskPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputMskPq) GetPath() *string {
-	if o == nil {
+func (i *InputMskPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputMskPq) GetCompress() *InputMskCompression {
-	if o == nil {
+func (i *InputMskPq) GetCompress() *InputMskCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputMskMetadatum struct {
@@ -209,18 +209,18 @@ func (i *InputMskMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMskMetadatum) GetName() string {
-	if o == nil {
+func (i *InputMskMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputMskMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputMskMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputMskAuth - Credentials to use when authenticating with the schema registry using basic HTTP authentication
@@ -241,18 +241,18 @@ func (i *InputMskAuth) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMskAuth) GetDisabled() *bool {
-	if o == nil {
+func (i *InputMskAuth) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputMskAuth) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputMskAuth) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
 type InputMskKafkaSchemaRegistryMinimumTLSVersion string
@@ -351,74 +351,74 @@ func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) UnmarshalJSON(data []
 	return nil
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetServername() *string {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetServername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Servername
+	return i.Servername
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetMinVersion() *InputMskKafkaSchemaRegistryMinimumTLSVersion {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetMinVersion() *InputMskKafkaSchemaRegistryMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetMaxVersion() *InputMskKafkaSchemaRegistryMaximumTLSVersion {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryTLSSettingsClientSide) GetMaxVersion() *InputMskKafkaSchemaRegistryMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputMskKafkaSchemaRegistryAuthentication struct {
@@ -447,53 +447,53 @@ func (i *InputMskKafkaSchemaRegistryAuthentication) UnmarshalJSON(data []byte) e
 	return nil
 }
 
-func (o *InputMskKafkaSchemaRegistryAuthentication) GetDisabled() *bool {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryAuthentication) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputMskKafkaSchemaRegistryAuthentication) GetSchemaRegistryURL() *string {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryAuthentication) GetSchemaRegistryURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SchemaRegistryURL
+	return i.SchemaRegistryURL
 }
 
-func (o *InputMskKafkaSchemaRegistryAuthentication) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryAuthentication) GetConnectionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return i.ConnectionTimeout
 }
 
-func (o *InputMskKafkaSchemaRegistryAuthentication) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryAuthentication) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputMskKafkaSchemaRegistryAuthentication) GetMaxRetries() *float64 {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryAuthentication) GetMaxRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRetries
+	return i.MaxRetries
 }
 
-func (o *InputMskKafkaSchemaRegistryAuthentication) GetAuth() *InputMskAuth {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryAuthentication) GetAuth() *InputMskAuth {
+	if i == nil {
 		return nil
 	}
-	return o.Auth
+	return i.Auth
 }
 
-func (o *InputMskKafkaSchemaRegistryAuthentication) GetTLS() *InputMskKafkaSchemaRegistryTLSSettingsClientSide {
-	if o == nil {
+func (i *InputMskKafkaSchemaRegistryAuthentication) GetTLS() *InputMskKafkaSchemaRegistryTLSSettingsClientSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
 // InputMskAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
@@ -649,74 +649,74 @@ func (i *InputMskTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMskTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputMskTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputMskTLSSettingsClientSide) GetServername() *string {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetServername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Servername
+	return i.Servername
 }
 
-func (o *InputMskTLSSettingsClientSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputMskTLSSettingsClientSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputMskTLSSettingsClientSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputMskTLSSettingsClientSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputMskTLSSettingsClientSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputMskTLSSettingsClientSide) GetMinVersion() *InputMskMinimumTLSVersion {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetMinVersion() *InputMskMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputMskTLSSettingsClientSide) GetMaxVersion() *InputMskMaximumTLSVersion {
-	if o == nil {
+func (i *InputMskTLSSettingsClientSide) GetMaxVersion() *InputMskMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputMsk struct {
@@ -827,331 +827,331 @@ func (i *InputMsk) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputMsk) GetID() *string {
-	if o == nil {
+func (i *InputMsk) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputMsk) GetType() *InputMskType {
-	if o == nil {
+func (i *InputMsk) GetType() *InputMskType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputMsk) GetDisabled() *bool {
-	if o == nil {
+func (i *InputMsk) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputMsk) GetPipeline() *string {
-	if o == nil {
+func (i *InputMsk) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputMsk) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputMsk) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputMsk) GetEnvironment() *string {
-	if o == nil {
+func (i *InputMsk) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputMsk) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputMsk) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputMsk) GetStreamtags() []string {
-	if o == nil {
+func (i *InputMsk) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputMsk) GetConnections() []InputMskConnection {
-	if o == nil {
+func (i *InputMsk) GetConnections() []InputMskConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputMsk) GetPq() *InputMskPq {
-	if o == nil {
+func (i *InputMsk) GetPq() *InputMskPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputMsk) GetBrokers() []string {
-	if o == nil {
+func (i *InputMsk) GetBrokers() []string {
+	if i == nil {
 		return []string{}
 	}
-	return o.Brokers
+	return i.Brokers
 }
 
-func (o *InputMsk) GetTopics() []string {
-	if o == nil {
+func (i *InputMsk) GetTopics() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Topics
+	return i.Topics
 }
 
-func (o *InputMsk) GetGroupID() *string {
-	if o == nil {
+func (i *InputMsk) GetGroupID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.GroupID
+	return i.GroupID
 }
 
-func (o *InputMsk) GetFromBeginning() *bool {
-	if o == nil {
+func (i *InputMsk) GetFromBeginning() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.FromBeginning
+	return i.FromBeginning
 }
 
-func (o *InputMsk) GetSessionTimeout() *float64 {
-	if o == nil {
+func (i *InputMsk) GetSessionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SessionTimeout
+	return i.SessionTimeout
 }
 
-func (o *InputMsk) GetRebalanceTimeout() *float64 {
-	if o == nil {
+func (i *InputMsk) GetRebalanceTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RebalanceTimeout
+	return i.RebalanceTimeout
 }
 
-func (o *InputMsk) GetHeartbeatInterval() *float64 {
-	if o == nil {
+func (i *InputMsk) GetHeartbeatInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.HeartbeatInterval
+	return i.HeartbeatInterval
 }
 
-func (o *InputMsk) GetMetadata() []InputMskMetadatum {
-	if o == nil {
+func (i *InputMsk) GetMetadata() []InputMskMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputMsk) GetKafkaSchemaRegistry() *InputMskKafkaSchemaRegistryAuthentication {
-	if o == nil {
+func (i *InputMsk) GetKafkaSchemaRegistry() *InputMskKafkaSchemaRegistryAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.KafkaSchemaRegistry
+	return i.KafkaSchemaRegistry
 }
 
-func (o *InputMsk) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (i *InputMsk) GetConnectionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return i.ConnectionTimeout
 }
 
-func (o *InputMsk) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputMsk) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputMsk) GetMaxRetries() *float64 {
-	if o == nil {
+func (i *InputMsk) GetMaxRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRetries
+	return i.MaxRetries
 }
 
-func (o *InputMsk) GetMaxBackOff() *float64 {
-	if o == nil {
+func (i *InputMsk) GetMaxBackOff() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBackOff
+	return i.MaxBackOff
 }
 
-func (o *InputMsk) GetInitialBackoff() *float64 {
-	if o == nil {
+func (i *InputMsk) GetInitialBackoff() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.InitialBackoff
+	return i.InitialBackoff
 }
 
-func (o *InputMsk) GetBackoffRate() *float64 {
-	if o == nil {
+func (i *InputMsk) GetBackoffRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.BackoffRate
+	return i.BackoffRate
 }
 
-func (o *InputMsk) GetAuthenticationTimeout() *float64 {
-	if o == nil {
+func (i *InputMsk) GetAuthenticationTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AuthenticationTimeout
+	return i.AuthenticationTimeout
 }
 
-func (o *InputMsk) GetReauthenticationThreshold() *float64 {
-	if o == nil {
+func (i *InputMsk) GetReauthenticationThreshold() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ReauthenticationThreshold
+	return i.ReauthenticationThreshold
 }
 
-func (o *InputMsk) GetAwsAuthenticationMethod() *InputMskAuthenticationMethod {
-	if o == nil {
+func (i *InputMsk) GetAwsAuthenticationMethod() *InputMskAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputMsk) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputMsk) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputMsk) GetRegion() string {
-	if o == nil {
+func (i *InputMsk) GetRegion() string {
+	if i == nil {
 		return ""
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputMsk) GetEndpoint() *string {
-	if o == nil {
+func (i *InputMsk) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputMsk) GetSignatureVersion() *InputMskSignatureVersion {
-	if o == nil {
+func (i *InputMsk) GetSignatureVersion() *InputMskSignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputMsk) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputMsk) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputMsk) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputMsk) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputMsk) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputMsk) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputMsk) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputMsk) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputMsk) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputMsk) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputMsk) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputMsk) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputMsk) GetTLS() *InputMskTLSSettingsClientSide {
-	if o == nil {
+func (i *InputMsk) GetTLS() *InputMskTLSSettingsClientSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputMsk) GetAutoCommitInterval() *float64 {
-	if o == nil {
+func (i *InputMsk) GetAutoCommitInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AutoCommitInterval
+	return i.AutoCommitInterval
 }
 
-func (o *InputMsk) GetAutoCommitThreshold() *float64 {
-	if o == nil {
+func (i *InputMsk) GetAutoCommitThreshold() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AutoCommitThreshold
+	return i.AutoCommitThreshold
 }
 
-func (o *InputMsk) GetMaxBytesPerPartition() *float64 {
-	if o == nil {
+func (i *InputMsk) GetMaxBytesPerPartition() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBytesPerPartition
+	return i.MaxBytesPerPartition
 }
 
-func (o *InputMsk) GetMaxBytes() *float64 {
-	if o == nil {
+func (i *InputMsk) GetMaxBytes() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBytes
+	return i.MaxBytes
 }
 
-func (o *InputMsk) GetMaxSocketErrors() *float64 {
-	if o == nil {
+func (i *InputMsk) GetMaxSocketErrors() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSocketErrors
+	return i.MaxSocketErrors
 }
 
-func (o *InputMsk) GetDescription() *string {
-	if o == nil {
+func (i *InputMsk) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputMsk) GetAwsAPIKey() *string {
-	if o == nil {
+func (i *InputMsk) GetAwsAPIKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return i.AwsAPIKey
 }
 
-func (o *InputMsk) GetAwsSecret() *string {
-	if o == nil {
+func (i *InputMsk) GetAwsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecret
+	return i.AwsSecret
 }

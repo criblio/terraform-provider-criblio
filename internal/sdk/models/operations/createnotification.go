@@ -12,11 +12,11 @@ type CreateNotificationResponseBody struct {
 	Items []shared.Notification `json:"items,omitempty"`
 }
 
-func (o *CreateNotificationResponseBody) GetItems() []shared.Notification {
-	if o == nil {
+func (c *CreateNotificationResponseBody) GetItems() []shared.Notification {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateNotificationResponse struct {
@@ -32,37 +32,37 @@ type CreateNotificationResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateNotificationResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateNotificationResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateNotificationResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateNotificationResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateNotificationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateNotificationResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateNotificationResponse) GetObject() *CreateNotificationResponseBody {
-	if o == nil {
+func (c *CreateNotificationResponse) GetObject() *CreateNotificationResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateNotificationResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateNotificationResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

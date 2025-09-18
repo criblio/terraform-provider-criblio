@@ -12,11 +12,11 @@ type CreateSystemDiagSendResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemDiagSendResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemDiagSendResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemDiagSendResponse struct {
@@ -32,37 +32,37 @@ type CreateSystemDiagSendResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemDiagSendResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemDiagSendResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemDiagSendResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemDiagSendResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemDiagSendResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemDiagSendResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemDiagSendResponse) GetObject() *CreateSystemDiagSendResponseBody {
-	if o == nil {
+func (c *CreateSystemDiagSendResponse) GetObject() *CreateSystemDiagSendResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemDiagSendResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemDiagSendResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

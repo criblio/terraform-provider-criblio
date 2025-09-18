@@ -14,18 +14,18 @@ type CreateProjectACLTeamsApplyByIDRequest struct {
 	AccessControlSchema shared.AccessControlSchema `request:"mediaType=application/json"`
 }
 
-func (o *CreateProjectACLTeamsApplyByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateProjectACLTeamsApplyByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateProjectACLTeamsApplyByIDRequest) GetAccessControlSchema() shared.AccessControlSchema {
-	if o == nil {
+func (c *CreateProjectACLTeamsApplyByIDRequest) GetAccessControlSchema() shared.AccessControlSchema {
+	if c == nil {
 		return shared.AccessControlSchema{}
 	}
-	return o.AccessControlSchema
+	return c.AccessControlSchema
 }
 
 type CreateProjectACLTeamsApplyByIDResponse struct {
@@ -39,30 +39,30 @@ type CreateProjectACLTeamsApplyByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateProjectACLTeamsApplyByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateProjectACLTeamsApplyByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateProjectACLTeamsApplyByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateProjectACLTeamsApplyByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateProjectACLTeamsApplyByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateProjectACLTeamsApplyByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateProjectACLTeamsApplyByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateProjectACLTeamsApplyByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

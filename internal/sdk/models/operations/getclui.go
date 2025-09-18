@@ -43,18 +43,18 @@ type GetCluiRequest struct {
 	Context *Context `queryParam:"style=form,explode=true,name=context"`
 }
 
-func (o *GetCluiRequest) GetQuery() string {
-	if o == nil {
+func (g *GetCluiRequest) GetQuery() string {
+	if g == nil {
 		return ""
 	}
-	return o.Query
+	return g.Query
 }
 
-func (o *GetCluiRequest) GetContext() *Context {
-	if o == nil {
+func (g *GetCluiRequest) GetContext() *Context {
+	if g == nil {
 		return nil
 	}
-	return o.Context
+	return g.Context
 }
 
 // GetCluiResponseBody - a list of CluiItem objects
@@ -62,11 +62,11 @@ type GetCluiResponseBody struct {
 	Items []shared.CluiItem `json:"items,omitempty"`
 }
 
-func (o *GetCluiResponseBody) GetItems() []shared.CluiItem {
-	if o == nil {
+func (g *GetCluiResponseBody) GetItems() []shared.CluiItem {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetCluiResponse struct {
@@ -82,37 +82,37 @@ type GetCluiResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetCluiResponse) GetContentType() string {
-	if o == nil {
+func (g *GetCluiResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetCluiResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetCluiResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetCluiResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetCluiResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetCluiResponse) GetObject() *GetCluiResponseBody {
-	if o == nil {
+func (g *GetCluiResponse) GetObject() *GetCluiResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetCluiResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetCluiResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

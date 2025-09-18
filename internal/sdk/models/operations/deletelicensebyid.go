@@ -12,11 +12,11 @@ type DeleteLicenseByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteLicenseByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteLicenseByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteLicenseByIDResponseBody - a list of License objects
@@ -24,11 +24,11 @@ type DeleteLicenseByIDResponseBody struct {
 	Items []shared.License `json:"items,omitempty"`
 }
 
-func (o *DeleteLicenseByIDResponseBody) GetItems() []shared.License {
-	if o == nil {
+func (d *DeleteLicenseByIDResponseBody) GetItems() []shared.License {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteLicenseByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteLicenseByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteLicenseByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteLicenseByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteLicenseByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteLicenseByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteLicenseByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteLicenseByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteLicenseByIDResponse) GetObject() *DeleteLicenseByIDResponseBody {
-	if o == nil {
+func (d *DeleteLicenseByIDResponse) GetObject() *DeleteLicenseByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteLicenseByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteLicenseByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

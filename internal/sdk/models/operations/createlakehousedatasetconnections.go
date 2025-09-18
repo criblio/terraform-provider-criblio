@@ -17,25 +17,25 @@ type CreateLakehouseDatasetConnectionsRequest struct {
 	RequestBody   *CreateLakehouseDatasetConnectionsRequestBody `request:"mediaType=application/json"`
 }
 
-func (o *CreateLakehouseDatasetConnectionsRequest) GetLakehouseID() string {
-	if o == nil {
+func (c *CreateLakehouseDatasetConnectionsRequest) GetLakehouseID() string {
+	if c == nil {
 		return ""
 	}
-	return o.LakehouseID
+	return c.LakehouseID
 }
 
-func (o *CreateLakehouseDatasetConnectionsRequest) GetLakeDatasetID() string {
-	if o == nil {
+func (c *CreateLakehouseDatasetConnectionsRequest) GetLakeDatasetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.LakeDatasetID
+	return c.LakeDatasetID
 }
 
-func (o *CreateLakehouseDatasetConnectionsRequest) GetRequestBody() *CreateLakehouseDatasetConnectionsRequestBody {
-	if o == nil {
+func (c *CreateLakehouseDatasetConnectionsRequest) GetRequestBody() *CreateLakehouseDatasetConnectionsRequestBody {
+	if c == nil {
 		return nil
 	}
-	return o.RequestBody
+	return c.RequestBody
 }
 
 // CreateLakehouseDatasetConnectionsResponseBody - Successfully created dataset connections
@@ -53,30 +53,30 @@ type CreateLakehouseDatasetConnectionsResponse struct {
 	Object *CreateLakehouseDatasetConnectionsResponseBody
 }
 
-func (o *CreateLakehouseDatasetConnectionsResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateLakehouseDatasetConnectionsResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateLakehouseDatasetConnectionsResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateLakehouseDatasetConnectionsResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateLakehouseDatasetConnectionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateLakehouseDatasetConnectionsResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateLakehouseDatasetConnectionsResponse) GetObject() *CreateLakehouseDatasetConnectionsResponseBody {
-	if o == nil {
+func (c *CreateLakehouseDatasetConnectionsResponse) GetObject() *CreateLakehouseDatasetConnectionsResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }

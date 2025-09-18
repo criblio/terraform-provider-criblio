@@ -12,11 +12,11 @@ type GetBulletinMessageByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetBulletinMessageByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetBulletinMessageByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetBulletinMessageByIDResponseBody - a list of BulletinMessage objects
@@ -24,11 +24,11 @@ type GetBulletinMessageByIDResponseBody struct {
 	Items []shared.BulletinMessage `json:"items,omitempty"`
 }
 
-func (o *GetBulletinMessageByIDResponseBody) GetItems() []shared.BulletinMessage {
-	if o == nil {
+func (g *GetBulletinMessageByIDResponseBody) GetItems() []shared.BulletinMessage {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetBulletinMessageByIDResponse struct {
@@ -44,37 +44,37 @@ type GetBulletinMessageByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetBulletinMessageByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetBulletinMessageByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetBulletinMessageByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetBulletinMessageByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetBulletinMessageByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetBulletinMessageByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetBulletinMessageByIDResponse) GetObject() *GetBulletinMessageByIDResponseBody {
-	if o == nil {
+func (g *GetBulletinMessageByIDResponse) GetObject() *GetBulletinMessageByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetBulletinMessageByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetBulletinMessageByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

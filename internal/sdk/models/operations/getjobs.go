@@ -56,53 +56,53 @@ type GetJobsRequest struct {
 	GroupID *string `queryParam:"style=form,explode=true,name=groupId"`
 }
 
-func (o *GetJobsRequest) GetOffset() *int64 {
-	if o == nil {
+func (g *GetJobsRequest) GetOffset() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Offset
+	return g.Offset
 }
 
-func (o *GetJobsRequest) GetLimit() *int64 {
-	if o == nil {
+func (g *GetJobsRequest) GetLimit() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Limit
+	return g.Limit
 }
 
-func (o *GetJobsRequest) GetRunType() *RunType {
-	if o == nil {
+func (g *GetJobsRequest) GetRunType() *RunType {
+	if g == nil {
 		return nil
 	}
-	return o.RunType
+	return g.RunType
 }
 
-func (o *GetJobsRequest) GetState() *string {
-	if o == nil {
+func (g *GetJobsRequest) GetState() *string {
+	if g == nil {
 		return nil
 	}
-	return o.State
+	return g.State
 }
 
-func (o *GetJobsRequest) GetID() *string {
-	if o == nil {
+func (g *GetJobsRequest) GetID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetJobsRequest) GetCollectorID() *string {
-	if o == nil {
+func (g *GetJobsRequest) GetCollectorID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CollectorID
+	return g.CollectorID
 }
 
-func (o *GetJobsRequest) GetGroupID() *string {
-	if o == nil {
+func (g *GetJobsRequest) GetGroupID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetJobsResponseBody - a list of JobInfo objects
@@ -115,25 +115,25 @@ type GetJobsResponseBody struct {
 	Items []shared.JobInfo `json:"items,omitempty"`
 }
 
-func (o *GetJobsResponseBody) GetOffset() *int64 {
-	if o == nil {
+func (g *GetJobsResponseBody) GetOffset() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Offset
+	return g.Offset
 }
 
-func (o *GetJobsResponseBody) GetLimit() *int64 {
-	if o == nil {
+func (g *GetJobsResponseBody) GetLimit() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Limit
+	return g.Limit
 }
 
-func (o *GetJobsResponseBody) GetItems() []shared.JobInfo {
-	if o == nil {
+func (g *GetJobsResponseBody) GetItems() []shared.JobInfo {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetJobsResponse struct {
@@ -149,37 +149,37 @@ type GetJobsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetJobsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetJobsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetJobsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetJobsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetJobsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetJobsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetJobsResponse) GetObject() *GetJobsResponseBody {
-	if o == nil {
+func (g *GetJobsResponse) GetObject() *GetJobsResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetJobsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetJobsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

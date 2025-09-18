@@ -18,30 +18,30 @@ type GetAuthSsoResponse struct {
 	RedirectInfo *shared.RedirectInfo
 }
 
-func (o *GetAuthSsoResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthSsoResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthSsoResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthSsoResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthSsoResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthSsoResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAuthSsoResponse) GetRedirectInfo() *shared.RedirectInfo {
-	if o == nil {
+func (g *GetAuthSsoResponse) GetRedirectInfo() *shared.RedirectInfo {
+	if g == nil {
 		return nil
 	}
-	return o.RedirectInfo
+	return g.RedirectInfo
 }

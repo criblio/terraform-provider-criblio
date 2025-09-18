@@ -28,18 +28,18 @@ func (s *S3Bucket) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *S3Bucket) GetName() *string {
-	if o == nil {
+func (s *S3Bucket) GetName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *S3Bucket) GetRegion() *string {
-	if o == nil {
+func (s *S3Bucket) GetRegion() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Region
+	return s.Region
 }
 
 type AwsSecurityLakeDataset struct {
@@ -71,60 +71,60 @@ func (a *AwsSecurityLakeDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AwsSecurityLakeDataset) GetID() string {
-	if o == nil {
+func (a *AwsSecurityLakeDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *AwsSecurityLakeDataset) GetDescription() *string {
-	if o == nil {
+func (a *AwsSecurityLakeDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AwsSecurityLakeDataset) GetProviderID() string {
-	if o == nil {
+func (a *AwsSecurityLakeDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *AwsSecurityLakeDataset) GetType() string {
-	if o == nil {
+func (a *AwsSecurityLakeDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AwsSecurityLakeDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *AwsSecurityLakeDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *AwsSecurityLakeDataset) GetPath() *string {
-	if o == nil {
+func (a *AwsSecurityLakeDataset) GetPath() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Path
+	return a.Path
 }
 
-func (o *AwsSecurityLakeDataset) GetFilter() *string {
-	if o == nil {
+func (a *AwsSecurityLakeDataset) GetFilter() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Filter
+	return a.Filter
 }
 
-func (o *AwsSecurityLakeDataset) GetSelectedBuckets() []S3Bucket {
-	if o == nil {
+func (a *AwsSecurityLakeDataset) GetSelectedBuckets() []S3Bucket {
+	if a == nil {
 		return []S3Bucket{}
 	}
-	return o.SelectedBuckets
+	return a.SelectedBuckets
 }
 
 type GcsDatasetExtraPath struct {
@@ -147,25 +147,25 @@ func (g *GcsDatasetExtraPath) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GcsDatasetExtraPath) GetBucket() string {
-	if o == nil {
+func (g *GcsDatasetExtraPath) GetBucket() string {
+	if g == nil {
 		return ""
 	}
-	return o.Bucket
+	return g.Bucket
 }
 
-func (o *GcsDatasetExtraPath) GetFilter() *string {
-	if o == nil {
+func (g *GcsDatasetExtraPath) GetFilter() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Filter
+	return g.Filter
 }
 
-func (o *GcsDatasetExtraPath) GetRegion() *string {
-	if o == nil {
+func (g *GcsDatasetExtraPath) GetRegion() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Region
+	return g.Region
 }
 
 type GcsDataset struct {
@@ -203,81 +203,81 @@ func (g *GcsDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GcsDataset) GetID() string {
-	if o == nil {
+func (g *GcsDataset) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GcsDataset) GetDescription() *string {
-	if o == nil {
+func (g *GcsDataset) GetDescription() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Description
+	return g.Description
 }
 
-func (o *GcsDataset) GetProviderID() string {
-	if o == nil {
+func (g *GcsDataset) GetProviderID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ProviderID
+	return g.ProviderID
 }
 
-func (o *GcsDataset) GetType() string {
-	if o == nil {
+func (g *GcsDataset) GetType() string {
+	if g == nil {
 		return ""
 	}
-	return o.Type
+	return g.Type
 }
 
-func (o *GcsDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (g *GcsDataset) GetMetadata() *DatasetMetadata {
+	if g == nil {
 		return nil
 	}
-	return o.Metadata
+	return g.Metadata
 }
 
-func (o *GcsDataset) GetBucket() string {
-	if o == nil {
+func (g *GcsDataset) GetBucket() string {
+	if g == nil {
 		return ""
 	}
-	return o.Bucket
+	return g.Bucket
 }
 
-func (o *GcsDataset) GetFilter() *string {
-	if o == nil {
+func (g *GcsDataset) GetFilter() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Filter
+	return g.Filter
 }
 
-func (o *GcsDataset) GetRegion() *string {
-	if o == nil {
+func (g *GcsDataset) GetRegion() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Region
+	return g.Region
 }
 
-func (o *GcsDataset) GetExtraPaths() []GcsDatasetExtraPath {
-	if o == nil {
+func (g *GcsDataset) GetExtraPaths() []GcsDatasetExtraPath {
+	if g == nil {
 		return nil
 	}
-	return o.ExtraPaths
+	return g.ExtraPaths
 }
 
-func (o *GcsDataset) GetStorageClasses() []string {
-	if o == nil {
+func (g *GcsDataset) GetStorageClasses() []string {
+	if g == nil {
 		return nil
 	}
-	return o.StorageClasses
+	return g.StorageClasses
 }
 
-func (o *GcsDataset) GetSkipEventTimeFilter() *bool {
-	if o == nil {
+func (g *GcsDataset) GetSkipEventTimeFilter() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.SkipEventTimeFilter
+	return g.SkipEventTimeFilter
 }
 
 type AzureBlobDatasetExtraPath struct {
@@ -300,25 +300,25 @@ func (a *AzureBlobDatasetExtraPath) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureBlobDatasetExtraPath) GetContainerName() string {
-	if o == nil {
+func (a *AzureBlobDatasetExtraPath) GetContainerName() string {
+	if a == nil {
 		return ""
 	}
-	return o.ContainerName
+	return a.ContainerName
 }
 
-func (o *AzureBlobDatasetExtraPath) GetPath() *string {
-	if o == nil {
+func (a *AzureBlobDatasetExtraPath) GetPath() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Path
+	return a.Path
 }
 
-func (o *AzureBlobDatasetExtraPath) GetFilter() *string {
-	if o == nil {
+func (a *AzureBlobDatasetExtraPath) GetFilter() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Filter
+	return a.Filter
 }
 
 type AzureBlobDataset struct {
@@ -356,81 +356,81 @@ func (a *AzureBlobDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureBlobDataset) GetID() string {
-	if o == nil {
+func (a *AzureBlobDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *AzureBlobDataset) GetDescription() *string {
-	if o == nil {
+func (a *AzureBlobDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AzureBlobDataset) GetProviderID() string {
-	if o == nil {
+func (a *AzureBlobDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *AzureBlobDataset) GetType() string {
-	if o == nil {
+func (a *AzureBlobDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AzureBlobDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *AzureBlobDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *AzureBlobDataset) GetContainerName() string {
-	if o == nil {
+func (a *AzureBlobDataset) GetContainerName() string {
+	if a == nil {
 		return ""
 	}
-	return o.ContainerName
+	return a.ContainerName
 }
 
-func (o *AzureBlobDataset) GetPath() *string {
-	if o == nil {
+func (a *AzureBlobDataset) GetPath() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Path
+	return a.Path
 }
 
-func (o *AzureBlobDataset) GetFilter() *string {
-	if o == nil {
+func (a *AzureBlobDataset) GetFilter() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Filter
+	return a.Filter
 }
 
-func (o *AzureBlobDataset) GetExtraPaths() []AzureBlobDatasetExtraPath {
-	if o == nil {
+func (a *AzureBlobDataset) GetExtraPaths() []AzureBlobDatasetExtraPath {
+	if a == nil {
 		return nil
 	}
-	return o.ExtraPaths
+	return a.ExtraPaths
 }
 
-func (o *AzureBlobDataset) GetStorageClasses() []string {
-	if o == nil {
+func (a *AzureBlobDataset) GetStorageClasses() []string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageClasses
+	return a.StorageClasses
 }
 
-func (o *AzureBlobDataset) GetSkipEventTimeFilter() *bool {
-	if o == nil {
+func (a *AzureBlobDataset) GetSkipEventTimeFilter() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.SkipEventTimeFilter
+	return a.SkipEventTimeFilter
 }
 
 type EdgeDataset struct {
@@ -462,60 +462,60 @@ func (e *EdgeDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EdgeDataset) GetID() string {
-	if o == nil {
+func (e *EdgeDataset) GetID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ID
+	return e.ID
 }
 
-func (o *EdgeDataset) GetDescription() *string {
-	if o == nil {
+func (e *EdgeDataset) GetDescription() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Description
+	return e.Description
 }
 
-func (o *EdgeDataset) GetProviderID() string {
-	if o == nil {
+func (e *EdgeDataset) GetProviderID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ProviderID
+	return e.ProviderID
 }
 
-func (o *EdgeDataset) GetType() string {
-	if o == nil {
+func (e *EdgeDataset) GetType() string {
+	if e == nil {
 		return ""
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *EdgeDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (e *EdgeDataset) GetMetadata() *DatasetMetadata {
+	if e == nil {
 		return nil
 	}
-	return o.Metadata
+	return e.Metadata
 }
 
-func (o *EdgeDataset) GetFleets() []string {
-	if o == nil {
+func (e *EdgeDataset) GetFleets() []string {
+	if e == nil {
 		return nil
 	}
-	return o.Fleets
+	return e.Fleets
 }
 
-func (o *EdgeDataset) GetPath() string {
-	if o == nil {
+func (e *EdgeDataset) GetPath() string {
+	if e == nil {
 		return ""
 	}
-	return o.Path
+	return e.Path
 }
 
-func (o *EdgeDataset) GetFilter() *string {
-	if o == nil {
+func (e *EdgeDataset) GetFilter() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Filter
+	return e.Filter
 }
 
 type MetaDataset struct {
@@ -543,46 +543,46 @@ func (m *MetaDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *MetaDataset) GetID() string {
-	if o == nil {
+func (m *MetaDataset) GetID() string {
+	if m == nil {
 		return ""
 	}
-	return o.ID
+	return m.ID
 }
 
-func (o *MetaDataset) GetDescription() *string {
-	if o == nil {
+func (m *MetaDataset) GetDescription() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Description
+	return m.Description
 }
 
-func (o *MetaDataset) GetProviderID() string {
-	if o == nil {
+func (m *MetaDataset) GetProviderID() string {
+	if m == nil {
 		return ""
 	}
-	return o.ProviderID
+	return m.ProviderID
 }
 
-func (o *MetaDataset) GetType() string {
-	if o == nil {
+func (m *MetaDataset) GetType() string {
+	if m == nil {
 		return ""
 	}
-	return o.Type
+	return m.Type
 }
 
-func (o *MetaDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (m *MetaDataset) GetMetadata() *DatasetMetadata {
+	if m == nil {
 		return nil
 	}
-	return o.Metadata
+	return m.Metadata
 }
 
-func (o *MetaDataset) GetDatasets() []string {
-	if o == nil {
+func (m *MetaDataset) GetDatasets() []string {
+	if m == nil {
 		return []string{}
 	}
-	return o.Datasets
+	return m.Datasets
 }
 
 type CriblLeaderDatasetExtraPath struct {
@@ -603,18 +603,18 @@ func (c *CriblLeaderDatasetExtraPath) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CriblLeaderDatasetExtraPath) GetPath() string {
-	if o == nil {
+func (c *CriblLeaderDatasetExtraPath) GetPath() string {
+	if c == nil {
 		return ""
 	}
-	return o.Path
+	return c.Path
 }
 
-func (o *CriblLeaderDatasetExtraPath) GetFilter() *string {
-	if o == nil {
+func (c *CriblLeaderDatasetExtraPath) GetFilter() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Filter
+	return c.Filter
 }
 
 type CriblLeaderDataset struct {
@@ -646,60 +646,60 @@ func (c *CriblLeaderDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CriblLeaderDataset) GetID() string {
-	if o == nil {
+func (c *CriblLeaderDataset) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CriblLeaderDataset) GetDescription() *string {
-	if o == nil {
+func (c *CriblLeaderDataset) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *CriblLeaderDataset) GetProviderID() string {
-	if o == nil {
+func (c *CriblLeaderDataset) GetProviderID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProviderID
+	return c.ProviderID
 }
 
-func (o *CriblLeaderDataset) GetType() string {
-	if o == nil {
+func (c *CriblLeaderDataset) GetType() string {
+	if c == nil {
 		return ""
 	}
-	return o.Type
+	return c.Type
 }
 
-func (o *CriblLeaderDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (c *CriblLeaderDataset) GetMetadata() *DatasetMetadata {
+	if c == nil {
 		return nil
 	}
-	return o.Metadata
+	return c.Metadata
 }
 
-func (o *CriblLeaderDataset) GetPath() string {
-	if o == nil {
+func (c *CriblLeaderDataset) GetPath() string {
+	if c == nil {
 		return ""
 	}
-	return o.Path
+	return c.Path
 }
 
-func (o *CriblLeaderDataset) GetFilter() *string {
-	if o == nil {
+func (c *CriblLeaderDataset) GetFilter() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Filter
+	return c.Filter
 }
 
-func (o *CriblLeaderDataset) GetExtraPaths() []CriblLeaderDatasetExtraPath {
-	if o == nil {
+func (c *CriblLeaderDataset) GetExtraPaths() []CriblLeaderDatasetExtraPath {
+	if c == nil {
 		return nil
 	}
-	return o.ExtraPaths
+	return c.ExtraPaths
 }
 
 type S3DatasetExtraPath struct {
@@ -726,39 +726,39 @@ func (s *S3DatasetExtraPath) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *S3DatasetExtraPath) GetBucket() string {
-	if o == nil {
+func (s *S3DatasetExtraPath) GetBucket() string {
+	if s == nil {
 		return ""
 	}
-	return o.Bucket
+	return s.Bucket
 }
 
-func (o *S3DatasetExtraPath) GetPath() *string {
-	if o == nil {
+func (s *S3DatasetExtraPath) GetPath() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Path
+	return s.Path
 }
 
-func (o *S3DatasetExtraPath) GetFilter() *string {
-	if o == nil {
+func (s *S3DatasetExtraPath) GetFilter() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Filter
+	return s.Filter
 }
 
-func (o *S3DatasetExtraPath) GetRegion() *string {
-	if o == nil {
+func (s *S3DatasetExtraPath) GetRegion() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Region
+	return s.Region
 }
 
-func (o *S3DatasetExtraPath) GetAutoDetectRegion() *bool {
-	if o == nil {
+func (s *S3DatasetExtraPath) GetAutoDetectRegion() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.AutoDetectRegion
+	return s.AutoDetectRegion
 }
 
 type S3Dataset struct {
@@ -800,95 +800,95 @@ func (s *S3Dataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *S3Dataset) GetID() string {
-	if o == nil {
+func (s *S3Dataset) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *S3Dataset) GetDescription() *string {
-	if o == nil {
+func (s *S3Dataset) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *S3Dataset) GetProviderID() string {
-	if o == nil {
+func (s *S3Dataset) GetProviderID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ProviderID
+	return s.ProviderID
 }
 
-func (o *S3Dataset) GetType() string {
-	if o == nil {
+func (s *S3Dataset) GetType() string {
+	if s == nil {
 		return ""
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *S3Dataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (s *S3Dataset) GetMetadata() *DatasetMetadata {
+	if s == nil {
 		return nil
 	}
-	return o.Metadata
+	return s.Metadata
 }
 
-func (o *S3Dataset) GetBucket() string {
-	if o == nil {
+func (s *S3Dataset) GetBucket() string {
+	if s == nil {
 		return ""
 	}
-	return o.Bucket
+	return s.Bucket
 }
 
-func (o *S3Dataset) GetPath() *string {
-	if o == nil {
+func (s *S3Dataset) GetPath() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Path
+	return s.Path
 }
 
-func (o *S3Dataset) GetFilter() *string {
-	if o == nil {
+func (s *S3Dataset) GetFilter() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Filter
+	return s.Filter
 }
 
-func (o *S3Dataset) GetRegion() *string {
-	if o == nil {
+func (s *S3Dataset) GetRegion() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Region
+	return s.Region
 }
 
-func (o *S3Dataset) GetAutoDetectRegion() *bool {
-	if o == nil {
+func (s *S3Dataset) GetAutoDetectRegion() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.AutoDetectRegion
+	return s.AutoDetectRegion
 }
 
-func (o *S3Dataset) GetExtraPaths() []S3DatasetExtraPath {
-	if o == nil {
+func (s *S3Dataset) GetExtraPaths() []S3DatasetExtraPath {
+	if s == nil {
 		return nil
 	}
-	return o.ExtraPaths
+	return s.ExtraPaths
 }
 
-func (o *S3Dataset) GetStorageClasses() []string {
-	if o == nil {
+func (s *S3Dataset) GetStorageClasses() []string {
+	if s == nil {
 		return nil
 	}
-	return o.StorageClasses
+	return s.StorageClasses
 }
 
-func (o *S3Dataset) GetSkipEventTimeFilter() *bool {
-	if o == nil {
+func (s *S3Dataset) GetSkipEventTimeFilter() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.SkipEventTimeFilter
+	return s.SkipEventTimeFilter
 }
 
 type APIElasticSearchDataset struct {
@@ -918,53 +918,53 @@ func (a *APIElasticSearchDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIElasticSearchDataset) GetID() string {
-	if o == nil {
+func (a *APIElasticSearchDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIElasticSearchDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIElasticSearchDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIElasticSearchDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIElasticSearchDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIElasticSearchDataset) GetType() string {
-	if o == nil {
+func (a *APIElasticSearchDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIElasticSearchDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIElasticSearchDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIElasticSearchDataset) GetIndex() string {
-	if o == nil {
+func (a *APIElasticSearchDataset) GetIndex() string {
+	if a == nil {
 		return ""
 	}
-	return o.Index
+	return a.Index
 }
 
-func (o *APIElasticSearchDataset) GetTimestampField() string {
-	if o == nil {
+func (a *APIElasticSearchDataset) GetTimestampField() string {
+	if a == nil {
 		return ""
 	}
-	return o.TimestampField
+	return a.TimestampField
 }
 
 type APIOpenSearchDataset struct {
@@ -994,53 +994,53 @@ func (a *APIOpenSearchDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIOpenSearchDataset) GetID() string {
-	if o == nil {
+func (a *APIOpenSearchDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIOpenSearchDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIOpenSearchDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIOpenSearchDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIOpenSearchDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIOpenSearchDataset) GetType() string {
-	if o == nil {
+func (a *APIOpenSearchDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIOpenSearchDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIOpenSearchDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIOpenSearchDataset) GetIndex() string {
-	if o == nil {
+func (a *APIOpenSearchDataset) GetIndex() string {
+	if a == nil {
 		return ""
 	}
-	return o.Index
+	return a.Index
 }
 
-func (o *APIOpenSearchDataset) GetTimestampField() *string {
-	if o == nil {
+func (a *APIOpenSearchDataset) GetTimestampField() *string {
+	if a == nil {
 		return nil
 	}
-	return o.TimestampField
+	return a.TimestampField
 }
 
 // StepMode - How to calculate the "step," or time range increment per data point, for the Prometheus query request
@@ -1099,60 +1099,60 @@ func (p *PrometheusDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PrometheusDataset) GetID() string {
-	if o == nil {
+func (p *PrometheusDataset) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PrometheusDataset) GetDescription() *string {
-	if o == nil {
+func (p *PrometheusDataset) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PrometheusDataset) GetProviderID() string {
-	if o == nil {
+func (p *PrometheusDataset) GetProviderID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ProviderID
+	return p.ProviderID
 }
 
-func (o *PrometheusDataset) GetType() string {
-	if o == nil {
+func (p *PrometheusDataset) GetType() string {
+	if p == nil {
 		return ""
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PrometheusDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (p *PrometheusDataset) GetMetadata() *DatasetMetadata {
+	if p == nil {
 		return nil
 	}
-	return o.Metadata
+	return p.Metadata
 }
 
-func (o *PrometheusDataset) GetDesiredNumDataPoints() *float64 {
-	if o == nil {
+func (p *PrometheusDataset) GetDesiredNumDataPoints() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.DesiredNumDataPoints
+	return p.DesiredNumDataPoints
 }
 
-func (o *PrometheusDataset) GetStepMode() *StepMode {
-	if o == nil {
+func (p *PrometheusDataset) GetStepMode() *StepMode {
+	if p == nil {
 		return nil
 	}
-	return o.StepMode
+	return p.StepMode
 }
 
-func (o *PrometheusDataset) GetMetricNamePattern() *string {
-	if o == nil {
+func (p *PrometheusDataset) GetMetricNamePattern() *string {
+	if p == nil {
 		return nil
 	}
-	return o.MetricNamePattern
+	return p.MetricNamePattern
 }
 
 type ClickHouseDataset struct {
@@ -1183,60 +1183,60 @@ func (c *ClickHouseDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ClickHouseDataset) GetID() string {
-	if o == nil {
+func (c *ClickHouseDataset) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *ClickHouseDataset) GetDescription() *string {
-	if o == nil {
+func (c *ClickHouseDataset) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *ClickHouseDataset) GetProviderID() string {
-	if o == nil {
+func (c *ClickHouseDataset) GetProviderID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProviderID
+	return c.ProviderID
 }
 
-func (o *ClickHouseDataset) GetType() string {
-	if o == nil {
+func (c *ClickHouseDataset) GetType() string {
+	if c == nil {
 		return ""
 	}
-	return o.Type
+	return c.Type
 }
 
-func (o *ClickHouseDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (c *ClickHouseDataset) GetMetadata() *DatasetMetadata {
+	if c == nil {
 		return nil
 	}
-	return o.Metadata
+	return c.Metadata
 }
 
-func (o *ClickHouseDataset) GetDatabase() *string {
-	if o == nil {
+func (c *ClickHouseDataset) GetDatabase() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Database
+	return c.Database
 }
 
-func (o *ClickHouseDataset) GetTable() string {
-	if o == nil {
+func (c *ClickHouseDataset) GetTable() string {
+	if c == nil {
 		return ""
 	}
-	return o.Table
+	return c.Table
 }
 
-func (o *ClickHouseDataset) GetTimestampField() *string {
-	if o == nil {
+func (c *ClickHouseDataset) GetTimestampField() *string {
+	if c == nil {
 		return nil
 	}
-	return o.TimestampField
+	return c.TimestampField
 }
 
 type SnowflakeDataset struct {
@@ -1273,81 +1273,81 @@ func (s *SnowflakeDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SnowflakeDataset) GetID() string {
-	if o == nil {
+func (s *SnowflakeDataset) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SnowflakeDataset) GetDescription() *string {
-	if o == nil {
+func (s *SnowflakeDataset) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SnowflakeDataset) GetProviderID() string {
-	if o == nil {
+func (s *SnowflakeDataset) GetProviderID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ProviderID
+	return s.ProviderID
 }
 
-func (o *SnowflakeDataset) GetType() string {
-	if o == nil {
+func (s *SnowflakeDataset) GetType() string {
+	if s == nil {
 		return ""
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SnowflakeDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (s *SnowflakeDataset) GetMetadata() *DatasetMetadata {
+	if s == nil {
 		return nil
 	}
-	return o.Metadata
+	return s.Metadata
 }
 
-func (o *SnowflakeDataset) GetWarehouse() *string {
-	if o == nil {
+func (s *SnowflakeDataset) GetWarehouse() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Warehouse
+	return s.Warehouse
 }
 
-func (o *SnowflakeDataset) GetDatabase() *string {
-	if o == nil {
+func (s *SnowflakeDataset) GetDatabase() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Database
+	return s.Database
 }
 
-func (o *SnowflakeDataset) GetSchema() *string {
-	if o == nil {
+func (s *SnowflakeDataset) GetSchema() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Schema
+	return s.Schema
 }
 
-func (o *SnowflakeDataset) GetTable() string {
-	if o == nil {
+func (s *SnowflakeDataset) GetTable() string {
+	if s == nil {
 		return ""
 	}
-	return o.Table
+	return s.Table
 }
 
-func (o *SnowflakeDataset) GetTimestampField() *string {
-	if o == nil {
+func (s *SnowflakeDataset) GetTimestampField() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TimestampField
+	return s.TimestampField
 }
 
-func (o *SnowflakeDataset) GetRole() *string {
-	if o == nil {
+func (s *SnowflakeDataset) GetRole() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Role
+	return s.Role
 }
 
 type APIAzureDataExplorerDataset struct {
@@ -1385,81 +1385,81 @@ func (a *APIAzureDataExplorerDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIAzureDataExplorerDataset) GetID() string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIAzureDataExplorerDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIAzureDataExplorerDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIAzureDataExplorerDataset) GetType() string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIAzureDataExplorerDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIAzureDataExplorerDataset) GetCluster() string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetCluster() string {
+	if a == nil {
 		return ""
 	}
-	return o.Cluster
+	return a.Cluster
 }
 
-func (o *APIAzureDataExplorerDataset) GetLocation() string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetLocation() string {
+	if a == nil {
 		return ""
 	}
-	return o.Location
+	return a.Location
 }
 
-func (o *APIAzureDataExplorerDataset) GetDatabase() string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetDatabase() string {
+	if a == nil {
 		return ""
 	}
-	return o.Database
+	return a.Database
 }
 
-func (o *APIAzureDataExplorerDataset) GetTable() string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetTable() string {
+	if a == nil {
 		return ""
 	}
-	return o.Table
+	return a.Table
 }
 
-func (o *APIAzureDataExplorerDataset) GetTimestampField() *string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetTimestampField() *string {
+	if a == nil {
 		return nil
 	}
-	return o.TimestampField
+	return a.TimestampField
 }
 
-func (o *APIAzureDataExplorerDataset) GetTimestampFieldContents() *string {
-	if o == nil {
+func (a *APIAzureDataExplorerDataset) GetTimestampFieldContents() *string {
+	if a == nil {
 		return nil
 	}
-	return o.TimestampFieldContents
+	return a.TimestampFieldContents
 }
 
 type APIZoomDataset struct {
@@ -1487,46 +1487,46 @@ func (a *APIZoomDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIZoomDataset) GetID() string {
-	if o == nil {
+func (a *APIZoomDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIZoomDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIZoomDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIZoomDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIZoomDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIZoomDataset) GetType() string {
-	if o == nil {
+func (a *APIZoomDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIZoomDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIZoomDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIZoomDataset) GetEnabledEndpoints() []string {
-	if o == nil {
+func (a *APIZoomDataset) GetEnabledEndpoints() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.EnabledEndpoints
+	return a.EnabledEndpoints
 }
 
 type APITailscaleDataset struct {
@@ -1554,46 +1554,46 @@ func (a *APITailscaleDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APITailscaleDataset) GetID() string {
-	if o == nil {
+func (a *APITailscaleDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APITailscaleDataset) GetDescription() *string {
-	if o == nil {
+func (a *APITailscaleDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APITailscaleDataset) GetProviderID() string {
-	if o == nil {
+func (a *APITailscaleDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APITailscaleDataset) GetType() string {
-	if o == nil {
+func (a *APITailscaleDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APITailscaleDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APITailscaleDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APITailscaleDataset) GetEnabledEndpoints() []string {
-	if o == nil {
+func (a *APITailscaleDataset) GetEnabledEndpoints() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.EnabledEndpoints
+	return a.EnabledEndpoints
 }
 
 type APIOktaDataset struct {
@@ -1621,46 +1621,46 @@ func (a *APIOktaDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIOktaDataset) GetID() string {
-	if o == nil {
+func (a *APIOktaDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIOktaDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIOktaDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIOktaDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIOktaDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIOktaDataset) GetType() string {
-	if o == nil {
+func (a *APIOktaDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIOktaDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIOktaDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIOktaDataset) GetEnabledEndpoints() []string {
-	if o == nil {
+func (a *APIOktaDataset) GetEnabledEndpoints() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.EnabledEndpoints
+	return a.EnabledEndpoints
 }
 
 type APIMsGraphDataset struct {
@@ -1688,46 +1688,46 @@ func (a *APIMsGraphDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIMsGraphDataset) GetID() string {
-	if o == nil {
+func (a *APIMsGraphDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIMsGraphDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIMsGraphDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIMsGraphDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIMsGraphDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIMsGraphDataset) GetType() string {
-	if o == nil {
+func (a *APIMsGraphDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIMsGraphDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIMsGraphDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIMsGraphDataset) GetEnabledEndpoints() []string {
-	if o == nil {
+func (a *APIMsGraphDataset) GetEnabledEndpoints() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.EnabledEndpoints
+	return a.EnabledEndpoints
 }
 
 type APIGoogleWorkspaceDataset struct {
@@ -1755,46 +1755,46 @@ func (a *APIGoogleWorkspaceDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIGoogleWorkspaceDataset) GetID() string {
-	if o == nil {
+func (a *APIGoogleWorkspaceDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIGoogleWorkspaceDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIGoogleWorkspaceDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIGoogleWorkspaceDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIGoogleWorkspaceDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIGoogleWorkspaceDataset) GetType() string {
-	if o == nil {
+func (a *APIGoogleWorkspaceDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIGoogleWorkspaceDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIGoogleWorkspaceDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIGoogleWorkspaceDataset) GetEnabledEndpoints() []string {
-	if o == nil {
+func (a *APIGoogleWorkspaceDataset) GetEnabledEndpoints() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.EnabledEndpoints
+	return a.EnabledEndpoints
 }
 
 type APIGcpDataset struct {
@@ -1822,46 +1822,46 @@ func (a *APIGcpDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIGcpDataset) GetID() string {
-	if o == nil {
+func (a *APIGcpDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIGcpDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIGcpDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIGcpDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIGcpDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIGcpDataset) GetType() string {
-	if o == nil {
+func (a *APIGcpDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIGcpDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIGcpDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIGcpDataset) GetEndpointConfigs() []GcpEndpointConfig {
-	if o == nil {
+func (a *APIGcpDataset) GetEndpointConfigs() []GcpEndpointConfig {
+	if a == nil {
 		return []GcpEndpointConfig{}
 	}
-	return o.EndpointConfigs
+	return a.EndpointConfigs
 }
 
 type APIAzureDataset struct {
@@ -1891,53 +1891,53 @@ func (a *APIAzureDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIAzureDataset) GetID() string {
-	if o == nil {
+func (a *APIAzureDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIAzureDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIAzureDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIAzureDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIAzureDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIAzureDataset) GetType() string {
-	if o == nil {
+func (a *APIAzureDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIAzureDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIAzureDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIAzureDataset) GetEnabledEndpoints() []string {
-	if o == nil {
+func (a *APIAzureDataset) GetEnabledEndpoints() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.EnabledEndpoints
+	return a.EnabledEndpoints
 }
 
-func (o *APIAzureDataset) GetSubscriptionIds() []string {
-	if o == nil {
+func (a *APIAzureDataset) GetSubscriptionIds() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.SubscriptionIds
+	return a.SubscriptionIds
 }
 
 type APIAwsDataset struct {
@@ -1967,53 +1967,53 @@ func (a *APIAwsDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIAwsDataset) GetID() string {
-	if o == nil {
+func (a *APIAwsDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIAwsDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIAwsDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIAwsDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIAwsDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIAwsDataset) GetType() string {
-	if o == nil {
+func (a *APIAwsDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIAwsDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIAwsDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIAwsDataset) GetEnabledEndpoints() []string {
-	if o == nil {
+func (a *APIAwsDataset) GetEnabledEndpoints() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.EnabledEndpoints
+	return a.EnabledEndpoints
 }
 
-func (o *APIAwsDataset) GetRegions() []string {
-	if o == nil {
+func (a *APIAwsDataset) GetRegions() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.Regions
+	return a.Regions
 }
 
 type APIHTTPDataset struct {
@@ -2041,46 +2041,46 @@ func (a *APIHTTPDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *APIHTTPDataset) GetID() string {
-	if o == nil {
+func (a *APIHTTPDataset) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIHTTPDataset) GetDescription() *string {
-	if o == nil {
+func (a *APIHTTPDataset) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIHTTPDataset) GetProviderID() string {
-	if o == nil {
+func (a *APIHTTPDataset) GetProviderID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ProviderID
+	return a.ProviderID
 }
 
-func (o *APIHTTPDataset) GetType() string {
-	if o == nil {
+func (a *APIHTTPDataset) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIHTTPDataset) GetMetadata() *DatasetMetadata {
-	if o == nil {
+func (a *APIHTTPDataset) GetMetadata() *DatasetMetadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIHTTPDataset) GetEnabledEndpoints() []string {
-	if o == nil {
+func (a *APIHTTPDataset) GetEnabledEndpoints() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.EnabledEndpoints
+	return a.EnabledEndpoints
 }
 
 type GenericDatasetType string

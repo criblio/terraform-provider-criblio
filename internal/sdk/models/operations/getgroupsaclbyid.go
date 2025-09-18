@@ -55,18 +55,18 @@ type GetGroupsACLByIDRequest struct {
 	Type *GetGroupsACLByIDType `queryParam:"style=form,explode=true,name=type"`
 }
 
-func (o *GetGroupsACLByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetGroupsACLByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetGroupsACLByIDRequest) GetType() *GetGroupsACLByIDType {
-	if o == nil {
+func (g *GetGroupsACLByIDRequest) GetType() *GetGroupsACLByIDType {
+	if g == nil {
 		return nil
 	}
-	return o.Type
+	return g.Type
 }
 
 // GetGroupsACLByIDResponseBody - a list of UserAccessControlList objects
@@ -74,11 +74,11 @@ type GetGroupsACLByIDResponseBody struct {
 	Items []shared.UserAccessControlList `json:"items,omitempty"`
 }
 
-func (o *GetGroupsACLByIDResponseBody) GetItems() []shared.UserAccessControlList {
-	if o == nil {
+func (g *GetGroupsACLByIDResponseBody) GetItems() []shared.UserAccessControlList {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetGroupsACLByIDResponse struct {
@@ -94,37 +94,37 @@ type GetGroupsACLByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetGroupsACLByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetGroupsACLByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetGroupsACLByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetGroupsACLByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetGroupsACLByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetGroupsACLByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetGroupsACLByIDResponse) GetObject() *GetGroupsACLByIDResponseBody {
-	if o == nil {
+func (g *GetGroupsACLByIDResponse) GetObject() *GetGroupsACLByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetGroupsACLByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetGroupsACLByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -7,16 +7,16 @@ type NameValue struct {
 	Value Expression `json:"value"`
 }
 
-func (o *NameValue) GetName() string {
-	if o == nil {
+func (n *NameValue) GetName() string {
+	if n == nil {
 		return ""
 	}
-	return o.Name
+	return n.Name
 }
 
-func (o *NameValue) GetValue() Expression {
-	if o == nil {
+func (n *NameValue) GetValue() Expression {
+	if n == nil {
 		return Expression{}
 	}
-	return o.Value
+	return n.Value
 }

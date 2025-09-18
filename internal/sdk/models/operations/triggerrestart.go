@@ -15,23 +15,23 @@ type TriggerRestartResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *TriggerRestartResponse) GetContentType() string {
-	if o == nil {
+func (t *TriggerRestartResponse) GetContentType() string {
+	if t == nil {
 		return ""
 	}
-	return o.ContentType
+	return t.ContentType
 }
 
-func (o *TriggerRestartResponse) GetStatusCode() int {
-	if o == nil {
+func (t *TriggerRestartResponse) GetStatusCode() int {
+	if t == nil {
 		return 0
 	}
-	return o.StatusCode
+	return t.StatusCode
 }
 
-func (o *TriggerRestartResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (t *TriggerRestartResponse) GetRawResponse() *http.Response {
+	if t == nil {
 		return nil
 	}
-	return o.RawResponse
+	return t.RawResponse
 }

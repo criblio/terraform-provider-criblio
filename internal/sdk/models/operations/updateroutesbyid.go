@@ -14,18 +14,18 @@ type UpdateRoutesByIDRequest struct {
 	Routes shared.RoutesInput `request:"mediaType=application/json"`
 }
 
-func (o *UpdateRoutesByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateRoutesByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateRoutesByIDRequest) GetRoutes() shared.RoutesInput {
-	if o == nil {
+func (u *UpdateRoutesByIDRequest) GetRoutes() shared.RoutesInput {
+	if u == nil {
 		return shared.RoutesInput{}
 	}
-	return o.Routes
+	return u.Routes
 }
 
 // UpdateRoutesByIDResponseBody - a list of Routes objects
@@ -33,11 +33,11 @@ type UpdateRoutesByIDResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *UpdateRoutesByIDResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (u *UpdateRoutesByIDResponseBody) GetItems() []shared.Routes {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateRoutesByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateRoutesByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateRoutesByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateRoutesByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateRoutesByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateRoutesByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateRoutesByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateRoutesByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateRoutesByIDResponse) GetObject() *UpdateRoutesByIDResponseBody {
-	if o == nil {
+func (u *UpdateRoutesByIDResponse) GetObject() *UpdateRoutesByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateRoutesByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateRoutesByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

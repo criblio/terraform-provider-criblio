@@ -12,11 +12,11 @@ type CreateBannerMessageResponseBody struct {
 	Items []shared.BannerMessage `json:"items,omitempty"`
 }
 
-func (o *CreateBannerMessageResponseBody) GetItems() []shared.BannerMessage {
-	if o == nil {
+func (c *CreateBannerMessageResponseBody) GetItems() []shared.BannerMessage {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateBannerMessageResponse struct {
@@ -32,37 +32,37 @@ type CreateBannerMessageResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateBannerMessageResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateBannerMessageResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateBannerMessageResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateBannerMessageResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateBannerMessageResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateBannerMessageResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateBannerMessageResponse) GetObject() *CreateBannerMessageResponseBody {
-	if o == nil {
+func (c *CreateBannerMessageResponse) GetObject() *CreateBannerMessageResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateBannerMessageResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateBannerMessageResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

@@ -206,44 +206,44 @@ type SystemMetricsEnum struct {
 	MetricNameFilter *MetricNameFilter `json:"metricNameFilter,omitempty"`
 }
 
-func (o *SystemMetricsEnum) GetDimKeyFilter() *DimKeyFilter {
-	if o == nil {
+func (s *SystemMetricsEnum) GetDimKeyFilter() *DimKeyFilter {
+	if s == nil {
 		return nil
 	}
-	return o.DimKeyFilter
+	return s.DimKeyFilter
 }
 
-func (o *SystemMetricsEnum) GetDimValueFilter() *DimValueFilter {
-	if o == nil {
+func (s *SystemMetricsEnum) GetDimValueFilter() *DimValueFilter {
+	if s == nil {
 		return nil
 	}
-	return o.DimValueFilter
+	return s.DimValueFilter
 }
 
-func (o *SystemMetricsEnum) GetEarliest() *float64 {
-	if o == nil {
+func (s *SystemMetricsEnum) GetEarliest() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.Earliest
+	return s.Earliest
 }
 
-func (o *SystemMetricsEnum) GetFilterExpr() *string {
-	if o == nil {
+func (s *SystemMetricsEnum) GetFilterExpr() *string {
+	if s == nil {
 		return nil
 	}
-	return o.FilterExpr
+	return s.FilterExpr
 }
 
-func (o *SystemMetricsEnum) GetMaxValues() *float64 {
-	if o == nil {
+func (s *SystemMetricsEnum) GetMaxValues() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxValues
+	return s.MaxValues
 }
 
-func (o *SystemMetricsEnum) GetMetricNameFilter() *MetricNameFilter {
-	if o == nil {
+func (s *SystemMetricsEnum) GetMetricNameFilter() *MetricNameFilter {
+	if s == nil {
 		return nil
 	}
-	return o.MetricNameFilter
+	return s.MetricNameFilter
 }

@@ -13,51 +13,51 @@ type ExprLibEntry struct {
 	Unprotected *bool          `json:"unprotected,omitempty"`
 }
 
-func (o *ExprLibEntry) GetContext() map[string]any {
-	if o == nil {
+func (e *ExprLibEntry) GetContext() map[string]any {
+	if e == nil {
 		return nil
 	}
-	return o.Context
+	return e.Context
 }
 
-func (o *ExprLibEntry) GetEvalType() *string {
-	if o == nil {
+func (e *ExprLibEntry) GetEvalType() *string {
+	if e == nil {
 		return nil
 	}
-	return o.EvalType
+	return e.EvalType
 }
 
-func (o *ExprLibEntry) GetExpr() string {
-	if o == nil {
+func (e *ExprLibEntry) GetExpr() string {
+	if e == nil {
 		return ""
 	}
-	return o.Expr
+	return e.Expr
 }
 
-func (o *ExprLibEntry) GetID() string {
-	if o == nil {
+func (e *ExprLibEntry) GetID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ID
+	return e.ID
 }
 
-func (o *ExprLibEntry) GetPack() *string {
-	if o == nil {
+func (e *ExprLibEntry) GetPack() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Pack
+	return e.Pack
 }
 
-func (o *ExprLibEntry) GetResult() map[string]any {
-	if o == nil {
+func (e *ExprLibEntry) GetResult() map[string]any {
+	if e == nil {
 		return nil
 	}
-	return o.Result
+	return e.Result
 }
 
-func (o *ExprLibEntry) GetUnprotected() *bool {
-	if o == nil {
+func (e *ExprLibEntry) GetUnprotected() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.Unprotected
+	return e.Unprotected
 }

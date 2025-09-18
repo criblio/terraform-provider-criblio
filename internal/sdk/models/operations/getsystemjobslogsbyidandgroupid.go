@@ -26,60 +26,60 @@ type GetSystemJobsLogsByIDAndGroupIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDRequest) GetLimit() *int64 {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDRequest) GetLimit() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Limit
+	return g.Limit
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDRequest) GetOffset() *int64 {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDRequest) GetOffset() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Offset
+	return g.Offset
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDRequest) GetEndOffset() *int64 {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDRequest) GetEndOffset() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.EndOffset
+	return g.EndOffset
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDRequest) GetEt() *int64 {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDRequest) GetEt() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Et
+	return g.Et
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDRequest) GetLt() *int64 {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDRequest) GetLt() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.Lt
+	return g.Lt
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDRequest) GetFilter() *string {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDRequest) GetFilter() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Filter
+	return g.Filter
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetSystemJobsLogsByIDAndGroupIDResponseBody - a list of any objects
@@ -87,11 +87,11 @@ type GetSystemJobsLogsByIDAndGroupIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemJobsLogsByIDAndGroupIDResponse struct {
@@ -107,37 +107,37 @@ type GetSystemJobsLogsByIDAndGroupIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDResponse) GetObject() *GetSystemJobsLogsByIDAndGroupIDResponseBody {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDResponse) GetObject() *GetSystemJobsLogsByIDAndGroupIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemJobsLogsByIDAndGroupIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemJobsLogsByIDAndGroupIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -11,44 +11,44 @@ type Expression struct {
 	Update  []AuthPolicyEntry `json:"Update"`
 }
 
-func (o *Expression) GetCreate() []AuthPolicyEntry {
-	if o == nil {
+func (e *Expression) GetCreate() []AuthPolicyEntry {
+	if e == nil {
 		return []AuthPolicyEntry{}
 	}
-	return o.Create
+	return e.Create
 }
 
-func (o *Expression) GetDelete() []AuthPolicyEntry {
-	if o == nil {
+func (e *Expression) GetDelete() []AuthPolicyEntry {
+	if e == nil {
 		return []AuthPolicyEntry{}
 	}
-	return o.Delete
+	return e.Delete
 }
 
-func (o *Expression) GetList() []AuthPolicyEntry {
-	if o == nil {
+func (e *Expression) GetList() []AuthPolicyEntry {
+	if e == nil {
 		return []AuthPolicyEntry{}
 	}
-	return o.List
+	return e.List
 }
 
-func (o *Expression) GetRead() []AuthPolicyEntry {
-	if o == nil {
+func (e *Expression) GetRead() []AuthPolicyEntry {
+	if e == nil {
 		return []AuthPolicyEntry{}
 	}
-	return o.Read
+	return e.Read
 }
 
-func (o *Expression) GetReplace() []AuthPolicyEntry {
-	if o == nil {
+func (e *Expression) GetReplace() []AuthPolicyEntry {
+	if e == nil {
 		return []AuthPolicyEntry{}
 	}
-	return o.Replace
+	return e.Replace
 }
 
-func (o *Expression) GetUpdate() []AuthPolicyEntry {
-	if o == nil {
+func (e *Expression) GetUpdate() []AuthPolicyEntry {
+	if e == nil {
 		return []AuthPolicyEntry{}
 	}
-	return o.Update
+	return e.Update
 }

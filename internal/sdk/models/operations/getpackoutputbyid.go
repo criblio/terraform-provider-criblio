@@ -15,25 +15,25 @@ type GetPackOutputByIDRequest struct {
 	Pack    string `pathParam:"style=simple,explode=false,name=pack"`
 }
 
-func (o *GetPackOutputByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetPackOutputByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetPackOutputByIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetPackOutputByIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
-func (o *GetPackOutputByIDRequest) GetPack() string {
-	if o == nil {
+func (g *GetPackOutputByIDRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
 // GetPackOutputByIDResponseBody - a list of Output objects
@@ -53,37 +53,37 @@ type GetPackOutputByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetPackOutputByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPackOutputByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPackOutputByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPackOutputByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPackOutputByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPackOutputByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetPackOutputByIDResponse) GetObject() *GetPackOutputByIDResponseBody {
-	if o == nil {
+func (g *GetPackOutputByIDResponse) GetObject() *GetPackOutputByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetPackOutputByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetPackOutputByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

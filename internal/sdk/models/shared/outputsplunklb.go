@@ -446,60 +446,60 @@ func (i *IndexerDiscoveryConfigs) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *IndexerDiscoveryConfigs) GetSite() *string {
-	if o == nil {
+func (i *IndexerDiscoveryConfigs) GetSite() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Site
+	return i.Site
 }
 
-func (o *IndexerDiscoveryConfigs) GetMasterURI() string {
-	if o == nil {
+func (i *IndexerDiscoveryConfigs) GetMasterURI() string {
+	if i == nil {
 		return ""
 	}
-	return o.MasterURI
+	return i.MasterURI
 }
 
-func (o *IndexerDiscoveryConfigs) GetRefreshIntervalSec() *float64 {
-	if o == nil {
+func (i *IndexerDiscoveryConfigs) GetRefreshIntervalSec() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RefreshIntervalSec
+	return i.RefreshIntervalSec
 }
 
-func (o *IndexerDiscoveryConfigs) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *IndexerDiscoveryConfigs) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *IndexerDiscoveryConfigs) GetAuthTokens() []OutputSplunkLbAuthToken {
-	if o == nil {
+func (i *IndexerDiscoveryConfigs) GetAuthTokens() []OutputSplunkLbAuthToken {
+	if i == nil {
 		return nil
 	}
-	return o.AuthTokens
+	return i.AuthTokens
 }
 
-func (o *IndexerDiscoveryConfigs) GetAuthType() *IndexerDiscoveryConfigsAuthenticationMethod {
-	if o == nil {
+func (i *IndexerDiscoveryConfigs) GetAuthType() *IndexerDiscoveryConfigsAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *IndexerDiscoveryConfigs) GetAuthToken() *string {
-	if o == nil {
+func (i *IndexerDiscoveryConfigs) GetAuthToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthToken
+	return i.AuthToken
 }
 
-func (o *IndexerDiscoveryConfigs) GetTextSecret() *string {
-	if o == nil {
+func (i *IndexerDiscoveryConfigs) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
 // OutputSplunkLbTLS - Whether to inherit TLS configs from group setting or disable TLS

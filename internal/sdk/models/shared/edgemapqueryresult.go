@@ -6,11 +6,11 @@ type WorkerInfo struct {
 	Hostname string `json:"hostname"`
 }
 
-func (o *WorkerInfo) GetHostname() string {
-	if o == nil {
+func (w *WorkerInfo) GetHostname() string {
+	if w == nil {
 		return ""
 	}
-	return o.Hostname
+	return w.Hostname
 }
 
 type EdgeMapQueryResult struct {
@@ -18,16 +18,16 @@ type EdgeMapQueryResult struct {
 	WorkerNode string     `json:"__worker_node"`
 }
 
-func (o *EdgeMapQueryResult) GetWorkerInfo() WorkerInfo {
-	if o == nil {
+func (e *EdgeMapQueryResult) GetWorkerInfo() WorkerInfo {
+	if e == nil {
 		return WorkerInfo{}
 	}
-	return o.WorkerInfo
+	return e.WorkerInfo
 }
 
-func (o *EdgeMapQueryResult) GetWorkerNode() string {
-	if o == nil {
+func (e *EdgeMapQueryResult) GetWorkerNode() string {
+	if e == nil {
 		return ""
 	}
-	return o.WorkerNode
+	return e.WorkerNode
 }

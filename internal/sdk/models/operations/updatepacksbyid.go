@@ -21,46 +21,46 @@ type UpdatePacksByIDRequest struct {
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 }
 
-func (o *UpdatePacksByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdatePacksByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdatePacksByIDRequest) GetSource() *string {
-	if o == nil {
+func (u *UpdatePacksByIDRequest) GetSource() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Source
+	return u.Source
 }
 
-func (o *UpdatePacksByIDRequest) GetMinor() *string {
-	if o == nil {
+func (u *UpdatePacksByIDRequest) GetMinor() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Minor
+	return u.Minor
 }
 
-func (o *UpdatePacksByIDRequest) GetSpec() *string {
-	if o == nil {
+func (u *UpdatePacksByIDRequest) GetSpec() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Spec
+	return u.Spec
 }
 
-func (o *UpdatePacksByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdatePacksByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdatePacksByIDRequest) GetDisabled() *bool {
-	if o == nil {
+func (u *UpdatePacksByIDRequest) GetDisabled() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Disabled
+	return u.Disabled
 }
 
 // UpdatePacksByIDResponseBody - a list of PackInfo objects
@@ -68,11 +68,11 @@ type UpdatePacksByIDResponseBody struct {
 	Items []shared.PackInstallInfo `json:"items,omitempty"`
 }
 
-func (o *UpdatePacksByIDResponseBody) GetItems() []shared.PackInstallInfo {
-	if o == nil {
+func (u *UpdatePacksByIDResponseBody) GetItems() []shared.PackInstallInfo {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdatePacksByIDResponse struct {
@@ -88,37 +88,37 @@ type UpdatePacksByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdatePacksByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdatePacksByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdatePacksByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdatePacksByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdatePacksByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdatePacksByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdatePacksByIDResponse) GetObject() *UpdatePacksByIDResponseBody {
-	if o == nil {
+func (u *UpdatePacksByIDResponse) GetObject() *UpdatePacksByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdatePacksByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdatePacksByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

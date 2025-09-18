@@ -7,16 +7,16 @@ type SearchJobErrorStateConfig struct {
 	ErrorMessages []string `json:"errorMessages"`
 }
 
-func (o *SearchJobErrorStateConfig) GetCoordinated() bool {
-	if o == nil {
+func (s *SearchJobErrorStateConfig) GetCoordinated() bool {
+	if s == nil {
 		return false
 	}
-	return o.Coordinated
+	return s.Coordinated
 }
 
-func (o *SearchJobErrorStateConfig) GetErrorMessages() []string {
-	if o == nil {
+func (s *SearchJobErrorStateConfig) GetErrorMessages() []string {
+	if s == nil {
 		return []string{}
 	}
-	return o.ErrorMessages
+	return s.ErrorMessages
 }

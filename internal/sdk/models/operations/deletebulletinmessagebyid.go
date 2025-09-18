@@ -12,11 +12,11 @@ type DeleteBulletinMessageByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteBulletinMessageByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteBulletinMessageByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteBulletinMessageByIDResponseBody - a list of BulletinMessage objects
@@ -24,11 +24,11 @@ type DeleteBulletinMessageByIDResponseBody struct {
 	Items []shared.BulletinMessage `json:"items,omitempty"`
 }
 
-func (o *DeleteBulletinMessageByIDResponseBody) GetItems() []shared.BulletinMessage {
-	if o == nil {
+func (d *DeleteBulletinMessageByIDResponseBody) GetItems() []shared.BulletinMessage {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteBulletinMessageByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteBulletinMessageByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteBulletinMessageByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteBulletinMessageByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteBulletinMessageByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteBulletinMessageByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteBulletinMessageByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteBulletinMessageByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteBulletinMessageByIDResponse) GetObject() *DeleteBulletinMessageByIDResponseBody {
-	if o == nil {
+func (d *DeleteBulletinMessageByIDResponse) GetObject() *DeleteBulletinMessageByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteBulletinMessageByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteBulletinMessageByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -14,18 +14,18 @@ type CreateGrokFileRequest struct {
 	GrokFile shared.GrokFile `request:"mediaType=application/json"`
 }
 
-func (o *CreateGrokFileRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateGrokFileRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateGrokFileRequest) GetGrokFile() shared.GrokFile {
-	if o == nil {
+func (c *CreateGrokFileRequest) GetGrokFile() shared.GrokFile {
+	if c == nil {
 		return shared.GrokFile{}
 	}
-	return o.GrokFile
+	return c.GrokFile
 }
 
 // CreateGrokFileResponseBody - a list of GrokFile objects
@@ -33,11 +33,11 @@ type CreateGrokFileResponseBody struct {
 	Items []shared.GrokFile `json:"items,omitempty"`
 }
 
-func (o *CreateGrokFileResponseBody) GetItems() []shared.GrokFile {
-	if o == nil {
+func (c *CreateGrokFileResponseBody) GetItems() []shared.GrokFile {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateGrokFileResponse struct {
@@ -53,37 +53,37 @@ type CreateGrokFileResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateGrokFileResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateGrokFileResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateGrokFileResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateGrokFileResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateGrokFileResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateGrokFileResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateGrokFileResponse) GetObject() *CreateGrokFileResponseBody {
-	if o == nil {
+func (c *CreateGrokFileResponse) GetObject() *CreateGrokFileResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateGrokFileResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateGrokFileResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

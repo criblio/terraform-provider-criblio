@@ -7,16 +7,16 @@ type AWSKMSServiceConfig struct {
 	Region    string `json:"region"`
 }
 
-func (o *AWSKMSServiceConfig) GetKmsKeyArn() string {
-	if o == nil {
+func (a *AWSKMSServiceConfig) GetKmsKeyArn() string {
+	if a == nil {
 		return ""
 	}
-	return o.KmsKeyArn
+	return a.KmsKeyArn
 }
 
-func (o *AWSKMSServiceConfig) GetRegion() string {
-	if o == nil {
+func (a *AWSKMSServiceConfig) GetRegion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Region
+	return a.Region
 }

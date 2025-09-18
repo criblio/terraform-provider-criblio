@@ -18,93 +18,93 @@ type TableViewSettings struct {
 	WrapCells              bool                  `json:"wrapCells"`
 }
 
-func (o *TableViewSettings) GetColumnFilterSettings() *ColumnFilterSettings {
-	if o == nil {
+func (t *TableViewSettings) GetColumnFilterSettings() *ColumnFilterSettings {
+	if t == nil {
 		return nil
 	}
-	return o.ColumnFilterSettings
+	return t.ColumnFilterSettings
 }
 
-func (o *TableViewSettings) GetColumnFormatSettings() *ColumnFormatSettings {
-	if o == nil {
+func (t *TableViewSettings) GetColumnFormatSettings() *ColumnFormatSettings {
+	if t == nil {
 		return nil
 	}
-	return o.ColumnFormatSettings
+	return t.ColumnFormatSettings
 }
 
-func (o *TableViewSettings) GetColumnOrderSettings() *ColumnOrderSettings {
-	if o == nil {
+func (t *TableViewSettings) GetColumnOrderSettings() *ColumnOrderSettings {
+	if t == nil {
 		return nil
 	}
-	return o.ColumnOrderSettings
+	return t.ColumnOrderSettings
 }
 
-func (o *TableViewSettings) GetColumnSortSettings() *ColumnSortSettings {
-	if o == nil {
+func (t *TableViewSettings) GetColumnSortSettings() *ColumnSortSettings {
+	if t == nil {
 		return nil
 	}
-	return o.ColumnSortSettings
+	return t.ColumnSortSettings
 }
 
-func (o *TableViewSettings) GetEventDetailsPanel() *bool {
-	if o == nil {
+func (t *TableViewSettings) GetEventDetailsPanel() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.EventDetailsPanel
+	return t.EventDetailsPanel
 }
 
-func (o *TableViewSettings) GetEventTableFields() []string {
-	if o == nil {
+func (t *TableViewSettings) GetEventTableFields() []string {
+	if t == nil {
 		return nil
 	}
-	return o.EventTableFields
+	return t.EventTableFields
 }
 
-func (o *TableViewSettings) GetRowNumberColumnWidth() *float64 {
-	if o == nil {
+func (t *TableViewSettings) GetRowNumberColumnWidth() *float64 {
+	if t == nil {
 		return nil
 	}
-	return o.RowNumberColumnWidth
+	return t.RowNumberColumnWidth
 }
 
-func (o *TableViewSettings) GetShowColumnTotals() bool {
-	if o == nil {
+func (t *TableViewSettings) GetShowColumnTotals() bool {
+	if t == nil {
 		return false
 	}
-	return o.ShowColumnTotals
+	return t.ShowColumnTotals
 }
 
-func (o *TableViewSettings) GetShowColumnTotalsPinned() bool {
-	if o == nil {
+func (t *TableViewSettings) GetShowColumnTotalsPinned() bool {
+	if t == nil {
 		return false
 	}
-	return o.ShowColumnTotalsPinned
+	return t.ShowColumnTotalsPinned
 }
 
-func (o *TableViewSettings) GetShowRowNumbers() bool {
-	if o == nil {
+func (t *TableViewSettings) GetShowRowNumbers() bool {
+	if t == nil {
 		return false
 	}
-	return o.ShowRowNumbers
+	return t.ShowRowNumbers
 }
 
-func (o *TableViewSettings) GetShowRowTotals() bool {
-	if o == nil {
+func (t *TableViewSettings) GetShowRowTotals() bool {
+	if t == nil {
 		return false
 	}
-	return o.ShowRowTotals
+	return t.ShowRowTotals
 }
 
-func (o *TableViewSettings) GetShowRowTotalsPinned() bool {
-	if o == nil {
+func (t *TableViewSettings) GetShowRowTotalsPinned() bool {
+	if t == nil {
 		return false
 	}
-	return o.ShowRowTotalsPinned
+	return t.ShowRowTotalsPinned
 }
 
-func (o *TableViewSettings) GetWrapCells() bool {
-	if o == nil {
+func (t *TableViewSettings) GetWrapCells() bool {
+	if t == nil {
 		return false
 	}
-	return o.WrapCells
+	return t.WrapCells
 }

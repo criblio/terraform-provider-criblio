@@ -16,25 +16,25 @@ type DeleteSystemInputsByPackRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteSystemInputsByPackRequest) GetPack() string {
-	if o == nil {
+func (d *DeleteSystemInputsByPackRequest) GetPack() string {
+	if d == nil {
 		return ""
 	}
-	return o.Pack
+	return d.Pack
 }
 
-func (o *DeleteSystemInputsByPackRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteSystemInputsByPackRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
-func (o *DeleteSystemInputsByPackRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSystemInputsByPackRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteSystemInputsByPackResponseBody - a list of Pipeline objects
@@ -42,11 +42,11 @@ type DeleteSystemInputsByPackResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *DeleteSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (d *DeleteSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSystemInputsByPackResponse struct {
@@ -62,37 +62,37 @@ type DeleteSystemInputsByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSystemInputsByPackResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSystemInputsByPackResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSystemInputsByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSystemInputsByPackResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSystemInputsByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSystemInputsByPackResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSystemInputsByPackResponse) GetObject() *DeleteSystemInputsByPackResponseBody {
-	if o == nil {
+func (d *DeleteSystemInputsByPackResponse) GetObject() *DeleteSystemInputsByPackResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSystemInputsByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSystemInputsByPackResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

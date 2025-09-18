@@ -16,79 +16,79 @@ type DatabaseConnectionConfig struct {
 	User              *string                `json:"user,omitempty"`
 }
 
-func (o *DatabaseConnectionConfig) GetAuthType() string {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetAuthType() string {
+	if d == nil {
 		return ""
 	}
-	return o.AuthType
+	return d.AuthType
 }
 
-func (o *DatabaseConnectionConfig) GetConfigObj() *string {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetConfigObj() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ConfigObj
+	return d.ConfigObj
 }
 
-func (o *DatabaseConnectionConfig) GetConnectionString() *string {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetConnectionString() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ConnectionString
+	return d.ConnectionString
 }
 
-func (o *DatabaseConnectionConfig) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetConnectionTimeout() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return d.ConnectionTimeout
 }
 
-func (o *DatabaseConnectionConfig) GetDatabaseType() DatabaseConnectionType {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetDatabaseType() DatabaseConnectionType {
+	if d == nil {
 		return DatabaseConnectionType("")
 	}
-	return o.DatabaseType
+	return d.DatabaseType
 }
 
-func (o *DatabaseConnectionConfig) GetDescription() string {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetDescription() string {
+	if d == nil {
 		return ""
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DatabaseConnectionConfig) GetID() string {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DatabaseConnectionConfig) GetPassword() *string {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetPassword() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Password
+	return d.Password
 }
 
-func (o *DatabaseConnectionConfig) GetRequestTimeout() *float64 {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetRequestTimeout() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return d.RequestTimeout
 }
 
-func (o *DatabaseConnectionConfig) GetTags() *string {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetTags() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Tags
+	return d.Tags
 }
 
-func (o *DatabaseConnectionConfig) GetUser() *string {
-	if o == nil {
+func (d *DatabaseConnectionConfig) GetUser() *string {
+	if d == nil {
 		return nil
 	}
-	return o.User
+	return d.User
 }

@@ -47,18 +47,18 @@ func (i *InputSystemStateConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemStateConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputSystemStateConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSystemStateConnection) GetOutput() string {
-	if o == nil {
+func (i *InputSystemStateConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSystemStateMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputSystemStatePq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemStatePq) GetMode() *InputSystemStateMode {
-	if o == nil {
+func (i *InputSystemStatePq) GetMode() *InputSystemStateMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSystemStatePq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSystemStatePq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSystemStatePq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSystemStatePq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSystemStatePq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSystemStatePq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSystemStatePq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSystemStatePq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSystemStatePq) GetPath() *string {
-	if o == nil {
+func (i *InputSystemStatePq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSystemStatePq) GetCompress() *InputSystemStateCompression {
-	if o == nil {
+func (i *InputSystemStatePq) GetCompress() *InputSystemStateCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputSystemStateMetadatum struct {
@@ -209,18 +209,18 @@ func (i *InputSystemStateMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemStateMetadatum) GetName() string {
-	if o == nil {
+func (i *InputSystemStateMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSystemStateMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputSystemStateMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // HostsFile - Creates events based on entries collected from the hosts file
@@ -239,11 +239,11 @@ func (h *HostsFile) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *HostsFile) GetEnable() *bool {
-	if o == nil {
+func (h *HostsFile) GetEnable() *bool {
+	if h == nil {
 		return nil
 	}
-	return o.Enable
+	return h.Enable
 }
 
 // Interfaces - Creates events for each of the host’s network interfaces
@@ -262,11 +262,11 @@ func (i *Interfaces) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Interfaces) GetEnable() *bool {
-	if o == nil {
+func (i *Interfaces) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
 // DisksAndFileSystems - Creates events for physical disks, partitions, and file systems
@@ -285,11 +285,11 @@ func (d *DisksAndFileSystems) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DisksAndFileSystems) GetEnable() *bool {
-	if o == nil {
+func (d *DisksAndFileSystems) GetEnable() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Enable
+	return d.Enable
 }
 
 // HostInfo - Creates events based on the host system’s current state
@@ -308,11 +308,11 @@ func (h *HostInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *HostInfo) GetEnable() *bool {
-	if o == nil {
+func (h *HostInfo) GetEnable() *bool {
+	if h == nil {
 		return nil
 	}
-	return o.Enable
+	return h.Enable
 }
 
 // InputSystemStateRoutes - Creates events based on entries collected from the host’s network routes
@@ -331,11 +331,11 @@ func (i *InputSystemStateRoutes) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemStateRoutes) GetEnable() *bool {
-	if o == nil {
+func (i *InputSystemStateRoutes) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
 // DNS - Creates events for DNS resolvers and search entries
@@ -354,11 +354,11 @@ func (d *DNS) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DNS) GetEnable() *bool {
-	if o == nil {
+func (d *DNS) GetEnable() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Enable
+	return d.Enable
 }
 
 // UsersAndGroups - Creates events for local users and groups
@@ -377,11 +377,11 @@ func (u *UsersAndGroups) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *UsersAndGroups) GetEnable() *bool {
-	if o == nil {
+func (u *UsersAndGroups) GetEnable() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Enable
+	return u.Enable
 }
 
 // Firewall - Creates events for Firewall rules entries
@@ -400,11 +400,11 @@ func (f *Firewall) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Firewall) GetEnable() *bool {
-	if o == nil {
+func (f *Firewall) GetEnable() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.Enable
+	return f.Enable
 }
 
 // Services - Creates events from the list of services
@@ -423,11 +423,11 @@ func (s *Services) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Services) GetEnable() *bool {
-	if o == nil {
+func (s *Services) GetEnable() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Enable
+	return s.Enable
 }
 
 // ListeningPorts - Creates events from list of listening ports
@@ -446,11 +446,11 @@ func (l *ListeningPorts) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ListeningPorts) GetEnable() *bool {
-	if o == nil {
+func (l *ListeningPorts) GetEnable() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Enable
+	return l.Enable
 }
 
 // LoggedInUsers - Creates events from list of logged-in users
@@ -469,11 +469,11 @@ func (l *LoggedInUsers) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LoggedInUsers) GetEnable() *bool {
-	if o == nil {
+func (l *LoggedInUsers) GetEnable() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Enable
+	return l.Enable
 }
 
 type Collectors struct {
@@ -512,81 +512,81 @@ func (c *Collectors) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Collectors) GetHostsfile() *HostsFile {
-	if o == nil {
+func (c *Collectors) GetHostsfile() *HostsFile {
+	if c == nil {
 		return nil
 	}
-	return o.Hostsfile
+	return c.Hostsfile
 }
 
-func (o *Collectors) GetInterfaces() *Interfaces {
-	if o == nil {
+func (c *Collectors) GetInterfaces() *Interfaces {
+	if c == nil {
 		return nil
 	}
-	return o.Interfaces
+	return c.Interfaces
 }
 
-func (o *Collectors) GetDisk() *DisksAndFileSystems {
-	if o == nil {
+func (c *Collectors) GetDisk() *DisksAndFileSystems {
+	if c == nil {
 		return nil
 	}
-	return o.Disk
+	return c.Disk
 }
 
-func (o *Collectors) GetMetadata() *HostInfo {
-	if o == nil {
+func (c *Collectors) GetMetadata() *HostInfo {
+	if c == nil {
 		return nil
 	}
-	return o.Metadata
+	return c.Metadata
 }
 
-func (o *Collectors) GetRoutes() *InputSystemStateRoutes {
-	if o == nil {
+func (c *Collectors) GetRoutes() *InputSystemStateRoutes {
+	if c == nil {
 		return nil
 	}
-	return o.Routes
+	return c.Routes
 }
 
-func (o *Collectors) GetDNS() *DNS {
-	if o == nil {
+func (c *Collectors) GetDNS() *DNS {
+	if c == nil {
 		return nil
 	}
-	return o.DNS
+	return c.DNS
 }
 
-func (o *Collectors) GetUser() *UsersAndGroups {
-	if o == nil {
+func (c *Collectors) GetUser() *UsersAndGroups {
+	if c == nil {
 		return nil
 	}
-	return o.User
+	return c.User
 }
 
-func (o *Collectors) GetFirewall() *Firewall {
-	if o == nil {
+func (c *Collectors) GetFirewall() *Firewall {
+	if c == nil {
 		return nil
 	}
-	return o.Firewall
+	return c.Firewall
 }
 
-func (o *Collectors) GetServices() *Services {
-	if o == nil {
+func (c *Collectors) GetServices() *Services {
+	if c == nil {
 		return nil
 	}
-	return o.Services
+	return c.Services
 }
 
-func (o *Collectors) GetPorts() *ListeningPorts {
-	if o == nil {
+func (c *Collectors) GetPorts() *ListeningPorts {
+	if c == nil {
 		return nil
 	}
-	return o.Ports
+	return c.Ports
 }
 
-func (o *Collectors) GetLoginUsers() *LoggedInUsers {
-	if o == nil {
+func (c *Collectors) GetLoginUsers() *LoggedInUsers {
+	if c == nil {
 		return nil
 	}
-	return o.LoginUsers
+	return c.LoginUsers
 }
 
 type InputSystemStateDataCompressionFormat string
@@ -640,46 +640,46 @@ func (i *InputSystemStatePersistence) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemStatePersistence) GetEnable() *bool {
-	if o == nil {
+func (i *InputSystemStatePersistence) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
-func (o *InputSystemStatePersistence) GetTimeWindow() *string {
-	if o == nil {
+func (i *InputSystemStatePersistence) GetTimeWindow() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWindow
+	return i.TimeWindow
 }
 
-func (o *InputSystemStatePersistence) GetMaxDataSize() *string {
-	if o == nil {
+func (i *InputSystemStatePersistence) GetMaxDataSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataSize
+	return i.MaxDataSize
 }
 
-func (o *InputSystemStatePersistence) GetMaxDataTime() *string {
-	if o == nil {
+func (i *InputSystemStatePersistence) GetMaxDataTime() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataTime
+	return i.MaxDataTime
 }
 
-func (o *InputSystemStatePersistence) GetCompress() *InputSystemStateDataCompressionFormat {
-	if o == nil {
+func (i *InputSystemStatePersistence) GetCompress() *InputSystemStateDataCompressionFormat {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
-func (o *InputSystemStatePersistence) GetDestPath() *string {
-	if o == nil {
+func (i *InputSystemStatePersistence) GetDestPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.DestPath
+	return i.DestPath
 }
 
 type InputSystemState struct {
@@ -722,114 +722,114 @@ func (i *InputSystemState) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSystemState) GetID() string {
-	if o == nil {
+func (i *InputSystemState) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSystemState) GetType() InputSystemStateType {
-	if o == nil {
+func (i *InputSystemState) GetType() InputSystemStateType {
+	if i == nil {
 		return InputSystemStateType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSystemState) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSystemState) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSystemState) GetPipeline() *string {
-	if o == nil {
+func (i *InputSystemState) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSystemState) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSystemState) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSystemState) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSystemState) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSystemState) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSystemState) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSystemState) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSystemState) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSystemState) GetConnections() []InputSystemStateConnection {
-	if o == nil {
+func (i *InputSystemState) GetConnections() []InputSystemStateConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSystemState) GetPq() *InputSystemStatePq {
-	if o == nil {
+func (i *InputSystemState) GetPq() *InputSystemStatePq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSystemState) GetInterval() *float64 {
-	if o == nil {
+func (i *InputSystemState) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputSystemState) GetMetadata() []InputSystemStateMetadatum {
-	if o == nil {
+func (i *InputSystemState) GetMetadata() []InputSystemStateMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSystemState) GetCollectors() *Collectors {
-	if o == nil {
+func (i *InputSystemState) GetCollectors() *Collectors {
+	if i == nil {
 		return nil
 	}
-	return o.Collectors
+	return i.Collectors
 }
 
-func (o *InputSystemState) GetPersistence() *InputSystemStatePersistence {
-	if o == nil {
+func (i *InputSystemState) GetPersistence() *InputSystemStatePersistence {
+	if i == nil {
 		return nil
 	}
-	return o.Persistence
+	return i.Persistence
 }
 
-func (o *InputSystemState) GetDisableNativeModule() *bool {
-	if o == nil {
+func (i *InputSystemState) GetDisableNativeModule() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DisableNativeModule
+	return i.DisableNativeModule
 }
 
-func (o *InputSystemState) GetDescription() *string {
-	if o == nil {
+func (i *InputSystemState) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

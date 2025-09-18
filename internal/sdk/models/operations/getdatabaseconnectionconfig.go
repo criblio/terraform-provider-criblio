@@ -14,18 +14,18 @@ type GetDatabaseConnectionConfigRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetDatabaseConnectionConfigRequest) GetDatabaseType() *string {
-	if o == nil {
+func (g *GetDatabaseConnectionConfigRequest) GetDatabaseType() *string {
+	if g == nil {
 		return nil
 	}
-	return o.DatabaseType
+	return g.DatabaseType
 }
 
-func (o *GetDatabaseConnectionConfigRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetDatabaseConnectionConfigRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetDatabaseConnectionConfigResponseBody - a list of DatabaseConnectionConfig objects
@@ -33,11 +33,11 @@ type GetDatabaseConnectionConfigResponseBody struct {
 	Items []shared.DatabaseConnectionConfig `json:"items,omitempty"`
 }
 
-func (o *GetDatabaseConnectionConfigResponseBody) GetItems() []shared.DatabaseConnectionConfig {
-	if o == nil {
+func (g *GetDatabaseConnectionConfigResponseBody) GetItems() []shared.DatabaseConnectionConfig {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetDatabaseConnectionConfigResponse struct {
@@ -53,37 +53,37 @@ type GetDatabaseConnectionConfigResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetDatabaseConnectionConfigResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDatabaseConnectionConfigResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDatabaseConnectionConfigResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDatabaseConnectionConfigResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDatabaseConnectionConfigResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDatabaseConnectionConfigResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDatabaseConnectionConfigResponse) GetObject() *GetDatabaseConnectionConfigResponseBody {
-	if o == nil {
+func (g *GetDatabaseConnectionConfigResponse) GetObject() *GetDatabaseConnectionConfigResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetDatabaseConnectionConfigResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetDatabaseConnectionConfigResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

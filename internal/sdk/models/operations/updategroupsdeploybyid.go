@@ -14,18 +14,18 @@ type UpdateGroupsDeployByIDRequest struct {
 	DeployRequest shared.DeployRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateGroupsDeployByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateGroupsDeployByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateGroupsDeployByIDRequest) GetDeployRequest() shared.DeployRequest {
-	if o == nil {
+func (u *UpdateGroupsDeployByIDRequest) GetDeployRequest() shared.DeployRequest {
+	if u == nil {
 		return shared.DeployRequest{}
 	}
-	return o.DeployRequest
+	return u.DeployRequest
 }
 
 // UpdateGroupsDeployByIDResponseBody - a list of ConfigGroup objects
@@ -33,11 +33,11 @@ type UpdateGroupsDeployByIDResponseBody struct {
 	Items []shared.ConfigGroup `json:"items,omitempty"`
 }
 
-func (o *UpdateGroupsDeployByIDResponseBody) GetItems() []shared.ConfigGroup {
-	if o == nil {
+func (u *UpdateGroupsDeployByIDResponseBody) GetItems() []shared.ConfigGroup {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateGroupsDeployByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateGroupsDeployByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateGroupsDeployByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateGroupsDeployByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateGroupsDeployByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateGroupsDeployByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateGroupsDeployByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateGroupsDeployByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateGroupsDeployByIDResponse) GetObject() *UpdateGroupsDeployByIDResponseBody {
-	if o == nil {
+func (u *UpdateGroupsDeployByIDResponse) GetObject() *UpdateGroupsDeployByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateGroupsDeployByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateGroupsDeployByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

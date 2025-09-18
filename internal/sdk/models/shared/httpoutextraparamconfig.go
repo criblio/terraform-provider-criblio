@@ -7,16 +7,16 @@ type HTTPOutExtraParamConfig struct {
 	Value map[string]any `json:"value"`
 }
 
-func (o *HTTPOutExtraParamConfig) GetName() string {
-	if o == nil {
+func (h *HTTPOutExtraParamConfig) GetName() string {
+	if h == nil {
 		return ""
 	}
-	return o.Name
+	return h.Name
 }
 
-func (o *HTTPOutExtraParamConfig) GetValue() map[string]any {
-	if o == nil {
+func (h *HTTPOutExtraParamConfig) GetValue() map[string]any {
+	if h == nil {
 		return map[string]any{}
 	}
-	return o.Value
+	return h.Value
 }

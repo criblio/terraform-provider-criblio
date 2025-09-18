@@ -15,72 +15,72 @@ type User struct {
 	Username        string   `json:"username"`
 }
 
-func (o *User) GetCurrentPassword() *string {
-	if o == nil {
+func (u *User) GetCurrentPassword() *string {
+	if u == nil {
 		return nil
 	}
-	return o.CurrentPassword
+	return u.CurrentPassword
 }
 
-func (o *User) GetDisabled() bool {
-	if o == nil {
+func (u *User) GetDisabled() bool {
+	if u == nil {
 		return false
 	}
-	return o.Disabled
+	return u.Disabled
 }
 
-func (o *User) GetEmail() string {
-	if o == nil {
+func (u *User) GetEmail() string {
+	if u == nil {
 		return ""
 	}
-	return o.Email
+	return u.Email
 }
 
-func (o *User) GetFirst() string {
-	if o == nil {
+func (u *User) GetFirst() string {
+	if u == nil {
 		return ""
 	}
-	return o.First
+	return u.First
 }
 
-func (o *User) GetID() string {
-	if o == nil {
+func (u *User) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *User) GetLast() string {
-	if o == nil {
+func (u *User) GetLast() string {
+	if u == nil {
 		return ""
 	}
-	return o.Last
+	return u.Last
 }
 
-func (o *User) GetPassword() *string {
-	if o == nil {
+func (u *User) GetPassword() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Password
+	return u.Password
 }
 
-func (o *User) GetRoles() []string {
-	if o == nil {
+func (u *User) GetRoles() []string {
+	if u == nil {
 		return nil
 	}
-	return o.Roles
+	return u.Roles
 }
 
-func (o *User) GetTeams() []string {
-	if o == nil {
+func (u *User) GetTeams() []string {
+	if u == nil {
 		return nil
 	}
-	return o.Teams
+	return u.Teams
 }
 
-func (o *User) GetUsername() string {
-	if o == nil {
+func (u *User) GetUsername() string {
+	if u == nil {
 		return ""
 	}
-	return o.Username
+	return u.Username
 }

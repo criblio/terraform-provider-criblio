@@ -12,11 +12,11 @@ type GetAuthorizePolicyResponseBody struct {
 	Items []shared.AuthPolicyEntry `json:"items,omitempty"`
 }
 
-func (o *GetAuthorizePolicyResponseBody) GetItems() []shared.AuthPolicyEntry {
-	if o == nil {
+func (g *GetAuthorizePolicyResponseBody) GetItems() []shared.AuthPolicyEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetAuthorizePolicyResponse struct {
@@ -32,37 +32,37 @@ type GetAuthorizePolicyResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetAuthorizePolicyResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthorizePolicyResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthorizePolicyResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthorizePolicyResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthorizePolicyResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthorizePolicyResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAuthorizePolicyResponse) GetObject() *GetAuthorizePolicyResponseBody {
-	if o == nil {
+func (g *GetAuthorizePolicyResponse) GetObject() *GetAuthorizePolicyResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetAuthorizePolicyResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetAuthorizePolicyResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

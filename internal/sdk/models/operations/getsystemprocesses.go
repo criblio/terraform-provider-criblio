@@ -12,11 +12,11 @@ type GetSystemProcessesResponseBody struct {
 	Items []shared.ProcessEntry `json:"items,omitempty"`
 }
 
-func (o *GetSystemProcessesResponseBody) GetItems() []shared.ProcessEntry {
-	if o == nil {
+func (g *GetSystemProcessesResponseBody) GetItems() []shared.ProcessEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemProcessesResponse struct {
@@ -32,37 +32,37 @@ type GetSystemProcessesResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemProcessesResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemProcessesResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemProcessesResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemProcessesResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemProcessesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemProcessesResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemProcessesResponse) GetObject() *GetSystemProcessesResponseBody {
-	if o == nil {
+func (g *GetSystemProcessesResponse) GetObject() *GetSystemProcessesResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemProcessesResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemProcessesResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

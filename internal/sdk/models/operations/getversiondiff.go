@@ -18,32 +18,32 @@ type GetVersionDiffRequest struct {
 	DiffLineLimit *float64 `queryParam:"style=form,explode=true,name=diffLineLimit"`
 }
 
-func (o *GetVersionDiffRequest) GetCommit() *string {
-	if o == nil {
+func (g *GetVersionDiffRequest) GetCommit() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Commit
+	return g.Commit
 }
 
-func (o *GetVersionDiffRequest) GetGroup() *string {
-	if o == nil {
+func (g *GetVersionDiffRequest) GetGroup() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Group
+	return g.Group
 }
 
-func (o *GetVersionDiffRequest) GetFilename() *string {
-	if o == nil {
+func (g *GetVersionDiffRequest) GetFilename() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Filename
+	return g.Filename
 }
 
-func (o *GetVersionDiffRequest) GetDiffLineLimit() *float64 {
-	if o == nil {
+func (g *GetVersionDiffRequest) GetDiffLineLimit() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.DiffLineLimit
+	return g.DiffLineLimit
 }
 
 // GetVersionDiffResponseBody - a list of any objects
@@ -51,11 +51,11 @@ type GetVersionDiffResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetVersionDiffResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetVersionDiffResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetVersionDiffResponse struct {
@@ -71,37 +71,37 @@ type GetVersionDiffResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetVersionDiffResponse) GetContentType() string {
-	if o == nil {
+func (g *GetVersionDiffResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetVersionDiffResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetVersionDiffResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetVersionDiffResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetVersionDiffResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetVersionDiffResponse) GetObject() *GetVersionDiffResponseBody {
-	if o == nil {
+func (g *GetVersionDiffResponse) GetObject() *GetVersionDiffResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetVersionDiffResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetVersionDiffResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

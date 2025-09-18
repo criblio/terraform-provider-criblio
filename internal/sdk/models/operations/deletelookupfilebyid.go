@@ -14,18 +14,18 @@ type DeleteLookupFileByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteLookupFileByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteLookupFileByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteLookupFileByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteLookupFileByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteLookupFileByIDResponseBody - a list of LookupFile objects
@@ -45,37 +45,37 @@ type DeleteLookupFileByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteLookupFileByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteLookupFileByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteLookupFileByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteLookupFileByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteLookupFileByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteLookupFileByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteLookupFileByIDResponse) GetObject() *DeleteLookupFileByIDResponseBody {
-	if o == nil {
+func (d *DeleteLookupFileByIDResponse) GetObject() *DeleteLookupFileByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteLookupFileByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteLookupFileByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

@@ -14,18 +14,18 @@ type GetJobsErrorsByIDAndGroupRequest struct {
 	Group string `pathParam:"style=simple,explode=false,name=group"`
 }
 
-func (o *GetJobsErrorsByIDAndGroupRequest) GetID() string {
-	if o == nil {
+func (g *GetJobsErrorsByIDAndGroupRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetJobsErrorsByIDAndGroupRequest) GetGroup() string {
-	if o == nil {
+func (g *GetJobsErrorsByIDAndGroupRequest) GetGroup() string {
+	if g == nil {
 		return ""
 	}
-	return o.Group
+	return g.Group
 }
 
 // GetJobsErrorsByIDAndGroupResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type GetJobsErrorsByIDAndGroupResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetJobsErrorsByIDAndGroupResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetJobsErrorsByIDAndGroupResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetJobsErrorsByIDAndGroupResponse struct {
@@ -53,37 +53,37 @@ type GetJobsErrorsByIDAndGroupResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetJobsErrorsByIDAndGroupResponse) GetContentType() string {
-	if o == nil {
+func (g *GetJobsErrorsByIDAndGroupResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetJobsErrorsByIDAndGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetJobsErrorsByIDAndGroupResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetJobsErrorsByIDAndGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetJobsErrorsByIDAndGroupResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetJobsErrorsByIDAndGroupResponse) GetObject() *GetJobsErrorsByIDAndGroupResponseBody {
-	if o == nil {
+func (g *GetJobsErrorsByIDAndGroupResponse) GetObject() *GetJobsErrorsByIDAndGroupResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetJobsErrorsByIDAndGroupResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetJobsErrorsByIDAndGroupResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

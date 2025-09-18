@@ -17,30 +17,30 @@ type GetAuthMetadataResponse struct {
 	Res *string
 }
 
-func (o *GetAuthMetadataResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthMetadataResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthMetadataResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthMetadataResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthMetadataResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthMetadataResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAuthMetadataResponse) GetRes() *string {
-	if o == nil {
+func (g *GetAuthMetadataResponse) GetRes() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Res
+	return g.Res
 }

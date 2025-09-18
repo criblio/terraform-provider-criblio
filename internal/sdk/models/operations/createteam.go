@@ -12,11 +12,11 @@ type CreateTeamResponseBody struct {
 	Items []shared.Team `json:"items,omitempty"`
 }
 
-func (o *CreateTeamResponseBody) GetItems() []shared.Team {
-	if o == nil {
+func (c *CreateTeamResponseBody) GetItems() []shared.Team {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateTeamResponse struct {
@@ -32,37 +32,37 @@ type CreateTeamResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateTeamResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateTeamResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateTeamResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateTeamResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateTeamResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateTeamResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateTeamResponse) GetObject() *CreateTeamResponseBody {
-	if o == nil {
+func (c *CreateTeamResponse) GetObject() *CreateTeamResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateTeamResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateTeamResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

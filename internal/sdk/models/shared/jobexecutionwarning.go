@@ -7,16 +7,16 @@ type JobExecutionWarning struct {
 	Type string  `json:"type"`
 }
 
-func (o *JobExecutionWarning) GetText() *string {
-	if o == nil {
+func (j *JobExecutionWarning) GetText() *string {
+	if j == nil {
 		return nil
 	}
-	return o.Text
+	return j.Text
 }
 
-func (o *JobExecutionWarning) GetType() string {
-	if o == nil {
+func (j *JobExecutionWarning) GetType() string {
+	if j == nil {
 		return ""
 	}
-	return o.Type
+	return j.Type
 }

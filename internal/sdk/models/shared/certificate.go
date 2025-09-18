@@ -15,51 +15,51 @@ type Certificate struct {
 	InUse []string `json:"inUse,omitempty"`
 }
 
-func (o *Certificate) GetID() string {
-	if o == nil {
+func (c *Certificate) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *Certificate) GetDescription() *string {
-	if o == nil {
+func (c *Certificate) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *Certificate) GetCert() string {
-	if o == nil {
+func (c *Certificate) GetCert() string {
+	if c == nil {
 		return ""
 	}
-	return o.Cert
+	return c.Cert
 }
 
-func (o *Certificate) GetPrivKey() string {
-	if o == nil {
+func (c *Certificate) GetPrivKey() string {
+	if c == nil {
 		return ""
 	}
-	return o.PrivKey
+	return c.PrivKey
 }
 
-func (o *Certificate) GetPassphrase() *string {
-	if o == nil {
+func (c *Certificate) GetPassphrase() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Passphrase
+	return c.Passphrase
 }
 
-func (o *Certificate) GetCa() *string {
-	if o == nil {
+func (c *Certificate) GetCa() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Ca
+	return c.Ca
 }
 
-func (o *Certificate) GetInUse() []string {
-	if o == nil {
+func (c *Certificate) GetInUse() []string {
+	if c == nil {
 		return nil
 	}
-	return o.InUse
+	return c.InUse
 }

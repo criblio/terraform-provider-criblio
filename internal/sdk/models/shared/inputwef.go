@@ -47,18 +47,18 @@ func (i *InputWefConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWefConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputWefConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputWefConnection) GetOutput() string {
-	if o == nil {
+func (i *InputWefConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputWefMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputWefPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWefPq) GetMode() *InputWefMode {
-	if o == nil {
+func (i *InputWefPq) GetMode() *InputWefMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWefPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputWefPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputWefPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputWefPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputWefPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputWefPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputWefPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputWefPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputWefPq) GetPath() *string {
-	if o == nil {
+func (i *InputWefPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputWefPq) GetCompress() *InputWefCompression {
-	if o == nil {
+func (i *InputWefPq) GetCompress() *InputWefCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputWefAuthenticationMethod - How to authenticate incoming client connections
@@ -323,109 +323,109 @@ func (m *MTLSSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *MTLSSettings) GetDisabled() *bool {
-	if o == nil {
+func (m *MTLSSettings) GetDisabled() *bool {
+	if m == nil {
 		return nil
 	}
-	return o.Disabled
+	return m.Disabled
 }
 
-func (o *MTLSSettings) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (m *MTLSSettings) GetRejectUnauthorized() *bool {
+	if m == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return m.RejectUnauthorized
 }
 
-func (o *MTLSSettings) GetRequestCert() *bool {
-	if o == nil {
+func (m *MTLSSettings) GetRequestCert() *bool {
+	if m == nil {
 		return nil
 	}
-	return o.RequestCert
+	return m.RequestCert
 }
 
-func (o *MTLSSettings) GetCertificateName() *string {
-	if o == nil {
+func (m *MTLSSettings) GetCertificateName() *string {
+	if m == nil {
 		return nil
 	}
-	return o.CertificateName
+	return m.CertificateName
 }
 
-func (o *MTLSSettings) GetPrivKeyPath() string {
-	if o == nil {
+func (m *MTLSSettings) GetPrivKeyPath() string {
+	if m == nil {
 		return ""
 	}
-	return o.PrivKeyPath
+	return m.PrivKeyPath
 }
 
-func (o *MTLSSettings) GetPassphrase() *string {
-	if o == nil {
+func (m *MTLSSettings) GetPassphrase() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Passphrase
+	return m.Passphrase
 }
 
-func (o *MTLSSettings) GetCertPath() string {
-	if o == nil {
+func (m *MTLSSettings) GetCertPath() string {
+	if m == nil {
 		return ""
 	}
-	return o.CertPath
+	return m.CertPath
 }
 
-func (o *MTLSSettings) GetCaPath() string {
-	if o == nil {
+func (m *MTLSSettings) GetCaPath() string {
+	if m == nil {
 		return ""
 	}
-	return o.CaPath
+	return m.CaPath
 }
 
-func (o *MTLSSettings) GetCommonNameRegex() *string {
-	if o == nil {
+func (m *MTLSSettings) GetCommonNameRegex() *string {
+	if m == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return m.CommonNameRegex
 }
 
-func (o *MTLSSettings) GetMinVersion() *InputWefMinimumTLSVersion {
-	if o == nil {
+func (m *MTLSSettings) GetMinVersion() *InputWefMinimumTLSVersion {
+	if m == nil {
 		return nil
 	}
-	return o.MinVersion
+	return m.MinVersion
 }
 
-func (o *MTLSSettings) GetMaxVersion() *InputWefMaximumTLSVersion {
-	if o == nil {
+func (m *MTLSSettings) GetMaxVersion() *InputWefMaximumTLSVersion {
+	if m == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return m.MaxVersion
 }
 
-func (o *MTLSSettings) GetOcspCheck() *bool {
-	if o == nil {
+func (m *MTLSSettings) GetOcspCheck() *bool {
+	if m == nil {
 		return nil
 	}
-	return o.OcspCheck
+	return m.OcspCheck
 }
 
-func (o *MTLSSettings) GetKeytab() any {
-	if o == nil {
+func (m *MTLSSettings) GetKeytab() any {
+	if m == nil {
 		return nil
 	}
-	return o.Keytab
+	return m.Keytab
 }
 
-func (o *MTLSSettings) GetPrincipal() any {
-	if o == nil {
+func (m *MTLSSettings) GetPrincipal() any {
+	if m == nil {
 		return nil
 	}
-	return o.Principal
+	return m.Principal
 }
 
-func (o *MTLSSettings) GetOcspCheckFailClose() *bool {
-	if o == nil {
+func (m *MTLSSettings) GetOcspCheckFailClose() *bool {
+	if m == nil {
 		return nil
 	}
-	return o.OcspCheckFailClose
+	return m.OcspCheckFailClose
 }
 
 // InputWefFormat - Content format in which the endpoint should deliver events
@@ -498,18 +498,18 @@ func (s *SubscriptionMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SubscriptionMetadatum) GetName() string {
-	if o == nil {
+func (s *SubscriptionMetadatum) GetName() string {
+	if s == nil {
 		return ""
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SubscriptionMetadatum) GetValue() string {
-	if o == nil {
+func (s *SubscriptionMetadatum) GetValue() string {
+	if s == nil {
 		return ""
 	}
-	return o.Value
+	return s.Value
 }
 
 type InputWefSubscription struct {
@@ -549,95 +549,95 @@ func (i *InputWefSubscription) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWefSubscription) GetID() string {
-	if o == nil {
+func (i *InputWefSubscription) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputWefSubscription) GetSubscriptionName() string {
-	if o == nil {
+func (i *InputWefSubscription) GetSubscriptionName() string {
+	if i == nil {
 		return ""
 	}
-	return o.SubscriptionName
+	return i.SubscriptionName
 }
 
-func (o *InputWefSubscription) GetVersion() *string {
-	if o == nil {
+func (i *InputWefSubscription) GetVersion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Version
+	return i.Version
 }
 
-func (o *InputWefSubscription) GetContentFormat() *InputWefFormat {
-	if o == nil {
+func (i *InputWefSubscription) GetContentFormat() *InputWefFormat {
+	if i == nil {
 		return nil
 	}
-	return o.ContentFormat
+	return i.ContentFormat
 }
 
-func (o *InputWefSubscription) GetHeartbeatInterval() *float64 {
-	if o == nil {
+func (i *InputWefSubscription) GetHeartbeatInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.HeartbeatInterval
+	return i.HeartbeatInterval
 }
 
-func (o *InputWefSubscription) GetBatchTimeout() *float64 {
-	if o == nil {
+func (i *InputWefSubscription) GetBatchTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.BatchTimeout
+	return i.BatchTimeout
 }
 
-func (o *InputWefSubscription) GetReadExistingEvents() *bool {
-	if o == nil {
+func (i *InputWefSubscription) GetReadExistingEvents() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReadExistingEvents
+	return i.ReadExistingEvents
 }
 
-func (o *InputWefSubscription) GetSendBookmarks() *bool {
-	if o == nil {
+func (i *InputWefSubscription) GetSendBookmarks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendBookmarks
+	return i.SendBookmarks
 }
 
-func (o *InputWefSubscription) GetCompress() *bool {
-	if o == nil {
+func (i *InputWefSubscription) GetCompress() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
-func (o *InputWefSubscription) GetTargets() []string {
-	if o == nil {
+func (i *InputWefSubscription) GetTargets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Targets
+	return i.Targets
 }
 
-func (o *InputWefSubscription) GetLocale() *string {
-	if o == nil {
+func (i *InputWefSubscription) GetLocale() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Locale
+	return i.Locale
 }
 
-func (o *InputWefSubscription) GetQuerySelector() *QueryBuilderMode {
-	if o == nil {
+func (i *InputWefSubscription) GetQuerySelector() *QueryBuilderMode {
+	if i == nil {
 		return nil
 	}
-	return o.QuerySelector
+	return i.QuerySelector
 }
 
-func (o *InputWefSubscription) GetMetadata() []SubscriptionMetadatum {
-	if o == nil {
+func (i *InputWefSubscription) GetMetadata() []SubscriptionMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
 type InputWefMetadatum struct {
@@ -657,18 +657,18 @@ func (i *InputWefMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWefMetadatum) GetName() string {
-	if o == nil {
+func (i *InputWefMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputWefMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputWefMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputWef struct {
@@ -742,219 +742,219 @@ func (i *InputWef) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWef) GetID() *string {
-	if o == nil {
+func (i *InputWef) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputWef) GetType() *InputWefType {
-	if o == nil {
+func (i *InputWef) GetType() *InputWefType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputWef) GetDisabled() *bool {
-	if o == nil {
+func (i *InputWef) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputWef) GetPipeline() *string {
-	if o == nil {
+func (i *InputWef) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputWef) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputWef) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputWef) GetEnvironment() *string {
-	if o == nil {
+func (i *InputWef) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputWef) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputWef) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputWef) GetStreamtags() []string {
-	if o == nil {
+func (i *InputWef) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputWef) GetConnections() []InputWefConnection {
-	if o == nil {
+func (i *InputWef) GetConnections() []InputWefConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputWef) GetPq() *InputWefPq {
-	if o == nil {
+func (i *InputWef) GetPq() *InputWefPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputWef) GetHost() *string {
-	if o == nil {
+func (i *InputWef) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputWef) GetPort() *float64 {
-	if o == nil {
+func (i *InputWef) GetPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputWef) GetAuthMethod() *InputWefAuthenticationMethod {
-	if o == nil {
+func (i *InputWef) GetAuthMethod() *InputWefAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthMethod
+	return i.AuthMethod
 }
 
-func (o *InputWef) GetTLS() *MTLSSettings {
-	if o == nil {
+func (i *InputWef) GetTLS() *MTLSSettings {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputWef) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputWef) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputWef) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputWef) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputWef) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputWef) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputWef) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputWef) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputWef) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputWef) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputWef) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputWef) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputWef) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputWef) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputWef) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputWef) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputWef) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputWef) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputWef) GetCaFingerprint() *string {
-	if o == nil {
+func (i *InputWef) GetCaFingerprint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaFingerprint
+	return i.CaFingerprint
 }
 
-func (o *InputWef) GetKeytab() *string {
-	if o == nil {
+func (i *InputWef) GetKeytab() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Keytab
+	return i.Keytab
 }
 
-func (o *InputWef) GetPrincipal() *string {
-	if o == nil {
+func (i *InputWef) GetPrincipal() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Principal
+	return i.Principal
 }
 
-func (o *InputWef) GetAllowMachineIDMismatch() *bool {
-	if o == nil {
+func (i *InputWef) GetAllowMachineIDMismatch() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.AllowMachineIDMismatch
+	return i.AllowMachineIDMismatch
 }
 
-func (o *InputWef) GetSubscriptions() []InputWefSubscription {
-	if o == nil {
+func (i *InputWef) GetSubscriptions() []InputWefSubscription {
+	if i == nil {
 		return []InputWefSubscription{}
 	}
-	return o.Subscriptions
+	return i.Subscriptions
 }
 
-func (o *InputWef) GetMetadata() []InputWefMetadatum {
-	if o == nil {
+func (i *InputWef) GetMetadata() []InputWefMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputWef) GetDescription() *string {
-	if o == nil {
+func (i *InputWef) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputWef) GetLogFingerprintMismatch() *bool {
-	if o == nil {
+func (i *InputWef) GetLogFingerprintMismatch() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.LogFingerprintMismatch
+	return i.LogFingerprintMismatch
 }

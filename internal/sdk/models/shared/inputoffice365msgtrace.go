@@ -47,18 +47,18 @@ func (i *InputOffice365MsgTraceConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MsgTraceConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputOffice365MsgTraceConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputOffice365MsgTraceConnection) GetOutput() string {
-	if o == nil {
+func (i *InputOffice365MsgTraceConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputOffice365MsgTraceMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputOffice365MsgTracePq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MsgTracePq) GetMode() *InputOffice365MsgTraceMode {
-	if o == nil {
+func (i *InputOffice365MsgTracePq) GetMode() *InputOffice365MsgTraceMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputOffice365MsgTracePq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTracePq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputOffice365MsgTracePq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTracePq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputOffice365MsgTracePq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputOffice365MsgTracePq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputOffice365MsgTracePq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputOffice365MsgTracePq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputOffice365MsgTracePq) GetPath() *string {
-	if o == nil {
+func (i *InputOffice365MsgTracePq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputOffice365MsgTracePq) GetCompress() *InputOffice365MsgTraceCompression {
-	if o == nil {
+func (i *InputOffice365MsgTracePq) GetCompress() *InputOffice365MsgTraceCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputOffice365MsgTraceAuthenticationMethod - Select authentication method.
@@ -281,18 +281,18 @@ func (i *InputOffice365MsgTraceMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MsgTraceMetadatum) GetName() string {
-	if o == nil {
+func (i *InputOffice365MsgTraceMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputOffice365MsgTraceMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputOffice365MsgTraceMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputOffice365MsgTraceRetryType - The algorithm to use when performing HTTP retries
@@ -355,60 +355,60 @@ func (i *InputOffice365MsgTraceRetryRules) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MsgTraceRetryRules) GetType() *InputOffice365MsgTraceRetryType {
-	if o == nil {
+func (i *InputOffice365MsgTraceRetryRules) GetType() *InputOffice365MsgTraceRetryType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputOffice365MsgTraceRetryRules) GetInterval() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTraceRetryRules) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputOffice365MsgTraceRetryRules) GetLimit() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTraceRetryRules) GetLimit() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Limit
+	return i.Limit
 }
 
-func (o *InputOffice365MsgTraceRetryRules) GetMultiplier() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTraceRetryRules) GetMultiplier() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Multiplier
+	return i.Multiplier
 }
 
-func (o *InputOffice365MsgTraceRetryRules) GetCodes() []float64 {
-	if o == nil {
+func (i *InputOffice365MsgTraceRetryRules) GetCodes() []float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Codes
+	return i.Codes
 }
 
-func (o *InputOffice365MsgTraceRetryRules) GetEnableHeader() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTraceRetryRules) GetEnableHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHeader
+	return i.EnableHeader
 }
 
-func (o *InputOffice365MsgTraceRetryRules) GetRetryConnectTimeout() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTraceRetryRules) GetRetryConnectTimeout() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectTimeout
+	return i.RetryConnectTimeout
 }
 
-func (o *InputOffice365MsgTraceRetryRules) GetRetryConnectReset() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTraceRetryRules) GetRetryConnectReset() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectReset
+	return i.RetryConnectReset
 }
 
 // InputOffice365MsgTraceSubscriptionPlan - Office 365 subscription plan for your organization, typically Office 365 Enterprise
@@ -466,32 +466,32 @@ func (c *CertOptions) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CertOptions) GetCertificateName() *string {
-	if o == nil {
+func (c *CertOptions) GetCertificateName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CertificateName
+	return c.CertificateName
 }
 
-func (o *CertOptions) GetPrivKeyPath() string {
-	if o == nil {
+func (c *CertOptions) GetPrivKeyPath() string {
+	if c == nil {
 		return ""
 	}
-	return o.PrivKeyPath
+	return c.PrivKeyPath
 }
 
-func (o *CertOptions) GetPassphrase() *string {
-	if o == nil {
+func (c *CertOptions) GetPassphrase() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Passphrase
+	return c.Passphrase
 }
 
-func (o *CertOptions) GetCertPath() string {
-	if o == nil {
+func (c *CertOptions) GetCertPath() string {
+	if c == nil {
 		return ""
 	}
-	return o.CertPath
+	return c.CertPath
 }
 
 type InputOffice365MsgTrace struct {
@@ -578,268 +578,268 @@ func (i *InputOffice365MsgTrace) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOffice365MsgTrace) GetID() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputOffice365MsgTrace) GetType() *InputOffice365MsgTraceType {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetType() *InputOffice365MsgTraceType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputOffice365MsgTrace) GetDisabled() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputOffice365MsgTrace) GetPipeline() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputOffice365MsgTrace) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputOffice365MsgTrace) GetEnvironment() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputOffice365MsgTrace) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputOffice365MsgTrace) GetStreamtags() []string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputOffice365MsgTrace) GetConnections() []InputOffice365MsgTraceConnection {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetConnections() []InputOffice365MsgTraceConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputOffice365MsgTrace) GetPq() *InputOffice365MsgTracePq {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetPq() *InputOffice365MsgTracePq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputOffice365MsgTrace) GetURL() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.URL
+	return i.URL
 }
 
-func (o *InputOffice365MsgTrace) GetInterval() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputOffice365MsgTrace) GetStartDate() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetStartDate() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StartDate
+	return i.StartDate
 }
 
-func (o *InputOffice365MsgTrace) GetEndDate() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetEndDate() *string {
+	if i == nil {
 		return nil
 	}
-	return o.EndDate
+	return i.EndDate
 }
 
-func (o *InputOffice365MsgTrace) GetTimeout() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Timeout
+	return i.Timeout
 }
 
-func (o *InputOffice365MsgTrace) GetDisableTimeFilter() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetDisableTimeFilter() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DisableTimeFilter
+	return i.DisableTimeFilter
 }
 
-func (o *InputOffice365MsgTrace) GetAuthType() *InputOffice365MsgTraceAuthenticationMethod {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetAuthType() *InputOffice365MsgTraceAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputOffice365MsgTrace) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputOffice365MsgTrace) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputOffice365MsgTrace) GetLogLevel() *InputOffice365MsgTraceLogLevel {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetLogLevel() *InputOffice365MsgTraceLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputOffice365MsgTrace) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputOffice365MsgTrace) GetKeepAliveTime() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetKeepAliveTime() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTime
+	return i.KeepAliveTime
 }
 
-func (o *InputOffice365MsgTrace) GetMaxMissedKeepAlives() *float64 {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetMaxMissedKeepAlives() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMissedKeepAlives
+	return i.MaxMissedKeepAlives
 }
 
-func (o *InputOffice365MsgTrace) GetTTL() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputOffice365MsgTrace) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputOffice365MsgTrace) GetMetadata() []InputOffice365MsgTraceMetadatum {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetMetadata() []InputOffice365MsgTraceMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputOffice365MsgTrace) GetRetryRules() *InputOffice365MsgTraceRetryRules {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetRetryRules() *InputOffice365MsgTraceRetryRules {
+	if i == nil {
 		return nil
 	}
-	return o.RetryRules
+	return i.RetryRules
 }
 
-func (o *InputOffice365MsgTrace) GetDescription() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputOffice365MsgTrace) GetUsername() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputOffice365MsgTrace) GetPassword() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputOffice365MsgTrace) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputOffice365MsgTrace) GetClientSecret() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetClientSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ClientSecret
+	return i.ClientSecret
 }
 
-func (o *InputOffice365MsgTrace) GetTenantID() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetTenantID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TenantID
+	return i.TenantID
 }
 
-func (o *InputOffice365MsgTrace) GetClientID() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetClientID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ClientID
+	return i.ClientID
 }
 
-func (o *InputOffice365MsgTrace) GetResource() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetResource() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Resource
+	return i.Resource
 }
 
-func (o *InputOffice365MsgTrace) GetPlanType() *InputOffice365MsgTraceSubscriptionPlan {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetPlanType() *InputOffice365MsgTraceSubscriptionPlan {
+	if i == nil {
 		return nil
 	}
-	return o.PlanType
+	return i.PlanType
 }
 
-func (o *InputOffice365MsgTrace) GetTextSecret() *string {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputOffice365MsgTrace) GetCertOptions() *CertOptions {
-	if o == nil {
+func (i *InputOffice365MsgTrace) GetCertOptions() *CertOptions {
+	if i == nil {
 		return nil
 	}
-	return o.CertOptions
+	return i.CertOptions
 }

@@ -7,16 +7,16 @@ type FileProcessInfo struct {
 	Process string  `json:"process"`
 }
 
-func (o *FileProcessInfo) GetPid() float64 {
-	if o == nil {
+func (f *FileProcessInfo) GetPid() float64 {
+	if f == nil {
 		return 0.0
 	}
-	return o.Pid
+	return f.Pid
 }
 
-func (o *FileProcessInfo) GetProcess() string {
-	if o == nil {
+func (f *FileProcessInfo) GetProcess() string {
+	if f == nil {
 		return ""
 	}
-	return o.Process
+	return f.Process
 }

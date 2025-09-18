@@ -39,25 +39,25 @@ type AppscopeTransportTLS struct {
 	Validateserver *bool   `json:"validateserver,omitempty"`
 }
 
-func (o *AppscopeTransportTLS) GetCacertpath() *string {
-	if o == nil {
+func (a *AppscopeTransportTLS) GetCacertpath() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Cacertpath
+	return a.Cacertpath
 }
 
-func (o *AppscopeTransportTLS) GetEnable() *bool {
-	if o == nil {
+func (a *AppscopeTransportTLS) GetEnable() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Enable
+	return a.Enable
 }
 
-func (o *AppscopeTransportTLS) GetValidateserver() *bool {
-	if o == nil {
+func (a *AppscopeTransportTLS) GetValidateserver() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Validateserver
+	return a.Validateserver
 }
 
 type AppscopeTransport struct {
@@ -69,44 +69,44 @@ type AppscopeTransport struct {
 	Type   *string               `json:"type,omitempty"`
 }
 
-func (o *AppscopeTransport) GetBuffer() *Buffer {
-	if o == nil {
+func (a *AppscopeTransport) GetBuffer() *Buffer {
+	if a == nil {
 		return nil
 	}
-	return o.Buffer
+	return a.Buffer
 }
 
-func (o *AppscopeTransport) GetHost() *string {
-	if o == nil {
+func (a *AppscopeTransport) GetHost() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Host
+	return a.Host
 }
 
-func (o *AppscopeTransport) GetPath() *string {
-	if o == nil {
+func (a *AppscopeTransport) GetPath() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Path
+	return a.Path
 }
 
-func (o *AppscopeTransport) GetPort() *float64 {
-	if o == nil {
+func (a *AppscopeTransport) GetPort() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.Port
+	return a.Port
 }
 
-func (o *AppscopeTransport) GetTLS() *AppscopeTransportTLS {
-	if o == nil {
+func (a *AppscopeTransport) GetTLS() *AppscopeTransportTLS {
+	if a == nil {
 		return nil
 	}
-	return o.TLS
+	return a.TLS
 }
 
-func (o *AppscopeTransport) GetType() *string {
-	if o == nil {
+func (a *AppscopeTransport) GetType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Type
+	return a.Type
 }

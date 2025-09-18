@@ -14,18 +14,18 @@ type DeleteLibSchemasByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteLibSchemasByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteLibSchemasByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteLibSchemasByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteLibSchemasByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteLibSchemasByIDResponseBody - a list of Schema objects
@@ -33,11 +33,11 @@ type DeleteLibSchemasByIDResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *DeleteLibSchemasByIDResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (d *DeleteLibSchemasByIDResponseBody) GetItems() []shared.SchemaLibEntry {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteLibSchemasByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteLibSchemasByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteLibSchemasByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteLibSchemasByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteLibSchemasByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteLibSchemasByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteLibSchemasByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteLibSchemasByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteLibSchemasByIDResponse) GetObject() *DeleteLibSchemasByIDResponseBody {
-	if o == nil {
+func (d *DeleteLibSchemasByIDResponse) GetObject() *DeleteLibSchemasByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteLibSchemasByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteLibSchemasByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

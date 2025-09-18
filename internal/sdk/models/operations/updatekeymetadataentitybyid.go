@@ -14,18 +14,18 @@ type UpdateKeyMetadataEntityByIDRequest struct {
 	KeyMetadataEntity shared.KeyMetadataEntity `request:"mediaType=application/json"`
 }
 
-func (o *UpdateKeyMetadataEntityByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateKeyMetadataEntityByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateKeyMetadataEntityByIDRequest) GetKeyMetadataEntity() shared.KeyMetadataEntity {
-	if o == nil {
+func (u *UpdateKeyMetadataEntityByIDRequest) GetKeyMetadataEntity() shared.KeyMetadataEntity {
+	if u == nil {
 		return shared.KeyMetadataEntity{}
 	}
-	return o.KeyMetadataEntity
+	return u.KeyMetadataEntity
 }
 
 // UpdateKeyMetadataEntityByIDResponseBody - a list of KeyMetadataEntity objects
@@ -33,11 +33,11 @@ type UpdateKeyMetadataEntityByIDResponseBody struct {
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`
 }
 
-func (o *UpdateKeyMetadataEntityByIDResponseBody) GetItems() []shared.KeyMetadataEntity {
-	if o == nil {
+func (u *UpdateKeyMetadataEntityByIDResponseBody) GetItems() []shared.KeyMetadataEntity {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateKeyMetadataEntityByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateKeyMetadataEntityByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateKeyMetadataEntityByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateKeyMetadataEntityByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateKeyMetadataEntityByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateKeyMetadataEntityByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateKeyMetadataEntityByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateKeyMetadataEntityByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateKeyMetadataEntityByIDResponse) GetObject() *UpdateKeyMetadataEntityByIDResponseBody {
-	if o == nil {
+func (u *UpdateKeyMetadataEntityByIDResponse) GetObject() *UpdateKeyMetadataEntityByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateKeyMetadataEntityByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateKeyMetadataEntityByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

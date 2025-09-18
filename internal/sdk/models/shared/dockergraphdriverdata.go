@@ -6,9 +6,9 @@ type DockerGraphDriverData struct {
 	MergedDir string `json:"MergedDir"`
 }
 
-func (o *DockerGraphDriverData) GetMergedDir() string {
-	if o == nil {
+func (d *DockerGraphDriverData) GetMergedDir() string {
+	if d == nil {
 		return ""
 	}
-	return o.MergedDir
+	return d.MergedDir
 }

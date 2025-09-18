@@ -24,16 +24,16 @@ func (g *GcpAccountConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GcpAccountConfig) GetName() string {
-	if o == nil {
+func (g *GcpAccountConfig) GetName() string {
+	if g == nil {
 		return ""
 	}
-	return o.Name
+	return g.Name
 }
 
-func (o *GcpAccountConfig) GetServiceAccountCredentials() string {
-	if o == nil {
+func (g *GcpAccountConfig) GetServiceAccountCredentials() string {
+	if g == nil {
 		return ""
 	}
-	return o.ServiceAccountCredentials
+	return g.ServiceAccountCredentials
 }

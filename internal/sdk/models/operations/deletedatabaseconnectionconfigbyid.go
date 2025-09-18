@@ -14,18 +14,18 @@ type DeleteDatabaseConnectionConfigByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteDatabaseConnectionConfigByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteDatabaseConnectionConfigByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteDatabaseConnectionConfigByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteDatabaseConnectionConfigByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteDatabaseConnectionConfigByIDResponseBody - a list of DatabaseConnectionConfig objects
@@ -33,11 +33,11 @@ type DeleteDatabaseConnectionConfigByIDResponseBody struct {
 	Items []shared.DatabaseConnectionConfig `json:"items,omitempty"`
 }
 
-func (o *DeleteDatabaseConnectionConfigByIDResponseBody) GetItems() []shared.DatabaseConnectionConfig {
-	if o == nil {
+func (d *DeleteDatabaseConnectionConfigByIDResponseBody) GetItems() []shared.DatabaseConnectionConfig {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteDatabaseConnectionConfigByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteDatabaseConnectionConfigByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteDatabaseConnectionConfigByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteDatabaseConnectionConfigByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteDatabaseConnectionConfigByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteDatabaseConnectionConfigByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteDatabaseConnectionConfigByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteDatabaseConnectionConfigByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteDatabaseConnectionConfigByIDResponse) GetObject() *DeleteDatabaseConnectionConfigByIDResponseBody {
-	if o == nil {
+func (d *DeleteDatabaseConnectionConfigByIDResponse) GetObject() *DeleteDatabaseConnectionConfigByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteDatabaseConnectionConfigByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteDatabaseConnectionConfigByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

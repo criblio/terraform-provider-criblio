@@ -7,16 +7,16 @@ type SearchTerm struct {
 	Term            string `json:"term"`
 }
 
-func (o *SearchTerm) GetIsCaseSensitive() bool {
-	if o == nil {
+func (s *SearchTerm) GetIsCaseSensitive() bool {
+	if s == nil {
 		return false
 	}
-	return o.IsCaseSensitive
+	return s.IsCaseSensitive
 }
 
-func (o *SearchTerm) GetTerm() string {
-	if o == nil {
+func (s *SearchTerm) GetTerm() string {
+	if s == nil {
 		return ""
 	}
-	return o.Term
+	return s.Term
 }

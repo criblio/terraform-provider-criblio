@@ -8,23 +8,23 @@ type GitFilesResponse struct {
 	Items         []GitFile      `json:"items"`
 }
 
-func (o *GitFilesResponse) GetCommitMessage() map[string]any {
-	if o == nil {
+func (g *GitFilesResponse) GetCommitMessage() map[string]any {
+	if g == nil {
 		return map[string]any{}
 	}
-	return o.CommitMessage
+	return g.CommitMessage
 }
 
-func (o *GitFilesResponse) GetCount() float64 {
-	if o == nil {
+func (g *GitFilesResponse) GetCount() float64 {
+	if g == nil {
 		return 0.0
 	}
-	return o.Count
+	return g.Count
 }
 
-func (o *GitFilesResponse) GetItems() []GitFile {
-	if o == nil {
+func (g *GitFilesResponse) GetItems() []GitFile {
+	if g == nil {
 		return []GitFile{}
 	}
-	return o.Items
+	return g.Items
 }

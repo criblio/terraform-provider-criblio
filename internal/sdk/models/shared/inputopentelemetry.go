@@ -47,18 +47,18 @@ func (i *InputOpenTelemetryConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOpenTelemetryConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputOpenTelemetryConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputOpenTelemetryConnection) GetOutput() string {
-	if o == nil {
+func (i *InputOpenTelemetryConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputOpenTelemetryMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputOpenTelemetryPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOpenTelemetryPq) GetMode() *InputOpenTelemetryMode {
-	if o == nil {
+func (i *InputOpenTelemetryPq) GetMode() *InputOpenTelemetryMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputOpenTelemetryPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetryPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputOpenTelemetryPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetryPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputOpenTelemetryPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputOpenTelemetryPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputOpenTelemetryPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputOpenTelemetryPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputOpenTelemetryPq) GetPath() *string {
-	if o == nil {
+func (i *InputOpenTelemetryPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputOpenTelemetryPq) GetCompress() *InputOpenTelemetryCompression {
-	if o == nil {
+func (i *InputOpenTelemetryPq) GetCompress() *InputOpenTelemetryCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputOpenTelemetryMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputOpenTelemetryTLSSettingsServerSide) UnmarshalJSON(data []byte) err
 	return nil
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetMinVersion() *InputOpenTelemetryMinimumTLSVersion {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetMinVersion() *InputOpenTelemetryMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputOpenTelemetryTLSSettingsServerSide) GetMaxVersion() *InputOpenTelemetryMaximumTLSVersion {
-	if o == nil {
+func (i *InputOpenTelemetryTLSSettingsServerSide) GetMaxVersion() *InputOpenTelemetryMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 // InputOpenTelemetryProtocol - Select whether to leverage gRPC or HTTP for OpenTelemetry
@@ -474,18 +474,18 @@ func (i *InputOpenTelemetryMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOpenTelemetryMetadatum) GetName() string {
-	if o == nil {
+func (i *InputOpenTelemetryMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputOpenTelemetryMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputOpenTelemetryMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputOpenTelemetryOauthParam struct {
@@ -506,18 +506,18 @@ func (i *InputOpenTelemetryOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOpenTelemetryOauthParam) GetName() string {
-	if o == nil {
+func (i *InputOpenTelemetryOauthParam) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputOpenTelemetryOauthParam) GetValue() string {
-	if o == nil {
+func (i *InputOpenTelemetryOauthParam) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputOpenTelemetryOauthHeader struct {
@@ -538,18 +538,18 @@ func (i *InputOpenTelemetryOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOpenTelemetryOauthHeader) GetName() string {
-	if o == nil {
+func (i *InputOpenTelemetryOauthHeader) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputOpenTelemetryOauthHeader) GetValue() string {
-	if o == nil {
+func (i *InputOpenTelemetryOauthHeader) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputOpenTelemetry struct {
@@ -648,324 +648,324 @@ func (i *InputOpenTelemetry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputOpenTelemetry) GetID() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputOpenTelemetry) GetType() *InputOpenTelemetryType {
-	if o == nil {
+func (i *InputOpenTelemetry) GetType() *InputOpenTelemetryType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputOpenTelemetry) GetDisabled() *bool {
-	if o == nil {
+func (i *InputOpenTelemetry) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputOpenTelemetry) GetPipeline() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputOpenTelemetry) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputOpenTelemetry) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputOpenTelemetry) GetEnvironment() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputOpenTelemetry) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputOpenTelemetry) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputOpenTelemetry) GetStreamtags() []string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputOpenTelemetry) GetConnections() []InputOpenTelemetryConnection {
-	if o == nil {
+func (i *InputOpenTelemetry) GetConnections() []InputOpenTelemetryConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputOpenTelemetry) GetPq() *InputOpenTelemetryPq {
-	if o == nil {
+func (i *InputOpenTelemetry) GetPq() *InputOpenTelemetryPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputOpenTelemetry) GetHost() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputOpenTelemetry) GetPort() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetry) GetPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputOpenTelemetry) GetTLS() *InputOpenTelemetryTLSSettingsServerSide {
-	if o == nil {
+func (i *InputOpenTelemetry) GetTLS() *InputOpenTelemetryTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputOpenTelemetry) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetry) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputOpenTelemetry) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputOpenTelemetry) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputOpenTelemetry) GetEnableProxyHeader() any {
-	if o == nil {
+func (i *InputOpenTelemetry) GetEnableProxyHeader() any {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputOpenTelemetry) GetCaptureHeaders() any {
-	if o == nil {
+func (i *InputOpenTelemetry) GetCaptureHeaders() any {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputOpenTelemetry) GetActivityLogSampleRate() any {
-	if o == nil {
+func (i *InputOpenTelemetry) GetActivityLogSampleRate() any {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputOpenTelemetry) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetry) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputOpenTelemetry) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetry) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputOpenTelemetry) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetry) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputOpenTelemetry) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputOpenTelemetry) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputOpenTelemetry) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputOpenTelemetry) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputOpenTelemetry) GetProtocol() *InputOpenTelemetryProtocol {
-	if o == nil {
+func (i *InputOpenTelemetry) GetProtocol() *InputOpenTelemetryProtocol {
+	if i == nil {
 		return nil
 	}
-	return o.Protocol
+	return i.Protocol
 }
 
-func (o *InputOpenTelemetry) GetExtractSpans() *bool {
-	if o == nil {
+func (i *InputOpenTelemetry) GetExtractSpans() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ExtractSpans
+	return i.ExtractSpans
 }
 
-func (o *InputOpenTelemetry) GetExtractMetrics() *bool {
-	if o == nil {
+func (i *InputOpenTelemetry) GetExtractMetrics() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ExtractMetrics
+	return i.ExtractMetrics
 }
 
-func (o *InputOpenTelemetry) GetOtlpVersion() *InputOpenTelemetryOTLPVersion {
-	if o == nil {
+func (i *InputOpenTelemetry) GetOtlpVersion() *InputOpenTelemetryOTLPVersion {
+	if i == nil {
 		return nil
 	}
-	return o.OtlpVersion
+	return i.OtlpVersion
 }
 
-func (o *InputOpenTelemetry) GetAuthType() *InputOpenTelemetryAuthenticationType {
-	if o == nil {
+func (i *InputOpenTelemetry) GetAuthType() *InputOpenTelemetryAuthenticationType {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputOpenTelemetry) GetMetadata() []InputOpenTelemetryMetadatum {
-	if o == nil {
+func (i *InputOpenTelemetry) GetMetadata() []InputOpenTelemetryMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputOpenTelemetry) GetMaxActiveCxn() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetry) GetMaxActiveCxn() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveCxn
+	return i.MaxActiveCxn
 }
 
-func (o *InputOpenTelemetry) GetDescription() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputOpenTelemetry) GetUsername() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputOpenTelemetry) GetPassword() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputOpenTelemetry) GetToken() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputOpenTelemetry) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputOpenTelemetry) GetTextSecret() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputOpenTelemetry) GetLoginURL() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputOpenTelemetry) GetSecretParamName() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SecretParamName
+	return i.SecretParamName
 }
 
-func (o *InputOpenTelemetry) GetSecret() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputOpenTelemetry) GetTokenAttributeName() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetTokenAttributeName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenAttributeName
+	return i.TokenAttributeName
 }
 
-func (o *InputOpenTelemetry) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputOpenTelemetry) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputOpenTelemetry) GetTokenTimeoutSecs() *float64 {
-	if o == nil {
+func (i *InputOpenTelemetry) GetTokenTimeoutSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TokenTimeoutSecs
+	return i.TokenTimeoutSecs
 }
 
-func (o *InputOpenTelemetry) GetOauthParams() []InputOpenTelemetryOauthParam {
-	if o == nil {
+func (i *InputOpenTelemetry) GetOauthParams() []InputOpenTelemetryOauthParam {
+	if i == nil {
 		return nil
 	}
-	return o.OauthParams
+	return i.OauthParams
 }
 
-func (o *InputOpenTelemetry) GetOauthHeaders() []InputOpenTelemetryOauthHeader {
-	if o == nil {
+func (i *InputOpenTelemetry) GetOauthHeaders() []InputOpenTelemetryOauthHeader {
+	if i == nil {
 		return nil
 	}
-	return o.OauthHeaders
+	return i.OauthHeaders
 }
 
-func (o *InputOpenTelemetry) GetExtractLogs() *bool {
-	if o == nil {
+func (i *InputOpenTelemetry) GetExtractLogs() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ExtractLogs
+	return i.ExtractLogs
 }

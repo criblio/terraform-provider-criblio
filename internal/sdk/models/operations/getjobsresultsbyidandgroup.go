@@ -16,25 +16,25 @@ type GetJobsResultsByIDAndGroupRequest struct {
 	Group string `pathParam:"style=simple,explode=false,name=group"`
 }
 
-func (o *GetJobsResultsByIDAndGroupRequest) GetID() string {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetJobsResultsByIDAndGroupRequest) GetMaxFiles() *float64 {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupRequest) GetMaxFiles() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.MaxFiles
+	return g.MaxFiles
 }
 
-func (o *GetJobsResultsByIDAndGroupRequest) GetGroup() string {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupRequest) GetGroup() string {
+	if g == nil {
 		return ""
 	}
-	return o.Group
+	return g.Group
 }
 
 // GetJobsResultsByIDAndGroupResponseBody - a list of any objects
@@ -42,11 +42,11 @@ type GetJobsResultsByIDAndGroupResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetJobsResultsByIDAndGroupResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetJobsResultsByIDAndGroupResponse struct {
@@ -62,37 +62,37 @@ type GetJobsResultsByIDAndGroupResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetJobsResultsByIDAndGroupResponse) GetContentType() string {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetJobsResultsByIDAndGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetJobsResultsByIDAndGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetJobsResultsByIDAndGroupResponse) GetObject() *GetJobsResultsByIDAndGroupResponseBody {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupResponse) GetObject() *GetJobsResultsByIDAndGroupResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetJobsResultsByIDAndGroupResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetJobsResultsByIDAndGroupResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

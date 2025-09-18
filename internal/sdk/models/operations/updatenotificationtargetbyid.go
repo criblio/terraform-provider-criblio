@@ -14,18 +14,18 @@ type UpdateNotificationTargetByIDRequest struct {
 	NotificationTarget shared.NotificationTarget `request:"mediaType=application/json"`
 }
 
-func (o *UpdateNotificationTargetByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateNotificationTargetByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateNotificationTargetByIDRequest) GetNotificationTarget() shared.NotificationTarget {
-	if o == nil {
+func (u *UpdateNotificationTargetByIDRequest) GetNotificationTarget() shared.NotificationTarget {
+	if u == nil {
 		return shared.NotificationTarget{}
 	}
-	return o.NotificationTarget
+	return u.NotificationTarget
 }
 
 // UpdateNotificationTargetByIDResponseBody - a list of NotificationTarget objects
@@ -45,37 +45,37 @@ type UpdateNotificationTargetByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateNotificationTargetByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateNotificationTargetByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateNotificationTargetByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateNotificationTargetByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateNotificationTargetByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateNotificationTargetByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateNotificationTargetByIDResponse) GetObject() *UpdateNotificationTargetByIDResponseBody {
-	if o == nil {
+func (u *UpdateNotificationTargetByIDResponse) GetObject() *UpdateNotificationTargetByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateNotificationTargetByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateNotificationTargetByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

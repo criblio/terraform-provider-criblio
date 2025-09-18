@@ -14,13 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -60,81 +54,46 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 		Attributes: map[string]schema.Attribute{
 			"comments": schema.ListNestedAttribute{
 				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-				},
 				NestedObject: schema.NestedAttributeObject{
-					PlanModifiers: []planmodifier.Object{
-						objectplanmodifier.RequiresReplaceIfConfigured(),
-					},
 					Attributes: map[string]schema.Attribute{
 						"additional_properties": schema.StringAttribute{
-							CustomType: jsontypes.NormalizedType{},
-							Optional:   true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Requires replacement if changed.; Parsed as JSON.`,
+							CustomType:  jsontypes.NormalizedType{},
+							Optional:    true,
+							Description: `Parsed as JSON.`,
 						},
 						"comment": schema.StringAttribute{
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Optional, short description of this Route's purpose. Requires replacement if changed.`,
+							Optional:    true,
+							Description: `Optional, short description of this Route's purpose`,
 						},
 					},
 				},
-				Description: `Comments. Requires replacement if changed.`,
+				Description: `Comments`,
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `group Id. Requires replacement if changed.`,
+				Required:    true,
+				Description: `group Id`,
 			},
 			"groups": schema.MapNestedAttribute{
 				Optional: true,
-				PlanModifiers: []planmodifier.Map{
-					mapplanmodifier.RequiresReplaceIfConfigured(),
-				},
 				NestedObject: schema.NestedAttributeObject{
-					PlanModifiers: []planmodifier.Object{
-						objectplanmodifier.RequiresReplaceIfConfigured(),
-					},
 					Attributes: map[string]schema.Attribute{
 						"description": schema.StringAttribute{
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Short description of this group. Requires replacement if changed.`,
+							Optional:    true,
+							Description: `Short description of this group`,
 						},
 						"disabled": schema.BoolAttribute{
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								boolplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Whether this group is disabled. Requires replacement if changed.`,
+							Optional:    true,
+							Description: `Whether this group is disabled`,
 						},
 						"name": schema.StringAttribute{
 							Required: true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Requires replacement if changed.`,
 						},
 					},
 				},
-				Description: `Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Routes ID. Requires replacement if changed.`,
+				Optional:    true,
+				Description: `Routes ID`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -238,104 +197,63 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"pack": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `pack ID to GET. Requires replacement if changed.`,
+				Required:    true,
+				Description: `pack ID to GET`,
 			},
 			"routes": schema.ListNestedAttribute{
 				Required: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-				},
 				NestedObject: schema.NestedAttributeObject{
-					PlanModifiers: []planmodifier.Object{
-						objectplanmodifier.RequiresReplaceIfConfigured(),
-					},
 					Attributes: map[string]schema.Attribute{
 						"additional_properties": schema.StringAttribute{
-							CustomType: jsontypes.NormalizedType{},
-							Optional:   true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Requires replacement if changed.; Parsed as JSON.`,
+							CustomType:  jsontypes.NormalizedType{},
+							Optional:    true,
+							Description: `Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Requires replacement if changed.`,
 						},
 						"disabled": schema.BoolAttribute{
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								boolplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Disable this routing rule. Requires replacement if changed.`,
+							Optional:    true,
+							Description: `Disable this routing rule`,
 						},
 						"enable_output_expression": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(false),
-							PlanModifiers: []planmodifier.Bool{
-								boolplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false; Requires replacement if changed.`,
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
+							Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false`,
 						},
 						"filter": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  stringdefault.StaticString(`true`),
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `JavaScript expression to select data to route. Default: "true"; Requires replacement if changed.`,
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`true`),
+							Description: `JavaScript expression to select data to route. Default: "true"`,
 						},
 						"final": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(true),
-							PlanModifiers: []planmodifier.Bool{
-								boolplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true; Requires replacement if changed.`,
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(true),
+							Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true`,
 						},
 						"name": schema.StringAttribute{
 							Required: true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Requires replacement if changed.`,
 						},
 						"output": schema.StringAttribute{
-							CustomType: jsontypes.NormalizedType{},
-							Optional:   true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Requires replacement if changed.; Parsed as JSON.`,
+							CustomType:  jsontypes.NormalizedType{},
+							Optional:    true,
+							Description: `Parsed as JSON.`,
 						},
 						"output_expression": schema.StringAttribute{
-							CustomType: jsontypes.NormalizedType{},
-							Optional:   true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Requires replacement if changed.; Parsed as JSON.`,
+							CustomType:  jsontypes.NormalizedType{},
+							Optional:    true,
+							Description: `Parsed as JSON.`,
 						},
 						"pipeline": schema.StringAttribute{
-							Required: true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplaceIfConfigured(),
-							},
-							Description: `Pipeline to send the matching data to. Requires replacement if changed.`,
+							Required:    true,
+							Description: `Pipeline to send the matching data to`,
 						},
 					},
 				},
-				Description: `Pipeline routing rules. Requires replacement if changed.`,
+				Description: `Pipeline routing rules`,
 			},
 		},
 	}
@@ -530,7 +448,80 @@ func (r *PackRoutesResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	// Not Implemented; all attributes marked as RequiresReplace
+	request, requestDiags := data.ToOperationsCreateRoutesByPackRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Routes.CreateRoutesByPack(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+	if !(res.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoutesByPackResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetRoutesByPackRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Routes.GetRoutesByPack(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByPackResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -554,7 +545,29 @@ func (r *PackRoutesResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 
-	// Not Implemented; entity does not have a configured DELETE operation
+	request, requestDiags := data.ToOperationsCreateRoutesByPackRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Routes.CreateRoutesByPack(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+
 }
 
 func (r *PackRoutesResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

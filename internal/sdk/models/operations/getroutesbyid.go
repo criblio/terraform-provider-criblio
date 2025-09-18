@@ -12,11 +12,11 @@ type GetRoutesByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetRoutesByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetRoutesByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetRoutesByIDResponseBody - a list of Routes objects
@@ -24,11 +24,11 @@ type GetRoutesByIDResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetRoutesByIDResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (g *GetRoutesByIDResponseBody) GetItems() []shared.Routes {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetRoutesByIDResponse struct {
@@ -44,37 +44,37 @@ type GetRoutesByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetRoutesByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetRoutesByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetRoutesByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetRoutesByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetRoutesByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetRoutesByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetRoutesByIDResponse) GetObject() *GetRoutesByIDResponseBody {
-	if o == nil {
+func (g *GetRoutesByIDResponse) GetObject() *GetRoutesByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetRoutesByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetRoutesByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -8,23 +8,23 @@ type PublicSettings struct {
 	IsRegistered bool   `json:"isRegistered"`
 }
 
-func (o *PublicSettings) GetAPIProtocol() string {
-	if o == nil {
+func (p *PublicSettings) GetAPIProtocol() string {
+	if p == nil {
 		return ""
 	}
-	return o.APIProtocol
+	return p.APIProtocol
 }
 
-func (o *PublicSettings) GetIntercom() bool {
-	if o == nil {
+func (p *PublicSettings) GetIntercom() bool {
+	if p == nil {
 		return false
 	}
-	return o.Intercom
+	return p.Intercom
 }
 
-func (o *PublicSettings) GetIsRegistered() bool {
-	if o == nil {
+func (p *PublicSettings) GetIsRegistered() bool {
+	if p == nil {
 		return false
 	}
-	return o.IsRegistered
+	return p.IsRegistered
 }

@@ -12,11 +12,11 @@ type ListCollectorsRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListCollectorsRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListCollectorsRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListCollectorsResponseBody - a list of Collector objects
@@ -36,37 +36,37 @@ type ListCollectorsResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListCollectorsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListCollectorsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListCollectorsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListCollectorsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListCollectorsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListCollectorsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListCollectorsResponse) GetObject() *ListCollectorsResponseBody {
-	if o == nil {
+func (l *ListCollectorsResponse) GetObject() *ListCollectorsResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListCollectorsResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListCollectorsResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

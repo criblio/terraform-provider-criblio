@@ -9,30 +9,30 @@ type Diag struct {
 	Size    *float64 `json:"size,omitempty"`
 }
 
-func (o *Diag) GetID() string {
-	if o == nil {
+func (d *Diag) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *Diag) GetModTime() *float64 {
-	if o == nil {
+func (d *Diag) GetModTime() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.ModTime
+	return d.ModTime
 }
 
-func (o *Diag) GetPath() string {
-	if o == nil {
+func (d *Diag) GetPath() string {
+	if d == nil {
 		return ""
 	}
-	return o.Path
+	return d.Path
 }
 
-func (o *Diag) GetSize() *float64 {
-	if o == nil {
+func (d *Diag) GetSize() *float64 {
+	if d == nil {
 		return nil
 	}
-	return o.Size
+	return d.Size
 }

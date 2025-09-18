@@ -14,65 +14,65 @@ type RestSecret struct {
 	Value       *string    `json:"value,omitempty"`
 }
 
-func (o *RestSecret) GetAPIKey() *string {
-	if o == nil {
+func (r *RestSecret) GetAPIKey() *string {
+	if r == nil {
 		return nil
 	}
-	return o.APIKey
+	return r.APIKey
 }
 
-func (o *RestSecret) GetDescription() *string {
-	if o == nil {
+func (r *RestSecret) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *RestSecret) GetID() string {
-	if o == nil {
+func (r *RestSecret) GetID() string {
+	if r == nil {
 		return ""
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *RestSecret) GetPassword() *string {
-	if o == nil {
+func (r *RestSecret) GetPassword() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Password
+	return r.Password
 }
 
-func (o *RestSecret) GetSecretKey() *string {
-	if o == nil {
+func (r *RestSecret) GetSecretKey() *string {
+	if r == nil {
 		return nil
 	}
-	return o.SecretKey
+	return r.SecretKey
 }
 
-func (o *RestSecret) GetSecretType() SecretType {
-	if o == nil {
+func (r *RestSecret) GetSecretType() SecretType {
+	if r == nil {
 		return SecretType("")
 	}
-	return o.SecretType
+	return r.SecretType
 }
 
-func (o *RestSecret) GetTags() *string {
-	if o == nil {
+func (r *RestSecret) GetTags() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Tags
+	return r.Tags
 }
 
-func (o *RestSecret) GetUsername() *string {
-	if o == nil {
+func (r *RestSecret) GetUsername() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Username
+	return r.Username
 }
 
-func (o *RestSecret) GetValue() *string {
-	if o == nil {
+func (r *RestSecret) GetValue() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Value
+	return r.Value
 }

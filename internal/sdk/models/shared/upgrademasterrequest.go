@@ -9,18 +9,18 @@ type Package struct {
 	PackageHashURL *string `json:"packageHashUrl,omitempty"`
 }
 
-func (o *Package) GetPackageURL() string {
-	if o == nil {
+func (p *Package) GetPackageURL() string {
+	if p == nil {
 		return ""
 	}
-	return o.PackageURL
+	return p.PackageURL
 }
 
-func (o *Package) GetPackageHashURL() *string {
-	if o == nil {
+func (p *Package) GetPackageHashURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.PackageHashURL
+	return p.PackageHashURL
 }
 
 type UpgradeMasterRequest struct {
@@ -28,9 +28,9 @@ type UpgradeMasterRequest struct {
 	Packages []Package `json:"packages,omitempty"`
 }
 
-func (o *UpgradeMasterRequest) GetPackages() []Package {
-	if o == nil {
+func (u *UpgradeMasterRequest) GetPackages() []Package {
+	if u == nil {
 		return nil
 	}
-	return o.Packages
+	return u.Packages
 }

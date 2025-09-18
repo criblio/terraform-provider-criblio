@@ -16,25 +16,25 @@ type CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest struct {
 	CaptureParams shared.CaptureParams `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest) GetProjectID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProjectID
+	return c.ProjectID
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest) GetCaptureParams() shared.CaptureParams {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDRequest) GetCaptureParams() shared.CaptureParams {
+	if c == nil {
 		return shared.CaptureParams{}
 	}
-	return o.CaptureParams
+	return c.CaptureParams
 }
 
 // CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody - A list of any objects
@@ -42,11 +42,11 @@ type CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse struct {
@@ -62,37 +62,37 @@ type CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetObject() *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetObject() *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByGroupIDAndProjectIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

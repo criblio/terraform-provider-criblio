@@ -18,30 +18,30 @@ type GetHealthInfoResponse struct {
 	HealthStatus *shared.HealthStatus
 }
 
-func (o *GetHealthInfoResponse) GetContentType() string {
-	if o == nil {
+func (g *GetHealthInfoResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetHealthInfoResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetHealthInfoResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetHealthInfoResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetHealthInfoResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetHealthInfoResponse) GetHealthStatus() *shared.HealthStatus {
-	if o == nil {
+func (g *GetHealthInfoResponse) GetHealthStatus() *shared.HealthStatus {
+	if g == nil {
 		return nil
 	}
-	return o.HealthStatus
+	return g.HealthStatus
 }

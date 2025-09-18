@@ -320,18 +320,18 @@ func (e *ExtraLogType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ExtraLogType) GetLogType() string {
-	if o == nil {
+func (e *ExtraLogType) GetLogType() string {
+	if e == nil {
 		return ""
 	}
-	return o.LogType
+	return e.LogType
 }
 
-func (o *ExtraLogType) GetDescription() *string {
-	if o == nil {
+func (e *ExtraLogType) GetDescription() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Description
+	return e.Description
 }
 
 type CustomLabel struct {
@@ -350,18 +350,18 @@ func (c *CustomLabel) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CustomLabel) GetKey() string {
-	if o == nil {
+func (c *CustomLabel) GetKey() string {
+	if c == nil {
 		return ""
 	}
-	return o.Key
+	return c.Key
 }
 
-func (o *CustomLabel) GetValue() string {
-	if o == nil {
+func (c *CustomLabel) GetValue() string {
+	if c == nil {
 		return ""
 	}
-	return o.Value
+	return c.Value
 }
 
 // OutputGoogleChronicleCompression - Codec to use to compress the persisted data

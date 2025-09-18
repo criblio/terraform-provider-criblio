@@ -12,11 +12,11 @@ type ListLoggerConfigResponseBody struct {
 	Items []shared.LoggerConfig `json:"items,omitempty"`
 }
 
-func (o *ListLoggerConfigResponseBody) GetItems() []shared.LoggerConfig {
-	if o == nil {
+func (l *ListLoggerConfigResponseBody) GetItems() []shared.LoggerConfig {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListLoggerConfigResponse struct {
@@ -32,37 +32,37 @@ type ListLoggerConfigResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListLoggerConfigResponse) GetContentType() string {
-	if o == nil {
+func (l *ListLoggerConfigResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListLoggerConfigResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListLoggerConfigResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListLoggerConfigResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListLoggerConfigResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListLoggerConfigResponse) GetObject() *ListLoggerConfigResponseBody {
-	if o == nil {
+func (l *ListLoggerConfigResponse) GetObject() *ListLoggerConfigResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListLoggerConfigResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListLoggerConfigResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

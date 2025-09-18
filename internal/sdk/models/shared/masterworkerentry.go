@@ -43,11 +43,11 @@ type MasterWorkerEntryWorkers struct {
 	Count float64 `json:"count"`
 }
 
-func (o *MasterWorkerEntryWorkers) GetCount() float64 {
-	if o == nil {
+func (m *MasterWorkerEntryWorkers) GetCount() float64 {
+	if m == nil {
 		return 0.0
 	}
-	return o.Count
+	return m.Count
 }
 
 type MasterWorkerEntry struct {
@@ -66,93 +66,93 @@ type MasterWorkerEntry struct {
 	Workers           *MasterWorkerEntryWorkers `json:"workers,omitempty"`
 }
 
-func (o *MasterWorkerEntry) GetDeployable() *bool {
-	if o == nil {
+func (m *MasterWorkerEntry) GetDeployable() *bool {
+	if m == nil {
 		return nil
 	}
-	return o.Deployable
+	return m.Deployable
 }
 
-func (o *MasterWorkerEntry) GetFirstMsgTime() float64 {
-	if o == nil {
+func (m *MasterWorkerEntry) GetFirstMsgTime() float64 {
+	if m == nil {
 		return 0.0
 	}
-	return o.FirstMsgTime
+	return m.FirstMsgTime
 }
 
-func (o *MasterWorkerEntry) GetGroup() string {
-	if o == nil {
+func (m *MasterWorkerEntry) GetGroup() string {
+	if m == nil {
 		return ""
 	}
-	return o.Group
+	return m.Group
 }
 
-func (o *MasterWorkerEntry) GetID() string {
-	if o == nil {
+func (m *MasterWorkerEntry) GetID() string {
+	if m == nil {
 		return ""
 	}
-	return o.ID
+	return m.ID
 }
 
-func (o *MasterWorkerEntry) GetInfo() NodeProvidedInfo {
-	if o == nil {
+func (m *MasterWorkerEntry) GetInfo() NodeProvidedInfo {
+	if m == nil {
 		return NodeProvidedInfo{}
 	}
-	return o.Info
+	return m.Info
 }
 
-func (o *MasterWorkerEntry) GetLastMetrics() *LastMetrics {
-	if o == nil {
+func (m *MasterWorkerEntry) GetLastMetrics() *LastMetrics {
+	if m == nil {
 		return nil
 	}
-	return o.LastMetrics
+	return m.LastMetrics
 }
 
-func (o *MasterWorkerEntry) GetLastMsgTime() float64 {
-	if o == nil {
+func (m *MasterWorkerEntry) GetLastMsgTime() float64 {
+	if m == nil {
 		return 0.0
 	}
-	return o.LastMsgTime
+	return m.LastMsgTime
 }
 
-func (o *MasterWorkerEntry) GetMetadata() *HeartbeatMetadata {
-	if o == nil {
+func (m *MasterWorkerEntry) GetMetadata() *HeartbeatMetadata {
+	if m == nil {
 		return nil
 	}
-	return o.Metadata
+	return m.Metadata
 }
 
-func (o *MasterWorkerEntry) GetNodeUpgradeStatus() *NodeUpgradeStatus {
-	if o == nil {
+func (m *MasterWorkerEntry) GetNodeUpgradeStatus() *NodeUpgradeStatus {
+	if m == nil {
 		return nil
 	}
-	return o.NodeUpgradeStatus
+	return m.NodeUpgradeStatus
 }
 
-func (o *MasterWorkerEntry) GetStatus() *string {
-	if o == nil {
+func (m *MasterWorkerEntry) GetStatus() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Status
+	return m.Status
 }
 
-func (o *MasterWorkerEntry) GetType() *MasterWorkerEntryType {
-	if o == nil {
+func (m *MasterWorkerEntry) GetType() *MasterWorkerEntryType {
+	if m == nil {
 		return nil
 	}
-	return o.Type
+	return m.Type
 }
 
-func (o *MasterWorkerEntry) GetWorkerProcesses() float64 {
-	if o == nil {
+func (m *MasterWorkerEntry) GetWorkerProcesses() float64 {
+	if m == nil {
 		return 0.0
 	}
-	return o.WorkerProcesses
+	return m.WorkerProcesses
 }
 
-func (o *MasterWorkerEntry) GetWorkers() *MasterWorkerEntryWorkers {
-	if o == nil {
+func (m *MasterWorkerEntry) GetWorkers() *MasterWorkerEntryWorkers {
+	if m == nil {
 		return nil
 	}
-	return o.Workers
+	return m.Workers
 }

@@ -14,18 +14,18 @@ type GetSearchJobsStagesResultsByIDAndStageIDRequest struct {
 	StageID string `pathParam:"style=simple,explode=false,name=stageId"`
 }
 
-func (o *GetSearchJobsStagesResultsByIDAndStageIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSearchJobsStagesResultsByIDAndStageIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetSearchJobsStagesResultsByIDAndStageIDRequest) GetStageID() string {
-	if o == nil {
+func (g *GetSearchJobsStagesResultsByIDAndStageIDRequest) GetStageID() string {
+	if g == nil {
 		return ""
 	}
-	return o.StageID
+	return g.StageID
 }
 
 type GetSearchJobsStagesResultsByIDAndStageIDResponse struct {
@@ -41,37 +41,37 @@ type GetSearchJobsStagesResultsByIDAndStageIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetString() *string {
-	if o == nil {
+func (g *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetString() *string {
+	if g == nil {
 		return nil
 	}
-	return o.String
+	return g.String
 }
 
-func (o *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchJobsStagesResultsByIDAndStageIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

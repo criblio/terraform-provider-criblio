@@ -78,22 +78,22 @@ type AMTrustPolicyCondition struct {
 	StringEquals *StringEquals `json:"StringEquals,omitempty"`
 }
 
-func (o *AMTrustPolicyCondition) GetStringEquals() *StringEquals {
-	if o == nil {
+func (a *AMTrustPolicyCondition) GetStringEquals() *StringEquals {
+	if a == nil {
 		return nil
 	}
-	return o.StringEquals
+	return a.StringEquals
 }
 
 type Principal struct {
 	Aws string `json:"AWS"`
 }
 
-func (o *Principal) GetAws() string {
-	if o == nil {
+func (p *Principal) GetAws() string {
+	if p == nil {
 		return ""
 	}
-	return o.Aws
+	return p.Aws
 }
 
 type Statement struct {
@@ -103,32 +103,32 @@ type Statement struct {
 	Principal Principal               `json:"Principal"`
 }
 
-func (o *Statement) GetAction() Action {
-	if o == nil {
+func (s *Statement) GetAction() Action {
+	if s == nil {
 		return Action{}
 	}
-	return o.Action
+	return s.Action
 }
 
-func (o *Statement) GetCondition() *AMTrustPolicyCondition {
-	if o == nil {
+func (s *Statement) GetCondition() *AMTrustPolicyCondition {
+	if s == nil {
 		return nil
 	}
-	return o.Condition
+	return s.Condition
 }
 
-func (o *Statement) GetEffect() string {
-	if o == nil {
+func (s *Statement) GetEffect() string {
+	if s == nil {
 		return ""
 	}
-	return o.Effect
+	return s.Effect
 }
 
-func (o *Statement) GetPrincipal() Principal {
-	if o == nil {
+func (s *Statement) GetPrincipal() Principal {
+	if s == nil {
 		return Principal{}
 	}
-	return o.Principal
+	return s.Principal
 }
 
 type AMTrustPolicy struct {
@@ -136,16 +136,16 @@ type AMTrustPolicy struct {
 	Version   string      `json:"Version"`
 }
 
-func (o *AMTrustPolicy) GetStatement() []Statement {
-	if o == nil {
+func (a *AMTrustPolicy) GetStatement() []Statement {
+	if a == nil {
 		return []Statement{}
 	}
-	return o.Statement
+	return a.Statement
 }
 
-func (o *AMTrustPolicy) GetVersion() string {
-	if o == nil {
+func (a *AMTrustPolicy) GetVersion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Version
+	return a.Version
 }

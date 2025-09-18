@@ -10,37 +10,37 @@ type AppscopeLibEntry struct {
 	Tags        *string                  `json:"tags,omitempty"`
 }
 
-func (o *AppscopeLibEntry) GetConfig() AppscopeConfigWithCustom {
-	if o == nil {
+func (a *AppscopeLibEntry) GetConfig() AppscopeConfigWithCustom {
+	if a == nil {
 		return AppscopeConfigWithCustom{}
 	}
-	return o.Config
+	return a.Config
 }
 
-func (o *AppscopeLibEntry) GetDescription() string {
-	if o == nil {
+func (a *AppscopeLibEntry) GetDescription() string {
+	if a == nil {
 		return ""
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AppscopeLibEntry) GetID() string {
-	if o == nil {
+func (a *AppscopeLibEntry) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *AppscopeLibEntry) GetLib() CriblLib {
-	if o == nil {
+func (a *AppscopeLibEntry) GetLib() CriblLib {
+	if a == nil {
 		return CriblLib("")
 	}
-	return o.Lib
+	return a.Lib
 }
 
-func (o *AppscopeLibEntry) GetTags() *string {
-	if o == nil {
+func (a *AppscopeLibEntry) GetTags() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Tags
+	return a.Tags
 }

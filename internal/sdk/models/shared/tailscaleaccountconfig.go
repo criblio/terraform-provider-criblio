@@ -26,23 +26,23 @@ func (t *TailscaleAccountConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *TailscaleAccountConfig) GetName() string {
-	if o == nil {
+func (t *TailscaleAccountConfig) GetName() string {
+	if t == nil {
 		return ""
 	}
-	return o.Name
+	return t.Name
 }
 
-func (o *TailscaleAccountConfig) GetClientID() string {
-	if o == nil {
+func (t *TailscaleAccountConfig) GetClientID() string {
+	if t == nil {
 		return ""
 	}
-	return o.ClientID
+	return t.ClientID
 }
 
-func (o *TailscaleAccountConfig) GetClientSecret() string {
-	if o == nil {
+func (t *TailscaleAccountConfig) GetClientSecret() string {
+	if t == nil {
 		return ""
 	}
-	return o.ClientSecret
+	return t.ClientSecret
 }

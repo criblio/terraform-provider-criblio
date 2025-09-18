@@ -12,11 +12,11 @@ type CreateEdgeKubeLogsResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *CreateEdgeKubeLogsResponseBody) GetItems() []string {
-	if o == nil {
+func (c *CreateEdgeKubeLogsResponseBody) GetItems() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateEdgeKubeLogsResponse struct {
@@ -32,37 +32,37 @@ type CreateEdgeKubeLogsResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateEdgeKubeLogsResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateEdgeKubeLogsResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateEdgeKubeLogsResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateEdgeKubeLogsResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateEdgeKubeLogsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateEdgeKubeLogsResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateEdgeKubeLogsResponse) GetObject() *CreateEdgeKubeLogsResponseBody {
-	if o == nil {
+func (c *CreateEdgeKubeLogsResponse) GetObject() *CreateEdgeKubeLogsResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateEdgeKubeLogsResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateEdgeKubeLogsResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

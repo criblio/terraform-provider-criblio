@@ -47,18 +47,18 @@ func (i *InputKubeEventsConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeEventsConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputKubeEventsConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKubeEventsConnection) GetOutput() string {
-	if o == nil {
+func (i *InputKubeEventsConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputKubeEventsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputKubeEventsPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeEventsPq) GetMode() *InputKubeEventsMode {
-	if o == nil {
+func (i *InputKubeEventsPq) GetMode() *InputKubeEventsMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputKubeEventsPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputKubeEventsPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputKubeEventsPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputKubeEventsPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputKubeEventsPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputKubeEventsPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputKubeEventsPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputKubeEventsPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputKubeEventsPq) GetPath() *string {
-	if o == nil {
+func (i *InputKubeEventsPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputKubeEventsPq) GetCompress() *InputKubeEventsCompression {
-	if o == nil {
+func (i *InputKubeEventsPq) GetCompress() *InputKubeEventsCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputKubeEventsRule struct {
@@ -210,18 +210,18 @@ func (i *InputKubeEventsRule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeEventsRule) GetFilter() string {
-	if o == nil {
+func (i *InputKubeEventsRule) GetFilter() string {
+	if i == nil {
 		return ""
 	}
-	return o.Filter
+	return i.Filter
 }
 
-func (o *InputKubeEventsRule) GetDescription() *string {
-	if o == nil {
+func (i *InputKubeEventsRule) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
 type InputKubeEventsMetadatum struct {
@@ -241,18 +241,18 @@ func (i *InputKubeEventsMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeEventsMetadatum) GetName() string {
-	if o == nil {
+func (i *InputKubeEventsMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputKubeEventsMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputKubeEventsMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputKubeEvents struct {
@@ -291,93 +291,93 @@ func (i *InputKubeEvents) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeEvents) GetID() string {
-	if o == nil {
+func (i *InputKubeEvents) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputKubeEvents) GetType() InputKubeEventsType {
-	if o == nil {
+func (i *InputKubeEvents) GetType() InputKubeEventsType {
+	if i == nil {
 		return InputKubeEventsType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputKubeEvents) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKubeEvents) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKubeEvents) GetPipeline() *string {
-	if o == nil {
+func (i *InputKubeEvents) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKubeEvents) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputKubeEvents) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputKubeEvents) GetEnvironment() *string {
-	if o == nil {
+func (i *InputKubeEvents) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputKubeEvents) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputKubeEvents) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputKubeEvents) GetStreamtags() []string {
-	if o == nil {
+func (i *InputKubeEvents) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputKubeEvents) GetConnections() []InputKubeEventsConnection {
-	if o == nil {
+func (i *InputKubeEvents) GetConnections() []InputKubeEventsConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputKubeEvents) GetPq() *InputKubeEventsPq {
-	if o == nil {
+func (i *InputKubeEvents) GetPq() *InputKubeEventsPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputKubeEvents) GetRules() []InputKubeEventsRule {
-	if o == nil {
+func (i *InputKubeEvents) GetRules() []InputKubeEventsRule {
+	if i == nil {
 		return nil
 	}
-	return o.Rules
+	return i.Rules
 }
 
-func (o *InputKubeEvents) GetMetadata() []InputKubeEventsMetadatum {
-	if o == nil {
+func (i *InputKubeEvents) GetMetadata() []InputKubeEventsMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputKubeEvents) GetDescription() *string {
-	if o == nil {
+func (i *InputKubeEvents) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

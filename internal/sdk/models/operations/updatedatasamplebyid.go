@@ -14,18 +14,18 @@ type UpdateDataSampleByIDRequest struct {
 	DataSample shared.DataSample `request:"mediaType=application/json"`
 }
 
-func (o *UpdateDataSampleByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateDataSampleByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateDataSampleByIDRequest) GetDataSample() shared.DataSample {
-	if o == nil {
+func (u *UpdateDataSampleByIDRequest) GetDataSample() shared.DataSample {
+	if u == nil {
 		return shared.DataSample{}
 	}
-	return o.DataSample
+	return u.DataSample
 }
 
 // UpdateDataSampleByIDResponseBody - a list of DataSample objects
@@ -33,11 +33,11 @@ type UpdateDataSampleByIDResponseBody struct {
 	Items []shared.DataSample `json:"items,omitempty"`
 }
 
-func (o *UpdateDataSampleByIDResponseBody) GetItems() []shared.DataSample {
-	if o == nil {
+func (u *UpdateDataSampleByIDResponseBody) GetItems() []shared.DataSample {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateDataSampleByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateDataSampleByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateDataSampleByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateDataSampleByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateDataSampleByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateDataSampleByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateDataSampleByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateDataSampleByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateDataSampleByIDResponse) GetObject() *UpdateDataSampleByIDResponseBody {
-	if o == nil {
+func (u *UpdateDataSampleByIDResponse) GetObject() *UpdateDataSampleByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateDataSampleByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateDataSampleByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

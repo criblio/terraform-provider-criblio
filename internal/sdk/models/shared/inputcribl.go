@@ -47,18 +47,18 @@ func (i *InputCriblConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputCriblConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCriblConnection) GetOutput() string {
-	if o == nil {
+func (i *InputCriblConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputCriblMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputCriblPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblPq) GetMode() *InputCriblMode {
-	if o == nil {
+func (i *InputCriblPq) GetMode() *InputCriblMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCriblPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputCriblPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputCriblPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputCriblPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputCriblPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputCriblPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputCriblPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputCriblPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputCriblPq) GetPath() *string {
-	if o == nil {
+func (i *InputCriblPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputCriblPq) GetCompress() *InputCriblCompression {
-	if o == nil {
+func (i *InputCriblPq) GetCompress() *InputCriblCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputCriblMetadatum struct {
@@ -209,18 +209,18 @@ func (i *InputCriblMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCriblMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCriblMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCriblMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCriblMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCribl struct {
@@ -258,93 +258,93 @@ func (i *InputCribl) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCribl) GetID() string {
-	if o == nil {
+func (i *InputCribl) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCribl) GetType() InputCriblType {
-	if o == nil {
+func (i *InputCribl) GetType() InputCriblType {
+	if i == nil {
 		return InputCriblType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCribl) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCribl) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCribl) GetPipeline() *string {
-	if o == nil {
+func (i *InputCribl) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCribl) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCribl) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCribl) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCribl) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCribl) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputCribl) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputCribl) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCribl) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCribl) GetConnections() []InputCriblConnection {
-	if o == nil {
+func (i *InputCribl) GetConnections() []InputCriblConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputCribl) GetPq() *InputCriblPq {
-	if o == nil {
+func (i *InputCribl) GetPq() *InputCriblPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputCribl) GetFilter() *string {
-	if o == nil {
+func (i *InputCribl) GetFilter() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Filter
+	return i.Filter
 }
 
-func (o *InputCribl) GetMetadata() []InputCriblMetadatum {
-	if o == nil {
+func (i *InputCribl) GetMetadata() []InputCriblMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCribl) GetDescription() *string {
-	if o == nil {
+func (i *InputCribl) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

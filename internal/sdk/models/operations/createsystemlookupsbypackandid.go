@@ -19,39 +19,39 @@ type CreateSystemLookupsByPackAndIDRequest struct {
 	LookupFile shared.LookupFile `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemLookupsByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateSystemLookupsByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDRequest) GetPack() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pack
+	return c.Pack
 }
 
-func (o *CreateSystemLookupsByPackAndIDRequest) GetDisabled() *bool {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDRequest) GetDisabled() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Disabled
+	return c.Disabled
 }
 
-func (o *CreateSystemLookupsByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSystemLookupsByPackAndIDRequest) GetLookupFile() shared.LookupFile {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDRequest) GetLookupFile() shared.LookupFile {
+	if c == nil {
 		return shared.LookupFile{}
 	}
-	return o.LookupFile
+	return c.LookupFile
 }
 
 // CreateSystemLookupsByPackAndIDResponseBody - a list of Pipeline objects
@@ -59,11 +59,11 @@ type CreateSystemLookupsByPackAndIDResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *CreateSystemLookupsByPackAndIDResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDResponseBody) GetItems() []shared.Pipeline {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemLookupsByPackAndIDResponse struct {
@@ -79,37 +79,37 @@ type CreateSystemLookupsByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemLookupsByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemLookupsByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemLookupsByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemLookupsByPackAndIDResponse) GetObject() *CreateSystemLookupsByPackAndIDResponseBody {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDResponse) GetObject() *CreateSystemLookupsByPackAndIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemLookupsByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemLookupsByPackAndIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

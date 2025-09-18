@@ -12,11 +12,11 @@ type DeleteSystemDiagRequest struct {
 	Path string `queryParam:"style=form,explode=true,name=path"`
 }
 
-func (o *DeleteSystemDiagRequest) GetPath() string {
-	if o == nil {
+func (d *DeleteSystemDiagRequest) GetPath() string {
+	if d == nil {
 		return ""
 	}
-	return o.Path
+	return d.Path
 }
 
 // DeleteSystemDiagResponseBody - a list of any objects
@@ -24,11 +24,11 @@ type DeleteSystemDiagResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *DeleteSystemDiagResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (d *DeleteSystemDiagResponseBody) GetItems() []map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSystemDiagResponse struct {
@@ -44,37 +44,37 @@ type DeleteSystemDiagResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSystemDiagResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSystemDiagResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSystemDiagResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSystemDiagResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSystemDiagResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSystemDiagResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSystemDiagResponse) GetObject() *DeleteSystemDiagResponseBody {
-	if o == nil {
+func (d *DeleteSystemDiagResponse) GetObject() *DeleteSystemDiagResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSystemDiagResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSystemDiagResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

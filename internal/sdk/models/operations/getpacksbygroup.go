@@ -15,25 +15,25 @@ type GetPacksByGroupRequest struct {
 	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
 }
 
-func (o *GetPacksByGroupRequest) GetWith() *string {
-	if o == nil {
+func (g *GetPacksByGroupRequest) GetWith() *string {
+	if g == nil {
 		return nil
 	}
-	return o.With
+	return g.With
 }
 
-func (o *GetPacksByGroupRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetPacksByGroupRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
-func (o *GetPacksByGroupRequest) GetDisabled() *bool {
-	if o == nil {
+func (g *GetPacksByGroupRequest) GetDisabled() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Disabled
+	return g.Disabled
 }
 
 // GetPacksByGroupResponseBody - a list of PackInfo objects
@@ -41,11 +41,11 @@ type GetPacksByGroupResponseBody struct {
 	Items []shared.PackInstallInfo `json:"items,omitempty"`
 }
 
-func (o *GetPacksByGroupResponseBody) GetItems() []shared.PackInstallInfo {
-	if o == nil {
+func (g *GetPacksByGroupResponseBody) GetItems() []shared.PackInstallInfo {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetPacksByGroupResponse struct {
@@ -61,37 +61,37 @@ type GetPacksByGroupResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetPacksByGroupResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPacksByGroupResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPacksByGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPacksByGroupResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPacksByGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPacksByGroupResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetPacksByGroupResponse) GetObject() *GetPacksByGroupResponseBody {
-	if o == nil {
+func (g *GetPacksByGroupResponse) GetObject() *GetPacksByGroupResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetPacksByGroupResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetPacksByGroupResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

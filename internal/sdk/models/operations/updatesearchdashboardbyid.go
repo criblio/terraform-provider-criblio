@@ -14,18 +14,18 @@ type UpdateSearchDashboardByIDRequest struct {
 	SearchDashboard shared.SearchDashboard `request:"mediaType=application/json"`
 }
 
-func (o *UpdateSearchDashboardByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateSearchDashboardByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateSearchDashboardByIDRequest) GetSearchDashboard() shared.SearchDashboard {
-	if o == nil {
+func (u *UpdateSearchDashboardByIDRequest) GetSearchDashboard() shared.SearchDashboard {
+	if u == nil {
 		return shared.SearchDashboard{}
 	}
-	return o.SearchDashboard
+	return u.SearchDashboard
 }
 
 // UpdateSearchDashboardByIDResponseBody - a list of SearchDashboard objects
@@ -33,11 +33,11 @@ type UpdateSearchDashboardByIDResponseBody struct {
 	Items []shared.SearchDashboard `json:"items,omitempty"`
 }
 
-func (o *UpdateSearchDashboardByIDResponseBody) GetItems() []shared.SearchDashboard {
-	if o == nil {
+func (u *UpdateSearchDashboardByIDResponseBody) GetItems() []shared.SearchDashboard {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSearchDashboardByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateSearchDashboardByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSearchDashboardByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSearchDashboardByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSearchDashboardByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSearchDashboardByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSearchDashboardByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSearchDashboardByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSearchDashboardByIDResponse) GetObject() *UpdateSearchDashboardByIDResponseBody {
-	if o == nil {
+func (u *UpdateSearchDashboardByIDResponse) GetObject() *UpdateSearchDashboardByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSearchDashboardByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSearchDashboardByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

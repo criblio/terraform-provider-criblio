@@ -20,39 +20,39 @@ type GetSearchJobsResultsByIDRequest struct {
 	UpperBound *float64 `queryParam:"style=form,explode=true,name=upperBound"`
 }
 
-func (o *GetSearchJobsResultsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetSearchJobsResultsByIDRequest) GetLimit() *float64 {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDRequest) GetLimit() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.Limit
+	return g.Limit
 }
 
-func (o *GetSearchJobsResultsByIDRequest) GetOffset() *float64 {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDRequest) GetOffset() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.Offset
+	return g.Offset
 }
 
-func (o *GetSearchJobsResultsByIDRequest) GetLowerBound() *float64 {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDRequest) GetLowerBound() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.LowerBound
+	return g.LowerBound
 }
 
-func (o *GetSearchJobsResultsByIDRequest) GetUpperBound() *float64 {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDRequest) GetUpperBound() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.UpperBound
+	return g.UpperBound
 }
 
 type GetSearchJobsResultsByIDResponse struct {
@@ -68,37 +68,37 @@ type GetSearchJobsResultsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchJobsResultsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchJobsResultsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchJobsResultsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchJobsResultsByIDResponse) GetSearchJobResults() *shared.SearchJobResults {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDResponse) GetSearchJobResults() *shared.SearchJobResults {
+	if g == nil {
 		return nil
 	}
-	return o.SearchJobResults
+	return g.SearchJobResults
 }
 
-func (o *GetSearchJobsResultsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchJobsResultsByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

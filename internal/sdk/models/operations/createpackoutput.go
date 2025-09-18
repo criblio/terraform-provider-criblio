@@ -16,32 +16,32 @@ type CreatePackOutputRequest struct {
 	Output shared.Output `request:"mediaType=application/json"`
 }
 
-func (o *CreatePackOutputRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreatePackOutputRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreatePackOutputRequest) GetPack() string {
-	if o == nil {
+func (c *CreatePackOutputRequest) GetPack() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pack
+	return c.Pack
 }
 
-func (o *CreatePackOutputRequest) GetID() string {
-	if o == nil {
+func (c *CreatePackOutputRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreatePackOutputRequest) GetOutput() shared.Output {
-	if o == nil {
+func (c *CreatePackOutputRequest) GetOutput() shared.Output {
+	if c == nil {
 		return shared.Output{}
 	}
-	return o.Output
+	return c.Output
 }
 
 // CreatePackOutputResponseBody - a list of Output objects
@@ -61,37 +61,37 @@ type CreatePackOutputResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreatePackOutputResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePackOutputResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePackOutputResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePackOutputResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePackOutputResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePackOutputResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePackOutputResponse) GetObject() *CreatePackOutputResponseBody {
-	if o == nil {
+func (c *CreatePackOutputResponse) GetObject() *CreatePackOutputResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreatePackOutputResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreatePackOutputResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

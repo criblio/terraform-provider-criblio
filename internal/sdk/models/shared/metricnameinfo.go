@@ -8,25 +8,25 @@ type Dim struct {
 	Values []string `json:"values"`
 }
 
-func (o *Dim) GetCount() float64 {
-	if o == nil {
+func (d *Dim) GetCount() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Count
+	return d.Count
 }
 
-func (o *Dim) GetName() string {
-	if o == nil {
+func (d *Dim) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *Dim) GetValues() []string {
-	if o == nil {
+func (d *Dim) GetValues() []string {
+	if d == nil {
 		return []string{}
 	}
-	return o.Values
+	return d.Values
 }
 
 type MetricNameInfo struct {
@@ -34,16 +34,16 @@ type MetricNameInfo struct {
 	Name string `json:"name"`
 }
 
-func (o *MetricNameInfo) GetDims() []Dim {
-	if o == nil {
+func (m *MetricNameInfo) GetDims() []Dim {
+	if m == nil {
 		return []Dim{}
 	}
-	return o.Dims
+	return m.Dims
 }
 
-func (o *MetricNameInfo) GetName() string {
-	if o == nil {
+func (m *MetricNameInfo) GetName() string {
+	if m == nil {
 		return ""
 	}
-	return o.Name
+	return m.Name
 }

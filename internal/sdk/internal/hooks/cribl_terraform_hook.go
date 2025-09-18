@@ -340,6 +340,8 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clientSecret, audience string) (*TokenInfo, error) {
 	// Get auth URL from base URL
 	authURL := ""
+	useFormEncoded := false
+
 	if o.baseURL != "" {
 		// Extract domain from workspace URL (e.g., from https://main-org.cribl.cloud)
 		parsedURL, err := url.Parse(o.baseURL)
@@ -361,7 +363,35 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 			}
 			domain := parts[1] // e.g., "cribl.cloud"
 
-			authURL = fmt.Sprintf("https://login.%s/oauth/token", domain)
+			// Check if domain contains "gov" - use Okta OAuth2 for gov domains
+			if strings.Contains(domain, "gov") {
+				// For gov domains, use Okta OAuth2 endpoint
+				// Check for custom Okta settings from environment
+				oktaDomain := os.Getenv("CRIBL_OKTA_DOMAIN")
+				authServerID := os.Getenv("CRIBL_OKTA_AUTH_SERVER_ID")
+
+				if oktaDomain == "" {
+					// Default mapping: derive Okta domain from cloud domain
+					// e.g., "cribl-gov-staging.cloud" -> "criblgov-stg.okta.com"
+					oktaDomain = strings.ReplaceAll(domain, "cribl-gov-", "criblgov-")
+					oktaDomain = strings.ReplaceAll(oktaDomain, "staging", "stg")
+					oktaDomain = strings.ReplaceAll(oktaDomain, ".cloud", ".okta.com")
+				}
+
+				if authServerID == "" {
+					// Authorization server ID must be configured via environment variable
+					authServerID = os.Getenv("CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID")
+					if authServerID == "" {
+						return nil, fmt.Errorf("CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID environment variable is required for gov domains")
+					}
+				}
+
+				authURL = fmt.Sprintf("https://%s/oauth2/%s/v1/token", oktaDomain, authServerID)
+				useFormEncoded = true
+				log.Printf("[DEBUG] Using Okta OAuth2 for gov domain: %s", authURL)
+			} else {
+				authURL = fmt.Sprintf("https://login.%s/oauth/token", domain)
+			}
 		}
 	} else {
 		return nil, fmt.Errorf("no base URL provided")
@@ -393,24 +423,43 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 		}
 	}
 
-	// Create JSON request body (matching bootstrap template format)
-	requestBody := map[string]string{
-		"grant_type":    "client_credentials",
-		"client_id":     clientID,
-		"client_secret": clientSecret,
-		"audience":      audience,
-	}
+	var req *http.Request
+	var err error
 
-	jsonData, err := json.Marshal(requestBody)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request body: %v", err)
-	}
+	if useFormEncoded {
+		// For gov domains (Okta OAuth2), use form-encoded data
+		formData := url.Values{}
+		formData.Set("grant_type", "client_credentials")
+		formData.Set("client_id", clientID)
+		formData.Set("client_secret", clientSecret)
+		formData.Set("audience", audience)
 
-	req, err := http.NewRequestWithContext(ctx, "POST", authURL, strings.NewReader(string(jsonData)))
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %v", err)
+		req, err = http.NewRequestWithContext(ctx, "POST", authURL, strings.NewReader(formData.Encode()))
+		if err != nil {
+			return nil, fmt.Errorf("failed to create request: %v", err)
+		}
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		log.Printf("[DEBUG] Using form-encoded OAuth2 request for gov domain")
+	} else {
+		// Create JSON request body (matching bootstrap template format)
+		requestBody := map[string]string{
+			"grant_type":    "client_credentials",
+			"client_id":     clientID,
+			"client_secret": clientSecret,
+			"audience":      audience,
+		}
+
+		jsonData, err := json.Marshal(requestBody)
+		if err != nil {
+			return nil, fmt.Errorf("failed to marshal request body: %v", err)
+		}
+
+		req, err = http.NewRequestWithContext(ctx, "POST", authURL, strings.NewReader(string(jsonData)))
+		if err != nil {
+			return nil, fmt.Errorf("failed to create request: %v", err)
+		}
+		req.Header.Set("Content-Type", "application/json")
 	}
-	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := o.client.Do(req)
 	if err != nil {

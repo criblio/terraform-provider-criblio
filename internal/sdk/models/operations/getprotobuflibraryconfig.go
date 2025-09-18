@@ -12,11 +12,11 @@ type GetProtobufLibraryConfigRequest struct {
 	OnlyWithEncodings string `queryParam:"style=form,explode=true,name=onlyWithEncodings"`
 }
 
-func (o *GetProtobufLibraryConfigRequest) GetOnlyWithEncodings() string {
-	if o == nil {
+func (g *GetProtobufLibraryConfigRequest) GetOnlyWithEncodings() string {
+	if g == nil {
 		return ""
 	}
-	return o.OnlyWithEncodings
+	return g.OnlyWithEncodings
 }
 
 // GetProtobufLibraryConfigResponseBody - a list of ProtobufEncodingConfig objects
@@ -24,11 +24,11 @@ type GetProtobufLibraryConfigResponseBody struct {
 	Items []shared.ProtobufEncodingConfig `json:"items,omitempty"`
 }
 
-func (o *GetProtobufLibraryConfigResponseBody) GetItems() []shared.ProtobufEncodingConfig {
-	if o == nil {
+func (g *GetProtobufLibraryConfigResponseBody) GetItems() []shared.ProtobufEncodingConfig {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetProtobufLibraryConfigResponse struct {
@@ -44,37 +44,37 @@ type GetProtobufLibraryConfigResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetProtobufLibraryConfigResponse) GetContentType() string {
-	if o == nil {
+func (g *GetProtobufLibraryConfigResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetProtobufLibraryConfigResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetProtobufLibraryConfigResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetProtobufLibraryConfigResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetProtobufLibraryConfigResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetProtobufLibraryConfigResponse) GetObject() *GetProtobufLibraryConfigResponseBody {
-	if o == nil {
+func (g *GetProtobufLibraryConfigResponse) GetObject() *GetProtobufLibraryConfigResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetProtobufLibraryConfigResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetProtobufLibraryConfigResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

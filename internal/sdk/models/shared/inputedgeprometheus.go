@@ -47,18 +47,18 @@ func (i *InputEdgePrometheusConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEdgePrometheusConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputEdgePrometheusConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputEdgePrometheusConnection) GetOutput() string {
-	if o == nil {
+func (i *InputEdgePrometheusConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputEdgePrometheusMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputEdgePrometheusPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEdgePrometheusPq) GetMode() *InputEdgePrometheusMode {
-	if o == nil {
+func (i *InputEdgePrometheusPq) GetMode() *InputEdgePrometheusMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputEdgePrometheusPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputEdgePrometheusPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputEdgePrometheusPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputEdgePrometheusPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputEdgePrometheusPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputEdgePrometheusPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputEdgePrometheusPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputEdgePrometheusPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputEdgePrometheusPq) GetPath() *string {
-	if o == nil {
+func (i *InputEdgePrometheusPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputEdgePrometheusPq) GetCompress() *InputEdgePrometheusPqCompression {
-	if o == nil {
+func (i *InputEdgePrometheusPq) GetCompress() *InputEdgePrometheusPqCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputEdgePrometheusDiscoveryType - Target discovery mechanism. Use static to manually enter a list of targets.
@@ -279,39 +279,39 @@ func (i *InputEdgePrometheusDiskSpooling) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEdgePrometheusDiskSpooling) GetEnable() *bool {
-	if o == nil {
+func (i *InputEdgePrometheusDiskSpooling) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
-func (o *InputEdgePrometheusDiskSpooling) GetTimeWindow() *string {
-	if o == nil {
+func (i *InputEdgePrometheusDiskSpooling) GetTimeWindow() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWindow
+	return i.TimeWindow
 }
 
-func (o *InputEdgePrometheusDiskSpooling) GetMaxDataSize() *string {
-	if o == nil {
+func (i *InputEdgePrometheusDiskSpooling) GetMaxDataSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataSize
+	return i.MaxDataSize
 }
 
-func (o *InputEdgePrometheusDiskSpooling) GetMaxDataTime() *string {
-	if o == nil {
+func (i *InputEdgePrometheusDiskSpooling) GetMaxDataTime() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataTime
+	return i.MaxDataTime
 }
 
-func (o *InputEdgePrometheusDiskSpooling) GetCompress() *InputEdgePrometheusPersistenceCompression {
-	if o == nil {
+func (i *InputEdgePrometheusDiskSpooling) GetCompress() *InputEdgePrometheusPersistenceCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputEdgePrometheusMetadatum struct {
@@ -331,18 +331,18 @@ func (i *InputEdgePrometheusMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEdgePrometheusMetadatum) GetName() string {
-	if o == nil {
+func (i *InputEdgePrometheusMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputEdgePrometheusMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputEdgePrometheusMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputEdgePrometheusAuthTypeAuthenticationMethod - Enter credentials directly, or select a stored secret
@@ -424,32 +424,32 @@ func (t *Target) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Target) GetProtocol() *TargetProtocol {
-	if o == nil {
+func (t *Target) GetProtocol() *TargetProtocol {
+	if t == nil {
 		return nil
 	}
-	return o.Protocol
+	return t.Protocol
 }
 
-func (o *Target) GetHost() string {
-	if o == nil {
+func (t *Target) GetHost() string {
+	if t == nil {
 		return ""
 	}
-	return o.Host
+	return t.Host
 }
 
-func (o *Target) GetPort() *float64 {
-	if o == nil {
+func (t *Target) GetPort() *float64 {
+	if t == nil {
 		return nil
 	}
-	return o.Port
+	return t.Port
 }
 
-func (o *Target) GetPath() *string {
-	if o == nil {
+func (t *Target) GetPath() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Path
+	return t.Path
 }
 
 // InputEdgePrometheusRecordType - DNS Record type to resolve
@@ -527,18 +527,18 @@ func (i *InputEdgePrometheusSearchFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEdgePrometheusSearchFilter) GetName() string {
-	if o == nil {
+func (i *InputEdgePrometheusSearchFilter) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputEdgePrometheusSearchFilter) GetValues() []string {
-	if o == nil {
+func (i *InputEdgePrometheusSearchFilter) GetValues() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Values
+	return i.Values
 }
 
 // InputEdgePrometheusAwsAuthenticationMethodAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
@@ -616,18 +616,18 @@ func (p *PodFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PodFilter) GetFilter() string {
-	if o == nil {
+func (p *PodFilter) GetFilter() string {
+	if p == nil {
 		return ""
 	}
-	return o.Filter
+	return p.Filter
 }
 
-func (o *PodFilter) GetDescription() *string {
-	if o == nil {
+func (p *PodFilter) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
 type InputEdgePrometheus struct {
@@ -728,310 +728,310 @@ func (i *InputEdgePrometheus) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputEdgePrometheus) GetID() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputEdgePrometheus) GetType() *InputEdgePrometheusType {
-	if o == nil {
+func (i *InputEdgePrometheus) GetType() *InputEdgePrometheusType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputEdgePrometheus) GetDisabled() *bool {
-	if o == nil {
+func (i *InputEdgePrometheus) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputEdgePrometheus) GetPipeline() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputEdgePrometheus) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputEdgePrometheus) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputEdgePrometheus) GetEnvironment() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputEdgePrometheus) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputEdgePrometheus) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputEdgePrometheus) GetStreamtags() []string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputEdgePrometheus) GetConnections() []InputEdgePrometheusConnection {
-	if o == nil {
+func (i *InputEdgePrometheus) GetConnections() []InputEdgePrometheusConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputEdgePrometheus) GetPq() *InputEdgePrometheusPq {
-	if o == nil {
+func (i *InputEdgePrometheus) GetPq() *InputEdgePrometheusPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputEdgePrometheus) GetDimensionList() []string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetDimensionList() []string {
+	if i == nil {
 		return nil
 	}
-	return o.DimensionList
+	return i.DimensionList
 }
 
-func (o *InputEdgePrometheus) GetDiscoveryType() *InputEdgePrometheusDiscoveryType {
-	if o == nil {
+func (i *InputEdgePrometheus) GetDiscoveryType() *InputEdgePrometheusDiscoveryType {
+	if i == nil {
 		return nil
 	}
-	return o.DiscoveryType
+	return i.DiscoveryType
 }
 
-func (o *InputEdgePrometheus) GetInterval() *float64 {
-	if o == nil {
+func (i *InputEdgePrometheus) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputEdgePrometheus) GetTimeout() *float64 {
-	if o == nil {
+func (i *InputEdgePrometheus) GetTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Timeout
+	return i.Timeout
 }
 
-func (o *InputEdgePrometheus) GetPersistence() *InputEdgePrometheusDiskSpooling {
-	if o == nil {
+func (i *InputEdgePrometheus) GetPersistence() *InputEdgePrometheusDiskSpooling {
+	if i == nil {
 		return nil
 	}
-	return o.Persistence
+	return i.Persistence
 }
 
-func (o *InputEdgePrometheus) GetMetadata() []InputEdgePrometheusMetadatum {
-	if o == nil {
+func (i *InputEdgePrometheus) GetMetadata() []InputEdgePrometheusMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputEdgePrometheus) GetAuthType() *InputEdgePrometheusAuthTypeAuthenticationMethod {
-	if o == nil {
+func (i *InputEdgePrometheus) GetAuthType() *InputEdgePrometheusAuthTypeAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputEdgePrometheus) GetDescription() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputEdgePrometheus) GetTargets() []Target {
-	if o == nil {
+func (i *InputEdgePrometheus) GetTargets() []Target {
+	if i == nil {
 		return nil
 	}
-	return o.Targets
+	return i.Targets
 }
 
-func (o *InputEdgePrometheus) GetNameList() []string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetNameList() []string {
+	if i == nil {
 		return nil
 	}
-	return o.NameList
+	return i.NameList
 }
 
-func (o *InputEdgePrometheus) GetRecordType() *InputEdgePrometheusRecordType {
-	if o == nil {
+func (i *InputEdgePrometheus) GetRecordType() *InputEdgePrometheusRecordType {
+	if i == nil {
 		return nil
 	}
-	return o.RecordType
+	return i.RecordType
 }
 
-func (o *InputEdgePrometheus) GetScrapeProtocol() *ScrapeProtocolProtocol {
-	if o == nil {
+func (i *InputEdgePrometheus) GetScrapeProtocol() *ScrapeProtocolProtocol {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapeProtocol
+	return i.ScrapeProtocol
 }
 
-func (o *InputEdgePrometheus) GetScrapePath() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetScrapePath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapePath
+	return i.ScrapePath
 }
 
-func (o *InputEdgePrometheus) GetUsePublicIP() *bool {
-	if o == nil {
+func (i *InputEdgePrometheus) GetUsePublicIP() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.UsePublicIP
+	return i.UsePublicIP
 }
 
-func (o *InputEdgePrometheus) GetScrapePort() *float64 {
-	if o == nil {
+func (i *InputEdgePrometheus) GetScrapePort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapePort
+	return i.ScrapePort
 }
 
-func (o *InputEdgePrometheus) GetSearchFilter() []InputEdgePrometheusSearchFilter {
-	if o == nil {
+func (i *InputEdgePrometheus) GetSearchFilter() []InputEdgePrometheusSearchFilter {
+	if i == nil {
 		return nil
 	}
-	return o.SearchFilter
+	return i.SearchFilter
 }
 
-func (o *InputEdgePrometheus) GetAwsAuthenticationMethod() *InputEdgePrometheusAwsAuthenticationMethodAuthenticationMethod {
-	if o == nil {
+func (i *InputEdgePrometheus) GetAwsAuthenticationMethod() *InputEdgePrometheusAwsAuthenticationMethodAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputEdgePrometheus) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputEdgePrometheus) GetRegion() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputEdgePrometheus) GetEndpoint() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputEdgePrometheus) GetSignatureVersion() *InputEdgePrometheusSignatureVersion {
-	if o == nil {
+func (i *InputEdgePrometheus) GetSignatureVersion() *InputEdgePrometheusSignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputEdgePrometheus) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputEdgePrometheus) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputEdgePrometheus) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputEdgePrometheus) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputEdgePrometheus) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputEdgePrometheus) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputEdgePrometheus) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputEdgePrometheus) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputEdgePrometheus) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputEdgePrometheus) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputEdgePrometheus) GetScrapeProtocolExpr() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetScrapeProtocolExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapeProtocolExpr
+	return i.ScrapeProtocolExpr
 }
 
-func (o *InputEdgePrometheus) GetScrapePortExpr() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetScrapePortExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapePortExpr
+	return i.ScrapePortExpr
 }
 
-func (o *InputEdgePrometheus) GetScrapePathExpr() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetScrapePathExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ScrapePathExpr
+	return i.ScrapePathExpr
 }
 
-func (o *InputEdgePrometheus) GetPodFilter() []PodFilter {
-	if o == nil {
+func (i *InputEdgePrometheus) GetPodFilter() []PodFilter {
+	if i == nil {
 		return nil
 	}
-	return o.PodFilter
+	return i.PodFilter
 }
 
-func (o *InputEdgePrometheus) GetUsername() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputEdgePrometheus) GetPassword() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputEdgePrometheus) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputEdgePrometheus) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }

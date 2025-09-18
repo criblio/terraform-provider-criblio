@@ -7,16 +7,16 @@ type MembershipSchema struct {
 	Rm  []string `json:"rm,omitempty"`
 }
 
-func (o *MembershipSchema) GetAdd() []string {
-	if o == nil {
+func (m *MembershipSchema) GetAdd() []string {
+	if m == nil {
 		return nil
 	}
-	return o.Add
+	return m.Add
 }
 
-func (o *MembershipSchema) GetRm() []string {
-	if o == nil {
+func (m *MembershipSchema) GetRm() []string {
+	if m == nil {
 		return nil
 	}
-	return o.Rm
+	return m.Rm
 }

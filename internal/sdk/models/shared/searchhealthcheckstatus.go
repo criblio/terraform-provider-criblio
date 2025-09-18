@@ -38,16 +38,16 @@ type SearchHealthCheckStatus struct {
 	Status     SearchHealthCheckStatusStatus `json:"status"`
 }
 
-func (o *SearchHealthCheckStatus) GetReportedAt() float64 {
-	if o == nil {
+func (s *SearchHealthCheckStatus) GetReportedAt() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.ReportedAt
+	return s.ReportedAt
 }
 
-func (o *SearchHealthCheckStatus) GetStatus() SearchHealthCheckStatusStatus {
-	if o == nil {
+func (s *SearchHealthCheckStatus) GetStatus() SearchHealthCheckStatusStatus {
+	if s == nil {
 		return SearchHealthCheckStatusStatus("")
 	}
-	return o.Status
+	return s.Status
 }

@@ -171,25 +171,25 @@ func (i *InputCollectorGCSStateTracking) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCSStateTracking) GetStateUpdateExpression() *string {
-	if o == nil {
+func (i *InputCollectorGCSStateTracking) GetStateUpdateExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateUpdateExpression
+	return i.StateUpdateExpression
 }
 
-func (o *InputCollectorGCSStateTracking) GetStateMergeExpression() *string {
-	if o == nil {
+func (i *InputCollectorGCSStateTracking) GetStateMergeExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateMergeExpression
+	return i.StateMergeExpression
 }
 
-func (o *InputCollectorGCSStateTracking) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorGCSStateTracking) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputCollectorGCSRunSettings struct {
@@ -231,95 +231,95 @@ func (i *InputCollectorGCSRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCSRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputCollectorGCSRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputCollectorGCSRunSettings) GetLogLevel() *InputCollectorGCSLogLevel {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetLogLevel() *InputCollectorGCSLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputCollectorGCSRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputCollectorGCSRunSettings) GetMode() *InputCollectorGCSMode {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetMode() *InputCollectorGCSMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectorGCSRunSettings) GetTimeRangeType() *InputCollectorGCSTimeRange {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetTimeRangeType() *InputCollectorGCSTimeRange {
+	if i == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return i.TimeRangeType
 }
 
-func (o *InputCollectorGCSRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetEarliest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorGCSRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetLatest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorGCSRunSettings) GetExpression() *string {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Expression
+	return i.Expression
 }
 
-func (o *InputCollectorGCSRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetMinTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return i.MinTaskSize
 }
 
-func (o *InputCollectorGCSRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetMaxTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return i.MaxTaskSize
 }
 
-func (o *InputCollectorGCSRunSettings) GetTimeWarning() *InputCollectorGCSTimeWarning {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetTimeWarning() *InputCollectorGCSTimeWarning {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return i.TimeWarning
 }
 
-func (o *InputCollectorGCSRunSettings) GetStateTracking() *InputCollectorGCSStateTracking {
-	if o == nil {
+func (i *InputCollectorGCSRunSettings) GetStateTracking() *InputCollectorGCSStateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 // InputCollectorGCSSchedule - Configuration for a scheduled job
@@ -348,46 +348,46 @@ func (i *InputCollectorGCSSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCSSchedule) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorGCSSchedule) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCollectorGCSSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputCollectorGCSSchedule) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputCollectorGCSSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (i *InputCollectorGCSSchedule) GetMaxConcurrentRuns() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return i.MaxConcurrentRuns
 }
 
-func (o *InputCollectorGCSSchedule) GetSkippable() *bool {
-	if o == nil {
+func (i *InputCollectorGCSSchedule) GetSkippable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Skippable
+	return i.Skippable
 }
 
-func (o *InputCollectorGCSSchedule) GetResumeMissed() *bool {
-	if o == nil {
+func (i *InputCollectorGCSSchedule) GetResumeMissed() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return i.ResumeMissed
 }
 
-func (o *InputCollectorGCSSchedule) GetRun() *InputCollectorGCSRunSettings {
-	if o == nil {
+func (i *InputCollectorGCSSchedule) GetRun() *InputCollectorGCSRunSettings {
+	if i == nil {
 		return nil
 	}
-	return o.Run
+	return i.Run
 }
 
 type InputCollectorGCSTypeCollection2 string
@@ -432,25 +432,25 @@ func (i *InputCollectorGCSPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCSPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectorGCSPreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectorGCSPreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectorGCSPreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectorGCSPreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectorGCSPreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectorGCSMetadatum struct {
@@ -470,18 +470,18 @@ func (i *InputCollectorGCSMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCSMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectorGCSMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectorGCSMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectorGCSMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollectorGCSInput struct {
@@ -514,67 +514,67 @@ func (i *InputCollectorGCSInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCSInput) GetType() *InputCollectorGCSTypeCollection2 {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetType() *InputCollectorGCSTypeCollection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorGCSInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollectorGCSInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollectorGCSInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollectorGCSInput) GetPreprocess() *InputCollectorGCSPreprocess {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetPreprocess() *InputCollectorGCSPreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollectorGCSInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollectorGCSInput) GetMetadata() []InputCollectorGCSMetadatum {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetMetadata() []InputCollectorGCSMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollectorGCSInput) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectorGCSInput) GetOutput() *string {
-	if o == nil {
+func (i *InputCollectorGCSInput) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }
 
 type TypeGcs string
@@ -669,53 +669,53 @@ func (i *InputCollectorGCSConf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCSConf) GetServiceAccountCredentials() *string {
-	if o == nil {
+func (i *InputCollectorGCSConf) GetServiceAccountCredentials() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ServiceAccountCredentials
+	return i.ServiceAccountCredentials
 }
 
-func (o *InputCollectorGCSConf) GetBucket() *string {
-	if o == nil {
+func (i *InputCollectorGCSConf) GetBucket() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Bucket
+	return i.Bucket
 }
 
-func (o *InputCollectorGCSConf) GetPath() *string {
-	if o == nil {
+func (i *InputCollectorGCSConf) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputCollectorGCSConf) GetAuthType() *InputCollectorGCSAuthenticationMethod {
-	if o == nil {
+func (i *InputCollectorGCSConf) GetAuthType() *InputCollectorGCSAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputCollectorGCSConf) GetRecurse() *bool {
-	if o == nil {
+func (i *InputCollectorGCSConf) GetRecurse() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Recurse
+	return i.Recurse
 }
 
-func (o *InputCollectorGCSConf) GetExtractors() []InputCollectorGCSExtractor {
-	if o == nil {
+func (i *InputCollectorGCSConf) GetExtractors() []InputCollectorGCSExtractor {
+	if i == nil {
 		return nil
 	}
-	return o.Extractors
+	return i.Extractors
 }
 
-func (o *InputCollectorGCSConf) GetMaxBatchSize() *int64 {
-	if o == nil {
+func (i *InputCollectorGCSConf) GetMaxBatchSize() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBatchSize
+	return i.MaxBatchSize
 }
 
 type InputCollectorGCSCollector struct {
@@ -734,18 +734,18 @@ func (i *InputCollectorGCSCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCSCollector) GetType() TypeGcs {
-	if o == nil {
+func (i *InputCollectorGCSCollector) GetType() TypeGcs {
+	if i == nil {
 		return TypeGcs("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorGCSCollector) GetConf() *InputCollectorGCSConf {
-	if o == nil {
+func (i *InputCollectorGCSCollector) GetConf() *InputCollectorGCSConf {
+	if i == nil {
 		return nil
 	}
-	return o.Conf
+	return i.Conf
 }
 
 type InputCollectorGCS struct {
@@ -779,93 +779,93 @@ func (i *InputCollectorGCS) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorGCS) GetID() *string {
-	if o == nil {
+func (i *InputCollectorGCS) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollectorGCS) GetType() *InputCollectorGCSTypeCollection1 {
-	if o == nil {
+func (i *InputCollectorGCS) GetType() *InputCollectorGCSTypeCollection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorGCS) GetTTL() *string {
-	if o == nil {
+func (i *InputCollectorGCS) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputCollectorGCS) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputCollectorGCS) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputCollectorGCS) GetRemoveFields() []string {
-	if o == nil {
+func (i *InputCollectorGCS) GetRemoveFields() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return i.RemoveFields
 }
 
-func (o *InputCollectorGCS) GetResumeOnBoot() *bool {
-	if o == nil {
+func (i *InputCollectorGCS) GetResumeOnBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return i.ResumeOnBoot
 }
 
-func (o *InputCollectorGCS) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollectorGCS) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollectorGCS) GetSavedState() *InputCollectorGCSSavedState {
-	if o == nil {
+func (i *InputCollectorGCS) GetSavedState() *InputCollectorGCSSavedState {
+	if i == nil {
 		return nil
 	}
-	return o.SavedState
+	return i.SavedState
 }
 
-func (o *InputCollectorGCS) GetSchedule() *InputCollectorGCSSchedule {
-	if o == nil {
+func (i *InputCollectorGCS) GetSchedule() *InputCollectorGCSSchedule {
+	if i == nil {
 		return nil
 	}
-	return o.Schedule
+	return i.Schedule
 }
 
-func (o *InputCollectorGCS) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollectorGCS) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollectorGCS) GetWorkerAffinity() *bool {
-	if o == nil {
+func (i *InputCollectorGCS) GetWorkerAffinity() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return i.WorkerAffinity
 }
 
-func (o *InputCollectorGCS) GetInput() *InputCollectorGCSInput {
-	if o == nil {
+func (i *InputCollectorGCS) GetInput() *InputCollectorGCSInput {
+	if i == nil {
 		return nil
 	}
-	return o.Input
+	return i.Input
 }
 
-func (o *InputCollectorGCS) GetCollector() InputCollectorGCSCollector {
-	if o == nil {
+func (i *InputCollectorGCS) GetCollector() InputCollectorGCSCollector {
+	if i == nil {
 		return InputCollectorGCSCollector{}
 	}
-	return o.Collector
+	return i.Collector
 }

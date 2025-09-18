@@ -90,25 +90,25 @@ type GetProductsUsersACLByProductAndIDRequest struct {
 	Type *GetProductsUsersACLByProductAndIDType `queryParam:"style=form,explode=true,name=type"`
 }
 
-func (o *GetProductsUsersACLByProductAndIDRequest) GetProduct() GetProductsUsersACLByProductAndIDProduct {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDRequest) GetProduct() GetProductsUsersACLByProductAndIDProduct {
+	if g == nil {
 		return GetProductsUsersACLByProductAndIDProduct("")
 	}
-	return o.Product
+	return g.Product
 }
 
-func (o *GetProductsUsersACLByProductAndIDRequest) GetID() string {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetProductsUsersACLByProductAndIDRequest) GetType() *GetProductsUsersACLByProductAndIDType {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDRequest) GetType() *GetProductsUsersACLByProductAndIDType {
+	if g == nil {
 		return nil
 	}
-	return o.Type
+	return g.Type
 }
 
 // GetProductsUsersACLByProductAndIDResponseBody - a list of ResourcePolicy objects
@@ -116,11 +116,11 @@ type GetProductsUsersACLByProductAndIDResponseBody struct {
 	Items []shared.ResourcePolicy `json:"items,omitempty"`
 }
 
-func (o *GetProductsUsersACLByProductAndIDResponseBody) GetItems() []shared.ResourcePolicy {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDResponseBody) GetItems() []shared.ResourcePolicy {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetProductsUsersACLByProductAndIDResponse struct {
@@ -136,37 +136,37 @@ type GetProductsUsersACLByProductAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetProductsUsersACLByProductAndIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetProductsUsersACLByProductAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetProductsUsersACLByProductAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetProductsUsersACLByProductAndIDResponse) GetObject() *GetProductsUsersACLByProductAndIDResponseBody {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDResponse) GetObject() *GetProductsUsersACLByProductAndIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetProductsUsersACLByProductAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetProductsUsersACLByProductAndIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

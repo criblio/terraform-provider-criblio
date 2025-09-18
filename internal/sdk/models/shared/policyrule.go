@@ -10,37 +10,37 @@ type PolicyRule struct {
 	Title       *string  `json:"title,omitempty"`
 }
 
-func (o *PolicyRule) GetArgs() []string {
-	if o == nil {
+func (p *PolicyRule) GetArgs() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Args
+	return p.Args
 }
 
-func (o *PolicyRule) GetDescription() *string {
-	if o == nil {
+func (p *PolicyRule) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PolicyRule) GetID() string {
-	if o == nil {
+func (p *PolicyRule) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PolicyRule) GetTemplate() []string {
-	if o == nil {
+func (p *PolicyRule) GetTemplate() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Template
+	return p.Template
 }
 
-func (o *PolicyRule) GetTitle() *string {
-	if o == nil {
+func (p *PolicyRule) GetTitle() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Title
+	return p.Title
 }

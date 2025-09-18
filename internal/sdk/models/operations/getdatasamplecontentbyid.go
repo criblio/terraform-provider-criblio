@@ -12,11 +12,11 @@ type GetDataSampleContentByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetDataSampleContentByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetDataSampleContentByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetDataSampleContentByIDResponseBody - a list of SampleContent objects
@@ -24,11 +24,11 @@ type GetDataSampleContentByIDResponseBody struct {
 	Items [][]map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetDataSampleContentByIDResponseBody) GetItems() [][]map[string]any {
-	if o == nil {
+func (g *GetDataSampleContentByIDResponseBody) GetItems() [][]map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetDataSampleContentByIDResponse struct {
@@ -44,37 +44,37 @@ type GetDataSampleContentByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetDataSampleContentByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDataSampleContentByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDataSampleContentByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDataSampleContentByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDataSampleContentByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDataSampleContentByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDataSampleContentByIDResponse) GetObject() *GetDataSampleContentByIDResponseBody {
-	if o == nil {
+func (g *GetDataSampleContentByIDResponse) GetObject() *GetDataSampleContentByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetDataSampleContentByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetDataSampleContentByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

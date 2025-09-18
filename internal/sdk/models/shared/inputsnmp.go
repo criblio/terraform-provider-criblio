@@ -47,18 +47,18 @@ func (i *InputSnmpConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSnmpConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputSnmpConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSnmpConnection) GetOutput() string {
-	if o == nil {
+func (i *InputSnmpConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSnmpMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputSnmpPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSnmpPq) GetMode() *InputSnmpMode {
-	if o == nil {
+func (i *InputSnmpPq) GetMode() *InputSnmpMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSnmpPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSnmpPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSnmpPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSnmpPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSnmpPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSnmpPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSnmpPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSnmpPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSnmpPq) GetPath() *string {
-	if o == nil {
+func (i *InputSnmpPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSnmpPq) GetCompress() *InputSnmpCompression {
-	if o == nil {
+func (i *InputSnmpPq) GetCompress() *InputSnmpCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type AuthenticationProtocol string
@@ -251,32 +251,32 @@ func (v *V3User) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *V3User) GetName() string {
-	if o == nil {
+func (v *V3User) GetName() string {
+	if v == nil {
 		return ""
 	}
-	return o.Name
+	return v.Name
 }
 
-func (o *V3User) GetAuthProtocol() *AuthenticationProtocol {
-	if o == nil {
+func (v *V3User) GetAuthProtocol() *AuthenticationProtocol {
+	if v == nil {
 		return nil
 	}
-	return o.AuthProtocol
+	return v.AuthProtocol
 }
 
-func (o *V3User) GetAuthKey() any {
-	if o == nil {
+func (v *V3User) GetAuthKey() any {
+	if v == nil {
 		return nil
 	}
-	return o.AuthKey
+	return v.AuthKey
 }
 
-func (o *V3User) GetPrivProtocol() any {
-	if o == nil {
+func (v *V3User) GetPrivProtocol() any {
+	if v == nil {
 		return nil
 	}
-	return o.PrivProtocol
+	return v.PrivProtocol
 }
 
 // SNMPv3Authentication - Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues.
@@ -299,25 +299,25 @@ func (s *SNMPv3Authentication) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SNMPv3Authentication) GetV3AuthEnabled() *bool {
-	if o == nil {
+func (s *SNMPv3Authentication) GetV3AuthEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.V3AuthEnabled
+	return s.V3AuthEnabled
 }
 
-func (o *SNMPv3Authentication) GetAllowUnmatchedTrap() *bool {
-	if o == nil {
+func (s *SNMPv3Authentication) GetAllowUnmatchedTrap() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.AllowUnmatchedTrap
+	return s.AllowUnmatchedTrap
 }
 
-func (o *SNMPv3Authentication) GetV3Users() []V3User {
-	if o == nil {
+func (s *SNMPv3Authentication) GetV3Users() []V3User {
+	if s == nil {
 		return nil
 	}
-	return o.V3Users
+	return s.V3Users
 }
 
 type InputSnmpMetadatum struct {
@@ -337,18 +337,18 @@ func (i *InputSnmpMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSnmpMetadatum) GetName() string {
-	if o == nil {
+func (i *InputSnmpMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSnmpMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputSnmpMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSnmp struct {
@@ -401,142 +401,142 @@ func (i *InputSnmp) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSnmp) GetID() *string {
-	if o == nil {
+func (i *InputSnmp) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSnmp) GetType() *InputSnmpType {
-	if o == nil {
+func (i *InputSnmp) GetType() *InputSnmpType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSnmp) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSnmp) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSnmp) GetPipeline() *string {
-	if o == nil {
+func (i *InputSnmp) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSnmp) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSnmp) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSnmp) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSnmp) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSnmp) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSnmp) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSnmp) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSnmp) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSnmp) GetConnections() []InputSnmpConnection {
-	if o == nil {
+func (i *InputSnmp) GetConnections() []InputSnmpConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSnmp) GetPq() *InputSnmpPq {
-	if o == nil {
+func (i *InputSnmp) GetPq() *InputSnmpPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSnmp) GetHost() *string {
-	if o == nil {
+func (i *InputSnmp) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputSnmp) GetPort() *float64 {
-	if o == nil {
+func (i *InputSnmp) GetPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputSnmp) GetSnmpV3Auth() *SNMPv3Authentication {
-	if o == nil {
+func (i *InputSnmp) GetSnmpV3Auth() *SNMPv3Authentication {
+	if i == nil {
 		return nil
 	}
-	return o.SnmpV3Auth
+	return i.SnmpV3Auth
 }
 
-func (o *InputSnmp) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSnmp) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSnmp) GetIPWhitelistRegex() *string {
-	if o == nil {
+func (i *InputSnmp) GetIPWhitelistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPWhitelistRegex
+	return i.IPWhitelistRegex
 }
 
-func (o *InputSnmp) GetMetadata() []InputSnmpMetadatum {
-	if o == nil {
+func (i *InputSnmp) GetMetadata() []InputSnmpMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSnmp) GetUDPSocketRxBufSize() *float64 {
-	if o == nil {
+func (i *InputSnmp) GetUDPSocketRxBufSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.UDPSocketRxBufSize
+	return i.UDPSocketRxBufSize
 }
 
-func (o *InputSnmp) GetVarbindsWithTypes() *bool {
-	if o == nil {
+func (i *InputSnmp) GetVarbindsWithTypes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.VarbindsWithTypes
+	return i.VarbindsWithTypes
 }
 
-func (o *InputSnmp) GetBestEffortParsing() *bool {
-	if o == nil {
+func (i *InputSnmp) GetBestEffortParsing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.BestEffortParsing
+	return i.BestEffortParsing
 }
 
-func (o *InputSnmp) GetDescription() *string {
-	if o == nil {
+func (i *InputSnmp) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

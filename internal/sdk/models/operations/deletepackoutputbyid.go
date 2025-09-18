@@ -15,25 +15,25 @@ type DeletePackOutputByIDRequest struct {
 	Pack    string `pathParam:"style=simple,explode=false,name=pack"`
 }
 
-func (o *DeletePackOutputByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeletePackOutputByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeletePackOutputByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeletePackOutputByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
-func (o *DeletePackOutputByIDRequest) GetPack() string {
-	if o == nil {
+func (d *DeletePackOutputByIDRequest) GetPack() string {
+	if d == nil {
 		return ""
 	}
-	return o.Pack
+	return d.Pack
 }
 
 // DeletePackOutputByIDResponseBody - a list of Output objects
@@ -53,37 +53,37 @@ type DeletePackOutputByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeletePackOutputByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeletePackOutputByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeletePackOutputByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeletePackOutputByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeletePackOutputByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeletePackOutputByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeletePackOutputByIDResponse) GetObject() *DeletePackOutputByIDResponseBody {
-	if o == nil {
+func (d *DeletePackOutputByIDResponse) GetObject() *DeletePackOutputByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeletePackOutputByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeletePackOutputByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

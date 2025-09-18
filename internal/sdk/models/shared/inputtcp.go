@@ -47,18 +47,18 @@ func (i *InputTCPConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTCPConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputTCPConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputTCPConnection) GetOutput() string {
-	if o == nil {
+func (i *InputTCPConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputTCPMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputTCPPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTCPPq) GetMode() *InputTCPMode {
-	if o == nil {
+func (i *InputTCPPq) GetMode() *InputTCPMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputTCPPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputTCPPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputTCPPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputTCPPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputTCPPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputTCPPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputTCPPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputTCPPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputTCPPq) GetPath() *string {
-	if o == nil {
+func (i *InputTCPPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputTCPPq) GetCompress() *InputTCPCompression {
-	if o == nil {
+func (i *InputTCPPq) GetCompress() *InputTCPCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputTCPMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputTCPTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetMinVersion() *InputTCPMinimumTLSVersion {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetMinVersion() *InputTCPMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputTCPTLSSettingsServerSide) GetMaxVersion() *InputTCPMaximumTLSVersion {
-	if o == nil {
+func (i *InputTCPTLSSettingsServerSide) GetMaxVersion() *InputTCPMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputTCPMetadatum struct {
@@ -381,18 +381,18 @@ func (i *InputTCPMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTCPMetadatum) GetName() string {
-	if o == nil {
+func (i *InputTCPMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputTCPMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputTCPMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputTCPPreprocess struct {
@@ -414,25 +414,25 @@ func (i *InputTCPPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTCPPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputTCPPreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputTCPPreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputTCPPreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputTCPPreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputTCPPreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 // InputTCPAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
@@ -522,184 +522,184 @@ func (i *InputTCP) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputTCP) GetID() *string {
-	if o == nil {
+func (i *InputTCP) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputTCP) GetType() *InputTCPType {
-	if o == nil {
+func (i *InputTCP) GetType() *InputTCPType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputTCP) GetDisabled() *bool {
-	if o == nil {
+func (i *InputTCP) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputTCP) GetPipeline() *string {
-	if o == nil {
+func (i *InputTCP) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputTCP) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputTCP) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputTCP) GetEnvironment() *string {
-	if o == nil {
+func (i *InputTCP) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputTCP) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputTCP) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputTCP) GetStreamtags() []string {
-	if o == nil {
+func (i *InputTCP) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputTCP) GetConnections() []InputTCPConnection {
-	if o == nil {
+func (i *InputTCP) GetConnections() []InputTCPConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputTCP) GetPq() *InputTCPPq {
-	if o == nil {
+func (i *InputTCP) GetPq() *InputTCPPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputTCP) GetHost() *string {
-	if o == nil {
+func (i *InputTCP) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputTCP) GetPort() float64 {
-	if o == nil {
+func (i *InputTCP) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputTCP) GetTLS() *InputTCPTLSSettingsServerSide {
-	if o == nil {
+func (i *InputTCP) GetTLS() *InputTCPTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputTCP) GetIPWhitelistRegex() *string {
-	if o == nil {
+func (i *InputTCP) GetIPWhitelistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPWhitelistRegex
+	return i.IPWhitelistRegex
 }
 
-func (o *InputTCP) GetMaxActiveCxn() *float64 {
-	if o == nil {
+func (i *InputTCP) GetMaxActiveCxn() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveCxn
+	return i.MaxActiveCxn
 }
 
-func (o *InputTCP) GetSocketIdleTimeout() *float64 {
-	if o == nil {
+func (i *InputTCP) GetSocketIdleTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketIdleTimeout
+	return i.SocketIdleTimeout
 }
 
-func (o *InputTCP) GetSocketEndingMaxWait() *float64 {
-	if o == nil {
+func (i *InputTCP) GetSocketEndingMaxWait() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketEndingMaxWait
+	return i.SocketEndingMaxWait
 }
 
-func (o *InputTCP) GetSocketMaxLifespan() *float64 {
-	if o == nil {
+func (i *InputTCP) GetSocketMaxLifespan() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketMaxLifespan
+	return i.SocketMaxLifespan
 }
 
-func (o *InputTCP) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputTCP) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputTCP) GetMetadata() []InputTCPMetadatum {
-	if o == nil {
+func (i *InputTCP) GetMetadata() []InputTCPMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputTCP) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputTCP) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputTCP) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputTCP) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputTCP) GetEnableHeader() *bool {
-	if o == nil {
+func (i *InputTCP) GetEnableHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHeader
+	return i.EnableHeader
 }
 
-func (o *InputTCP) GetPreprocess() *InputTCPPreprocess {
-	if o == nil {
+func (i *InputTCP) GetPreprocess() *InputTCPPreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputTCP) GetDescription() *string {
-	if o == nil {
+func (i *InputTCP) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputTCP) GetAuthType() *InputTCPAuthenticationMethod {
-	if o == nil {
+func (i *InputTCP) GetAuthType() *InputTCPAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }

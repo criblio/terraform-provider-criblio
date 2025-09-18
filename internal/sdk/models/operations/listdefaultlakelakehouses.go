@@ -12,11 +12,11 @@ type ListDefaultLakeLakehousesResponseBody struct {
 	Items []shared.Lakehouse `json:"items,omitempty"`
 }
 
-func (o *ListDefaultLakeLakehousesResponseBody) GetItems() []shared.Lakehouse {
-	if o == nil {
+func (l *ListDefaultLakeLakehousesResponseBody) GetItems() []shared.Lakehouse {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListDefaultLakeLakehousesResponse struct {
@@ -32,37 +32,37 @@ type ListDefaultLakeLakehousesResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListDefaultLakeLakehousesResponse) GetContentType() string {
-	if o == nil {
+func (l *ListDefaultLakeLakehousesResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDefaultLakeLakehousesResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListDefaultLakeLakehousesResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDefaultLakeLakehousesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDefaultLakeLakehousesResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDefaultLakeLakehousesResponse) GetObject() *ListDefaultLakeLakehousesResponseBody {
-	if o == nil {
+func (l *ListDefaultLakeLakehousesResponse) GetObject() *ListDefaultLakeLakehousesResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListDefaultLakeLakehousesResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListDefaultLakeLakehousesResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

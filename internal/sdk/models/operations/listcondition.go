@@ -12,11 +12,11 @@ type ListConditionResponseBody struct {
 	Items []shared.Condition `json:"items,omitempty"`
 }
 
-func (o *ListConditionResponseBody) GetItems() []shared.Condition {
-	if o == nil {
+func (l *ListConditionResponseBody) GetItems() []shared.Condition {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListConditionResponse struct {
@@ -32,37 +32,37 @@ type ListConditionResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListConditionResponse) GetContentType() string {
-	if o == nil {
+func (l *ListConditionResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListConditionResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListConditionResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListConditionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListConditionResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListConditionResponse) GetObject() *ListConditionResponseBody {
-	if o == nil {
+func (l *ListConditionResponse) GetObject() *ListConditionResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListConditionResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListConditionResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

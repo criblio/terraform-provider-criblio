@@ -12,11 +12,11 @@ type GetAuthGroupsResponseBody struct {
 	Items []shared.CrudEntityBase `json:"items,omitempty"`
 }
 
-func (o *GetAuthGroupsResponseBody) GetItems() []shared.CrudEntityBase {
-	if o == nil {
+func (g *GetAuthGroupsResponseBody) GetItems() []shared.CrudEntityBase {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetAuthGroupsResponse struct {
@@ -32,37 +32,37 @@ type GetAuthGroupsResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetAuthGroupsResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthGroupsResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthGroupsResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthGroupsResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthGroupsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthGroupsResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAuthGroupsResponse) GetObject() *GetAuthGroupsResponseBody {
-	if o == nil {
+func (g *GetAuthGroupsResponse) GetObject() *GetAuthGroupsResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetAuthGroupsResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetAuthGroupsResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

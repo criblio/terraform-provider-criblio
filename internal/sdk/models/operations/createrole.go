@@ -12,11 +12,11 @@ type CreateRoleResponseBody struct {
 	Items []shared.Role `json:"items,omitempty"`
 }
 
-func (o *CreateRoleResponseBody) GetItems() []shared.Role {
-	if o == nil {
+func (c *CreateRoleResponseBody) GetItems() []shared.Role {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateRoleResponse struct {
@@ -32,37 +32,37 @@ type CreateRoleResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateRoleResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateRoleResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateRoleResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateRoleResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateRoleResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateRoleResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateRoleResponse) GetObject() *CreateRoleResponseBody {
-	if o == nil {
+func (c *CreateRoleResponse) GetObject() *CreateRoleResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateRoleResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateRoleResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

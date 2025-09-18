@@ -58,51 +58,51 @@ func (c *CriblLakeDataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CriblLakeDataset) GetAcceleratedFields() []string {
-	if o == nil {
+func (c *CriblLakeDataset) GetAcceleratedFields() []string {
+	if c == nil {
 		return nil
 	}
-	return o.AcceleratedFields
+	return c.AcceleratedFields
 }
 
-func (o *CriblLakeDataset) GetBucketName() *string {
-	if o == nil {
+func (c *CriblLakeDataset) GetBucketName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.BucketName
+	return c.BucketName
 }
 
-func (o *CriblLakeDataset) GetDescription() *string {
-	if o == nil {
+func (c *CriblLakeDataset) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *CriblLakeDataset) GetFormat() *CriblLakeDatasetFormat {
-	if o == nil {
+func (c *CriblLakeDataset) GetFormat() *CriblLakeDatasetFormat {
+	if c == nil {
 		return nil
 	}
-	return o.Format
+	return c.Format
 }
 
-func (o *CriblLakeDataset) GetID() string {
-	if o == nil {
+func (c *CriblLakeDataset) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CriblLakeDataset) GetRetentionPeriodInDays() *float64 {
-	if o == nil {
+func (c *CriblLakeDataset) GetRetentionPeriodInDays() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.RetentionPeriodInDays
+	return c.RetentionPeriodInDays
 }
 
-func (o *CriblLakeDataset) GetSearchConfig() *LakeDatasetSearchConfig {
-	if o == nil {
+func (c *CriblLakeDataset) GetSearchConfig() *LakeDatasetSearchConfig {
+	if c == nil {
 		return nil
 	}
-	return o.SearchConfig
+	return c.SearchConfig
 }

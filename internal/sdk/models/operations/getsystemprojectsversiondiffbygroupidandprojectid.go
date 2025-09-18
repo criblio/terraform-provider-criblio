@@ -15,25 +15,25 @@ type GetSystemProjectsVersionDiffByGroupIDAndProjectIDRequest struct {
 	Commit    *string `queryParam:"style=form,explode=true,name=commit"`
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDRequest) GetProjectID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDRequest) GetCommit() *string {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDRequest) GetCommit() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Commit
+	return g.Commit
 }
 
 // GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponseBody - A list of any objects
@@ -41,11 +41,11 @@ type GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse struct {
@@ -61,37 +61,37 @@ type GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetObject() *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponseBody {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetObject() *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemProjectsVersionDiffByGroupIDAndProjectIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

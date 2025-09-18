@@ -47,18 +47,18 @@ func (i *InputPrometheusRwConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusRwConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputPrometheusRwConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputPrometheusRwConnection) GetOutput() string {
-	if o == nil {
+func (i *InputPrometheusRwConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputPrometheusRwMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputPrometheusRwPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusRwPq) GetMode() *InputPrometheusRwMode {
-	if o == nil {
+func (i *InputPrometheusRwPq) GetMode() *InputPrometheusRwMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputPrometheusRwPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputPrometheusRwPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputPrometheusRwPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputPrometheusRwPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputPrometheusRwPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputPrometheusRwPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputPrometheusRwPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputPrometheusRwPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputPrometheusRwPq) GetPath() *string {
-	if o == nil {
+func (i *InputPrometheusRwPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputPrometheusRwPq) GetCompress() *InputPrometheusRwCompression {
-	if o == nil {
+func (i *InputPrometheusRwPq) GetCompress() *InputPrometheusRwCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputPrometheusRwMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputPrometheusRwTLSSettingsServerSide) UnmarshalJSON(data []byte) erro
 	return nil
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetMinVersion() *InputPrometheusRwMinimumTLSVersion {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetMinVersion() *InputPrometheusRwMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputPrometheusRwTLSSettingsServerSide) GetMaxVersion() *InputPrometheusRwMaximumTLSVersion {
-	if o == nil {
+func (i *InputPrometheusRwTLSSettingsServerSide) GetMaxVersion() *InputPrometheusRwMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 // InputPrometheusRwAuthenticationType - Remote Write authentication type
@@ -420,18 +420,18 @@ func (i *InputPrometheusRwMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusRwMetadatum) GetName() string {
-	if o == nil {
+func (i *InputPrometheusRwMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputPrometheusRwMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputPrometheusRwMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputPrometheusRwOauthParam struct {
@@ -452,18 +452,18 @@ func (i *InputPrometheusRwOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusRwOauthParam) GetName() string {
-	if o == nil {
+func (i *InputPrometheusRwOauthParam) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputPrometheusRwOauthParam) GetValue() string {
-	if o == nil {
+func (i *InputPrometheusRwOauthParam) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputPrometheusRwOauthHeader struct {
@@ -484,18 +484,18 @@ func (i *InputPrometheusRwOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusRwOauthHeader) GetName() string {
-	if o == nil {
+func (i *InputPrometheusRwOauthHeader) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputPrometheusRwOauthHeader) GetValue() string {
-	if o == nil {
+func (i *InputPrometheusRwOauthHeader) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputPrometheusRw struct {
@@ -587,289 +587,289 @@ func (i *InputPrometheusRw) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputPrometheusRw) GetID() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputPrometheusRw) GetType() *InputPrometheusRwType {
-	if o == nil {
+func (i *InputPrometheusRw) GetType() *InputPrometheusRwType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputPrometheusRw) GetDisabled() *bool {
-	if o == nil {
+func (i *InputPrometheusRw) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputPrometheusRw) GetPipeline() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputPrometheusRw) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputPrometheusRw) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputPrometheusRw) GetEnvironment() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputPrometheusRw) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputPrometheusRw) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputPrometheusRw) GetStreamtags() []string {
-	if o == nil {
+func (i *InputPrometheusRw) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputPrometheusRw) GetConnections() []InputPrometheusRwConnection {
-	if o == nil {
+func (i *InputPrometheusRw) GetConnections() []InputPrometheusRwConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputPrometheusRw) GetPq() *InputPrometheusRwPq {
-	if o == nil {
+func (i *InputPrometheusRw) GetPq() *InputPrometheusRwPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputPrometheusRw) GetHost() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputPrometheusRw) GetPort() float64 {
-	if o == nil {
+func (i *InputPrometheusRw) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputPrometheusRw) GetTLS() *InputPrometheusRwTLSSettingsServerSide {
-	if o == nil {
+func (i *InputPrometheusRw) GetTLS() *InputPrometheusRwTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputPrometheusRw) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputPrometheusRw) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputPrometheusRw) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputPrometheusRw) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputPrometheusRw) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputPrometheusRw) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputPrometheusRw) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputPrometheusRw) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputPrometheusRw) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputPrometheusRw) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputPrometheusRw) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputPrometheusRw) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputPrometheusRw) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputPrometheusRw) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputPrometheusRw) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputPrometheusRw) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputPrometheusRw) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputPrometheusRw) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputPrometheusRw) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputPrometheusRw) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputPrometheusRw) GetPrometheusAPI() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetPrometheusAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrometheusAPI
+	return i.PrometheusAPI
 }
 
-func (o *InputPrometheusRw) GetAuthType() *InputPrometheusRwAuthenticationType {
-	if o == nil {
+func (i *InputPrometheusRw) GetAuthType() *InputPrometheusRwAuthenticationType {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputPrometheusRw) GetMetadata() []InputPrometheusRwMetadatum {
-	if o == nil {
+func (i *InputPrometheusRw) GetMetadata() []InputPrometheusRwMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputPrometheusRw) GetDescription() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputPrometheusRw) GetUsername() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputPrometheusRw) GetPassword() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputPrometheusRw) GetToken() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputPrometheusRw) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputPrometheusRw) GetTextSecret() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputPrometheusRw) GetLoginURL() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputPrometheusRw) GetSecretParamName() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SecretParamName
+	return i.SecretParamName
 }
 
-func (o *InputPrometheusRw) GetSecret() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputPrometheusRw) GetTokenAttributeName() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetTokenAttributeName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenAttributeName
+	return i.TokenAttributeName
 }
 
-func (o *InputPrometheusRw) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputPrometheusRw) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputPrometheusRw) GetTokenTimeoutSecs() *float64 {
-	if o == nil {
+func (i *InputPrometheusRw) GetTokenTimeoutSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TokenTimeoutSecs
+	return i.TokenTimeoutSecs
 }
 
-func (o *InputPrometheusRw) GetOauthParams() []InputPrometheusRwOauthParam {
-	if o == nil {
+func (i *InputPrometheusRw) GetOauthParams() []InputPrometheusRwOauthParam {
+	if i == nil {
 		return nil
 	}
-	return o.OauthParams
+	return i.OauthParams
 }
 
-func (o *InputPrometheusRw) GetOauthHeaders() []InputPrometheusRwOauthHeader {
-	if o == nil {
+func (i *InputPrometheusRw) GetOauthHeaders() []InputPrometheusRwOauthHeader {
+	if i == nil {
 		return nil
 	}
-	return o.OauthHeaders
+	return i.OauthHeaders
 }

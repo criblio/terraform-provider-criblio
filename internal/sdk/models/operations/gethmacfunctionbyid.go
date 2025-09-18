@@ -14,18 +14,18 @@ type GetHmacFunctionByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetHmacFunctionByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetHmacFunctionByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetHmacFunctionByIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetHmacFunctionByIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetHmacFunctionByIDResponseBody - a list of HmacFunction objects
@@ -33,11 +33,11 @@ type GetHmacFunctionByIDResponseBody struct {
 	Items []shared.HmacFunction `json:"items,omitempty"`
 }
 
-func (o *GetHmacFunctionByIDResponseBody) GetItems() []shared.HmacFunction {
-	if o == nil {
+func (g *GetHmacFunctionByIDResponseBody) GetItems() []shared.HmacFunction {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetHmacFunctionByIDResponse struct {
@@ -53,37 +53,37 @@ type GetHmacFunctionByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetHmacFunctionByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetHmacFunctionByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetHmacFunctionByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetHmacFunctionByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetHmacFunctionByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetHmacFunctionByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetHmacFunctionByIDResponse) GetObject() *GetHmacFunctionByIDResponseBody {
-	if o == nil {
+func (g *GetHmacFunctionByIDResponse) GetObject() *GetHmacFunctionByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetHmacFunctionByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetHmacFunctionByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

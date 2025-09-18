@@ -6,9 +6,9 @@ type CommonServiceLimitConfigs struct {
 	MemoryLimit string `json:"memoryLimit"`
 }
 
-func (o *CommonServiceLimitConfigs) GetMemoryLimit() string {
-	if o == nil {
+func (c *CommonServiceLimitConfigs) GetMemoryLimit() string {
+	if c == nil {
 		return ""
 	}
-	return o.MemoryLimit
+	return c.MemoryLimit
 }

@@ -8,23 +8,23 @@ type PreviewRequestBody struct {
 	Query   string          `json:"query"`
 }
 
-func (o *PreviewRequestBody) GetEvents() []any {
-	if o == nil {
+func (p *PreviewRequestBody) GetEvents() []any {
+	if p == nil {
 		return []any{}
 	}
-	return o.Events
+	return p.Events
 }
 
-func (o *PreviewRequestBody) GetOptions() *PreviewOptions {
-	if o == nil {
+func (p *PreviewRequestBody) GetOptions() *PreviewOptions {
+	if p == nil {
 		return nil
 	}
-	return o.Options
+	return p.Options
 }
 
-func (o *PreviewRequestBody) GetQuery() string {
-	if o == nil {
+func (p *PreviewRequestBody) GetQuery() string {
+	if p == nil {
 		return ""
 	}
-	return o.Query
+	return p.Query
 }

@@ -12,11 +12,11 @@ type GetDataSampleByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetDataSampleByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetDataSampleByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetDataSampleByIDResponseBody - a list of DataSample objects
@@ -24,11 +24,11 @@ type GetDataSampleByIDResponseBody struct {
 	Items []shared.DataSample `json:"items,omitempty"`
 }
 
-func (o *GetDataSampleByIDResponseBody) GetItems() []shared.DataSample {
-	if o == nil {
+func (g *GetDataSampleByIDResponseBody) GetItems() []shared.DataSample {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetDataSampleByIDResponse struct {
@@ -44,37 +44,37 @@ type GetDataSampleByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetDataSampleByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDataSampleByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDataSampleByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDataSampleByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDataSampleByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDataSampleByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDataSampleByIDResponse) GetObject() *GetDataSampleByIDResponseBody {
-	if o == nil {
+func (g *GetDataSampleByIDResponse) GetObject() *GetDataSampleByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetDataSampleByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetDataSampleByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

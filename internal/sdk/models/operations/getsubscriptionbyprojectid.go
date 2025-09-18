@@ -12,11 +12,11 @@ type GetSubscriptionByProjectIDRequest struct {
 	ProjectID string `pathParam:"style=simple,explode=false,name=projectId"`
 }
 
-func (o *GetSubscriptionByProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (g *GetSubscriptionByProjectIDRequest) GetProjectID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
 // GetSubscriptionByProjectIDResponseBody - a list of Subscription objects
@@ -24,11 +24,11 @@ type GetSubscriptionByProjectIDResponseBody struct {
 	Items []shared.Subscription `json:"items,omitempty"`
 }
 
-func (o *GetSubscriptionByProjectIDResponseBody) GetItems() []shared.Subscription {
-	if o == nil {
+func (g *GetSubscriptionByProjectIDResponseBody) GetItems() []shared.Subscription {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSubscriptionByProjectIDResponse struct {
@@ -44,37 +44,37 @@ type GetSubscriptionByProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSubscriptionByProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSubscriptionByProjectIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSubscriptionByProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSubscriptionByProjectIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSubscriptionByProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSubscriptionByProjectIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSubscriptionByProjectIDResponse) GetObject() *GetSubscriptionByProjectIDResponseBody {
-	if o == nil {
+func (g *GetSubscriptionByProjectIDResponse) GetObject() *GetSubscriptionByProjectIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSubscriptionByProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSubscriptionByProjectIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -14,18 +14,18 @@ type GetPipelinesByPackRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetPipelinesByPackRequest) GetPack() string {
-	if o == nil {
+func (g *GetPipelinesByPackRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
-func (o *GetPipelinesByPackRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetPipelinesByPackRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetPipelinesByPackResponseBody - a list of Routes objects
@@ -33,11 +33,11 @@ type GetPipelinesByPackResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetPipelinesByPackResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (g *GetPipelinesByPackResponseBody) GetItems() []shared.Routes {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetPipelinesByPackResponse struct {
@@ -53,37 +53,37 @@ type GetPipelinesByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetPipelinesByPackResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPipelinesByPackResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPipelinesByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPipelinesByPackResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPipelinesByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPipelinesByPackResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetPipelinesByPackResponse) GetObject() *GetPipelinesByPackResponseBody {
-	if o == nil {
+func (g *GetPipelinesByPackResponse) GetObject() *GetPipelinesByPackResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetPipelinesByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetPipelinesByPackResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

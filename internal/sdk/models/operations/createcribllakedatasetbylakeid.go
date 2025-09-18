@@ -40,18 +40,18 @@ type CreateCriblLakeDatasetByLakeIDRequest struct {
 	CriblLakeDataset shared.CriblLakeDataset `request:"mediaType=application/json"`
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDRequest) GetLakeID() CreateCriblLakeDatasetByLakeIDLakeID {
-	if o == nil {
+func (c *CreateCriblLakeDatasetByLakeIDRequest) GetLakeID() CreateCriblLakeDatasetByLakeIDLakeID {
+	if c == nil {
 		return CreateCriblLakeDatasetByLakeIDLakeID("")
 	}
-	return o.LakeID
+	return c.LakeID
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDRequest) GetCriblLakeDataset() shared.CriblLakeDataset {
-	if o == nil {
+func (c *CreateCriblLakeDatasetByLakeIDRequest) GetCriblLakeDataset() shared.CriblLakeDataset {
+	if c == nil {
 		return shared.CriblLakeDataset{}
 	}
-	return o.CriblLakeDataset
+	return c.CriblLakeDataset
 }
 
 // CreateCriblLakeDatasetByLakeIDResponseBody - a list of CriblLakeDataset objects
@@ -59,11 +59,11 @@ type CreateCriblLakeDatasetByLakeIDResponseBody struct {
 	Items []shared.CriblLakeDataset `json:"items,omitempty"`
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDResponseBody) GetItems() []shared.CriblLakeDataset {
-	if o == nil {
+func (c *CreateCriblLakeDatasetByLakeIDResponseBody) GetItems() []shared.CriblLakeDataset {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateCriblLakeDatasetByLakeIDResponse struct {
@@ -79,37 +79,37 @@ type CreateCriblLakeDatasetByLakeIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateCriblLakeDatasetByLakeIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateCriblLakeDatasetByLakeIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateCriblLakeDatasetByLakeIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDResponse) GetObject() *CreateCriblLakeDatasetByLakeIDResponseBody {
-	if o == nil {
+func (c *CreateCriblLakeDatasetByLakeIDResponse) GetObject() *CreateCriblLakeDatasetByLakeIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateCriblLakeDatasetByLakeIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateCriblLakeDatasetByLakeIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

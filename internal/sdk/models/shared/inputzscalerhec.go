@@ -47,18 +47,18 @@ func (i *InputZscalerHecConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputZscalerHecConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputZscalerHecConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputZscalerHecConnection) GetOutput() string {
-	if o == nil {
+func (i *InputZscalerHecConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputZscalerHecMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputZscalerHecPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputZscalerHecPq) GetMode() *InputZscalerHecMode {
-	if o == nil {
+func (i *InputZscalerHecPq) GetMode() *InputZscalerHecMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputZscalerHecPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputZscalerHecPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputZscalerHecPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputZscalerHecPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputZscalerHecPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputZscalerHecPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputZscalerHecPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputZscalerHecPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputZscalerHecPq) GetPath() *string {
-	if o == nil {
+func (i *InputZscalerHecPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputZscalerHecPq) GetCompress() *InputZscalerHecCompression {
-	if o == nil {
+func (i *InputZscalerHecPq) GetCompress() *InputZscalerHecCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputZscalerHecAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
@@ -236,18 +236,18 @@ func (i *InputZscalerHecAuthTokenMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputZscalerHecAuthTokenMetadatum) GetName() string {
-	if o == nil {
+func (i *InputZscalerHecAuthTokenMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputZscalerHecAuthTokenMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputZscalerHecAuthTokenMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputZscalerHecAuthToken struct {
@@ -274,53 +274,53 @@ func (i *InputZscalerHecAuthToken) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputZscalerHecAuthToken) GetAuthType() *InputZscalerHecAuthenticationMethod {
-	if o == nil {
+func (i *InputZscalerHecAuthToken) GetAuthType() *InputZscalerHecAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputZscalerHecAuthToken) GetTokenSecret() any {
-	if o == nil {
+func (i *InputZscalerHecAuthToken) GetTokenSecret() any {
+	if i == nil {
 		return nil
 	}
-	return o.TokenSecret
+	return i.TokenSecret
 }
 
-func (o *InputZscalerHecAuthToken) GetToken() any {
-	if o == nil {
+func (i *InputZscalerHecAuthToken) GetToken() any {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputZscalerHecAuthToken) GetEnabled() *bool {
-	if o == nil {
+func (i *InputZscalerHecAuthToken) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputZscalerHecAuthToken) GetDescription() *string {
-	if o == nil {
+func (i *InputZscalerHecAuthToken) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputZscalerHecAuthToken) GetAllowedIndexesAtToken() []string {
-	if o == nil {
+func (i *InputZscalerHecAuthToken) GetAllowedIndexesAtToken() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AllowedIndexesAtToken
+	return i.AllowedIndexesAtToken
 }
 
-func (o *InputZscalerHecAuthToken) GetMetadata() []InputZscalerHecAuthTokenMetadatum {
-	if o == nil {
+func (i *InputZscalerHecAuthToken) GetMetadata() []InputZscalerHecAuthTokenMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
 type InputZscalerHecMinimumTLSVersion string
@@ -418,81 +418,81 @@ func (i *InputZscalerHecTLSSettingsServerSide) UnmarshalJSON(data []byte) error 
 	return nil
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetMinVersion() *InputZscalerHecMinimumTLSVersion {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetMinVersion() *InputZscalerHecMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputZscalerHecTLSSettingsServerSide) GetMaxVersion() *InputZscalerHecMaximumTLSVersion {
-	if o == nil {
+func (i *InputZscalerHecTLSSettingsServerSide) GetMaxVersion() *InputZscalerHecMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputZscalerHecMetadatum struct {
@@ -512,18 +512,18 @@ func (i *InputZscalerHecMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputZscalerHecMetadatum) GetName() string {
-	if o == nil {
+func (i *InputZscalerHecMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputZscalerHecMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputZscalerHecMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputZscalerHec struct {
@@ -600,233 +600,233 @@ func (i *InputZscalerHec) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputZscalerHec) GetID() *string {
-	if o == nil {
+func (i *InputZscalerHec) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputZscalerHec) GetType() *InputZscalerHecType {
-	if o == nil {
+func (i *InputZscalerHec) GetType() *InputZscalerHecType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputZscalerHec) GetDisabled() *bool {
-	if o == nil {
+func (i *InputZscalerHec) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputZscalerHec) GetPipeline() *string {
-	if o == nil {
+func (i *InputZscalerHec) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputZscalerHec) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputZscalerHec) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputZscalerHec) GetEnvironment() *string {
-	if o == nil {
+func (i *InputZscalerHec) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputZscalerHec) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputZscalerHec) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputZscalerHec) GetStreamtags() []string {
-	if o == nil {
+func (i *InputZscalerHec) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputZscalerHec) GetConnections() []InputZscalerHecConnection {
-	if o == nil {
+func (i *InputZscalerHec) GetConnections() []InputZscalerHecConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputZscalerHec) GetPq() *InputZscalerHecPq {
-	if o == nil {
+func (i *InputZscalerHec) GetPq() *InputZscalerHecPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputZscalerHec) GetHost() *string {
-	if o == nil {
+func (i *InputZscalerHec) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputZscalerHec) GetPort() float64 {
-	if o == nil {
+func (i *InputZscalerHec) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputZscalerHec) GetAuthTokens() []InputZscalerHecAuthToken {
-	if o == nil {
+func (i *InputZscalerHec) GetAuthTokens() []InputZscalerHecAuthToken {
+	if i == nil {
 		return nil
 	}
-	return o.AuthTokens
+	return i.AuthTokens
 }
 
-func (o *InputZscalerHec) GetTLS() *InputZscalerHecTLSSettingsServerSide {
-	if o == nil {
+func (i *InputZscalerHec) GetTLS() *InputZscalerHecTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputZscalerHec) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputZscalerHec) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputZscalerHec) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputZscalerHec) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputZscalerHec) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputZscalerHec) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputZscalerHec) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputZscalerHec) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputZscalerHec) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputZscalerHec) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputZscalerHec) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputZscalerHec) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputZscalerHec) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputZscalerHec) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputZscalerHec) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputZscalerHec) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputZscalerHec) GetEnableHealthCheck() any {
-	if o == nil {
+func (i *InputZscalerHec) GetEnableHealthCheck() any {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputZscalerHec) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputZscalerHec) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputZscalerHec) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputZscalerHec) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputZscalerHec) GetHecAPI() *string {
-	if o == nil {
+func (i *InputZscalerHec) GetHecAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.HecAPI
+	return i.HecAPI
 }
 
-func (o *InputZscalerHec) GetMetadata() []InputZscalerHecMetadatum {
-	if o == nil {
+func (i *InputZscalerHec) GetMetadata() []InputZscalerHecMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputZscalerHec) GetAllowedIndexes() []string {
-	if o == nil {
+func (i *InputZscalerHec) GetAllowedIndexes() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AllowedIndexes
+	return i.AllowedIndexes
 }
 
-func (o *InputZscalerHec) GetHecAcks() *bool {
-	if o == nil {
+func (i *InputZscalerHec) GetHecAcks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.HecAcks
+	return i.HecAcks
 }
 
-func (o *InputZscalerHec) GetAccessControlAllowOrigin() []string {
-	if o == nil {
+func (i *InputZscalerHec) GetAccessControlAllowOrigin() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AccessControlAllowOrigin
+	return i.AccessControlAllowOrigin
 }
 
-func (o *InputZscalerHec) GetAccessControlAllowHeaders() []string {
-	if o == nil {
+func (i *InputZscalerHec) GetAccessControlAllowHeaders() []string {
+	if i == nil {
 		return nil
 	}
-	return o.AccessControlAllowHeaders
+	return i.AccessControlAllowHeaders
 }
 
-func (o *InputZscalerHec) GetEmitTokenMetrics() *bool {
-	if o == nil {
+func (i *InputZscalerHec) GetEmitTokenMetrics() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EmitTokenMetrics
+	return i.EmitTokenMetrics
 }
 
-func (o *InputZscalerHec) GetDescription() *string {
-	if o == nil {
+func (i *InputZscalerHec) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

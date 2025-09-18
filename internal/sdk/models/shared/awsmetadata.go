@@ -15,51 +15,51 @@ type AwsMetadata struct {
 	Version        float64          `json:"version"`
 }
 
-func (o *AwsMetadata) GetHostname() *string {
-	if o == nil {
+func (a *AwsMetadata) GetHostname() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Hostname
+	return a.Hostname
 }
 
-func (o *AwsMetadata) GetIdentity() map[string]any {
-	if o == nil {
+func (a *AwsMetadata) GetIdentity() map[string]any {
+	if a == nil {
 		return nil
 	}
-	return o.Identity
+	return a.Identity
 }
 
-func (o *AwsMetadata) GetPublicIpv4() *string {
-	if o == nil {
+func (a *AwsMetadata) GetPublicIpv4() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PublicIpv4
+	return a.PublicIpv4
 }
 
-func (o *AwsMetadata) GetRoles() []string {
-	if o == nil {
+func (a *AwsMetadata) GetRoles() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Roles
+	return a.Roles
 }
 
-func (o *AwsMetadata) GetSecurityGroups() []string {
-	if o == nil {
+func (a *AwsMetadata) GetSecurityGroups() []string {
+	if a == nil {
 		return nil
 	}
-	return o.SecurityGroups
+	return a.SecurityGroups
 }
 
-func (o *AwsMetadata) GetTags() *AwsMetadataTags {
-	if o == nil {
+func (a *AwsMetadata) GetTags() *AwsMetadataTags {
+	if a == nil {
 		return nil
 	}
-	return o.Tags
+	return a.Tags
 }
 
-func (o *AwsMetadata) GetVersion() float64 {
-	if o == nil {
+func (a *AwsMetadata) GetVersion() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.Version
+	return a.Version
 }

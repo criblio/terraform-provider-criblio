@@ -14,18 +14,18 @@ type UpdateScriptByIDRequest struct {
 	ScriptLibEntry shared.ScriptLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *UpdateScriptByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateScriptByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateScriptByIDRequest) GetScriptLibEntry() shared.ScriptLibEntry {
-	if o == nil {
+func (u *UpdateScriptByIDRequest) GetScriptLibEntry() shared.ScriptLibEntry {
+	if u == nil {
 		return shared.ScriptLibEntry{}
 	}
-	return o.ScriptLibEntry
+	return u.ScriptLibEntry
 }
 
 // UpdateScriptByIDResponseBody - a list of Script objects
@@ -33,11 +33,11 @@ type UpdateScriptByIDResponseBody struct {
 	Items []shared.ScriptLibEntry `json:"items,omitempty"`
 }
 
-func (o *UpdateScriptByIDResponseBody) GetItems() []shared.ScriptLibEntry {
-	if o == nil {
+func (u *UpdateScriptByIDResponseBody) GetItems() []shared.ScriptLibEntry {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateScriptByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateScriptByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateScriptByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateScriptByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateScriptByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateScriptByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateScriptByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateScriptByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateScriptByIDResponse) GetObject() *UpdateScriptByIDResponseBody {
-	if o == nil {
+func (u *UpdateScriptByIDResponse) GetObject() *UpdateScriptByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateScriptByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateScriptByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -14,18 +14,18 @@ type CreateSystemProjectsCaptureByProjectIDRequest struct {
 	CaptureParams shared.CaptureParams `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemProjectsCaptureByProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByProjectIDRequest) GetProjectID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProjectID
+	return c.ProjectID
 }
 
-func (o *CreateSystemProjectsCaptureByProjectIDRequest) GetCaptureParams() shared.CaptureParams {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByProjectIDRequest) GetCaptureParams() shared.CaptureParams {
+	if c == nil {
 		return shared.CaptureParams{}
 	}
-	return o.CaptureParams
+	return c.CaptureParams
 }
 
 // CreateSystemProjectsCaptureByProjectIDResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type CreateSystemProjectsCaptureByProjectIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSystemProjectsCaptureByProjectIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByProjectIDResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemProjectsCaptureByProjectIDResponse struct {
@@ -53,37 +53,37 @@ type CreateSystemProjectsCaptureByProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemProjectsCaptureByProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByProjectIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemProjectsCaptureByProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByProjectIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemProjectsCaptureByProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByProjectIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemProjectsCaptureByProjectIDResponse) GetObject() *CreateSystemProjectsCaptureByProjectIDResponseBody {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByProjectIDResponse) GetObject() *CreateSystemProjectsCaptureByProjectIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemProjectsCaptureByProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemProjectsCaptureByProjectIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

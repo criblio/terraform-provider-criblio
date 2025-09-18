@@ -8,25 +8,25 @@ type PublishPackResponseGit struct {
 	CommitMessage string `json:"commitMessage"`
 }
 
-func (o *PublishPackResponseGit) GetBranch() string {
-	if o == nil {
+func (p *PublishPackResponseGit) GetBranch() string {
+	if p == nil {
 		return ""
 	}
-	return o.Branch
+	return p.Branch
 }
 
-func (o *PublishPackResponseGit) GetCommitHash() string {
-	if o == nil {
+func (p *PublishPackResponseGit) GetCommitHash() string {
+	if p == nil {
 		return ""
 	}
-	return o.CommitHash
+	return p.CommitHash
 }
 
-func (o *PublishPackResponseGit) GetCommitMessage() string {
-	if o == nil {
+func (p *PublishPackResponseGit) GetCommitMessage() string {
+	if p == nil {
 		return ""
 	}
-	return o.CommitMessage
+	return p.CommitMessage
 }
 
 type PublishPackResponse struct {
@@ -37,37 +37,37 @@ type PublishPackResponse struct {
 	Status  *PublishPackToGitStatusType `json:"status,omitempty"`
 }
 
-func (o *PublishPackResponse) GetGit() *PublishPackResponseGit {
-	if o == nil {
+func (p *PublishPackResponse) GetGit() *PublishPackResponseGit {
+	if p == nil {
 		return nil
 	}
-	return o.Git
+	return p.Git
 }
 
-func (o *PublishPackResponse) GetID() string {
-	if o == nil {
+func (p *PublishPackResponse) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PublishPackResponse) GetMessage() *string {
-	if o == nil {
+func (p *PublishPackResponse) GetMessage() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Message
+	return p.Message
 }
 
-func (o *PublishPackResponse) GetSource() *string {
-	if o == nil {
+func (p *PublishPackResponse) GetSource() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Source
+	return p.Source
 }
 
-func (o *PublishPackResponse) GetStatus() *PublishPackToGitStatusType {
-	if o == nil {
+func (p *PublishPackResponse) GetStatus() *PublishPackToGitStatusType {
+	if p == nil {
 		return nil
 	}
-	return o.Status
+	return p.Status
 }

@@ -12,11 +12,11 @@ type GetEdgeContainersByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetEdgeContainersByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetEdgeContainersByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetEdgeContainersByIDResponseBody - a list of Container objects
@@ -24,11 +24,11 @@ type GetEdgeContainersByIDResponseBody struct {
 	Items []shared.Container `json:"items,omitempty"`
 }
 
-func (o *GetEdgeContainersByIDResponseBody) GetItems() []shared.Container {
-	if o == nil {
+func (g *GetEdgeContainersByIDResponseBody) GetItems() []shared.Container {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeContainersByIDResponse struct {
@@ -44,37 +44,37 @@ type GetEdgeContainersByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeContainersByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeContainersByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeContainersByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeContainersByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeContainersByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeContainersByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeContainersByIDResponse) GetObject() *GetEdgeContainersByIDResponseBody {
-	if o == nil {
+func (g *GetEdgeContainersByIDResponse) GetObject() *GetEdgeContainersByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeContainersByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeContainersByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -14,18 +14,18 @@ type CreateDatasetACLTeamsApplyByIDRequest struct {
 	AccessControlSchema shared.AccessControlSchema `request:"mediaType=application/json"`
 }
 
-func (o *CreateDatasetACLTeamsApplyByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateDatasetACLTeamsApplyByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateDatasetACLTeamsApplyByIDRequest) GetAccessControlSchema() shared.AccessControlSchema {
-	if o == nil {
+func (c *CreateDatasetACLTeamsApplyByIDRequest) GetAccessControlSchema() shared.AccessControlSchema {
+	if c == nil {
 		return shared.AccessControlSchema{}
 	}
-	return o.AccessControlSchema
+	return c.AccessControlSchema
 }
 
 type CreateDatasetACLTeamsApplyByIDResponse struct {
@@ -39,30 +39,30 @@ type CreateDatasetACLTeamsApplyByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateDatasetACLTeamsApplyByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateDatasetACLTeamsApplyByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateDatasetACLTeamsApplyByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateDatasetACLTeamsApplyByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateDatasetACLTeamsApplyByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateDatasetACLTeamsApplyByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateDatasetACLTeamsApplyByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateDatasetACLTeamsApplyByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

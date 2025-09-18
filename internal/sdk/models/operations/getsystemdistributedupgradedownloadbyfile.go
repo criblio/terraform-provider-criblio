@@ -12,11 +12,11 @@ type GetSystemDistributedUpgradeDownloadByFileRequest struct {
 	File string `pathParam:"style=simple,explode=false,name=file"`
 }
 
-func (o *GetSystemDistributedUpgradeDownloadByFileRequest) GetFile() string {
-	if o == nil {
+func (g *GetSystemDistributedUpgradeDownloadByFileRequest) GetFile() string {
+	if g == nil {
 		return ""
 	}
-	return o.File
+	return g.File
 }
 
 // GetSystemDistributedUpgradeDownloadByFileResponseBody - a list of any objects
@@ -24,11 +24,11 @@ type GetSystemDistributedUpgradeDownloadByFileResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetSystemDistributedUpgradeDownloadByFileResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetSystemDistributedUpgradeDownloadByFileResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemDistributedUpgradeDownloadByFileResponse struct {
@@ -44,37 +44,37 @@ type GetSystemDistributedUpgradeDownloadByFileResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemDistributedUpgradeDownloadByFileResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemDistributedUpgradeDownloadByFileResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemDistributedUpgradeDownloadByFileResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemDistributedUpgradeDownloadByFileResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemDistributedUpgradeDownloadByFileResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemDistributedUpgradeDownloadByFileResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemDistributedUpgradeDownloadByFileResponse) GetObject() *GetSystemDistributedUpgradeDownloadByFileResponseBody {
-	if o == nil {
+func (g *GetSystemDistributedUpgradeDownloadByFileResponse) GetObject() *GetSystemDistributedUpgradeDownloadByFileResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemDistributedUpgradeDownloadByFileResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemDistributedUpgradeDownloadByFileResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

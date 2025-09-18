@@ -19,39 +19,39 @@ type NodeProvidedInfoAws struct {
 	Zone    string                `json:"zone"`
 }
 
-func (o *NodeProvidedInfoAws) GetEnabled() bool {
-	if o == nil {
+func (n *NodeProvidedInfoAws) GetEnabled() bool {
+	if n == nil {
 		return false
 	}
-	return o.Enabled
+	return n.Enabled
 }
 
-func (o *NodeProvidedInfoAws) GetRegion() string {
-	if o == nil {
+func (n *NodeProvidedInfoAws) GetRegion() string {
+	if n == nil {
 		return ""
 	}
-	return o.Region
+	return n.Region
 }
 
-func (o *NodeProvidedInfoAws) GetTags() *NodeProvidedInfoTags {
-	if o == nil {
+func (n *NodeProvidedInfoAws) GetTags() *NodeProvidedInfoTags {
+	if n == nil {
 		return nil
 	}
-	return o.Tags
+	return n.Tags
 }
 
-func (o *NodeProvidedInfoAws) GetType() string {
-	if o == nil {
+func (n *NodeProvidedInfoAws) GetType() string {
+	if n == nil {
 		return ""
 	}
-	return o.Type
+	return n.Type
 }
 
-func (o *NodeProvidedInfoAws) GetZone() string {
-	if o == nil {
+func (n *NodeProvidedInfoAws) GetZone() string {
+	if n == nil {
 		return ""
 	}
-	return o.Zone
+	return n.Zone
 }
 
 type NodeProvidedInfoHostOs struct {
@@ -61,32 +61,32 @@ type NodeProvidedInfoHostOs struct {
 	Version   string   `json:"version"`
 }
 
-func (o *NodeProvidedInfoHostOs) GetAddresses() []string {
-	if o == nil {
+func (n *NodeProvidedInfoHostOs) GetAddresses() []string {
+	if n == nil {
 		return []string{}
 	}
-	return o.Addresses
+	return n.Addresses
 }
 
-func (o *NodeProvidedInfoHostOs) GetEnabled() bool {
-	if o == nil {
+func (n *NodeProvidedInfoHostOs) GetEnabled() bool {
+	if n == nil {
 		return false
 	}
-	return o.Enabled
+	return n.Enabled
 }
 
-func (o *NodeProvidedInfoHostOs) GetID() string {
-	if o == nil {
+func (n *NodeProvidedInfoHostOs) GetID() string {
+	if n == nil {
 		return ""
 	}
-	return o.ID
+	return n.ID
 }
 
-func (o *NodeProvidedInfoHostOs) GetVersion() string {
-	if o == nil {
+func (n *NodeProvidedInfoHostOs) GetVersion() string {
+	if n == nil {
 		return ""
 	}
-	return o.Version
+	return n.Version
 }
 
 type NodeProvidedInfoOwner struct {
@@ -94,18 +94,18 @@ type NodeProvidedInfoOwner struct {
 	Name string `json:"name"`
 }
 
-func (o *NodeProvidedInfoOwner) GetKind() string {
-	if o == nil {
+func (n *NodeProvidedInfoOwner) GetKind() string {
+	if n == nil {
 		return ""
 	}
-	return o.Kind
+	return n.Kind
 }
 
-func (o *NodeProvidedInfoOwner) GetName() string {
-	if o == nil {
+func (n *NodeProvidedInfoOwner) GetName() string {
+	if n == nil {
 		return ""
 	}
-	return o.Name
+	return n.Name
 }
 
 type NodeProvidedInfoKube struct {
@@ -117,46 +117,46 @@ type NodeProvidedInfoKube struct {
 	Source    string                 `json:"source"`
 }
 
-func (o *NodeProvidedInfoKube) GetEnabled() bool {
-	if o == nil {
+func (n *NodeProvidedInfoKube) GetEnabled() bool {
+	if n == nil {
 		return false
 	}
-	return o.Enabled
+	return n.Enabled
 }
 
-func (o *NodeProvidedInfoKube) GetNamespace() string {
-	if o == nil {
+func (n *NodeProvidedInfoKube) GetNamespace() string {
+	if n == nil {
 		return ""
 	}
-	return o.Namespace
+	return n.Namespace
 }
 
-func (o *NodeProvidedInfoKube) GetNode() string {
-	if o == nil {
+func (n *NodeProvidedInfoKube) GetNode() string {
+	if n == nil {
 		return ""
 	}
-	return o.Node
+	return n.Node
 }
 
-func (o *NodeProvidedInfoKube) GetOwner() *NodeProvidedInfoOwner {
-	if o == nil {
+func (n *NodeProvidedInfoKube) GetOwner() *NodeProvidedInfoOwner {
+	if n == nil {
 		return nil
 	}
-	return o.Owner
+	return n.Owner
 }
 
-func (o *NodeProvidedInfoKube) GetPod() string {
-	if o == nil {
+func (n *NodeProvidedInfoKube) GetPod() string {
+	if n == nil {
 		return ""
 	}
-	return o.Pod
+	return n.Pod
 }
 
-func (o *NodeProvidedInfoKube) GetSource() string {
-	if o == nil {
+func (n *NodeProvidedInfoKube) GetSource() string {
+	if n == nil {
 		return ""
 	}
-	return o.Source
+	return n.Source
 }
 
 type NodeProvidedInfoOs2 struct {
@@ -174,11 +174,11 @@ func (n *NodeProvidedInfoOs2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *NodeProvidedInfoOs2) GetAddresses() []string {
-	if o == nil {
+func (n *NodeProvidedInfoOs2) GetAddresses() []string {
+	if n == nil {
 		return []string{}
 	}
-	return o.Addresses
+	return n.Addresses
 }
 
 type NodeProvidedInfoOs1 struct {
@@ -199,32 +199,32 @@ func (n *NodeProvidedInfoOs1) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *NodeProvidedInfoOs1) GetAddresses() []string {
-	if o == nil {
+func (n *NodeProvidedInfoOs1) GetAddresses() []string {
+	if n == nil {
 		return []string{}
 	}
-	return o.Addresses
+	return n.Addresses
 }
 
-func (o *NodeProvidedInfoOs1) GetEnabled() bool {
-	if o == nil {
+func (n *NodeProvidedInfoOs1) GetEnabled() bool {
+	if n == nil {
 		return false
 	}
-	return o.Enabled
+	return n.Enabled
 }
 
-func (o *NodeProvidedInfoOs1) GetID() string {
-	if o == nil {
+func (n *NodeProvidedInfoOs1) GetID() string {
+	if n == nil {
 		return ""
 	}
-	return o.ID
+	return n.ID
 }
 
-func (o *NodeProvidedInfoOs1) GetVersion() string {
-	if o == nil {
+func (n *NodeProvidedInfoOs1) GetVersion() string {
+	if n == nil {
 		return ""
 	}
-	return o.Version
+	return n.Version
 }
 
 type OsType string
@@ -311,128 +311,128 @@ type NodeProvidedInfo struct {
 	Totalmem       float64                 `json:"totalmem"`
 }
 
-func (o *NodeProvidedInfo) GetArchitecture() string {
-	if o == nil {
+func (n *NodeProvidedInfo) GetArchitecture() string {
+	if n == nil {
 		return ""
 	}
-	return o.Architecture
+	return n.Architecture
 }
 
-func (o *NodeProvidedInfo) GetAws() *NodeProvidedInfoAws {
-	if o == nil {
+func (n *NodeProvidedInfo) GetAws() *NodeProvidedInfoAws {
+	if n == nil {
 		return nil
 	}
-	return o.Aws
+	return n.Aws
 }
 
-func (o *NodeProvidedInfo) GetConnIP() *string {
-	if o == nil {
+func (n *NodeProvidedInfo) GetConnIP() *string {
+	if n == nil {
 		return nil
 	}
-	return o.ConnIP
+	return n.ConnIP
 }
 
-func (o *NodeProvidedInfo) GetCpus() float64 {
-	if o == nil {
+func (n *NodeProvidedInfo) GetCpus() float64 {
+	if n == nil {
 		return 0.0
 	}
-	return o.Cpus
+	return n.Cpus
 }
 
-func (o *NodeProvidedInfo) GetCribl() HBCriblInfo {
-	if o == nil {
+func (n *NodeProvidedInfo) GetCribl() HBCriblInfo {
+	if n == nil {
 		return HBCriblInfo{}
 	}
-	return o.Cribl
+	return n.Cribl
 }
 
-func (o *NodeProvidedInfo) GetFreeDiskSpace() float64 {
-	if o == nil {
+func (n *NodeProvidedInfo) GetFreeDiskSpace() float64 {
+	if n == nil {
 		return 0.0
 	}
-	return o.FreeDiskSpace
+	return n.FreeDiskSpace
 }
 
-func (o *NodeProvidedInfo) GetHostOs() *NodeProvidedInfoHostOs {
-	if o == nil {
+func (n *NodeProvidedInfo) GetHostOs() *NodeProvidedInfoHostOs {
+	if n == nil {
 		return nil
 	}
-	return o.HostOs
+	return n.HostOs
 }
 
-func (o *NodeProvidedInfo) GetHostname() string {
-	if o == nil {
+func (n *NodeProvidedInfo) GetHostname() string {
+	if n == nil {
 		return ""
 	}
-	return o.Hostname
+	return n.Hostname
 }
 
-func (o *NodeProvidedInfo) GetIsSaasWorker() *bool {
-	if o == nil {
+func (n *NodeProvidedInfo) GetIsSaasWorker() *bool {
+	if n == nil {
 		return nil
 	}
-	return o.IsSaasWorker
+	return n.IsSaasWorker
 }
 
-func (o *NodeProvidedInfo) GetKube() *NodeProvidedInfoKube {
-	if o == nil {
+func (n *NodeProvidedInfo) GetKube() *NodeProvidedInfoKube {
+	if n == nil {
 		return nil
 	}
-	return o.Kube
+	return n.Kube
 }
 
-func (o *NodeProvidedInfo) GetLocalTime() *float64 {
-	if o == nil {
+func (n *NodeProvidedInfo) GetLocalTime() *float64 {
+	if n == nil {
 		return nil
 	}
-	return o.LocalTime
+	return n.LocalTime
 }
 
-func (o *NodeProvidedInfo) GetMetadata() *HeartbeatMetadata {
-	if o == nil {
+func (n *NodeProvidedInfo) GetMetadata() *HeartbeatMetadata {
+	if n == nil {
 		return nil
 	}
-	return o.Metadata
+	return n.Metadata
 }
 
-func (o *NodeProvidedInfo) GetNode() string {
-	if o == nil {
+func (n *NodeProvidedInfo) GetNode() string {
+	if n == nil {
 		return ""
 	}
-	return o.Node
+	return n.Node
 }
 
-func (o *NodeProvidedInfo) GetOs() *Os {
-	if o == nil {
+func (n *NodeProvidedInfo) GetOs() *Os {
+	if n == nil {
 		return nil
 	}
-	return o.Os
+	return n.Os
 }
 
-func (o *NodeProvidedInfo) GetPlatform() string {
-	if o == nil {
+func (n *NodeProvidedInfo) GetPlatform() string {
+	if n == nil {
 		return ""
 	}
-	return o.Platform
+	return n.Platform
 }
 
-func (o *NodeProvidedInfo) GetRelease() string {
-	if o == nil {
+func (n *NodeProvidedInfo) GetRelease() string {
+	if n == nil {
 		return ""
 	}
-	return o.Release
+	return n.Release
 }
 
-func (o *NodeProvidedInfo) GetTotalDiskSpace() float64 {
-	if o == nil {
+func (n *NodeProvidedInfo) GetTotalDiskSpace() float64 {
+	if n == nil {
 		return 0.0
 	}
-	return o.TotalDiskSpace
+	return n.TotalDiskSpace
 }
 
-func (o *NodeProvidedInfo) GetTotalmem() float64 {
-	if o == nil {
+func (n *NodeProvidedInfo) GetTotalmem() float64 {
+	if n == nil {
 		return 0.0
 	}
-	return o.Totalmem
+	return n.Totalmem
 }

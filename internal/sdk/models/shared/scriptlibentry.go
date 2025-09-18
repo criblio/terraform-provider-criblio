@@ -29,44 +29,44 @@ func (s *ScriptLibEntry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ScriptLibEntry) GetID() string {
-	if o == nil {
+func (s *ScriptLibEntry) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *ScriptLibEntry) GetCommand() string {
-	if o == nil {
+func (s *ScriptLibEntry) GetCommand() string {
+	if s == nil {
 		return ""
 	}
-	return o.Command
+	return s.Command
 }
 
-func (o *ScriptLibEntry) GetDescription() *string {
-	if o == nil {
+func (s *ScriptLibEntry) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *ScriptLibEntry) GetArgs() []string {
-	if o == nil {
+func (s *ScriptLibEntry) GetArgs() []string {
+	if s == nil {
 		return nil
 	}
-	return o.Args
+	return s.Args
 }
 
-func (o *ScriptLibEntry) GetEnv() map[string]string {
-	if o == nil {
+func (s *ScriptLibEntry) GetEnv() map[string]string {
+	if s == nil {
 		return nil
 	}
-	return o.Env
+	return s.Env
 }
 
-func (o *ScriptLibEntry) GetAdditionalProperties() any {
-	if o == nil {
+func (s *ScriptLibEntry) GetAdditionalProperties() any {
+	if s == nil {
 		return nil
 	}
-	return o.AdditionalProperties
+	return s.AdditionalProperties
 }

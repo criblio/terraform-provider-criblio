@@ -5,9 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 	"time"
 )
@@ -617,4 +619,170 @@ func TestTerraformAfterErrorMultiUse(t *testing.T) {
 	if err.Error() != expectedErrorString {
 		t.Errorf("test.AfterError returned unexpected error, got '%s', expected '%s'", err.Error(), expectedErrorString)
 	}
+}
+
+func TestGovDomainOAuth2(t *testing.T) {
+	// Test that gov domains use Okta OAuth2 with form-encoded data
+	receivedContentType := ""
+	receivedBody := ""
+	requestedURL := ""
+
+	// Create custom HTTP client that intercepts OAuth2 requests
+	customClient := &MockHTTPClient{}
+	customClient.DoFunc = func(req *http.Request) (*http.Response, error) {
+		// Capture OAuth2 request details
+		if strings.Contains(req.URL.Path, "/oauth2/") && strings.Contains(req.URL.Path, "/v1/token") {
+			requestedURL = req.URL.String()
+			receivedContentType = req.Header.Get("Content-Type")
+			bodyBytes, _ := io.ReadAll(req.Body)
+			receivedBody = string(bodyBytes)
+
+			// Return mock token response for OAuth2 requests
+			response := &http.Response{
+				StatusCode: 200,
+				Header:     make(http.Header),
+				Body:       io.NopCloser(strings.NewReader(`{"access_token":"gov-access-token","expires_in":3600,"token_type":"Bearer"}`)),
+			}
+			response.Header.Set("Content-Type", "application/json")
+			return response, nil
+		}
+
+		// For other requests, return empty response
+		return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(""))}, nil
+	}
+
+	os.Setenv("CRIBL_CLIENT_ID", "test-client-id")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-client-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-gov-staging.cloud")
+	os.Setenv("CRIBL_OKTA_DOMAIN", "criblgov-stg.okta.com")
+	os.Setenv("CRIBL_OKTA_AUTH_SERVER_ID", "ausfridm9cpg2Y5nW4h7")
+	os.Setenv("CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID", "ausfridm9cpg2Y5nW4h7")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	var beforeCtx BeforeRequestContext
+
+	// Use gov domain workspace URL
+	govWorkspaceURL := "https://test-workspace-test-org.cribl-gov-staging.cloud"
+
+	myReq, err := http.NewRequest("GET", "/api/v1/test", nil)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	beforeCtx.Context = ctx
+
+	test := NewCriblTerraformHook()
+	_, _ = test.SDKInit(govWorkspaceURL, customClient)
+
+	outReq, err := test.BeforeRequest(beforeCtx, myReq)
+	if err != nil {
+		t.Errorf("Error in BeforeRequest for gov domain: %s", err)
+		return
+	}
+
+	// Verify OAuth2 token was obtained
+	expectedAuthHeader := "Bearer gov-access-token"
+	actualAuthHeader := outReq.Header.Get("Authorization")
+	if actualAuthHeader != expectedAuthHeader {
+		t.Errorf("Expected Authorization header '%s', got '%s'", expectedAuthHeader, actualAuthHeader)
+	}
+
+	// Verify Okta URL was used
+	expectedURLPattern := "criblgov-stg.okta.com/oauth2/ausfridm9cpg2Y5nW4h7/v1/token"
+	if !strings.Contains(requestedURL, expectedURLPattern) {
+		t.Errorf("Expected OAuth2 URL to contain '%s', got '%s'", expectedURLPattern, requestedURL)
+	}
+
+	// Verify form-encoded content type was used (not JSON)
+	expectedContentType := "application/x-www-form-urlencoded"
+	if receivedContentType != expectedContentType {
+		t.Errorf("Expected Content-Type '%s', got '%s'", expectedContentType, receivedContentType)
+	}
+
+	// Verify form data contains required fields
+	if !strings.Contains(receivedBody, "grant_type=client_credentials") {
+		t.Errorf("Form data should contain grant_type=client_credentials, got: %s", receivedBody)
+	}
+	if !strings.Contains(receivedBody, "client_id=test-client-id") {
+		t.Errorf("Form data should contain client_id, got: %s", receivedBody)
+	}
+	if !strings.Contains(receivedBody, "client_secret=test-client-secret") {
+		t.Errorf("Form data should contain client_secret, got: %s", receivedBody)
+	}
+	if !strings.Contains(receivedBody, "audience=") {
+		t.Errorf("Form data should contain audience parameter, got: %s", receivedBody)
+	}
+
+	// Clean up environment variables
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_OKTA_DOMAIN", "")
+	os.Setenv("CRIBL_OKTA_AUTH_SERVER_ID", "")
+	os.Setenv("CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestGovDomainOAuth2MissingAuthServerID(t *testing.T) {
+	// Test that missing CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID returns an error
+	os.Setenv("CRIBL_CLIENT_ID", "test-client-id")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-client-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-gov-staging.cloud")
+	os.Setenv("CRIBL_OKTA_DOMAIN", "criblgov-stg.okta.com")
+	os.Setenv("CRIBL_OKTA_AUTH_SERVER_ID", "")         // Not provided
+	os.Setenv("CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID", "") // Not provided - should cause error
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	// Create custom HTTP client (shouldn't be called due to error)
+	customClient := &MockHTTPClient{}
+	customClient.DoFunc = func(req *http.Request) (*http.Response, error) {
+		t.Errorf("HTTP client should not be called when auth server ID is missing")
+		return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(""))}, nil
+	}
+
+	var beforeCtx BeforeRequestContext
+	govWorkspaceURL := "https://test-workspace-test-org.cribl-gov-staging.cloud"
+
+	myReq, err := http.NewRequest("GET", "/api/v1/test", nil)
+	if err != nil {
+		t.Errorf("Error generating http request for testing: %s", err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	beforeCtx.Context = ctx
+
+	test := NewCriblTerraformHook()
+	_, _ = test.SDKInit(govWorkspaceURL, customClient)
+
+	// This should return an error due to missing auth server ID
+	_, err = test.BeforeRequest(beforeCtx, myReq)
+	if err == nil {
+		t.Errorf("Expected error when CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID is missing, but got none")
+		return
+	}
+
+	expectedError := "CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID environment variable is required for gov domains"
+	if !strings.Contains(err.Error(), expectedError) {
+		t.Errorf("Expected error containing '%s', got '%s'", expectedError, err.Error())
+	}
+
+	// Clean up environment variables
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_OKTA_DOMAIN", "")
+	os.Setenv("CRIBL_OKTA_AUTH_SERVER_ID", "")
+	os.Setenv("CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }

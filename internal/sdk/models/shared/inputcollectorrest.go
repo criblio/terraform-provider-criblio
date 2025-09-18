@@ -171,25 +171,25 @@ func (i *InputCollectorRestRunStateTracking) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRestRunStateTracking) GetStateUpdateExpression() *string {
-	if o == nil {
+func (i *InputCollectorRestRunStateTracking) GetStateUpdateExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateUpdateExpression
+	return i.StateUpdateExpression
 }
 
-func (o *InputCollectorRestRunStateTracking) GetStateMergeExpression() *string {
-	if o == nil {
+func (i *InputCollectorRestRunStateTracking) GetStateMergeExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateMergeExpression
+	return i.StateMergeExpression
 }
 
-func (o *InputCollectorRestRunStateTracking) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorRestRunStateTracking) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputCollectorRestRunSettings struct {
@@ -231,95 +231,95 @@ func (i *InputCollectorRestRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRestRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputCollectorRestRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputCollectorRestRunSettings) GetLogLevel() *InputCollectorRestLogLevel {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetLogLevel() *InputCollectorRestLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputCollectorRestRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputCollectorRestRunSettings) GetMode() *InputCollectorRestMode {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetMode() *InputCollectorRestMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectorRestRunSettings) GetTimeRangeType() *InputCollectorRestTimeRange {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetTimeRangeType() *InputCollectorRestTimeRange {
+	if i == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return i.TimeRangeType
 }
 
-func (o *InputCollectorRestRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetEarliest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorRestRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetLatest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorRestRunSettings) GetExpression() *string {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Expression
+	return i.Expression
 }
 
-func (o *InputCollectorRestRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetMinTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return i.MinTaskSize
 }
 
-func (o *InputCollectorRestRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetMaxTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return i.MaxTaskSize
 }
 
-func (o *InputCollectorRestRunSettings) GetTimeWarning() *InputCollectorRestTimeWarning {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetTimeWarning() *InputCollectorRestTimeWarning {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return i.TimeWarning
 }
 
-func (o *InputCollectorRestRunSettings) GetStateTracking() *InputCollectorRestRunStateTracking {
-	if o == nil {
+func (i *InputCollectorRestRunSettings) GetStateTracking() *InputCollectorRestRunStateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 // InputCollectorRestSchedule - Configuration for a scheduled job
@@ -348,46 +348,46 @@ func (i *InputCollectorRestSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRestSchedule) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorRestSchedule) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCollectorRestSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputCollectorRestSchedule) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputCollectorRestSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (i *InputCollectorRestSchedule) GetMaxConcurrentRuns() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return i.MaxConcurrentRuns
 }
 
-func (o *InputCollectorRestSchedule) GetSkippable() *bool {
-	if o == nil {
+func (i *InputCollectorRestSchedule) GetSkippable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Skippable
+	return i.Skippable
 }
 
-func (o *InputCollectorRestSchedule) GetResumeMissed() *bool {
-	if o == nil {
+func (i *InputCollectorRestSchedule) GetResumeMissed() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return i.ResumeMissed
 }
 
-func (o *InputCollectorRestSchedule) GetRun() *InputCollectorRestRunSettings {
-	if o == nil {
+func (i *InputCollectorRestSchedule) GetRun() *InputCollectorRestRunSettings {
+	if i == nil {
 		return nil
 	}
-	return o.Run
+	return i.Run
 }
 
 type InputCollectorRestTypeCollection2 string
@@ -432,25 +432,25 @@ func (i *InputCollectorRestPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRestPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectorRestPreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectorRestPreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectorRestPreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectorRestPreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectorRestPreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectorRestMetadatum struct {
@@ -470,18 +470,18 @@ func (i *InputCollectorRestMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRestMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectorRestMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectorRestMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectorRestMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollectorRestInput struct {
@@ -514,67 +514,67 @@ func (i *InputCollectorRestInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRestInput) GetType() *InputCollectorRestTypeCollection2 {
-	if o == nil {
+func (i *InputCollectorRestInput) GetType() *InputCollectorRestTypeCollection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorRestInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollectorRestInput) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollectorRestInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollectorRestInput) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollectorRestInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollectorRestInput) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollectorRestInput) GetPreprocess() *InputCollectorRestPreprocess {
-	if o == nil {
+func (i *InputCollectorRestInput) GetPreprocess() *InputCollectorRestPreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollectorRestInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollectorRestInput) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollectorRestInput) GetMetadata() []InputCollectorRestMetadatum {
-	if o == nil {
+func (i *InputCollectorRestInput) GetMetadata() []InputCollectorRestMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollectorRestInput) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectorRestInput) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectorRestInput) GetOutput() *string {
-	if o == nil {
+func (i *InputCollectorRestInput) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }
 
 type TypeRest string
@@ -672,18 +672,18 @@ func (a *AuthRequestParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AuthRequestParam) GetName() *string {
-	if o == nil {
+func (a *AuthRequestParam) GetName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AuthRequestParam) GetValue() *string {
-	if o == nil {
+func (a *AuthRequestParam) GetValue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Value
+	return a.Value
 }
 
 type AuthRequestHeader struct {
@@ -702,18 +702,18 @@ func (a *AuthRequestHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AuthRequestHeader) GetName() *string {
-	if o == nil {
+func (a *AuthRequestHeader) GetName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AuthRequestHeader) GetValue() *string {
-	if o == nil {
+func (a *AuthRequestHeader) GetValue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Value
+	return a.Value
 }
 
 type InputCollectorRestCollectMethod string
@@ -764,18 +764,18 @@ func (c *CollectRequestHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CollectRequestHeader) GetName() *string {
-	if o == nil {
+func (c *CollectRequestHeader) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *CollectRequestHeader) GetValue() *string {
-	if o == nil {
+func (c *CollectRequestHeader) GetValue() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Value
+	return c.Value
 }
 
 type CollectRequestParam struct {
@@ -794,18 +794,18 @@ func (c *CollectRequestParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CollectRequestParam) GetName() *string {
-	if o == nil {
+func (c *CollectRequestParam) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *CollectRequestParam) GetValue() *string {
-	if o == nil {
+func (c *CollectRequestParam) GetValue() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Value
+	return c.Value
 }
 
 type DiscoverType string
@@ -879,18 +879,18 @@ func (d *DiscoverRequestHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DiscoverRequestHeader) GetName() *string {
-	if o == nil {
+func (d *DiscoverRequestHeader) GetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DiscoverRequestHeader) GetValue() *string {
-	if o == nil {
+func (d *DiscoverRequestHeader) GetValue() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Value
+	return d.Value
 }
 
 type DiscoverRequestParam struct {
@@ -932,81 +932,81 @@ func (d *DiscoveryConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DiscoveryConfiguration) GetDiscoverType() *DiscoverType {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetDiscoverType() *DiscoverType {
+	if d == nil {
 		return nil
 	}
-	return o.DiscoverType
+	return d.DiscoverType
 }
 
-func (o *DiscoveryConfiguration) GetDiscoverMethod() *DiscoverMethod {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetDiscoverMethod() *DiscoverMethod {
+	if d == nil {
 		return nil
 	}
-	return o.DiscoverMethod
+	return d.DiscoverMethod
 }
 
-func (o *DiscoveryConfiguration) GetPagination() *PaginationConfig {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetPagination() *PaginationConfig {
+	if d == nil {
 		return nil
 	}
-	return o.Pagination
+	return d.Pagination
 }
 
-func (o *DiscoveryConfiguration) GetEnableDiscoverCode() *bool {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetEnableDiscoverCode() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.EnableDiscoverCode
+	return d.EnableDiscoverCode
 }
 
-func (o *DiscoveryConfiguration) GetItemList() []string {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetItemList() []string {
+	if d == nil {
 		return nil
 	}
-	return o.ItemList
+	return d.ItemList
 }
 
-func (o *DiscoveryConfiguration) GetDiscoverURL() *string {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetDiscoverURL() *string {
+	if d == nil {
 		return nil
 	}
-	return o.DiscoverURL
+	return d.DiscoverURL
 }
 
-func (o *DiscoveryConfiguration) GetDiscoverRequestHeaders() []DiscoverRequestHeader {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetDiscoverRequestHeaders() []DiscoverRequestHeader {
+	if d == nil {
 		return nil
 	}
-	return o.DiscoverRequestHeaders
+	return d.DiscoverRequestHeaders
 }
 
-func (o *DiscoveryConfiguration) GetDiscoverRequestParams() []DiscoverRequestParam {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetDiscoverRequestParams() []DiscoverRequestParam {
+	if d == nil {
 		return nil
 	}
-	return o.DiscoverRequestParams
+	return d.DiscoverRequestParams
 }
 
-func (o *DiscoveryConfiguration) GetDiscoverBody() *string {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetDiscoverBody() *string {
+	if d == nil {
 		return nil
 	}
-	return o.DiscoverBody
+	return d.DiscoverBody
 }
 
-func (o *DiscoveryConfiguration) GetFormatResultCode() *string {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetFormatResultCode() *string {
+	if d == nil {
 		return nil
 	}
-	return o.FormatResultCode
+	return d.FormatResultCode
 }
 
-func (o *DiscoveryConfiguration) GetDiscoverDataField() *string {
-	if o == nil {
+func (d *DiscoveryConfiguration) GetDiscoverDataField() *string {
+	if d == nil {
 		return nil
 	}
-	return o.DiscoverDataField
+	return d.DiscoverDataField
 }
 
 type InputCollectorRestRetryType string
@@ -1059,74 +1059,74 @@ func (r *RetryRulesConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RetryRulesConfiguration) GetType() *InputCollectorRestRetryType {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetType() *InputCollectorRestRetryType {
+	if r == nil {
 		return nil
 	}
-	return o.Type
+	return r.Type
 }
 
-func (o *RetryRulesConfiguration) GetInterval() *int64 {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetInterval() *int64 {
+	if r == nil {
 		return nil
 	}
-	return o.Interval
+	return r.Interval
 }
 
-func (o *RetryRulesConfiguration) GetLimit() *int64 {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetLimit() *int64 {
+	if r == nil {
 		return nil
 	}
-	return o.Limit
+	return r.Limit
 }
 
-func (o *RetryRulesConfiguration) GetMultiplier() *float64 {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetMultiplier() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Multiplier
+	return r.Multiplier
 }
 
-func (o *RetryRulesConfiguration) GetMaxIntervalMs() *int64 {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetMaxIntervalMs() *int64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxIntervalMs
+	return r.MaxIntervalMs
 }
 
-func (o *RetryRulesConfiguration) GetCodes() []int64 {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetCodes() []int64 {
+	if r == nil {
 		return nil
 	}
-	return o.Codes
+	return r.Codes
 }
 
-func (o *RetryRulesConfiguration) GetEnableHeader() *bool {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetEnableHeader() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.EnableHeader
+	return r.EnableHeader
 }
 
-func (o *RetryRulesConfiguration) GetRetryConnectTimeout() *bool {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetRetryConnectTimeout() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.RetryConnectTimeout
+	return r.RetryConnectTimeout
 }
 
-func (o *RetryRulesConfiguration) GetRetryConnectReset() *bool {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetRetryConnectReset() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.RetryConnectReset
+	return r.RetryConnectReset
 }
 
-func (o *RetryRulesConfiguration) GetRetryHeaderName() *string {
-	if o == nil {
+func (r *RetryRulesConfiguration) GetRetryHeaderName() *string {
+	if r == nil {
 		return nil
 	}
-	return o.RetryHeaderName
+	return r.RetryHeaderName
 }
 
 type SchedulingStateTracking struct {
@@ -1158,11 +1158,11 @@ func (i *InternalScheduling) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InternalScheduling) GetStateTracking() *SchedulingStateTracking {
-	if o == nil {
+func (i *InternalScheduling) GetStateTracking() *SchedulingStateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 type InputCollectorRestConf struct {
@@ -1214,207 +1214,207 @@ func (i *InputCollectorRestConf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRestConf) GetAuthentication() *InputCollectorRestAuthentication {
-	if o == nil {
+func (i *InputCollectorRestConf) GetAuthentication() *InputCollectorRestAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.Authentication
+	return i.Authentication
 }
 
-func (o *InputCollectorRestConf) GetUsername() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputCollectorRestConf) GetPassword() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputCollectorRestConf) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputCollectorRestConf) GetToken() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputCollectorRestConf) GetTokenSecret() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetTokenSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenSecret
+	return i.TokenSecret
 }
 
-func (o *InputCollectorRestConf) GetLoginURL() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputCollectorRestConf) GetLoginBody() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetLoginBody() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginBody
+	return i.LoginBody
 }
 
-func (o *InputCollectorRestConf) GetAuthHeaderKey() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetAuthHeaderKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderKey
+	return i.AuthHeaderKey
 }
 
-func (o *InputCollectorRestConf) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputCollectorRestConf) GetClientSecretParamName() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetClientSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ClientSecretParamName
+	return i.ClientSecretParamName
 }
 
-func (o *InputCollectorRestConf) GetAuthRequestParams() []AuthRequestParam {
-	if o == nil {
+func (i *InputCollectorRestConf) GetAuthRequestParams() []AuthRequestParam {
+	if i == nil {
 		return nil
 	}
-	return o.AuthRequestParams
+	return i.AuthRequestParams
 }
 
-func (o *InputCollectorRestConf) GetTokenRespAttribute() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetTokenRespAttribute() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenRespAttribute
+	return i.TokenRespAttribute
 }
 
-func (o *InputCollectorRestConf) GetAuthRequestHeaders() []AuthRequestHeader {
-	if o == nil {
+func (i *InputCollectorRestConf) GetAuthRequestHeaders() []AuthRequestHeader {
+	if i == nil {
 		return nil
 	}
-	return o.AuthRequestHeaders
+	return i.AuthRequestHeaders
 }
 
-func (o *InputCollectorRestConf) GetCollectURL() *string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetCollectURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CollectURL
+	return i.CollectURL
 }
 
-func (o *InputCollectorRestConf) GetCollectMethod() *InputCollectorRestCollectMethod {
-	if o == nil {
+func (i *InputCollectorRestConf) GetCollectMethod() *InputCollectorRestCollectMethod {
+	if i == nil {
 		return nil
 	}
-	return o.CollectMethod
+	return i.CollectMethod
 }
 
-func (o *InputCollectorRestConf) GetCollectRequestHeaders() []CollectRequestHeader {
-	if o == nil {
+func (i *InputCollectorRestConf) GetCollectRequestHeaders() []CollectRequestHeader {
+	if i == nil {
 		return nil
 	}
-	return o.CollectRequestHeaders
+	return i.CollectRequestHeaders
 }
 
-func (o *InputCollectorRestConf) GetCollectRequestParams() []CollectRequestParam {
-	if o == nil {
+func (i *InputCollectorRestConf) GetCollectRequestParams() []CollectRequestParam {
+	if i == nil {
 		return nil
 	}
-	return o.CollectRequestParams
+	return i.CollectRequestParams
 }
 
-func (o *InputCollectorRestConf) GetTimeout() *int64 {
-	if o == nil {
+func (i *InputCollectorRestConf) GetTimeout() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.Timeout
+	return i.Timeout
 }
 
-func (o *InputCollectorRestConf) GetUseRoundRobinDNS() *bool {
-	if o == nil {
+func (i *InputCollectorRestConf) GetUseRoundRobinDNS() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.UseRoundRobinDNS
+	return i.UseRoundRobinDNS
 }
 
-func (o *InputCollectorRestConf) GetDisableTimeFilter() *bool {
-	if o == nil {
+func (i *InputCollectorRestConf) GetDisableTimeFilter() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DisableTimeFilter
+	return i.DisableTimeFilter
 }
 
-func (o *InputCollectorRestConf) GetDecodeURL() *bool {
-	if o == nil {
+func (i *InputCollectorRestConf) GetDecodeURL() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DecodeURL
+	return i.DecodeURL
 }
 
-func (o *InputCollectorRestConf) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputCollectorRestConf) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputCollectorRestConf) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputCollectorRestConf) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputCollectorRestConf) GetSafeHeaders() []string {
-	if o == nil {
+func (i *InputCollectorRestConf) GetSafeHeaders() []string {
+	if i == nil {
 		return nil
 	}
-	return o.SafeHeaders
+	return i.SafeHeaders
 }
 
-func (o *InputCollectorRestConf) GetDiscovery() *DiscoveryConfiguration {
-	if o == nil {
+func (i *InputCollectorRestConf) GetDiscovery() *DiscoveryConfiguration {
+	if i == nil {
 		return nil
 	}
-	return o.Discovery
+	return i.Discovery
 }
 
-func (o *InputCollectorRestConf) GetPagination() *PaginationConfig {
-	if o == nil {
+func (i *InputCollectorRestConf) GetPagination() *PaginationConfig {
+	if i == nil {
 		return nil
 	}
-	return o.Pagination
+	return i.Pagination
 }
 
-func (o *InputCollectorRestConf) GetRetryRules() *RetryRulesConfiguration {
-	if o == nil {
+func (i *InputCollectorRestConf) GetRetryRules() *RetryRulesConfiguration {
+	if i == nil {
 		return nil
 	}
-	return o.RetryRules
+	return i.RetryRules
 }
 
-func (o *InputCollectorRestConf) GetScheduling() *InternalScheduling {
-	if o == nil {
+func (i *InputCollectorRestConf) GetScheduling() *InternalScheduling {
+	if i == nil {
 		return nil
 	}
-	return o.Scheduling
+	return i.Scheduling
 }
 
 type InputCollectorRestCollector struct {
@@ -1433,18 +1433,18 @@ func (i *InputCollectorRestCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRestCollector) GetType() TypeRest {
-	if o == nil {
+func (i *InputCollectorRestCollector) GetType() TypeRest {
+	if i == nil {
 		return TypeRest("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorRestCollector) GetConf() *InputCollectorRestConf {
-	if o == nil {
+func (i *InputCollectorRestCollector) GetConf() *InputCollectorRestConf {
+	if i == nil {
 		return nil
 	}
-	return o.Conf
+	return i.Conf
 }
 
 type InputCollectorRest struct {
@@ -1478,93 +1478,93 @@ func (i *InputCollectorRest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorRest) GetID() *string {
-	if o == nil {
+func (i *InputCollectorRest) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollectorRest) GetType() *InputCollectorRestTypeCollection1 {
-	if o == nil {
+func (i *InputCollectorRest) GetType() *InputCollectorRestTypeCollection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorRest) GetTTL() *string {
-	if o == nil {
+func (i *InputCollectorRest) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputCollectorRest) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputCollectorRest) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputCollectorRest) GetRemoveFields() []string {
-	if o == nil {
+func (i *InputCollectorRest) GetRemoveFields() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return i.RemoveFields
 }
 
-func (o *InputCollectorRest) GetResumeOnBoot() *bool {
-	if o == nil {
+func (i *InputCollectorRest) GetResumeOnBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return i.ResumeOnBoot
 }
 
-func (o *InputCollectorRest) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollectorRest) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollectorRest) GetSavedState() *InputCollectorRestSavedState {
-	if o == nil {
+func (i *InputCollectorRest) GetSavedState() *InputCollectorRestSavedState {
+	if i == nil {
 		return nil
 	}
-	return o.SavedState
+	return i.SavedState
 }
 
-func (o *InputCollectorRest) GetSchedule() *InputCollectorRestSchedule {
-	if o == nil {
+func (i *InputCollectorRest) GetSchedule() *InputCollectorRestSchedule {
+	if i == nil {
 		return nil
 	}
-	return o.Schedule
+	return i.Schedule
 }
 
-func (o *InputCollectorRest) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollectorRest) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollectorRest) GetWorkerAffinity() *bool {
-	if o == nil {
+func (i *InputCollectorRest) GetWorkerAffinity() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return i.WorkerAffinity
 }
 
-func (o *InputCollectorRest) GetInput() *InputCollectorRestInput {
-	if o == nil {
+func (i *InputCollectorRest) GetInput() *InputCollectorRestInput {
+	if i == nil {
 		return nil
 	}
-	return o.Input
+	return i.Input
 }
 
-func (o *InputCollectorRest) GetCollector() InputCollectorRestCollector {
-	if o == nil {
+func (i *InputCollectorRest) GetCollector() InputCollectorRestCollector {
+	if i == nil {
 		return InputCollectorRestCollector{}
 	}
-	return o.Collector
+	return i.Collector
 }

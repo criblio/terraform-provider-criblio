@@ -9,30 +9,30 @@ type HTTPOutAuthConfig struct {
 	Username *string `json:"username,omitempty"`
 }
 
-func (o *HTTPOutAuthConfig) GetDisabled() *bool {
-	if o == nil {
+func (h *HTTPOutAuthConfig) GetDisabled() *bool {
+	if h == nil {
 		return nil
 	}
-	return o.Disabled
+	return h.Disabled
 }
 
-func (o *HTTPOutAuthConfig) GetPassword() *string {
-	if o == nil {
+func (h *HTTPOutAuthConfig) GetPassword() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Password
+	return h.Password
 }
 
-func (o *HTTPOutAuthConfig) GetToken() *string {
-	if o == nil {
+func (h *HTTPOutAuthConfig) GetToken() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Token
+	return h.Token
 }
 
-func (o *HTTPOutAuthConfig) GetUsername() *string {
-	if o == nil {
+func (h *HTTPOutAuthConfig) GetUsername() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Username
+	return h.Username
 }

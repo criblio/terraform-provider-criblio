@@ -14,18 +14,18 @@ type GetOutputPqByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetOutputPqByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetOutputPqByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetOutputPqByIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetOutputPqByIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetOutputPqByIDResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type GetOutputPqByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetOutputPqByIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetOutputPqByIDResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetOutputPqByIDResponse struct {
@@ -53,37 +53,37 @@ type GetOutputPqByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetOutputPqByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetOutputPqByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetOutputPqByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetOutputPqByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetOutputPqByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetOutputPqByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetOutputPqByIDResponse) GetObject() *GetOutputPqByIDResponseBody {
-	if o == nil {
+func (g *GetOutputPqByIDResponse) GetObject() *GetOutputPqByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetOutputPqByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetOutputPqByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

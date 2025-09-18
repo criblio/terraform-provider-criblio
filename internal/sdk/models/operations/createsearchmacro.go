@@ -12,11 +12,11 @@ type CreateSearchMacroResponseBody struct {
 	Items []shared.SearchMacro `json:"items,omitempty"`
 }
 
-func (o *CreateSearchMacroResponseBody) GetItems() []shared.SearchMacro {
-	if o == nil {
+func (c *CreateSearchMacroResponseBody) GetItems() []shared.SearchMacro {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSearchMacroResponse struct {
@@ -32,37 +32,37 @@ type CreateSearchMacroResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSearchMacroResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSearchMacroResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSearchMacroResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSearchMacroResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSearchMacroResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSearchMacroResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSearchMacroResponse) GetObject() *CreateSearchMacroResponseBody {
-	if o == nil {
+func (c *CreateSearchMacroResponse) GetObject() *CreateSearchMacroResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSearchMacroResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSearchMacroResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

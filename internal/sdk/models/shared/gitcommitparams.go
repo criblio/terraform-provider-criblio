@@ -9,30 +9,30 @@ type GitCommitParams struct {
 	Message   string   `json:"message"`
 }
 
-func (o *GitCommitParams) GetEffective() *bool {
-	if o == nil {
+func (g *GitCommitParams) GetEffective() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Effective
+	return g.Effective
 }
 
-func (o *GitCommitParams) GetFiles() []string {
-	if o == nil {
+func (g *GitCommitParams) GetFiles() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Files
+	return g.Files
 }
 
-func (o *GitCommitParams) GetGroup() *string {
-	if o == nil {
+func (g *GitCommitParams) GetGroup() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Group
+	return g.Group
 }
 
-func (o *GitCommitParams) GetMessage() string {
-	if o == nil {
+func (g *GitCommitParams) GetMessage() string {
+	if g == nil {
 		return ""
 	}
-	return o.Message
+	return g.Message
 }

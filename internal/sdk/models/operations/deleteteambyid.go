@@ -12,11 +12,11 @@ type DeleteTeamByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteTeamByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteTeamByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteTeamByIDResponseBody - a list of Team objects
@@ -24,11 +24,11 @@ type DeleteTeamByIDResponseBody struct {
 	Items []shared.Team `json:"items,omitempty"`
 }
 
-func (o *DeleteTeamByIDResponseBody) GetItems() []shared.Team {
-	if o == nil {
+func (d *DeleteTeamByIDResponseBody) GetItems() []shared.Team {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteTeamByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteTeamByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteTeamByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteTeamByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteTeamByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteTeamByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteTeamByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteTeamByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteTeamByIDResponse) GetObject() *DeleteTeamByIDResponseBody {
-	if o == nil {
+func (d *DeleteTeamByIDResponse) GetObject() *DeleteTeamByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteTeamByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteTeamByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

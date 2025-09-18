@@ -148,25 +148,25 @@ func (t *TLSConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *TLSConfiguration) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (t *TLSConfiguration) GetRejectUnauthorized() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return t.RejectUnauthorized
 }
 
-func (o *TLSConfiguration) GetMinVersion() *SMTPTargetMinimumTLSVersion {
-	if o == nil {
+func (t *TLSConfiguration) GetMinVersion() *SMTPTargetMinimumTLSVersion {
+	if t == nil {
 		return nil
 	}
-	return o.MinVersion
+	return t.MinVersion
 }
 
-func (o *TLSConfiguration) GetMaxVersion() *SMTPTargetMaximumTLSVersion {
-	if o == nil {
+func (t *TLSConfiguration) GetMaxVersion() *SMTPTargetMaximumTLSVersion {
+	if t == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return t.MaxVersion
 }
 
 type SMTPTarget struct {
@@ -202,72 +202,72 @@ func (s *SMTPTarget) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SMTPTarget) GetID() string {
-	if o == nil {
+func (s *SMTPTarget) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SMTPTarget) GetType() SMTPTargetType {
-	if o == nil {
+func (s *SMTPTarget) GetType() SMTPTargetType {
+	if s == nil {
 		return SMTPTargetType("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SMTPTarget) GetSystemFields() []string {
-	if o == nil {
+func (s *SMTPTarget) GetSystemFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.SystemFields
+	return s.SystemFields
 }
 
-func (o *SMTPTarget) GetHost() string {
-	if o == nil {
+func (s *SMTPTarget) GetHost() string {
+	if s == nil {
 		return ""
 	}
-	return o.Host
+	return s.Host
 }
 
-func (o *SMTPTarget) GetPort() int64 {
-	if o == nil {
+func (s *SMTPTarget) GetPort() int64 {
+	if s == nil {
 		return 0
 	}
-	return o.Port
+	return s.Port
 }
 
-func (o *SMTPTarget) GetFrom() string {
-	if o == nil {
+func (s *SMTPTarget) GetFrom() string {
+	if s == nil {
 		return ""
 	}
-	return o.From
+	return s.From
 }
 
-func (o *SMTPTarget) GetUsername() *string {
-	if o == nil {
+func (s *SMTPTarget) GetUsername() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Username
+	return s.Username
 }
 
-func (o *SMTPTarget) GetPassword() *string {
-	if o == nil {
+func (s *SMTPTarget) GetPassword() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Password
+	return s.Password
 }
 
-func (o *SMTPTarget) GetEncryptionOption() *Encryption {
-	if o == nil {
+func (s *SMTPTarget) GetEncryptionOption() *Encryption {
+	if s == nil {
 		return nil
 	}
-	return o.EncryptionOption
+	return s.EncryptionOption
 }
 
-func (o *SMTPTarget) GetTLS() *TLSConfiguration {
-	if o == nil {
+func (s *SMTPTarget) GetTLS() *TLSConfiguration {
+	if s == nil {
 		return nil
 	}
-	return o.TLS
+	return s.TLS
 }

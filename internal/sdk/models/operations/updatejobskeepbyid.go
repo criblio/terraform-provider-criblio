@@ -14,18 +14,18 @@ type UpdateJobsKeepByIDRequest struct {
 	GroupID *string `queryParam:"style=form,explode=true,name=groupId"`
 }
 
-func (o *UpdateJobsKeepByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateJobsKeepByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateJobsKeepByIDRequest) GetGroupID() *string {
-	if o == nil {
+func (u *UpdateJobsKeepByIDRequest) GetGroupID() *string {
+	if u == nil {
 		return nil
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
 // UpdateJobsKeepByIDResponseBody - a list of JobInfo objects
@@ -33,11 +33,11 @@ type UpdateJobsKeepByIDResponseBody struct {
 	Items []shared.JobInfo `json:"items,omitempty"`
 }
 
-func (o *UpdateJobsKeepByIDResponseBody) GetItems() []shared.JobInfo {
-	if o == nil {
+func (u *UpdateJobsKeepByIDResponseBody) GetItems() []shared.JobInfo {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateJobsKeepByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateJobsKeepByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateJobsKeepByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateJobsKeepByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateJobsKeepByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateJobsKeepByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateJobsKeepByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateJobsKeepByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateJobsKeepByIDResponse) GetObject() *UpdateJobsKeepByIDResponseBody {
-	if o == nil {
+func (u *UpdateJobsKeepByIDResponse) GetObject() *UpdateJobsKeepByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateJobsKeepByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateJobsKeepByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -6,9 +6,9 @@ type AuthToken struct {
 	Token string `json:"token"`
 }
 
-func (o *AuthToken) GetToken() string {
-	if o == nil {
+func (a *AuthToken) GetToken() string {
+	if a == nil {
 		return ""
 	}
-	return o.Token
+	return a.Token
 }

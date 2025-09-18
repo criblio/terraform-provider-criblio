@@ -14,18 +14,18 @@ type DeleteSubscriptionByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteSubscriptionByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSubscriptionByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteSubscriptionByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteSubscriptionByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteSubscriptionByIDResponseBody - a list of Subscription objects
@@ -33,11 +33,11 @@ type DeleteSubscriptionByIDResponseBody struct {
 	Items []shared.Subscription `json:"items,omitempty"`
 }
 
-func (o *DeleteSubscriptionByIDResponseBody) GetItems() []shared.Subscription {
-	if o == nil {
+func (d *DeleteSubscriptionByIDResponseBody) GetItems() []shared.Subscription {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSubscriptionByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteSubscriptionByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSubscriptionByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSubscriptionByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSubscriptionByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSubscriptionByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSubscriptionByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSubscriptionByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSubscriptionByIDResponse) GetObject() *DeleteSubscriptionByIDResponseBody {
-	if o == nil {
+func (d *DeleteSubscriptionByIDResponse) GetObject() *DeleteSubscriptionByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSubscriptionByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSubscriptionByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

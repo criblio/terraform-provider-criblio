@@ -16,25 +16,25 @@ type UpdateAppscopeLibEntryByIDRequest struct {
 	AppscopeLibEntry shared.AppscopeLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *UpdateAppscopeLibEntryByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateAppscopeLibEntryByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateAppscopeLibEntryByIDRequest) GetAppscopeLibEntry() shared.AppscopeLibEntry {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDRequest) GetAppscopeLibEntry() shared.AppscopeLibEntry {
+	if u == nil {
 		return shared.AppscopeLibEntry{}
 	}
-	return o.AppscopeLibEntry
+	return u.AppscopeLibEntry
 }
 
 // UpdateAppscopeLibEntryByIDResponseBody - a list of AppscopeLibEntry objects
@@ -42,11 +42,11 @@ type UpdateAppscopeLibEntryByIDResponseBody struct {
 	Items []shared.AppscopeLibEntry `json:"items,omitempty"`
 }
 
-func (o *UpdateAppscopeLibEntryByIDResponseBody) GetItems() []shared.AppscopeLibEntry {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDResponseBody) GetItems() []shared.AppscopeLibEntry {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateAppscopeLibEntryByIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateAppscopeLibEntryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateAppscopeLibEntryByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateAppscopeLibEntryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateAppscopeLibEntryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateAppscopeLibEntryByIDResponse) GetObject() *UpdateAppscopeLibEntryByIDResponseBody {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDResponse) GetObject() *UpdateAppscopeLibEntryByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateAppscopeLibEntryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateAppscopeLibEntryByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

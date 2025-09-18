@@ -16,25 +16,25 @@ type UpdateSchemaByIDRequest struct {
 	SchemaLibEntry shared.SchemaLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *UpdateSchemaByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateSchemaByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateSchemaByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateSchemaByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateSchemaByIDRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
-	if o == nil {
+func (u *UpdateSchemaByIDRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
+	if u == nil {
 		return shared.SchemaLibEntry{}
 	}
-	return o.SchemaLibEntry
+	return u.SchemaLibEntry
 }
 
 // UpdateSchemaByIDResponseBody - a list of Schema objects
@@ -42,11 +42,11 @@ type UpdateSchemaByIDResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *UpdateSchemaByIDResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (u *UpdateSchemaByIDResponseBody) GetItems() []shared.SchemaLibEntry {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSchemaByIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateSchemaByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSchemaByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSchemaByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSchemaByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSchemaByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSchemaByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSchemaByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSchemaByIDResponse) GetObject() *UpdateSchemaByIDResponseBody {
-	if o == nil {
+func (u *UpdateSchemaByIDResponse) GetObject() *UpdateSchemaByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSchemaByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSchemaByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

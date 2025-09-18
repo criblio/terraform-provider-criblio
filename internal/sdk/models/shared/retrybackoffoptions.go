@@ -8,23 +8,23 @@ type RetryBackoffOptions struct {
 	MaxBackoff     *float64 `json:"maxBackoff,omitempty"`
 }
 
-func (o *RetryBackoffOptions) GetBackoffRate() *float64 {
-	if o == nil {
+func (r *RetryBackoffOptions) GetBackoffRate() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.BackoffRate
+	return r.BackoffRate
 }
 
-func (o *RetryBackoffOptions) GetInitialBackoff() *float64 {
-	if o == nil {
+func (r *RetryBackoffOptions) GetInitialBackoff() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.InitialBackoff
+	return r.InitialBackoff
 }
 
-func (o *RetryBackoffOptions) GetMaxBackoff() *float64 {
-	if o == nil {
+func (r *RetryBackoffOptions) GetMaxBackoff() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxBackoff
+	return r.MaxBackoff
 }

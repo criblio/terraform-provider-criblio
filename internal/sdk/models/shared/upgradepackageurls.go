@@ -7,16 +7,16 @@ type UpgradePackageUrls struct {
 	PackageURL     string  `json:"packageUrl"`
 }
 
-func (o *UpgradePackageUrls) GetPackageHashURL() *string {
-	if o == nil {
+func (u *UpgradePackageUrls) GetPackageHashURL() *string {
+	if u == nil {
 		return nil
 	}
-	return o.PackageHashURL
+	return u.PackageHashURL
 }
 
-func (o *UpgradePackageUrls) GetPackageURL() string {
-	if o == nil {
+func (u *UpgradePackageUrls) GetPackageURL() string {
+	if u == nil {
 		return ""
 	}
-	return o.PackageURL
+	return u.PackageURL
 }

@@ -9,30 +9,30 @@ type ProfilerItem struct {
 	WorkerID   *string  `json:"workerId,omitempty"`
 }
 
-func (o *ProfilerItem) GetCreateTime() *float64 {
-	if o == nil {
+func (p *ProfilerItem) GetCreateTime() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.CreateTime
+	return p.CreateTime
 }
 
-func (o *ProfilerItem) GetID() string {
-	if o == nil {
+func (p *ProfilerItem) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *ProfilerItem) GetSize() *float64 {
-	if o == nil {
+func (p *ProfilerItem) GetSize() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Size
+	return p.Size
 }
 
-func (o *ProfilerItem) GetWorkerID() *string {
-	if o == nil {
+func (p *ProfilerItem) GetWorkerID() *string {
+	if p == nil {
 		return nil
 	}
-	return o.WorkerID
+	return p.WorkerID
 }

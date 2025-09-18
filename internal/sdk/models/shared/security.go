@@ -10,37 +10,37 @@ type Security struct {
 	CloudDomain    *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
 }
 
-func (o *Security) GetBearerAuth() *string {
-	if o == nil {
+func (s *Security) GetBearerAuth() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BearerAuth
+	return s.BearerAuth
 }
 
-func (o *Security) GetClientOauth() *SchemeClientOauth {
-	if o == nil {
+func (s *Security) GetClientOauth() *SchemeClientOauth {
+	if s == nil {
 		return nil
 	}
-	return o.ClientOauth
+	return s.ClientOauth
 }
 
-func (o *Security) GetOrganizationID() *string {
-	if o == nil {
+func (s *Security) GetOrganizationID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return s.OrganizationID
 }
 
-func (o *Security) GetWorkspaceID() *string {
-	if o == nil {
+func (s *Security) GetWorkspaceID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return s.WorkspaceID
 }
 
-func (o *Security) GetCloudDomain() *string {
-	if o == nil {
+func (s *Security) GetCloudDomain() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CloudDomain
+	return s.CloudDomain
 }

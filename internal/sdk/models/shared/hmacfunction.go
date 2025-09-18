@@ -12,51 +12,51 @@ type HmacFunction struct {
 	StringDelim      *string  `json:"stringDelim,omitempty"`
 }
 
-func (o *HmacFunction) GetDescription() *string {
-	if o == nil {
+func (h *HmacFunction) GetDescription() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Description
+	return h.Description
 }
 
-func (o *HmacFunction) GetHeaderExpression() string {
-	if o == nil {
+func (h *HmacFunction) GetHeaderExpression() string {
+	if h == nil {
 		return ""
 	}
-	return o.HeaderExpression
+	return h.HeaderExpression
 }
 
-func (o *HmacFunction) GetHeaderName() string {
-	if o == nil {
+func (h *HmacFunction) GetHeaderName() string {
+	if h == nil {
 		return ""
 	}
-	return o.HeaderName
+	return h.HeaderName
 }
 
-func (o *HmacFunction) GetID() string {
-	if o == nil {
+func (h *HmacFunction) GetID() string {
+	if h == nil {
 		return ""
 	}
-	return o.ID
+	return h.ID
 }
 
-func (o *HmacFunction) GetLib() CriblLib {
-	if o == nil {
+func (h *HmacFunction) GetLib() CriblLib {
+	if h == nil {
 		return CriblLib("")
 	}
-	return o.Lib
+	return h.Lib
 }
 
-func (o *HmacFunction) GetStringBuilders() []string {
-	if o == nil {
+func (h *HmacFunction) GetStringBuilders() []string {
+	if h == nil {
 		return []string{}
 	}
-	return o.StringBuilders
+	return h.StringBuilders
 }
 
-func (o *HmacFunction) GetStringDelim() *string {
-	if o == nil {
+func (h *HmacFunction) GetStringDelim() *string {
+	if h == nil {
 		return nil
 	}
-	return o.StringDelim
+	return h.StringDelim
 }

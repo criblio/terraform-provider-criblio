@@ -65,23 +65,23 @@ type SortByField struct {
 	NullPosition NullPosition `json:"nullPosition"`
 }
 
-func (o *SortByField) GetDirection() Direction {
-	if o == nil {
+func (s *SortByField) GetDirection() Direction {
+	if s == nil {
 		return Direction("")
 	}
-	return o.Direction
+	return s.Direction
 }
 
-func (o *SortByField) GetFieldName() string {
-	if o == nil {
+func (s *SortByField) GetFieldName() string {
+	if s == nil {
 		return ""
 	}
-	return o.FieldName
+	return s.FieldName
 }
 
-func (o *SortByField) GetNullPosition() NullPosition {
-	if o == nil {
+func (s *SortByField) GetNullPosition() NullPosition {
+	if s == nil {
 		return NullPosition("")
 	}
-	return o.NullPosition
+	return s.NullPosition
 }

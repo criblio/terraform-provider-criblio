@@ -11,44 +11,44 @@ type RedisCacheLimits struct {
 	ServicePeriodSecs       *float64 `json:"servicePeriodSecs,omitempty"`
 }
 
-func (o *RedisCacheLimits) GetClientTrackingMechanism() *string {
-	if o == nil {
+func (r *RedisCacheLimits) GetClientTrackingMechanism() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ClientTrackingMechanism
+	return r.ClientTrackingMechanism
 }
 
-func (o *RedisCacheLimits) GetEnableServerAssist() *bool {
-	if o == nil {
+func (r *RedisCacheLimits) GetEnableServerAssist() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.EnableServerAssist
+	return r.EnableServerAssist
 }
 
-func (o *RedisCacheLimits) GetKeyTTLSecs() *float64 {
-	if o == nil {
+func (r *RedisCacheLimits) GetKeyTTLSecs() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.KeyTTLSecs
+	return r.KeyTTLSecs
 }
 
-func (o *RedisCacheLimits) GetMaxCacheSize() *float64 {
-	if o == nil {
+func (r *RedisCacheLimits) GetMaxCacheSize() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxCacheSize
+	return r.MaxCacheSize
 }
 
-func (o *RedisCacheLimits) GetMaxNumKeys() *float64 {
-	if o == nil {
+func (r *RedisCacheLimits) GetMaxNumKeys() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxNumKeys
+	return r.MaxNumKeys
 }
 
-func (o *RedisCacheLimits) GetServicePeriodSecs() *float64 {
-	if o == nil {
+func (r *RedisCacheLimits) GetServicePeriodSecs() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.ServicePeriodSecs
+	return r.ServicePeriodSecs
 }

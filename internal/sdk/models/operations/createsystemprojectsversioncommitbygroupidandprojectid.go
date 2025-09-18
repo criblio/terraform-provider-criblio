@@ -16,25 +16,25 @@ type CreateSystemProjectsVersionCommitByGroupIDAndProjectIDRequest struct {
 	ProjectGitCommitParams shared.ProjectGitCommitParams `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDRequest) GetProjectID() string {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDRequest) GetProjectID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ProjectID
+	return c.ProjectID
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDRequest) GetProjectGitCommitParams() shared.ProjectGitCommitParams {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDRequest) GetProjectGitCommitParams() shared.ProjectGitCommitParams {
+	if c == nil {
 		return shared.ProjectGitCommitParams{}
 	}
-	return o.ProjectGitCommitParams
+	return c.ProjectGitCommitParams
 }
 
 // CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponseBody - A list of GitCommitSummary objects
@@ -42,11 +42,11 @@ type CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponseBody struct {
 	Items []shared.GitCommitSummary `json:"items,omitempty"`
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponseBody) GetItems() []shared.GitCommitSummary {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponseBody) GetItems() []shared.GitCommitSummary {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse struct {
@@ -62,37 +62,37 @@ type CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetObject() *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponseBody {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetObject() *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemProjectsVersionCommitByGroupIDAndProjectIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

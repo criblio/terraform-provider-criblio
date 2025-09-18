@@ -12,11 +12,11 @@ type CreateAiSettingsFeaturesResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateAiSettingsFeaturesResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateAiSettingsFeaturesResponse struct {
@@ -32,37 +32,37 @@ type CreateAiSettingsFeaturesResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateAiSettingsFeaturesResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateAiSettingsFeaturesResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateAiSettingsFeaturesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateAiSettingsFeaturesResponse) GetObject() *CreateAiSettingsFeaturesResponseBody {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesResponse) GetObject() *CreateAiSettingsFeaturesResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateAiSettingsFeaturesResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

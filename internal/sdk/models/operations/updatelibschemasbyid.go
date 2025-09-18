@@ -16,25 +16,25 @@ type UpdateLibSchemasByIDRequest struct {
 	SchemaLibEntry shared.SchemaLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *UpdateLibSchemasByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateLibSchemasByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateLibSchemasByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateLibSchemasByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateLibSchemasByIDRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
-	if o == nil {
+func (u *UpdateLibSchemasByIDRequest) GetSchemaLibEntry() shared.SchemaLibEntry {
+	if u == nil {
 		return shared.SchemaLibEntry{}
 	}
-	return o.SchemaLibEntry
+	return u.SchemaLibEntry
 }
 
 // UpdateLibSchemasByIDResponseBody - a list of Schema objects
@@ -42,11 +42,11 @@ type UpdateLibSchemasByIDResponseBody struct {
 	Items []shared.SchemaLibEntry `json:"items,omitempty"`
 }
 
-func (o *UpdateLibSchemasByIDResponseBody) GetItems() []shared.SchemaLibEntry {
-	if o == nil {
+func (u *UpdateLibSchemasByIDResponseBody) GetItems() []shared.SchemaLibEntry {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateLibSchemasByIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateLibSchemasByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateLibSchemasByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateLibSchemasByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateLibSchemasByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateLibSchemasByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateLibSchemasByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateLibSchemasByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateLibSchemasByIDResponse) GetObject() *UpdateLibSchemasByIDResponseBody {
-	if o == nil {
+func (u *UpdateLibSchemasByIDResponse) GetObject() *UpdateLibSchemasByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateLibSchemasByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateLibSchemasByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

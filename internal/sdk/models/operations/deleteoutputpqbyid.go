@@ -14,18 +14,18 @@ type DeleteOutputPqByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteOutputPqByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteOutputPqByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteOutputPqByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteOutputPqByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteOutputPqByIDResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type DeleteOutputPqByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *DeleteOutputPqByIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (d *DeleteOutputPqByIDResponseBody) GetItems() []map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteOutputPqByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteOutputPqByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteOutputPqByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteOutputPqByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteOutputPqByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteOutputPqByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteOutputPqByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteOutputPqByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteOutputPqByIDResponse) GetObject() *DeleteOutputPqByIDResponseBody {
-	if o == nil {
+func (d *DeleteOutputPqByIDResponse) GetObject() *DeleteOutputPqByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteOutputPqByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteOutputPqByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

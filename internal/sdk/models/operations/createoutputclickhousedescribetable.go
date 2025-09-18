@@ -12,11 +12,11 @@ type CreateOutputClickHouseDescribeTableResponseBody struct {
 	Items []shared.ClickHouseDescriptionResult `json:"items,omitempty"`
 }
 
-func (o *CreateOutputClickHouseDescribeTableResponseBody) GetItems() []shared.ClickHouseDescriptionResult {
-	if o == nil {
+func (c *CreateOutputClickHouseDescribeTableResponseBody) GetItems() []shared.ClickHouseDescriptionResult {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateOutputClickHouseDescribeTableResponse struct {
@@ -32,37 +32,37 @@ type CreateOutputClickHouseDescribeTableResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateOutputClickHouseDescribeTableResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOutputClickHouseDescribeTableResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOutputClickHouseDescribeTableResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOutputClickHouseDescribeTableResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOutputClickHouseDescribeTableResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOutputClickHouseDescribeTableResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOutputClickHouseDescribeTableResponse) GetObject() *CreateOutputClickHouseDescribeTableResponseBody {
-	if o == nil {
+func (c *CreateOutputClickHouseDescribeTableResponse) GetObject() *CreateOutputClickHouseDescribeTableResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateOutputClickHouseDescribeTableResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateOutputClickHouseDescribeTableResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

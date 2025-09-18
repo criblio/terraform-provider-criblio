@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: f38797bdf43368a661c8443d962b1ac1
+  docChecksum: eed83e647c1a0dca601c71282998e0a2
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.615.2
-  generationVersion: 2.698.4
-  releaseVersion: 1.11.23
-  configChecksum: 932d50f8949ba7380f70bc2c51fbe483
+  speakeasyVersion: 1.618.1
+  generationVersion: 2.702.0
+  releaseVersion: 1.12.2
+  configChecksum: fd9f5940665396affc279ae74cfaf881
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
-    constsAndDefaults: 0.2.1
-    core: 3.44.1
+    constsAndDefaults: 0.3.0
+    core: 3.44.3
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.82.1
@@ -29,7 +29,6 @@ features:
 generatedFiles:
   - .gitattributes
   - USAGE.md
-  - examples/README.md
   - examples/data-sources/criblio_appscope_config/data-source.tf
   - examples/data-sources/criblio_collector/data-source.tf
   - examples/data-sources/criblio_config_version/data-source.tf
@@ -58,6 +57,7 @@ generatedFiles:
   - examples/data-sources/criblio_pipeline/data-source.tf
   - examples/data-sources/criblio_project/data-source.tf
   - examples/data-sources/criblio_regex/data-source.tf
+  - examples/data-sources/criblio_routes/data-source.tf
   - examples/data-sources/criblio_schema/data-source.tf
   - examples/data-sources/criblio_search_dashboard/data-source.tf
   - examples/data-sources/criblio_search_dashboard_category/data-source.tf
@@ -151,6 +151,9 @@ generatedFiles:
   - examples/resources/criblio_regex/import-by-string-id.tf
   - examples/resources/criblio_regex/import.sh
   - examples/resources/criblio_regex/resource.tf
+  - examples/resources/criblio_routes/import-by-string-id.tf
+  - examples/resources/criblio_routes/import.sh
+  - examples/resources/criblio_routes/resource.tf
   - examples/resources/criblio_schema/import-by-string-id.tf
   - examples/resources/criblio_schema/import.sh
   - examples/resources/criblio_schema/resource.tf
@@ -318,6 +321,10 @@ generatedFiles:
   - internal/provider/regex_data_source_sdk.go
   - internal/provider/regex_resource.go
   - internal/provider/regex_resource_sdk.go
+  - internal/provider/routes_data_source.go
+  - internal/provider/routes_data_source_sdk.go
+  - internal/provider/routes_resource.go
+  - internal/provider/routes_resource_sdk.go
   - internal/provider/schema_data_source.go
   - internal/provider/schema_data_source_sdk.go
   - internal/provider/schema_resource.go
@@ -1417,6 +1424,7 @@ generatedFiles:
   - internal/sdk/models/operations/createrestsecret.go
   - internal/sdk/models/operations/createrole.go
   - internal/sdk/models/operations/createroutesappendbyid.go
+  - internal/sdk/models/operations/createroutesbygroupid.go
   - internal/sdk/models/operations/createroutesbypack.go
   - internal/sdk/models/operations/createsavedjob.go
   - internal/sdk/models/operations/createsavedquery.go
@@ -1640,6 +1648,7 @@ generatedFiles:
   - internal/sdk/models/operations/getregexlibentrybyid.go
   - internal/sdk/models/operations/getrestsecretbyid.go
   - internal/sdk/models/operations/getrolebyid.go
+  - internal/sdk/models/operations/getroutesbygroupid.go
   - internal/sdk/models/operations/getroutesbyid.go
   - internal/sdk/models/operations/getroutesbypack.go
   - internal/sdk/models/operations/getsavedjobbyid.go
@@ -2276,6 +2285,8 @@ generatedFiles:
   - internal/sdk/notifications.go
   - internal/sdk/notificationtargets.go
   - internal/sdk/onlyonprem.go
+  - internal/sdk/optionalnullable/optionalnullable.go
+  - internal/sdk/optionalnullable/optionalnullable_test.go
   - internal/sdk/outputs.go
   - internal/sdk/packs.go
   - internal/sdk/parquetschemas.go
@@ -7559,6 +7570,28 @@ examples:
         path:
           id: "<id>"
           groupId: "default"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  getRoutesByGroupId:
+    speakeasy-default-get-routes-by-group-id:
+      parameters:
+        path:
+          groupId: "default"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  createRoutesByGroupId:
+    speakeasy-default-create-routes-by-group-id:
+      parameters:
+        path:
+          groupId: "default"
+      requestBody:
+        application/json: {"routes": [{"name": "<value>", "filter": "true", "pipeline": "<value>", "enableOutputExpression": false, "final": true}]}
       responses:
         "200":
           application/json: {}

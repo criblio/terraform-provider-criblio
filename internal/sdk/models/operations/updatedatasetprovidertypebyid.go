@@ -14,18 +14,18 @@ type UpdateDatasetProviderTypeByIDRequest struct {
 	DatasetProviderType shared.DatasetProviderType `request:"mediaType=application/json"`
 }
 
-func (o *UpdateDatasetProviderTypeByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateDatasetProviderTypeByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateDatasetProviderTypeByIDRequest) GetDatasetProviderType() shared.DatasetProviderType {
-	if o == nil {
+func (u *UpdateDatasetProviderTypeByIDRequest) GetDatasetProviderType() shared.DatasetProviderType {
+	if u == nil {
 		return shared.DatasetProviderType{}
 	}
-	return o.DatasetProviderType
+	return u.DatasetProviderType
 }
 
 // UpdateDatasetProviderTypeByIDResponseBody - a list of DatasetProviderType objects
@@ -33,11 +33,11 @@ type UpdateDatasetProviderTypeByIDResponseBody struct {
 	Items []shared.DatasetProviderType `json:"items,omitempty"`
 }
 
-func (o *UpdateDatasetProviderTypeByIDResponseBody) GetItems() []shared.DatasetProviderType {
-	if o == nil {
+func (u *UpdateDatasetProviderTypeByIDResponseBody) GetItems() []shared.DatasetProviderType {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateDatasetProviderTypeByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateDatasetProviderTypeByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateDatasetProviderTypeByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateDatasetProviderTypeByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateDatasetProviderTypeByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateDatasetProviderTypeByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateDatasetProviderTypeByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateDatasetProviderTypeByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateDatasetProviderTypeByIDResponse) GetObject() *UpdateDatasetProviderTypeByIDResponseBody {
-	if o == nil {
+func (u *UpdateDatasetProviderTypeByIDResponse) GetObject() *UpdateDatasetProviderTypeByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateDatasetProviderTypeByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateDatasetProviderTypeByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

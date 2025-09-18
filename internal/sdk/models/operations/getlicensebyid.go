@@ -12,11 +12,11 @@ type GetLicenseByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetLicenseByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetLicenseByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetLicenseByIDResponseBody - a list of License objects
@@ -24,11 +24,11 @@ type GetLicenseByIDResponseBody struct {
 	Items []shared.License `json:"items,omitempty"`
 }
 
-func (o *GetLicenseByIDResponseBody) GetItems() []shared.License {
-	if o == nil {
+func (g *GetLicenseByIDResponseBody) GetItems() []shared.License {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetLicenseByIDResponse struct {
@@ -44,37 +44,37 @@ type GetLicenseByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetLicenseByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetLicenseByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetLicenseByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetLicenseByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetLicenseByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetLicenseByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetLicenseByIDResponse) GetObject() *GetLicenseByIDResponseBody {
-	if o == nil {
+func (g *GetLicenseByIDResponse) GetObject() *GetLicenseByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetLicenseByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetLicenseByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

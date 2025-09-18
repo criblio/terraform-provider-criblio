@@ -16,25 +16,25 @@ type DeleteGlobalVariableLibVarsByPackAndIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
+	if d == nil {
 		return ""
 	}
-	return o.Pack
+	return d.Pack
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects
@@ -42,11 +42,11 @@ type DeleteGlobalVariableLibVarsByPackAndIDResponseBody struct {
 	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteGlobalVariableLibVarsByPackAndIDResponse struct {
@@ -62,37 +62,37 @@ type DeleteGlobalVariableLibVarsByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetObject() *DeleteGlobalVariableLibVarsByPackAndIDResponseBody {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetObject() *DeleteGlobalVariableLibVarsByPackAndIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

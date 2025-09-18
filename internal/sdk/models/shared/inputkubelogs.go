@@ -47,18 +47,18 @@ func (i *InputKubeLogsConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeLogsConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputKubeLogsConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKubeLogsConnection) GetOutput() string {
-	if o == nil {
+func (i *InputKubeLogsConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputKubeLogsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputKubeLogsPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeLogsPq) GetMode() *InputKubeLogsMode {
-	if o == nil {
+func (i *InputKubeLogsPq) GetMode() *InputKubeLogsMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputKubeLogsPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputKubeLogsPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputKubeLogsPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputKubeLogsPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputKubeLogsPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputKubeLogsPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputKubeLogsPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputKubeLogsPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputKubeLogsPq) GetPath() *string {
-	if o == nil {
+func (i *InputKubeLogsPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputKubeLogsPq) GetCompress() *InputKubeLogsPqCompression {
-	if o == nil {
+func (i *InputKubeLogsPq) GetCompress() *InputKubeLogsPqCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputKubeLogsRule struct {
@@ -210,18 +210,18 @@ func (i *InputKubeLogsRule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeLogsRule) GetFilter() string {
-	if o == nil {
+func (i *InputKubeLogsRule) GetFilter() string {
+	if i == nil {
 		return ""
 	}
-	return o.Filter
+	return i.Filter
 }
 
-func (o *InputKubeLogsRule) GetDescription() *string {
-	if o == nil {
+func (i *InputKubeLogsRule) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
 type InputKubeLogsMetadatum struct {
@@ -241,18 +241,18 @@ func (i *InputKubeLogsMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeLogsMetadatum) GetName() string {
-	if o == nil {
+func (i *InputKubeLogsMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputKubeLogsMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputKubeLogsMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputKubeLogsPersistenceCompression - Data compression format. Default is gzip.
@@ -306,39 +306,39 @@ func (i *InputKubeLogsDiskSpooling) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeLogsDiskSpooling) GetEnable() *bool {
-	if o == nil {
+func (i *InputKubeLogsDiskSpooling) GetEnable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enable
+	return i.Enable
 }
 
-func (o *InputKubeLogsDiskSpooling) GetTimeWindow() *string {
-	if o == nil {
+func (i *InputKubeLogsDiskSpooling) GetTimeWindow() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWindow
+	return i.TimeWindow
 }
 
-func (o *InputKubeLogsDiskSpooling) GetMaxDataSize() *string {
-	if o == nil {
+func (i *InputKubeLogsDiskSpooling) GetMaxDataSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataSize
+	return i.MaxDataSize
 }
 
-func (o *InputKubeLogsDiskSpooling) GetMaxDataTime() *string {
-	if o == nil {
+func (i *InputKubeLogsDiskSpooling) GetMaxDataTime() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxDataTime
+	return i.MaxDataTime
 }
 
-func (o *InputKubeLogsDiskSpooling) GetCompress() *InputKubeLogsPersistenceCompression {
-	if o == nil {
+func (i *InputKubeLogsDiskSpooling) GetCompress() *InputKubeLogsPersistenceCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputKubeLogs struct {
@@ -388,135 +388,135 @@ func (i *InputKubeLogs) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputKubeLogs) GetID() string {
-	if o == nil {
+func (i *InputKubeLogs) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputKubeLogs) GetType() InputKubeLogsType {
-	if o == nil {
+func (i *InputKubeLogs) GetType() InputKubeLogsType {
+	if i == nil {
 		return InputKubeLogsType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputKubeLogs) GetDisabled() *bool {
-	if o == nil {
+func (i *InputKubeLogs) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputKubeLogs) GetPipeline() *string {
-	if o == nil {
+func (i *InputKubeLogs) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputKubeLogs) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputKubeLogs) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputKubeLogs) GetEnvironment() *string {
-	if o == nil {
+func (i *InputKubeLogs) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputKubeLogs) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputKubeLogs) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputKubeLogs) GetStreamtags() []string {
-	if o == nil {
+func (i *InputKubeLogs) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputKubeLogs) GetConnections() []InputKubeLogsConnection {
-	if o == nil {
+func (i *InputKubeLogs) GetConnections() []InputKubeLogsConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputKubeLogs) GetPq() *InputKubeLogsPq {
-	if o == nil {
+func (i *InputKubeLogs) GetPq() *InputKubeLogsPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputKubeLogs) GetInterval() *float64 {
-	if o == nil {
+func (i *InputKubeLogs) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputKubeLogs) GetRules() []InputKubeLogsRule {
-	if o == nil {
+func (i *InputKubeLogs) GetRules() []InputKubeLogsRule {
+	if i == nil {
 		return nil
 	}
-	return o.Rules
+	return i.Rules
 }
 
-func (o *InputKubeLogs) GetTimestamps() *bool {
-	if o == nil {
+func (i *InputKubeLogs) GetTimestamps() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Timestamps
+	return i.Timestamps
 }
 
-func (o *InputKubeLogs) GetMetadata() []InputKubeLogsMetadatum {
-	if o == nil {
+func (i *InputKubeLogs) GetMetadata() []InputKubeLogsMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputKubeLogs) GetPersistence() *InputKubeLogsDiskSpooling {
-	if o == nil {
+func (i *InputKubeLogs) GetPersistence() *InputKubeLogsDiskSpooling {
+	if i == nil {
 		return nil
 	}
-	return o.Persistence
+	return i.Persistence
 }
 
-func (o *InputKubeLogs) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputKubeLogs) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputKubeLogs) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputKubeLogs) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputKubeLogs) GetEnableLoadBalancing() *bool {
-	if o == nil {
+func (i *InputKubeLogs) GetEnableLoadBalancing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableLoadBalancing
+	return i.EnableLoadBalancing
 }
 
-func (o *InputKubeLogs) GetDescription() *string {
-	if o == nil {
+func (i *InputKubeLogs) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

@@ -52,51 +52,51 @@ type BulletinMessage struct {
 	Metadata []BulletinMessageMetadatum `json:"metadata,omitempty"`
 }
 
-func (o *BulletinMessage) GetID() string {
-	if o == nil {
+func (b *BulletinMessage) GetID() string {
+	if b == nil {
 		return ""
 	}
-	return o.ID
+	return b.ID
 }
 
-func (o *BulletinMessage) GetSeverity() *BulletinMessageSeverity {
-	if o == nil {
+func (b *BulletinMessage) GetSeverity() *BulletinMessageSeverity {
+	if b == nil {
 		return nil
 	}
-	return o.Severity
+	return b.Severity
 }
 
-func (o *BulletinMessage) GetTitle() *string {
-	if o == nil {
+func (b *BulletinMessage) GetTitle() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Title
+	return b.Title
 }
 
-func (o *BulletinMessage) GetText() string {
-	if o == nil {
+func (b *BulletinMessage) GetText() string {
+	if b == nil {
 		return ""
 	}
-	return o.Text
+	return b.Text
 }
 
-func (o *BulletinMessage) GetTime() *float64 {
-	if o == nil {
+func (b *BulletinMessage) GetTime() *float64 {
+	if b == nil {
 		return nil
 	}
-	return o.Time
+	return b.Time
 }
 
-func (o *BulletinMessage) GetGroup() *string {
-	if o == nil {
+func (b *BulletinMessage) GetGroup() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Group
+	return b.Group
 }
 
-func (o *BulletinMessage) GetMetadata() []BulletinMessageMetadatum {
-	if o == nil {
+func (b *BulletinMessage) GetMetadata() []BulletinMessageMetadatum {
+	if b == nil {
 		return nil
 	}
-	return o.Metadata
+	return b.Metadata
 }

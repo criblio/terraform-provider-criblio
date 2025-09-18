@@ -7,16 +7,16 @@ type ContainerdContainer struct {
 	Root   ContainerdRoot    `json:"root"`
 }
 
-func (o *ContainerdContainer) GetMounts() []ContainerdMount {
-	if o == nil {
+func (c *ContainerdContainer) GetMounts() []ContainerdMount {
+	if c == nil {
 		return []ContainerdMount{}
 	}
-	return o.Mounts
+	return c.Mounts
 }
 
-func (o *ContainerdContainer) GetRoot() ContainerdRoot {
-	if o == nil {
+func (c *ContainerdContainer) GetRoot() ContainerdRoot {
+	if c == nil {
 		return ContainerdRoot{}
 	}
-	return o.Root
+	return c.Root
 }

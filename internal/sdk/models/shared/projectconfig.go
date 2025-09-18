@@ -13,37 +13,37 @@ type ProjectConfig struct {
 	Subscriptions []string   `json:"subscriptions"`
 }
 
-func (o *ProjectConfig) GetConsumers() *Consumers {
-	if o == nil {
+func (p *ProjectConfig) GetConsumers() *Consumers {
+	if p == nil {
 		return nil
 	}
-	return o.Consumers
+	return p.Consumers
 }
 
-func (o *ProjectConfig) GetDescription() *string {
-	if o == nil {
+func (p *ProjectConfig) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *ProjectConfig) GetDestinations() []string {
-	if o == nil {
+func (p *ProjectConfig) GetDestinations() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Destinations
+	return p.Destinations
 }
 
-func (o *ProjectConfig) GetID() string {
-	if o == nil {
+func (p *ProjectConfig) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *ProjectConfig) GetSubscriptions() []string {
-	if o == nil {
+func (p *ProjectConfig) GetSubscriptions() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Subscriptions
+	return p.Subscriptions
 }

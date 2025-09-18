@@ -12,11 +12,11 @@ type CreateSavedQueryResponseBody struct {
 	Items []shared.SavedQuery `json:"items,omitempty"`
 }
 
-func (o *CreateSavedQueryResponseBody) GetItems() []shared.SavedQuery {
-	if o == nil {
+func (c *CreateSavedQueryResponseBody) GetItems() []shared.SavedQuery {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSavedQueryResponse struct {
@@ -32,37 +32,37 @@ type CreateSavedQueryResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSavedQueryResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSavedQueryResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSavedQueryResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSavedQueryResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSavedQueryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSavedQueryResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSavedQueryResponse) GetObject() *CreateSavedQueryResponseBody {
-	if o == nil {
+func (c *CreateSavedQueryResponse) GetObject() *CreateSavedQueryResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSavedQueryResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSavedQueryResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

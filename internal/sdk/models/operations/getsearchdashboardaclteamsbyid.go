@@ -12,11 +12,11 @@ type GetSearchDashboardACLTeamsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetSearchDashboardACLTeamsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSearchDashboardACLTeamsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetSearchDashboardACLTeamsByIDResponseBody - a list of UserAccessControlList objects
@@ -24,11 +24,11 @@ type GetSearchDashboardACLTeamsByIDResponseBody struct {
 	Items []shared.UserAccessControlList `json:"items,omitempty"`
 }
 
-func (o *GetSearchDashboardACLTeamsByIDResponseBody) GetItems() []shared.UserAccessControlList {
-	if o == nil {
+func (g *GetSearchDashboardACLTeamsByIDResponseBody) GetItems() []shared.UserAccessControlList {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSearchDashboardACLTeamsByIDResponse struct {
@@ -44,37 +44,37 @@ type GetSearchDashboardACLTeamsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchDashboardACLTeamsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchDashboardACLTeamsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchDashboardACLTeamsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchDashboardACLTeamsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchDashboardACLTeamsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchDashboardACLTeamsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchDashboardACLTeamsByIDResponse) GetObject() *GetSearchDashboardACLTeamsByIDResponseBody {
-	if o == nil {
+func (g *GetSearchDashboardACLTeamsByIDResponse) GetObject() *GetSearchDashboardACLTeamsByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSearchDashboardACLTeamsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchDashboardACLTeamsByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

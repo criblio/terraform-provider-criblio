@@ -12,51 +12,51 @@ type ProcessEntry struct {
 	Type          string         `json:"type"`
 }
 
-func (o *ProcessEntry) GetEnv() map[string]any {
-	if o == nil {
+func (p *ProcessEntry) GetEnv() map[string]any {
+	if p == nil {
 		return nil
 	}
-	return o.Env
+	return p.Env
 }
 
-func (o *ProcessEntry) GetID() string {
-	if o == nil {
+func (p *ProcessEntry) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *ProcessEntry) GetPid() *float64 {
-	if o == nil {
+func (p *ProcessEntry) GetPid() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Pid
+	return p.Pid
 }
 
-func (o *ProcessEntry) GetRestartOnExit() bool {
-	if o == nil {
+func (p *ProcessEntry) GetRestartOnExit() bool {
+	if p == nil {
 		return false
 	}
-	return o.RestartOnExit
+	return p.RestartOnExit
 }
 
-func (o *ProcessEntry) GetRestarts() float64 {
-	if o == nil {
+func (p *ProcessEntry) GetRestarts() float64 {
+	if p == nil {
 		return 0.0
 	}
-	return o.Restarts
+	return p.Restarts
 }
 
-func (o *ProcessEntry) GetStartTime() float64 {
-	if o == nil {
+func (p *ProcessEntry) GetStartTime() float64 {
+	if p == nil {
 		return 0.0
 	}
-	return o.StartTime
+	return p.StartTime
 }
 
-func (o *ProcessEntry) GetType() string {
-	if o == nil {
+func (p *ProcessEntry) GetType() string {
+	if p == nil {
 		return ""
 	}
-	return o.Type
+	return p.Type
 }

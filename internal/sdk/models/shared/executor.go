@@ -16,79 +16,79 @@ type Executor struct {
 	Version  string         `json:"version"`
 }
 
-func (o *Executor) GetConf() map[string]any {
-	if o == nil {
+func (e *Executor) GetConf() map[string]any {
+	if e == nil {
 		return map[string]any{}
 	}
-	return o.Conf
+	return e.Conf
 }
 
-func (o *Executor) GetFilename() string {
-	if o == nil {
+func (e *Executor) GetFilename() string {
+	if e == nil {
 		return ""
 	}
-	return o.Filename
+	return e.Filename
 }
 
-func (o *Executor) GetDisabled() bool {
-	if o == nil {
+func (e *Executor) GetDisabled() bool {
+	if e == nil {
 		return false
 	}
-	return o.Disabled
+	return e.Disabled
 }
 
-func (o *Executor) GetGroup() string {
-	if o == nil {
+func (e *Executor) GetGroup() string {
+	if e == nil {
 		return ""
 	}
-	return o.Group
+	return e.Group
 }
 
-func (o *Executor) GetID() string {
-	if o == nil {
+func (e *Executor) GetID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ID
+	return e.ID
 }
 
-func (o *Executor) GetInitTime() float64 {
-	if o == nil {
+func (e *Executor) GetInitTime() float64 {
+	if e == nil {
 		return 0.0
 	}
-	return o.InitTime
+	return e.InitTime
 }
 
-func (o *Executor) GetLoadTime() float64 {
-	if o == nil {
+func (e *Executor) GetLoadTime() float64 {
+	if e == nil {
 		return 0.0
 	}
-	return o.LoadTime
+	return e.LoadTime
 }
 
-func (o *Executor) GetModTime() float64 {
-	if o == nil {
+func (e *Executor) GetModTime() float64 {
+	if e == nil {
 		return 0.0
 	}
-	return o.ModTime
+	return e.ModTime
 }
 
-func (o *Executor) GetName() string {
-	if o == nil {
+func (e *Executor) GetName() string {
+	if e == nil {
 		return ""
 	}
-	return o.Name
+	return e.Name
 }
 
-func (o *Executor) GetUischema() map[string]any {
-	if o == nil {
+func (e *Executor) GetUischema() map[string]any {
+	if e == nil {
 		return map[string]any{}
 	}
-	return o.Uischema
+	return e.Uischema
 }
 
-func (o *Executor) GetVersion() string {
-	if o == nil {
+func (e *Executor) GetVersion() string {
+	if e == nil {
 		return ""
 	}
-	return o.Version
+	return e.Version
 }

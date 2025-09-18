@@ -12,11 +12,11 @@ type DeleteScriptByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteScriptByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteScriptByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteScriptByIDResponseBody - a list of Script objects
@@ -24,11 +24,11 @@ type DeleteScriptByIDResponseBody struct {
 	Items []shared.ScriptLibEntry `json:"items,omitempty"`
 }
 
-func (o *DeleteScriptByIDResponseBody) GetItems() []shared.ScriptLibEntry {
-	if o == nil {
+func (d *DeleteScriptByIDResponseBody) GetItems() []shared.ScriptLibEntry {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteScriptByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteScriptByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteScriptByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteScriptByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteScriptByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteScriptByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteScriptByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteScriptByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteScriptByIDResponse) GetObject() *DeleteScriptByIDResponseBody {
-	if o == nil {
+func (d *DeleteScriptByIDResponse) GetObject() *DeleteScriptByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteScriptByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteScriptByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

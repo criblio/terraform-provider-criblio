@@ -14,18 +14,18 @@ type GetAppscopeLibEntryByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetAppscopeLibEntryByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetAppscopeLibEntryByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetAppscopeLibEntryByIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetAppscopeLibEntryByIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetAppscopeLibEntryByIDResponseBody - a list of AppscopeLibEntry objects
@@ -33,11 +33,11 @@ type GetAppscopeLibEntryByIDResponseBody struct {
 	Items []shared.AppscopeLibEntry `json:"items,omitempty"`
 }
 
-func (o *GetAppscopeLibEntryByIDResponseBody) GetItems() []shared.AppscopeLibEntry {
-	if o == nil {
+func (g *GetAppscopeLibEntryByIDResponseBody) GetItems() []shared.AppscopeLibEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetAppscopeLibEntryByIDResponse struct {
@@ -53,37 +53,37 @@ type GetAppscopeLibEntryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetAppscopeLibEntryByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAppscopeLibEntryByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAppscopeLibEntryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAppscopeLibEntryByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAppscopeLibEntryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAppscopeLibEntryByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAppscopeLibEntryByIDResponse) GetObject() *GetAppscopeLibEntryByIDResponseBody {
-	if o == nil {
+func (g *GetAppscopeLibEntryByIDResponse) GetObject() *GetAppscopeLibEntryByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetAppscopeLibEntryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetAppscopeLibEntryByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

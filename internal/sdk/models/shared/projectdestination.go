@@ -7,16 +7,16 @@ type ProjectDestination struct {
 	Type string `json:"type"`
 }
 
-func (o *ProjectDestination) GetID() string {
-	if o == nil {
+func (p *ProjectDestination) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *ProjectDestination) GetType() string {
-	if o == nil {
+func (p *ProjectDestination) GetType() string {
+	if p == nil {
 		return ""
 	}
-	return o.Type
+	return p.Type
 }

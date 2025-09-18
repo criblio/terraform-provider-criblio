@@ -16,25 +16,25 @@ type CreateOutputRequest struct {
 	Output shared.Output `request:"mediaType=application/json"`
 }
 
-func (o *CreateOutputRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateOutputRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateOutputRequest) GetID() string {
-	if o == nil {
+func (c *CreateOutputRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateOutputRequest) GetOutput() shared.Output {
-	if o == nil {
+func (c *CreateOutputRequest) GetOutput() shared.Output {
+	if c == nil {
 		return shared.Output{}
 	}
-	return o.Output
+	return c.Output
 }
 
 // CreateOutputResponseBody - a list of Output objects
@@ -54,37 +54,37 @@ type CreateOutputResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateOutputResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOutputResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOutputResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOutputResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOutputResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOutputResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOutputResponse) GetObject() *CreateOutputResponseBody {
-	if o == nil {
+func (c *CreateOutputResponse) GetObject() *CreateOutputResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateOutputResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateOutputResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

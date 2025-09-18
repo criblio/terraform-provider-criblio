@@ -14,18 +14,18 @@ type UpdateCertificateByIDRequest struct {
 	Certificate shared.Certificate `request:"mediaType=application/json"`
 }
 
-func (o *UpdateCertificateByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateCertificateByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateCertificateByIDRequest) GetCertificate() shared.Certificate {
-	if o == nil {
+func (u *UpdateCertificateByIDRequest) GetCertificate() shared.Certificate {
+	if u == nil {
 		return shared.Certificate{}
 	}
-	return o.Certificate
+	return u.Certificate
 }
 
 // UpdateCertificateByIDResponseBody - a list of Certificate objects
@@ -33,11 +33,11 @@ type UpdateCertificateByIDResponseBody struct {
 	Items []shared.Certificate `json:"items,omitempty"`
 }
 
-func (o *UpdateCertificateByIDResponseBody) GetItems() []shared.Certificate {
-	if o == nil {
+func (u *UpdateCertificateByIDResponseBody) GetItems() []shared.Certificate {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateCertificateByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateCertificateByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateCertificateByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateCertificateByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateCertificateByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateCertificateByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateCertificateByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateCertificateByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateCertificateByIDResponse) GetObject() *UpdateCertificateByIDResponseBody {
-	if o == nil {
+func (u *UpdateCertificateByIDResponse) GetObject() *UpdateCertificateByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateCertificateByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateCertificateByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

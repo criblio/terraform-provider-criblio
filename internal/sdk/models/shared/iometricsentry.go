@@ -8,23 +8,23 @@ type IoMetricsEntry struct {
 	Level     IoMetricsEntryLevel `json:"level"`
 }
 
-func (o *IoMetricsEntry) GetCanDelete() *bool {
-	if o == nil {
+func (i *IoMetricsEntry) GetCanDelete() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CanDelete
+	return i.CanDelete
 }
 
-func (o *IoMetricsEntry) GetID() string {
-	if o == nil {
+func (i *IoMetricsEntry) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *IoMetricsEntry) GetLevel() IoMetricsEntryLevel {
-	if o == nil {
+func (i *IoMetricsEntry) GetLevel() IoMetricsEntryLevel {
+	if i == nil {
 		return IoMetricsEntryLevel("")
 	}
-	return o.Level
+	return i.Level
 }

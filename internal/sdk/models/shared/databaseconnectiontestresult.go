@@ -7,16 +7,16 @@ type DatabaseConnectionTestResult struct {
 	Success  bool    `json:"success"`
 }
 
-func (o *DatabaseConnectionTestResult) GetErrorMsg() *string {
-	if o == nil {
+func (d *DatabaseConnectionTestResult) GetErrorMsg() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorMsg
+	return d.ErrorMsg
 }
 
-func (o *DatabaseConnectionTestResult) GetSuccess() bool {
-	if o == nil {
+func (d *DatabaseConnectionTestResult) GetSuccess() bool {
+	if d == nil {
 		return false
 	}
-	return o.Success
+	return d.Success
 }

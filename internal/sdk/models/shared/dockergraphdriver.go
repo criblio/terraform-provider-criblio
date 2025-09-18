@@ -6,9 +6,9 @@ type DockerGraphDriver struct {
 	Data *DockerGraphDriverData `json:"Data,omitempty"`
 }
 
-func (o *DockerGraphDriver) GetData() *DockerGraphDriverData {
-	if o == nil {
+func (d *DockerGraphDriver) GetData() *DockerGraphDriverData {
+	if d == nil {
 		return nil
 	}
-	return o.Data
+	return d.Data
 }

@@ -16,25 +16,25 @@ type GetGlobalVariableLibVarsByPackAndIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects
@@ -42,11 +42,11 @@ type GetGlobalVariableLibVarsByPackAndIDResponseBody struct {
 	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetGlobalVariableLibVarsByPackAndIDResponse struct {
@@ -62,37 +62,37 @@ type GetGlobalVariableLibVarsByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDResponse) GetObject() *GetGlobalVariableLibVarsByPackAndIDResponseBody {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDResponse) GetObject() *GetGlobalVariableLibVarsByPackAndIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetGlobalVariableLibVarsByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetGlobalVariableLibVarsByPackAndIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

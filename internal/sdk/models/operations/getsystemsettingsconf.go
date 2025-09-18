@@ -12,11 +12,11 @@ type GetSystemSettingsConfResponseBody struct {
 	Items []shared.SystemSettingsConf `json:"items,omitempty"`
 }
 
-func (o *GetSystemSettingsConfResponseBody) GetItems() []shared.SystemSettingsConf {
-	if o == nil {
+func (g *GetSystemSettingsConfResponseBody) GetItems() []shared.SystemSettingsConf {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemSettingsConfResponse struct {
@@ -32,37 +32,37 @@ type GetSystemSettingsConfResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemSettingsConfResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemSettingsConfResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemSettingsConfResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemSettingsConfResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemSettingsConfResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemSettingsConfResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemSettingsConfResponse) GetObject() *GetSystemSettingsConfResponseBody {
-	if o == nil {
+func (g *GetSystemSettingsConfResponse) GetObject() *GetSystemSettingsConfResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemSettingsConfResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemSettingsConfResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

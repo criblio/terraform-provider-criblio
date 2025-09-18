@@ -12,11 +12,11 @@ type GetSummaryWorkersRequest struct {
 	FilterExp *string `queryParam:"style=form,explode=true,name=filterExp"`
 }
 
-func (o *GetSummaryWorkersRequest) GetFilterExp() *string {
-	if o == nil {
+func (g *GetSummaryWorkersRequest) GetFilterExp() *string {
+	if g == nil {
 		return nil
 	}
-	return o.FilterExp
+	return g.FilterExp
 }
 
 // GetSummaryWorkersResponseBody - a list of number objects
@@ -24,11 +24,11 @@ type GetSummaryWorkersResponseBody struct {
 	Items []float64 `json:"items,omitempty"`
 }
 
-func (o *GetSummaryWorkersResponseBody) GetItems() []float64 {
-	if o == nil {
+func (g *GetSummaryWorkersResponseBody) GetItems() []float64 {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSummaryWorkersResponse struct {
@@ -44,37 +44,37 @@ type GetSummaryWorkersResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSummaryWorkersResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSummaryWorkersResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSummaryWorkersResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSummaryWorkersResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSummaryWorkersResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSummaryWorkersResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSummaryWorkersResponse) GetObject() *GetSummaryWorkersResponseBody {
-	if o == nil {
+func (g *GetSummaryWorkersResponse) GetObject() *GetSummaryWorkersResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSummaryWorkersResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSummaryWorkersResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

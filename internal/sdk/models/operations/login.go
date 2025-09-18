@@ -18,30 +18,30 @@ type LoginResponse struct {
 	AuthToken *shared.AuthToken
 }
 
-func (o *LoginResponse) GetContentType() string {
-	if o == nil {
+func (l *LoginResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *LoginResponse) GetStatusCode() int {
-	if o == nil {
+func (l *LoginResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *LoginResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *LoginResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *LoginResponse) GetAuthToken() *shared.AuthToken {
-	if o == nil {
+func (l *LoginResponse) GetAuthToken() *shared.AuthToken {
+	if l == nil {
 		return nil
 	}
-	return o.AuthToken
+	return l.AuthToken
 }

@@ -47,18 +47,18 @@ func (i *InputExecConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputExecConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputExecConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputExecConnection) GetOutput() string {
-	if o == nil {
+func (i *InputExecConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputExecMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputExecPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputExecPq) GetMode() *InputExecMode {
-	if o == nil {
+func (i *InputExecPq) GetMode() *InputExecMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputExecPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputExecPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputExecPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputExecPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputExecPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputExecPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputExecPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputExecPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputExecPq) GetPath() *string {
-	if o == nil {
+func (i *InputExecPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputExecPq) GetCompress() *InputExecCompression {
-	if o == nil {
+func (i *InputExecPq) GetCompress() *InputExecCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // ScheduleType - Select a schedule type; either an interval (in seconds) or a cron-style schedule.
@@ -236,18 +236,18 @@ func (i *InputExecMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputExecMetadatum) GetName() string {
-	if o == nil {
+func (i *InputExecMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputExecMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputExecMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputExec struct {
@@ -298,135 +298,135 @@ func (i *InputExec) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputExec) GetID() *string {
-	if o == nil {
+func (i *InputExec) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputExec) GetType() InputExecType {
-	if o == nil {
+func (i *InputExec) GetType() InputExecType {
+	if i == nil {
 		return InputExecType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputExec) GetDisabled() *bool {
-	if o == nil {
+func (i *InputExec) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputExec) GetPipeline() *string {
-	if o == nil {
+func (i *InputExec) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputExec) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputExec) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputExec) GetEnvironment() *string {
-	if o == nil {
+func (i *InputExec) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputExec) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputExec) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputExec) GetStreamtags() []string {
-	if o == nil {
+func (i *InputExec) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputExec) GetConnections() []InputExecConnection {
-	if o == nil {
+func (i *InputExec) GetConnections() []InputExecConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputExec) GetPq() *InputExecPq {
-	if o == nil {
+func (i *InputExec) GetPq() *InputExecPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputExec) GetCommand() string {
-	if o == nil {
+func (i *InputExec) GetCommand() string {
+	if i == nil {
 		return ""
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputExec) GetRetries() *float64 {
-	if o == nil {
+func (i *InputExec) GetRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Retries
+	return i.Retries
 }
 
-func (o *InputExec) GetScheduleType() *ScheduleType {
-	if o == nil {
+func (i *InputExec) GetScheduleType() *ScheduleType {
+	if i == nil {
 		return nil
 	}
-	return o.ScheduleType
+	return i.ScheduleType
 }
 
-func (o *InputExec) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputExec) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputExec) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputExec) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputExec) GetMetadata() []InputExecMetadatum {
-	if o == nil {
+func (i *InputExec) GetMetadata() []InputExecMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputExec) GetDescription() *string {
-	if o == nil {
+func (i *InputExec) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputExec) GetInterval() *float64 {
-	if o == nil {
+func (i *InputExec) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputExec) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputExec) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }

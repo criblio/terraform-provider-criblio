@@ -108,72 +108,72 @@ type SearchSettings struct {
 	WriteOnlyProviderSecrets     bool         `json:"writeOnlyProviderSecrets"`
 }
 
-func (o *SearchSettings) GetCompressObjectCacheArtifacts() bool {
-	if o == nil {
+func (s *SearchSettings) GetCompressObjectCacheArtifacts() bool {
+	if s == nil {
 		return false
 	}
-	return o.CompressObjectCacheArtifacts
+	return s.CompressObjectCacheArtifacts
 }
 
-func (o *SearchSettings) GetFieldSummaryMaxFields() float64 {
-	if o == nil {
+func (s *SearchSettings) GetFieldSummaryMaxFields() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.FieldSummaryMaxFields
+	return s.FieldSummaryMaxFields
 }
 
-func (o *SearchSettings) GetFieldSummaryMaxNestedDepth() float64 {
-	if o == nil {
+func (s *SearchSettings) GetFieldSummaryMaxNestedDepth() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.FieldSummaryMaxNestedDepth
+	return s.FieldSummaryMaxNestedDepth
 }
 
-func (o *SearchSettings) GetMaxConcurrentSearches() float64 {
-	if o == nil {
+func (s *SearchSettings) GetMaxConcurrentSearches() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.MaxConcurrentSearches
+	return s.MaxConcurrentSearches
 }
 
-func (o *SearchSettings) GetMaxExecutorsPerSearch() float64 {
-	if o == nil {
+func (s *SearchSettings) GetMaxExecutorsPerSearch() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.MaxExecutorsPerSearch
+	return s.MaxExecutorsPerSearch
 }
 
-func (o *SearchSettings) GetMaxResultsPerSearch() float64 {
-	if o == nil {
+func (s *SearchSettings) GetMaxResultsPerSearch() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.MaxResultsPerSearch
+	return s.MaxResultsPerSearch
 }
 
-func (o *SearchSettings) GetSearchHistoryMaxJobs() float64 {
-	if o == nil {
+func (s *SearchSettings) GetSearchHistoryMaxJobs() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.SearchHistoryMaxJobs
+	return s.SearchHistoryMaxJobs
 }
 
-func (o *SearchSettings) GetSearchQueueLength() float64 {
-	if o == nil {
+func (s *SearchSettings) GetSearchQueueLength() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.SearchQueueLength
+	return s.SearchQueueLength
 }
 
-func (o *SearchSettings) GetWarmPoolSize() WarmPoolSize {
-	if o == nil {
+func (s *SearchSettings) GetWarmPoolSize() WarmPoolSize {
+	if s == nil {
 		return WarmPoolSize{}
 	}
-	return o.WarmPoolSize
+	return s.WarmPoolSize
 }
 
-func (o *SearchSettings) GetWriteOnlyProviderSecrets() bool {
-	if o == nil {
+func (s *SearchSettings) GetWriteOnlyProviderSecrets() bool {
+	if s == nil {
 		return false
 	}
-	return o.WriteOnlyProviderSecrets
+	return s.WriteOnlyProviderSecrets
 }

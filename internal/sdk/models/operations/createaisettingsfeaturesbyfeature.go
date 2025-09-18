@@ -12,11 +12,11 @@ type CreateAiSettingsFeaturesByFeatureRequest struct {
 	Feature string `pathParam:"style=simple,explode=false,name=feature"`
 }
 
-func (o *CreateAiSettingsFeaturesByFeatureRequest) GetFeature() string {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesByFeatureRequest) GetFeature() string {
+	if c == nil {
 		return ""
 	}
-	return o.Feature
+	return c.Feature
 }
 
 // CreateAiSettingsFeaturesByFeatureResponseBody - a list of Response objects
@@ -24,11 +24,11 @@ type CreateAiSettingsFeaturesByFeatureResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateAiSettingsFeaturesByFeatureResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesByFeatureResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateAiSettingsFeaturesByFeatureResponse struct {
@@ -44,37 +44,37 @@ type CreateAiSettingsFeaturesByFeatureResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateAiSettingsFeaturesByFeatureResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesByFeatureResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateAiSettingsFeaturesByFeatureResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesByFeatureResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateAiSettingsFeaturesByFeatureResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesByFeatureResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateAiSettingsFeaturesByFeatureResponse) GetObject() *CreateAiSettingsFeaturesByFeatureResponseBody {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesByFeatureResponse) GetObject() *CreateAiSettingsFeaturesByFeatureResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateAiSettingsFeaturesByFeatureResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateAiSettingsFeaturesByFeatureResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

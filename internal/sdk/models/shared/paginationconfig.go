@@ -67,93 +67,93 @@ func (p *PaginationConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PaginationConfig) GetType() *PaginationType {
-	if o == nil {
+func (p *PaginationConfig) GetType() *PaginationType {
+	if p == nil {
 		return nil
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PaginationConfig) GetOffsetField() *string {
-	if o == nil {
+func (p *PaginationConfig) GetOffsetField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.OffsetField
+	return p.OffsetField
 }
 
-func (o *PaginationConfig) GetLimitField() *string {
-	if o == nil {
+func (p *PaginationConfig) GetLimitField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.LimitField
+	return p.LimitField
 }
 
-func (o *PaginationConfig) GetLimit() *int64 {
-	if o == nil {
+func (p *PaginationConfig) GetLimit() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Limit
+	return p.Limit
 }
 
-func (o *PaginationConfig) GetMaxPages() *int64 {
-	if o == nil {
+func (p *PaginationConfig) GetMaxPages() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.MaxPages
+	return p.MaxPages
 }
 
-func (o *PaginationConfig) GetZeroIndexed() *bool {
-	if o == nil {
+func (p *PaginationConfig) GetZeroIndexed() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.ZeroIndexed
+	return p.ZeroIndexed
 }
 
-func (o *PaginationConfig) GetPageField() *string {
-	if o == nil {
+func (p *PaginationConfig) GetPageField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.PageField
+	return p.PageField
 }
 
-func (o *PaginationConfig) GetSizeField() *string {
-	if o == nil {
+func (p *PaginationConfig) GetSizeField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.SizeField
+	return p.SizeField
 }
 
-func (o *PaginationConfig) GetSize() *int64 {
-	if o == nil {
+func (p *PaginationConfig) GetSize() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Size
+	return p.Size
 }
 
-func (o *PaginationConfig) GetAttribute() []string {
-	if o == nil {
+func (p *PaginationConfig) GetAttribute() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Attribute
+	return p.Attribute
 }
 
-func (o *PaginationConfig) GetLastPageExpr() *string {
-	if o == nil {
+func (p *PaginationConfig) GetLastPageExpr() *string {
+	if p == nil {
 		return nil
 	}
-	return o.LastPageExpr
+	return p.LastPageExpr
 }
 
-func (o *PaginationConfig) GetOffset() *int64 {
-	if o == nil {
+func (p *PaginationConfig) GetOffset() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Offset
+	return p.Offset
 }
 
-func (o *PaginationConfig) GetTotalRecordField() *string {
-	if o == nil {
+func (p *PaginationConfig) GetTotalRecordField() *string {
+	if p == nil {
 		return nil
 	}
-	return o.TotalRecordField
+	return p.TotalRecordField
 }

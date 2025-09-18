@@ -47,18 +47,18 @@ func (i *InputS3Connection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3Connection) GetPipeline() *string {
-	if o == nil {
+func (i *InputS3Connection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputS3Connection) GetOutput() string {
-	if o == nil {
+func (i *InputS3Connection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputS3Mode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputS3Pq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3Pq) GetMode() *InputS3Mode {
-	if o == nil {
+func (i *InputS3Pq) GetMode() *InputS3Mode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputS3Pq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputS3Pq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputS3Pq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputS3Pq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputS3Pq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputS3Pq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputS3Pq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputS3Pq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputS3Pq) GetPath() *string {
-	if o == nil {
+func (i *InputS3Pq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputS3Pq) GetCompress() *InputS3Compression {
-	if o == nil {
+func (i *InputS3Pq) GetCompress() *InputS3Compression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputS3AuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
@@ -268,25 +268,25 @@ func (i *InputS3Preprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3Preprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputS3Preprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputS3Preprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputS3Preprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputS3Preprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputS3Preprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputS3Metadatum struct {
@@ -306,18 +306,18 @@ func (i *InputS3Metadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3Metadatum) GetName() string {
-	if o == nil {
+func (i *InputS3Metadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputS3Metadatum) GetValue() string {
-	if o == nil {
+func (i *InputS3Metadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputS3Checkpointing struct {
@@ -338,18 +338,18 @@ func (i *InputS3Checkpointing) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3Checkpointing) GetEnabled() *bool {
-	if o == nil {
+func (i *InputS3Checkpointing) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputS3Checkpointing) GetRetries() *float64 {
-	if o == nil {
+func (i *InputS3Checkpointing) GetRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Retries
+	return i.Retries
 }
 
 type InputS3 struct {
@@ -448,317 +448,317 @@ func (i *InputS3) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputS3) GetID() *string {
-	if o == nil {
+func (i *InputS3) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputS3) GetType() InputS3Type {
-	if o == nil {
+func (i *InputS3) GetType() InputS3Type {
+	if i == nil {
 		return InputS3Type("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputS3) GetDisabled() *bool {
-	if o == nil {
+func (i *InputS3) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputS3) GetPipeline() *string {
-	if o == nil {
+func (i *InputS3) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputS3) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputS3) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputS3) GetEnvironment() *string {
-	if o == nil {
+func (i *InputS3) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputS3) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputS3) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputS3) GetStreamtags() []string {
-	if o == nil {
+func (i *InputS3) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputS3) GetConnections() []InputS3Connection {
-	if o == nil {
+func (i *InputS3) GetConnections() []InputS3Connection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputS3) GetPq() *InputS3Pq {
-	if o == nil {
+func (i *InputS3) GetPq() *InputS3Pq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputS3) GetQueueName() string {
-	if o == nil {
+func (i *InputS3) GetQueueName() string {
+	if i == nil {
 		return ""
 	}
-	return o.QueueName
+	return i.QueueName
 }
 
-func (o *InputS3) GetFileFilter() *string {
-	if o == nil {
+func (i *InputS3) GetFileFilter() *string {
+	if i == nil {
 		return nil
 	}
-	return o.FileFilter
+	return i.FileFilter
 }
 
-func (o *InputS3) GetAwsAccountID() *string {
-	if o == nil {
+func (i *InputS3) GetAwsAccountID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAccountID
+	return i.AwsAccountID
 }
 
-func (o *InputS3) GetAwsAuthenticationMethod() *InputS3AuthenticationMethod {
-	if o == nil {
+func (i *InputS3) GetAwsAuthenticationMethod() *InputS3AuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputS3) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputS3) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputS3) GetRegion() *string {
-	if o == nil {
+func (i *InputS3) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputS3) GetEndpoint() *string {
-	if o == nil {
+func (i *InputS3) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputS3) GetSignatureVersion() *InputS3SignatureVersion {
-	if o == nil {
+func (i *InputS3) GetSignatureVersion() *InputS3SignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputS3) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputS3) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputS3) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputS3) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputS3) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputS3) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputS3) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputS3) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputS3) GetMaxMessages() *float64 {
-	if o == nil {
+func (i *InputS3) GetMaxMessages() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMessages
+	return i.MaxMessages
 }
 
-func (o *InputS3) GetVisibilityTimeout() *float64 {
-	if o == nil {
+func (i *InputS3) GetVisibilityTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.VisibilityTimeout
+	return i.VisibilityTimeout
 }
 
-func (o *InputS3) GetNumReceivers() *float64 {
-	if o == nil {
+func (i *InputS3) GetNumReceivers() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.NumReceivers
+	return i.NumReceivers
 }
 
-func (o *InputS3) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputS3) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputS3) GetSkipOnError() *bool {
-	if o == nil {
+func (i *InputS3) GetSkipOnError() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SkipOnError
+	return i.SkipOnError
 }
 
-func (o *InputS3) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputS3) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputS3) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputS3) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputS3) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputS3) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputS3) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputS3) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputS3) GetEnableSQSAssumeRole() *bool {
-	if o == nil {
+func (i *InputS3) GetEnableSQSAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableSQSAssumeRole
+	return i.EnableSQSAssumeRole
 }
 
-func (o *InputS3) GetPreprocess() *InputS3Preprocess {
-	if o == nil {
+func (i *InputS3) GetPreprocess() *InputS3Preprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputS3) GetMetadata() []InputS3Metadatum {
-	if o == nil {
+func (i *InputS3) GetMetadata() []InputS3Metadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputS3) GetParquetChunkSizeMB() *float64 {
-	if o == nil {
+func (i *InputS3) GetParquetChunkSizeMB() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ParquetChunkSizeMB
+	return i.ParquetChunkSizeMB
 }
 
-func (o *InputS3) GetParquetChunkDownloadTimeout() *float64 {
-	if o == nil {
+func (i *InputS3) GetParquetChunkDownloadTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ParquetChunkDownloadTimeout
+	return i.ParquetChunkDownloadTimeout
 }
 
-func (o *InputS3) GetCheckpointing() *InputS3Checkpointing {
-	if o == nil {
+func (i *InputS3) GetCheckpointing() *InputS3Checkpointing {
+	if i == nil {
 		return nil
 	}
-	return o.Checkpointing
+	return i.Checkpointing
 }
 
-func (o *InputS3) GetPollTimeout() *float64 {
-	if o == nil {
+func (i *InputS3) GetPollTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.PollTimeout
+	return i.PollTimeout
 }
 
-func (o *InputS3) GetEncoding() *string {
-	if o == nil {
+func (i *InputS3) GetEncoding() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Encoding
+	return i.Encoding
 }
 
-func (o *InputS3) GetTagAfterProcessing() *bool {
-	if o == nil {
+func (i *InputS3) GetTagAfterProcessing() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.TagAfterProcessing
+	return i.TagAfterProcessing
 }
 
-func (o *InputS3) GetDescription() *string {
-	if o == nil {
+func (i *InputS3) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputS3) GetAwsAPIKey() *string {
-	if o == nil {
+func (i *InputS3) GetAwsAPIKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return i.AwsAPIKey
 }
 
-func (o *InputS3) GetAwsSecret() *string {
-	if o == nil {
+func (i *InputS3) GetAwsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecret
+	return i.AwsSecret
 }
 
-func (o *InputS3) GetProcessedTagKey() *string {
-	if o == nil {
+func (i *InputS3) GetProcessedTagKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ProcessedTagKey
+	return i.ProcessedTagKey
 }
 
-func (o *InputS3) GetProcessedTagValue() *string {
-	if o == nil {
+func (i *InputS3) GetProcessedTagValue() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ProcessedTagValue
+	return i.ProcessedTagValue
 }

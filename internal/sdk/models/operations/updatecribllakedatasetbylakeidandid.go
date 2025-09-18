@@ -42,25 +42,25 @@ type UpdateCriblLakeDatasetByLakeIDAndIDRequest struct {
 	CriblLakeDataset shared.CriblLakeDataset `request:"mediaType=application/json"`
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() UpdateCriblLakeDatasetByLakeIDAndIDLakeID {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDRequest) GetLakeID() UpdateCriblLakeDatasetByLakeIDAndIDLakeID {
+	if u == nil {
 		return UpdateCriblLakeDatasetByLakeIDAndIDLakeID("")
 	}
-	return o.LakeID
+	return u.LakeID
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDRequest) GetCriblLakeDataset() shared.CriblLakeDataset {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDRequest) GetCriblLakeDataset() shared.CriblLakeDataset {
+	if u == nil {
 		return shared.CriblLakeDataset{}
 	}
-	return o.CriblLakeDataset
+	return u.CriblLakeDataset
 }
 
 // UpdateCriblLakeDatasetByLakeIDAndIDResponseBody - a list of CriblLakeDataset objects
@@ -68,11 +68,11 @@ type UpdateCriblLakeDatasetByLakeIDAndIDResponseBody struct {
 	Items []shared.CriblLakeDataset `json:"items,omitempty"`
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDResponseBody) GetItems() []shared.CriblLakeDataset {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDResponseBody) GetItems() []shared.CriblLakeDataset {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateCriblLakeDatasetByLakeIDAndIDResponse struct {
@@ -88,37 +88,37 @@ type UpdateCriblLakeDatasetByLakeIDAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetObject() *UpdateCriblLakeDatasetByLakeIDAndIDResponseBody {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetObject() *UpdateCriblLakeDatasetByLakeIDAndIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateCriblLakeDatasetByLakeIDAndIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -12,11 +12,11 @@ type GetVersionInfoResponseBody struct {
 	Items []shared.GitInfo `json:"items,omitempty"`
 }
 
-func (o *GetVersionInfoResponseBody) GetItems() []shared.GitInfo {
-	if o == nil {
+func (g *GetVersionInfoResponseBody) GetItems() []shared.GitInfo {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetVersionInfoResponse struct {
@@ -32,37 +32,37 @@ type GetVersionInfoResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetVersionInfoResponse) GetContentType() string {
-	if o == nil {
+func (g *GetVersionInfoResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetVersionInfoResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetVersionInfoResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetVersionInfoResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetVersionInfoResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetVersionInfoResponse) GetObject() *GetVersionInfoResponseBody {
-	if o == nil {
+func (g *GetVersionInfoResponse) GetObject() *GetVersionInfoResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetVersionInfoResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetVersionInfoResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

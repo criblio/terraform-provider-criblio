@@ -11,44 +11,44 @@ type UsageGroup struct {
 	UsersCount                 *float64 `json:"usersCount,omitempty"`
 }
 
-func (o *UsageGroup) GetCoordinatorHeapMemoryLimit() *float64 {
-	if o == nil {
+func (u *UsageGroup) GetCoordinatorHeapMemoryLimit() *float64 {
+	if u == nil {
 		return nil
 	}
-	return o.CoordinatorHeapMemoryLimit
+	return u.CoordinatorHeapMemoryLimit
 }
 
-func (o *UsageGroup) GetDescription() *string {
-	if o == nil {
+func (u *UsageGroup) GetDescription() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Description
+	return u.Description
 }
 
-func (o *UsageGroup) GetEnabled() *bool {
-	if o == nil {
+func (u *UsageGroup) GetEnabled() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Enabled
+	return u.Enabled
 }
 
-func (o *UsageGroup) GetID() string {
-	if o == nil {
+func (u *UsageGroup) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UsageGroup) GetRules() any {
-	if o == nil {
+func (u *UsageGroup) GetRules() any {
+	if u == nil {
 		return nil
 	}
-	return o.Rules
+	return u.Rules
 }
 
-func (o *UsageGroup) GetUsersCount() *float64 {
-	if o == nil {
+func (u *UsageGroup) GetUsersCount() *float64 {
+	if u == nil {
 		return nil
 	}
-	return o.UsersCount
+	return u.UsersCount
 }

@@ -12,11 +12,11 @@ type ListGrokFileRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListGrokFileRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListGrokFileRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListGrokFileResponseBody - a list of GrokFile objects
@@ -24,11 +24,11 @@ type ListGrokFileResponseBody struct {
 	Items []shared.GrokFile `json:"items,omitempty"`
 }
 
-func (o *ListGrokFileResponseBody) GetItems() []shared.GrokFile {
-	if o == nil {
+func (l *ListGrokFileResponseBody) GetItems() []shared.GrokFile {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListGrokFileResponse struct {
@@ -44,37 +44,37 @@ type ListGrokFileResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListGrokFileResponse) GetContentType() string {
-	if o == nil {
+func (l *ListGrokFileResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListGrokFileResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListGrokFileResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListGrokFileResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListGrokFileResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListGrokFileResponse) GetObject() *ListGrokFileResponseBody {
-	if o == nil {
+func (l *ListGrokFileResponse) GetObject() *ListGrokFileResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListGrokFileResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListGrokFileResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

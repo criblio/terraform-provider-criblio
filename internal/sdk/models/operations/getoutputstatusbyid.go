@@ -12,11 +12,11 @@ type GetOutputStatusByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetOutputStatusByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetOutputStatusByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetOutputStatusByIDResponseBody - a list of OutputStatus objects
@@ -24,11 +24,11 @@ type GetOutputStatusByIDResponseBody struct {
 	Items []shared.OutputStatus `json:"items,omitempty"`
 }
 
-func (o *GetOutputStatusByIDResponseBody) GetItems() []shared.OutputStatus {
-	if o == nil {
+func (g *GetOutputStatusByIDResponseBody) GetItems() []shared.OutputStatus {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetOutputStatusByIDResponse struct {
@@ -44,37 +44,37 @@ type GetOutputStatusByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetOutputStatusByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetOutputStatusByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetOutputStatusByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetOutputStatusByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetOutputStatusByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetOutputStatusByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetOutputStatusByIDResponse) GetObject() *GetOutputStatusByIDResponseBody {
-	if o == nil {
+func (g *GetOutputStatusByIDResponse) GetObject() *GetOutputStatusByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetOutputStatusByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetOutputStatusByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -12,11 +12,11 @@ type CreatePacksPublishByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *CreatePacksPublishByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreatePacksPublishByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
 // CreatePacksPublishByIDResponseBody - a list of PublishPackResponse objects
@@ -24,11 +24,11 @@ type CreatePacksPublishByIDResponseBody struct {
 	Items []shared.PublishPackResponse `json:"items,omitempty"`
 }
 
-func (o *CreatePacksPublishByIDResponseBody) GetItems() []shared.PublishPackResponse {
-	if o == nil {
+func (c *CreatePacksPublishByIDResponseBody) GetItems() []shared.PublishPackResponse {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreatePacksPublishByIDResponse struct {
@@ -44,37 +44,37 @@ type CreatePacksPublishByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreatePacksPublishByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePacksPublishByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePacksPublishByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePacksPublishByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePacksPublishByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePacksPublishByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePacksPublishByIDResponse) GetObject() *CreatePacksPublishByIDResponseBody {
-	if o == nil {
+func (c *CreatePacksPublishByIDResponse) GetObject() *CreatePacksPublishByIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreatePacksPublishByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreatePacksPublishByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

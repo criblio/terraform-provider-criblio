@@ -12,11 +12,11 @@ type GetKeyMetadataEntityByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetKeyMetadataEntityByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetKeyMetadataEntityByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetKeyMetadataEntityByIDResponseBody - a list of KeyMetadataEntity objects
@@ -24,11 +24,11 @@ type GetKeyMetadataEntityByIDResponseBody struct {
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`
 }
 
-func (o *GetKeyMetadataEntityByIDResponseBody) GetItems() []shared.KeyMetadataEntity {
-	if o == nil {
+func (g *GetKeyMetadataEntityByIDResponseBody) GetItems() []shared.KeyMetadataEntity {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetKeyMetadataEntityByIDResponse struct {
@@ -44,37 +44,37 @@ type GetKeyMetadataEntityByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetKeyMetadataEntityByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetKeyMetadataEntityByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetKeyMetadataEntityByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetKeyMetadataEntityByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetKeyMetadataEntityByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetKeyMetadataEntityByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetKeyMetadataEntityByIDResponse) GetObject() *GetKeyMetadataEntityByIDResponseBody {
-	if o == nil {
+func (g *GetKeyMetadataEntityByIDResponse) GetObject() *GetKeyMetadataEntityByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetKeyMetadataEntityByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetKeyMetadataEntityByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

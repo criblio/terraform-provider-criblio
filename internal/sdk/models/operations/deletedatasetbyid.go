@@ -12,11 +12,11 @@ type DeleteDatasetByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteDatasetByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteDatasetByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteDatasetByIDResponseBody - a list of Dataset objects
@@ -24,11 +24,11 @@ type DeleteDatasetByIDResponseBody struct {
 	Items []shared.GenericDataset `json:"items,omitempty"`
 }
 
-func (o *DeleteDatasetByIDResponseBody) GetItems() []shared.GenericDataset {
-	if o == nil {
+func (d *DeleteDatasetByIDResponseBody) GetItems() []shared.GenericDataset {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteDatasetByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteDatasetByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteDatasetByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteDatasetByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteDatasetByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteDatasetByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteDatasetByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteDatasetByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteDatasetByIDResponse) GetObject() *DeleteDatasetByIDResponseBody {
-	if o == nil {
+func (d *DeleteDatasetByIDResponse) GetObject() *DeleteDatasetByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteDatasetByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteDatasetByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

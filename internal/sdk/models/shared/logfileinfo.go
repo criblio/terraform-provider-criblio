@@ -7,16 +7,16 @@ type LogFileInfo struct {
 	Path string `json:"path"`
 }
 
-func (o *LogFileInfo) GetID() string {
-	if o == nil {
+func (l *LogFileInfo) GetID() string {
+	if l == nil {
 		return ""
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *LogFileInfo) GetPath() string {
-	if o == nil {
+func (l *LogFileInfo) GetPath() string {
+	if l == nil {
 		return ""
 	}
-	return o.Path
+	return l.Path
 }

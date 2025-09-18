@@ -12,11 +12,11 @@ type CreateKeyMetadataEntityResponseBody struct {
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`
 }
 
-func (o *CreateKeyMetadataEntityResponseBody) GetItems() []shared.KeyMetadataEntity {
-	if o == nil {
+func (c *CreateKeyMetadataEntityResponseBody) GetItems() []shared.KeyMetadataEntity {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateKeyMetadataEntityResponse struct {
@@ -32,37 +32,37 @@ type CreateKeyMetadataEntityResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateKeyMetadataEntityResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateKeyMetadataEntityResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateKeyMetadataEntityResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateKeyMetadataEntityResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateKeyMetadataEntityResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateKeyMetadataEntityResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateKeyMetadataEntityResponse) GetObject() *CreateKeyMetadataEntityResponseBody {
-	if o == nil {
+func (c *CreateKeyMetadataEntityResponse) GetObject() *CreateKeyMetadataEntityResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateKeyMetadataEntityResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateKeyMetadataEntityResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

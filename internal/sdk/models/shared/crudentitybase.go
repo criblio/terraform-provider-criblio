@@ -6,9 +6,9 @@ type CrudEntityBase struct {
 	ID string `json:"id"`
 }
 
-func (o *CrudEntityBase) GetID() string {
-	if o == nil {
+func (c *CrudEntityBase) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }

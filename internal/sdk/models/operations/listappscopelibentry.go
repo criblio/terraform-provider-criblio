@@ -12,11 +12,11 @@ type ListAppscopeLibEntryRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListAppscopeLibEntryRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListAppscopeLibEntryRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListAppscopeLibEntryResponseBody - a list of AppscopeLibEntry objects
@@ -24,11 +24,11 @@ type ListAppscopeLibEntryResponseBody struct {
 	Items []shared.AppscopeLibEntry `json:"items,omitempty"`
 }
 
-func (o *ListAppscopeLibEntryResponseBody) GetItems() []shared.AppscopeLibEntry {
-	if o == nil {
+func (l *ListAppscopeLibEntryResponseBody) GetItems() []shared.AppscopeLibEntry {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListAppscopeLibEntryResponse struct {
@@ -44,37 +44,37 @@ type ListAppscopeLibEntryResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListAppscopeLibEntryResponse) GetContentType() string {
-	if o == nil {
+func (l *ListAppscopeLibEntryResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListAppscopeLibEntryResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListAppscopeLibEntryResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListAppscopeLibEntryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListAppscopeLibEntryResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListAppscopeLibEntryResponse) GetObject() *ListAppscopeLibEntryResponseBody {
-	if o == nil {
+func (l *ListAppscopeLibEntryResponse) GetObject() *ListAppscopeLibEntryResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListAppscopeLibEntryResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListAppscopeLibEntryResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

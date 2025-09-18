@@ -8,23 +8,23 @@ type Process struct {
 	Ppid float64 `json:"ppid"`
 }
 
-func (o *Process) GetID() string {
-	if o == nil {
+func (p *Process) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *Process) GetPid() float64 {
-	if o == nil {
+func (p *Process) GetPid() float64 {
+	if p == nil {
 		return 0.0
 	}
-	return o.Pid
+	return p.Pid
 }
 
-func (o *Process) GetPpid() float64 {
-	if o == nil {
+func (p *Process) GetPpid() float64 {
+	if p == nil {
 		return 0.0
 	}
-	return o.Ppid
+	return p.Ppid
 }

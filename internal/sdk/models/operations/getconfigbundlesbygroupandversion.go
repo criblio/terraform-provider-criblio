@@ -11,18 +11,18 @@ type GetConfigBundlesByGroupAndVersionRequest struct {
 	Version string `pathParam:"style=simple,explode=false,name=version"`
 }
 
-func (o *GetConfigBundlesByGroupAndVersionRequest) GetGroup() string {
-	if o == nil {
+func (g *GetConfigBundlesByGroupAndVersionRequest) GetGroup() string {
+	if g == nil {
 		return ""
 	}
-	return o.Group
+	return g.Group
 }
 
-func (o *GetConfigBundlesByGroupAndVersionRequest) GetVersion() string {
-	if o == nil {
+func (g *GetConfigBundlesByGroupAndVersionRequest) GetVersion() string {
+	if g == nil {
 		return ""
 	}
-	return o.Version
+	return g.Version
 }
 
 type GetConfigBundlesByGroupAndVersionResponse struct {
@@ -36,30 +36,30 @@ type GetConfigBundlesByGroupAndVersionResponse struct {
 	Bytes []byte
 }
 
-func (o *GetConfigBundlesByGroupAndVersionResponse) GetContentType() string {
-	if o == nil {
+func (g *GetConfigBundlesByGroupAndVersionResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetConfigBundlesByGroupAndVersionResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetConfigBundlesByGroupAndVersionResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetConfigBundlesByGroupAndVersionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetConfigBundlesByGroupAndVersionResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetConfigBundlesByGroupAndVersionResponse) GetBytes() []byte {
-	if o == nil {
+func (g *GetConfigBundlesByGroupAndVersionResponse) GetBytes() []byte {
+	if g == nil {
 		return nil
 	}
-	return o.Bytes
+	return g.Bytes
 }

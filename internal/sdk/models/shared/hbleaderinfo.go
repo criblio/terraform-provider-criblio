@@ -9,30 +9,30 @@ type HBLeaderInfo struct {
 	TLS        *bool   `json:"tls,omitempty"`
 }
 
-func (o *HBLeaderInfo) GetHost() string {
-	if o == nil {
+func (h *HBLeaderInfo) GetHost() string {
+	if h == nil {
 		return ""
 	}
-	return o.Host
+	return h.Host
 }
 
-func (o *HBLeaderInfo) GetPort() float64 {
-	if o == nil {
+func (h *HBLeaderInfo) GetPort() float64 {
+	if h == nil {
 		return 0.0
 	}
-	return o.Port
+	return h.Port
 }
 
-func (o *HBLeaderInfo) GetServername() *string {
-	if o == nil {
+func (h *HBLeaderInfo) GetServername() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Servername
+	return h.Servername
 }
 
-func (o *HBLeaderInfo) GetTLS() *bool {
-	if o == nil {
+func (h *HBLeaderInfo) GetTLS() *bool {
+	if h == nil {
 		return nil
 	}
-	return o.TLS
+	return h.TLS
 }

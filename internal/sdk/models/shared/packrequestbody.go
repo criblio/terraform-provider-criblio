@@ -9,32 +9,32 @@ type PackRequestBodyTags struct {
 	Technology []string `json:"technology"`
 }
 
-func (o *PackRequestBodyTags) GetDataType() []string {
-	if o == nil {
+func (p *PackRequestBodyTags) GetDataType() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.DataType
+	return p.DataType
 }
 
-func (o *PackRequestBodyTags) GetDomain() []string {
-	if o == nil {
+func (p *PackRequestBodyTags) GetDomain() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Domain
+	return p.Domain
 }
 
-func (o *PackRequestBodyTags) GetStreamtags() []string {
-	if o == nil {
+func (p *PackRequestBodyTags) GetStreamtags() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Streamtags
+	return p.Streamtags
 }
 
-func (o *PackRequestBodyTags) GetTechnology() []string {
-	if o == nil {
+func (p *PackRequestBodyTags) GetTechnology() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Technology
+	return p.Technology
 }
 
 type PackRequestBody struct {
@@ -55,107 +55,107 @@ type PackRequestBody struct {
 	Version              *string              `json:"version,omitempty"`
 }
 
-func (o *PackRequestBody) GetAllowCustomFunctions() *bool {
-	if o == nil {
+func (p *PackRequestBody) GetAllowCustomFunctions() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.AllowCustomFunctions
+	return p.AllowCustomFunctions
 }
 
-func (o *PackRequestBody) GetAuthor() *string {
-	if o == nil {
+func (p *PackRequestBody) GetAuthor() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Author
+	return p.Author
 }
 
-func (o *PackRequestBody) GetDescription() *string {
-	if o == nil {
+func (p *PackRequestBody) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PackRequestBody) GetDisplayName() *string {
-	if o == nil {
+func (p *PackRequestBody) GetDisplayName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DisplayName
+	return p.DisplayName
 }
 
-func (o *PackRequestBody) GetExports() []string {
-	if o == nil {
+func (p *PackRequestBody) GetExports() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Exports
+	return p.Exports
 }
 
-func (o *PackRequestBody) GetForce() *bool {
-	if o == nil {
+func (p *PackRequestBody) GetForce() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Force
+	return p.Force
 }
 
-func (o *PackRequestBody) GetID() string {
-	if o == nil {
+func (p *PackRequestBody) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PackRequestBody) GetIsDisabled() *bool {
-	if o == nil {
+func (p *PackRequestBody) GetIsDisabled() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.IsDisabled
+	return p.IsDisabled
 }
 
-func (o *PackRequestBody) GetInputs() *float64 {
-	if o == nil {
+func (p *PackRequestBody) GetInputs() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Inputs
+	return p.Inputs
 }
 
-func (o *PackRequestBody) GetMinLogStreamVersion() *string {
-	if o == nil {
+func (p *PackRequestBody) GetMinLogStreamVersion() *string {
+	if p == nil {
 		return nil
 	}
-	return o.MinLogStreamVersion
+	return p.MinLogStreamVersion
 }
 
-func (o *PackRequestBody) GetOutputs() *float64 {
-	if o == nil {
+func (p *PackRequestBody) GetOutputs() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Outputs
+	return p.Outputs
 }
 
-func (o *PackRequestBody) GetSource() *string {
-	if o == nil {
+func (p *PackRequestBody) GetSource() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Source
+	return p.Source
 }
 
-func (o *PackRequestBody) GetSpec() *string {
-	if o == nil {
+func (p *PackRequestBody) GetSpec() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Spec
+	return p.Spec
 }
 
-func (o *PackRequestBody) GetTags() *PackRequestBodyTags {
-	if o == nil {
+func (p *PackRequestBody) GetTags() *PackRequestBodyTags {
+	if p == nil {
 		return nil
 	}
-	return o.Tags
+	return p.Tags
 }
 
-func (o *PackRequestBody) GetVersion() *string {
-	if o == nil {
+func (p *PackRequestBody) GetVersion() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Version
+	return p.Version
 }

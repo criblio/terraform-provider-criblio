@@ -47,18 +47,18 @@ func (i *InputDatadogAgentConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatadogAgentConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputDatadogAgentConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputDatadogAgentConnection) GetOutput() string {
-	if o == nil {
+func (i *InputDatadogAgentConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputDatadogAgentMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputDatadogAgentPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatadogAgentPq) GetMode() *InputDatadogAgentMode {
-	if o == nil {
+func (i *InputDatadogAgentPq) GetMode() *InputDatadogAgentMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputDatadogAgentPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputDatadogAgentPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputDatadogAgentPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputDatadogAgentPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputDatadogAgentPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputDatadogAgentPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputDatadogAgentPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputDatadogAgentPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputDatadogAgentPq) GetPath() *string {
-	if o == nil {
+func (i *InputDatadogAgentPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputDatadogAgentPq) GetCompress() *InputDatadogAgentCompression {
-	if o == nil {
+func (i *InputDatadogAgentPq) GetCompress() *InputDatadogAgentCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputDatadogAgentMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputDatadogAgentTLSSettingsServerSide) UnmarshalJSON(data []byte) erro
 	return nil
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetMinVersion() *InputDatadogAgentMinimumTLSVersion {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetMinVersion() *InputDatadogAgentMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputDatadogAgentTLSSettingsServerSide) GetMaxVersion() *InputDatadogAgentMaximumTLSVersion {
-	if o == nil {
+func (i *InputDatadogAgentTLSSettingsServerSide) GetMaxVersion() *InputDatadogAgentMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputDatadogAgentMetadatum struct {
@@ -381,18 +381,18 @@ func (i *InputDatadogAgentMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatadogAgentMetadatum) GetName() string {
-	if o == nil {
+func (i *InputDatadogAgentMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputDatadogAgentMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputDatadogAgentMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputDatadogAgentProxyMode struct {
@@ -413,18 +413,18 @@ func (i *InputDatadogAgentProxyMode) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatadogAgentProxyMode) GetEnabled() *bool {
-	if o == nil {
+func (i *InputDatadogAgentProxyMode) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputDatadogAgentProxyMode) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputDatadogAgentProxyMode) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
 type InputDatadogAgent struct {
@@ -491,198 +491,198 @@ func (i *InputDatadogAgent) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputDatadogAgent) GetID() *string {
-	if o == nil {
+func (i *InputDatadogAgent) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputDatadogAgent) GetType() *InputDatadogAgentType {
-	if o == nil {
+func (i *InputDatadogAgent) GetType() *InputDatadogAgentType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputDatadogAgent) GetDisabled() *bool {
-	if o == nil {
+func (i *InputDatadogAgent) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputDatadogAgent) GetPipeline() *string {
-	if o == nil {
+func (i *InputDatadogAgent) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputDatadogAgent) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputDatadogAgent) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputDatadogAgent) GetEnvironment() *string {
-	if o == nil {
+func (i *InputDatadogAgent) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputDatadogAgent) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputDatadogAgent) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputDatadogAgent) GetStreamtags() []string {
-	if o == nil {
+func (i *InputDatadogAgent) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputDatadogAgent) GetConnections() []InputDatadogAgentConnection {
-	if o == nil {
+func (i *InputDatadogAgent) GetConnections() []InputDatadogAgentConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputDatadogAgent) GetPq() *InputDatadogAgentPq {
-	if o == nil {
+func (i *InputDatadogAgent) GetPq() *InputDatadogAgentPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputDatadogAgent) GetHost() *string {
-	if o == nil {
+func (i *InputDatadogAgent) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputDatadogAgent) GetPort() float64 {
-	if o == nil {
+func (i *InputDatadogAgent) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputDatadogAgent) GetTLS() *InputDatadogAgentTLSSettingsServerSide {
-	if o == nil {
+func (i *InputDatadogAgent) GetTLS() *InputDatadogAgentTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputDatadogAgent) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputDatadogAgent) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputDatadogAgent) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputDatadogAgent) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputDatadogAgent) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputDatadogAgent) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputDatadogAgent) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputDatadogAgent) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputDatadogAgent) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputDatadogAgent) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputDatadogAgent) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputDatadogAgent) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputDatadogAgent) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputDatadogAgent) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputDatadogAgent) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputDatadogAgent) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputDatadogAgent) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputDatadogAgent) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputDatadogAgent) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputDatadogAgent) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputDatadogAgent) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputDatadogAgent) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputDatadogAgent) GetExtractMetrics() *bool {
-	if o == nil {
+func (i *InputDatadogAgent) GetExtractMetrics() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ExtractMetrics
+	return i.ExtractMetrics
 }
 
-func (o *InputDatadogAgent) GetMetadata() []InputDatadogAgentMetadatum {
-	if o == nil {
+func (i *InputDatadogAgent) GetMetadata() []InputDatadogAgentMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputDatadogAgent) GetProxyMode() *InputDatadogAgentProxyMode {
-	if o == nil {
+func (i *InputDatadogAgent) GetProxyMode() *InputDatadogAgentProxyMode {
+	if i == nil {
 		return nil
 	}
-	return o.ProxyMode
+	return i.ProxyMode
 }
 
-func (o *InputDatadogAgent) GetDescription() *string {
-	if o == nil {
+func (i *InputDatadogAgent) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

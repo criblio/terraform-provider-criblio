@@ -11,44 +11,44 @@ type UpgradeResult struct {
 	UpgradedToVersion VersionInfo   `json:"upgradedToVersion"`
 }
 
-func (o *UpgradeResult) GetAvailableVersions() []VersionInfo {
-	if o == nil {
+func (u *UpgradeResult) GetAvailableVersions() []VersionInfo {
+	if u == nil {
 		return []VersionInfo{}
 	}
-	return o.AvailableVersions
+	return u.AvailableVersions
 }
 
-func (o *UpgradeResult) GetCanUpgrade() bool {
-	if o == nil {
+func (u *UpgradeResult) GetCanUpgrade() bool {
+	if u == nil {
 		return false
 	}
-	return o.CanUpgrade
+	return u.CanUpgrade
 }
 
-func (o *UpgradeResult) GetInstalledVersion() VersionInfo {
-	if o == nil {
+func (u *UpgradeResult) GetInstalledVersion() VersionInfo {
+	if u == nil {
 		return VersionInfo{}
 	}
-	return o.InstalledVersion
+	return u.InstalledVersion
 }
 
-func (o *UpgradeResult) GetIsSuccess() bool {
-	if o == nil {
+func (u *UpgradeResult) GetIsSuccess() bool {
+	if u == nil {
 		return false
 	}
-	return o.IsSuccess
+	return u.IsSuccess
 }
 
-func (o *UpgradeResult) GetMessage() string {
-	if o == nil {
+func (u *UpgradeResult) GetMessage() string {
+	if u == nil {
 		return ""
 	}
-	return o.Message
+	return u.Message
 }
 
-func (o *UpgradeResult) GetUpgradedToVersion() VersionInfo {
-	if o == nil {
+func (u *UpgradeResult) GetUpgradedToVersion() VersionInfo {
+	if u == nil {
 		return VersionInfo{}
 	}
-	return o.UpgradedToVersion
+	return u.UpgradedToVersion
 }

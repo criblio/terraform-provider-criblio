@@ -47,18 +47,18 @@ func (i *InputModelDrivenTelemetryConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputModelDrivenTelemetryConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputModelDrivenTelemetryConnection) GetOutput() string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputModelDrivenTelemetryMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputModelDrivenTelemetryPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputModelDrivenTelemetryPq) GetMode() *InputModelDrivenTelemetryMode {
-	if o == nil {
+func (i *InputModelDrivenTelemetryPq) GetMode() *InputModelDrivenTelemetryMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputModelDrivenTelemetryPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputModelDrivenTelemetryPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputModelDrivenTelemetryPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputModelDrivenTelemetryPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputModelDrivenTelemetryPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputModelDrivenTelemetryPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputModelDrivenTelemetryPq) GetPath() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputModelDrivenTelemetryPq) GetCompress() *InputModelDrivenTelemetryCompression {
-	if o == nil {
+func (i *InputModelDrivenTelemetryPq) GetCompress() *InputModelDrivenTelemetryCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputModelDrivenTelemetryMinimumTLSVersion string
@@ -285,74 +285,74 @@ func (i *InputModelDrivenTelemetryTLSSettingsServerSide) UnmarshalJSON(data []by
 	return nil
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetMinVersion() *InputModelDrivenTelemetryMinimumTLSVersion {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetMinVersion() *InputModelDrivenTelemetryMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputModelDrivenTelemetryTLSSettingsServerSide) GetMaxVersion() *InputModelDrivenTelemetryMaximumTLSVersion {
-	if o == nil {
+func (i *InputModelDrivenTelemetryTLSSettingsServerSide) GetMaxVersion() *InputModelDrivenTelemetryMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputModelDrivenTelemetryMetadatum struct {
@@ -372,18 +372,18 @@ func (i *InputModelDrivenTelemetryMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputModelDrivenTelemetryMetadatum) GetName() string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputModelDrivenTelemetryMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputModelDrivenTelemetryMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputModelDrivenTelemetry struct {
@@ -429,121 +429,121 @@ func (i *InputModelDrivenTelemetry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputModelDrivenTelemetry) GetID() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputModelDrivenTelemetry) GetType() *InputModelDrivenTelemetryType {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetType() *InputModelDrivenTelemetryType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputModelDrivenTelemetry) GetDisabled() *bool {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputModelDrivenTelemetry) GetPipeline() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputModelDrivenTelemetry) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputModelDrivenTelemetry) GetEnvironment() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputModelDrivenTelemetry) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputModelDrivenTelemetry) GetStreamtags() []string {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputModelDrivenTelemetry) GetConnections() []InputModelDrivenTelemetryConnection {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetConnections() []InputModelDrivenTelemetryConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputModelDrivenTelemetry) GetPq() *InputModelDrivenTelemetryPq {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetPq() *InputModelDrivenTelemetryPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputModelDrivenTelemetry) GetHost() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputModelDrivenTelemetry) GetPort() *float64 {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetPort() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputModelDrivenTelemetry) GetTLS() *InputModelDrivenTelemetryTLSSettingsServerSide {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetTLS() *InputModelDrivenTelemetryTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputModelDrivenTelemetry) GetMetadata() []InputModelDrivenTelemetryMetadatum {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetMetadata() []InputModelDrivenTelemetryMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputModelDrivenTelemetry) GetMaxActiveCxn() *float64 {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetMaxActiveCxn() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveCxn
+	return i.MaxActiveCxn
 }
 
-func (o *InputModelDrivenTelemetry) GetShutdownTimeoutMs() *float64 {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetShutdownTimeoutMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ShutdownTimeoutMs
+	return i.ShutdownTimeoutMs
 }
 
-func (o *InputModelDrivenTelemetry) GetDescription() *string {
-	if o == nil {
+func (i *InputModelDrivenTelemetry) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

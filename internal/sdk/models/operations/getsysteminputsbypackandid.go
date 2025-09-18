@@ -16,25 +16,25 @@ type GetSystemInputsByPackAndIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetSystemInputsByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetSystemInputsByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
-func (o *GetSystemInputsByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetSystemInputsByPackAndIDResponseBody - a list of Routes objects
@@ -42,11 +42,11 @@ type GetSystemInputsByPackAndIDResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetSystemInputsByPackAndIDResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDResponseBody) GetItems() []shared.Routes {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSystemInputsByPackAndIDResponse struct {
@@ -62,37 +62,37 @@ type GetSystemInputsByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSystemInputsByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSystemInputsByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSystemInputsByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSystemInputsByPackAndIDResponse) GetObject() *GetSystemInputsByPackAndIDResponseBody {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDResponse) GetObject() *GetSystemInputsByPackAndIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSystemInputsByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSystemInputsByPackAndIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

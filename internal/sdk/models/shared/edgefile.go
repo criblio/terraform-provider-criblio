@@ -12,51 +12,51 @@ type EdgeFile struct {
 	Size        float64           `json:"size"`
 }
 
-func (o *EdgeFile) GetFilePath() string {
-	if o == nil {
+func (e *EdgeFile) GetFilePath() string {
+	if e == nil {
 		return ""
 	}
-	return o.FilePath
+	return e.FilePath
 }
 
-func (o *EdgeFile) GetID() string {
-	if o == nil {
+func (e *EdgeFile) GetID() string {
+	if e == nil {
 		return ""
 	}
-	return o.ID
+	return e.ID
 }
 
-func (o *EdgeFile) GetModTime() float64 {
-	if o == nil {
+func (e *EdgeFile) GetModTime() float64 {
+	if e == nil {
 		return 0.0
 	}
-	return o.ModTime
+	return e.ModTime
 }
 
-func (o *EdgeFile) GetMode() string {
-	if o == nil {
+func (e *EdgeFile) GetMode() string {
+	if e == nil {
 		return ""
 	}
-	return o.Mode
+	return e.Mode
 }
 
-func (o *EdgeFile) GetOwner() float64 {
-	if o == nil {
+func (e *EdgeFile) GetOwner() float64 {
+	if e == nil {
 		return 0.0
 	}
-	return o.Owner
+	return e.Owner
 }
 
-func (o *EdgeFile) GetProcessInfo() []FileProcessInfo {
-	if o == nil {
+func (e *EdgeFile) GetProcessInfo() []FileProcessInfo {
+	if e == nil {
 		return nil
 	}
-	return o.ProcessInfo
+	return e.ProcessInfo
 }
 
-func (o *EdgeFile) GetSize() float64 {
-	if o == nil {
+func (e *EdgeFile) GetSize() float64 {
+	if e == nil {
 		return 0.0
 	}
-	return o.Size
+	return e.Size
 }

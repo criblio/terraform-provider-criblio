@@ -12,11 +12,11 @@ type ListHmacFunctionRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListHmacFunctionRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListHmacFunctionRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListHmacFunctionResponseBody - a list of HmacFunction objects
@@ -24,11 +24,11 @@ type ListHmacFunctionResponseBody struct {
 	Items []shared.HmacFunction `json:"items,omitempty"`
 }
 
-func (o *ListHmacFunctionResponseBody) GetItems() []shared.HmacFunction {
-	if o == nil {
+func (l *ListHmacFunctionResponseBody) GetItems() []shared.HmacFunction {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListHmacFunctionResponse struct {
@@ -44,37 +44,37 @@ type ListHmacFunctionResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListHmacFunctionResponse) GetContentType() string {
-	if o == nil {
+func (l *ListHmacFunctionResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListHmacFunctionResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListHmacFunctionResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListHmacFunctionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListHmacFunctionResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListHmacFunctionResponse) GetObject() *ListHmacFunctionResponseBody {
-	if o == nil {
+func (l *ListHmacFunctionResponse) GetObject() *ListHmacFunctionResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListHmacFunctionResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListHmacFunctionResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

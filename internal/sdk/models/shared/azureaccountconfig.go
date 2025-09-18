@@ -28,30 +28,30 @@ func (a *AzureAccountConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureAccountConfig) GetName() string {
-	if o == nil {
+func (a *AzureAccountConfig) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AzureAccountConfig) GetClientID() string {
-	if o == nil {
+func (a *AzureAccountConfig) GetClientID() string {
+	if a == nil {
 		return ""
 	}
-	return o.ClientID
+	return a.ClientID
 }
 
-func (o *AzureAccountConfig) GetClientSecret() string {
-	if o == nil {
+func (a *AzureAccountConfig) GetClientSecret() string {
+	if a == nil {
 		return ""
 	}
-	return o.ClientSecret
+	return a.ClientSecret
 }
 
-func (o *AzureAccountConfig) GetTenantID() string {
-	if o == nil {
+func (a *AzureAccountConfig) GetTenantID() string {
+	if a == nil {
 		return ""
 	}
-	return o.TenantID
+	return a.TenantID
 }

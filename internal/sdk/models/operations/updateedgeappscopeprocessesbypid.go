@@ -12,11 +12,11 @@ type UpdateEdgeAppscopeProcessesByPidRequest struct {
 	Pid string `pathParam:"style=simple,explode=false,name=pid"`
 }
 
-func (o *UpdateEdgeAppscopeProcessesByPidRequest) GetPid() string {
-	if o == nil {
+func (u *UpdateEdgeAppscopeProcessesByPidRequest) GetPid() string {
+	if u == nil {
 		return ""
 	}
-	return o.Pid
+	return u.Pid
 }
 
 // UpdateEdgeAppscopeProcessesByPidResponseBody - a list of AppScopeProcess objects
@@ -24,11 +24,11 @@ type UpdateEdgeAppscopeProcessesByPidResponseBody struct {
 	Items []shared.AppScopeProcess `json:"items,omitempty"`
 }
 
-func (o *UpdateEdgeAppscopeProcessesByPidResponseBody) GetItems() []shared.AppScopeProcess {
-	if o == nil {
+func (u *UpdateEdgeAppscopeProcessesByPidResponseBody) GetItems() []shared.AppScopeProcess {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateEdgeAppscopeProcessesByPidResponse struct {
@@ -44,37 +44,37 @@ type UpdateEdgeAppscopeProcessesByPidResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateEdgeAppscopeProcessesByPidResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateEdgeAppscopeProcessesByPidResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateEdgeAppscopeProcessesByPidResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateEdgeAppscopeProcessesByPidResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateEdgeAppscopeProcessesByPidResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateEdgeAppscopeProcessesByPidResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateEdgeAppscopeProcessesByPidResponse) GetObject() *UpdateEdgeAppscopeProcessesByPidResponseBody {
-	if o == nil {
+func (u *UpdateEdgeAppscopeProcessesByPidResponse) GetObject() *UpdateEdgeAppscopeProcessesByPidResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateEdgeAppscopeProcessesByPidResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateEdgeAppscopeProcessesByPidResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

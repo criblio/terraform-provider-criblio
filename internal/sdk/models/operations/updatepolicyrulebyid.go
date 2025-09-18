@@ -14,18 +14,18 @@ type UpdatePolicyRuleByIDRequest struct {
 	PolicyRule shared.PolicyRule `request:"mediaType=application/json"`
 }
 
-func (o *UpdatePolicyRuleByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdatePolicyRuleByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdatePolicyRuleByIDRequest) GetPolicyRule() shared.PolicyRule {
-	if o == nil {
+func (u *UpdatePolicyRuleByIDRequest) GetPolicyRule() shared.PolicyRule {
+	if u == nil {
 		return shared.PolicyRule{}
 	}
-	return o.PolicyRule
+	return u.PolicyRule
 }
 
 // UpdatePolicyRuleByIDResponseBody - a list of PolicyRule objects
@@ -33,11 +33,11 @@ type UpdatePolicyRuleByIDResponseBody struct {
 	Items []shared.PolicyRule `json:"items,omitempty"`
 }
 
-func (o *UpdatePolicyRuleByIDResponseBody) GetItems() []shared.PolicyRule {
-	if o == nil {
+func (u *UpdatePolicyRuleByIDResponseBody) GetItems() []shared.PolicyRule {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdatePolicyRuleByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdatePolicyRuleByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdatePolicyRuleByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdatePolicyRuleByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdatePolicyRuleByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdatePolicyRuleByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdatePolicyRuleByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdatePolicyRuleByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdatePolicyRuleByIDResponse) GetObject() *UpdatePolicyRuleByIDResponseBody {
-	if o == nil {
+func (u *UpdatePolicyRuleByIDResponse) GetObject() *UpdatePolicyRuleByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdatePolicyRuleByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdatePolicyRuleByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

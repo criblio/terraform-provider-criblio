@@ -7,16 +7,16 @@ type DatatypePreviewRequestBody struct {
 	Input            DatatypePreviewInput `json:"input"`
 }
 
-func (o *DatatypePreviewRequestBody) GetEventBreakerRule() *EventBreakerRule {
-	if o == nil {
+func (d *DatatypePreviewRequestBody) GetEventBreakerRule() *EventBreakerRule {
+	if d == nil {
 		return nil
 	}
-	return o.EventBreakerRule
+	return d.EventBreakerRule
 }
 
-func (o *DatatypePreviewRequestBody) GetInput() DatatypePreviewInput {
-	if o == nil {
+func (d *DatatypePreviewRequestBody) GetInput() DatatypePreviewInput {
+	if d == nil {
 		return DatatypePreviewInput{}
 	}
-	return o.Input
+	return d.Input
 }

@@ -12,11 +12,11 @@ type GetExecutorByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetExecutorByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetExecutorByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetExecutorByIDResponseBody - a list of Executor objects
@@ -24,11 +24,11 @@ type GetExecutorByIDResponseBody struct {
 	Items []shared.Executor `json:"items,omitempty"`
 }
 
-func (o *GetExecutorByIDResponseBody) GetItems() []shared.Executor {
-	if o == nil {
+func (g *GetExecutorByIDResponseBody) GetItems() []shared.Executor {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetExecutorByIDResponse struct {
@@ -44,37 +44,37 @@ type GetExecutorByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetExecutorByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetExecutorByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetExecutorByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetExecutorByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetExecutorByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetExecutorByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetExecutorByIDResponse) GetObject() *GetExecutorByIDResponseBody {
-	if o == nil {
+func (g *GetExecutorByIDResponse) GetObject() *GetExecutorByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetExecutorByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetExecutorByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

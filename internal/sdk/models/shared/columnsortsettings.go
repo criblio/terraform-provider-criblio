@@ -6,9 +6,9 @@ type ColumnSortSettings struct {
 	Sort any `json:"sort"`
 }
 
-func (o *ColumnSortSettings) GetSort() any {
-	if o == nil {
+func (c *ColumnSortSettings) GetSort() any {
+	if c == nil {
 		return nil
 	}
-	return o.Sort
+	return c.Sort
 }

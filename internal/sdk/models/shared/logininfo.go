@@ -7,16 +7,16 @@ type LoginInfo struct {
 	Password string `json:"password"`
 }
 
-func (o *LoginInfo) GetUsername() string {
-	if o == nil {
+func (l *LoginInfo) GetUsername() string {
+	if l == nil {
 		return ""
 	}
-	return o.Username
+	return l.Username
 }
 
-func (o *LoginInfo) GetPassword() string {
-	if o == nil {
+func (l *LoginInfo) GetPassword() string {
+	if l == nil {
 		return ""
 	}
-	return o.Password
+	return l.Password
 }

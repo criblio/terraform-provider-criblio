@@ -14,18 +14,18 @@ type CreateSearchDashboardACLTeamsApplyByIDRequest struct {
 	AccessControlSchema shared.AccessControlSchema `request:"mediaType=application/json"`
 }
 
-func (o *CreateSearchDashboardACLTeamsApplyByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateSearchDashboardACLTeamsApplyByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateSearchDashboardACLTeamsApplyByIDRequest) GetAccessControlSchema() shared.AccessControlSchema {
-	if o == nil {
+func (c *CreateSearchDashboardACLTeamsApplyByIDRequest) GetAccessControlSchema() shared.AccessControlSchema {
+	if c == nil {
 		return shared.AccessControlSchema{}
 	}
-	return o.AccessControlSchema
+	return c.AccessControlSchema
 }
 
 type CreateSearchDashboardACLTeamsApplyByIDResponse struct {
@@ -39,30 +39,30 @@ type CreateSearchDashboardACLTeamsApplyByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSearchDashboardACLTeamsApplyByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSearchDashboardACLTeamsApplyByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSearchDashboardACLTeamsApplyByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSearchDashboardACLTeamsApplyByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSearchDashboardACLTeamsApplyByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSearchDashboardACLTeamsApplyByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSearchDashboardACLTeamsApplyByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSearchDashboardACLTeamsApplyByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

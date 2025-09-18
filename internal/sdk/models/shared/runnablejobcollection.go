@@ -126,95 +126,95 @@ func (r *RunnableJobCollectionRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobCollectionRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetRescheduleDroppedTasks() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return r.RescheduleDroppedTasks
 }
 
-func (o *RunnableJobCollectionRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetMaxTaskReschedule() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return r.MaxTaskReschedule
 }
 
-func (o *RunnableJobCollectionRunSettings) GetLogLevel() *RunnableJobCollectionScheduleLogLevel {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetLogLevel() *RunnableJobCollectionScheduleLogLevel {
+	if r == nil {
 		return nil
 	}
-	return o.LogLevel
+	return r.LogLevel
 }
 
-func (o *RunnableJobCollectionRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetJobTimeout() *string {
+	if r == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return r.JobTimeout
 }
 
-func (o *RunnableJobCollectionRunSettings) GetMode() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetMode() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Mode
+	return r.Mode
 }
 
-func (o *RunnableJobCollectionRunSettings) GetTimeRangeType() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetTimeRangeType() *string {
+	if r == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return r.TimeRangeType
 }
 
-func (o *RunnableJobCollectionRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetEarliest() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Earliest
+	return r.Earliest
 }
 
-func (o *RunnableJobCollectionRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetLatest() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Latest
+	return r.Latest
 }
 
-func (o *RunnableJobCollectionRunSettings) GetTimestampTimezone() any {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetTimestampTimezone() any {
+	if r == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return r.TimestampTimezone
 }
 
-func (o *RunnableJobCollectionRunSettings) GetTimeWarning() *RunnableJobCollectionScheduleTimeWarning {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetTimeWarning() *RunnableJobCollectionScheduleTimeWarning {
+	if r == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return r.TimeWarning
 }
 
-func (o *RunnableJobCollectionRunSettings) GetExpression() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetExpression() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Expression
+	return r.Expression
 }
 
-func (o *RunnableJobCollectionRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetMinTaskSize() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return r.MinTaskSize
 }
 
-func (o *RunnableJobCollectionRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRunSettings) GetMaxTaskSize() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return r.MaxTaskSize
 }
 
 // RunnableJobCollectionSchedule - Configuration for a scheduled job
@@ -242,46 +242,46 @@ func (r *RunnableJobCollectionSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobCollectionSchedule) GetEnabled() *bool {
-	if o == nil {
+func (r *RunnableJobCollectionSchedule) GetEnabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Enabled
+	return r.Enabled
 }
 
-func (o *RunnableJobCollectionSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (r *RunnableJobCollectionSchedule) GetCronSchedule() *string {
+	if r == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return r.CronSchedule
 }
 
-func (o *RunnableJobCollectionSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (r *RunnableJobCollectionSchedule) GetMaxConcurrentRuns() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return r.MaxConcurrentRuns
 }
 
-func (o *RunnableJobCollectionSchedule) GetSkippable() *bool {
-	if o == nil {
+func (r *RunnableJobCollectionSchedule) GetSkippable() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Skippable
+	return r.Skippable
 }
 
-func (o *RunnableJobCollectionSchedule) GetResumeMissed() any {
-	if o == nil {
+func (r *RunnableJobCollectionSchedule) GetResumeMissed() any {
+	if r == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return r.ResumeMissed
 }
 
-func (o *RunnableJobCollectionSchedule) GetRun() *RunnableJobCollectionRunSettings {
-	if o == nil {
+func (r *RunnableJobCollectionSchedule) GetRun() *RunnableJobCollectionRunSettings {
+	if r == nil {
 		return nil
 	}
-	return o.Run
+	return r.Run
 }
 
 type RunnableJobCollectionCollectorSpecificSettings struct {
@@ -319,32 +319,32 @@ func (r *RunnableJobCollectionCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobCollectionCollector) GetType() string {
-	if o == nil {
+func (r *RunnableJobCollectionCollector) GetType() string {
+	if r == nil {
 		return ""
 	}
-	return o.Type
+	return r.Type
 }
 
-func (o *RunnableJobCollectionCollector) GetConf() RunnableJobCollectionCollectorSpecificSettings {
-	if o == nil {
+func (r *RunnableJobCollectionCollector) GetConf() RunnableJobCollectionCollectorSpecificSettings {
+	if r == nil {
 		return RunnableJobCollectionCollectorSpecificSettings{}
 	}
-	return o.Conf
+	return r.Conf
 }
 
-func (o *RunnableJobCollectionCollector) GetDestructive() *bool {
-	if o == nil {
+func (r *RunnableJobCollectionCollector) GetDestructive() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Destructive
+	return r.Destructive
 }
 
-func (o *RunnableJobCollectionCollector) GetEncoding() *string {
-	if o == nil {
+func (r *RunnableJobCollectionCollector) GetEncoding() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Encoding
+	return r.Encoding
 }
 
 type RunnableJobCollectionType string
@@ -389,25 +389,25 @@ func (r *RunnableJobCollectionPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobCollectionPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (r *RunnableJobCollectionPreprocess) GetDisabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Disabled
+	return r.Disabled
 }
 
-func (o *RunnableJobCollectionPreprocess) GetCommand() *string {
-	if o == nil {
+func (r *RunnableJobCollectionPreprocess) GetCommand() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Command
+	return r.Command
 }
 
-func (o *RunnableJobCollectionPreprocess) GetArgs() []string {
-	if o == nil {
+func (r *RunnableJobCollectionPreprocess) GetArgs() []string {
+	if r == nil {
 		return nil
 	}
-	return o.Args
+	return r.Args
 }
 
 type RunnableJobCollectionMetadatum struct {
@@ -427,18 +427,18 @@ func (r *RunnableJobCollectionMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobCollectionMetadatum) GetName() string {
-	if o == nil {
+func (r *RunnableJobCollectionMetadatum) GetName() string {
+	if r == nil {
 		return ""
 	}
-	return o.Name
+	return r.Name
 }
 
-func (o *RunnableJobCollectionMetadatum) GetValue() string {
-	if o == nil {
+func (r *RunnableJobCollectionMetadatum) GetValue() string {
+	if r == nil {
 		return ""
 	}
-	return o.Value
+	return r.Value
 }
 
 type RunnableJobCollectionInput struct {
@@ -471,67 +471,67 @@ func (r *RunnableJobCollectionInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobCollectionInput) GetType() *RunnableJobCollectionType {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetType() *RunnableJobCollectionType {
+	if r == nil {
 		return nil
 	}
-	return o.Type
+	return r.Type
 }
 
-func (o *RunnableJobCollectionInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetBreakerRulesets() []string {
+	if r == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return r.BreakerRulesets
 }
 
-func (o *RunnableJobCollectionInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetStaleChannelFlushMs() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return r.StaleChannelFlushMs
 }
 
-func (o *RunnableJobCollectionInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetSendToRoutes() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return r.SendToRoutes
 }
 
-func (o *RunnableJobCollectionInput) GetPreprocess() *RunnableJobCollectionPreprocess {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetPreprocess() *RunnableJobCollectionPreprocess {
+	if r == nil {
 		return nil
 	}
-	return o.Preprocess
+	return r.Preprocess
 }
 
-func (o *RunnableJobCollectionInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetThrottleRatePerSec() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return r.ThrottleRatePerSec
 }
 
-func (o *RunnableJobCollectionInput) GetMetadata() []RunnableJobCollectionMetadatum {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetMetadata() []RunnableJobCollectionMetadatum {
+	if r == nil {
 		return nil
 	}
-	return o.Metadata
+	return r.Metadata
 }
 
-func (o *RunnableJobCollectionInput) GetPipeline() *string {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetPipeline() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Pipeline
+	return r.Pipeline
 }
 
-func (o *RunnableJobCollectionInput) GetOutput() *string {
-	if o == nil {
+func (r *RunnableJobCollectionInput) GetOutput() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Output
+	return r.Output
 }
 
 // RunnableJobCollectionLogLevel - Level at which to set task logging
@@ -691,25 +691,25 @@ func (c *CaptureSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CaptureSettings) GetDuration() *float64 {
-	if o == nil {
+func (c *CaptureSettings) GetDuration() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.Duration
+	return c.Duration
 }
 
-func (o *CaptureSettings) GetMaxEvents() *float64 {
-	if o == nil {
+func (c *CaptureSettings) GetMaxEvents() *float64 {
+	if c == nil {
 		return nil
 	}
-	return o.MaxEvents
+	return c.MaxEvents
 }
 
-func (o *CaptureSettings) GetLevel() *WhereToCapture {
-	if o == nil {
+func (c *CaptureSettings) GetLevel() *WhereToCapture {
+	if c == nil {
 		return nil
 	}
-	return o.Level
+	return c.Level
 }
 
 type RunnableJobCollectionRun struct {
@@ -755,109 +755,109 @@ func (r *RunnableJobCollectionRun) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobCollectionRun) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetRescheduleDroppedTasks() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return r.RescheduleDroppedTasks
 }
 
-func (o *RunnableJobCollectionRun) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetMaxTaskReschedule() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return r.MaxTaskReschedule
 }
 
-func (o *RunnableJobCollectionRun) GetLogLevel() *RunnableJobCollectionLogLevel {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetLogLevel() *RunnableJobCollectionLogLevel {
+	if r == nil {
 		return nil
 	}
-	return o.LogLevel
+	return r.LogLevel
 }
 
-func (o *RunnableJobCollectionRun) GetJobTimeout() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetJobTimeout() *string {
+	if r == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return r.JobTimeout
 }
 
-func (o *RunnableJobCollectionRun) GetMode() *RunnableJobCollectionMode {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetMode() *RunnableJobCollectionMode {
+	if r == nil {
 		return nil
 	}
-	return o.Mode
+	return r.Mode
 }
 
-func (o *RunnableJobCollectionRun) GetTimeRangeType() *RunnableJobCollectionTimeRange {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetTimeRangeType() *RunnableJobCollectionTimeRange {
+	if r == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return r.TimeRangeType
 }
 
-func (o *RunnableJobCollectionRun) GetEarliest() *float64 {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetEarliest() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Earliest
+	return r.Earliest
 }
 
-func (o *RunnableJobCollectionRun) GetLatest() *float64 {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetLatest() *float64 {
+	if r == nil {
 		return nil
 	}
-	return o.Latest
+	return r.Latest
 }
 
-func (o *RunnableJobCollectionRun) GetTimestampTimezone() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetTimestampTimezone() *string {
+	if r == nil {
 		return nil
 	}
-	return o.TimestampTimezone
+	return r.TimestampTimezone
 }
 
-func (o *RunnableJobCollectionRun) GetTimeWarning() *RunnableJobCollectionTimeWarning {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetTimeWarning() *RunnableJobCollectionTimeWarning {
+	if r == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return r.TimeWarning
 }
 
-func (o *RunnableJobCollectionRun) GetExpression() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetExpression() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Expression
+	return r.Expression
 }
 
-func (o *RunnableJobCollectionRun) GetMinTaskSize() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetMinTaskSize() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return r.MinTaskSize
 }
 
-func (o *RunnableJobCollectionRun) GetMaxTaskSize() *string {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetMaxTaskSize() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return r.MaxTaskSize
 }
 
-func (o *RunnableJobCollectionRun) GetDiscoverToRoutes() *bool {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetDiscoverToRoutes() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.DiscoverToRoutes
+	return r.DiscoverToRoutes
 }
 
-func (o *RunnableJobCollectionRun) GetCapture() *CaptureSettings {
-	if o == nil {
+func (r *RunnableJobCollectionRun) GetCapture() *CaptureSettings {
+	if r == nil {
 		return nil
 	}
-	return o.Capture
+	return r.Capture
 }
 
 type RunnableJobCollection struct {
@@ -897,100 +897,100 @@ func (r *RunnableJobCollection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RunnableJobCollection) GetID() *string {
-	if o == nil {
+func (r *RunnableJobCollection) GetID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *RunnableJobCollection) GetDescription() *string {
-	if o == nil {
+func (r *RunnableJobCollection) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *RunnableJobCollection) GetType() *RunnableJobCollectionJobType {
-	if o == nil {
+func (r *RunnableJobCollection) GetType() *RunnableJobCollectionJobType {
+	if r == nil {
 		return nil
 	}
-	return o.Type
+	return r.Type
 }
 
-func (o *RunnableJobCollection) GetTTL() *string {
-	if o == nil {
+func (r *RunnableJobCollection) GetTTL() *string {
+	if r == nil {
 		return nil
 	}
-	return o.TTL
+	return r.TTL
 }
 
-func (o *RunnableJobCollection) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (r *RunnableJobCollection) GetIgnoreGroupJobsLimit() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return r.IgnoreGroupJobsLimit
 }
 
-func (o *RunnableJobCollection) GetRemoveFields() []string {
-	if o == nil {
+func (r *RunnableJobCollection) GetRemoveFields() []string {
+	if r == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return r.RemoveFields
 }
 
-func (o *RunnableJobCollection) GetResumeOnBoot() *bool {
-	if o == nil {
+func (r *RunnableJobCollection) GetResumeOnBoot() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return r.ResumeOnBoot
 }
 
-func (o *RunnableJobCollection) GetEnvironment() *string {
-	if o == nil {
+func (r *RunnableJobCollection) GetEnvironment() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Environment
+	return r.Environment
 }
 
-func (o *RunnableJobCollection) GetSchedule() *RunnableJobCollectionSchedule {
-	if o == nil {
+func (r *RunnableJobCollection) GetSchedule() *RunnableJobCollectionSchedule {
+	if r == nil {
 		return nil
 	}
-	return o.Schedule
+	return r.Schedule
 }
 
-func (o *RunnableJobCollection) GetStreamtags() []string {
-	if o == nil {
+func (r *RunnableJobCollection) GetStreamtags() []string {
+	if r == nil {
 		return nil
 	}
-	return o.Streamtags
+	return r.Streamtags
 }
 
-func (o *RunnableJobCollection) GetWorkerAffinity() *bool {
-	if o == nil {
+func (r *RunnableJobCollection) GetWorkerAffinity() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return r.WorkerAffinity
 }
 
-func (o *RunnableJobCollection) GetCollector() RunnableJobCollectionCollector {
-	if o == nil {
+func (r *RunnableJobCollection) GetCollector() RunnableJobCollectionCollector {
+	if r == nil {
 		return RunnableJobCollectionCollector{}
 	}
-	return o.Collector
+	return r.Collector
 }
 
-func (o *RunnableJobCollection) GetInput() *RunnableJobCollectionInput {
-	if o == nil {
+func (r *RunnableJobCollection) GetInput() *RunnableJobCollectionInput {
+	if r == nil {
 		return nil
 	}
-	return o.Input
+	return r.Input
 }
 
-func (o *RunnableJobCollection) GetRun() RunnableJobCollectionRun {
-	if o == nil {
+func (r *RunnableJobCollection) GetRun() RunnableJobCollectionRun {
+	if r == nil {
 		return RunnableJobCollectionRun{}
 	}
-	return o.Run
+	return r.Run
 }

@@ -84,25 +84,25 @@ type GetProductsGroupsACLTeamsByProductAndIDRequest struct {
 	Type *GetProductsGroupsACLTeamsByProductAndIDType `queryParam:"style=form,explode=true,name=type"`
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDRequest) GetProduct() GetProductsGroupsACLTeamsByProductAndIDProduct {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDRequest) GetProduct() GetProductsGroupsACLTeamsByProductAndIDProduct {
+	if g == nil {
 		return GetProductsGroupsACLTeamsByProductAndIDProduct("")
 	}
-	return o.Product
+	return g.Product
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDRequest) GetID() string {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDRequest) GetType() *GetProductsGroupsACLTeamsByProductAndIDType {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDRequest) GetType() *GetProductsGroupsACLTeamsByProductAndIDType {
+	if g == nil {
 		return nil
 	}
-	return o.Type
+	return g.Type
 }
 
 // GetProductsGroupsACLTeamsByProductAndIDResponseBody - a list of TeamAccessControlList objects
@@ -110,11 +110,11 @@ type GetProductsGroupsACLTeamsByProductAndIDResponseBody struct {
 	Items []shared.TeamAccessControlList `json:"items,omitempty"`
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDResponseBody) GetItems() []shared.TeamAccessControlList {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDResponseBody) GetItems() []shared.TeamAccessControlList {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetProductsGroupsACLTeamsByProductAndIDResponse struct {
@@ -130,37 +130,37 @@ type GetProductsGroupsACLTeamsByProductAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDResponse) GetObject() *GetProductsGroupsACLTeamsByProductAndIDResponseBody {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDResponse) GetObject() *GetProductsGroupsACLTeamsByProductAndIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetProductsGroupsACLTeamsByProductAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetProductsGroupsACLTeamsByProductAndIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

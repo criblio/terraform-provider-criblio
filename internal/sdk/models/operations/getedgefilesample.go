@@ -14,18 +14,18 @@ type GetEdgeFileSampleRequest struct {
 	BytesRequested *float64 `queryParam:"style=form,explode=true,name=bytesRequested"`
 }
 
-func (o *GetEdgeFileSampleRequest) GetPath() string {
-	if o == nil {
+func (g *GetEdgeFileSampleRequest) GetPath() string {
+	if g == nil {
 		return ""
 	}
-	return o.Path
+	return g.Path
 }
 
-func (o *GetEdgeFileSampleRequest) GetBytesRequested() *float64 {
-	if o == nil {
+func (g *GetEdgeFileSampleRequest) GetBytesRequested() *float64 {
+	if g == nil {
 		return nil
 	}
-	return o.BytesRequested
+	return g.BytesRequested
 }
 
 // GetEdgeFileSampleResponseBody - a list of SampleFile objects
@@ -33,11 +33,11 @@ type GetEdgeFileSampleResponseBody struct {
 	Items []shared.SampleFile `json:"items,omitempty"`
 }
 
-func (o *GetEdgeFileSampleResponseBody) GetItems() []shared.SampleFile {
-	if o == nil {
+func (g *GetEdgeFileSampleResponseBody) GetItems() []shared.SampleFile {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetEdgeFileSampleResponse struct {
@@ -53,37 +53,37 @@ type GetEdgeFileSampleResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetEdgeFileSampleResponse) GetContentType() string {
-	if o == nil {
+func (g *GetEdgeFileSampleResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetEdgeFileSampleResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetEdgeFileSampleResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetEdgeFileSampleResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetEdgeFileSampleResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetEdgeFileSampleResponse) GetObject() *GetEdgeFileSampleResponseBody {
-	if o == nil {
+func (g *GetEdgeFileSampleResponse) GetObject() *GetEdgeFileSampleResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetEdgeFileSampleResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetEdgeFileSampleResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

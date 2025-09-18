@@ -7,16 +7,16 @@ type ProjectGitCommitParams struct {
 	Message   string `json:"message"`
 }
 
-func (o *ProjectGitCommitParams) GetEffective() *bool {
-	if o == nil {
+func (p *ProjectGitCommitParams) GetEffective() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Effective
+	return p.Effective
 }
 
-func (o *ProjectGitCommitParams) GetMessage() string {
-	if o == nil {
+func (p *ProjectGitCommitParams) GetMessage() string {
+	if p == nil {
 		return ""
 	}
-	return o.Message
+	return p.Message
 }

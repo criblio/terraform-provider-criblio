@@ -47,18 +47,18 @@ func (i *InputSecurityLakeConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSecurityLakeConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputSecurityLakeConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSecurityLakeConnection) GetOutput() string {
-	if o == nil {
+func (i *InputSecurityLakeConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputSecurityLakeMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputSecurityLakePq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSecurityLakePq) GetMode() *InputSecurityLakeMode {
-	if o == nil {
+func (i *InputSecurityLakePq) GetMode() *InputSecurityLakeMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputSecurityLakePq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputSecurityLakePq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputSecurityLakePq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputSecurityLakePq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputSecurityLakePq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputSecurityLakePq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputSecurityLakePq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputSecurityLakePq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputSecurityLakePq) GetPath() *string {
-	if o == nil {
+func (i *InputSecurityLakePq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputSecurityLakePq) GetCompress() *InputSecurityLakeCompression {
-	if o == nil {
+func (i *InputSecurityLakePq) GetCompress() *InputSecurityLakeCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputSecurityLakeAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
@@ -268,25 +268,25 @@ func (i *InputSecurityLakePreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSecurityLakePreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSecurityLakePreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSecurityLakePreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputSecurityLakePreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputSecurityLakePreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputSecurityLakePreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputSecurityLakeMetadatum struct {
@@ -306,18 +306,18 @@ func (i *InputSecurityLakeMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSecurityLakeMetadatum) GetName() string {
-	if o == nil {
+func (i *InputSecurityLakeMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputSecurityLakeMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputSecurityLakeMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputSecurityLakeCheckpointing struct {
@@ -338,18 +338,18 @@ func (i *InputSecurityLakeCheckpointing) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSecurityLakeCheckpointing) GetEnabled() *bool {
-	if o == nil {
+func (i *InputSecurityLakeCheckpointing) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputSecurityLakeCheckpointing) GetRetries() *float64 {
-	if o == nil {
+func (i *InputSecurityLakeCheckpointing) GetRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Retries
+	return i.Retries
 }
 
 type InputSecurityLakeTagAfterProcessing string
@@ -473,317 +473,317 @@ func (i *InputSecurityLake) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputSecurityLake) GetID() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputSecurityLake) GetType() InputSecurityLakeType {
-	if o == nil {
+func (i *InputSecurityLake) GetType() InputSecurityLakeType {
+	if i == nil {
 		return InputSecurityLakeType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputSecurityLake) GetDisabled() *bool {
-	if o == nil {
+func (i *InputSecurityLake) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputSecurityLake) GetPipeline() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputSecurityLake) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputSecurityLake) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputSecurityLake) GetEnvironment() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputSecurityLake) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputSecurityLake) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputSecurityLake) GetStreamtags() []string {
-	if o == nil {
+func (i *InputSecurityLake) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputSecurityLake) GetConnections() []InputSecurityLakeConnection {
-	if o == nil {
+func (i *InputSecurityLake) GetConnections() []InputSecurityLakeConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputSecurityLake) GetPq() *InputSecurityLakePq {
-	if o == nil {
+func (i *InputSecurityLake) GetPq() *InputSecurityLakePq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputSecurityLake) GetQueueName() string {
-	if o == nil {
+func (i *InputSecurityLake) GetQueueName() string {
+	if i == nil {
 		return ""
 	}
-	return o.QueueName
+	return i.QueueName
 }
 
-func (o *InputSecurityLake) GetFileFilter() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetFileFilter() *string {
+	if i == nil {
 		return nil
 	}
-	return o.FileFilter
+	return i.FileFilter
 }
 
-func (o *InputSecurityLake) GetAwsAccountID() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetAwsAccountID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAccountID
+	return i.AwsAccountID
 }
 
-func (o *InputSecurityLake) GetAwsAuthenticationMethod() *InputSecurityLakeAuthenticationMethod {
-	if o == nil {
+func (i *InputSecurityLake) GetAwsAuthenticationMethod() *InputSecurityLakeAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAuthenticationMethod
+	return i.AwsAuthenticationMethod
 }
 
-func (o *InputSecurityLake) GetAwsSecretKey() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetAwsSecretKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecretKey
+	return i.AwsSecretKey
 }
 
-func (o *InputSecurityLake) GetRegion() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetRegion() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Region
+	return i.Region
 }
 
-func (o *InputSecurityLake) GetEndpoint() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputSecurityLake) GetSignatureVersion() *InputSecurityLakeSignatureVersion {
-	if o == nil {
+func (i *InputSecurityLake) GetSignatureVersion() *InputSecurityLakeSignatureVersion {
+	if i == nil {
 		return nil
 	}
-	return o.SignatureVersion
+	return i.SignatureVersion
 }
 
-func (o *InputSecurityLake) GetReuseConnections() *bool {
-	if o == nil {
+func (i *InputSecurityLake) GetReuseConnections() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ReuseConnections
+	return i.ReuseConnections
 }
 
-func (o *InputSecurityLake) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputSecurityLake) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputSecurityLake) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputSecurityLake) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputSecurityLake) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputSecurityLake) GetMaxMessages() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetMaxMessages() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMessages
+	return i.MaxMessages
 }
 
-func (o *InputSecurityLake) GetVisibilityTimeout() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetVisibilityTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.VisibilityTimeout
+	return i.VisibilityTimeout
 }
 
-func (o *InputSecurityLake) GetNumReceivers() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetNumReceivers() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.NumReceivers
+	return i.NumReceivers
 }
 
-func (o *InputSecurityLake) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputSecurityLake) GetSkipOnError() *bool {
-	if o == nil {
+func (i *InputSecurityLake) GetSkipOnError() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SkipOnError
+	return i.SkipOnError
 }
 
-func (o *InputSecurityLake) GetEnableAssumeRole() *bool {
-	if o == nil {
+func (i *InputSecurityLake) GetEnableAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableAssumeRole
+	return i.EnableAssumeRole
 }
 
-func (o *InputSecurityLake) GetAssumeRoleArn() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetAssumeRoleArn() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return i.AssumeRoleArn
 }
 
-func (o *InputSecurityLake) GetAssumeRoleExternalID() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetAssumeRoleExternalID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AssumeRoleExternalID
+	return i.AssumeRoleExternalID
 }
 
-func (o *InputSecurityLake) GetDurationSeconds() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetDurationSeconds() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.DurationSeconds
+	return i.DurationSeconds
 }
 
-func (o *InputSecurityLake) GetEnableSQSAssumeRole() *bool {
-	if o == nil {
+func (i *InputSecurityLake) GetEnableSQSAssumeRole() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableSQSAssumeRole
+	return i.EnableSQSAssumeRole
 }
 
-func (o *InputSecurityLake) GetPreprocess() *InputSecurityLakePreprocess {
-	if o == nil {
+func (i *InputSecurityLake) GetPreprocess() *InputSecurityLakePreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputSecurityLake) GetMetadata() []InputSecurityLakeMetadatum {
-	if o == nil {
+func (i *InputSecurityLake) GetMetadata() []InputSecurityLakeMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputSecurityLake) GetParquetChunkSizeMB() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetParquetChunkSizeMB() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ParquetChunkSizeMB
+	return i.ParquetChunkSizeMB
 }
 
-func (o *InputSecurityLake) GetParquetChunkDownloadTimeout() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetParquetChunkDownloadTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ParquetChunkDownloadTimeout
+	return i.ParquetChunkDownloadTimeout
 }
 
-func (o *InputSecurityLake) GetCheckpointing() *InputSecurityLakeCheckpointing {
-	if o == nil {
+func (i *InputSecurityLake) GetCheckpointing() *InputSecurityLakeCheckpointing {
+	if i == nil {
 		return nil
 	}
-	return o.Checkpointing
+	return i.Checkpointing
 }
 
-func (o *InputSecurityLake) GetPollTimeout() *float64 {
-	if o == nil {
+func (i *InputSecurityLake) GetPollTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.PollTimeout
+	return i.PollTimeout
 }
 
-func (o *InputSecurityLake) GetEncoding() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetEncoding() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Encoding
+	return i.Encoding
 }
 
-func (o *InputSecurityLake) GetDescription() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputSecurityLake) GetAwsAPIKey() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetAwsAPIKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsAPIKey
+	return i.AwsAPIKey
 }
 
-func (o *InputSecurityLake) GetAwsSecret() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetAwsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AwsSecret
+	return i.AwsSecret
 }
 
-func (o *InputSecurityLake) GetTagAfterProcessing() *InputSecurityLakeTagAfterProcessing {
-	if o == nil {
+func (i *InputSecurityLake) GetTagAfterProcessing() *InputSecurityLakeTagAfterProcessing {
+	if i == nil {
 		return nil
 	}
-	return o.TagAfterProcessing
+	return i.TagAfterProcessing
 }
 
-func (o *InputSecurityLake) GetProcessedTagKey() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetProcessedTagKey() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ProcessedTagKey
+	return i.ProcessedTagKey
 }
 
-func (o *InputSecurityLake) GetProcessedTagValue() *string {
-	if o == nil {
+func (i *InputSecurityLake) GetProcessedTagValue() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ProcessedTagValue
+	return i.ProcessedTagValue
 }

@@ -14,18 +14,18 @@ type UpdateSubscriptionByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *UpdateSubscriptionByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateSubscriptionByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateSubscriptionByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateSubscriptionByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
 // UpdateSubscriptionByIDResponseBody - a list of Subscription objects
@@ -33,11 +33,11 @@ type UpdateSubscriptionByIDResponseBody struct {
 	Items []shared.Subscription `json:"items,omitempty"`
 }
 
-func (o *UpdateSubscriptionByIDResponseBody) GetItems() []shared.Subscription {
-	if o == nil {
+func (u *UpdateSubscriptionByIDResponseBody) GetItems() []shared.Subscription {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSubscriptionByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateSubscriptionByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSubscriptionByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSubscriptionByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSubscriptionByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSubscriptionByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSubscriptionByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSubscriptionByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSubscriptionByIDResponse) GetObject() *UpdateSubscriptionByIDResponseBody {
-	if o == nil {
+func (u *UpdateSubscriptionByIDResponse) GetObject() *UpdateSubscriptionByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSubscriptionByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSubscriptionByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

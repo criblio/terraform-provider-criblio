@@ -17,32 +17,32 @@ type CreatePacksRequest struct {
 	PackRequestBody shared.PackRequestBody `request:"mediaType=application/json"`
 }
 
-func (o *CreatePacksRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreatePacksRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreatePacksRequest) GetFilename() *string {
-	if o == nil {
+func (c *CreatePacksRequest) GetFilename() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Filename
+	return c.Filename
 }
 
-func (o *CreatePacksRequest) GetDisabled() *bool {
-	if o == nil {
+func (c *CreatePacksRequest) GetDisabled() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Disabled
+	return c.Disabled
 }
 
-func (o *CreatePacksRequest) GetPackRequestBody() shared.PackRequestBody {
-	if o == nil {
+func (c *CreatePacksRequest) GetPackRequestBody() shared.PackRequestBody {
+	if c == nil {
 		return shared.PackRequestBody{}
 	}
-	return o.PackRequestBody
+	return c.PackRequestBody
 }
 
 // CreatePacksResponseBody - a list of PackInstallInfo objects
@@ -50,11 +50,11 @@ type CreatePacksResponseBody struct {
 	Items []shared.PackInstallInfo `json:"items,omitempty"`
 }
 
-func (o *CreatePacksResponseBody) GetItems() []shared.PackInstallInfo {
-	if o == nil {
+func (c *CreatePacksResponseBody) GetItems() []shared.PackInstallInfo {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreatePacksResponse struct {
@@ -70,37 +70,37 @@ type CreatePacksResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreatePacksResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePacksResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePacksResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePacksResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePacksResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePacksResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePacksResponse) GetObject() *CreatePacksResponseBody {
-	if o == nil {
+func (c *CreatePacksResponse) GetObject() *CreatePacksResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreatePacksResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreatePacksResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

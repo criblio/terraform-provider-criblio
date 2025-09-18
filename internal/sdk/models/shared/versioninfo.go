@@ -14,65 +14,65 @@ type VersionInfo struct {
 	PreRelease   *string  `json:"preRelease,omitempty"`
 }
 
-func (o *VersionInfo) GetArchitecture() *string {
-	if o == nil {
+func (v *VersionInfo) GetArchitecture() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Architecture
+	return v.Architecture
 }
 
-func (o *VersionInfo) GetBuild() string {
-	if o == nil {
+func (v *VersionInfo) GetBuild() string {
+	if v == nil {
 		return ""
 	}
-	return o.Build
+	return v.Build
 }
 
-func (o *VersionInfo) GetDownloadURL() *string {
-	if o == nil {
+func (v *VersionInfo) GetDownloadURL() *string {
+	if v == nil {
 		return nil
 	}
-	return o.DownloadURL
+	return v.DownloadURL
 }
 
-func (o *VersionInfo) GetFullVersion() string {
-	if o == nil {
+func (v *VersionInfo) GetFullVersion() string {
+	if v == nil {
 		return ""
 	}
-	return o.FullVersion
+	return v.FullVersion
 }
 
-func (o *VersionInfo) GetMajor() float64 {
-	if o == nil {
+func (v *VersionInfo) GetMajor() float64 {
+	if v == nil {
 		return 0.0
 	}
-	return o.Major
+	return v.Major
 }
 
-func (o *VersionInfo) GetMinor() float64 {
-	if o == nil {
+func (v *VersionInfo) GetMinor() float64 {
+	if v == nil {
 		return 0.0
 	}
-	return o.Minor
+	return v.Minor
 }
 
-func (o *VersionInfo) GetPlatform() *string {
-	if o == nil {
+func (v *VersionInfo) GetPlatform() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Platform
+	return v.Platform
 }
 
-func (o *VersionInfo) GetPoint() *float64 {
-	if o == nil {
+func (v *VersionInfo) GetPoint() *float64 {
+	if v == nil {
 		return nil
 	}
-	return o.Point
+	return v.Point
 }
 
-func (o *VersionInfo) GetPreRelease() *string {
-	if o == nil {
+func (v *VersionInfo) GetPreRelease() *string {
+	if v == nil {
 		return nil
 	}
-	return o.PreRelease
+	return v.PreRelease
 }

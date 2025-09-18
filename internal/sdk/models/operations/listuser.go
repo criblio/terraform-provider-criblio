@@ -12,11 +12,11 @@ type ListUserResponseBody struct {
 	Items []shared.User `json:"items,omitempty"`
 }
 
-func (o *ListUserResponseBody) GetItems() []shared.User {
-	if o == nil {
+func (l *ListUserResponseBody) GetItems() []shared.User {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListUserResponse struct {
@@ -32,37 +32,37 @@ type ListUserResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListUserResponse) GetContentType() string {
-	if o == nil {
+func (l *ListUserResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListUserResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListUserResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListUserResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListUserResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListUserResponse) GetObject() *ListUserResponseBody {
-	if o == nil {
+func (l *ListUserResponse) GetObject() *ListUserResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListUserResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListUserResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

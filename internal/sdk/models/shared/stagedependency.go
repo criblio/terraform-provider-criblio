@@ -8,23 +8,23 @@ type StageDependency struct {
 	Type            StageDependencyType `json:"type"`
 }
 
-func (o *StageDependency) GetDependentFields() []string {
-	if o == nil {
+func (s *StageDependency) GetDependentFields() []string {
+	if s == nil {
 		return nil
 	}
-	return o.DependentFields
+	return s.DependentFields
 }
 
-func (o *StageDependency) GetID() string {
-	if o == nil {
+func (s *StageDependency) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *StageDependency) GetType() StageDependencyType {
-	if o == nil {
+func (s *StageDependency) GetType() StageDependencyType {
+	if s == nil {
 		return StageDependencyType("")
 	}
-	return o.Type
+	return s.Type
 }

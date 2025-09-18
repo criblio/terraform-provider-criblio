@@ -14,18 +14,18 @@ type UpdateRestSecretByIDRequest struct {
 	RestSecret shared.RestSecret `request:"mediaType=application/json"`
 }
 
-func (o *UpdateRestSecretByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateRestSecretByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateRestSecretByIDRequest) GetRestSecret() shared.RestSecret {
-	if o == nil {
+func (u *UpdateRestSecretByIDRequest) GetRestSecret() shared.RestSecret {
+	if u == nil {
 		return shared.RestSecret{}
 	}
-	return o.RestSecret
+	return u.RestSecret
 }
 
 // UpdateRestSecretByIDResponseBody - a list of RestSecret objects
@@ -33,11 +33,11 @@ type UpdateRestSecretByIDResponseBody struct {
 	Items []shared.RestSecret `json:"items,omitempty"`
 }
 
-func (o *UpdateRestSecretByIDResponseBody) GetItems() []shared.RestSecret {
-	if o == nil {
+func (u *UpdateRestSecretByIDResponseBody) GetItems() []shared.RestSecret {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateRestSecretByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateRestSecretByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateRestSecretByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateRestSecretByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateRestSecretByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateRestSecretByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateRestSecretByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateRestSecretByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateRestSecretByIDResponse) GetObject() *UpdateRestSecretByIDResponseBody {
-	if o == nil {
+func (u *UpdateRestSecretByIDResponse) GetObject() *UpdateRestSecretByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateRestSecretByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateRestSecretByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -16,25 +16,25 @@ type DeleteBreakersByPackAndIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteBreakersByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteBreakersByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDRequest) GetPack() string {
+	if d == nil {
 		return ""
 	}
-	return o.Pack
+	return d.Pack
 }
 
-func (o *DeleteBreakersByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteBreakersByPackAndIDResponseBody - a list of Pipeline objects
@@ -42,11 +42,11 @@ type DeleteBreakersByPackAndIDResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *DeleteBreakersByPackAndIDResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDResponseBody) GetItems() []shared.Pipeline {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteBreakersByPackAndIDResponse struct {
@@ -62,37 +62,37 @@ type DeleteBreakersByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteBreakersByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteBreakersByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteBreakersByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteBreakersByPackAndIDResponse) GetObject() *DeleteBreakersByPackAndIDResponseBody {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDResponse) GetObject() *DeleteBreakersByPackAndIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteBreakersByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteBreakersByPackAndIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

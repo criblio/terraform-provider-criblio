@@ -47,18 +47,18 @@ func (i *InputConfluentCloudConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputConfluentCloudConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputConfluentCloudConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputConfluentCloudConnection) GetOutput() string {
-	if o == nil {
+func (i *InputConfluentCloudConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputConfluentCloudMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputConfluentCloudPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputConfluentCloudPq) GetMode() *InputConfluentCloudMode {
-	if o == nil {
+func (i *InputConfluentCloudPq) GetMode() *InputConfluentCloudMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputConfluentCloudPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputConfluentCloudPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputConfluentCloudPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputConfluentCloudPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputConfluentCloudPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputConfluentCloudPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputConfluentCloudPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputConfluentCloudPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputConfluentCloudPq) GetPath() *string {
-	if o == nil {
+func (i *InputConfluentCloudPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputConfluentCloudPq) GetCompress() *InputConfluentCloudCompression {
-	if o == nil {
+func (i *InputConfluentCloudPq) GetCompress() *InputConfluentCloudCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputConfluentCloudMinimumTLSVersion string
@@ -288,74 +288,74 @@ func (i *InputConfluentCloudTLSSettingsClientSide) UnmarshalJSON(data []byte) er
 	return nil
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetServername() *string {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetServername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Servername
+	return i.Servername
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetMinVersion() *InputConfluentCloudMinimumTLSVersion {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetMinVersion() *InputConfluentCloudMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputConfluentCloudTLSSettingsClientSide) GetMaxVersion() *InputConfluentCloudMaximumTLSVersion {
-	if o == nil {
+func (i *InputConfluentCloudTLSSettingsClientSide) GetMaxVersion() *InputConfluentCloudMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 // InputConfluentCloudAuth - Credentials to use when authenticating with the schema registry using basic HTTP authentication
@@ -376,18 +376,18 @@ func (i *InputConfluentCloudAuth) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputConfluentCloudAuth) GetDisabled() *bool {
-	if o == nil {
+func (i *InputConfluentCloudAuth) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputConfluentCloudAuth) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputConfluentCloudAuth) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
 type InputConfluentCloudKafkaSchemaRegistryMinimumTLSVersion string
@@ -486,74 +486,74 @@ func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) UnmarshalJ
 	return nil
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetRejectUnauthorized() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetServername() *string {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetServername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Servername
+	return i.Servername
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetMinVersion() *InputConfluentCloudKafkaSchemaRegistryMinimumTLSVersion {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetMinVersion() *InputConfluentCloudKafkaSchemaRegistryMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetMaxVersion() *InputConfluentCloudKafkaSchemaRegistryMaximumTLSVersion {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide) GetMaxVersion() *InputConfluentCloudKafkaSchemaRegistryMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 type InputConfluentCloudKafkaSchemaRegistryAuthentication struct {
@@ -582,53 +582,53 @@ func (i *InputConfluentCloudKafkaSchemaRegistryAuthentication) UnmarshalJSON(dat
 	return nil
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetDisabled() *bool {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetSchemaRegistryURL() *string {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetSchemaRegistryURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SchemaRegistryURL
+	return i.SchemaRegistryURL
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetConnectionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return i.ConnectionTimeout
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetMaxRetries() *float64 {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetMaxRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRetries
+	return i.MaxRetries
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetAuth() *InputConfluentCloudAuth {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetAuth() *InputConfluentCloudAuth {
+	if i == nil {
 		return nil
 	}
-	return o.Auth
+	return i.Auth
 }
 
-func (o *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetTLS() *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide {
-	if o == nil {
+func (i *InputConfluentCloudKafkaSchemaRegistryAuthentication) GetTLS() *InputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
 type InputConfluentCloudSASLMechanism string
@@ -680,18 +680,18 @@ func (i *InputConfluentCloudAuthentication) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputConfluentCloudAuthentication) GetDisabled() *bool {
-	if o == nil {
+func (i *InputConfluentCloudAuthentication) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputConfluentCloudAuthentication) GetMechanism() *InputConfluentCloudSASLMechanism {
-	if o == nil {
+func (i *InputConfluentCloudAuthentication) GetMechanism() *InputConfluentCloudSASLMechanism {
+	if i == nil {
 		return nil
 	}
-	return o.Mechanism
+	return i.Mechanism
 }
 
 type InputConfluentCloudMetadatum struct {
@@ -711,18 +711,18 @@ func (i *InputConfluentCloudMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputConfluentCloudMetadatum) GetName() string {
-	if o == nil {
+func (i *InputConfluentCloudMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputConfluentCloudMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputConfluentCloudMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputConfluentCloud struct {
@@ -811,247 +811,247 @@ func (i *InputConfluentCloud) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputConfluentCloud) GetID() *string {
-	if o == nil {
+func (i *InputConfluentCloud) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputConfluentCloud) GetType() *InputConfluentCloudType {
-	if o == nil {
+func (i *InputConfluentCloud) GetType() *InputConfluentCloudType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputConfluentCloud) GetDisabled() *bool {
-	if o == nil {
+func (i *InputConfluentCloud) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputConfluentCloud) GetPipeline() *string {
-	if o == nil {
+func (i *InputConfluentCloud) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputConfluentCloud) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputConfluentCloud) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputConfluentCloud) GetEnvironment() *string {
-	if o == nil {
+func (i *InputConfluentCloud) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputConfluentCloud) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputConfluentCloud) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputConfluentCloud) GetStreamtags() []string {
-	if o == nil {
+func (i *InputConfluentCloud) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputConfluentCloud) GetConnections() []InputConfluentCloudConnection {
-	if o == nil {
+func (i *InputConfluentCloud) GetConnections() []InputConfluentCloudConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputConfluentCloud) GetPq() *InputConfluentCloudPq {
-	if o == nil {
+func (i *InputConfluentCloud) GetPq() *InputConfluentCloudPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputConfluentCloud) GetBrokers() []string {
-	if o == nil {
+func (i *InputConfluentCloud) GetBrokers() []string {
+	if i == nil {
 		return []string{}
 	}
-	return o.Brokers
+	return i.Brokers
 }
 
-func (o *InputConfluentCloud) GetTLS() *InputConfluentCloudTLSSettingsClientSide {
-	if o == nil {
+func (i *InputConfluentCloud) GetTLS() *InputConfluentCloudTLSSettingsClientSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputConfluentCloud) GetTopics() []string {
-	if o == nil {
+func (i *InputConfluentCloud) GetTopics() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Topics
+	return i.Topics
 }
 
-func (o *InputConfluentCloud) GetGroupID() *string {
-	if o == nil {
+func (i *InputConfluentCloud) GetGroupID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.GroupID
+	return i.GroupID
 }
 
-func (o *InputConfluentCloud) GetFromBeginning() *bool {
-	if o == nil {
+func (i *InputConfluentCloud) GetFromBeginning() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.FromBeginning
+	return i.FromBeginning
 }
 
-func (o *InputConfluentCloud) GetKafkaSchemaRegistry() *InputConfluentCloudKafkaSchemaRegistryAuthentication {
-	if o == nil {
+func (i *InputConfluentCloud) GetKafkaSchemaRegistry() *InputConfluentCloudKafkaSchemaRegistryAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.KafkaSchemaRegistry
+	return i.KafkaSchemaRegistry
 }
 
-func (o *InputConfluentCloud) GetConnectionTimeout() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetConnectionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionTimeout
+	return i.ConnectionTimeout
 }
 
-func (o *InputConfluentCloud) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputConfluentCloud) GetMaxRetries() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetMaxRetries() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRetries
+	return i.MaxRetries
 }
 
-func (o *InputConfluentCloud) GetMaxBackOff() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetMaxBackOff() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBackOff
+	return i.MaxBackOff
 }
 
-func (o *InputConfluentCloud) GetInitialBackoff() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetInitialBackoff() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.InitialBackoff
+	return i.InitialBackoff
 }
 
-func (o *InputConfluentCloud) GetBackoffRate() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetBackoffRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.BackoffRate
+	return i.BackoffRate
 }
 
-func (o *InputConfluentCloud) GetAuthenticationTimeout() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetAuthenticationTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AuthenticationTimeout
+	return i.AuthenticationTimeout
 }
 
-func (o *InputConfluentCloud) GetReauthenticationThreshold() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetReauthenticationThreshold() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ReauthenticationThreshold
+	return i.ReauthenticationThreshold
 }
 
-func (o *InputConfluentCloud) GetSasl() *InputConfluentCloudAuthentication {
-	if o == nil {
+func (i *InputConfluentCloud) GetSasl() *InputConfluentCloudAuthentication {
+	if i == nil {
 		return nil
 	}
-	return o.Sasl
+	return i.Sasl
 }
 
-func (o *InputConfluentCloud) GetSessionTimeout() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetSessionTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SessionTimeout
+	return i.SessionTimeout
 }
 
-func (o *InputConfluentCloud) GetRebalanceTimeout() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetRebalanceTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RebalanceTimeout
+	return i.RebalanceTimeout
 }
 
-func (o *InputConfluentCloud) GetHeartbeatInterval() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetHeartbeatInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.HeartbeatInterval
+	return i.HeartbeatInterval
 }
 
-func (o *InputConfluentCloud) GetAutoCommitInterval() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetAutoCommitInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AutoCommitInterval
+	return i.AutoCommitInterval
 }
 
-func (o *InputConfluentCloud) GetAutoCommitThreshold() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetAutoCommitThreshold() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.AutoCommitThreshold
+	return i.AutoCommitThreshold
 }
 
-func (o *InputConfluentCloud) GetMaxBytesPerPartition() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetMaxBytesPerPartition() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBytesPerPartition
+	return i.MaxBytesPerPartition
 }
 
-func (o *InputConfluentCloud) GetMaxBytes() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetMaxBytes() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBytes
+	return i.MaxBytes
 }
 
-func (o *InputConfluentCloud) GetMaxSocketErrors() *float64 {
-	if o == nil {
+func (i *InputConfluentCloud) GetMaxSocketErrors() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSocketErrors
+	return i.MaxSocketErrors
 }
 
-func (o *InputConfluentCloud) GetMetadata() []InputConfluentCloudMetadatum {
-	if o == nil {
+func (i *InputConfluentCloud) GetMetadata() []InputConfluentCloudMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputConfluentCloud) GetDescription() *string {
-	if o == nil {
+func (i *InputConfluentCloud) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

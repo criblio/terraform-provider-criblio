@@ -12,11 +12,11 @@ type CreateDashboardCategoryResponseBody struct {
 	Items []shared.DashboardCategory `json:"items,omitempty"`
 }
 
-func (o *CreateDashboardCategoryResponseBody) GetItems() []shared.DashboardCategory {
-	if o == nil {
+func (c *CreateDashboardCategoryResponseBody) GetItems() []shared.DashboardCategory {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateDashboardCategoryResponse struct {
@@ -32,37 +32,37 @@ type CreateDashboardCategoryResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateDashboardCategoryResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateDashboardCategoryResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateDashboardCategoryResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateDashboardCategoryResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateDashboardCategoryResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateDashboardCategoryResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateDashboardCategoryResponse) GetObject() *CreateDashboardCategoryResponseBody {
-	if o == nil {
+func (c *CreateDashboardCategoryResponse) GetObject() *CreateDashboardCategoryResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateDashboardCategoryResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateDashboardCategoryResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

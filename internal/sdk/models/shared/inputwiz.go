@@ -47,18 +47,18 @@ func (i *InputWizConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWizConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputWizConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputWizConnection) GetOutput() string {
-	if o == nil {
+func (i *InputWizConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputWizMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputWizPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWizPq) GetMode() *InputWizMode {
-	if o == nil {
+func (i *InputWizPq) GetMode() *InputWizMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWizPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputWizPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputWizPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputWizPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputWizPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputWizPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputWizPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputWizPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputWizPq) GetPath() *string {
-	if o == nil {
+func (i *InputWizPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputWizPq) GetCompress() *InputWizCompression {
-	if o == nil {
+func (i *InputWizPq) GetCompress() *InputWizCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputWizContentConfig struct {
@@ -210,25 +210,25 @@ func (i *InputWizContentConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWizContentConfig) GetContentType() string {
-	if o == nil {
+func (i *InputWizContentConfig) GetContentType() string {
+	if i == nil {
 		return ""
 	}
-	return o.ContentType
+	return i.ContentType
 }
 
-func (o *InputWizContentConfig) GetContentDescription() *string {
-	if o == nil {
+func (i *InputWizContentConfig) GetContentDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ContentDescription
+	return i.ContentDescription
 }
 
-func (o *InputWizContentConfig) GetEnabled() *bool {
-	if o == nil {
+func (i *InputWizContentConfig) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputWizMetadatum struct {
@@ -248,18 +248,18 @@ func (i *InputWizMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWizMetadatum) GetName() string {
-	if o == nil {
+func (i *InputWizMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputWizMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputWizMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 // InputWizRetryType - The algorithm to use when performing HTTP retries
@@ -322,60 +322,60 @@ func (i *InputWizRetryRules) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWizRetryRules) GetType() *InputWizRetryType {
-	if o == nil {
+func (i *InputWizRetryRules) GetType() *InputWizRetryType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputWizRetryRules) GetInterval() *float64 {
-	if o == nil {
+func (i *InputWizRetryRules) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputWizRetryRules) GetLimit() *float64 {
-	if o == nil {
+func (i *InputWizRetryRules) GetLimit() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Limit
+	return i.Limit
 }
 
-func (o *InputWizRetryRules) GetMultiplier() *float64 {
-	if o == nil {
+func (i *InputWizRetryRules) GetMultiplier() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Multiplier
+	return i.Multiplier
 }
 
-func (o *InputWizRetryRules) GetCodes() []float64 {
-	if o == nil {
+func (i *InputWizRetryRules) GetCodes() []float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Codes
+	return i.Codes
 }
 
-func (o *InputWizRetryRules) GetEnableHeader() *bool {
-	if o == nil {
+func (i *InputWizRetryRules) GetEnableHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHeader
+	return i.EnableHeader
 }
 
-func (o *InputWizRetryRules) GetRetryConnectTimeout() *bool {
-	if o == nil {
+func (i *InputWizRetryRules) GetRetryConnectTimeout() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectTimeout
+	return i.RetryConnectTimeout
 }
 
-func (o *InputWizRetryRules) GetRetryConnectReset() *bool {
-	if o == nil {
+func (i *InputWizRetryRules) GetRetryConnectReset() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RetryConnectReset
+	return i.RetryConnectReset
 }
 
 // InputWizAuthenticationMethod - Enter client secret directly, or select a stored secret
@@ -465,184 +465,184 @@ func (i *InputWiz) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWiz) GetID() *string {
-	if o == nil {
+func (i *InputWiz) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputWiz) GetType() *InputWizType {
-	if o == nil {
+func (i *InputWiz) GetType() *InputWizType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputWiz) GetDisabled() *bool {
-	if o == nil {
+func (i *InputWiz) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputWiz) GetPipeline() *string {
-	if o == nil {
+func (i *InputWiz) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputWiz) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputWiz) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputWiz) GetEnvironment() *string {
-	if o == nil {
+func (i *InputWiz) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputWiz) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputWiz) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputWiz) GetStreamtags() []string {
-	if o == nil {
+func (i *InputWiz) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputWiz) GetConnections() []InputWizConnection {
-	if o == nil {
+func (i *InputWiz) GetConnections() []InputWizConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputWiz) GetPq() *InputWizPq {
-	if o == nil {
+func (i *InputWiz) GetPq() *InputWizPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputWiz) GetEndpoint() *string {
-	if o == nil {
+func (i *InputWiz) GetEndpoint() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Endpoint
+	return i.Endpoint
 }
 
-func (o *InputWiz) GetAuthURL() string {
-	if o == nil {
+func (i *InputWiz) GetAuthURL() string {
+	if i == nil {
 		return ""
 	}
-	return o.AuthURL
+	return i.AuthURL
 }
 
-func (o *InputWiz) GetAuthAudienceOverride() *string {
-	if o == nil {
+func (i *InputWiz) GetAuthAudienceOverride() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthAudienceOverride
+	return i.AuthAudienceOverride
 }
 
-func (o *InputWiz) GetClientID() string {
-	if o == nil {
+func (i *InputWiz) GetClientID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ClientID
+	return i.ClientID
 }
 
-func (o *InputWiz) GetContentConfig() []InputWizContentConfig {
-	if o == nil {
+func (i *InputWiz) GetContentConfig() []InputWizContentConfig {
+	if i == nil {
 		return nil
 	}
-	return o.ContentConfig
+	return i.ContentConfig
 }
 
-func (o *InputWiz) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputWiz) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputWiz) GetKeepAliveTime() *float64 {
-	if o == nil {
+func (i *InputWiz) GetKeepAliveTime() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTime
+	return i.KeepAliveTime
 }
 
-func (o *InputWiz) GetMaxMissedKeepAlives() *float64 {
-	if o == nil {
+func (i *InputWiz) GetMaxMissedKeepAlives() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxMissedKeepAlives
+	return i.MaxMissedKeepAlives
 }
 
-func (o *InputWiz) GetTTL() *string {
-	if o == nil {
+func (i *InputWiz) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputWiz) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputWiz) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputWiz) GetMetadata() []InputWizMetadatum {
-	if o == nil {
+func (i *InputWiz) GetMetadata() []InputWizMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputWiz) GetRetryRules() *InputWizRetryRules {
-	if o == nil {
+func (i *InputWiz) GetRetryRules() *InputWizRetryRules {
+	if i == nil {
 		return nil
 	}
-	return o.RetryRules
+	return i.RetryRules
 }
 
-func (o *InputWiz) GetAuthType() *InputWizAuthenticationMethod {
-	if o == nil {
+func (i *InputWiz) GetAuthType() *InputWizAuthenticationMethod {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputWiz) GetDescription() *string {
-	if o == nil {
+func (i *InputWiz) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputWiz) GetClientSecret() *string {
-	if o == nil {
+func (i *InputWiz) GetClientSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ClientSecret
+	return i.ClientSecret
 }
 
-func (o *InputWiz) GetTextSecret() *string {
-	if o == nil {
+func (i *InputWiz) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }

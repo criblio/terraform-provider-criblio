@@ -11,44 +11,44 @@ type KubeMetadata struct {
 	Source    string         `json:"source"`
 }
 
-func (o *KubeMetadata) GetCluster() map[string]any {
-	if o == nil {
+func (k *KubeMetadata) GetCluster() map[string]any {
+	if k == nil {
 		return nil
 	}
-	return o.Cluster
+	return k.Cluster
 }
 
-func (o *KubeMetadata) GetContainer() map[string]any {
-	if o == nil {
+func (k *KubeMetadata) GetContainer() map[string]any {
+	if k == nil {
 		return nil
 	}
-	return o.Container
+	return k.Container
 }
 
-func (o *KubeMetadata) GetNamespace() string {
-	if o == nil {
+func (k *KubeMetadata) GetNamespace() string {
+	if k == nil {
 		return ""
 	}
-	return o.Namespace
+	return k.Namespace
 }
 
-func (o *KubeMetadata) GetNode() map[string]any {
-	if o == nil {
+func (k *KubeMetadata) GetNode() map[string]any {
+	if k == nil {
 		return nil
 	}
-	return o.Node
+	return k.Node
 }
 
-func (o *KubeMetadata) GetPod() map[string]any {
-	if o == nil {
+func (k *KubeMetadata) GetPod() map[string]any {
+	if k == nil {
 		return nil
 	}
-	return o.Pod
+	return k.Pod
 }
 
-func (o *KubeMetadata) GetSource() string {
-	if o == nil {
+func (k *KubeMetadata) GetSource() string {
+	if k == nil {
 		return ""
 	}
-	return o.Source
+	return k.Source
 }

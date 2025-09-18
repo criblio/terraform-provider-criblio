@@ -7,18 +7,18 @@ type AddHecTokenRequestMetadatum struct {
 	Value string `json:"value"`
 }
 
-func (o *AddHecTokenRequestMetadatum) GetName() string {
-	if o == nil {
+func (a *AddHecTokenRequestMetadatum) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AddHecTokenRequestMetadatum) GetValue() string {
-	if o == nil {
+func (a *AddHecTokenRequestMetadatum) GetValue() string {
+	if a == nil {
 		return ""
 	}
-	return o.Value
+	return a.Value
 }
 
 type AddHecTokenRequest struct {
@@ -28,30 +28,30 @@ type AddHecTokenRequest struct {
 	Token       string                        `json:"token"`
 }
 
-func (o *AddHecTokenRequest) GetDescription() *string {
-	if o == nil {
+func (a *AddHecTokenRequest) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AddHecTokenRequest) GetEnabled() *bool {
-	if o == nil {
+func (a *AddHecTokenRequest) GetEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Enabled
+	return a.Enabled
 }
 
-func (o *AddHecTokenRequest) GetMetadata() []AddHecTokenRequestMetadatum {
-	if o == nil {
+func (a *AddHecTokenRequest) GetMetadata() []AddHecTokenRequestMetadatum {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *AddHecTokenRequest) GetToken() string {
-	if o == nil {
+func (a *AddHecTokenRequest) GetToken() string {
+	if a == nil {
 		return ""
 	}
-	return o.Token
+	return a.Token
 }

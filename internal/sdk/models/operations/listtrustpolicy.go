@@ -12,11 +12,11 @@ type ListTrustPolicyResponseBody struct {
 	Items []shared.TrustPolicy `json:"items,omitempty"`
 }
 
-func (o *ListTrustPolicyResponseBody) GetItems() []shared.TrustPolicy {
-	if o == nil {
+func (l *ListTrustPolicyResponseBody) GetItems() []shared.TrustPolicy {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListTrustPolicyResponse struct {
@@ -32,37 +32,37 @@ type ListTrustPolicyResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListTrustPolicyResponse) GetContentType() string {
-	if o == nil {
+func (l *ListTrustPolicyResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListTrustPolicyResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListTrustPolicyResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListTrustPolicyResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListTrustPolicyResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListTrustPolicyResponse) GetObject() *ListTrustPolicyResponseBody {
-	if o == nil {
+func (l *ListTrustPolicyResponse) GetObject() *ListTrustPolicyResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListTrustPolicyResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListTrustPolicyResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

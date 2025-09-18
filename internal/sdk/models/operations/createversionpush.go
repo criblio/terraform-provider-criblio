@@ -12,11 +12,11 @@ type CreateVersionPushResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateVersionPushResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateVersionPushResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateVersionPushResponse struct {
@@ -32,37 +32,37 @@ type CreateVersionPushResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateVersionPushResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateVersionPushResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateVersionPushResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateVersionPushResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateVersionPushResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateVersionPushResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateVersionPushResponse) GetObject() *CreateVersionPushResponseBody {
-	if o == nil {
+func (c *CreateVersionPushResponse) GetObject() *CreateVersionPushResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateVersionPushResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateVersionPushResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

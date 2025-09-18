@@ -14,18 +14,18 @@ type CreateParserRequest struct {
 	ParserLibEntry shared.ParserLibEntry `request:"mediaType=application/json"`
 }
 
-func (o *CreateParserRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateParserRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateParserRequest) GetParserLibEntry() shared.ParserLibEntry {
-	if o == nil {
+func (c *CreateParserRequest) GetParserLibEntry() shared.ParserLibEntry {
+	if c == nil {
 		return shared.ParserLibEntry{}
 	}
-	return o.ParserLibEntry
+	return c.ParserLibEntry
 }
 
 // CreateParserResponseBody - a list of Parser objects
@@ -33,11 +33,11 @@ type CreateParserResponseBody struct {
 	Items []shared.ParserLibEntry `json:"items,omitempty"`
 }
 
-func (o *CreateParserResponseBody) GetItems() []shared.ParserLibEntry {
-	if o == nil {
+func (c *CreateParserResponseBody) GetItems() []shared.ParserLibEntry {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateParserResponse struct {
@@ -53,37 +53,37 @@ type CreateParserResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateParserResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateParserResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateParserResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateParserResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateParserResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateParserResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateParserResponse) GetObject() *CreateParserResponseBody {
-	if o == nil {
+func (c *CreateParserResponse) GetObject() *CreateParserResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateParserResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateParserResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

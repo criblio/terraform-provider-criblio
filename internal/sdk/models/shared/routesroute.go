@@ -36,79 +36,79 @@ func (r *RoutesRoute) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *RoutesRoute) GetID() *string {
-	if o == nil {
+func (r *RoutesRoute) GetID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *RoutesRoute) GetName() string {
-	if o == nil {
+func (r *RoutesRoute) GetName() string {
+	if r == nil {
 		return ""
 	}
-	return o.Name
+	return r.Name
 }
 
-func (o *RoutesRoute) GetDisabled() *bool {
-	if o == nil {
+func (r *RoutesRoute) GetDisabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Disabled
+	return r.Disabled
 }
 
-func (o *RoutesRoute) GetFilter() *string {
-	if o == nil {
+func (r *RoutesRoute) GetFilter() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Filter
+	return r.Filter
 }
 
-func (o *RoutesRoute) GetPipeline() string {
-	if o == nil {
+func (r *RoutesRoute) GetPipeline() string {
+	if r == nil {
 		return ""
 	}
-	return o.Pipeline
+	return r.Pipeline
 }
 
-func (o *RoutesRoute) GetEnableOutputExpression() *bool {
-	if o == nil {
+func (r *RoutesRoute) GetEnableOutputExpression() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.EnableOutputExpression
+	return r.EnableOutputExpression
 }
 
-func (o *RoutesRoute) GetOutput() any {
-	if o == nil {
+func (r *RoutesRoute) GetOutput() any {
+	if r == nil {
 		return nil
 	}
-	return o.Output
+	return r.Output
 }
 
-func (o *RoutesRoute) GetOutputExpression() any {
-	if o == nil {
+func (r *RoutesRoute) GetOutputExpression() any {
+	if r == nil {
 		return nil
 	}
-	return o.OutputExpression
+	return r.OutputExpression
 }
 
-func (o *RoutesRoute) GetDescription() *string {
-	if o == nil {
+func (r *RoutesRoute) GetDescription() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Description
+	return r.Description
 }
 
-func (o *RoutesRoute) GetFinal() *bool {
-	if o == nil {
+func (r *RoutesRoute) GetFinal() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Final
+	return r.Final
 }
 
-func (o *RoutesRoute) GetAdditionalProperties() any {
-	if o == nil {
+func (r *RoutesRoute) GetAdditionalProperties() any {
+	if r == nil {
 		return nil
 	}
-	return o.AdditionalProperties
+	return r.AdditionalProperties
 }

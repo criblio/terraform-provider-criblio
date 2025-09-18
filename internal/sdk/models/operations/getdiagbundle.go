@@ -17,30 +17,30 @@ type GetDiagBundleResponse struct {
 	Bytes []byte
 }
 
-func (o *GetDiagBundleResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDiagBundleResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDiagBundleResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDiagBundleResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDiagBundleResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDiagBundleResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDiagBundleResponse) GetBytes() []byte {
-	if o == nil {
+func (g *GetDiagBundleResponse) GetBytes() []byte {
+	if g == nil {
 		return nil
 	}
-	return o.Bytes
+	return g.Bytes
 }

@@ -12,11 +12,11 @@ type GetScriptByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetScriptByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetScriptByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetScriptByIDResponseBody - a list of Script objects
@@ -24,11 +24,11 @@ type GetScriptByIDResponseBody struct {
 	Items []shared.ScriptLibEntry `json:"items,omitempty"`
 }
 
-func (o *GetScriptByIDResponseBody) GetItems() []shared.ScriptLibEntry {
-	if o == nil {
+func (g *GetScriptByIDResponseBody) GetItems() []shared.ScriptLibEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetScriptByIDResponse struct {
@@ -44,37 +44,37 @@ type GetScriptByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetScriptByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetScriptByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetScriptByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetScriptByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetScriptByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetScriptByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetScriptByIDResponse) GetObject() *GetScriptByIDResponseBody {
-	if o == nil {
+func (g *GetScriptByIDResponse) GetObject() *GetScriptByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetScriptByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetScriptByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

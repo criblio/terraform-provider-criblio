@@ -17,32 +17,32 @@ type CreateSystemInputsByPackRequest struct {
 	Input shared.Input `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemInputsByPackRequest) GetPack() string {
-	if o == nil {
+func (c *CreateSystemInputsByPackRequest) GetPack() string {
+	if c == nil {
 		return ""
 	}
-	return o.Pack
+	return c.Pack
 }
 
-func (o *CreateSystemInputsByPackRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateSystemInputsByPackRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateSystemInputsByPackRequest) GetID() string {
-	if o == nil {
+func (c *CreateSystemInputsByPackRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CreateSystemInputsByPackRequest) GetInput() shared.Input {
-	if o == nil {
+func (c *CreateSystemInputsByPackRequest) GetInput() shared.Input {
+	if c == nil {
 		return shared.Input{}
 	}
-	return o.Input
+	return c.Input
 }
 
 // CreateSystemInputsByPackResponseBody - a list of Pipeline objects
@@ -50,11 +50,11 @@ type CreateSystemInputsByPackResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *CreateSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (c *CreateSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemInputsByPackResponse struct {
@@ -70,37 +70,37 @@ type CreateSystemInputsByPackResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemInputsByPackResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemInputsByPackResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemInputsByPackResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemInputsByPackResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemInputsByPackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemInputsByPackResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemInputsByPackResponse) GetObject() *CreateSystemInputsByPackResponseBody {
-	if o == nil {
+func (c *CreateSystemInputsByPackResponse) GetObject() *CreateSystemInputsByPackResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemInputsByPackResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemInputsByPackResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

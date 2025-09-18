@@ -12,11 +12,11 @@ type CreatePreviewResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreatePreviewResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreatePreviewResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreatePreviewResponse struct {
@@ -32,37 +32,37 @@ type CreatePreviewResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreatePreviewResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePreviewResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePreviewResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePreviewResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePreviewResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePreviewResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePreviewResponse) GetObject() *CreatePreviewResponseBody {
-	if o == nil {
+func (c *CreatePreviewResponse) GetObject() *CreatePreviewResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreatePreviewResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreatePreviewResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

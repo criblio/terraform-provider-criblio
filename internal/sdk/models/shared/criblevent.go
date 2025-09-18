@@ -6,9 +6,9 @@ type CriblEvent struct {
 	Raw string `json:"_raw"`
 }
 
-func (o *CriblEvent) GetRaw() string {
-	if o == nil {
+func (c *CriblEvent) GetRaw() string {
+	if c == nil {
 		return ""
 	}
-	return o.Raw
+	return c.Raw
 }

@@ -6,9 +6,9 @@ type DeployRequest struct {
 	Version string `json:"version"`
 }
 
-func (o *DeployRequest) GetVersion() string {
-	if o == nil {
+func (d *DeployRequest) GetVersion() string {
+	if d == nil {
 		return ""
 	}
-	return o.Version
+	return d.Version
 }

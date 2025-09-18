@@ -14,18 +14,18 @@ type CreateProjectRequest struct {
 	ProjectConfig shared.ProjectConfig `request:"mediaType=application/json"`
 }
 
-func (o *CreateProjectRequest) GetGroupID() string {
-	if o == nil {
+func (c *CreateProjectRequest) GetGroupID() string {
+	if c == nil {
 		return ""
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CreateProjectRequest) GetProjectConfig() shared.ProjectConfig {
-	if o == nil {
+func (c *CreateProjectRequest) GetProjectConfig() shared.ProjectConfig {
+	if c == nil {
 		return shared.ProjectConfig{}
 	}
-	return o.ProjectConfig
+	return c.ProjectConfig
 }
 
 // CreateProjectResponseBody - a list of Project objects
@@ -33,11 +33,11 @@ type CreateProjectResponseBody struct {
 	Items []shared.ProjectConfig `json:"items,omitempty"`
 }
 
-func (o *CreateProjectResponseBody) GetItems() []shared.ProjectConfig {
-	if o == nil {
+func (c *CreateProjectResponseBody) GetItems() []shared.ProjectConfig {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateProjectResponse struct {
@@ -53,37 +53,37 @@ type CreateProjectResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateProjectResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateProjectResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateProjectResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateProjectResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateProjectResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateProjectResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateProjectResponse) GetObject() *CreateProjectResponseBody {
-	if o == nil {
+func (c *CreateProjectResponse) GetObject() *CreateProjectResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateProjectResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateProjectResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

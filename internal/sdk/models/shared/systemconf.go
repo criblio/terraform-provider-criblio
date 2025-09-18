@@ -8,23 +8,23 @@ type SystemConf struct {
 	Upgrade     string `json:"upgrade"`
 }
 
-func (o *SystemConf) GetInstallType() string {
-	if o == nil {
+func (s *SystemConf) GetInstallType() string {
+	if s == nil {
 		return ""
 	}
-	return o.InstallType
+	return s.InstallType
 }
 
-func (o *SystemConf) GetRestart() string {
-	if o == nil {
+func (s *SystemConf) GetRestart() string {
+	if s == nil {
 		return ""
 	}
-	return o.Restart
+	return s.Restart
 }
 
-func (o *SystemConf) GetUpgrade() string {
-	if o == nil {
+func (s *SystemConf) GetUpgrade() string {
+	if s == nil {
 		return ""
 	}
-	return o.Upgrade
+	return s.Upgrade
 }

@@ -102,23 +102,23 @@ type DatasetProviderType struct {
 	Locality    *OriginConfig `json:"locality,omitempty"`
 }
 
-func (o *DatasetProviderType) GetDescription() *string {
-	if o == nil {
+func (d *DatasetProviderType) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DatasetProviderType) GetID() ID {
-	if o == nil {
+func (d *DatasetProviderType) GetID() ID {
+	if d == nil {
 		return ID("")
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DatasetProviderType) GetLocality() *OriginConfig {
-	if o == nil {
+func (d *DatasetProviderType) GetLocality() *OriginConfig {
+	if d == nil {
 		return nil
 	}
-	return o.Locality
+	return d.Locality
 }

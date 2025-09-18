@@ -12,11 +12,11 @@ type CreateRestSecretResponseBody struct {
 	Items []shared.RestSecret `json:"items,omitempty"`
 }
 
-func (o *CreateRestSecretResponseBody) GetItems() []shared.RestSecret {
-	if o == nil {
+func (c *CreateRestSecretResponseBody) GetItems() []shared.RestSecret {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateRestSecretResponse struct {
@@ -32,37 +32,37 @@ type CreateRestSecretResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateRestSecretResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateRestSecretResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateRestSecretResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateRestSecretResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateRestSecretResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateRestSecretResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateRestSecretResponse) GetObject() *CreateRestSecretResponseBody {
-	if o == nil {
+func (c *CreateRestSecretResponse) GetObject() *CreateRestSecretResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateRestSecretResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateRestSecretResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

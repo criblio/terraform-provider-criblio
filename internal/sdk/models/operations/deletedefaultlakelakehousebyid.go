@@ -12,11 +12,11 @@ type DeleteDefaultLakeLakehouseByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteDefaultLakeLakehouseByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteDefaultLakeLakehouseByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteDefaultLakeLakehouseByIDResponseBody - a list of Lakehouse objects
@@ -24,11 +24,11 @@ type DeleteDefaultLakeLakehouseByIDResponseBody struct {
 	Items []shared.Lakehouse `json:"items,omitempty"`
 }
 
-func (o *DeleteDefaultLakeLakehouseByIDResponseBody) GetItems() []shared.Lakehouse {
-	if o == nil {
+func (d *DeleteDefaultLakeLakehouseByIDResponseBody) GetItems() []shared.Lakehouse {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteDefaultLakeLakehouseByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteDefaultLakeLakehouseByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteDefaultLakeLakehouseByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteDefaultLakeLakehouseByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteDefaultLakeLakehouseByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteDefaultLakeLakehouseByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteDefaultLakeLakehouseByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteDefaultLakeLakehouseByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteDefaultLakeLakehouseByIDResponse) GetObject() *DeleteDefaultLakeLakehouseByIDResponseBody {
-	if o == nil {
+func (d *DeleteDefaultLakeLakehouseByIDResponse) GetObject() *DeleteDefaultLakeLakehouseByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteDefaultLakeLakehouseByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteDefaultLakeLakehouseByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

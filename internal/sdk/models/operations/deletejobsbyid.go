@@ -12,11 +12,11 @@ type DeleteJobsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteJobsByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteJobsByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteJobsByIDResponseBody - a list of any objects
@@ -24,11 +24,11 @@ type DeleteJobsByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *DeleteJobsByIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (d *DeleteJobsByIDResponseBody) GetItems() []map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteJobsByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteJobsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteJobsByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteJobsByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteJobsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteJobsByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteJobsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteJobsByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteJobsByIDResponse) GetObject() *DeleteJobsByIDResponseBody {
-	if o == nil {
+func (d *DeleteJobsByIDResponse) GetObject() *DeleteJobsByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteJobsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteJobsByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

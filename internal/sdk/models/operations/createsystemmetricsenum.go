@@ -12,11 +12,11 @@ type CreateSystemMetricsEnumResponseBody struct {
 	Items []shared.MetricNameInfo `json:"items,omitempty"`
 }
 
-func (o *CreateSystemMetricsEnumResponseBody) GetItems() []shared.MetricNameInfo {
-	if o == nil {
+func (c *CreateSystemMetricsEnumResponseBody) GetItems() []shared.MetricNameInfo {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemMetricsEnumResponse struct {
@@ -32,37 +32,37 @@ type CreateSystemMetricsEnumResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemMetricsEnumResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemMetricsEnumResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemMetricsEnumResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemMetricsEnumResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemMetricsEnumResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemMetricsEnumResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemMetricsEnumResponse) GetObject() *CreateSystemMetricsEnumResponseBody {
-	if o == nil {
+func (c *CreateSystemMetricsEnumResponse) GetObject() *CreateSystemMetricsEnumResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemMetricsEnumResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemMetricsEnumResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

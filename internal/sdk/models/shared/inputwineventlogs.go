@@ -47,18 +47,18 @@ func (i *InputWinEventLogsConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWinEventLogsConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputWinEventLogsConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputWinEventLogsConnection) GetOutput() string {
-	if o == nil {
+func (i *InputWinEventLogsConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputWinEventLogsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputWinEventLogsPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWinEventLogsPq) GetMode() *InputWinEventLogsMode {
-	if o == nil {
+func (i *InputWinEventLogsPq) GetMode() *InputWinEventLogsMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputWinEventLogsPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputWinEventLogsPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputWinEventLogsPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputWinEventLogsPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputWinEventLogsPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputWinEventLogsPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputWinEventLogsPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputWinEventLogsPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputWinEventLogsPq) GetPath() *string {
-	if o == nil {
+func (i *InputWinEventLogsPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputWinEventLogsPq) GetCompress() *InputWinEventLogsCompression {
-	if o == nil {
+func (i *InputWinEventLogsPq) GetCompress() *InputWinEventLogsCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // ReadMode - Read all stored and future event logs, or only future events
@@ -263,18 +263,18 @@ func (i *InputWinEventLogsMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWinEventLogsMetadatum) GetName() string {
-	if o == nil {
+func (i *InputWinEventLogsMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputWinEventLogsMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputWinEventLogsMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputWinEventLogs struct {
@@ -325,135 +325,135 @@ func (i *InputWinEventLogs) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputWinEventLogs) GetID() *string {
-	if o == nil {
+func (i *InputWinEventLogs) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputWinEventLogs) GetType() InputWinEventLogsType {
-	if o == nil {
+func (i *InputWinEventLogs) GetType() InputWinEventLogsType {
+	if i == nil {
 		return InputWinEventLogsType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputWinEventLogs) GetDisabled() *bool {
-	if o == nil {
+func (i *InputWinEventLogs) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputWinEventLogs) GetPipeline() *string {
-	if o == nil {
+func (i *InputWinEventLogs) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputWinEventLogs) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputWinEventLogs) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputWinEventLogs) GetEnvironment() *string {
-	if o == nil {
+func (i *InputWinEventLogs) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputWinEventLogs) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputWinEventLogs) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputWinEventLogs) GetStreamtags() []string {
-	if o == nil {
+func (i *InputWinEventLogs) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputWinEventLogs) GetConnections() []InputWinEventLogsConnection {
-	if o == nil {
+func (i *InputWinEventLogs) GetConnections() []InputWinEventLogsConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputWinEventLogs) GetPq() *InputWinEventLogsPq {
-	if o == nil {
+func (i *InputWinEventLogs) GetPq() *InputWinEventLogsPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputWinEventLogs) GetLogNames() []string {
-	if o == nil {
+func (i *InputWinEventLogs) GetLogNames() []string {
+	if i == nil {
 		return nil
 	}
-	return o.LogNames
+	return i.LogNames
 }
 
-func (o *InputWinEventLogs) GetReadMode() *ReadMode {
-	if o == nil {
+func (i *InputWinEventLogs) GetReadMode() *ReadMode {
+	if i == nil {
 		return nil
 	}
-	return o.ReadMode
+	return i.ReadMode
 }
 
-func (o *InputWinEventLogs) GetEventFormat() *EventFormat {
-	if o == nil {
+func (i *InputWinEventLogs) GetEventFormat() *EventFormat {
+	if i == nil {
 		return nil
 	}
-	return o.EventFormat
+	return i.EventFormat
 }
 
-func (o *InputWinEventLogs) GetDisableNativeModule() *bool {
-	if o == nil {
+func (i *InputWinEventLogs) GetDisableNativeModule() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DisableNativeModule
+	return i.DisableNativeModule
 }
 
-func (o *InputWinEventLogs) GetInterval() *float64 {
-	if o == nil {
+func (i *InputWinEventLogs) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputWinEventLogs) GetBatchSize() *float64 {
-	if o == nil {
+func (i *InputWinEventLogs) GetBatchSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.BatchSize
+	return i.BatchSize
 }
 
-func (o *InputWinEventLogs) GetMetadata() []InputWinEventLogsMetadatum {
-	if o == nil {
+func (i *InputWinEventLogs) GetMetadata() []InputWinEventLogsMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputWinEventLogs) GetMaxEventBytes() *float64 {
-	if o == nil {
+func (i *InputWinEventLogs) GetMaxEventBytes() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxEventBytes
+	return i.MaxEventBytes
 }
 
-func (o *InputWinEventLogs) GetDescription() *string {
-	if o == nil {
+func (i *InputWinEventLogs) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }

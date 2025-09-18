@@ -12,11 +12,11 @@ type GetFunctionByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetFunctionByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetFunctionByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetFunctionByIDResponseBody - a list of Function objects
@@ -24,11 +24,11 @@ type GetFunctionByIDResponseBody struct {
 	Items []shared.Function `json:"items,omitempty"`
 }
 
-func (o *GetFunctionByIDResponseBody) GetItems() []shared.Function {
-	if o == nil {
+func (g *GetFunctionByIDResponseBody) GetItems() []shared.Function {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetFunctionByIDResponse struct {
@@ -44,37 +44,37 @@ type GetFunctionByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetFunctionByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetFunctionByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetFunctionByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetFunctionByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetFunctionByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetFunctionByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetFunctionByIDResponse) GetObject() *GetFunctionByIDResponseBody {
-	if o == nil {
+func (g *GetFunctionByIDResponse) GetObject() *GetFunctionByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetFunctionByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetFunctionByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

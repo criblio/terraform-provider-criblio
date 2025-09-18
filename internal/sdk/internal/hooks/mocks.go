@@ -5,9 +5,13 @@ import (
 )
 
 type MockHTTPClient struct {
+	DoFunc func(req *http.Request) (*http.Response, error)
 }
 
 func (c MockHTTPClient) Do(req *http.Request) (*http.Response, error) {
+	if c.DoFunc != nil {
+		return c.DoFunc(req)
+	}
 	client := &http.Client{}
 	return client.Do(req)
 }

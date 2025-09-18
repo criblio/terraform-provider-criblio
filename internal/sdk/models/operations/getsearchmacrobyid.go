@@ -12,11 +12,11 @@ type GetSearchMacroByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetSearchMacroByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSearchMacroByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetSearchMacroByIDResponseBody - a list of SearchMacro objects
@@ -24,11 +24,11 @@ type GetSearchMacroByIDResponseBody struct {
 	Items []shared.SearchMacro `json:"items,omitempty"`
 }
 
-func (o *GetSearchMacroByIDResponseBody) GetItems() []shared.SearchMacro {
-	if o == nil {
+func (g *GetSearchMacroByIDResponseBody) GetItems() []shared.SearchMacro {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSearchMacroByIDResponse struct {
@@ -44,37 +44,37 @@ type GetSearchMacroByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSearchMacroByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSearchMacroByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSearchMacroByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSearchMacroByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSearchMacroByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSearchMacroByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSearchMacroByIDResponse) GetObject() *GetSearchMacroByIDResponseBody {
-	if o == nil {
+func (g *GetSearchMacroByIDResponse) GetObject() *GetSearchMacroByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSearchMacroByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSearchMacroByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

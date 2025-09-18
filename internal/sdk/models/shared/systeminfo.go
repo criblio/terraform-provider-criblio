@@ -12,53 +12,53 @@ type SystemInfoConf struct {
 	Rules       float64 `json:"rules"`
 }
 
-func (o *SystemInfoConf) GetConfVersion() *string {
-	if o == nil {
+func (s *SystemInfoConf) GetConfVersion() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ConfVersion
+	return s.ConfVersion
 }
 
-func (o *SystemInfoConf) GetInputs() float64 {
-	if o == nil {
+func (s *SystemInfoConf) GetInputs() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Inputs
+	return s.Inputs
 }
 
-func (o *SystemInfoConf) GetName() *string {
-	if o == nil {
+func (s *SystemInfoConf) GetName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SystemInfoConf) GetOutputs() float64 {
-	if o == nil {
+func (s *SystemInfoConf) GetOutputs() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Outputs
+	return s.Outputs
 }
 
-func (o *SystemInfoConf) GetPipelines() float64 {
-	if o == nil {
+func (s *SystemInfoConf) GetPipelines() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Pipelines
+	return s.Pipelines
 }
 
-func (o *SystemInfoConf) GetRoutes() float64 {
-	if o == nil {
+func (s *SystemInfoConf) GetRoutes() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Routes
+	return s.Routes
 }
 
-func (o *SystemInfoConf) GetRules() float64 {
-	if o == nil {
+func (s *SystemInfoConf) GetRules() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Rules
+	return s.Rules
 }
 
 type Cpus struct {
@@ -67,25 +67,25 @@ type Cpus struct {
 	Times map[string]any `json:"times"`
 }
 
-func (o *Cpus) GetModel() string {
-	if o == nil {
+func (c *Cpus) GetModel() string {
+	if c == nil {
 		return ""
 	}
-	return o.Model
+	return c.Model
 }
 
-func (o *Cpus) GetSpeed() float64 {
-	if o == nil {
+func (c *Cpus) GetSpeed() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.Speed
+	return c.Speed
 }
 
-func (o *Cpus) GetTimes() map[string]any {
-	if o == nil {
+func (c *Cpus) GetTimes() map[string]any {
+	if c == nil {
 		return map[string]any{}
 	}
-	return o.Times
+	return c.Times
 }
 
 type DiskUsage struct {
@@ -95,32 +95,32 @@ type DiskUsage struct {
 	TotalDiskSize  float64 `json:"totalDiskSize"`
 }
 
-func (o *DiskUsage) GetBytesAvailable() float64 {
-	if o == nil {
+func (d *DiskUsage) GetBytesAvailable() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.BytesAvailable
+	return d.BytesAvailable
 }
 
-func (o *DiskUsage) GetBytesUsed() float64 {
-	if o == nil {
+func (d *DiskUsage) GetBytesUsed() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.BytesUsed
+	return d.BytesUsed
 }
 
-func (o *DiskUsage) GetDiskPath() string {
-	if o == nil {
+func (d *DiskUsage) GetDiskPath() string {
+	if d == nil {
 		return ""
 	}
-	return o.DiskPath
+	return d.DiskPath
 }
 
-func (o *DiskUsage) GetTotalDiskSize() float64 {
-	if o == nil {
+func (d *DiskUsage) GetTotalDiskSize() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.TotalDiskSize
+	return d.TotalDiskSize
 }
 
 type Env struct {
@@ -130,22 +130,22 @@ type SystemInfoSamples struct {
 	MaxSize string `json:"maxSize"`
 }
 
-func (o *SystemInfoSamples) GetMaxSize() string {
-	if o == nil {
+func (s *SystemInfoSamples) GetMaxSize() string {
+	if s == nil {
 		return ""
 	}
-	return o.MaxSize
+	return s.MaxSize
 }
 
 type SystemInfoLimits struct {
 	Samples SystemInfoSamples `json:"samples"`
 }
 
-func (o *SystemInfoLimits) GetSamples() SystemInfoSamples {
-	if o == nil {
+func (s *SystemInfoLimits) GetSamples() SystemInfoSamples {
+	if s == nil {
 		return SystemInfoSamples{}
 	}
-	return o.Samples
+	return s.Samples
 }
 
 type SystemInfoMemory struct {
@@ -153,18 +153,18 @@ type SystemInfoMemory struct {
 	Total float64 `json:"total"`
 }
 
-func (o *SystemInfoMemory) GetFree() float64 {
-	if o == nil {
+func (s *SystemInfoMemory) GetFree() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Free
+	return s.Free
 }
 
-func (o *SystemInfoMemory) GetTotal() float64 {
-	if o == nil {
+func (s *SystemInfoMemory) GetTotal() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Total
+	return s.Total
 }
 
 type SystemInfoOs struct {
@@ -175,39 +175,39 @@ type SystemInfoOs struct {
 	Type       string `json:"type"`
 }
 
-func (o *SystemInfoOs) GetArch() string {
-	if o == nil {
+func (s *SystemInfoOs) GetArch() string {
+	if s == nil {
 		return ""
 	}
-	return o.Arch
+	return s.Arch
 }
 
-func (o *SystemInfoOs) GetEndianness() string {
-	if o == nil {
+func (s *SystemInfoOs) GetEndianness() string {
+	if s == nil {
 		return ""
 	}
-	return o.Endianness
+	return s.Endianness
 }
 
-func (o *SystemInfoOs) GetPlatform() string {
-	if o == nil {
+func (s *SystemInfoOs) GetPlatform() string {
+	if s == nil {
 		return ""
 	}
-	return o.Platform
+	return s.Platform
 }
 
-func (o *SystemInfoOs) GetRelease() string {
-	if o == nil {
+func (s *SystemInfoOs) GetRelease() string {
+	if s == nil {
 		return ""
 	}
-	return o.Release
+	return s.Release
 }
 
-func (o *SystemInfoOs) GetType() string {
-	if o == nil {
+func (s *SystemInfoOs) GetType() string {
+	if s == nil {
 		return ""
 	}
-	return o.Type
+	return s.Type
 }
 
 type SystemInfo struct {
@@ -239,184 +239,184 @@ type SystemInfo struct {
 	WorkerProcesses   float64           `json:"workerProcesses"`
 }
 
-func (o *SystemInfo) GetBuild() map[string]any {
-	if o == nil {
+func (s *SystemInfo) GetBuild() map[string]any {
+	if s == nil {
 		return map[string]any{}
 	}
-	return o.Build
+	return s.Build
 }
 
-func (o *SystemInfo) GetAPIPort() float64 {
-	if o == nil {
+func (s *SystemInfo) GetAPIPort() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.APIPort
+	return s.APIPort
 }
 
-func (o *SystemInfo) GetConf() SystemInfoConf {
-	if o == nil {
+func (s *SystemInfo) GetConf() SystemInfoConf {
+	if s == nil {
 		return SystemInfoConf{}
 	}
-	return o.Conf
+	return s.Conf
 }
 
-func (o *SystemInfo) GetConfigPath() string {
-	if o == nil {
+func (s *SystemInfo) GetConfigPath() string {
+	if s == nil {
 		return ""
 	}
-	return o.ConfigPath
+	return s.ConfigPath
 }
 
-func (o *SystemInfo) GetCpus() []Cpus {
-	if o == nil {
+func (s *SystemInfo) GetCpus() []Cpus {
+	if s == nil {
 		return []Cpus{}
 	}
-	return o.Cpus
+	return s.Cpus
 }
 
-func (o *SystemInfo) GetDiskUsage() DiskUsage {
-	if o == nil {
+func (s *SystemInfo) GetDiskUsage() DiskUsage {
+	if s == nil {
 		return DiskUsage{}
 	}
-	return o.DiskUsage
+	return s.DiskUsage
 }
 
-func (o *SystemInfo) GetDistMode() AppMode {
-	if o == nil {
+func (s *SystemInfo) GetDistMode() AppMode {
+	if s == nil {
 		return AppMode("")
 	}
-	return o.DistMode
+	return s.DistMode
 }
 
-func (o *SystemInfo) GetEnv() Env {
-	if o == nil {
+func (s *SystemInfo) GetEnv() Env {
+	if s == nil {
 		return Env{}
 	}
-	return o.Env
+	return s.Env
 }
 
-func (o *SystemInfo) GetGUID() string {
-	if o == nil {
+func (s *SystemInfo) GetGUID() string {
+	if s == nil {
 		return ""
 	}
-	return o.GUID
+	return s.GUID
 }
 
-func (o *SystemInfo) GetHasCloudWorkspace() *bool {
-	if o == nil {
+func (s *SystemInfo) GetHasCloudWorkspace() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.HasCloudWorkspace
+	return s.HasCloudWorkspace
 }
 
-func (o *SystemInfo) GetHostname() string {
-	if o == nil {
+func (s *SystemInfo) GetHostname() string {
+	if s == nil {
 		return ""
 	}
-	return o.Hostname
+	return s.Hostname
 }
 
-func (o *SystemInfo) GetInstallPath() string {
-	if o == nil {
+func (s *SystemInfo) GetInstallPath() string {
+	if s == nil {
 		return ""
 	}
-	return o.InstallPath
+	return s.InstallPath
 }
 
-func (o *SystemInfo) GetIsCriblSandbox() *bool {
-	if o == nil {
+func (s *SystemInfo) GetIsCriblSandbox() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IsCriblSandbox
+	return s.IsCriblSandbox
 }
 
-func (o *SystemInfo) GetIsFedRampEnabled() *bool {
-	if o == nil {
+func (s *SystemInfo) GetIsFedRampEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IsFedRampEnabled
+	return s.IsFedRampEnabled
 }
 
-func (o *SystemInfo) GetIsFipsEnabled() *bool {
-	if o == nil {
+func (s *SystemInfo) GetIsFipsEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IsFipsEnabled
+	return s.IsFipsEnabled
 }
 
-func (o *SystemInfo) GetLicense() LicenseInfo {
-	if o == nil {
+func (s *SystemInfo) GetLicense() LicenseInfo {
+	if s == nil {
 		return LicenseInfo{}
 	}
-	return o.License
+	return s.License
 }
 
-func (o *SystemInfo) GetLimits() SystemInfoLimits {
-	if o == nil {
+func (s *SystemInfo) GetLimits() SystemInfoLimits {
+	if s == nil {
 		return SystemInfoLimits{}
 	}
-	return o.Limits
+	return s.Limits
 }
 
-func (o *SystemInfo) GetLoadavg() []float64 {
-	if o == nil {
+func (s *SystemInfo) GetLoadavg() []float64 {
+	if s == nil {
 		return []float64{}
 	}
-	return o.Loadavg
+	return s.Loadavg
 }
 
-func (o *SystemInfo) GetMemory() SystemInfoMemory {
-	if o == nil {
+func (s *SystemInfo) GetMemory() SystemInfoMemory {
+	if s == nil {
 		return SystemInfoMemory{}
 	}
-	return o.Memory
+	return s.Memory
 }
 
-func (o *SystemInfo) GetMessages() []BulletinMessage {
-	if o == nil {
+func (s *SystemInfo) GetMessages() []BulletinMessage {
+	if s == nil {
 		return []BulletinMessage{}
 	}
-	return o.Messages
+	return s.Messages
 }
 
-func (o *SystemInfo) GetNet() map[string]any {
-	if o == nil {
+func (s *SystemInfo) GetNet() map[string]any {
+	if s == nil {
 		return map[string]any{}
 	}
-	return o.Net
+	return s.Net
 }
 
-func (o *SystemInfo) GetOs() SystemInfoOs {
-	if o == nil {
+func (s *SystemInfo) GetOs() SystemInfoOs {
+	if s == nil {
 		return SystemInfoOs{}
 	}
-	return o.Os
+	return s.Os
 }
 
-func (o *SystemInfo) GetSystemConf() SystemConf {
-	if o == nil {
+func (s *SystemInfo) GetSystemConf() SystemConf {
+	if s == nil {
 		return SystemConf{}
 	}
-	return o.SystemConf
+	return s.SystemConf
 }
 
-func (o *SystemInfo) GetUptime() float64 {
-	if o == nil {
+func (s *SystemInfo) GetUptime() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.Uptime
+	return s.Uptime
 }
 
-func (o *SystemInfo) GetVersion() string {
-	if o == nil {
+func (s *SystemInfo) GetVersion() string {
+	if s == nil {
 		return ""
 	}
-	return o.Version
+	return s.Version
 }
 
-func (o *SystemInfo) GetWorkerProcesses() float64 {
-	if o == nil {
+func (s *SystemInfo) GetWorkerProcesses() float64 {
+	if s == nil {
 		return 0.0
 	}
-	return o.WorkerProcesses
+	return s.WorkerProcesses
 }

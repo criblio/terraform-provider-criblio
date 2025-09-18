@@ -6,9 +6,9 @@ type ContainerdTask struct {
 	Process map[string]any `json:"process,omitempty"`
 }
 
-func (o *ContainerdTask) GetProcess() map[string]any {
-	if o == nil {
+func (c *ContainerdTask) GetProcess() map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Process
+	return c.Process
 }

@@ -39,23 +39,23 @@ type UIStatePatch struct {
 	Args  map[string]any `json:"args,omitempty"`
 }
 
-func (o *UIStatePatch) GetOp() Op {
-	if o == nil {
+func (u *UIStatePatch) GetOp() Op {
+	if u == nil {
 		return Op("")
 	}
-	return o.Op
+	return u.Op
 }
 
-func (o *UIStatePatch) GetValue() any {
-	if o == nil {
+func (u *UIStatePatch) GetValue() any {
+	if u == nil {
 		return nil
 	}
-	return o.Value
+	return u.Value
 }
 
-func (o *UIStatePatch) GetArgs() map[string]any {
-	if o == nil {
+func (u *UIStatePatch) GetArgs() map[string]any {
+	if u == nil {
 		return nil
 	}
-	return o.Args
+	return u.Args
 }

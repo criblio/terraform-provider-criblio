@@ -14,18 +14,18 @@ type UpdateSavedQueryByIDRequest struct {
 	SavedQuery shared.SavedQuery `request:"mediaType=application/json"`
 }
 
-func (o *UpdateSavedQueryByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateSavedQueryByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateSavedQueryByIDRequest) GetSavedQuery() shared.SavedQuery {
-	if o == nil {
+func (u *UpdateSavedQueryByIDRequest) GetSavedQuery() shared.SavedQuery {
+	if u == nil {
 		return shared.SavedQuery{}
 	}
-	return o.SavedQuery
+	return u.SavedQuery
 }
 
 // UpdateSavedQueryByIDResponseBody - a list of SavedQuery objects
@@ -33,11 +33,11 @@ type UpdateSavedQueryByIDResponseBody struct {
 	Items []shared.SavedQuery `json:"items,omitempty"`
 }
 
-func (o *UpdateSavedQueryByIDResponseBody) GetItems() []shared.SavedQuery {
-	if o == nil {
+func (u *UpdateSavedQueryByIDResponseBody) GetItems() []shared.SavedQuery {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateSavedQueryByIDResponse struct {
@@ -53,37 +53,37 @@ type UpdateSavedQueryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateSavedQueryByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateSavedQueryByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateSavedQueryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateSavedQueryByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateSavedQueryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateSavedQueryByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateSavedQueryByIDResponse) GetObject() *UpdateSavedQueryByIDResponseBody {
-	if o == nil {
+func (u *UpdateSavedQueryByIDResponse) GetObject() *UpdateSavedQueryByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateSavedQueryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateSavedQueryByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

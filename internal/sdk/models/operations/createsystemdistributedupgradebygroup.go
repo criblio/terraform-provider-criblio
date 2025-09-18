@@ -14,18 +14,18 @@ type CreateSystemDistributedUpgradeByGroupRequest struct {
 	DistributedUpgradeRequest shared.DistributedUpgradeRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateSystemDistributedUpgradeByGroupRequest) GetGroup() string {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeByGroupRequest) GetGroup() string {
+	if c == nil {
 		return ""
 	}
-	return o.Group
+	return c.Group
 }
 
-func (o *CreateSystemDistributedUpgradeByGroupRequest) GetDistributedUpgradeRequest() shared.DistributedUpgradeRequest {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeByGroupRequest) GetDistributedUpgradeRequest() shared.DistributedUpgradeRequest {
+	if c == nil {
 		return shared.DistributedUpgradeRequest{}
 	}
-	return o.DistributedUpgradeRequest
+	return c.DistributedUpgradeRequest
 }
 
 // CreateSystemDistributedUpgradeByGroupResponseBody - a list of string objects
@@ -33,11 +33,11 @@ type CreateSystemDistributedUpgradeByGroupResponseBody struct {
 	Items []string `json:"items,omitempty"`
 }
 
-func (o *CreateSystemDistributedUpgradeByGroupResponseBody) GetItems() []string {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeByGroupResponseBody) GetItems() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSystemDistributedUpgradeByGroupResponse struct {
@@ -53,37 +53,37 @@ type CreateSystemDistributedUpgradeByGroupResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSystemDistributedUpgradeByGroupResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeByGroupResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSystemDistributedUpgradeByGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeByGroupResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSystemDistributedUpgradeByGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeByGroupResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSystemDistributedUpgradeByGroupResponse) GetObject() *CreateSystemDistributedUpgradeByGroupResponseBody {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeByGroupResponse) GetObject() *CreateSystemDistributedUpgradeByGroupResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSystemDistributedUpgradeByGroupResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSystemDistributedUpgradeByGroupResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

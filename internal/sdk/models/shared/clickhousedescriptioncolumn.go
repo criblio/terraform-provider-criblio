@@ -7,16 +7,16 @@ type ClickHouseDescriptionColumn struct {
 	Type string `json:"type"`
 }
 
-func (o *ClickHouseDescriptionColumn) GetName() string {
-	if o == nil {
+func (c *ClickHouseDescriptionColumn) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *ClickHouseDescriptionColumn) GetType() string {
-	if o == nil {
+func (c *ClickHouseDescriptionColumn) GetType() string {
+	if c == nil {
 		return ""
 	}
-	return o.Type
+	return c.Type
 }

@@ -16,25 +16,25 @@ type UpdateDatabaseConnectionConfigByIDRequest struct {
 	DatabaseConnectionConfig shared.DatabaseConnectionConfig `request:"mediaType=application/json"`
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDRequest) GetID() string {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDRequest) GetDatabaseConnectionConfig() shared.DatabaseConnectionConfig {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDRequest) GetDatabaseConnectionConfig() shared.DatabaseConnectionConfig {
+	if u == nil {
 		return shared.DatabaseConnectionConfig{}
 	}
-	return o.DatabaseConnectionConfig
+	return u.DatabaseConnectionConfig
 }
 
 // UpdateDatabaseConnectionConfigByIDResponseBody - a list of DatabaseConnectionConfig objects
@@ -42,11 +42,11 @@ type UpdateDatabaseConnectionConfigByIDResponseBody struct {
 	Items []shared.DatabaseConnectionConfig `json:"items,omitempty"`
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDResponseBody) GetItems() []shared.DatabaseConnectionConfig {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDResponseBody) GetItems() []shared.DatabaseConnectionConfig {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateDatabaseConnectionConfigByIDResponse struct {
@@ -62,37 +62,37 @@ type UpdateDatabaseConnectionConfigByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDResponse) GetObject() *UpdateDatabaseConnectionConfigByIDResponseBody {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDResponse) GetObject() *UpdateDatabaseConnectionConfigByIDResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateDatabaseConnectionConfigByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateDatabaseConnectionConfigByIDResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

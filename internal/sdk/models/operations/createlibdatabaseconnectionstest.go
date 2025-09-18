@@ -12,11 +12,11 @@ type CreateLibDatabaseConnectionsTestResponseBody struct {
 	Items []shared.DatabaseConnectionTestResult `json:"items,omitempty"`
 }
 
-func (o *CreateLibDatabaseConnectionsTestResponseBody) GetItems() []shared.DatabaseConnectionTestResult {
-	if o == nil {
+func (c *CreateLibDatabaseConnectionsTestResponseBody) GetItems() []shared.DatabaseConnectionTestResult {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateLibDatabaseConnectionsTestResponse struct {
@@ -32,37 +32,37 @@ type CreateLibDatabaseConnectionsTestResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateLibDatabaseConnectionsTestResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateLibDatabaseConnectionsTestResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateLibDatabaseConnectionsTestResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateLibDatabaseConnectionsTestResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateLibDatabaseConnectionsTestResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateLibDatabaseConnectionsTestResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateLibDatabaseConnectionsTestResponse) GetObject() *CreateLibDatabaseConnectionsTestResponseBody {
-	if o == nil {
+func (c *CreateLibDatabaseConnectionsTestResponse) GetObject() *CreateLibDatabaseConnectionsTestResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateLibDatabaseConnectionsTestResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateLibDatabaseConnectionsTestResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

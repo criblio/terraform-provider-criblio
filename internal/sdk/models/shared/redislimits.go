@@ -6,9 +6,9 @@ type RedisLimits struct {
 	Connections RedisConnectionLimits `json:"connections"`
 }
 
-func (o *RedisLimits) GetConnections() RedisConnectionLimits {
-	if o == nil {
+func (r *RedisLimits) GetConnections() RedisConnectionLimits {
+	if r == nil {
 		return RedisConnectionLimits{}
 	}
-	return o.Connections
+	return r.Connections
 }

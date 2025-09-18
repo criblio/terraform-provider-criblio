@@ -14,18 +14,18 @@ type GetSubscriptionByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetSubscriptionByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetSubscriptionByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetSubscriptionByIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetSubscriptionByIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetSubscriptionByIDResponseBody - a list of Subscription objects
@@ -33,11 +33,11 @@ type GetSubscriptionByIDResponseBody struct {
 	Items []shared.Subscription `json:"items,omitempty"`
 }
 
-func (o *GetSubscriptionByIDResponseBody) GetItems() []shared.Subscription {
-	if o == nil {
+func (g *GetSubscriptionByIDResponseBody) GetItems() []shared.Subscription {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetSubscriptionByIDResponse struct {
@@ -53,37 +53,37 @@ type GetSubscriptionByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSubscriptionByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetSubscriptionByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetSubscriptionByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetSubscriptionByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetSubscriptionByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetSubscriptionByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetSubscriptionByIDResponse) GetObject() *GetSubscriptionByIDResponseBody {
-	if o == nil {
+func (g *GetSubscriptionByIDResponse) GetObject() *GetSubscriptionByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetSubscriptionByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetSubscriptionByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

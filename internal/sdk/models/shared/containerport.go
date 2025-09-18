@@ -7,16 +7,16 @@ type ContainerPort struct {
 	PublicPort  float64 `json:"publicPort"`
 }
 
-func (o *ContainerPort) GetPrivatePort() float64 {
-	if o == nil {
+func (c *ContainerPort) GetPrivatePort() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.PrivatePort
+	return c.PrivatePort
 }
 
-func (o *ContainerPort) GetPublicPort() float64 {
-	if o == nil {
+func (c *ContainerPort) GetPublicPort() float64 {
+	if c == nil {
 		return 0.0
 	}
-	return o.PublicPort
+	return c.PublicPort
 }

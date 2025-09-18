@@ -12,11 +12,11 @@ type ListPipelineRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *ListPipelineRequest) GetGroupID() string {
-	if o == nil {
+func (l *ListPipelineRequest) GetGroupID() string {
+	if l == nil {
 		return ""
 	}
-	return o.GroupID
+	return l.GroupID
 }
 
 // ListPipelineResponseBody - a list of Pipeline objects
@@ -24,11 +24,11 @@ type ListPipelineResponseBody struct {
 	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (o *ListPipelineResponseBody) GetItems() []shared.Pipeline {
-	if o == nil {
+func (l *ListPipelineResponseBody) GetItems() []shared.Pipeline {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListPipelineResponse struct {
@@ -44,37 +44,37 @@ type ListPipelineResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListPipelineResponse) GetContentType() string {
-	if o == nil {
+func (l *ListPipelineResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListPipelineResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListPipelineResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListPipelineResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListPipelineResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListPipelineResponse) GetObject() *ListPipelineResponseBody {
-	if o == nil {
+func (l *ListPipelineResponse) GetObject() *ListPipelineResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListPipelineResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListPipelineResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

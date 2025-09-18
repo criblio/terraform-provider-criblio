@@ -40,51 +40,51 @@ type CluiItem struct {
 	Type     CluiType `json:"type"`
 }
 
-func (o *CluiItem) GetCategory() Category {
-	if o == nil {
+func (c *CluiItem) GetCategory() Category {
+	if c == nil {
 		return Category("")
 	}
-	return o.Category
+	return c.Category
 }
 
-func (o *CluiItem) GetGroupID() *string {
-	if o == nil {
+func (c *CluiItem) GetGroupID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.GroupID
+	return c.GroupID
 }
 
-func (o *CluiItem) GetID() *string {
-	if o == nil {
+func (c *CluiItem) GetID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *CluiItem) GetName() *string {
-	if o == nil {
+func (c *CluiItem) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *CluiItem) GetPackID() *string {
-	if o == nil {
+func (c *CluiItem) GetPackID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.PackID
+	return c.PackID
 }
 
-func (o *CluiItem) GetSubType() *string {
-	if o == nil {
+func (c *CluiItem) GetSubType() *string {
+	if c == nil {
 		return nil
 	}
-	return o.SubType
+	return c.SubType
 }
 
-func (o *CluiItem) GetType() CluiType {
-	if o == nil {
+func (c *CluiItem) GetType() CluiType {
+	if c == nil {
 		return CluiType("")
 	}
-	return o.Type
+	return c.Type
 }

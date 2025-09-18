@@ -13,58 +13,58 @@ type VaultKMSTLSClientConfig struct {
 	Servername         *string `json:"servername,omitempty"`
 }
 
-func (o *VaultKMSTLSClientConfig) GetCaPath() *string {
-	if o == nil {
+func (v *VaultKMSTLSClientConfig) GetCaPath() *string {
+	if v == nil {
 		return nil
 	}
-	return o.CaPath
+	return v.CaPath
 }
 
-func (o *VaultKMSTLSClientConfig) GetCertPath() *string {
-	if o == nil {
+func (v *VaultKMSTLSClientConfig) GetCertPath() *string {
+	if v == nil {
 		return nil
 	}
-	return o.CertPath
+	return v.CertPath
 }
 
-func (o *VaultKMSTLSClientConfig) GetCertificateName() *string {
-	if o == nil {
+func (v *VaultKMSTLSClientConfig) GetCertificateName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.CertificateName
+	return v.CertificateName
 }
 
-func (o *VaultKMSTLSClientConfig) GetDisabled() bool {
-	if o == nil {
+func (v *VaultKMSTLSClientConfig) GetDisabled() bool {
+	if v == nil {
 		return false
 	}
-	return o.Disabled
+	return v.Disabled
 }
 
-func (o *VaultKMSTLSClientConfig) GetPassphrase() *string {
-	if o == nil {
+func (v *VaultKMSTLSClientConfig) GetPassphrase() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Passphrase
+	return v.Passphrase
 }
 
-func (o *VaultKMSTLSClientConfig) GetPrivKeyPath() *string {
-	if o == nil {
+func (v *VaultKMSTLSClientConfig) GetPrivKeyPath() *string {
+	if v == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return v.PrivKeyPath
 }
 
-func (o *VaultKMSTLSClientConfig) GetRejectUnauthorized() *bool {
-	if o == nil {
+func (v *VaultKMSTLSClientConfig) GetRejectUnauthorized() *bool {
+	if v == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return v.RejectUnauthorized
 }
 
-func (o *VaultKMSTLSClientConfig) GetServername() *string {
-	if o == nil {
+func (v *VaultKMSTLSClientConfig) GetServername() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Servername
+	return v.Servername
 }

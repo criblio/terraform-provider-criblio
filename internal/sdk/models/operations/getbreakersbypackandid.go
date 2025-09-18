@@ -16,25 +16,25 @@ type GetBreakersByPackAndIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *GetBreakersByPackAndIDRequest) GetID() string {
-	if o == nil {
+func (g *GetBreakersByPackAndIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
-func (o *GetBreakersByPackAndIDRequest) GetPack() string {
-	if o == nil {
+func (g *GetBreakersByPackAndIDRequest) GetPack() string {
+	if g == nil {
 		return ""
 	}
-	return o.Pack
+	return g.Pack
 }
 
-func (o *GetBreakersByPackAndIDRequest) GetGroupID() string {
-	if o == nil {
+func (g *GetBreakersByPackAndIDRequest) GetGroupID() string {
+	if g == nil {
 		return ""
 	}
-	return o.GroupID
+	return g.GroupID
 }
 
 // GetBreakersByPackAndIDResponseBody - a list of Routes objects
@@ -42,11 +42,11 @@ type GetBreakersByPackAndIDResponseBody struct {
 	Items []shared.Routes `json:"items,omitempty"`
 }
 
-func (o *GetBreakersByPackAndIDResponseBody) GetItems() []shared.Routes {
-	if o == nil {
+func (g *GetBreakersByPackAndIDResponseBody) GetItems() []shared.Routes {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetBreakersByPackAndIDResponse struct {
@@ -62,37 +62,37 @@ type GetBreakersByPackAndIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetBreakersByPackAndIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetBreakersByPackAndIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetBreakersByPackAndIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetBreakersByPackAndIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetBreakersByPackAndIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetBreakersByPackAndIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetBreakersByPackAndIDResponse) GetObject() *GetBreakersByPackAndIDResponseBody {
-	if o == nil {
+func (g *GetBreakersByPackAndIDResponse) GetObject() *GetBreakersByPackAndIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetBreakersByPackAndIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetBreakersByPackAndIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

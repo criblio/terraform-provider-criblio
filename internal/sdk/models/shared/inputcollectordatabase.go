@@ -171,25 +171,25 @@ func (i *InputCollectorDatabaseStateTracking) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabaseStateTracking) GetStateUpdateExpression() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseStateTracking) GetStateUpdateExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateUpdateExpression
+	return i.StateUpdateExpression
 }
 
-func (o *InputCollectorDatabaseStateTracking) GetStateMergeExpression() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseStateTracking) GetStateMergeExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateMergeExpression
+	return i.StateMergeExpression
 }
 
-func (o *InputCollectorDatabaseStateTracking) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorDatabaseStateTracking) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputCollectorDatabaseRunSettings struct {
@@ -231,95 +231,95 @@ func (i *InputCollectorDatabaseRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetLogLevel() *InputCollectorDatabaseLogLevel {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetLogLevel() *InputCollectorDatabaseLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetMode() *InputCollectorDatabaseMode {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetMode() *InputCollectorDatabaseMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetTimeRangeType() *InputCollectorDatabaseTimeRange {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetTimeRangeType() *InputCollectorDatabaseTimeRange {
+	if i == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return i.TimeRangeType
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetEarliest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetLatest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetExpression() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Expression
+	return i.Expression
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetMinTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return i.MinTaskSize
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetMaxTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return i.MaxTaskSize
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetTimeWarning() *InputCollectorDatabaseTimeWarning {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetTimeWarning() *InputCollectorDatabaseTimeWarning {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return i.TimeWarning
 }
 
-func (o *InputCollectorDatabaseRunSettings) GetStateTracking() *InputCollectorDatabaseStateTracking {
-	if o == nil {
+func (i *InputCollectorDatabaseRunSettings) GetStateTracking() *InputCollectorDatabaseStateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 // InputCollectorDatabaseSchedule - Configuration for a scheduled job
@@ -348,46 +348,46 @@ func (i *InputCollectorDatabaseSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabaseSchedule) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorDatabaseSchedule) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCollectorDatabaseSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseSchedule) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputCollectorDatabaseSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (i *InputCollectorDatabaseSchedule) GetMaxConcurrentRuns() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return i.MaxConcurrentRuns
 }
 
-func (o *InputCollectorDatabaseSchedule) GetSkippable() *bool {
-	if o == nil {
+func (i *InputCollectorDatabaseSchedule) GetSkippable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Skippable
+	return i.Skippable
 }
 
-func (o *InputCollectorDatabaseSchedule) GetResumeMissed() *bool {
-	if o == nil {
+func (i *InputCollectorDatabaseSchedule) GetResumeMissed() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return i.ResumeMissed
 }
 
-func (o *InputCollectorDatabaseSchedule) GetRun() *InputCollectorDatabaseRunSettings {
-	if o == nil {
+func (i *InputCollectorDatabaseSchedule) GetRun() *InputCollectorDatabaseRunSettings {
+	if i == nil {
 		return nil
 	}
-	return o.Run
+	return i.Run
 }
 
 type InputCollectorDatabaseTypeCollection2 string
@@ -432,25 +432,25 @@ func (i *InputCollectorDatabasePreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabasePreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectorDatabasePreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectorDatabasePreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectorDatabasePreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectorDatabasePreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectorDatabasePreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectorDatabaseMetadatum struct {
@@ -470,18 +470,18 @@ func (i *InputCollectorDatabaseMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabaseMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectorDatabaseMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectorDatabaseMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectorDatabaseMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollectorDatabaseInput struct {
@@ -514,67 +514,67 @@ func (i *InputCollectorDatabaseInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabaseInput) GetType() *InputCollectorDatabaseTypeCollection2 {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetType() *InputCollectorDatabaseTypeCollection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorDatabaseInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollectorDatabaseInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollectorDatabaseInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollectorDatabaseInput) GetPreprocess() *InputCollectorDatabasePreprocess {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetPreprocess() *InputCollectorDatabasePreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollectorDatabaseInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollectorDatabaseInput) GetMetadata() []InputCollectorDatabaseMetadatum {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetMetadata() []InputCollectorDatabaseMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollectorDatabaseInput) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectorDatabaseInput) GetOutput() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseInput) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }
 
 type TypeDatabase string
@@ -619,25 +619,25 @@ func (i *InputCollectorDatabaseConf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabaseConf) GetConnectionID() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseConf) GetConnectionID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ConnectionID
+	return i.ConnectionID
 }
 
-func (o *InputCollectorDatabaseConf) GetQuery() *string {
-	if o == nil {
+func (i *InputCollectorDatabaseConf) GetQuery() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Query
+	return i.Query
 }
 
-func (o *InputCollectorDatabaseConf) GetQueryValidationEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorDatabaseConf) GetQueryValidationEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.QueryValidationEnabled
+	return i.QueryValidationEnabled
 }
 
 type InputCollectorDatabaseCollector struct {
@@ -656,18 +656,18 @@ func (i *InputCollectorDatabaseCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabaseCollector) GetType() TypeDatabase {
-	if o == nil {
+func (i *InputCollectorDatabaseCollector) GetType() TypeDatabase {
+	if i == nil {
 		return TypeDatabase("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorDatabaseCollector) GetConf() *InputCollectorDatabaseConf {
-	if o == nil {
+func (i *InputCollectorDatabaseCollector) GetConf() *InputCollectorDatabaseConf {
+	if i == nil {
 		return nil
 	}
-	return o.Conf
+	return i.Conf
 }
 
 type InputCollectorDatabase struct {
@@ -701,93 +701,93 @@ func (i *InputCollectorDatabase) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorDatabase) GetID() *string {
-	if o == nil {
+func (i *InputCollectorDatabase) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollectorDatabase) GetType() *InputCollectorDatabaseTypeCollection1 {
-	if o == nil {
+func (i *InputCollectorDatabase) GetType() *InputCollectorDatabaseTypeCollection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorDatabase) GetTTL() *string {
-	if o == nil {
+func (i *InputCollectorDatabase) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputCollectorDatabase) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputCollectorDatabase) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputCollectorDatabase) GetRemoveFields() []string {
-	if o == nil {
+func (i *InputCollectorDatabase) GetRemoveFields() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return i.RemoveFields
 }
 
-func (o *InputCollectorDatabase) GetResumeOnBoot() *bool {
-	if o == nil {
+func (i *InputCollectorDatabase) GetResumeOnBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return i.ResumeOnBoot
 }
 
-func (o *InputCollectorDatabase) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollectorDatabase) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollectorDatabase) GetSavedState() *InputCollectorDatabaseSavedState {
-	if o == nil {
+func (i *InputCollectorDatabase) GetSavedState() *InputCollectorDatabaseSavedState {
+	if i == nil {
 		return nil
 	}
-	return o.SavedState
+	return i.SavedState
 }
 
-func (o *InputCollectorDatabase) GetSchedule() *InputCollectorDatabaseSchedule {
-	if o == nil {
+func (i *InputCollectorDatabase) GetSchedule() *InputCollectorDatabaseSchedule {
+	if i == nil {
 		return nil
 	}
-	return o.Schedule
+	return i.Schedule
 }
 
-func (o *InputCollectorDatabase) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollectorDatabase) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollectorDatabase) GetWorkerAffinity() *bool {
-	if o == nil {
+func (i *InputCollectorDatabase) GetWorkerAffinity() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return i.WorkerAffinity
 }
 
-func (o *InputCollectorDatabase) GetInput() *InputCollectorDatabaseInput {
-	if o == nil {
+func (i *InputCollectorDatabase) GetInput() *InputCollectorDatabaseInput {
+	if i == nil {
 		return nil
 	}
-	return o.Input
+	return i.Input
 }
 
-func (o *InputCollectorDatabase) GetCollector() InputCollectorDatabaseCollector {
-	if o == nil {
+func (i *InputCollectorDatabase) GetCollector() InputCollectorDatabaseCollector {
+	if i == nil {
 		return InputCollectorDatabaseCollector{}
 	}
-	return o.Collector
+	return i.Collector
 }

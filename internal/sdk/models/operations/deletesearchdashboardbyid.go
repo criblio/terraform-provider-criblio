@@ -12,11 +12,11 @@ type DeleteSearchDashboardByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteSearchDashboardByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteSearchDashboardByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteSearchDashboardByIDResponseBody - a list of SearchDashboard objects
@@ -24,11 +24,11 @@ type DeleteSearchDashboardByIDResponseBody struct {
 	Items []shared.SearchDashboard `json:"items,omitempty"`
 }
 
-func (o *DeleteSearchDashboardByIDResponseBody) GetItems() []shared.SearchDashboard {
-	if o == nil {
+func (d *DeleteSearchDashboardByIDResponseBody) GetItems() []shared.SearchDashboard {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteSearchDashboardByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteSearchDashboardByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteSearchDashboardByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteSearchDashboardByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteSearchDashboardByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteSearchDashboardByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteSearchDashboardByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteSearchDashboardByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteSearchDashboardByIDResponse) GetObject() *DeleteSearchDashboardByIDResponseBody {
-	if o == nil {
+func (d *DeleteSearchDashboardByIDResponse) GetObject() *DeleteSearchDashboardByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteSearchDashboardByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteSearchDashboardByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

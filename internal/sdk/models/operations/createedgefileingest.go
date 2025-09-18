@@ -22,46 +22,46 @@ type CreateEdgeFileIngestRequest struct {
 	BreakerRuleSet *string `queryParam:"style=form,explode=true,name=breakerRuleSet"`
 }
 
-func (o *CreateEdgeFileIngestRequest) GetFilePath() *string {
-	if o == nil {
+func (c *CreateEdgeFileIngestRequest) GetFilePath() *string {
+	if c == nil {
 		return nil
 	}
-	return o.FilePath
+	return c.FilePath
 }
 
-func (o *CreateEdgeFileIngestRequest) GetPipelineID() *string {
-	if o == nil {
+func (c *CreateEdgeFileIngestRequest) GetPipelineID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.PipelineID
+	return c.PipelineID
 }
 
-func (o *CreateEdgeFileIngestRequest) GetOutputID() *string {
-	if o == nil {
+func (c *CreateEdgeFileIngestRequest) GetOutputID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OutputID
+	return c.OutputID
 }
 
-func (o *CreateEdgeFileIngestRequest) GetPreProcessingPipelineID() *string {
-	if o == nil {
+func (c *CreateEdgeFileIngestRequest) GetPreProcessingPipelineID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.PreProcessingPipelineID
+	return c.PreProcessingPipelineID
 }
 
-func (o *CreateEdgeFileIngestRequest) GetSendToRoutes() *string {
-	if o == nil {
+func (c *CreateEdgeFileIngestRequest) GetSendToRoutes() *string {
+	if c == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return c.SendToRoutes
 }
 
-func (o *CreateEdgeFileIngestRequest) GetBreakerRuleSet() *string {
-	if o == nil {
+func (c *CreateEdgeFileIngestRequest) GetBreakerRuleSet() *string {
+	if c == nil {
 		return nil
 	}
-	return o.BreakerRuleSet
+	return c.BreakerRuleSet
 }
 
 // CreateEdgeFileIngestResponseBody - a list of any objects
@@ -69,11 +69,11 @@ type CreateEdgeFileIngestResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateEdgeFileIngestResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateEdgeFileIngestResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateEdgeFileIngestResponse struct {
@@ -89,37 +89,37 @@ type CreateEdgeFileIngestResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateEdgeFileIngestResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateEdgeFileIngestResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateEdgeFileIngestResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateEdgeFileIngestResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateEdgeFileIngestResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateEdgeFileIngestResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateEdgeFileIngestResponse) GetObject() *CreateEdgeFileIngestResponseBody {
-	if o == nil {
+func (c *CreateEdgeFileIngestResponse) GetObject() *CreateEdgeFileIngestResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateEdgeFileIngestResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateEdgeFileIngestResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

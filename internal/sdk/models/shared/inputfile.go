@@ -47,18 +47,18 @@ func (i *InputFileConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFileConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputFileConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputFileConnection) GetOutput() string {
-	if o == nil {
+func (i *InputFileConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputFilePqMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputFilePq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFilePq) GetMode() *InputFilePqMode {
-	if o == nil {
+func (i *InputFilePq) GetMode() *InputFilePqMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputFilePq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputFilePq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputFilePq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputFilePq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputFilePq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputFilePq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputFilePq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputFilePq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputFilePq) GetPath() *string {
-	if o == nil {
+func (i *InputFilePq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputFilePq) GetCompress() *InputFileCompression {
-	if o == nil {
+func (i *InputFilePq) GetCompress() *InputFileCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 // InputFileMode - Choose how to discover files to monitor
@@ -236,18 +236,18 @@ func (i *InputFileMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFileMetadatum) GetName() string {
-	if o == nil {
+func (i *InputFileMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputFileMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputFileMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputFile struct {
@@ -315,198 +315,198 @@ func (i *InputFile) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputFile) GetID() string {
-	if o == nil {
+func (i *InputFile) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputFile) GetType() InputFileType {
-	if o == nil {
+func (i *InputFile) GetType() InputFileType {
+	if i == nil {
 		return InputFileType("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputFile) GetDisabled() *bool {
-	if o == nil {
+func (i *InputFile) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputFile) GetPipeline() *string {
-	if o == nil {
+func (i *InputFile) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputFile) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputFile) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputFile) GetEnvironment() *string {
-	if o == nil {
+func (i *InputFile) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputFile) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputFile) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputFile) GetStreamtags() []string {
-	if o == nil {
+func (i *InputFile) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputFile) GetConnections() []InputFileConnection {
-	if o == nil {
+func (i *InputFile) GetConnections() []InputFileConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputFile) GetPq() *InputFilePq {
-	if o == nil {
+func (i *InputFile) GetPq() *InputFilePq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputFile) GetMode() *InputFileMode {
-	if o == nil {
+func (i *InputFile) GetMode() *InputFileMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputFile) GetInterval() *float64 {
-	if o == nil {
+func (i *InputFile) GetInterval() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Interval
+	return i.Interval
 }
 
-func (o *InputFile) GetFilenames() []string {
-	if o == nil {
+func (i *InputFile) GetFilenames() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Filenames
+	return i.Filenames
 }
 
-func (o *InputFile) GetTailOnly() *bool {
-	if o == nil {
+func (i *InputFile) GetTailOnly() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.TailOnly
+	return i.TailOnly
 }
 
-func (o *InputFile) GetIdleTimeout() *float64 {
-	if o == nil {
+func (i *InputFile) GetIdleTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.IdleTimeout
+	return i.IdleTimeout
 }
 
-func (o *InputFile) GetMaxAgeDur() *string {
-	if o == nil {
+func (i *InputFile) GetMaxAgeDur() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxAgeDur
+	return i.MaxAgeDur
 }
 
-func (o *InputFile) GetCheckFileModTime() *bool {
-	if o == nil {
+func (i *InputFile) GetCheckFileModTime() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CheckFileModTime
+	return i.CheckFileModTime
 }
 
-func (o *InputFile) GetForceText() *bool {
-	if o == nil {
+func (i *InputFile) GetForceText() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ForceText
+	return i.ForceText
 }
 
-func (o *InputFile) GetHashLen() *float64 {
-	if o == nil {
+func (i *InputFile) GetHashLen() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.HashLen
+	return i.HashLen
 }
 
-func (o *InputFile) GetMetadata() []InputFileMetadatum {
-	if o == nil {
+func (i *InputFile) GetMetadata() []InputFileMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputFile) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputFile) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputFile) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputFile) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputFile) GetDescription() *string {
-	if o == nil {
+func (i *InputFile) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputFile) GetPath() *string {
-	if o == nil {
+func (i *InputFile) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputFile) GetDepth() *float64 {
-	if o == nil {
+func (i *InputFile) GetDepth() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Depth
+	return i.Depth
 }
 
-func (o *InputFile) GetSuppressMissingPathErrors() *bool {
-	if o == nil {
+func (i *InputFile) GetSuppressMissingPathErrors() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SuppressMissingPathErrors
+	return i.SuppressMissingPathErrors
 }
 
-func (o *InputFile) GetDeleteFiles() *bool {
-	if o == nil {
+func (i *InputFile) GetDeleteFiles() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.DeleteFiles
+	return i.DeleteFiles
 }
 
-func (o *InputFile) GetIncludeUnidentifiableBinary() *bool {
-	if o == nil {
+func (i *InputFile) GetIncludeUnidentifiableBinary() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IncludeUnidentifiableBinary
+	return i.IncludeUnidentifiableBinary
 }

@@ -12,11 +12,11 @@ type GetIoMetricsEntryByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetIoMetricsEntryByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetIoMetricsEntryByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetIoMetricsEntryByIDResponseBody - a list of IoMetricsEntry objects
@@ -24,11 +24,11 @@ type GetIoMetricsEntryByIDResponseBody struct {
 	Items []shared.IoMetricsEntry `json:"items,omitempty"`
 }
 
-func (o *GetIoMetricsEntryByIDResponseBody) GetItems() []shared.IoMetricsEntry {
-	if o == nil {
+func (g *GetIoMetricsEntryByIDResponseBody) GetItems() []shared.IoMetricsEntry {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetIoMetricsEntryByIDResponse struct {
@@ -44,37 +44,37 @@ type GetIoMetricsEntryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetIoMetricsEntryByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetIoMetricsEntryByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetIoMetricsEntryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetIoMetricsEntryByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetIoMetricsEntryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetIoMetricsEntryByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetIoMetricsEntryByIDResponse) GetObject() *GetIoMetricsEntryByIDResponseBody {
-	if o == nil {
+func (g *GetIoMetricsEntryByIDResponse) GetObject() *GetIoMetricsEntryByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetIoMetricsEntryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetIoMetricsEntryByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

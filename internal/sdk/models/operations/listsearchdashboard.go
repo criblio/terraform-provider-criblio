@@ -12,11 +12,11 @@ type ListSearchDashboardResponseBody struct {
 	Items []shared.SearchDashboard `json:"items,omitempty"`
 }
 
-func (o *ListSearchDashboardResponseBody) GetItems() []shared.SearchDashboard {
-	if o == nil {
+func (l *ListSearchDashboardResponseBody) GetItems() []shared.SearchDashboard {
+	if l == nil {
 		return nil
 	}
-	return o.Items
+	return l.Items
 }
 
 type ListSearchDashboardResponse struct {
@@ -32,37 +32,37 @@ type ListSearchDashboardResponse struct {
 	Error *shared.Error
 }
 
-func (o *ListSearchDashboardResponse) GetContentType() string {
-	if o == nil {
+func (l *ListSearchDashboardResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListSearchDashboardResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListSearchDashboardResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListSearchDashboardResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListSearchDashboardResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListSearchDashboardResponse) GetObject() *ListSearchDashboardResponseBody {
-	if o == nil {
+func (l *ListSearchDashboardResponse) GetObject() *ListSearchDashboardResponseBody {
+	if l == nil {
 		return nil
 	}
-	return o.Object
+	return l.Object
 }
 
-func (o *ListSearchDashboardResponse) GetError() *shared.Error {
-	if o == nil {
+func (l *ListSearchDashboardResponse) GetError() *shared.Error {
+	if l == nil {
 		return nil
 	}
-	return o.Error
+	return l.Error
 }

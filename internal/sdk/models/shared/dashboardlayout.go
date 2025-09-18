@@ -24,30 +24,30 @@ func (d *DashboardLayout) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DashboardLayout) GetH() float64 {
-	if o == nil {
+func (d *DashboardLayout) GetH() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.H
+	return d.H
 }
 
-func (o *DashboardLayout) GetW() float64 {
-	if o == nil {
+func (d *DashboardLayout) GetW() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.W
+	return d.W
 }
 
-func (o *DashboardLayout) GetX() float64 {
-	if o == nil {
+func (d *DashboardLayout) GetX() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.X
+	return d.X
 }
 
-func (o *DashboardLayout) GetY() float64 {
-	if o == nil {
+func (d *DashboardLayout) GetY() float64 {
+	if d == nil {
 		return 0.0
 	}
-	return o.Y
+	return d.Y
 }

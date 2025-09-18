@@ -9,30 +9,30 @@ type UpgradeGroupSettings struct {
 	RetryDelay *float64 `json:"retryDelay,omitempty"`
 }
 
-func (o *UpgradeGroupSettings) GetIsRolling() *bool {
-	if o == nil {
+func (u *UpgradeGroupSettings) GetIsRolling() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.IsRolling
+	return u.IsRolling
 }
 
-func (o *UpgradeGroupSettings) GetQuantity() *float64 {
-	if o == nil {
+func (u *UpgradeGroupSettings) GetQuantity() *float64 {
+	if u == nil {
 		return nil
 	}
-	return o.Quantity
+	return u.Quantity
 }
 
-func (o *UpgradeGroupSettings) GetRetryCount() *float64 {
-	if o == nil {
+func (u *UpgradeGroupSettings) GetRetryCount() *float64 {
+	if u == nil {
 		return nil
 	}
-	return o.RetryCount
+	return u.RetryCount
 }
 
-func (o *UpgradeGroupSettings) GetRetryDelay() *float64 {
-	if o == nil {
+func (u *UpgradeGroupSettings) GetRetryDelay() *float64 {
+	if u == nil {
 		return nil
 	}
-	return o.RetryDelay
+	return u.RetryDelay
 }

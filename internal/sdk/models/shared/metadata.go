@@ -12,51 +12,51 @@ type Metadata struct {
 	Timestamp float64        `json:"timestamp"`
 }
 
-func (o *Metadata) GetAws() *AwsMetadata {
-	if o == nil {
+func (m *Metadata) GetAws() *AwsMetadata {
+	if m == nil {
 		return nil
 	}
-	return o.Aws
+	return m.Aws
 }
 
-func (o *Metadata) GetCribl() *CriblMetadata {
-	if o == nil {
+func (m *Metadata) GetCribl() *CriblMetadata {
+	if m == nil {
 		return nil
 	}
-	return o.Cribl
+	return m.Cribl
 }
 
-func (o *Metadata) GetEnv() *EnvMetadata {
-	if o == nil {
+func (m *Metadata) GetEnv() *EnvMetadata {
+	if m == nil {
 		return nil
 	}
-	return o.Env
+	return m.Env
 }
 
-func (o *Metadata) GetHostOs() *OsMetadata {
-	if o == nil {
+func (m *Metadata) GetHostOs() *OsMetadata {
+	if m == nil {
 		return nil
 	}
-	return o.HostOs
+	return m.HostOs
 }
 
-func (o *Metadata) GetKube() *KubeMetadata {
-	if o == nil {
+func (m *Metadata) GetKube() *KubeMetadata {
+	if m == nil {
 		return nil
 	}
-	return o.Kube
+	return m.Kube
 }
 
-func (o *Metadata) GetOs() *OsMetadata {
-	if o == nil {
+func (m *Metadata) GetOs() *OsMetadata {
+	if m == nil {
 		return nil
 	}
-	return o.Os
+	return m.Os
 }
 
-func (o *Metadata) GetTimestamp() float64 {
-	if o == nil {
+func (m *Metadata) GetTimestamp() float64 {
+	if m == nil {
 		return 0.0
 	}
-	return o.Timestamp
+	return m.Timestamp
 }

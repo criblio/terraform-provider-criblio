@@ -24,72 +24,72 @@ type SavedQuery struct {
 	ID string `json:"id"`
 }
 
-func (o *SavedQuery) GetName() string {
-	if o == nil {
+func (s *SavedQuery) GetName() string {
+	if s == nil {
 		return ""
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SavedQuery) GetIsPrivate() *bool {
-	if o == nil {
+func (s *SavedQuery) GetIsPrivate() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IsPrivate
+	return s.IsPrivate
 }
 
-func (o *SavedQuery) GetQuery() string {
-	if o == nil {
+func (s *SavedQuery) GetQuery() string {
+	if s == nil {
 		return ""
 	}
-	return o.Query
+	return s.Query
 }
 
-func (o *SavedQuery) GetEarliest() *string {
-	if o == nil {
+func (s *SavedQuery) GetEarliest() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Earliest
+	return s.Earliest
 }
 
-func (o *SavedQuery) GetLatest() *string {
-	if o == nil {
+func (s *SavedQuery) GetLatest() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Latest
+	return s.Latest
 }
 
-func (o *SavedQuery) GetDescription() *string {
-	if o == nil {
+func (s *SavedQuery) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SavedQuery) GetSchedule() *SavedQuerySchedule {
-	if o == nil {
+func (s *SavedQuery) GetSchedule() *SavedQuerySchedule {
+	if s == nil {
 		return nil
 	}
-	return o.Schedule
+	return s.Schedule
 }
 
-func (o *SavedQuery) GetUser() *string {
-	if o == nil {
+func (s *SavedQuery) GetUser() *string {
+	if s == nil {
 		return nil
 	}
-	return o.User
+	return s.User
 }
 
-func (o *SavedQuery) GetDisplayUsername() *string {
-	if o == nil {
+func (s *SavedQuery) GetDisplayUsername() *string {
+	if s == nil {
 		return nil
 	}
-	return o.DisplayUsername
+	return s.DisplayUsername
 }
 
-func (o *SavedQuery) GetID() string {
-	if o == nil {
+func (s *SavedQuery) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return o.ID
+	return s.ID
 }

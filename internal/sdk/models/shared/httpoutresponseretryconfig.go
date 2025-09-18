@@ -9,30 +9,30 @@ type HTTPOutResponseRetryConfig struct {
 	MaxBackoff     *float64 `json:"maxBackoff,omitempty"`
 }
 
-func (o *HTTPOutResponseRetryConfig) GetBackoffRate() *float64 {
-	if o == nil {
+func (h *HTTPOutResponseRetryConfig) GetBackoffRate() *float64 {
+	if h == nil {
 		return nil
 	}
-	return o.BackoffRate
+	return h.BackoffRate
 }
 
-func (o *HTTPOutResponseRetryConfig) GetHTTPStatus() *float64 {
-	if o == nil {
+func (h *HTTPOutResponseRetryConfig) GetHTTPStatus() *float64 {
+	if h == nil {
 		return nil
 	}
-	return o.HTTPStatus
+	return h.HTTPStatus
 }
 
-func (o *HTTPOutResponseRetryConfig) GetInitialBackoff() *float64 {
-	if o == nil {
+func (h *HTTPOutResponseRetryConfig) GetInitialBackoff() *float64 {
+	if h == nil {
 		return nil
 	}
-	return o.InitialBackoff
+	return h.InitialBackoff
 }
 
-func (o *HTTPOutResponseRetryConfig) GetMaxBackoff() *float64 {
-	if o == nil {
+func (h *HTTPOutResponseRetryConfig) GetMaxBackoff() *float64 {
+	if h == nil {
 		return nil
 	}
-	return o.MaxBackoff
+	return h.MaxBackoff
 }

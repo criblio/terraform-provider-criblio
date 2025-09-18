@@ -12,11 +12,11 @@ type DeleteDashboardCategoryByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *DeleteDashboardCategoryByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteDashboardCategoryByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
 // DeleteDashboardCategoryByIDResponseBody - a list of DashboardCategory objects
@@ -24,11 +24,11 @@ type DeleteDashboardCategoryByIDResponseBody struct {
 	Items []shared.DashboardCategory `json:"items,omitempty"`
 }
 
-func (o *DeleteDashboardCategoryByIDResponseBody) GetItems() []shared.DashboardCategory {
-	if o == nil {
+func (d *DeleteDashboardCategoryByIDResponseBody) GetItems() []shared.DashboardCategory {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteDashboardCategoryByIDResponse struct {
@@ -44,37 +44,37 @@ type DeleteDashboardCategoryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteDashboardCategoryByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteDashboardCategoryByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteDashboardCategoryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteDashboardCategoryByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteDashboardCategoryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteDashboardCategoryByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteDashboardCategoryByIDResponse) GetObject() *DeleteDashboardCategoryByIDResponseBody {
-	if o == nil {
+func (d *DeleteDashboardCategoryByIDResponse) GetObject() *DeleteDashboardCategoryByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteDashboardCategoryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteDashboardCategoryByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

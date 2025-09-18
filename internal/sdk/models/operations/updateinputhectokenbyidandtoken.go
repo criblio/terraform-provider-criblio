@@ -18,32 +18,32 @@ type UpdateInputHecTokenByIDAndTokenRequest struct {
 	UpdateHecTokenRequest shared.UpdateHecTokenRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenRequest) GetID() string {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenRequest) GetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenRequest) GetToken() string {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenRequest) GetToken() string {
+	if u == nil {
 		return ""
 	}
-	return o.Token
+	return u.Token
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenRequest) GetGroupID() string {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenRequest) GetGroupID() string {
+	if u == nil {
 		return ""
 	}
-	return o.GroupID
+	return u.GroupID
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenRequest) GetUpdateHecTokenRequest() shared.UpdateHecTokenRequest {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenRequest) GetUpdateHecTokenRequest() shared.UpdateHecTokenRequest {
+	if u == nil {
 		return shared.UpdateHecTokenRequest{}
 	}
-	return o.UpdateHecTokenRequest
+	return u.UpdateHecTokenRequest
 }
 
 // UpdateInputHecTokenByIDAndTokenResponseBody - a list of any objects
@@ -51,11 +51,11 @@ type UpdateInputHecTokenByIDAndTokenResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenResponseBody) GetItems() []map[string]any {
+	if u == nil {
 		return nil
 	}
-	return o.Items
+	return u.Items
 }
 
 type UpdateInputHecTokenByIDAndTokenResponse struct {
@@ -71,37 +71,37 @@ type UpdateInputHecTokenByIDAndTokenResponse struct {
 	Error *shared.Error
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenResponse) GetObject() *UpdateInputHecTokenByIDAndTokenResponseBody {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenResponse) GetObject() *UpdateInputHecTokenByIDAndTokenResponseBody {
+	if u == nil {
 		return nil
 	}
-	return o.Object
+	return u.Object
 }
 
-func (o *UpdateInputHecTokenByIDAndTokenResponse) GetError() *shared.Error {
-	if o == nil {
+func (u *UpdateInputHecTokenByIDAndTokenResponse) GetError() *shared.Error {
+	if u == nil {
 		return nil
 	}
-	return o.Error
+	return u.Error
 }

@@ -47,11 +47,11 @@ type DeleteProductsUsersCacheByProductRequest struct {
 	Product DeleteProductsUsersCacheByProductProduct `pathParam:"style=simple,explode=false,name=product"`
 }
 
-func (o *DeleteProductsUsersCacheByProductRequest) GetProduct() DeleteProductsUsersCacheByProductProduct {
-	if o == nil {
+func (d *DeleteProductsUsersCacheByProductRequest) GetProduct() DeleteProductsUsersCacheByProductProduct {
+	if d == nil {
 		return DeleteProductsUsersCacheByProductProduct("")
 	}
-	return o.Product
+	return d.Product
 }
 
 // DeleteProductsUsersCacheByProductResponseBody - a list of any objects
@@ -59,11 +59,11 @@ type DeleteProductsUsersCacheByProductResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *DeleteProductsUsersCacheByProductResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (d *DeleteProductsUsersCacheByProductResponseBody) GetItems() []map[string]any {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteProductsUsersCacheByProductResponse struct {
@@ -79,37 +79,37 @@ type DeleteProductsUsersCacheByProductResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteProductsUsersCacheByProductResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteProductsUsersCacheByProductResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteProductsUsersCacheByProductResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteProductsUsersCacheByProductResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteProductsUsersCacheByProductResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteProductsUsersCacheByProductResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteProductsUsersCacheByProductResponse) GetObject() *DeleteProductsUsersCacheByProductResponseBody {
-	if o == nil {
+func (d *DeleteProductsUsersCacheByProductResponse) GetObject() *DeleteProductsUsersCacheByProductResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteProductsUsersCacheByProductResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteProductsUsersCacheByProductResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

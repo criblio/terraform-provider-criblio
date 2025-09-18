@@ -9,16 +9,16 @@ type MetadataItem struct {
 	Value string `json:"value"`
 }
 
-func (o *MetadataItem) GetName() string {
-	if o == nil {
+func (m *MetadataItem) GetName() string {
+	if m == nil {
 		return ""
 	}
-	return o.Name
+	return m.Name
 }
 
-func (o *MetadataItem) GetValue() string {
-	if o == nil {
+func (m *MetadataItem) GetValue() string {
+	if m == nil {
 		return ""
 	}
-	return o.Value
+	return m.Value
 }

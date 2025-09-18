@@ -7,16 +7,16 @@ type JobStatus struct {
 	State  map[string]any `json:"state"`
 }
 
-func (o *JobStatus) GetReason() map[string]any {
-	if o == nil {
+func (j *JobStatus) GetReason() map[string]any {
+	if j == nil {
 		return nil
 	}
-	return o.Reason
+	return j.Reason
 }
 
-func (o *JobStatus) GetState() map[string]any {
-	if o == nil {
+func (j *JobStatus) GetState() map[string]any {
+	if j == nil {
 		return map[string]any{}
 	}
-	return o.State
+	return j.State
 }

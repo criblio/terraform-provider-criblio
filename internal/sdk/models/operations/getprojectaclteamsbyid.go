@@ -12,11 +12,11 @@ type GetProjectACLTeamsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *GetProjectACLTeamsByIDRequest) GetID() string {
-	if o == nil {
+func (g *GetProjectACLTeamsByIDRequest) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetProjectACLTeamsByIDResponseBody - a list of UserAccessControlList objects
@@ -24,11 +24,11 @@ type GetProjectACLTeamsByIDResponseBody struct {
 	Items []shared.UserAccessControlList `json:"items,omitempty"`
 }
 
-func (o *GetProjectACLTeamsByIDResponseBody) GetItems() []shared.UserAccessControlList {
-	if o == nil {
+func (g *GetProjectACLTeamsByIDResponseBody) GetItems() []shared.UserAccessControlList {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetProjectACLTeamsByIDResponse struct {
@@ -44,37 +44,37 @@ type GetProjectACLTeamsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetProjectACLTeamsByIDResponse) GetContentType() string {
-	if o == nil {
+func (g *GetProjectACLTeamsByIDResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetProjectACLTeamsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetProjectACLTeamsByIDResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetProjectACLTeamsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetProjectACLTeamsByIDResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetProjectACLTeamsByIDResponse) GetObject() *GetProjectACLTeamsByIDResponseBody {
-	if o == nil {
+func (g *GetProjectACLTeamsByIDResponse) GetObject() *GetProjectACLTeamsByIDResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetProjectACLTeamsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetProjectACLTeamsByIDResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

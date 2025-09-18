@@ -47,18 +47,18 @@ func (i *InputCollectionConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectionConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectionConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectionConnection) GetOutput() string {
-	if o == nil {
+func (i *InputCollectionConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputCollectionMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputCollectionPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectionPq) GetMode() *InputCollectionMode {
-	if o == nil {
+func (i *InputCollectionPq) GetMode() *InputCollectionMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectionPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputCollectionPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputCollectionPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputCollectionPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputCollectionPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputCollectionPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputCollectionPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputCollectionPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputCollectionPq) GetPath() *string {
-	if o == nil {
+func (i *InputCollectionPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputCollectionPq) GetCompress() *InputCollectionCompression {
-	if o == nil {
+func (i *InputCollectionPq) GetCompress() *InputCollectionCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputCollectionPreprocess struct {
@@ -211,25 +211,25 @@ func (i *InputCollectionPreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectionPreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectionPreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectionPreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectionPreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectionPreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectionPreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectionMetadatum struct {
@@ -249,18 +249,18 @@ func (i *InputCollectionMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectionMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectionMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectionMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectionMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollection struct {
@@ -305,114 +305,114 @@ func (i *InputCollection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollection) GetID() string {
-	if o == nil {
+func (i *InputCollection) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollection) GetType() *InputCollectionType {
-	if o == nil {
+func (i *InputCollection) GetType() *InputCollectionType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollection) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollection) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollection) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollection) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollection) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollection) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollection) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollection) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputCollection) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputCollection) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollection) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollection) GetConnections() []InputCollectionConnection {
-	if o == nil {
+func (i *InputCollection) GetConnections() []InputCollectionConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputCollection) GetPq() *InputCollectionPq {
-	if o == nil {
+func (i *InputCollection) GetPq() *InputCollectionPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputCollection) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollection) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollection) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollection) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollection) GetPreprocess() *InputCollectionPreprocess {
-	if o == nil {
+func (i *InputCollection) GetPreprocess() *InputCollectionPreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollection) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollection) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollection) GetMetadata() []InputCollectionMetadatum {
-	if o == nil {
+func (i *InputCollection) GetMetadata() []InputCollectionMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollection) GetOutput() *string {
-	if o == nil {
+func (i *InputCollection) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }

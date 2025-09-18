@@ -12,11 +12,11 @@ type CreateSearchJobDispatchExecutorsByIDRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *CreateSearchJobDispatchExecutorsByIDRequest) GetID() string {
-	if o == nil {
+func (c *CreateSearchJobDispatchExecutorsByIDRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return o.ID
+	return c.ID
 }
 
 // CreateSearchJobDispatchExecutorsByIDResponseBody - a list of any objects
@@ -24,11 +24,11 @@ type CreateSearchJobDispatchExecutorsByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *CreateSearchJobDispatchExecutorsByIDResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (c *CreateSearchJobDispatchExecutorsByIDResponseBody) GetItems() []map[string]any {
+	if c == nil {
 		return nil
 	}
-	return o.Items
+	return c.Items
 }
 
 type CreateSearchJobDispatchExecutorsByIDResponse struct {
@@ -44,37 +44,37 @@ type CreateSearchJobDispatchExecutorsByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateSearchJobDispatchExecutorsByIDResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateSearchJobDispatchExecutorsByIDResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateSearchJobDispatchExecutorsByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateSearchJobDispatchExecutorsByIDResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateSearchJobDispatchExecutorsByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateSearchJobDispatchExecutorsByIDResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateSearchJobDispatchExecutorsByIDResponse) GetObject() *CreateSearchJobDispatchExecutorsByIDResponseBody {
-	if o == nil {
+func (c *CreateSearchJobDispatchExecutorsByIDResponse) GetObject() *CreateSearchJobDispatchExecutorsByIDResponseBody {
+	if c == nil {
 		return nil
 	}
-	return o.Object
+	return c.Object
 }
 
-func (o *CreateSearchJobDispatchExecutorsByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateSearchJobDispatchExecutorsByIDResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

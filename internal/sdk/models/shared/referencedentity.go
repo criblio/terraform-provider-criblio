@@ -7,16 +7,16 @@ type ReferencedEntity struct {
 	Type string `json:"type"`
 }
 
-func (o *ReferencedEntity) GetID() string {
-	if o == nil {
+func (r *ReferencedEntity) GetID() string {
+	if r == nil {
 		return ""
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *ReferencedEntity) GetType() string {
-	if o == nil {
+func (r *ReferencedEntity) GetType() string {
+	if r == nil {
 		return ""
 	}
-	return o.Type
+	return r.Type
 }

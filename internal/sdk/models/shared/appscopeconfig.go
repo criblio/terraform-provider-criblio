@@ -14,32 +14,32 @@ type AppscopeConfigCribl struct {
 	UseScopeSourceTransport *bool              `json:"useScopeSourceTransport,omitempty"`
 }
 
-func (o *AppscopeConfigCribl) GetAuthtoken() *string {
-	if o == nil {
+func (a *AppscopeConfigCribl) GetAuthtoken() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Authtoken
+	return a.Authtoken
 }
 
-func (o *AppscopeConfigCribl) GetEnable() *bool {
-	if o == nil {
+func (a *AppscopeConfigCribl) GetEnable() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Enable
+	return a.Enable
 }
 
-func (o *AppscopeConfigCribl) GetTransport() *AppscopeTransport {
-	if o == nil {
+func (a *AppscopeConfigCribl) GetTransport() *AppscopeTransport {
+	if a == nil {
 		return nil
 	}
-	return o.Transport
+	return a.Transport
 }
 
-func (o *AppscopeConfigCribl) GetUseScopeSourceTransport() *bool {
-	if o == nil {
+func (a *AppscopeConfigCribl) GetUseScopeSourceTransport() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.UseScopeSourceTransport
+	return a.UseScopeSourceTransport
 }
 
 type AppscopeConfigFormatNdjson struct {
@@ -47,18 +47,18 @@ type AppscopeConfigFormatNdjson struct {
 	Maxeventpersec float64 `json:"maxeventpersec"`
 }
 
-func (o *AppscopeConfigFormatNdjson) GetEnhancefs() bool {
-	if o == nil {
+func (a *AppscopeConfigFormatNdjson) GetEnhancefs() bool {
+	if a == nil {
 		return false
 	}
-	return o.Enhancefs
+	return a.Enhancefs
 }
 
-func (o *AppscopeConfigFormatNdjson) GetMaxeventpersec() float64 {
-	if o == nil {
+func (a *AppscopeConfigFormatNdjson) GetMaxeventpersec() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.Maxeventpersec
+	return a.Maxeventpersec
 }
 
 type AppscopeConfigType string
@@ -94,53 +94,53 @@ type AppscopeConfigWatchNdjson struct {
 	Value       *string  `json:"value,omitempty"`
 }
 
-func (o *AppscopeConfigWatchNdjson) GetAllowbinary() *bool {
-	if o == nil {
+func (a *AppscopeConfigWatchNdjson) GetAllowbinary() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Allowbinary
+	return a.Allowbinary
 }
 
-func (o *AppscopeConfigWatchNdjson) GetEnabled() *bool {
-	if o == nil {
+func (a *AppscopeConfigWatchNdjson) GetEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Enabled
+	return a.Enabled
 }
 
-func (o *AppscopeConfigWatchNdjson) GetField() *string {
-	if o == nil {
+func (a *AppscopeConfigWatchNdjson) GetField() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Field
+	return a.Field
 }
 
-func (o *AppscopeConfigWatchNdjson) GetHeaders() []string {
-	if o == nil {
+func (a *AppscopeConfigWatchNdjson) GetHeaders() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Headers
+	return a.Headers
 }
 
-func (o *AppscopeConfigWatchNdjson) GetName() *string {
-	if o == nil {
+func (a *AppscopeConfigWatchNdjson) GetName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AppscopeConfigWatchNdjson) GetType() string {
-	if o == nil {
+func (a *AppscopeConfigWatchNdjson) GetType() string {
+	if a == nil {
 		return ""
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AppscopeConfigWatchNdjson) GetValue() *string {
-	if o == nil {
+func (a *AppscopeConfigWatchNdjson) GetValue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Value
+	return a.Value
 }
 
 type AppscopeConfigEvent struct {
@@ -151,39 +151,39 @@ type AppscopeConfigEvent struct {
 	Watch     []AppscopeConfigWatchNdjson `json:"watch"`
 }
 
-func (o *AppscopeConfigEvent) GetEnable() bool {
-	if o == nil {
+func (a *AppscopeConfigEvent) GetEnable() bool {
+	if a == nil {
 		return false
 	}
-	return o.Enable
+	return a.Enable
 }
 
-func (o *AppscopeConfigEvent) GetFormat() AppscopeConfigFormatNdjson {
-	if o == nil {
+func (a *AppscopeConfigEvent) GetFormat() AppscopeConfigFormatNdjson {
+	if a == nil {
 		return AppscopeConfigFormatNdjson{}
 	}
-	return o.Format
+	return a.Format
 }
 
-func (o *AppscopeConfigEvent) GetTransport() AppscopeTransport {
-	if o == nil {
+func (a *AppscopeConfigEvent) GetTransport() AppscopeTransport {
+	if a == nil {
 		return AppscopeTransport{}
 	}
-	return o.Transport
+	return a.Transport
 }
 
-func (o *AppscopeConfigEvent) GetType() AppscopeConfigType {
-	if o == nil {
+func (a *AppscopeConfigEvent) GetType() AppscopeConfigType {
+	if a == nil {
 		return AppscopeConfigType("")
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AppscopeConfigEvent) GetWatch() []AppscopeConfigWatchNdjson {
-	if o == nil {
+func (a *AppscopeConfigEvent) GetWatch() []AppscopeConfigWatchNdjson {
+	if a == nil {
 		return []AppscopeConfigWatchNdjson{}
 	}
-	return o.Watch
+	return a.Watch
 }
 
 type AppscopeConfigLevel string
@@ -226,18 +226,18 @@ type AppscopeConfigLog struct {
 	Transport *AppscopeTransport   `json:"transport,omitempty"`
 }
 
-func (o *AppscopeConfigLog) GetLevel() *AppscopeConfigLevel {
-	if o == nil {
+func (a *AppscopeConfigLog) GetLevel() *AppscopeConfigLevel {
+	if a == nil {
 		return nil
 	}
-	return o.Level
+	return a.Level
 }
 
-func (o *AppscopeConfigLog) GetTransport() *AppscopeTransport {
-	if o == nil {
+func (a *AppscopeConfigLog) GetTransport() *AppscopeTransport {
+	if a == nil {
 		return nil
 	}
-	return o.Transport
+	return a.Transport
 }
 
 type AppscopeConfigLibscope struct {
@@ -247,32 +247,32 @@ type AppscopeConfigLibscope struct {
 	Summaryperiod *float64           `json:"summaryperiod,omitempty"`
 }
 
-func (o *AppscopeConfigLibscope) GetCommanddir() *string {
-	if o == nil {
+func (a *AppscopeConfigLibscope) GetCommanddir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Commanddir
+	return a.Commanddir
 }
 
-func (o *AppscopeConfigLibscope) GetConfigevent() *bool {
-	if o == nil {
+func (a *AppscopeConfigLibscope) GetConfigevent() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Configevent
+	return a.Configevent
 }
 
-func (o *AppscopeConfigLibscope) GetLog() *AppscopeConfigLog {
-	if o == nil {
+func (a *AppscopeConfigLibscope) GetLog() *AppscopeConfigLog {
+	if a == nil {
 		return nil
 	}
-	return o.Log
+	return a.Log
 }
 
-func (o *AppscopeConfigLibscope) GetSummaryperiod() *float64 {
-	if o == nil {
+func (a *AppscopeConfigLibscope) GetSummaryperiod() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.Summaryperiod
+	return a.Summaryperiod
 }
 
 type AppscopeConfigMetricFormat struct {
@@ -282,32 +282,32 @@ type AppscopeConfigMetricFormat struct {
 	Verbosity    *float64 `json:"verbosity,omitempty"`
 }
 
-func (o *AppscopeConfigMetricFormat) GetStatsdmaxlen() *float64 {
-	if o == nil {
+func (a *AppscopeConfigMetricFormat) GetStatsdmaxlen() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.Statsdmaxlen
+	return a.Statsdmaxlen
 }
 
-func (o *AppscopeConfigMetricFormat) GetStatsdprefix() *string {
-	if o == nil {
+func (a *AppscopeConfigMetricFormat) GetStatsdprefix() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Statsdprefix
+	return a.Statsdprefix
 }
 
-func (o *AppscopeConfigMetricFormat) GetType() *string {
-	if o == nil {
+func (a *AppscopeConfigMetricFormat) GetType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *AppscopeConfigMetricFormat) GetVerbosity() *float64 {
-	if o == nil {
+func (a *AppscopeConfigMetricFormat) GetVerbosity() *float64 {
+	if a == nil {
 		return nil
 	}
-	return o.Verbosity
+	return a.Verbosity
 }
 
 type AppscopeConfigMetricWatch struct {
@@ -320,32 +320,32 @@ type AppscopeConfigMetric struct {
 	Watch     []AppscopeConfigMetricWatch `json:"watch"`
 }
 
-func (o *AppscopeConfigMetric) GetEnable() bool {
-	if o == nil {
+func (a *AppscopeConfigMetric) GetEnable() bool {
+	if a == nil {
 		return false
 	}
-	return o.Enable
+	return a.Enable
 }
 
-func (o *AppscopeConfigMetric) GetFormat() AppscopeConfigMetricFormat {
-	if o == nil {
+func (a *AppscopeConfigMetric) GetFormat() AppscopeConfigMetricFormat {
+	if a == nil {
 		return AppscopeConfigMetricFormat{}
 	}
-	return o.Format
+	return a.Format
 }
 
-func (o *AppscopeConfigMetric) GetTransport() AppscopeTransport {
-	if o == nil {
+func (a *AppscopeConfigMetric) GetTransport() AppscopeTransport {
+	if a == nil {
 		return AppscopeTransport{}
 	}
-	return o.Transport
+	return a.Transport
 }
 
-func (o *AppscopeConfigMetric) GetWatch() []AppscopeConfigMetricWatch {
-	if o == nil {
+func (a *AppscopeConfigMetric) GetWatch() []AppscopeConfigMetricWatch {
+	if a == nil {
 		return []AppscopeConfigMetricWatch{}
 	}
-	return o.Watch
+	return a.Watch
 }
 
 type AppscopeConfigPayload struct {
@@ -353,18 +353,18 @@ type AppscopeConfigPayload struct {
 	Enable bool   `json:"enable"`
 }
 
-func (o *AppscopeConfigPayload) GetDir() string {
-	if o == nil {
+func (a *AppscopeConfigPayload) GetDir() string {
+	if a == nil {
 		return ""
 	}
-	return o.Dir
+	return a.Dir
 }
 
-func (o *AppscopeConfigPayload) GetEnable() bool {
-	if o == nil {
+func (a *AppscopeConfigPayload) GetEnable() bool {
+	if a == nil {
 		return false
 	}
-	return o.Enable
+	return a.Enable
 }
 
 type AppscopeConfigProtocol struct {
@@ -376,46 +376,46 @@ type AppscopeConfigProtocol struct {
 	Regex   string  `json:"regex"`
 }
 
-func (o *AppscopeConfigProtocol) GetBinary() bool {
-	if o == nil {
+func (a *AppscopeConfigProtocol) GetBinary() bool {
+	if a == nil {
 		return false
 	}
-	return o.Binary
+	return a.Binary
 }
 
-func (o *AppscopeConfigProtocol) GetDetect() bool {
-	if o == nil {
+func (a *AppscopeConfigProtocol) GetDetect() bool {
+	if a == nil {
 		return false
 	}
-	return o.Detect
+	return a.Detect
 }
 
-func (o *AppscopeConfigProtocol) GetLen() float64 {
-	if o == nil {
+func (a *AppscopeConfigProtocol) GetLen() float64 {
+	if a == nil {
 		return 0.0
 	}
-	return o.Len
+	return a.Len
 }
 
-func (o *AppscopeConfigProtocol) GetName() string {
-	if o == nil {
+func (a *AppscopeConfigProtocol) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AppscopeConfigProtocol) GetPayload() bool {
-	if o == nil {
+func (a *AppscopeConfigProtocol) GetPayload() bool {
+	if a == nil {
 		return false
 	}
-	return o.Payload
+	return a.Payload
 }
 
-func (o *AppscopeConfigProtocol) GetRegex() string {
-	if o == nil {
+func (a *AppscopeConfigProtocol) GetRegex() string {
+	if a == nil {
 		return ""
 	}
-	return o.Regex
+	return a.Regex
 }
 
 type AppscopeConfigTag struct {
@@ -423,18 +423,18 @@ type AppscopeConfigTag struct {
 	Value string `json:"value"`
 }
 
-func (o *AppscopeConfigTag) GetKey() string {
-	if o == nil {
+func (a *AppscopeConfigTag) GetKey() string {
+	if a == nil {
 		return ""
 	}
-	return o.Key
+	return a.Key
 }
 
-func (o *AppscopeConfigTag) GetValue() string {
-	if o == nil {
+func (a *AppscopeConfigTag) GetValue() string {
+	if a == nil {
 		return ""
 	}
-	return o.Value
+	return a.Value
 }
 
 type AppscopeConfig struct {
@@ -447,51 +447,51 @@ type AppscopeConfig struct {
 	Tags     []AppscopeConfigTag      `json:"tags,omitempty"`
 }
 
-func (o *AppscopeConfig) GetCribl() *AppscopeConfigCribl {
-	if o == nil {
+func (a *AppscopeConfig) GetCribl() *AppscopeConfigCribl {
+	if a == nil {
 		return nil
 	}
-	return o.Cribl
+	return a.Cribl
 }
 
-func (o *AppscopeConfig) GetEvent() *AppscopeConfigEvent {
-	if o == nil {
+func (a *AppscopeConfig) GetEvent() *AppscopeConfigEvent {
+	if a == nil {
 		return nil
 	}
-	return o.Event
+	return a.Event
 }
 
-func (o *AppscopeConfig) GetLibscope() *AppscopeConfigLibscope {
-	if o == nil {
+func (a *AppscopeConfig) GetLibscope() *AppscopeConfigLibscope {
+	if a == nil {
 		return nil
 	}
-	return o.Libscope
+	return a.Libscope
 }
 
-func (o *AppscopeConfig) GetMetric() *AppscopeConfigMetric {
-	if o == nil {
+func (a *AppscopeConfig) GetMetric() *AppscopeConfigMetric {
+	if a == nil {
 		return nil
 	}
-	return o.Metric
+	return a.Metric
 }
 
-func (o *AppscopeConfig) GetPayload() *AppscopeConfigPayload {
-	if o == nil {
+func (a *AppscopeConfig) GetPayload() *AppscopeConfigPayload {
+	if a == nil {
 		return nil
 	}
-	return o.Payload
+	return a.Payload
 }
 
-func (o *AppscopeConfig) GetProtocol() []AppscopeConfigProtocol {
-	if o == nil {
+func (a *AppscopeConfig) GetProtocol() []AppscopeConfigProtocol {
+	if a == nil {
 		return nil
 	}
-	return o.Protocol
+	return a.Protocol
 }
 
-func (o *AppscopeConfig) GetTags() []AppscopeConfigTag {
-	if o == nil {
+func (a *AppscopeConfig) GetTags() []AppscopeConfigTag {
+	if a == nil {
 		return nil
 	}
-	return o.Tags
+	return a.Tags
 }

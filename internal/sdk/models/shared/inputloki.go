@@ -47,18 +47,18 @@ func (i *InputLokiConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputLokiConnection) GetPipeline() *string {
-	if o == nil {
+func (i *InputLokiConnection) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputLokiConnection) GetOutput() string {
-	if o == nil {
+func (i *InputLokiConnection) GetOutput() string {
+	if i == nil {
 		return ""
 	}
-	return o.Output
+	return i.Output
 }
 
 // InputLokiMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
@@ -143,53 +143,53 @@ func (i *InputLokiPq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputLokiPq) GetMode() *InputLokiMode {
-	if o == nil {
+func (i *InputLokiPq) GetMode() *InputLokiMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputLokiPq) GetMaxBufferSize() *float64 {
-	if o == nil {
+func (i *InputLokiPq) GetMaxBufferSize() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxBufferSize
+	return i.MaxBufferSize
 }
 
-func (o *InputLokiPq) GetCommitFrequency() *float64 {
-	if o == nil {
+func (i *InputLokiPq) GetCommitFrequency() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.CommitFrequency
+	return i.CommitFrequency
 }
 
-func (o *InputLokiPq) GetMaxFileSize() *string {
-	if o == nil {
+func (i *InputLokiPq) GetMaxFileSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxFileSize
+	return i.MaxFileSize
 }
 
-func (o *InputLokiPq) GetMaxSize() *string {
-	if o == nil {
+func (i *InputLokiPq) GetMaxSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxSize
+	return i.MaxSize
 }
 
-func (o *InputLokiPq) GetPath() *string {
-	if o == nil {
+func (i *InputLokiPq) GetPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Path
+	return i.Path
 }
 
-func (o *InputLokiPq) GetCompress() *InputLokiCompression {
-	if o == nil {
+func (i *InputLokiPq) GetCompress() *InputLokiCompression {
+	if i == nil {
 		return nil
 	}
-	return o.Compress
+	return i.Compress
 }
 
 type InputLokiMinimumTLSVersion string
@@ -287,81 +287,81 @@ func (i *InputLokiTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetDisabled() *bool {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetCertificateName() *string {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetCertificateName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertificateName
+	return i.CertificateName
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetPrivKeyPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PrivKeyPath
+	return i.PrivKeyPath
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetPassphrase() *string {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetPassphrase() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Passphrase
+	return i.Passphrase
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetCertPath() *string {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetCertPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CertPath
+	return i.CertPath
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetCaPath() *string {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetCaPath() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CaPath
+	return i.CaPath
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetRequestCert() *bool {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetRequestCert() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RequestCert
+	return i.RequestCert
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetRejectUnauthorized() any {
+	if i == nil {
 		return nil
 	}
-	return o.RejectUnauthorized
+	return i.RejectUnauthorized
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetCommonNameRegex() any {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetCommonNameRegex() any {
+	if i == nil {
 		return nil
 	}
-	return o.CommonNameRegex
+	return i.CommonNameRegex
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetMinVersion() *InputLokiMinimumTLSVersion {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetMinVersion() *InputLokiMinimumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MinVersion
+	return i.MinVersion
 }
 
-func (o *InputLokiTLSSettingsServerSide) GetMaxVersion() *InputLokiMaximumTLSVersion {
-	if o == nil {
+func (i *InputLokiTLSSettingsServerSide) GetMaxVersion() *InputLokiMaximumTLSVersion {
+	if i == nil {
 		return nil
 	}
-	return o.MaxVersion
+	return i.MaxVersion
 }
 
 // InputLokiAuthenticationType - Loki logs authentication type
@@ -420,18 +420,18 @@ func (i *InputLokiMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputLokiMetadatum) GetName() string {
-	if o == nil {
+func (i *InputLokiMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputLokiMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputLokiMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputLokiOauthParam struct {
@@ -452,18 +452,18 @@ func (i *InputLokiOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputLokiOauthParam) GetName() string {
-	if o == nil {
+func (i *InputLokiOauthParam) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputLokiOauthParam) GetValue() string {
-	if o == nil {
+func (i *InputLokiOauthParam) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputLokiOauthHeader struct {
@@ -484,18 +484,18 @@ func (i *InputLokiOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputLokiOauthHeader) GetName() string {
-	if o == nil {
+func (i *InputLokiOauthHeader) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputLokiOauthHeader) GetValue() string {
-	if o == nil {
+func (i *InputLokiOauthHeader) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputLoki struct {
@@ -587,289 +587,289 @@ func (i *InputLoki) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputLoki) GetID() *string {
-	if o == nil {
+func (i *InputLoki) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputLoki) GetType() *InputLokiType {
-	if o == nil {
+func (i *InputLoki) GetType() *InputLokiType {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputLoki) GetDisabled() *bool {
-	if o == nil {
+func (i *InputLoki) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputLoki) GetPipeline() *string {
-	if o == nil {
+func (i *InputLoki) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputLoki) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputLoki) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputLoki) GetEnvironment() *string {
-	if o == nil {
+func (i *InputLoki) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputLoki) GetPqEnabled() *bool {
-	if o == nil {
+func (i *InputLoki) GetPqEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PqEnabled
+	return i.PqEnabled
 }
 
-func (o *InputLoki) GetStreamtags() []string {
-	if o == nil {
+func (i *InputLoki) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputLoki) GetConnections() []InputLokiConnection {
-	if o == nil {
+func (i *InputLoki) GetConnections() []InputLokiConnection {
+	if i == nil {
 		return nil
 	}
-	return o.Connections
+	return i.Connections
 }
 
-func (o *InputLoki) GetPq() *InputLokiPq {
-	if o == nil {
+func (i *InputLoki) GetPq() *InputLokiPq {
+	if i == nil {
 		return nil
 	}
-	return o.Pq
+	return i.Pq
 }
 
-func (o *InputLoki) GetHost() *string {
-	if o == nil {
+func (i *InputLoki) GetHost() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Host
+	return i.Host
 }
 
-func (o *InputLoki) GetPort() float64 {
-	if o == nil {
+func (i *InputLoki) GetPort() float64 {
+	if i == nil {
 		return 0.0
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *InputLoki) GetTLS() *InputLokiTLSSettingsServerSide {
-	if o == nil {
+func (i *InputLoki) GetTLS() *InputLokiTLSSettingsServerSide {
+	if i == nil {
 		return nil
 	}
-	return o.TLS
+	return i.TLS
 }
 
-func (o *InputLoki) GetMaxActiveReq() *float64 {
-	if o == nil {
+func (i *InputLoki) GetMaxActiveReq() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxActiveReq
+	return i.MaxActiveReq
 }
 
-func (o *InputLoki) GetMaxRequestsPerSocket() *int64 {
-	if o == nil {
+func (i *InputLoki) GetMaxRequestsPerSocket() *int64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxRequestsPerSocket
+	return i.MaxRequestsPerSocket
 }
 
-func (o *InputLoki) GetEnableProxyHeader() *bool {
-	if o == nil {
+func (i *InputLoki) GetEnableProxyHeader() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableProxyHeader
+	return i.EnableProxyHeader
 }
 
-func (o *InputLoki) GetCaptureHeaders() *bool {
-	if o == nil {
+func (i *InputLoki) GetCaptureHeaders() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.CaptureHeaders
+	return i.CaptureHeaders
 }
 
-func (o *InputLoki) GetActivityLogSampleRate() *float64 {
-	if o == nil {
+func (i *InputLoki) GetActivityLogSampleRate() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.ActivityLogSampleRate
+	return i.ActivityLogSampleRate
 }
 
-func (o *InputLoki) GetRequestTimeout() *float64 {
-	if o == nil {
+func (i *InputLoki) GetRequestTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.RequestTimeout
+	return i.RequestTimeout
 }
 
-func (o *InputLoki) GetSocketTimeout() *float64 {
-	if o == nil {
+func (i *InputLoki) GetSocketTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.SocketTimeout
+	return i.SocketTimeout
 }
 
-func (o *InputLoki) GetKeepAliveTimeout() *float64 {
-	if o == nil {
+func (i *InputLoki) GetKeepAliveTimeout() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.KeepAliveTimeout
+	return i.KeepAliveTimeout
 }
 
-func (o *InputLoki) GetEnableHealthCheck() *bool {
-	if o == nil {
+func (i *InputLoki) GetEnableHealthCheck() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.EnableHealthCheck
+	return i.EnableHealthCheck
 }
 
-func (o *InputLoki) GetIPAllowlistRegex() *string {
-	if o == nil {
+func (i *InputLoki) GetIPAllowlistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPAllowlistRegex
+	return i.IPAllowlistRegex
 }
 
-func (o *InputLoki) GetIPDenylistRegex() *string {
-	if o == nil {
+func (i *InputLoki) GetIPDenylistRegex() *string {
+	if i == nil {
 		return nil
 	}
-	return o.IPDenylistRegex
+	return i.IPDenylistRegex
 }
 
-func (o *InputLoki) GetLokiAPI() *string {
-	if o == nil {
+func (i *InputLoki) GetLokiAPI() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LokiAPI
+	return i.LokiAPI
 }
 
-func (o *InputLoki) GetAuthType() *InputLokiAuthenticationType {
-	if o == nil {
+func (i *InputLoki) GetAuthType() *InputLokiAuthenticationType {
+	if i == nil {
 		return nil
 	}
-	return o.AuthType
+	return i.AuthType
 }
 
-func (o *InputLoki) GetMetadata() []InputLokiMetadatum {
-	if o == nil {
+func (i *InputLoki) GetMetadata() []InputLokiMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputLoki) GetDescription() *string {
-	if o == nil {
+func (i *InputLoki) GetDescription() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *InputLoki) GetUsername() *string {
-	if o == nil {
+func (i *InputLoki) GetUsername() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Username
+	return i.Username
 }
 
-func (o *InputLoki) GetPassword() *string {
-	if o == nil {
+func (i *InputLoki) GetPassword() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Password
+	return i.Password
 }
 
-func (o *InputLoki) GetToken() *string {
-	if o == nil {
+func (i *InputLoki) GetToken() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Token
+	return i.Token
 }
 
-func (o *InputLoki) GetCredentialsSecret() *string {
-	if o == nil {
+func (i *InputLoki) GetCredentialsSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CredentialsSecret
+	return i.CredentialsSecret
 }
 
-func (o *InputLoki) GetTextSecret() *string {
-	if o == nil {
+func (i *InputLoki) GetTextSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TextSecret
+	return i.TextSecret
 }
 
-func (o *InputLoki) GetLoginURL() *string {
-	if o == nil {
+func (i *InputLoki) GetLoginURL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LoginURL
+	return i.LoginURL
 }
 
-func (o *InputLoki) GetSecretParamName() *string {
-	if o == nil {
+func (i *InputLoki) GetSecretParamName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.SecretParamName
+	return i.SecretParamName
 }
 
-func (o *InputLoki) GetSecret() *string {
-	if o == nil {
+func (i *InputLoki) GetSecret() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Secret
+	return i.Secret
 }
 
-func (o *InputLoki) GetTokenAttributeName() *string {
-	if o == nil {
+func (i *InputLoki) GetTokenAttributeName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TokenAttributeName
+	return i.TokenAttributeName
 }
 
-func (o *InputLoki) GetAuthHeaderExpr() *string {
-	if o == nil {
+func (i *InputLoki) GetAuthHeaderExpr() *string {
+	if i == nil {
 		return nil
 	}
-	return o.AuthHeaderExpr
+	return i.AuthHeaderExpr
 }
 
-func (o *InputLoki) GetTokenTimeoutSecs() *float64 {
-	if o == nil {
+func (i *InputLoki) GetTokenTimeoutSecs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.TokenTimeoutSecs
+	return i.TokenTimeoutSecs
 }
 
-func (o *InputLoki) GetOauthParams() []InputLokiOauthParam {
-	if o == nil {
+func (i *InputLoki) GetOauthParams() []InputLokiOauthParam {
+	if i == nil {
 		return nil
 	}
-	return o.OauthParams
+	return i.OauthParams
 }
 
-func (o *InputLoki) GetOauthHeaders() []InputLokiOauthHeader {
-	if o == nil {
+func (i *InputLoki) GetOauthHeaders() []InputLokiOauthHeader {
+	if i == nil {
 		return nil
 	}
-	return o.OauthHeaders
+	return i.OauthHeaders
 }

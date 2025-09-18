@@ -14,18 +14,18 @@ type GetVersionCountRequest struct {
 	ID *string `queryParam:"style=form,explode=true,name=ID"`
 }
 
-func (o *GetVersionCountRequest) GetGroup() *string {
-	if o == nil {
+func (g *GetVersionCountRequest) GetGroup() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Group
+	return g.Group
 }
 
-func (o *GetVersionCountRequest) GetID() *string {
-	if o == nil {
+func (g *GetVersionCountRequest) GetID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ID
+	return g.ID
 }
 
 // GetVersionCountResponseBody - a list of any objects
@@ -33,11 +33,11 @@ type GetVersionCountResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (o *GetVersionCountResponseBody) GetItems() []map[string]any {
-	if o == nil {
+func (g *GetVersionCountResponseBody) GetItems() []map[string]any {
+	if g == nil {
 		return nil
 	}
-	return o.Items
+	return g.Items
 }
 
 type GetVersionCountResponse struct {
@@ -53,37 +53,37 @@ type GetVersionCountResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetVersionCountResponse) GetContentType() string {
-	if o == nil {
+func (g *GetVersionCountResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetVersionCountResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetVersionCountResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetVersionCountResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetVersionCountResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetVersionCountResponse) GetObject() *GetVersionCountResponseBody {
-	if o == nil {
+func (g *GetVersionCountResponse) GetObject() *GetVersionCountResponseBody {
+	if g == nil {
 		return nil
 	}
-	return o.Object
+	return g.Object
 }
 
-func (o *GetVersionCountResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetVersionCountResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

@@ -36,58 +36,58 @@ func (s *SendDiagBundle) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SendDiagBundle) GetSendToCribl() *bool {
-	if o == nil {
+func (s *SendDiagBundle) GetSendToCribl() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.SendToCribl
+	return s.SendToCribl
 }
 
-func (o *SendDiagBundle) GetPath() *string {
-	if o == nil {
+func (s *SendDiagBundle) GetPath() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Path
+	return s.Path
 }
 
-func (o *SendDiagBundle) GetRenameJs() *bool {
-	if o == nil {
+func (s *SendDiagBundle) GetRenameJs() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.RenameJs
+	return s.RenameJs
 }
 
-func (o *SendDiagBundle) GetIncludeMetrics() *bool {
-	if o == nil {
+func (s *SendDiagBundle) GetIncludeMetrics() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IncludeMetrics
+	return s.IncludeMetrics
 }
 
-func (o *SendDiagBundle) GetIncludeGit() *bool {
-	if o == nil {
+func (s *SendDiagBundle) GetIncludeGit() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IncludeGit
+	return s.IncludeGit
 }
 
-func (o *SendDiagBundle) GetIncludeTopTalkers() *bool {
-	if o == nil {
+func (s *SendDiagBundle) GetIncludeTopTalkers() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IncludeTopTalkers
+	return s.IncludeTopTalkers
 }
 
-func (o *SendDiagBundle) GetMaxIncludeJobs() *float64 {
-	if o == nil {
+func (s *SendDiagBundle) GetMaxIncludeJobs() *float64 {
+	if s == nil {
 		return nil
 	}
-	return o.MaxIncludeJobs
+	return s.MaxIncludeJobs
 }
 
-func (o *SendDiagBundle) GetIncludeInstallLogs() *bool {
-	if o == nil {
+func (s *SendDiagBundle) GetIncludeInstallLogs() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.IncludeInstallLogs
+	return s.IncludeInstallLogs
 }

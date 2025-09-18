@@ -171,25 +171,25 @@ func (i *InputCollectorCriblLakeStateTracking) UnmarshalJSON(data []byte) error 
 	return nil
 }
 
-func (o *InputCollectorCriblLakeStateTracking) GetStateUpdateExpression() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeStateTracking) GetStateUpdateExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateUpdateExpression
+	return i.StateUpdateExpression
 }
 
-func (o *InputCollectorCriblLakeStateTracking) GetStateMergeExpression() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeStateTracking) GetStateMergeExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.StateMergeExpression
+	return i.StateMergeExpression
 }
 
-func (o *InputCollectorCriblLakeStateTracking) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLakeStateTracking) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
 type InputCollectorCriblLakeRunSettings struct {
@@ -231,95 +231,95 @@ func (i *InputCollectorCriblLakeRunSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetRescheduleDroppedTasks() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetRescheduleDroppedTasks() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.RescheduleDroppedTasks
+	return i.RescheduleDroppedTasks
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetMaxTaskReschedule() *float64 {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetMaxTaskReschedule() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskReschedule
+	return i.MaxTaskReschedule
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetLogLevel() *InputCollectorCriblLakeLogLevel {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetLogLevel() *InputCollectorCriblLakeLogLevel {
+	if i == nil {
 		return nil
 	}
-	return o.LogLevel
+	return i.LogLevel
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetJobTimeout() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetJobTimeout() *string {
+	if i == nil {
 		return nil
 	}
-	return o.JobTimeout
+	return i.JobTimeout
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetMode() *InputCollectorCriblLakeMode {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetMode() *InputCollectorCriblLakeMode {
+	if i == nil {
 		return nil
 	}
-	return o.Mode
+	return i.Mode
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetTimeRangeType() *InputCollectorCriblLakeTimeRange {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetTimeRangeType() *InputCollectorCriblLakeTimeRange {
+	if i == nil {
 		return nil
 	}
-	return o.TimeRangeType
+	return i.TimeRangeType
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetEarliest() *float64 {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetEarliest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Earliest
+	return i.Earliest
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetLatest() *float64 {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetLatest() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.Latest
+	return i.Latest
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetExpression() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetExpression() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Expression
+	return i.Expression
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetMinTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetMinTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MinTaskSize
+	return i.MinTaskSize
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetMaxTaskSize() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetMaxTaskSize() *string {
+	if i == nil {
 		return nil
 	}
-	return o.MaxTaskSize
+	return i.MaxTaskSize
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetTimeWarning() *InputCollectorCriblLakeTimeWarning {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetTimeWarning() *InputCollectorCriblLakeTimeWarning {
+	if i == nil {
 		return nil
 	}
-	return o.TimeWarning
+	return i.TimeWarning
 }
 
-func (o *InputCollectorCriblLakeRunSettings) GetStateTracking() *InputCollectorCriblLakeStateTracking {
-	if o == nil {
+func (i *InputCollectorCriblLakeRunSettings) GetStateTracking() *InputCollectorCriblLakeStateTracking {
+	if i == nil {
 		return nil
 	}
-	return o.StateTracking
+	return i.StateTracking
 }
 
 // InputCollectorCriblLakeSchedule - Configuration for a scheduled job
@@ -348,46 +348,46 @@ func (i *InputCollectorCriblLakeSchedule) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorCriblLakeSchedule) GetEnabled() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLakeSchedule) GetEnabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Enabled
+	return i.Enabled
 }
 
-func (o *InputCollectorCriblLakeSchedule) GetCronSchedule() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeSchedule) GetCronSchedule() *string {
+	if i == nil {
 		return nil
 	}
-	return o.CronSchedule
+	return i.CronSchedule
 }
 
-func (o *InputCollectorCriblLakeSchedule) GetMaxConcurrentRuns() *float64 {
-	if o == nil {
+func (i *InputCollectorCriblLakeSchedule) GetMaxConcurrentRuns() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.MaxConcurrentRuns
+	return i.MaxConcurrentRuns
 }
 
-func (o *InputCollectorCriblLakeSchedule) GetSkippable() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLakeSchedule) GetSkippable() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Skippable
+	return i.Skippable
 }
 
-func (o *InputCollectorCriblLakeSchedule) GetResumeMissed() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLakeSchedule) GetResumeMissed() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeMissed
+	return i.ResumeMissed
 }
 
-func (o *InputCollectorCriblLakeSchedule) GetRun() *InputCollectorCriblLakeRunSettings {
-	if o == nil {
+func (i *InputCollectorCriblLakeSchedule) GetRun() *InputCollectorCriblLakeRunSettings {
+	if i == nil {
 		return nil
 	}
-	return o.Run
+	return i.Run
 }
 
 type InputCollectorCriblLakeTypeCollection2 string
@@ -432,25 +432,25 @@ func (i *InputCollectorCriblLakePreprocess) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorCriblLakePreprocess) GetDisabled() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLakePreprocess) GetDisabled() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.Disabled
+	return i.Disabled
 }
 
-func (o *InputCollectorCriblLakePreprocess) GetCommand() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakePreprocess) GetCommand() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Command
+	return i.Command
 }
 
-func (o *InputCollectorCriblLakePreprocess) GetArgs() []string {
-	if o == nil {
+func (i *InputCollectorCriblLakePreprocess) GetArgs() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Args
+	return i.Args
 }
 
 type InputCollectorCriblLakeMetadatum struct {
@@ -470,18 +470,18 @@ func (i *InputCollectorCriblLakeMetadatum) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorCriblLakeMetadatum) GetName() string {
-	if o == nil {
+func (i *InputCollectorCriblLakeMetadatum) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *InputCollectorCriblLakeMetadatum) GetValue() string {
-	if o == nil {
+func (i *InputCollectorCriblLakeMetadatum) GetValue() string {
+	if i == nil {
 		return ""
 	}
-	return o.Value
+	return i.Value
 }
 
 type InputCollectorCriblLakeInput struct {
@@ -514,67 +514,67 @@ func (i *InputCollectorCriblLakeInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorCriblLakeInput) GetType() *InputCollectorCriblLakeTypeCollection2 {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetType() *InputCollectorCriblLakeTypeCollection2 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorCriblLakeInput) GetBreakerRulesets() []string {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetBreakerRulesets() []string {
+	if i == nil {
 		return nil
 	}
-	return o.BreakerRulesets
+	return i.BreakerRulesets
 }
 
-func (o *InputCollectorCriblLakeInput) GetStaleChannelFlushMs() *float64 {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetStaleChannelFlushMs() *float64 {
+	if i == nil {
 		return nil
 	}
-	return o.StaleChannelFlushMs
+	return i.StaleChannelFlushMs
 }
 
-func (o *InputCollectorCriblLakeInput) GetSendToRoutes() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetSendToRoutes() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.SendToRoutes
+	return i.SendToRoutes
 }
 
-func (o *InputCollectorCriblLakeInput) GetPreprocess() *InputCollectorCriblLakePreprocess {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetPreprocess() *InputCollectorCriblLakePreprocess {
+	if i == nil {
 		return nil
 	}
-	return o.Preprocess
+	return i.Preprocess
 }
 
-func (o *InputCollectorCriblLakeInput) GetThrottleRatePerSec() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetThrottleRatePerSec() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ThrottleRatePerSec
+	return i.ThrottleRatePerSec
 }
 
-func (o *InputCollectorCriblLakeInput) GetMetadata() []InputCollectorCriblLakeMetadatum {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetMetadata() []InputCollectorCriblLakeMetadatum {
+	if i == nil {
 		return nil
 	}
-	return o.Metadata
+	return i.Metadata
 }
 
-func (o *InputCollectorCriblLakeInput) GetPipeline() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetPipeline() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Pipeline
+	return i.Pipeline
 }
 
-func (o *InputCollectorCriblLakeInput) GetOutput() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeInput) GetOutput() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Output
+	return i.Output
 }
 
 type TypeCribllake string
@@ -616,11 +616,11 @@ func (i *InputCollectorCriblLakeConf) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorCriblLakeConf) GetDataset() *string {
-	if o == nil {
+func (i *InputCollectorCriblLakeConf) GetDataset() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Dataset
+	return i.Dataset
 }
 
 type InputCollectorCriblLakeCollector struct {
@@ -639,18 +639,18 @@ func (i *InputCollectorCriblLakeCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorCriblLakeCollector) GetType() TypeCribllake {
-	if o == nil {
+func (i *InputCollectorCriblLakeCollector) GetType() TypeCribllake {
+	if i == nil {
 		return TypeCribllake("")
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorCriblLakeCollector) GetConf() *InputCollectorCriblLakeConf {
-	if o == nil {
+func (i *InputCollectorCriblLakeCollector) GetConf() *InputCollectorCriblLakeConf {
+	if i == nil {
 		return nil
 	}
-	return o.Conf
+	return i.Conf
 }
 
 type InputCollectorCriblLake struct {
@@ -684,93 +684,93 @@ func (i *InputCollectorCriblLake) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InputCollectorCriblLake) GetID() *string {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InputCollectorCriblLake) GetType() *InputCollectorCriblLakeTypeCollection1 {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetType() *InputCollectorCriblLakeTypeCollection1 {
+	if i == nil {
 		return nil
 	}
-	return o.Type
+	return i.Type
 }
 
-func (o *InputCollectorCriblLake) GetTTL() *string {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetTTL() *string {
+	if i == nil {
 		return nil
 	}
-	return o.TTL
+	return i.TTL
 }
 
-func (o *InputCollectorCriblLake) GetIgnoreGroupJobsLimit() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetIgnoreGroupJobsLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.IgnoreGroupJobsLimit
+	return i.IgnoreGroupJobsLimit
 }
 
-func (o *InputCollectorCriblLake) GetRemoveFields() []string {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetRemoveFields() []string {
+	if i == nil {
 		return nil
 	}
-	return o.RemoveFields
+	return i.RemoveFields
 }
 
-func (o *InputCollectorCriblLake) GetResumeOnBoot() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetResumeOnBoot() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.ResumeOnBoot
+	return i.ResumeOnBoot
 }
 
-func (o *InputCollectorCriblLake) GetEnvironment() *string {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetEnvironment() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
-func (o *InputCollectorCriblLake) GetSavedState() *InputCollectorCriblLakeSavedState {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetSavedState() *InputCollectorCriblLakeSavedState {
+	if i == nil {
 		return nil
 	}
-	return o.SavedState
+	return i.SavedState
 }
 
-func (o *InputCollectorCriblLake) GetSchedule() *InputCollectorCriblLakeSchedule {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetSchedule() *InputCollectorCriblLakeSchedule {
+	if i == nil {
 		return nil
 	}
-	return o.Schedule
+	return i.Schedule
 }
 
-func (o *InputCollectorCriblLake) GetStreamtags() []string {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetStreamtags() []string {
+	if i == nil {
 		return nil
 	}
-	return o.Streamtags
+	return i.Streamtags
 }
 
-func (o *InputCollectorCriblLake) GetWorkerAffinity() *bool {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetWorkerAffinity() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.WorkerAffinity
+	return i.WorkerAffinity
 }
 
-func (o *InputCollectorCriblLake) GetInput() *InputCollectorCriblLakeInput {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetInput() *InputCollectorCriblLakeInput {
+	if i == nil {
 		return nil
 	}
-	return o.Input
+	return i.Input
 }
 
-func (o *InputCollectorCriblLake) GetCollector() InputCollectorCriblLakeCollector {
-	if o == nil {
+func (i *InputCollectorCriblLake) GetCollector() InputCollectorCriblLakeCollector {
+	if i == nil {
 		return InputCollectorCriblLakeCollector{}
 	}
-	return o.Collector
+	return i.Collector
 }

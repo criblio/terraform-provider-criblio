@@ -12,18 +12,18 @@ type GetAuthSsoCallbackRequest struct {
 	RelayState   *string `queryParam:"style=form,explode=true,name=RelayState"`
 }
 
-func (o *GetAuthSsoCallbackRequest) GetSAMLResponse() *string {
-	if o == nil {
+func (g *GetAuthSsoCallbackRequest) GetSAMLResponse() *string {
+	if g == nil {
 		return nil
 	}
-	return o.SAMLResponse
+	return g.SAMLResponse
 }
 
-func (o *GetAuthSsoCallbackRequest) GetRelayState() *string {
-	if o == nil {
+func (g *GetAuthSsoCallbackRequest) GetRelayState() *string {
+	if g == nil {
 		return nil
 	}
-	return o.RelayState
+	return g.RelayState
 }
 
 type GetAuthSsoCallbackResponse struct {
@@ -35,23 +35,23 @@ type GetAuthSsoCallbackResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *GetAuthSsoCallbackResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAuthSsoCallbackResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAuthSsoCallbackResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAuthSsoCallbackResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAuthSsoCallbackResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAuthSsoCallbackResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }

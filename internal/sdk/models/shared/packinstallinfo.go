@@ -9,32 +9,32 @@ type PackInstallInfoTags struct {
 	Technology []string `json:"technology"`
 }
 
-func (o *PackInstallInfoTags) GetDataType() []string {
-	if o == nil {
+func (p *PackInstallInfoTags) GetDataType() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.DataType
+	return p.DataType
 }
 
-func (o *PackInstallInfoTags) GetDomain() []string {
-	if o == nil {
+func (p *PackInstallInfoTags) GetDomain() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Domain
+	return p.Domain
 }
 
-func (o *PackInstallInfoTags) GetStreamtags() []string {
-	if o == nil {
+func (p *PackInstallInfoTags) GetStreamtags() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Streamtags
+	return p.Streamtags
 }
 
-func (o *PackInstallInfoTags) GetTechnology() []string {
-	if o == nil {
+func (p *PackInstallInfoTags) GetTechnology() []string {
+	if p == nil {
 		return []string{}
 	}
-	return o.Technology
+	return p.Technology
 }
 
 type PackInstallInfo struct {
@@ -55,107 +55,107 @@ type PackInstallInfo struct {
 	Warnings            any                  `json:"warnings"`
 }
 
-func (o *PackInstallInfo) GetAuthor() *string {
-	if o == nil {
+func (p *PackInstallInfo) GetAuthor() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Author
+	return p.Author
 }
 
-func (o *PackInstallInfo) GetDescription() *string {
-	if o == nil {
+func (p *PackInstallInfo) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PackInstallInfo) GetDisplayName() *string {
-	if o == nil {
+func (p *PackInstallInfo) GetDisplayName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DisplayName
+	return p.DisplayName
 }
 
-func (o *PackInstallInfo) GetExports() []string {
-	if o == nil {
+func (p *PackInstallInfo) GetExports() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Exports
+	return p.Exports
 }
 
-func (o *PackInstallInfo) GetID() string {
-	if o == nil {
+func (p *PackInstallInfo) GetID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PackInstallInfo) GetInputs() *float64 {
-	if o == nil {
+func (p *PackInstallInfo) GetInputs() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Inputs
+	return p.Inputs
 }
 
-func (o *PackInstallInfo) GetIsDisabled() *bool {
-	if o == nil {
+func (p *PackInstallInfo) GetIsDisabled() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.IsDisabled
+	return p.IsDisabled
 }
 
-func (o *PackInstallInfo) GetMinLogStreamVersion() *string {
-	if o == nil {
+func (p *PackInstallInfo) GetMinLogStreamVersion() *string {
+	if p == nil {
 		return nil
 	}
-	return o.MinLogStreamVersion
+	return p.MinLogStreamVersion
 }
 
-func (o *PackInstallInfo) GetOutputs() *float64 {
-	if o == nil {
+func (p *PackInstallInfo) GetOutputs() *float64 {
+	if p == nil {
 		return nil
 	}
-	return o.Outputs
+	return p.Outputs
 }
 
-func (o *PackInstallInfo) GetSettings() map[string]any {
-	if o == nil {
+func (p *PackInstallInfo) GetSettings() map[string]any {
+	if p == nil {
 		return nil
 	}
-	return o.Settings
+	return p.Settings
 }
 
-func (o *PackInstallInfo) GetSource() *string {
-	if o == nil {
+func (p *PackInstallInfo) GetSource() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Source
+	return p.Source
 }
 
-func (o *PackInstallInfo) GetSpec() *string {
-	if o == nil {
+func (p *PackInstallInfo) GetSpec() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Spec
+	return p.Spec
 }
 
-func (o *PackInstallInfo) GetTags() *PackInstallInfoTags {
-	if o == nil {
+func (p *PackInstallInfo) GetTags() *PackInstallInfoTags {
+	if p == nil {
 		return nil
 	}
-	return o.Tags
+	return p.Tags
 }
 
-func (o *PackInstallInfo) GetVersion() *string {
-	if o == nil {
+func (p *PackInstallInfo) GetVersion() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Version
+	return p.Version
 }
 
-func (o *PackInstallInfo) GetWarnings() any {
-	if o == nil {
+func (p *PackInstallInfo) GetWarnings() any {
+	if p == nil {
 		return nil
 	}
-	return o.Warnings
+	return p.Warnings
 }

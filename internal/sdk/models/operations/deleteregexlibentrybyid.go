@@ -14,18 +14,18 @@ type DeleteRegexLibEntryByIDRequest struct {
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
-func (o *DeleteRegexLibEntryByIDRequest) GetID() string {
-	if o == nil {
+func (d *DeleteRegexLibEntryByIDRequest) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteRegexLibEntryByIDRequest) GetGroupID() string {
-	if o == nil {
+func (d *DeleteRegexLibEntryByIDRequest) GetGroupID() string {
+	if d == nil {
 		return ""
 	}
-	return o.GroupID
+	return d.GroupID
 }
 
 // DeleteRegexLibEntryByIDResponseBody - a list of RegexLibEntry objects
@@ -33,11 +33,11 @@ type DeleteRegexLibEntryByIDResponseBody struct {
 	Items []shared.RegexLibEntry `json:"items,omitempty"`
 }
 
-func (o *DeleteRegexLibEntryByIDResponseBody) GetItems() []shared.RegexLibEntry {
-	if o == nil {
+func (d *DeleteRegexLibEntryByIDResponseBody) GetItems() []shared.RegexLibEntry {
+	if d == nil {
 		return nil
 	}
-	return o.Items
+	return d.Items
 }
 
 type DeleteRegexLibEntryByIDResponse struct {
@@ -53,37 +53,37 @@ type DeleteRegexLibEntryByIDResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteRegexLibEntryByIDResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteRegexLibEntryByIDResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteRegexLibEntryByIDResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteRegexLibEntryByIDResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteRegexLibEntryByIDResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteRegexLibEntryByIDResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteRegexLibEntryByIDResponse) GetObject() *DeleteRegexLibEntryByIDResponseBody {
-	if o == nil {
+func (d *DeleteRegexLibEntryByIDResponse) GetObject() *DeleteRegexLibEntryByIDResponseBody {
+	if d == nil {
 		return nil
 	}
-	return o.Object
+	return d.Object
 }
 
-func (o *DeleteRegexLibEntryByIDResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteRegexLibEntryByIDResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }
