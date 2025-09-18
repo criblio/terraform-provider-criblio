@@ -47447,6 +47447,195 @@ components:
       required:
         - category
         - type
+    TcpOutCompression:
+      type: string
+      nullable: true
+      enum:
+        - gzip
+        - none
+    ConfigBundles:
+      type: object
+      properties:
+        remoteUrl:
+          type: string
+      required:
+        - remoteUrl
+    FailoverConfigs:
+      type: object
+      properties:
+        missedHBLimit:
+          type: number
+        period:
+          type: string
+        volume:
+          type: string
+      required:
+        - volume
+    SocksProxyOpts:
+      type: object
+      properties:
+        disabled:
+          type: boolean
+        host:
+          type: string
+        password:
+          type: string
+        port:
+          type: number
+        type:
+          type: number
+        userId:
+          type: string
+      required:
+        - host
+        - port
+    ResiliencyType:
+      type: string
+      enum:
+        - none
+        - failover
+    CloudWorkspaceSchema:
+      type: object
+      properties:
+        authToken:
+          type: string
+        compression:
+          $ref: "#/components/schemas/TcpOutCompression"
+        configBundles:
+          $ref: "#/components/schemas/ConfigBundles"
+        configHelperSocketDir:
+          type: string
+        connectionTimeout:
+          type: number
+        disableSNIRouting:
+          type: boolean
+        disabled:
+          type: boolean
+        failover:
+          $ref: "#/components/schemas/FailoverConfigs"
+        forwardToLeaderApi:
+          type: boolean
+        host:
+          type: string
+        ipWhitelistRegex:
+          type: string
+        maxActiveCxn:
+          type: number
+        maxBufferBytes:
+          type: number
+        port:
+          type: number
+        protocol:
+          type: string
+        proxy:
+          $ref: "#/components/schemas/SocksProxyOpts"
+        resiliency:
+          $ref: "#/components/schemas/ResiliencyType"
+        subscriptionAgreement:
+          type: boolean
+        tls:
+          type: object
+          properties:
+            caPath:
+              type: string
+            certPath:
+              type: string
+            certificateName:
+              type: string
+            checkServerIdentity:
+              type: object
+            commonNameRegex:
+              type: object
+              additionalProperties: true
+            disabled:
+              type: boolean
+            passphrase:
+              type: string
+            privKeyPath:
+              type: string
+            rejectUnauthorized:
+              type: boolean
+            requestCert:
+              type: boolean
+            servername:
+              type: string
+          required:
+            - disabled
+        writeTimeout:
+          type: number
+      required:
+        - disabled
+        - host
+        - port
+        - subscriptionAgreement
+    MasterSchema:
+      type: object
+      properties:
+        authToken:
+          type: string
+        compression:
+          $ref: "#/components/schemas/TcpOutCompression"
+        configBundles:
+          $ref: "#/components/schemas/ConfigBundles"
+        configHelperSocketDir:
+          type: string
+        connectionTimeout:
+          type: number
+        disableSNIRouting:
+          type: boolean
+        failover:
+          $ref: "#/components/schemas/FailoverConfigs"
+        forwardToLeaderApi:
+          type: boolean
+        host:
+          type: string
+        ipWhitelistRegex:
+          type: string
+        maxActiveCxn:
+          type: number
+        maxBufferBytes:
+          type: number
+        port:
+          type: number
+        protocol:
+          type: string
+        proxy:
+          $ref: "#/components/schemas/SocksProxyOpts"
+        resiliency:
+          $ref: "#/components/schemas/ResiliencyType"
+        tls:
+          type: object
+          properties:
+            caPath:
+              type: string
+            certPath:
+              type: string
+            certificateName:
+              type: string
+            checkServerIdentity:
+              type: object
+            commonNameRegex:
+              type: object
+              additionalProperties: true
+            disabled:
+              type: boolean
+            passphrase:
+              type: string
+            privKeyPath:
+              type: string
+            rejectUnauthorized:
+              type: boolean
+            requestCert:
+              type: boolean
+            servername:
+              type: string
+          required:
+            - disabled
+        writeTimeout:
+          type: number
+      required:
+        - host
+        - port
     AppMode:
       type: string
       enum:
@@ -47455,6 +47644,38 @@ components:
         - worker
         - edge
         - managed-edge
+        - outpost
+    InstanceSettingsSchema:
+      oneOf:
+        - type: object
+          properties:
+            cloudWorkspace:
+              $ref: "#/components/schemas/CloudWorkspaceSchema"
+            envRegex:
+              type: string
+            group:
+              type: string
+            id:
+              type: string
+            master:
+              $ref: "#/components/schemas/MasterSchema"
+            mode:
+              $ref: "#/components/schemas/AppMode"
+            reportedDeploymentId:
+              type: string
+            tags:
+              type: array
+              items:
+                type: string
+          required:
+            - id
+            - mode
+        - type: object
+          properties:
+            bootstrapHost:
+              type: string
+            id:
+              type: string
     LookupVersions:
       type: object
     HBLeaderInfo:
@@ -52810,6 +53031,38 @@ paths:
           schema:
             type: string
           description: Pipeline Id
+  /system/instance/:
+    get:
+      operationId: listInstanceSettingsSchema
+      tags:
+        - system
+      summary: Get a list of InstanceSettingsSchema objects
+      description: Get a list of InstanceSettingsSchema objects
+      x-speakeasy-entity-operation: InstanceSettings#get
+      responses:
+        "200":
+          description: a list of InstanceSettingsSchema objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: number of items present in the items array
+                    x-speakeasy-ignore: true
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/InstanceSettingsSchema"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /system/banners:
     get:
       operationId: listBannerMessage

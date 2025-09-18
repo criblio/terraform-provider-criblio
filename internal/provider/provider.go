@@ -282,6 +282,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewGrokDataSource,
 		NewGroupDataSource,
 		NewHmacFunctionDataSource,
+		NewInstanceSettingsDataSource,
 		NewLookupFileDataSource,
 		NewNotificationDataSource,
 		NewNotificationTargetDataSource,

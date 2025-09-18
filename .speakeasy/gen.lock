@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: eed83e647c1a0dca601c71282998e0a2
+  docChecksum: de51399e75b7e29018b8bf766dfcc1dd
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.618.1
   generationVersion: 2.702.0
-  releaseVersion: 1.12.2
-  configChecksum: fd9f5940665396affc279ae74cfaf881
+  releaseVersion: 1.14.4
+  configChecksum: 3167ec4397c57eb12dbd4a6ed380aa26
   published: true
 features:
   terraform:
@@ -41,6 +41,7 @@ generatedFiles:
   - examples/data-sources/criblio_grok/data-source.tf
   - examples/data-sources/criblio_group/data-source.tf
   - examples/data-sources/criblio_hmac_function/data-source.tf
+  - examples/data-sources/criblio_instance_settings/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
   - examples/data-sources/criblio_notification/data-source.tf
   - examples/data-sources/criblio_notification_target/data-source.tf
@@ -240,6 +241,8 @@ generatedFiles:
   - internal/provider/hmacfunction_data_source_sdk.go
   - internal/provider/hmacfunction_resource.go
   - internal/provider/hmacfunction_resource_sdk.go
+  - internal/provider/instancesettings_data_source.go
+  - internal/provider/instancesettings_data_source_sdk.go
   - internal/provider/lakehousedatasetconnection_resource.go
   - internal/provider/lakehousedatasetconnection_resource_sdk.go
   - internal/provider/lookupfile_data_source.go
@@ -437,12 +440,16 @@ generatedFiles:
   - internal/provider/types/click_house_dataset.go
   - internal/provider/types/click_house_provider.go
   - internal/provider/types/cloud.go
+  - internal/provider/types/cloud_workspace_schema.go
+  - internal/provider/types/cloud_workspace_schema_check_server_identity.go
+  - internal/provider/types/cloud_workspace_schema_tls.go
   - internal/provider/types/collect_request_header.go
   - internal/provider/types/collect_request_param.go
   - internal/provider/types/collectors.go
   - internal/provider/types/comment.go
   - internal/provider/types/commit.go
   - internal/provider/types/condition_specific_configs.go
+  - internal/provider/types/config_bundles.go
   - internal/provider/types/config_group.go
   - internal/provider/types/config_group_cloud.go
   - internal/provider/types/config_group_git.go
@@ -471,6 +478,7 @@ generatedFiles:
   - internal/provider/types/event_breaker_ruleset_timestamp_format.go
   - internal/provider/types/extent_tag.go
   - internal/provider/types/extra_log_type.go
+  - internal/provider/types/failover_configs.go
   - internal/provider/types/field.go
   - internal/provider/types/firewall.go
   - internal/provider/types/gcp_account_config.go
@@ -939,6 +947,9 @@ generatedFiles:
   - internal/provider/types/input_zscaler_hec_metadatum.go
   - internal/provider/types/input_zscaler_hec_pq.go
   - internal/provider/types/input_zscaler_hec_tls_settings_server_side.go
+  - internal/provider/types/instance_settings_schema1.go
+  - internal/provider/types/instance_settings_schema2.go
+  - internal/provider/types/instance_settings_schema_union.go
   - internal/provider/types/interfaces.go
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/lake_dataset_search_config.go
@@ -950,6 +961,9 @@ generatedFiles:
   - internal/provider/types/loki_auth_oauth_param1.go
   - internal/provider/types/loki_auth_oauth_param2.go
   - internal/provider/types/lookup.go
+  - internal/provider/types/master_schema.go
+  - internal/provider/types/master_schema_check_server_identity.go
+  - internal/provider/types/master_schema_tls.go
   - internal/provider/types/meta_dataset.go
   - internal/provider/types/meta_provider.go
   - internal/provider/types/ms_graph_account_config.go
@@ -1274,6 +1288,7 @@ generatedFiles:
   - internal/provider/types/snowflake_dataset.go
   - internal/provider/types/snowflake_provider.go
   - internal/provider/types/sns_target.go
+  - internal/provider/types/socks_proxy_opts.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
   - internal/provider/types/tailscale_account_config.go
@@ -1742,6 +1757,7 @@ generatedFiles:
   - internal/sdk/models/operations/listhmacfunction.go
   - internal/sdk/models/operations/listinput.go
   - internal/sdk/models/operations/listinputstatus.go
+  - internal/sdk/models/operations/listinstancesettingsschema.go
   - internal/sdk/models/operations/listiometricsentry.go
   - internal/sdk/models/operations/listkeymetadataentity.go
   - internal/sdk/models/operations/listlibschemas.go
@@ -1880,6 +1896,7 @@ generatedFiles:
   - internal/sdk/models/shared/clickhousedescriptioncolumn.go
   - internal/sdk/models/shared/clickhousedescriptionresult.go
   - internal/sdk/models/shared/cloudprovider.go
+  - internal/sdk/models/shared/cloudworkspaceschema.go
   - internal/sdk/models/shared/cluiitem.go
   - internal/sdk/models/shared/cluitype.go
   - internal/sdk/models/shared/collector.go
@@ -1890,6 +1907,7 @@ generatedFiles:
   - internal/sdk/models/shared/commit.go
   - internal/sdk/models/shared/commonservicelimitconfigs.go
   - internal/sdk/models/shared/condition.go
+  - internal/sdk/models/shared/configbundles.go
   - internal/sdk/models/shared/configgroup.go
   - internal/sdk/models/shared/configgroupcloud.go
   - internal/sdk/models/shared/configgrouplookups.go
@@ -1942,6 +1960,7 @@ generatedFiles:
   - internal/sdk/models/shared/executor.go
   - internal/sdk/models/shared/expression.go
   - internal/sdk/models/shared/exprlibentry.go
+  - internal/sdk/models/shared/failoverconfigs.go
   - internal/sdk/models/shared/featuresentry.go
   - internal/sdk/models/shared/fileprocessinfo.go
   - internal/sdk/models/shared/filesystementry.go
@@ -2044,6 +2063,7 @@ generatedFiles:
   - internal/sdk/models/shared/inputwineventlogs.go
   - internal/sdk/models/shared/inputwiz.go
   - internal/sdk/models/shared/inputzscalerhec.go
+  - internal/sdk/models/shared/instancesettingsschemaunion.go
   - internal/sdk/models/shared/iometricsentry.go
   - internal/sdk/models/shared/iometricsentrylevel.go
   - internal/sdk/models/shared/jobexecutionwarning.go
@@ -2071,6 +2091,7 @@ generatedFiles:
   - internal/sdk/models/shared/lookupfile.go
   - internal/sdk/models/shared/lookupversions.go
   - internal/sdk/models/shared/mappingtype.go
+  - internal/sdk/models/shared/masterschema.go
   - internal/sdk/models/shared/masterworkerentry.go
   - internal/sdk/models/shared/membershipschema.go
   - internal/sdk/models/shared/metadata.go
@@ -2198,6 +2219,7 @@ generatedFiles:
   - internal/sdk/models/shared/referencedentity.go
   - internal/sdk/models/shared/referencingentity.go
   - internal/sdk/models/shared/regexlibentry.go
+  - internal/sdk/models/shared/resiliencytype.go
   - internal/sdk/models/shared/resourcepolicy.go
   - internal/sdk/models/shared/restartresponse.go
   - internal/sdk/models/shared/restsecret.go
@@ -2248,6 +2270,7 @@ generatedFiles:
   - internal/sdk/models/shared/slacktarget.go
   - internal/sdk/models/shared/smtptarget.go
   - internal/sdk/models/shared/snstarget.go
+  - internal/sdk/models/shared/socksproxyopts.go
   - internal/sdk/models/shared/sortbyfield.go
   - internal/sdk/models/shared/stagedependency.go
   - internal/sdk/models/shared/stagedependencytype.go
@@ -2262,6 +2285,7 @@ generatedFiles:
   - internal/sdk/models/shared/tailscaleaccountconfig.go
   - internal/sdk/models/shared/targetconfig.go
   - internal/sdk/models/shared/targetconfigconf.go
+  - internal/sdk/models/shared/tcpoutcompression.go
   - internal/sdk/models/shared/team.go
   - internal/sdk/models/shared/teamaccesscontrollist.go
   - internal/sdk/models/shared/tlsclientparams.go
@@ -7592,6 +7616,17 @@ examples:
           groupId: "default"
       requestBody:
         application/json: {"routes": [{"name": "<value>", "filter": "true", "pipeline": "<value>", "enableOutputExpression": false, "final": true}]}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {}
+  listInstanceSettingsSchema:
+    speakeasy-default-list-instance-settings-schema:
+      parameters:
+        path:
+          groupId: "<id>"
+          id: "<id>"
       responses:
         "200":
           application/json: {}

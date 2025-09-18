@@ -15,6 +15,7 @@ const (
 	AppModeWorker      AppMode = "worker"
 	AppModeEdge        AppMode = "edge"
 	AppModeManagedEdge AppMode = "managed-edge"
+	AppModeOutpost     AppMode = "outpost"
 )
 
 func (e AppMode) ToPointer() *AppMode {
@@ -35,6 +36,8 @@ func (e *AppMode) UnmarshalJSON(data []byte) error {
 	case "edge":
 		fallthrough
 	case "managed-edge":
+		fallthrough
+	case "outpost":
 		*e = AppMode(v)
 		return nil
 	default:

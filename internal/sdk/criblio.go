@@ -72,6 +72,8 @@ type CriblIo struct {
 	Samples *Samples
 	// Actions related to Pipelines
 	Pipelines *Pipelines
+	// Actions related to system settings
+	System *System
 	// Actions related to Banners
 	Banners *Banners
 	// Actions related to Certificates
@@ -185,8 +187,6 @@ type CriblIo struct {
 	Authorize *Authorize
 	// Actions related to Changelog
 	Changelog *Changelog
-	// Actions related to system settings
-	System *System
 	// Actions related to ClickHouse
 	ClickHouse *ClickHouse
 	// Actions related to CLUI
@@ -354,9 +354,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.12.2",
+		SDKVersion: "1.14.4",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.12.2 2.702.0 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.14.4 2.702.0 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
@@ -391,6 +391,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Preview = newPreview(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Samples = newSamples(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Pipelines = newPipelines(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.System = newSystem(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Banners = newBanners(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Certificates = newCertificates(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Features = newFeatures(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -449,7 +450,6 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Auth = newAuth(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Authorize = newAuthorize(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Changelog = newChangelog(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.System = newSystem(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ClickHouse = newClickHouse(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Clui = newClui(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Distributed = newDistributed(sdk, sdk.sdkConfiguration, sdk.hooks)

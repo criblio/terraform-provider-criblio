@@ -2,18 +2,18 @@
 
 package shared
 
-type CheckServerIdentity struct {
+type TLSClientParamsCheckServerIdentity struct {
 }
 
 type TLSClientParams struct {
-	CaPath              *string              `json:"caPath,omitempty"`
-	CertPath            *string              `json:"certPath,omitempty"`
-	CheckServerIdentity *CheckServerIdentity `json:"checkServerIdentity,omitempty"`
-	Disabled            bool                 `json:"disabled"`
-	Passphrase          *string              `json:"passphrase,omitempty"`
-	PrivKeyPath         *string              `json:"privKeyPath,omitempty"`
-	RejectUnauthorized  *bool                `json:"rejectUnauthorized,omitempty"`
-	Servername          *string              `json:"servername,omitempty"`
+	CaPath              *string                             `json:"caPath,omitempty"`
+	CertPath            *string                             `json:"certPath,omitempty"`
+	CheckServerIdentity *TLSClientParamsCheckServerIdentity `json:"checkServerIdentity,omitempty"`
+	Disabled            bool                                `json:"disabled"`
+	Passphrase          *string                             `json:"passphrase,omitempty"`
+	PrivKeyPath         *string                             `json:"privKeyPath,omitempty"`
+	RejectUnauthorized  *bool                               `json:"rejectUnauthorized,omitempty"`
+	Servername          *string                             `json:"servername,omitempty"`
 }
 
 func (t *TLSClientParams) GetCaPath() *string {
@@ -30,7 +30,7 @@ func (t *TLSClientParams) GetCertPath() *string {
 	return t.CertPath
 }
 
-func (t *TLSClientParams) GetCheckServerIdentity() *CheckServerIdentity {
+func (t *TLSClientParams) GetCheckServerIdentity() *TLSClientParamsCheckServerIdentity {
 	if t == nil {
 		return nil
 	}
