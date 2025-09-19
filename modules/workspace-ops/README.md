@@ -21,13 +21,13 @@ Create a new Terraform configuration that references this module:
 # main.tf
 module "cribl_workspace" {
   # For GitHub repository via SSH
-  source = "git::ssh://git@github.com/cribl/terraform-provider-criblio.git//module/workspace-ops?ref=main"
+  source = "git::ssh://git@github.com/criblio/terraform-provider-criblio.git//modules/workspace-ops"
   
   # Or for GitHub via HTTPS
-  # source = "git::https://github.com/cribl/terraform-provider-criblio.git//module/workspace-ops?ref=main"
+  # source = "git::https://github.com/criblio/terraform-provider-criblio.git//modules/workspace-ops"
   
   # Or for local development
-  # source = "../terraform-provider-criblio/module/workspace-ops"
+  # source = "../terraform-provider-criblio/modules/workspace-ops"
   
   # Required variables
   cribl_client_id     = var.cribl_client_id
