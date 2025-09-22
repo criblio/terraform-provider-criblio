@@ -1,0 +1,54 @@
+{
+  "id": "json-config-http",
+  "type": "http",
+  "description": "Regular HTTP source from JSON config",
+  "port": 8080,
+  "host": "0.0.0.0",
+  "disabled": false,
+  "pqEnabled": true,
+  "authType": "none",
+  "maxActiveReq": 256,
+  "sendToRoutes": true,
+  "streamtags": [
+    "http",
+    "json-config"
+  ],
+  "connections": [
+    {
+      "pipeline": "main",
+      "output": "default"
+    }
+  ],
+  "metadata": [
+    {
+      "name": "source_type",
+      "value": "http"
+    },
+    {
+      "name": "environment",
+      "value": "development"
+    }
+  ],
+  "enableHealthCheck": true,
+  "ipAllowlistRegex": "/.*/",
+  "ipDenylistRegex": "/^$/",
+  "keepAliveTimeout": 300,
+  "requestTimeout": 30,
+  "socketTimeout": 10,
+  "pq": {
+    "commitFrequency": 5,
+    "compress": "gzip",
+    "maxBufferSize": 50,
+    "maxFileSize": "1 MB",
+    "maxSize": "100 MB",
+    "mode": "smart",
+    "path": "$CRIBL_HOME/state/buffers"
+  },
+  "tls": {
+    "disabled": true,
+    "maxVersion": "TLSv1.3",
+    "minVersion": "TLSv1.2",
+    "rejectUnauthorized": true,
+    "requestCert": false
+  }
+}

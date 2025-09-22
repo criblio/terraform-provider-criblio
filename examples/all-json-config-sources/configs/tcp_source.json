@@ -1,0 +1,61 @@
+{
+  "id": "json-config-tcp",
+  "authType": "manual",
+  "breakerRulesets": [],
+  "connections": [
+    {
+      "output": "default",
+      "pipeline": "main"
+    }
+  ],
+  "description": "TCP source from JSON config",
+  "disabled": false,
+  "enableHeader": false,
+  "enableProxyHeader": false,
+  "host": "0.0.0.0",
+  "ipWhitelistRegex": "/.*/",
+  "maxActiveCxn": 100,
+  "metadata": [
+    {
+      "name": "source_type",
+      "value": "tcp"
+    },
+    {
+      "name": "protocol",
+      "value": "tcp"
+    }
+  ],
+  "port": 9999,
+  "pq": {
+    "commitFrequency": 5,
+    "compress": "gzip",
+    "maxBufferSize": 1000,
+    "maxFileSize": "1 MB",
+    "maxSize": "100 MB",
+    "mode": "smart",
+    "path": "$CRIBL_HOME/state/buffers"
+  },
+  "pqEnabled": true,
+  "sendToRoutes": true,
+  "socketEndingMaxWait": 30,
+  "socketIdleTimeout": 0,
+  "socketMaxLifespan": 0,
+  "staleChannelFlushMs": 10000,
+  "streamtags": [
+    "tcp",
+    "json-config"
+  ],
+  "tls": {
+    "caPath": "",
+    "certPath": "",
+    "certificateName": "",
+    "disabled": true,
+    "maxVersion": "TLSv1.3",
+    "minVersion": "TLSv1.2",
+    "passphrase": "",
+    "privKeyPath": "",
+    "rejectUnauthorized": true,
+    "requestCert": false
+  },
+  "type": "tcp"
+}

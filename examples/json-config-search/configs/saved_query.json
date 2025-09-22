@@ -1,0 +1,18 @@
+{
+  "id": "json_config_saved_query",
+  "name": "Sample Events Query",
+  "description": "Search saved query from JSON config",
+  "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000",
+  "earliest": "-1h",
+  "latest": "now",
+  "isPrivate": true,
+  "schedule": {
+    "cronSchedule": "0 */6 * * *",
+    "enabled": false,
+    "keepLastN": 10,
+    "notifications": {
+      "disabled": true
+    },
+    "tz": "UTC"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "json-config-kinesis-dest",
+  "type": "kinesis",
+  "description": "Kinesis destination from JSON config",
+  "region": "us-east-1",
+  "streamName": "cribl-events-stream",
+  "compression": "gzip",
+  "concurrency": 5,
+  "flushPeriodSec": 1,
+  "maxRecordSizeKb": 1024,
+  "partitionKey": "_partition",
+  "asNdjson": true,
+  "awsAuthenticationMethod": "auto",
+  "onBackpressure": "queue",
+  "rejectUnauthorized": true,
+  "reuseConnections": true,
+  "signatureVersion": "v4",
+  "systemFields": ["cribl_pipe"],
+  "streamtags": ["kinesis", "json-config"]
+}

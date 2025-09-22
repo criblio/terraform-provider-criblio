@@ -1,0 +1,19 @@
+{
+  "id": "json-config-kafka-dest",
+  "type": "kafka",
+  "description": "Kafka destination from JSON config",
+  "brokers": ["localhost:9092", "kafka-2:9092"],
+  "topic": "cribl-events",
+  "format": "json",
+  "compression": "gzip",
+  "ack": 1,
+  "flushPeriodSec": 5,
+  "flushEventCount": 1000,
+  "maxRecordSizeKb": 512,
+  "maxRetries": 3,
+  "connectionTimeout": 10000,
+  "requestTimeout": 30000,
+  "onBackpressure": "queue",
+  "systemFields": ["cribl_pipe"],
+  "streamtags": ["kafka", "json-config"]
+}

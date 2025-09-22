@@ -1,0 +1,22 @@
+{
+  "id": "json-config-elasticsearch-dest",
+  "type": "elastic",
+  "description": "Elasticsearch destination from JSON config",
+  "index": "cribl-logs-${_time:%Y.%m.%d}",
+  "compress": true,
+  "concurrency": 5,
+  "flushPeriodSec": 1,
+  "maxPayloadSizeKb": 4096,
+  "maxPayloadEvents": 1000,
+  "elasticVersion": "7",
+  "onBackpressure": "queue",
+  "loadBalanced": false,
+  "url": "http://localhost:9200",
+  "rejectUnauthorized": false,
+  "systemFields": ["cribl_pipe"],
+  "streamtags": ["elasticsearch", "json-config"],
+  "auth": {
+    "authType": "none",
+    "disabled": false
+  }
+}

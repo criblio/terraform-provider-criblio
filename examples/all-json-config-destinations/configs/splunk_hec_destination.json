@@ -1,0 +1,40 @@
+{
+    "id": "test-json-splunk",
+    "systemFields": [
+      "cribl_pipe"
+    ],
+    "streamtags": [],
+    "loadBalanced": true,
+    "nextQueue": "indexQueue",
+    "tcpRouting": "nowhere",
+    "concurrency": 5,
+    "maxPayloadSizeKB": 4096,
+    "maxPayloadEvents": 0,
+    "compress": true,
+    "rejectUnauthorized": true,
+    "timeoutSec": 30,
+    "flushPeriodSec": 1,
+    "failedRequestLoggingMode": "none",
+    "safeHeaders": [],
+    "enableMultiMetrics": true,
+    "authType": "manual",
+    "responseRetrySettings": [],
+    "timeoutRetrySettings": {
+      "timeoutRetry": false
+    },
+    "responseHonorRetryAfterHeader": true,
+    "onBackpressure": "block",
+    "excludeSelf": false,
+    "urls": [
+      {
+        "url": "http://localhost:8088/services/collector/event",
+        "weight": 1
+      }
+    ],
+    "dnsResolvePeriodSec": 600,
+    "loadBalanceStatsPeriodSec": 300,
+    "type": "splunk_hec",
+    "pipeline": "main",
+    "description": "test",
+    "token": "test"
+  }

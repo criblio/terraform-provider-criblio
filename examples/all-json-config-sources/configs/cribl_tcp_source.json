@@ -1,0 +1,57 @@
+{
+  "id": "json-config-cribl-tcp",
+  "disabled": false,
+  "sendToRoutes": true,
+  "pqEnabled": true,
+  "streamtags": [
+    "cribl-tcp",
+    "json-config"
+  ],
+  "host": "0.0.0.0",
+  "tls": {
+    "disabled": true,
+    "caPath": "",
+    "certPath": "",
+    "certificateName": "",
+    "maxVersion": "TLSv1.3",
+    "minVersion": "TLSv1.2",
+    "passphrase": "",
+    "privKeyPath": "",
+    "rejectUnauthorized": true,
+    "requestCert": false
+  },
+  "maxActiveCxn": 10000,
+  "socketIdleTimeout": 0,
+  "socketEndingMaxWait": 30,
+  "socketMaxLifespan": 0,
+  "enableProxyHeader": false,
+  "enableLoadBalancing": false,
+  "connections": [
+    {
+      "output": "default",
+      "pipeline": "main"
+    }
+  ],
+  "description": "Cribl TCP source from JSON config",
+  "metadata": [
+    {
+      "name": "source_type",
+      "value": "cribl_tcp"
+    },
+    {
+      "name": "protocol",
+      "value": "cribl_tcp"
+    }
+  ],
+  "port": 9998,
+  "pq": {
+    "commitFrequency": 5,
+    "compress": "gzip",
+    "maxBufferSize": 1000,
+    "maxFileSize": "1 MB",
+    "maxSize": "100 MB",
+    "mode": "smart",
+    "path": "$CRIBL_HOME/state/buffers"
+  },
+  "type": "cribl_tcp"
+}

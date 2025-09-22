@@ -1,0 +1,63 @@
+{
+  "id": "json-config-syslog",
+  "type": "syslog",
+  "description": "Syslog source from JSON config",
+  "tcpPort": 5514,
+  "udpPort": 5514,
+  "host": "0.0.0.0",
+  "disabled": false,
+  "pqEnabled": true,
+  "sendToRoutes": true,
+  "streamtags": [
+    "syslog",
+    "json-config"
+  ],
+  "connections": [
+    {
+      "pipeline": "main",
+      "output": "default"
+    }
+  ],
+  "allowNonStandardAppName": false,
+  "enableLoadBalancing": true,
+  "enableProxyHeader": false,
+  "inferFraming": false,
+  "keepFieldsList": [],
+  "maxActiveCxn": 0,
+  "maxBufferSize": 8,
+  "metadata": [
+    {
+      "name": "source_type",
+      "value": "syslog"
+    }
+  ],
+  "octetCounting": false,
+  "singleMsgUdpPackets": false,
+  "socketEndingMaxWait": 6,
+  "socketIdleTimeout": 30,
+  "socketMaxLifespan": 5,
+  "strictlyInferOctetCounting": true,
+  "timestampTimezone": "UTC",
+  "udpSocketRxBufSize": 262144,
+  "pq": {
+    "commitFrequency": 5,
+    "compress": "none",
+    "maxBufferSize": 50,
+    "maxFileSize": "1 MB",
+    "maxSize": "100 MB",
+    "mode": "smart",
+    "path": "$CRIBL_HOME/state/buffers"
+  },
+  "tls": {
+    "caPath": "",
+    "certPath": "",
+    "certificateName": "",
+    "disabled": true,
+    "maxVersion": "TLSv1.3",
+    "minVersion": "TLSv1.2",
+    "passphrase": "",
+    "privKeyPath": "",
+    "rejectUnauthorized": true,
+    "requestCert": false
+  }
+}

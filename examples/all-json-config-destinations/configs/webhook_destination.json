@@ -1,0 +1,41 @@
+{
+    "id": "test-json-webhook",
+    "systemFields": [
+      "cribl_pipe"
+    ],
+    "streamtags": [],
+    "method": "POST",
+    "format": "ndjson",
+    "keepAlive": true,
+    "concurrency": 5,
+    "maxPayloadSizeKB": 4096,
+    "maxPayloadEvents": 0,
+    "compress": true,
+    "rejectUnauthorized": true,
+    "timeoutSec": 30,
+    "flushPeriodSec": 1,
+    "useRoundRobinDns": false,
+    "failedRequestLoggingMode": "none",
+    "safeHeaders": [],
+    "responseRetrySettings": [],
+    "timeoutRetrySettings": {
+      "timeoutRetry": false
+    },
+    "responseHonorRetryAfterHeader": false,
+    "onBackpressure": "block",
+    "authType": "none",
+    "tls": {
+      "disabled": true
+    },
+    "loadBalanced": true,
+    "excludeSelf": false,
+    "urls": [
+      {
+        "weight": 1,
+        "url": "http://webhook:8000"
+      }
+    ],
+    "dnsResolvePeriodSec": 600,
+    "loadBalanceStatsPeriodSec": 300,
+    "type": "webhook"
+  }

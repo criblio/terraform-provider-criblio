@@ -1,0 +1,73 @@
+{
+    "id": "json_config_dashboard",
+    "cacheTTLSeconds": 300,
+    "description": "Dashboard with custom ID and modified description",
+    "elements": [
+      {
+        "description": "Line chart showing event count over time",
+        "empty": false,
+        "id": "chart1",
+        "index": 0,
+        "layout": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 6
+        },
+        "search": {
+          "earliest": "-1h",
+          "latest": "now",
+          "query": "dataset=\"cribl_edge_appscope_metrics\" | timechart count by _time",
+          "timezone": "UTC",
+          "type": "inline"
+        },
+        "title": "Event Count Over Time",
+        "type": "chart.line",
+        "value": {
+          "xAxis": "_time",
+          "yAxis": "count"
+        },
+        "variant": "visualization"
+      },
+      {
+        "description": "Table showing recent events",
+        "empty": false,
+        "id": "table1",
+        "index": 1,
+        "layout": {
+          "x": 0,
+          "y": 6,
+          "w": 12,
+          "h": 6
+        },
+        "search": {
+          "earliest": "-15m",
+          "latest": "now",
+          "query": "dataset=\"cribl_edge_appscope_metrics\" | head 50",
+          "timezone": "UTC",
+          "type": "inline"
+        },
+        "title": "Recent Events",
+        "type": "list.table",
+        "value": {
+          "columns": "auto",
+          "maxRows": "50"
+        },
+        "variant": "visualization"
+      }
+    ],
+    "name": "Sample Dashboard",
+    "refreshRate": 30,
+    "resolvedDatasetIds": [
+      "cribl_edge_appscope_metrics"
+    ],
+    "schedule": {
+      "cronSchedule": "0 8 * * *",
+      "enabled": false,
+      "keepLastN": 5,
+      "notifications": {
+        "disabled": true
+      },
+      "tz": "UTC"
+    }
+  }

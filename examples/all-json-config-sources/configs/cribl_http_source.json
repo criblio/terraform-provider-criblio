@@ -1,0 +1,56 @@
+{
+  "id": "json-config-cribl-http",
+  "activityLogSampleRate": 100,
+  "authTokens": [
+    "token1",
+    "token2"
+  ],
+  "captureHeaders": false,
+  "connections": [
+    {
+      "output": "default",
+      "pipeline": "main"
+    }
+  ],
+  "description": "Cribl HTTP source from JSON file",
+  "disabled": false,
+  "enableHealthCheck": true,
+  "enableProxyHeader": false,
+  "host": "0.0.0.0",
+  "ipAllowlistRegex": "/.*/",
+  "ipDenylistRegex": "/^$/",
+  "keepAliveTimeout": 300,
+  "maxActiveReq": 1000,
+  "maxRequestsPerSocket": 4,
+  "metadata": [
+    {
+      "name": "source_type",
+      "value": "cribl_http"
+    }
+  ],
+  "port": 12080,
+  "pq": {
+    "commitFrequency": 50,
+    "compress": "gzip",
+    "maxBufferSize": 50,
+    "maxFileSize": "1 MB",
+    "maxSize": "100 MB",
+    "mode": "smart",
+    "path": "$CRIBL_HOME/state/buffers"
+  },
+  "pqEnabled": true,
+  "requestTimeout": 30,
+  "sendToRoutes": true,
+  "socketTimeout": 10,
+  "streamtags": [
+    "cribl-http",
+    "json-config"
+  ],
+  "tls": {
+    "disabled": true,
+    "maxVersion": "TLSv1.3",
+    "minVersion": "TLSv1.2",
+    "requestCert": false
+  },
+  "type": "cribl_http"
+}

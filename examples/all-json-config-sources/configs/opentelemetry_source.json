@@ -1,0 +1,68 @@
+{
+  "id": "json-config-otel",
+  "type": "open_telemetry",
+  "description": "OpenTelemetry source from JSON config",
+  "port": 14317,
+  "protocol": "grpc",
+  "host": "0.0.0.0",
+  "disabled": false,
+  "otlpVersion": "1.3.1",
+  "authType": "none",
+  "authHeaderExpr": "true",
+  "extractLogs": false,
+  "extractMetrics": true,
+  "extractSpans": true,
+  "enableHealthCheck": false,
+  "ipAllowlistRegex": "/.*/",
+  "ipDenylistRegex": "/^$/",
+  "keepAliveTimeout": 15,
+  "maxActiveCxn": 1000,
+  "maxActiveReq": 256,
+  "maxRequestsPerSocket": 0,
+  "requestTimeout": 0,
+  "socketTimeout": 0,
+  "sendToRoutes": true,
+  "tokenTimeoutSecs": 3600,
+  "streamtags": [
+    "otel",
+    "json-config",
+    "telemetry"
+  ],
+  "connections": [
+    {
+      "pipeline": "main",
+      "output": "default"
+    }
+  ],
+  "metadata": [
+    {
+      "name": "source_type",
+      "value": "open_telemetry"
+    },
+    {
+      "name": "telemetry_type",
+      "value": "otel"
+    }
+  ],
+  "pq": {
+    "commitFrequency": 5,
+    "compress": "gzip",
+    "maxBufferSize": 50,
+    "maxFileSize": "1 MB",
+    "maxSize": "100 MB",
+    "mode": "smart",
+    "path": "$CRIBL_HOME/state/buffers"
+  },
+  "tls": {
+    "disabled": true,
+    "caPath": "",
+    "certPath": "",
+    "certificateName": "",
+    "maxVersion": "TLSv1.3",
+    "minVersion": "TLSv1.2",
+    "passphrase": "",
+    "privKeyPath": "",
+    "rejectUnauthorized": true,
+    "requestCert": false
+  }
+}
