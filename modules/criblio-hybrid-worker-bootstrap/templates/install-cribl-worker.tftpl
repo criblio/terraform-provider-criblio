@@ -1,0 +1,2 @@
+#!/bin/bash
+curl 'https://${workspace_id}-${organization_id}.${cloud_domain}/init/install-worker.sh?group=${group_id}&token=${leader_auth_token}&user=${os_cribl_user}&user_group=${os_cribl_group}&install_dir=${safe_install_dir}&${safe_group_tags}' | bash -

@@ -13,3 +13,4 @@ tests/e2e/local-plugins/registry.terraform.io/criblio/criblio/999.99.9/darwin_ar
 **.zip
 tests/e2e/import.tf
 *.idea
+*.tfvars

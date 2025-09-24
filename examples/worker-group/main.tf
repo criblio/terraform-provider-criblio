@@ -1,12 +1,12 @@
-resource "criblio_group" "my_group" {
+resource "criblio_group" "azure_eastus_stream_group" {
   cloud = {
     provider = "azure"
     region   = "eastus"
   }
   estimated_ingest_rate = 1024
   id                    = "my-group"
-  is_fleet              = false
   name                  = "my-group"
+  is_fleet              = false
   on_prem               = false
   product               = "stream"
   provisioned           = false
@@ -17,6 +17,3 @@ resource "criblio_group" "my_group" {
   worker_remote_access = false
 }
 
-output "group" {
-  value = criblio_group.my_group
-}
