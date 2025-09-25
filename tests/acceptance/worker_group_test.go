@@ -14,13 +14,13 @@ func TestWorkerGroup(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ImportState:     true,
-					ImportStateId:   "criblio_group.my_group",
-					ResourceName:    "criblio_group.my_group",
+					ImportStateId:   "criblio_group.azure_eastus_stream_group",
+					ResourceName:    "criblio_group.azure_eastus_stream_group",
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_group.my_group", "id", "newgroup"),
-						resource.TestCheckResourceAttr("criblio_group.my_group", "name", "newgroup"),
-						resource.TestCheckResourceAttr("criblio_group.my_group", "product", "stream"),
+						resource.TestCheckResourceAttr("criblio_group.azure_eastus_stream_group", "id", "my-group"),
+						resource.TestCheckResourceAttr("criblio_group.azure_eastus_stream_group", "name", "my-group"),
+						resource.TestCheckResourceAttr("criblio_group.azure_eastus_stream_group", "product", "stream"),
 					),
 				},
 			},
