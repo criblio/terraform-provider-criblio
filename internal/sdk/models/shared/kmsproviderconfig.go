@@ -172,8 +172,8 @@ const (
 )
 
 type Auth struct {
-	KMSProviderConfigAuth1 *KMSProviderConfigAuth1 `queryParam:"inline" name:"auth"`
-	KMSProviderConfigAuth2 *KMSProviderConfigAuth2 `queryParam:"inline" name:"auth"`
+	KMSProviderConfigAuth1 *KMSProviderConfigAuth1 `queryParam:"inline,name=auth"`
+	KMSProviderConfigAuth2 *KMSProviderConfigAuth2 `queryParam:"inline,name=auth"`
 
 	Type AuthType
 }

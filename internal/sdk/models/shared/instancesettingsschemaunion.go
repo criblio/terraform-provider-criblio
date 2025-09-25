@@ -124,8 +124,8 @@ const (
 )
 
 type InstanceSettingsSchemaUnion struct {
-	InstanceSettingsSchema1 *InstanceSettingsSchema1 `queryParam:"inline" name:"InstanceSettingsSchema"`
-	InstanceSettingsSchema2 *InstanceSettingsSchema2 `queryParam:"inline" name:"InstanceSettingsSchema"`
+	InstanceSettingsSchema1 *InstanceSettingsSchema1 `queryParam:"inline,name=InstanceSettingsSchema"`
+	InstanceSettingsSchema2 *InstanceSettingsSchema2 `queryParam:"inline,name=InstanceSettingsSchema"`
 
 	Type InstanceSettingsSchemaUnionType
 }

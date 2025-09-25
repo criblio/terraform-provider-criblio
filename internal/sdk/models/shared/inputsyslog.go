@@ -1403,8 +1403,8 @@ const (
 )
 
 type InputSyslog struct {
-	InputSyslogSyslog1 *InputSyslogSyslog1 `queryParam:"inline" name:"InputSyslog"`
-	InputSyslogSyslog2 *InputSyslogSyslog2 `queryParam:"inline" name:"InputSyslog"`
+	InputSyslogSyslog1 *InputSyslogSyslog1 `queryParam:"inline,name=InputSyslog"`
+	InputSyslogSyslog2 *InputSyslogSyslog2 `queryParam:"inline,name=InputSyslog"`
 
 	Type InputSyslogType
 }

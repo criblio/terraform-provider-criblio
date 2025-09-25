@@ -3,7 +3,6 @@ module github.com/criblio/terraform-provider-criblio
 go 1.23.7
 
 require (
-	github.com/ericlagergren/decimal v0.0.0-20221120152707-495c53812d05
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-docs v0.22.0
 	github.com/hashicorp/terraform-plugin-framework v1.15.1

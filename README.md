@@ -214,6 +214,7 @@ terraform plan
 * [criblio_search_usage_group](docs/resources/search_usage_group.md)
 * [criblio_source](docs/resources/source.md)
 * [criblio_subscription](docs/resources/subscription.md)
+* [criblio_workspace](docs/resources/workspace.md)
 ### Data Sources
 
 * [criblio_appscope_config](docs/data-sources/appscope_config.md)
@@ -256,6 +257,8 @@ terraform plan
 * [criblio_search_usage_group](docs/data-sources/search_usage_group.md)
 * [criblio_source](docs/data-sources/source.md)
 * [criblio_subscription](docs/data-sources/subscription.md)
+* [criblio_workspace](docs/data-sources/workspace.md)
+* [criblio_workspaces](docs/data-sources/workspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- No SDK Installation -->

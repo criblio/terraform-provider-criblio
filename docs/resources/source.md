@@ -749,6 +749,7 @@ resource "criblio_source" "my_source" {
     credentials_secret = "...my_credentials_secret..."
     description        = "...my_description..."
     dimension_list = [
+      "..."
     ]
     disabled           = true
     discovery_type     = "k8s-pods"
@@ -806,6 +807,7 @@ resource "criblio_source" "my_source" {
       {
         name = "...my_name..."
         values = [
+          "..."
         ]
       }
     ]
@@ -886,6 +888,7 @@ resource "criblio_source" "my_source" {
       enabled             = false
       reject_unauthorized = false
       remove_headers = [
+        "..."
       ]
       timeout_sec = 1740239672156922.5
       url         = "...my_url..."
@@ -2352,6 +2355,7 @@ resource "criblio_source" "my_source" {
     credentials_secret = "...my_credentials_secret..."
     description        = "...my_description..."
     dimension_list = [
+      "..."
     ]
     disabled                = false
     discovery_type          = "ec2"
@@ -2398,6 +2402,7 @@ resource "criblio_source" "my_source" {
       {
         name = "...my_name..."
         values = [
+          "..."
         ]
       }
     ]
@@ -2901,15 +2906,19 @@ resource "criblio_source" "my_source" {
   }
   input_splunk_hec = {
     access_control_allow_headers = [
+      "..."
     ]
     access_control_allow_origin = [
+      "..."
     ]
     activity_log_sample_rate = 5.25
     allowed_indexes = [
+      "..."
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
+          "..."
         ]
         auth_type   = "manual"
         description = "...my_description..."
@@ -3170,6 +3179,7 @@ resource "criblio_source" "my_source" {
       infer_framing                        = true
       ip_whitelist_regex                   = "...my_ip_whitelist_regex..."
       keep_fields_list = [
+        "..."
       ]
       max_active_cxn  = 7.64
       max_buffer_size = 3.56
@@ -3823,15 +3833,19 @@ resource "criblio_source" "my_source" {
   }
   input_zscaler_hec = {
     access_control_allow_headers = [
+      "..."
     ]
     access_control_allow_origin = [
+      "..."
     ]
     activity_log_sample_rate = 8.55
     allowed_indexes = [
+      "..."
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
+          "..."
         ]
         auth_type   = "manual"
         description = "...my_description..."

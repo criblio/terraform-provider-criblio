@@ -16,8 +16,8 @@ const (
 )
 
 type Action struct {
-	Str        *string  `queryParam:"inline" name:"Action"`
-	ArrayOfStr []string `queryParam:"inline" name:"Action"`
+	Str        *string  `queryParam:"inline,name=Action"`
+	ArrayOfStr []string `queryParam:"inline,name=Action"`
 
 	Type ActionType
 }

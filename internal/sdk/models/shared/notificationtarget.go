@@ -19,11 +19,11 @@ const (
 )
 
 type NotificationTarget struct {
-	WebhookTarget   *WebhookTarget   `queryParam:"inline" name:"NotificationTarget"`
-	PagerDutyTarget *PagerDutyTarget `queryParam:"inline" name:"NotificationTarget"`
-	SlackTarget     *SlackTarget     `queryParam:"inline" name:"NotificationTarget"`
-	SnsTarget       *SnsTarget       `queryParam:"inline" name:"NotificationTarget"`
-	SMTPTarget      *SMTPTarget      `queryParam:"inline" name:"NotificationTarget"`
+	WebhookTarget   *WebhookTarget   `queryParam:"inline,name=NotificationTarget"`
+	PagerDutyTarget *PagerDutyTarget `queryParam:"inline,name=NotificationTarget"`
+	SlackTarget     *SlackTarget     `queryParam:"inline,name=NotificationTarget"`
+	SnsTarget       *SnsTarget       `queryParam:"inline,name=NotificationTarget"`
+	SMTPTarget      *SMTPTarget      `queryParam:"inline,name=NotificationTarget"`
 
 	Type NotificationTargetType
 }

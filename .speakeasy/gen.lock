@@ -1,25 +1,27 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: de51399e75b7e29018b8bf766dfcc1dd
+  docChecksum: 6b7d0807a6abde4f4e0e179a97c420f9
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.618.1
-  generationVersion: 2.702.0
-  releaseVersion: 1.14.4
-  configChecksum: 3167ec4397c57eb12dbd4a6ed380aa26
+  speakeasyVersion: 1.628.1
+  generationVersion: 2.716.1
+  releaseVersion: 1.14.5
+  configChecksum: 51eec6be593eed443749b86b63c6073e
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.3.0
-    core: 3.44.3
+    core: 3.45.1
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
+    groups: 2.81.2
     ignores: 2.81.1
     inputOutputModels: 2.83.0
+    methodServerURLs: 2.82.1
     nameOverrides: 2.81.3
     nullables: 0.0.0
     oauth2ClientCredentials: 0.1.5
@@ -69,6 +71,8 @@ generatedFiles:
   - examples/data-sources/criblio_search_usage_group/data-source.tf
   - examples/data-sources/criblio_source/data-source.tf
   - examples/data-sources/criblio_subscription/data-source.tf
+  - examples/data-sources/criblio_workspace/data-source.tf
+  - examples/data-sources/criblio_workspaces/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/criblio_appscope_config/import-by-string-id.tf
   - examples/resources/criblio_appscope_config/import.sh
@@ -177,6 +181,9 @@ generatedFiles:
   - examples/resources/criblio_subscription/import-by-string-id.tf
   - examples/resources/criblio_subscription/import.sh
   - examples/resources/criblio_subscription/resource.tf
+  - examples/resources/criblio_workspace/import-by-string-id.tf
+  - examples/resources/criblio_workspace/import.sh
+  - examples/resources/criblio_workspace/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -1299,8 +1306,15 @@ generatedFiles:
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/webhook_target.go
+  - internal/provider/types/workspace_schema.go
   - internal/provider/types/zoom_account_config.go
   - internal/provider/utils.go
+  - internal/provider/workspace_data_source.go
+  - internal/provider/workspace_data_source_sdk.go
+  - internal/provider/workspace_resource.go
+  - internal/provider/workspace_resource_sdk.go
+  - internal/provider/workspaces_data_source.go
+  - internal/provider/workspaces_data_source_sdk.go
   - internal/sdk/.gitattributes
   - internal/sdk/aisettings.go
   - internal/sdk/appscopeconfigs.go
@@ -1614,6 +1628,7 @@ generatedFiles:
   - internal/sdk/models/operations/getgroupsbyid.go
   - internal/sdk/models/operations/getgroupsconfigversionbyid.go
   - internal/sdk/models/operations/gethealthinfo.go
+  - internal/sdk/models/operations/gethealthstatus.go
   - internal/sdk/models/operations/gethmacfunctionbyid.go
   - internal/sdk/models/operations/getinputbyid.go
   - internal/sdk/models/operations/getinputstatusbyid.go
@@ -1865,6 +1880,11 @@ generatedFiles:
   - internal/sdk/models/operations/updateuserbyid.go
   - internal/sdk/models/operations/updateuserinfobyid.go
   - internal/sdk/models/operations/updateworkersrestart.go
+  - internal/sdk/models/operations/v1workspacescreateworkspace.go
+  - internal/sdk/models/operations/v1workspacesdeleteworkspace.go
+  - internal/sdk/models/operations/v1workspacesgetworkspace.go
+  - internal/sdk/models/operations/v1workspaceslistworkspaces.go
+  - internal/sdk/models/operations/v1workspacesupdateworkspace.go
   - internal/sdk/models/shared/accesscontrol.go
   - internal/sdk/models/shared/accesscontrolschema.go
   - internal/sdk/models/shared/addhectokenrequest.go
@@ -2305,6 +2325,10 @@ generatedFiles:
   - internal/sdk/models/shared/vaultkmstlsclientconfig.go
   - internal/sdk/models/shared/versioninfo.go
   - internal/sdk/models/shared/webhooktarget.go
+  - internal/sdk/models/shared/workspacecreaterequestdto.go
+  - internal/sdk/models/shared/workspacepatchrequestdto.go
+  - internal/sdk/models/shared/workspaceschema.go
+  - internal/sdk/models/shared/workspaceslistresponsedto.go
   - internal/sdk/models/shared/zoomaccountconfig.go
   - internal/sdk/notifications.go
   - internal/sdk/notificationtargets.go
@@ -2342,7 +2366,6 @@ generatedFiles:
   - internal/sdk/types/bigint.go
   - internal/sdk/types/date.go
   - internal/sdk/types/datetime.go
-  - internal/sdk/types/decimal.go
   - internal/sdk/types/pointers.go
   - internal/sdk/uistate.go
   - internal/sdk/usagegroups.go
@@ -2350,6 +2373,7 @@ generatedFiles:
   - internal/sdk/usersacl.go
   - internal/sdk/versioning.go
   - internal/sdk/workers.go
+  - internal/sdk/workspaces.go
   - internal/validators/DateValidator.go
   - internal/validators/ExactlyOneChild.go
   - internal/validators/JSONParseValidator.go
@@ -7632,5 +7656,54 @@ examples:
           application/json: {}
         "500":
           application/json: {}
+  getHealthStatus:
+    speakeasy-default-get-health-status:
+      responses:
+        "200":
+          application/json: "OK"
+  v1.workspaces.createWorkspace:
+    speakeasy-default-v1-workspaces-create-workspace:
+      parameters:
+        path:
+          organizationId: "<id>"
+      requestBody:
+        application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+      responses:
+        "201":
+          application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+  v1.workspaces.listWorkspaces:
+    speakeasy-default-v1-workspaces-list-workspaces:
+      parameters:
+        path:
+          organizationId: "<id>"
+      responses:
+        "200":
+          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}], "count": 5}
+  v1.workspaces.updateWorkspace:
+    speakeasy-default-v1-workspaces-update-workspace:
+      parameters:
+        path:
+          organizationId: "<id>"
+          workspaceId: "<id>"
+      requestBody:
+        application/json: {"alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+      responses:
+        "200":
+          application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+  v1.workspaces.deleteWorkspace:
+    speakeasy-default-v1-workspaces-delete-workspace:
+      parameters:
+        path:
+          organizationId: "<id>"
+          workspaceId: "<id>"
+  v1.workspaces.getWorkspace:
+    speakeasy-default-v1-workspaces-get-workspace:
+      parameters:
+        path:
+          organizationId: "<id>"
+          workspaceId: "<id>"
+      responses:
+        "200":
+          application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
 examplesVersion: 1.0.2
 generatedTests: {}

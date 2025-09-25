@@ -749,6 +749,7 @@ resource "criblio_pack_source" "my_packsource" {
     credentials_secret = "...my_credentials_secret..."
     description        = "...my_description..."
     dimension_list = [
+      "..."
     ]
     disabled           = false
     discovery_type     = "k8s-pods"
@@ -806,6 +807,7 @@ resource "criblio_pack_source" "my_packsource" {
       {
         name = "...my_name..."
         values = [
+          "..."
         ]
       }
     ]
@@ -886,6 +888,7 @@ resource "criblio_pack_source" "my_packsource" {
       enabled             = true
       reject_unauthorized = true
       remove_headers = [
+        "..."
       ]
       timeout_sec = 3207862514268799.5
       url         = "...my_url..."
@@ -2579,6 +2582,7 @@ resource "criblio_pack_source" "my_packsource" {
     credentials_secret = "...my_credentials_secret..."
     description        = "...my_description..."
     dimension_list = [
+      "..."
     ]
     disabled                = true
     discovery_type          = "ec2"
@@ -2625,6 +2629,7 @@ resource "criblio_pack_source" "my_packsource" {
       {
         name = "...my_name..."
         values = [
+          "..."
         ]
       }
     ]
@@ -3128,15 +3133,19 @@ resource "criblio_pack_source" "my_packsource" {
   }
   input_splunk_hec = {
     access_control_allow_headers = [
+      "..."
     ]
     access_control_allow_origin = [
+      "..."
     ]
     activity_log_sample_rate = 7.44
     allowed_indexes = [
+      "..."
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
+          "..."
         ]
         auth_type   = "secret"
         description = "...my_description..."
@@ -3397,6 +3406,7 @@ resource "criblio_pack_source" "my_packsource" {
       infer_framing                        = false
       ip_whitelist_regex                   = "...my_ip_whitelist_regex..."
       keep_fields_list = [
+        "..."
       ]
       max_active_cxn  = 9.27
       max_buffer_size = 4.44
@@ -4050,15 +4060,19 @@ resource "criblio_pack_source" "my_packsource" {
   }
   input_zscaler_hec = {
     access_control_allow_headers = [
+      "..."
     ]
     access_control_allow_origin = [
+      "..."
     ]
     activity_log_sample_rate = 10.12
     allowed_indexes = [
+      "..."
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
+          "..."
         ]
         auth_type   = "secret"
         description = "...my_description..."

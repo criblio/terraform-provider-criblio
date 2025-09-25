@@ -123,8 +123,8 @@ const (
 )
 
 type DatatypePreviewInput struct {
-	DatatypePreviewInputDataset *DatatypePreviewInputDataset `queryParam:"inline" name:"DatatypePreviewInput"`
-	DatatypePreviewInputRawData *DatatypePreviewInputRawData `queryParam:"inline" name:"DatatypePreviewInput"`
+	DatatypePreviewInputDataset *DatatypePreviewInputDataset `queryParam:"inline,name=DatatypePreviewInput"`
+	DatatypePreviewInputRawData *DatatypePreviewInputRawData `queryParam:"inline,name=DatatypePreviewInput"`
 
 	Type DatatypePreviewInputType
 }

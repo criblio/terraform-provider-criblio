@@ -17,8 +17,8 @@ const (
 )
 
 type SearchJobStageConfigEarliest struct {
-	Str    *string  `queryParam:"inline" name:"earliest"`
-	Number *float64 `queryParam:"inline" name:"earliest"`
+	Str    *string  `queryParam:"inline,name=earliest"`
+	Number *float64 `queryParam:"inline,name=earliest"`
 
 	Type SearchJobStageConfigEarliestType
 }
@@ -80,8 +80,8 @@ const (
 )
 
 type SearchJobStageConfigLatest struct {
-	Str    *string  `queryParam:"inline" name:"latest"`
-	Number *float64 `queryParam:"inline" name:"latest"`
+	Str    *string  `queryParam:"inline,name=latest"`
+	Number *float64 `queryParam:"inline,name=latest"`
 
 	Type SearchJobStageConfigLatestType
 }

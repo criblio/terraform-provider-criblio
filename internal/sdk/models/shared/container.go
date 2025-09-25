@@ -17,8 +17,8 @@ const (
 )
 
 type Command struct {
-	Str        *string  `queryParam:"inline" name:"command"`
-	ArrayOfStr []string `queryParam:"inline" name:"command"`
+	Str        *string  `queryParam:"inline,name=command"`
+	ArrayOfStr []string `queryParam:"inline,name=command"`
 
 	Type CommandType
 }

@@ -36,7 +36,6 @@ type CriblioProviderModel struct {
 	ServerURL      types.String `tfsdk:"server_url"`
 	TokenURL       types.String `tfsdk:"token_url"`
 	WorkspaceID    types.String `tfsdk:"workspace_id"`
-	WorkspaceName  types.String `tfsdk:"workspace_name"`
 }
 
 func (p *CriblioProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -71,7 +70,7 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 				Optional:            true,
 			},
 			"server_url": schema.StringAttribute{
-				Description: `Server URL (defaults to https://{workspaceName}-{organizationId}.{cloudDomain})`,
+				Description: `Server URL (defaults to https://{workspaceId}-{organizationId}.{cloudDomain})`,
 				Optional:    true,
 			},
 			"token_url": schema.StringAttribute{
@@ -80,11 +79,6 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 				Sensitive:           true,
 			},
 			"workspace_id": schema.StringAttribute{
-				MarkdownDescription: `API Key. Configurable via environment variable ` + "`" + `CRIBL_WORKSPACE_ID` + "`" + `.`,
-				Optional:            true,
-				Sensitive:           true,
-			},
-			"workspace_name": schema.StringAttribute{
 				MarkdownDescription: `The Workspace name (defaults to main)`,
 				Optional:            true,
 			},
@@ -109,17 +103,21 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	serverUrl := data.ServerURL.ValueString()
 
 	if serverUrl == "" {
-		serverUrl = "https://{workspaceName}-{organizationId}.{cloudDomain}"
+		serverUrl = "https://{workspaceId}-{organizationId}.{cloudDomain}"
 	}
 
 	serverUrlParams := make(map[string]string)
 
-	if data.WorkspaceName.ValueString() != "" {
-		serverUrlParams["workspaceName"] = data.WorkspaceName.ValueString()
+	if data.WorkspaceID.ValueString() != "" {
+		serverUrlParams["workspaceId"] = data.WorkspaceID.ValueString()
 	}
 
-	if _, ok := serverUrlParams["workspaceName"]; !ok {
-		serverUrlParams["workspaceName"] = "main"
+	if _, ok := serverUrlParams["workspaceId"]; !ok && os.Getenv("CRIBL_WORKSPACE_ID") != "" {
+		serverUrlParams["workspaceId"] = os.Getenv("CRIBL_WORKSPACE_ID")
+	}
+
+	if _, ok := serverUrlParams["workspaceId"]; !ok {
+		serverUrlParams["workspaceId"] = "main"
 	}
 
 	if data.OrganizationID.ValueString() != "" {
@@ -265,6 +263,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewSearchUsageGroupResource,
 		NewSourceResource,
 		NewSubscriptionResource,
+		NewWorkspaceResource,
 	}
 }
 
@@ -310,6 +309,8 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewSearchUsageGroupDataSource,
 		NewSourceDataSource,
 		NewSubscriptionDataSource,
+		NewWorkspaceDataSource,
+		NewWorkspacesDataSource,
 	}
 }
 

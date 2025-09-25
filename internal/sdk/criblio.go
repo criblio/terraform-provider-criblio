@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.702.0
+// Generated from OpenAPI doc version 4.12.2-4b17c8d4 and generator version 2.716.1
 
 import (
 	"context"
@@ -22,7 +22,7 @@ const (
 
 // ServerList contains the list of servers available to the SDK
 var ServerList = map[string]string{
-	ServerCloud: "https://{workspaceName}-{organizationId}.{cloudDomain}",
+	ServerCloud: "https://{workspaceId}-{organizationId}.{cloudDomain}",
 }
 
 // HTTPClient provides an interface for supplying the SDK with a custom HTTP client
@@ -58,6 +58,9 @@ func Pointer[T any](v T) *T { return &v }
 // Complementary API reference documentation is available at https://docs.cribl.io/api-reference/. Product documentation is available at https://docs.cribl.io.
 type CriblIo struct {
 	SDKVersion string
+	// Actions related to REST server health
+	Health     *Health
+	Workspaces *Workspaces
 	// Actions related to Projects
 	Projects *Projects
 	// Actions related to Subscriptions
@@ -201,8 +204,6 @@ type CriblIo struct {
 	Conditions *Conditions
 	// Actions related to diagnostics
 	Diag *Diag
-	// Actions related to REST server health
-	Health *Health
 	// Actions related to Jobs
 	Jobs *Jobs
 	// Actions related to Security
@@ -276,15 +277,15 @@ func WithServer(server string) SDKOption {
 	}
 }
 
-// WithWorkspaceName allows setting the workspaceName variable for url substitution
-func WithWorkspaceName(workspaceName string) SDKOption {
+// WithWorkspaceID allows setting the workspaceId variable for url substitution
+func WithWorkspaceID(workspaceID string) SDKOption {
 	return func(sdk *CriblIo) {
 		for server := range sdk.sdkConfiguration.ServerVariables {
-			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["workspaceName"]; !ok {
+			if _, ok := sdk.sdkConfiguration.ServerVariables[server]["workspaceId"]; !ok {
 				continue
 			}
 
-			sdk.sdkConfiguration.ServerVariables[server]["workspaceName"] = fmt.Sprintf("%v", workspaceName)
+			sdk.sdkConfiguration.ServerVariables[server]["workspaceId"] = fmt.Sprintf("%v", workspaceID)
 		}
 	}
 }
@@ -354,13 +355,13 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.14.4",
+		SDKVersion: "1.14.5",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.14.4 2.702.0 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.14.5 2.716.1 4.12.2-4b17c8d4 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
-					"workspaceName":  "main",
+					"workspaceId":    "main",
 					"organizationId": "ian",
 					"cloudDomain":    "cribl.cloud",
 				},
@@ -384,6 +385,8 @@ func New(opts ...SDKOption) *CriblIo {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
+	sdk.Health = newHealth(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Projects = newProjects(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Versioning = newVersioning(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -457,7 +460,6 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Expressions = newExpressions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Conditions = newConditions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Diag = newDiag(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Health = newHealth(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Jobs = newJobs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Security = newSecurity(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Licenses = newLicenses(sdk, sdk.sdkConfiguration, sdk.hooks)

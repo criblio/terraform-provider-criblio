@@ -40,8 +40,8 @@ const (
 )
 
 type WarmPoolSize struct {
-	Number           *float64          `queryParam:"inline" name:"warmPoolSize"`
-	WarmPoolSizeEnum *WarmPoolSizeEnum `queryParam:"inline" name:"warmPoolSize"`
+	Number           *float64          `queryParam:"inline,name=warmPoolSize"`
+	WarmPoolSizeEnum *WarmPoolSizeEnum `queryParam:"inline,name=warmPoolSize"`
 
 	Type WarmPoolSizeType
 }

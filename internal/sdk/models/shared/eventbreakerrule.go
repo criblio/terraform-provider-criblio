@@ -566,10 +566,10 @@ const (
 )
 
 type ParserUnion struct {
-	Parser     *Parser     `queryParam:"inline" name:"parser"`
-	ParserGrok *ParserGrok `queryParam:"inline" name:"parser"`
-	ParserJSON *ParserJSON `queryParam:"inline" name:"parser"`
-	ParserKvp  *ParserKvp  `queryParam:"inline" name:"parser"`
+	Parser     *Parser     `queryParam:"inline,name=parser"`
+	ParserGrok *ParserGrok `queryParam:"inline,name=parser"`
+	ParserJSON *ParserJSON `queryParam:"inline,name=parser"`
+	ParserKvp  *ParserKvp  `queryParam:"inline,name=parser"`
 
 	Type ParserUnionType
 }
@@ -765,8 +765,8 @@ const (
 )
 
 type TimestampTimezoneUnion struct {
-	Str               *string            `queryParam:"inline" name:"timestampTimezone"`
-	TimestampTimezone *TimestampTimezone `queryParam:"inline" name:"timestampTimezone"`
+	Str               *string            `queryParam:"inline,name=timestampTimezone"`
+	TimestampTimezone *TimestampTimezone `queryParam:"inline,name=timestampTimezone"`
 
 	Type TimestampTimezoneUnionType
 }

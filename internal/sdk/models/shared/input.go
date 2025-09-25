@@ -72,64 +72,64 @@ const (
 )
 
 type Input struct {
-	InputCollection           *InputCollection           `queryParam:"inline" name:"Input"`
-	InputKafka                *InputKafka                `queryParam:"inline" name:"Input"`
-	InputMsk                  *InputMsk                  `queryParam:"inline" name:"Input"`
-	InputHTTP                 *InputHTTP                 `queryParam:"inline" name:"Input"`
-	InputSplunk               *InputSplunk               `queryParam:"inline" name:"Input"`
-	InputSplunkSearch         *InputSplunkSearch         `queryParam:"inline" name:"Input"`
-	InputSplunkHec            *InputSplunkHec            `queryParam:"inline" name:"Input"`
-	InputAzureBlob            *InputAzureBlob            `queryParam:"inline" name:"Input"`
-	InputElastic              *InputElastic              `queryParam:"inline" name:"Input"`
-	InputConfluentCloud       *InputConfluentCloud       `queryParam:"inline" name:"Input"`
-	InputGrafana              *InputGrafana              `queryParam:"inline" name:"Input"`
-	InputLoki                 *InputLoki                 `queryParam:"inline" name:"Input"`
-	InputPrometheusRw         *InputPrometheusRw         `queryParam:"inline" name:"Input"`
-	InputPrometheus           *InputPrometheus           `queryParam:"inline" name:"Input"`
-	InputEdgePrometheus       *InputEdgePrometheus       `queryParam:"inline" name:"Input"`
-	InputOffice365Mgmt        *InputOffice365Mgmt        `queryParam:"inline" name:"Input"`
-	InputOffice365Service     *InputOffice365Service     `queryParam:"inline" name:"Input"`
-	InputOffice365MsgTrace    *InputOffice365MsgTrace    `queryParam:"inline" name:"Input"`
-	InputEventhub             *InputEventhub             `queryParam:"inline" name:"Input"`
-	InputExec                 *InputExec                 `queryParam:"inline" name:"Input"`
-	InputFirehose             *InputFirehose             `queryParam:"inline" name:"Input"`
-	InputGooglePubsub         *InputGooglePubsub         `queryParam:"inline" name:"Input"`
-	InputCribl                *InputCribl                `queryParam:"inline" name:"Input"`
-	InputCriblTCP             *InputCriblTCP             `queryParam:"inline" name:"Input"`
-	InputCriblHTTP            *InputCriblHTTP            `queryParam:"inline" name:"Input"`
-	InputCriblLakeHTTP        *InputCriblLakeHTTP        `queryParam:"inline" name:"Input"`
-	InputTcpjson              *InputTcpjson              `queryParam:"inline" name:"Input"`
-	InputSystemMetrics        *InputSystemMetrics        `queryParam:"inline" name:"Input"`
-	InputSystemState          *InputSystemState          `queryParam:"inline" name:"Input"`
-	InputKubeMetrics          *InputKubeMetrics          `queryParam:"inline" name:"Input"`
-	InputKubeLogs             *InputKubeLogs             `queryParam:"inline" name:"Input"`
-	InputKubeEvents           *InputKubeEvents           `queryParam:"inline" name:"Input"`
-	InputWindowsMetrics       *InputWindowsMetrics       `queryParam:"inline" name:"Input"`
-	InputCrowdstrike          *InputCrowdstrike          `queryParam:"inline" name:"Input"`
-	InputDatadogAgent         *InputDatadogAgent         `queryParam:"inline" name:"Input"`
-	InputDatagen              *InputDatagen              `queryParam:"inline" name:"Input"`
-	InputHTTPRaw              *InputHTTPRaw              `queryParam:"inline" name:"Input"`
-	InputKinesis              *InputKinesis              `queryParam:"inline" name:"Input"`
-	InputCriblmetrics         *InputCriblmetrics         `queryParam:"inline" name:"Input"`
-	InputMetrics              *InputMetrics              `queryParam:"inline" name:"Input"`
-	InputS3                   *InputS3                   `queryParam:"inline" name:"Input"`
-	InputS3Inventory          *InputS3Inventory          `queryParam:"inline" name:"Input"`
-	InputSnmp                 *InputSnmp                 `queryParam:"inline" name:"Input"`
-	InputOpenTelemetry        *InputOpenTelemetry        `queryParam:"inline" name:"Input"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetry `queryParam:"inline" name:"Input"`
-	InputSqs                  *InputSqs                  `queryParam:"inline" name:"Input"`
-	InputSyslog               *InputSyslog               `queryParam:"inline" name:"Input"`
-	InputFile                 *InputFile                 `queryParam:"inline" name:"Input"`
-	InputTCP                  *InputTCP                  `queryParam:"inline" name:"Input"`
-	InputAppscope             *InputAppscope             `queryParam:"inline" name:"Input"`
-	InputWef                  *InputWef                  `queryParam:"inline" name:"Input"`
-	InputWinEventLogs         *InputWinEventLogs         `queryParam:"inline" name:"Input"`
-	InputRawUDP               *InputRawUDP               `queryParam:"inline" name:"Input"`
-	InputJournalFiles         *InputJournalFiles         `queryParam:"inline" name:"Input"`
-	InputWiz                  *InputWiz                  `queryParam:"inline" name:"Input"`
-	InputNetflow              *InputNetflow              `queryParam:"inline" name:"Input"`
-	InputSecurityLake         *InputSecurityLake         `queryParam:"inline" name:"Input"`
-	InputZscalerHec           *InputZscalerHec           `queryParam:"inline" name:"Input"`
+	InputCollection           *InputCollection           `queryParam:"inline,name=Input"`
+	InputKafka                *InputKafka                `queryParam:"inline,name=Input"`
+	InputMsk                  *InputMsk                  `queryParam:"inline,name=Input"`
+	InputHTTP                 *InputHTTP                 `queryParam:"inline,name=Input"`
+	InputSplunk               *InputSplunk               `queryParam:"inline,name=Input"`
+	InputSplunkSearch         *InputSplunkSearch         `queryParam:"inline,name=Input"`
+	InputSplunkHec            *InputSplunkHec            `queryParam:"inline,name=Input"`
+	InputAzureBlob            *InputAzureBlob            `queryParam:"inline,name=Input"`
+	InputElastic              *InputElastic              `queryParam:"inline,name=Input"`
+	InputConfluentCloud       *InputConfluentCloud       `queryParam:"inline,name=Input"`
+	InputGrafana              *InputGrafana              `queryParam:"inline,name=Input"`
+	InputLoki                 *InputLoki                 `queryParam:"inline,name=Input"`
+	InputPrometheusRw         *InputPrometheusRw         `queryParam:"inline,name=Input"`
+	InputPrometheus           *InputPrometheus           `queryParam:"inline,name=Input"`
+	InputEdgePrometheus       *InputEdgePrometheus       `queryParam:"inline,name=Input"`
+	InputOffice365Mgmt        *InputOffice365Mgmt        `queryParam:"inline,name=Input"`
+	InputOffice365Service     *InputOffice365Service     `queryParam:"inline,name=Input"`
+	InputOffice365MsgTrace    *InputOffice365MsgTrace    `queryParam:"inline,name=Input"`
+	InputEventhub             *InputEventhub             `queryParam:"inline,name=Input"`
+	InputExec                 *InputExec                 `queryParam:"inline,name=Input"`
+	InputFirehose             *InputFirehose             `queryParam:"inline,name=Input"`
+	InputGooglePubsub         *InputGooglePubsub         `queryParam:"inline,name=Input"`
+	InputCribl                *InputCribl                `queryParam:"inline,name=Input"`
+	InputCriblTCP             *InputCriblTCP             `queryParam:"inline,name=Input"`
+	InputCriblHTTP            *InputCriblHTTP            `queryParam:"inline,name=Input"`
+	InputCriblLakeHTTP        *InputCriblLakeHTTP        `queryParam:"inline,name=Input"`
+	InputTcpjson              *InputTcpjson              `queryParam:"inline,name=Input"`
+	InputSystemMetrics        *InputSystemMetrics        `queryParam:"inline,name=Input"`
+	InputSystemState          *InputSystemState          `queryParam:"inline,name=Input"`
+	InputKubeMetrics          *InputKubeMetrics          `queryParam:"inline,name=Input"`
+	InputKubeLogs             *InputKubeLogs             `queryParam:"inline,name=Input"`
+	InputKubeEvents           *InputKubeEvents           `queryParam:"inline,name=Input"`
+	InputWindowsMetrics       *InputWindowsMetrics       `queryParam:"inline,name=Input"`
+	InputCrowdstrike          *InputCrowdstrike          `queryParam:"inline,name=Input"`
+	InputDatadogAgent         *InputDatadogAgent         `queryParam:"inline,name=Input"`
+	InputDatagen              *InputDatagen              `queryParam:"inline,name=Input"`
+	InputHTTPRaw              *InputHTTPRaw              `queryParam:"inline,name=Input"`
+	InputKinesis              *InputKinesis              `queryParam:"inline,name=Input"`
+	InputCriblmetrics         *InputCriblmetrics         `queryParam:"inline,name=Input"`
+	InputMetrics              *InputMetrics              `queryParam:"inline,name=Input"`
+	InputS3                   *InputS3                   `queryParam:"inline,name=Input"`
+	InputS3Inventory          *InputS3Inventory          `queryParam:"inline,name=Input"`
+	InputSnmp                 *InputSnmp                 `queryParam:"inline,name=Input"`
+	InputOpenTelemetry        *InputOpenTelemetry        `queryParam:"inline,name=Input"`
+	InputModelDrivenTelemetry *InputModelDrivenTelemetry `queryParam:"inline,name=Input"`
+	InputSqs                  *InputSqs                  `queryParam:"inline,name=Input"`
+	InputSyslog               *InputSyslog               `queryParam:"inline,name=Input"`
+	InputFile                 *InputFile                 `queryParam:"inline,name=Input"`
+	InputTCP                  *InputTCP                  `queryParam:"inline,name=Input"`
+	InputAppscope             *InputAppscope             `queryParam:"inline,name=Input"`
+	InputWef                  *InputWef                  `queryParam:"inline,name=Input"`
+	InputWinEventLogs         *InputWinEventLogs         `queryParam:"inline,name=Input"`
+	InputRawUDP               *InputRawUDP               `queryParam:"inline,name=Input"`
+	InputJournalFiles         *InputJournalFiles         `queryParam:"inline,name=Input"`
+	InputWiz                  *InputWiz                  `queryParam:"inline,name=Input"`
+	InputNetflow              *InputNetflow              `queryParam:"inline,name=Input"`
+	InputSecurityLake         *InputSecurityLake         `queryParam:"inline,name=Input"`
+	InputZscalerHec           *InputZscalerHec           `queryParam:"inline,name=Input"`
 
 	Type InputType
 }

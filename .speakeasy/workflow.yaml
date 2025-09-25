@@ -4,6 +4,7 @@ sources:
     Cribl Control Plane and Management API:
         inputs:
             - location: openapi.yml
+            - location: openapi-mgmt.yml
         registry:
             location: registry.speakeasyapi.dev/cribl/cribl/cribl-control-plane-and-management-api
 targets:

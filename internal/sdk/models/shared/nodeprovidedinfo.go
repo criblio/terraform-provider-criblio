@@ -235,8 +235,8 @@ const (
 )
 
 type Os struct {
-	NodeProvidedInfoOs1 *NodeProvidedInfoOs1 `queryParam:"inline" name:"os"`
-	NodeProvidedInfoOs2 *NodeProvidedInfoOs2 `queryParam:"inline" name:"os"`
+	NodeProvidedInfoOs1 *NodeProvidedInfoOs1 `queryParam:"inline,name=os"`
+	NodeProvidedInfoOs2 *NodeProvidedInfoOs2 `queryParam:"inline,name=os"`
 
 	Type OsType
 }
