@@ -1,4 +1,4 @@
-speakeasyVersion: 1.618.1
+speakeasyVersion: 1.628.1
 sources:
     Cribl Control Plane and Management API:
         sourceNamespace: cribl-control-plane-and-management-api
@@ -20,6 +20,7 @@ workflow:
         Cribl Control Plane and Management API:
             inputs:
                 - location: openapi.yml
+                - location: openapi-mgmt.yml
             registry:
                 location: registry.speakeasyapi.dev/cribl/cribl/cribl-control-plane-and-management-api
     targets:

@@ -311,6 +311,7 @@ resource "criblio_destination" "my_destination" {
     dump_format_errors_to_disk = true
     environment                = "...my_environment..."
     exclude_mapping_fields = [
+      "..."
     ]
     extra_http_headers = [
       {

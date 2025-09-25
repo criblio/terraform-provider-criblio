@@ -1,0 +1,32 @@
+{
+  "id": "test_router_output",
+  "systemFields": [
+    "cribl_pipe"
+  ],
+  "streamtags": [
+    "test",
+    "json-config"
+  ],
+  "rules": [
+    {
+      "final": false,
+      "output": "test",
+      "filter": "true",
+      "description": "test"
+    },
+    {
+      "final": false,
+      "filter": "true",
+      "output": "cribl-lake-11",
+      "description": "test lake"
+    },
+    {
+      "final": true,
+      "filter": "true",
+      "output": "json-config-webhook-dest",
+      "description": "test webhook"
+    }
+  ],
+  "type": "router",
+  "description": "testing output router"
+}

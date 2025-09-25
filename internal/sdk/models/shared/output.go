@@ -77,69 +77,69 @@ const (
 )
 
 type Output struct {
-	OutputDefault                *OutputDefault                `queryParam:"inline" name:"Output"`
-	OutputWebhook                *OutputWebhook                `queryParam:"inline" name:"Output"`
-	OutputSentinel               *OutputSentinel               `queryParam:"inline" name:"Output"`
-	OutputDevnull                *OutputDevnull                `queryParam:"inline" name:"Output"`
-	OutputSyslog                 *OutputSyslog                 `queryParam:"inline" name:"Output"`
-	OutputSplunk                 *OutputSplunk                 `queryParam:"inline" name:"Output"`
-	OutputSplunkLb               *OutputSplunkLb               `queryParam:"inline" name:"Output"`
-	OutputSplunkHec              *OutputSplunkHec              `queryParam:"inline" name:"Output"`
-	OutputTcpjson                *OutputTcpjson                `queryParam:"inline" name:"Output"`
-	OutputWavefront              *OutputWavefront              `queryParam:"inline" name:"Output"`
-	OutputSignalfx               *OutputSignalfx               `queryParam:"inline" name:"Output"`
-	OutputFilesystem             *OutputFilesystem             `queryParam:"inline" name:"Output"`
-	OutputS3                     *OutputS3                     `queryParam:"inline" name:"Output"`
-	OutputAzureBlob              *OutputAzureBlob              `queryParam:"inline" name:"Output"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorer      `queryParam:"inline" name:"Output"`
-	OutputAzureLogs              *OutputAzureLogs              `queryParam:"inline" name:"Output"`
-	OutputKinesis                *OutputKinesis                `queryParam:"inline" name:"Output"`
-	OutputHoneycomb              *OutputHoneycomb              `queryParam:"inline" name:"Output"`
-	OutputAzureEventhub          *OutputAzureEventhub          `queryParam:"inline" name:"Output"`
-	OutputGoogleChronicle        *OutputGoogleChronicle        `queryParam:"inline" name:"Output"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorage     `queryParam:"inline" name:"Output"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLogging     `queryParam:"inline" name:"Output"`
-	OutputGooglePubsub           *OutputGooglePubsub           `queryParam:"inline" name:"Output"`
-	OutputExabeam                *OutputExabeam                `queryParam:"inline" name:"Output"`
-	OutputKafka                  *OutputKafka                  `queryParam:"inline" name:"Output"`
-	OutputConfluentCloud         *OutputConfluentCloud         `queryParam:"inline" name:"Output"`
-	OutputMsk                    *OutputMsk                    `queryParam:"inline" name:"Output"`
-	OutputElastic                *OutputElastic                `queryParam:"inline" name:"Output"`
-	OutputElasticCloud           *OutputElasticCloud           `queryParam:"inline" name:"Output"`
-	OutputNewrelic               *OutputNewrelic               `queryParam:"inline" name:"Output"`
-	OutputNewrelicEvents         *OutputNewrelicEvents         `queryParam:"inline" name:"Output"`
-	OutputInfluxdb               *OutputInfluxdb               `queryParam:"inline" name:"Output"`
-	OutputCloudwatch             *OutputCloudwatch             `queryParam:"inline" name:"Output"`
-	OutputMinio                  *OutputMinio                  `queryParam:"inline" name:"Output"`
-	OutputStatsd                 *OutputStatsd                 `queryParam:"inline" name:"Output"`
-	OutputStatsdExt              *OutputStatsdExt              `queryParam:"inline" name:"Output"`
-	OutputGraphite               *OutputGraphite               `queryParam:"inline" name:"Output"`
-	OutputRouter                 *OutputRouter                 `queryParam:"inline" name:"Output"`
-	OutputSns                    *OutputSns                    `queryParam:"inline" name:"Output"`
-	OutputSqs                    *OutputSqs                    `queryParam:"inline" name:"Output"`
-	OutputSnmp                   *OutputSnmp                   `queryParam:"inline" name:"Output"`
-	OutputSumoLogic              *OutputSumoLogic              `queryParam:"inline" name:"Output"`
-	OutputDatadog                *OutputDatadog                `queryParam:"inline" name:"Output"`
-	OutputGrafanaCloud           *OutputGrafanaCloud           `queryParam:"inline" name:"Output"`
-	OutputLoki                   *OutputLoki                   `queryParam:"inline" name:"Output"`
-	OutputPrometheus             *OutputPrometheus             `queryParam:"inline" name:"Output"`
-	OutputRing                   *OutputRing                   `queryParam:"inline" name:"Output"`
-	OutputOpenTelemetry          *OutputOpenTelemetry          `queryParam:"inline" name:"Output"`
-	OutputServiceNow             *OutputServiceNow             `queryParam:"inline" name:"Output"`
-	OutputDataset                *OutputDataset                `queryParam:"inline" name:"Output"`
-	OutputCriblTCP               *OutputCriblTCP               `queryParam:"inline" name:"Output"`
-	OutputCriblHTTP              *OutputCriblHTTP              `queryParam:"inline" name:"Output"`
-	OutputHumioHec               *OutputHumioHec               `queryParam:"inline" name:"Output"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiem `queryParam:"inline" name:"Output"`
-	OutputDlS3                   *OutputDlS3                   `queryParam:"inline" name:"Output"`
-	OutputSecurityLake           *OutputSecurityLake           `queryParam:"inline" name:"Output"`
-	OutputCriblLake              *OutputCriblLake              `queryParam:"inline" name:"Output"`
-	OutputDiskSpool              *OutputDiskSpool              `queryParam:"inline" name:"Output"`
-	OutputClickHouse             *OutputClickHouse             `queryParam:"inline" name:"Output"`
-	OutputXsiam                  *OutputXsiam                  `queryParam:"inline" name:"Output"`
-	OutputNetflow                *OutputNetflow                `queryParam:"inline" name:"Output"`
-	OutputDynatraceHTTP          *OutputDynatraceHTTP          `queryParam:"inline" name:"Output"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlp          `queryParam:"inline" name:"Output"`
+	OutputDefault                *OutputDefault                `queryParam:"inline,name=Output"`
+	OutputWebhook                *OutputWebhook                `queryParam:"inline,name=Output"`
+	OutputSentinel               *OutputSentinel               `queryParam:"inline,name=Output"`
+	OutputDevnull                *OutputDevnull                `queryParam:"inline,name=Output"`
+	OutputSyslog                 *OutputSyslog                 `queryParam:"inline,name=Output"`
+	OutputSplunk                 *OutputSplunk                 `queryParam:"inline,name=Output"`
+	OutputSplunkLb               *OutputSplunkLb               `queryParam:"inline,name=Output"`
+	OutputSplunkHec              *OutputSplunkHec              `queryParam:"inline,name=Output"`
+	OutputTcpjson                *OutputTcpjson                `queryParam:"inline,name=Output"`
+	OutputWavefront              *OutputWavefront              `queryParam:"inline,name=Output"`
+	OutputSignalfx               *OutputSignalfx               `queryParam:"inline,name=Output"`
+	OutputFilesystem             *OutputFilesystem             `queryParam:"inline,name=Output"`
+	OutputS3                     *OutputS3                     `queryParam:"inline,name=Output"`
+	OutputAzureBlob              *OutputAzureBlob              `queryParam:"inline,name=Output"`
+	OutputAzureDataExplorer      *OutputAzureDataExplorer      `queryParam:"inline,name=Output"`
+	OutputAzureLogs              *OutputAzureLogs              `queryParam:"inline,name=Output"`
+	OutputKinesis                *OutputKinesis                `queryParam:"inline,name=Output"`
+	OutputHoneycomb              *OutputHoneycomb              `queryParam:"inline,name=Output"`
+	OutputAzureEventhub          *OutputAzureEventhub          `queryParam:"inline,name=Output"`
+	OutputGoogleChronicle        *OutputGoogleChronicle        `queryParam:"inline,name=Output"`
+	OutputGoogleCloudStorage     *OutputGoogleCloudStorage     `queryParam:"inline,name=Output"`
+	OutputGoogleCloudLogging     *OutputGoogleCloudLogging     `queryParam:"inline,name=Output"`
+	OutputGooglePubsub           *OutputGooglePubsub           `queryParam:"inline,name=Output"`
+	OutputExabeam                *OutputExabeam                `queryParam:"inline,name=Output"`
+	OutputKafka                  *OutputKafka                  `queryParam:"inline,name=Output"`
+	OutputConfluentCloud         *OutputConfluentCloud         `queryParam:"inline,name=Output"`
+	OutputMsk                    *OutputMsk                    `queryParam:"inline,name=Output"`
+	OutputElastic                *OutputElastic                `queryParam:"inline,name=Output"`
+	OutputElasticCloud           *OutputElasticCloud           `queryParam:"inline,name=Output"`
+	OutputNewrelic               *OutputNewrelic               `queryParam:"inline,name=Output"`
+	OutputNewrelicEvents         *OutputNewrelicEvents         `queryParam:"inline,name=Output"`
+	OutputInfluxdb               *OutputInfluxdb               `queryParam:"inline,name=Output"`
+	OutputCloudwatch             *OutputCloudwatch             `queryParam:"inline,name=Output"`
+	OutputMinio                  *OutputMinio                  `queryParam:"inline,name=Output"`
+	OutputStatsd                 *OutputStatsd                 `queryParam:"inline,name=Output"`
+	OutputStatsdExt              *OutputStatsdExt              `queryParam:"inline,name=Output"`
+	OutputGraphite               *OutputGraphite               `queryParam:"inline,name=Output"`
+	OutputRouter                 *OutputRouter                 `queryParam:"inline,name=Output"`
+	OutputSns                    *OutputSns                    `queryParam:"inline,name=Output"`
+	OutputSqs                    *OutputSqs                    `queryParam:"inline,name=Output"`
+	OutputSnmp                   *OutputSnmp                   `queryParam:"inline,name=Output"`
+	OutputSumoLogic              *OutputSumoLogic              `queryParam:"inline,name=Output"`
+	OutputDatadog                *OutputDatadog                `queryParam:"inline,name=Output"`
+	OutputGrafanaCloud           *OutputGrafanaCloud           `queryParam:"inline,name=Output"`
+	OutputLoki                   *OutputLoki                   `queryParam:"inline,name=Output"`
+	OutputPrometheus             *OutputPrometheus             `queryParam:"inline,name=Output"`
+	OutputRing                   *OutputRing                   `queryParam:"inline,name=Output"`
+	OutputOpenTelemetry          *OutputOpenTelemetry          `queryParam:"inline,name=Output"`
+	OutputServiceNow             *OutputServiceNow             `queryParam:"inline,name=Output"`
+	OutputDataset                *OutputDataset                `queryParam:"inline,name=Output"`
+	OutputCriblTCP               *OutputCriblTCP               `queryParam:"inline,name=Output"`
+	OutputCriblHTTP              *OutputCriblHTTP              `queryParam:"inline,name=Output"`
+	OutputHumioHec               *OutputHumioHec               `queryParam:"inline,name=Output"`
+	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiem `queryParam:"inline,name=Output"`
+	OutputDlS3                   *OutputDlS3                   `queryParam:"inline,name=Output"`
+	OutputSecurityLake           *OutputSecurityLake           `queryParam:"inline,name=Output"`
+	OutputCriblLake              *OutputCriblLake              `queryParam:"inline,name=Output"`
+	OutputDiskSpool              *OutputDiskSpool              `queryParam:"inline,name=Output"`
+	OutputClickHouse             *OutputClickHouse             `queryParam:"inline,name=Output"`
+	OutputXsiam                  *OutputXsiam                  `queryParam:"inline,name=Output"`
+	OutputNetflow                *OutputNetflow                `queryParam:"inline,name=Output"`
+	OutputDynatraceHTTP          *OutputDynatraceHTTP          `queryParam:"inline,name=Output"`
+	OutputDynatraceOtlp          *OutputDynatraceOtlp          `queryParam:"inline,name=Output"`
 
 	Type OutputType
 }

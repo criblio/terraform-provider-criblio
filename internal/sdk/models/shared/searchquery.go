@@ -70,8 +70,8 @@ const (
 )
 
 type SearchQueryEarliest struct {
-	Str    *string  `queryParam:"inline" name:"earliest"`
-	Number *float64 `queryParam:"inline" name:"earliest"`
+	Str    *string  `queryParam:"inline,name=earliest"`
+	Number *float64 `queryParam:"inline,name=earliest"`
 
 	Type SearchQueryEarliestType
 }
@@ -133,8 +133,8 @@ const (
 )
 
 type SearchQueryLatest struct {
-	Str    *string  `queryParam:"inline" name:"latest"`
-	Number *float64 `queryParam:"inline" name:"latest"`
+	Str    *string  `queryParam:"inline,name=latest"`
+	Number *float64 `queryParam:"inline,name=latest"`
 
 	Type SearchQueryLatestType
 }
@@ -359,9 +359,9 @@ const (
 )
 
 type SearchQuery struct {
-	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline" name:"SearchQuery"`
-	SearchQueryInline *SearchQueryInline `queryParam:"inline" name:"SearchQuery"`
-	SearchQueryValues *SearchQueryValues `queryParam:"inline" name:"SearchQuery"`
+	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline,name=SearchQuery"`
+	SearchQueryInline *SearchQueryInline `queryParam:"inline,name=SearchQuery"`
+	SearchQueryValues *SearchQueryValues `queryParam:"inline,name=SearchQuery"`
 
 	Type SearchQueryType
 }

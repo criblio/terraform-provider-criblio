@@ -16,8 +16,8 @@ const (
 )
 
 type MetricsAggOptsEarliest struct {
-	Str    *string  `queryParam:"inline" name:"earliest"`
-	Number *float64 `queryParam:"inline" name:"earliest"`
+	Str    *string  `queryParam:"inline,name=earliest"`
+	Number *float64 `queryParam:"inline,name=earliest"`
 
 	Type MetricsAggOptsEarliestType
 }
@@ -79,8 +79,8 @@ const (
 )
 
 type MetricsAggOptsLatest struct {
-	Str    *string  `queryParam:"inline" name:"latest"`
-	Number *float64 `queryParam:"inline" name:"latest"`
+	Str    *string  `queryParam:"inline,name=latest"`
+	Number *float64 `queryParam:"inline,name=latest"`
 
 	Type MetricsAggOptsLatestType
 }

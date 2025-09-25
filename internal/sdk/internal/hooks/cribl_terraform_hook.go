@@ -212,6 +212,34 @@ func (o *CriblTerraformHook) constructBaseURLWithProviderConfig(providerOrgID, p
 	return constructedURL
 }
 
+// isGatewayPath determines if a request path should be routed to the gateway
+func (o *CriblTerraformHook) isGatewayPath(path string) bool {
+	// Remove leading slash and api prefix for consistent checking
+	cleanPath := strings.TrimLeft(path, "/")
+	cleanPath = strings.TrimPrefix(cleanPath, "api/")
+	cleanPath = strings.TrimPrefix(cleanPath, "v1/")
+
+	// Gateway paths are for organization and workspace management
+	return strings.HasPrefix(cleanPath, "organizations/")
+}
+
+// constructGatewayURL builds the gateway URL using the appropriate cloud domain
+func (o *CriblTerraformHook) constructGatewayURL(providerCloudDomain string, config *CriblConfig) string {
+	// Get cloud domain with proper precedence: Provider > Environment > Credentials > Default
+	cloudDomain := providerCloudDomain
+	if cloudDomain == "" {
+		cloudDomain = os.Getenv("CRIBL_CLOUD_DOMAIN")
+	}
+	if cloudDomain == "" && config != nil {
+		cloudDomain = config.CloudDomain
+	}
+	if cloudDomain == "" {
+		cloudDomain = "cribl.cloud" // Default domain
+	}
+
+	return fmt.Sprintf("https://gateway.%s", cloudDomain)
+}
+
 func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.Request) (*http.Request, error) {
 	// First try to get credentials from security context
 	var clientID, clientSecret, orgID, workspaceID, cloudDomain string
@@ -318,20 +346,46 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 		req.Header.Set("Authorization", "Bearer "+tokenInfo.Token)
 	}
 
-	// Handle URL routing - for new workspace format, requests go directly to workspace URL
-	trimmedBaseURL := strings.TrimRight(o.baseURL, "/")
+	// Handle URL routing
 	path := strings.TrimLeft(req.URL.Path, "/")
 
-	// For new workspace format, construct API URLs directly (e.g., https://main-org.domain/api/v1/...)
-	if !strings.Contains(req.URL.String(), "/api/v1") && !strings.HasPrefix(path, "api/v1") {
-		newURL := fmt.Sprintf("%s/api/v1/%s", trimmedBaseURL, path)
+	// Check if this is a gateway path (management endpoints)
+	if o.isGatewayPath(path) || strings.Contains(req.URL.Host, "gateway.") {
+		// Construct gateway URL
+		gatewayURL := o.constructGatewayURL(cloudDomain, config)
+
+		// Parse gateway URL to get the host
+		parsedGatewayURL, err := url.Parse(gatewayURL)
+		if err != nil {
+			return req, fmt.Errorf("failed to parse gateway URL: %v", err)
+		}
+
+		// For gateway requests, don't add /api/v1 prefix - use path as-is
+		newURL := fmt.Sprintf("%s/%s", strings.TrimRight(gatewayURL, "/"), path)
 
 		parsedURL, err := url.Parse(newURL)
 		if err != nil {
 			return req, err
 		}
 
+		// Set both URL host and explicit Host header for gateway requests
 		req.URL = parsedURL
+		req.Host = parsedGatewayURL.Host
+	} else {
+		// Handle regular workspace API routing
+		trimmedBaseURL := strings.TrimRight(o.baseURL, "/")
+
+		// For workspace API, add /api/v1 prefix if not already present
+		if !strings.Contains(req.URL.String(), "/api/v1") && !strings.HasPrefix(path, "api/v1") {
+			newURL := fmt.Sprintf("%s/api/v1/%s", trimmedBaseURL, path)
+
+			parsedURL, err := url.Parse(newURL)
+			if err != nil {
+				return req, err
+			}
+
+			req.URL = parsedURL
+		}
 	}
 
 	return req, nil

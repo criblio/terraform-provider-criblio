@@ -16,8 +16,8 @@ const (
 )
 
 type Remote struct {
-	Str     *string `queryParam:"inline" name:"remote"`
-	Boolean *bool   `queryParam:"inline" name:"remote"`
+	Str     *string `queryParam:"inline,name=remote"`
+	Boolean *bool   `queryParam:"inline,name=remote"`
 
 	Type RemoteType
 }

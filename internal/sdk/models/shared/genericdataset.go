@@ -2111,28 +2111,28 @@ const (
 )
 
 type GenericDataset struct {
-	APIHTTPDataset              *APIHTTPDataset              `queryParam:"inline" name:"GenericDataset"`
-	APIAwsDataset               *APIAwsDataset               `queryParam:"inline" name:"GenericDataset"`
-	APIAzureDataset             *APIAzureDataset             `queryParam:"inline" name:"GenericDataset"`
-	APIGcpDataset               *APIGcpDataset               `queryParam:"inline" name:"GenericDataset"`
-	APIGoogleWorkspaceDataset   *APIGoogleWorkspaceDataset   `queryParam:"inline" name:"GenericDataset"`
-	APIMsGraphDataset           *APIMsGraphDataset           `queryParam:"inline" name:"GenericDataset"`
-	APIOktaDataset              *APIOktaDataset              `queryParam:"inline" name:"GenericDataset"`
-	APITailscaleDataset         *APITailscaleDataset         `queryParam:"inline" name:"GenericDataset"`
-	APIZoomDataset              *APIZoomDataset              `queryParam:"inline" name:"GenericDataset"`
-	APIAzureDataExplorerDataset *APIAzureDataExplorerDataset `queryParam:"inline" name:"GenericDataset"`
-	SnowflakeDataset            *SnowflakeDataset            `queryParam:"inline" name:"GenericDataset"`
-	ClickHouseDataset           *ClickHouseDataset           `queryParam:"inline" name:"GenericDataset"`
-	PrometheusDataset           *PrometheusDataset           `queryParam:"inline" name:"GenericDataset"`
-	APIOpenSearchDataset        *APIOpenSearchDataset        `queryParam:"inline" name:"GenericDataset"`
-	APIElasticSearchDataset     *APIElasticSearchDataset     `queryParam:"inline" name:"GenericDataset"`
-	S3Dataset                   *S3Dataset                   `queryParam:"inline" name:"GenericDataset"`
-	CriblLeaderDataset          *CriblLeaderDataset          `queryParam:"inline" name:"GenericDataset"`
-	MetaDataset                 *MetaDataset                 `queryParam:"inline" name:"GenericDataset"`
-	EdgeDataset                 *EdgeDataset                 `queryParam:"inline" name:"GenericDataset"`
-	AzureBlobDataset            *AzureBlobDataset            `queryParam:"inline" name:"GenericDataset"`
-	GcsDataset                  *GcsDataset                  `queryParam:"inline" name:"GenericDataset"`
-	AwsSecurityLakeDataset      *AwsSecurityLakeDataset      `queryParam:"inline" name:"GenericDataset"`
+	APIHTTPDataset              *APIHTTPDataset              `queryParam:"inline,name=GenericDataset"`
+	APIAwsDataset               *APIAwsDataset               `queryParam:"inline,name=GenericDataset"`
+	APIAzureDataset             *APIAzureDataset             `queryParam:"inline,name=GenericDataset"`
+	APIGcpDataset               *APIGcpDataset               `queryParam:"inline,name=GenericDataset"`
+	APIGoogleWorkspaceDataset   *APIGoogleWorkspaceDataset   `queryParam:"inline,name=GenericDataset"`
+	APIMsGraphDataset           *APIMsGraphDataset           `queryParam:"inline,name=GenericDataset"`
+	APIOktaDataset              *APIOktaDataset              `queryParam:"inline,name=GenericDataset"`
+	APITailscaleDataset         *APITailscaleDataset         `queryParam:"inline,name=GenericDataset"`
+	APIZoomDataset              *APIZoomDataset              `queryParam:"inline,name=GenericDataset"`
+	APIAzureDataExplorerDataset *APIAzureDataExplorerDataset `queryParam:"inline,name=GenericDataset"`
+	SnowflakeDataset            *SnowflakeDataset            `queryParam:"inline,name=GenericDataset"`
+	ClickHouseDataset           *ClickHouseDataset           `queryParam:"inline,name=GenericDataset"`
+	PrometheusDataset           *PrometheusDataset           `queryParam:"inline,name=GenericDataset"`
+	APIOpenSearchDataset        *APIOpenSearchDataset        `queryParam:"inline,name=GenericDataset"`
+	APIElasticSearchDataset     *APIElasticSearchDataset     `queryParam:"inline,name=GenericDataset"`
+	S3Dataset                   *S3Dataset                   `queryParam:"inline,name=GenericDataset"`
+	CriblLeaderDataset          *CriblLeaderDataset          `queryParam:"inline,name=GenericDataset"`
+	MetaDataset                 *MetaDataset                 `queryParam:"inline,name=GenericDataset"`
+	EdgeDataset                 *EdgeDataset                 `queryParam:"inline,name=GenericDataset"`
+	AzureBlobDataset            *AzureBlobDataset            `queryParam:"inline,name=GenericDataset"`
+	GcsDataset                  *GcsDataset                  `queryParam:"inline,name=GenericDataset"`
+	AwsSecurityLakeDataset      *AwsSecurityLakeDataset      `queryParam:"inline,name=GenericDataset"`
 
 	Type GenericDatasetType
 }

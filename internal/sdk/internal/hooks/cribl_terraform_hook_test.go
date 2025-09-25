@@ -786,3 +786,230 @@ func TestGovDomainOAuth2MissingAuthServerID(t *testing.T) {
 	os.Setenv("CRIBL_OKTA_DEFAULT_AUTH_SERVER_ID", "")
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }
+
+func TestIsGatewayPath(t *testing.T) {
+	hook := NewCriblTerraformHook()
+
+	// Test cases for gateway paths
+	gatewayPaths := []struct {
+		path     string
+		expected bool
+		desc     string
+	}{
+		{"/v1/organizations/my-org/workspaces", true, "workspace creation path"},
+		{"/api/v1/organizations/my-org/workspaces", true, "workspace creation path with api prefix"},
+		{"v1/organizations/my-org/workspaces/workspace-id", true, "workspace operations path"},
+		{"api/v1/organizations/my-org/workspaces/workspace-id", true, "workspace operations path with api prefix"},
+		{"/v1/workspaces/workspace-id/sources", false, "regular workspace API path"},
+		{"/api/v1/workspaces/workspace-id/destinations", false, "regular workspace API path"},
+		{"/v1/system/health", false, "system health path"},
+		{"", false, "empty path"},
+		{"/", false, "root path"},
+	}
+
+	for _, test := range gatewayPaths {
+		result := hook.isGatewayPath(test.path)
+		if result != test.expected {
+			t.Errorf("isGatewayPath(%q) = %v, expected %v (%s)", test.path, result, test.expected, test.desc)
+		}
+	}
+}
+
+func TestConstructGatewayURL(t *testing.T) {
+	hook := NewCriblTerraformHook()
+
+	// Test with default domain
+	result := hook.constructGatewayURL("", nil)
+	expected := "https://gateway.cribl.cloud"
+	if result != expected {
+		t.Errorf("constructGatewayURL('', nil) = %q, expected %q", result, expected)
+	}
+
+	// Test with provider cloud domain
+	result = hook.constructGatewayURL("cribl-playground.cloud", nil)
+	expected = "https://gateway.cribl-playground.cloud"
+	if result != expected {
+		t.Errorf("constructGatewayURL('cribl-playground.cloud', nil) = %q, expected %q", result, expected)
+	}
+
+	// Test with config cloud domain
+	config := &CriblConfig{
+		CloudDomain: "cribl-staging.cloud",
+	}
+	result = hook.constructGatewayURL("", config)
+	expected = "https://gateway.cribl-staging.cloud"
+	if result != expected {
+		t.Errorf("constructGatewayURL('', config) = %q, expected %q", result, expected)
+	}
+
+	// Test provider takes precedence over config
+	result = hook.constructGatewayURL("cribl-prod.cloud", config)
+	expected = "https://gateway.cribl-prod.cloud"
+	if result != expected {
+		t.Errorf("constructGatewayURL('cribl-prod.cloud', config) = %q, expected %q", result, expected)
+	}
+}
+
+func TestGatewayRouting(t *testing.T) {
+	// Set environment variables for test
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-playground.cloud")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-bearer-token")
+
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("initial-url", nil)
+
+	// Test gateway path routing
+	gatewayReq, err := http.NewRequest("POST", "/v1/organizations/test-org/workspaces", nil)
+	if err != nil {
+		t.Fatalf("Error creating test request: %v", err)
+	}
+
+	var ctx BeforeRequestContext
+	finalReq, err := hook.BeforeRequest(ctx, gatewayReq)
+	if err != nil {
+		t.Fatalf("BeforeRequest failed: %v", err)
+	}
+
+	// Should route to gateway URL (no /api prefix)
+	expectedURL := "https://gateway.cribl-playground.cloud/v1/organizations/test-org/workspaces"
+	if finalReq.URL.String() != expectedURL {
+		t.Errorf("Gateway routing failed. Got %q, expected %q", finalReq.URL.String(), expectedURL)
+	}
+
+	// Test workspace path routing
+	workspaceReq, err := http.NewRequest("GET", "/v1/workspaces/test-workspace/sources", nil)
+	if err != nil {
+		t.Fatalf("Error creating test request: %v", err)
+	}
+
+	finalReq, err = hook.BeforeRequest(ctx, workspaceReq)
+	if err != nil {
+		t.Fatalf("BeforeRequest failed: %v", err)
+	}
+
+	// Should route to workspace URL using provider config
+	expectedURL = "https://test-workspace-test-org.cribl-playground.cloud/api/v1/v1/workspaces/test-workspace/sources"
+	if finalReq.URL.String() != expectedURL {
+		t.Errorf("Workspace routing failed. Got %q, expected %q", finalReq.URL.String(), expectedURL)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestGatewayRoutingWithProviderConfig(t *testing.T) {
+	// Set environment variables that should be overridden by provider config
+	os.Setenv("CRIBL_CLIENT_ID", "env-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "env-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "env-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "env-workspace")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl.cloud")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-bearer-token")
+
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("initial-url", nil)
+
+	// Simulate provider configuration
+	providerSecurity := shared.Security{
+		OrganizationID: StringPtr("provider-org"),
+		WorkspaceID:    StringPtr("provider-workspace"),
+		CloudDomain:    StringPtr("cribl-playground.cloud"),
+	}
+
+	// Create security source that returns provider config
+	securitySource := func(ctx context.Context) (interface{}, error) {
+		return providerSecurity, nil
+	}
+
+	// Create test request context with security source
+	myCtx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context:        context.Background(),
+			SecuritySource: securitySource,
+		},
+	}
+
+	// Test gateway path with provider config
+	gatewayReq, err := http.NewRequest("POST", "/v1/organizations/provider-org/workspaces", nil)
+	if err != nil {
+		t.Fatalf("Error creating test request: %v", err)
+	}
+
+	finalReq, err := hook.BeforeRequest(myCtx, gatewayReq)
+	if err != nil {
+		t.Fatalf("BeforeRequest failed: %v", err)
+	}
+
+	// Should route to gateway URL using provider cloud domain (no /api prefix)
+	expectedURL := "https://gateway.cribl-playground.cloud/v1/organizations/provider-org/workspaces"
+	if finalReq.URL.String() != expectedURL {
+		t.Errorf("Gateway routing with provider config failed. Got %q, expected %q", finalReq.URL.String(), expectedURL)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestGatewayHostOverride(t *testing.T) {
+	// Test that hardcoded gateway.cribl.cloud gets overridden with correct domain
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-playground.cloud")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-bearer-token")
+
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("initial-url", nil)
+
+	// Simulate a request that the SDK would send to hardcoded gateway.cribl.cloud
+	hardcodedReq, err := http.NewRequest("POST", "https://gateway.cribl.cloud/v1/organizations/test-org/workspaces", nil)
+	if err != nil {
+		t.Fatalf("Error creating test request: %v", err)
+	}
+
+	var ctx BeforeRequestContext
+	finalReq, err := hook.BeforeRequest(ctx, hardcodedReq)
+	if err != nil {
+		t.Fatalf("BeforeRequest failed: %v", err)
+	}
+
+	// Should override the host to use the correct domain
+	expectedHost := "gateway.cribl-playground.cloud"
+	if finalReq.URL.Host != expectedHost {
+		t.Errorf("Gateway URL.Host override failed. Got %q, expected %q", finalReq.URL.Host, expectedHost)
+	}
+
+	// Should also set the explicit Host field
+	if finalReq.Host != expectedHost {
+		t.Errorf("Gateway Host field override failed. Got %q, expected %q", finalReq.Host, expectedHost)
+	}
+
+	// Path should remain the same (no /api prefix needed for gateway)
+	expectedPath := "/v1/organizations/test-org/workspaces"
+	if finalReq.URL.Path != expectedPath {
+		t.Errorf("Path should remain unchanged for gateway. Got %q, expected %q", finalReq.URL.Path, expectedPath)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}

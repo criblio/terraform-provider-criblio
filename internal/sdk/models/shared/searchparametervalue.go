@@ -17,9 +17,9 @@ const (
 )
 
 type SearchParameterValue struct {
-	Str     *string  `queryParam:"inline" name:"SearchParameterValue"`
-	Number  *float64 `queryParam:"inline" name:"SearchParameterValue"`
-	Boolean *bool    `queryParam:"inline" name:"SearchParameterValue"`
+	Str     *string  `queryParam:"inline,name=SearchParameterValue"`
+	Number  *float64 `queryParam:"inline,name=SearchParameterValue"`
+	Boolean *bool    `queryParam:"inline,name=SearchParameterValue"`
 
 	Type SearchParameterValueType
 }

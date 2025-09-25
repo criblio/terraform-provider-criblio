@@ -22,14 +22,14 @@ const (
 )
 
 type InputCollector struct {
-	InputCollectorSplunk      *InputCollectorSplunk      `queryParam:"inline" name:"InputCollector"`
-	InputCollectorRest        *InputCollectorRest        `queryParam:"inline" name:"InputCollector"`
-	InputCollectorS3          *InputCollectorS3          `queryParam:"inline" name:"InputCollector"`
-	InputCollectorAzureBlob   *InputCollectorAzureBlob   `queryParam:"inline" name:"InputCollector"`
-	InputCollectorCriblLake   *InputCollectorCriblLake   `queryParam:"inline" name:"InputCollector"`
-	InputCollectorDatabase    *InputCollectorDatabase    `queryParam:"inline" name:"InputCollector"`
-	InputCollectorGCS         *InputCollectorGCS         `queryParam:"inline" name:"InputCollector"`
-	InputCollectorHealthCheck *InputCollectorHealthCheck `queryParam:"inline" name:"InputCollector"`
+	InputCollectorSplunk      *InputCollectorSplunk      `queryParam:"inline,name=InputCollector"`
+	InputCollectorRest        *InputCollectorRest        `queryParam:"inline,name=InputCollector"`
+	InputCollectorS3          *InputCollectorS3          `queryParam:"inline,name=InputCollector"`
+	InputCollectorAzureBlob   *InputCollectorAzureBlob   `queryParam:"inline,name=InputCollector"`
+	InputCollectorCriblLake   *InputCollectorCriblLake   `queryParam:"inline,name=InputCollector"`
+	InputCollectorDatabase    *InputCollectorDatabase    `queryParam:"inline,name=InputCollector"`
+	InputCollectorGCS         *InputCollectorGCS         `queryParam:"inline,name=InputCollector"`
+	InputCollectorHealthCheck *InputCollectorHealthCheck `queryParam:"inline,name=InputCollector"`
 
 	Type InputCollectorType
 }

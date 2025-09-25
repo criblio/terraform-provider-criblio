@@ -16,8 +16,8 @@ const (
 )
 
 type DimKeyFilter struct {
-	Str        *string  `queryParam:"inline" name:"dimKeyFilter"`
-	ArrayOfStr []string `queryParam:"inline" name:"dimKeyFilter"`
+	Str        *string  `queryParam:"inline,name=dimKeyFilter"`
+	ArrayOfStr []string `queryParam:"inline,name=dimKeyFilter"`
 
 	Type DimKeyFilterType
 }
@@ -79,8 +79,8 @@ const (
 )
 
 type DimValueFilter struct {
-	Str        *string  `queryParam:"inline" name:"dimValueFilter"`
-	ArrayOfStr []string `queryParam:"inline" name:"dimValueFilter"`
+	Str        *string  `queryParam:"inline,name=dimValueFilter"`
+	ArrayOfStr []string `queryParam:"inline,name=dimValueFilter"`
 
 	Type DimValueFilterType
 }
@@ -142,8 +142,8 @@ const (
 )
 
 type MetricNameFilter struct {
-	Str        *string  `queryParam:"inline" name:"metricNameFilter"`
-	ArrayOfStr []string `queryParam:"inline" name:"metricNameFilter"`
+	Str        *string  `queryParam:"inline,name=metricNameFilter"`
+	ArrayOfStr []string `queryParam:"inline,name=metricNameFilter"`
 
 	Type MetricNameFilterType
 }

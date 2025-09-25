@@ -1647,28 +1647,28 @@ const (
 )
 
 type GenericProvider struct {
-	APIHTTPProvider              *APIHTTPProvider              `queryParam:"inline" name:"GenericProvider"`
-	APIAwsProvider               *APIAwsProvider               `queryParam:"inline" name:"GenericProvider"`
-	APIAzureProvider             *APIAzureProvider             `queryParam:"inline" name:"GenericProvider"`
-	APIGcpProvider               *APIGcpProvider               `queryParam:"inline" name:"GenericProvider"`
-	APIGoogleWorkspaceProvider   *APIGoogleWorkspaceProvider   `queryParam:"inline" name:"GenericProvider"`
-	APIMsGraphProvider           *APIMsGraphProvider           `queryParam:"inline" name:"GenericProvider"`
-	APIOktaProvider              *APIOktaProvider              `queryParam:"inline" name:"GenericProvider"`
-	APITailscaleProvider         *APITailscaleProvider         `queryParam:"inline" name:"GenericProvider"`
-	APIZoomProvider              *APIZoomProvider              `queryParam:"inline" name:"GenericProvider"`
-	APIAzureDataExplorerProvider *APIAzureDataExplorerProvider `queryParam:"inline" name:"GenericProvider"`
-	SnowflakeProvider            *SnowflakeProvider            `queryParam:"inline" name:"GenericProvider"`
-	ClickHouseProvider           *ClickHouseProvider           `queryParam:"inline" name:"GenericProvider"`
-	PrometheusProvider           *PrometheusProvider           `queryParam:"inline" name:"GenericProvider"`
-	APIOpenSearchProvider        *APIOpenSearchProvider        `queryParam:"inline" name:"GenericProvider"`
-	APIElasticSearchProvider     *APIElasticSearchProvider     `queryParam:"inline" name:"GenericProvider"`
-	AwsSecurityLakeProvider      *AwsSecurityLakeProvider      `queryParam:"inline" name:"GenericProvider"`
-	S3Provider                   *S3Provider                   `queryParam:"inline" name:"GenericProvider"`
-	CriblLeaderProvider          *CriblLeaderProvider          `queryParam:"inline" name:"GenericProvider"`
-	MetaProvider                 *MetaProvider                 `queryParam:"inline" name:"GenericProvider"`
-	EdgeProvider                 *EdgeProvider                 `queryParam:"inline" name:"GenericProvider"`
-	AzureBlobProvider            *AzureBlobProvider            `queryParam:"inline" name:"GenericProvider"`
-	GcsProvider                  *GcsProvider                  `queryParam:"inline" name:"GenericProvider"`
+	APIHTTPProvider              *APIHTTPProvider              `queryParam:"inline,name=GenericProvider"`
+	APIAwsProvider               *APIAwsProvider               `queryParam:"inline,name=GenericProvider"`
+	APIAzureProvider             *APIAzureProvider             `queryParam:"inline,name=GenericProvider"`
+	APIGcpProvider               *APIGcpProvider               `queryParam:"inline,name=GenericProvider"`
+	APIGoogleWorkspaceProvider   *APIGoogleWorkspaceProvider   `queryParam:"inline,name=GenericProvider"`
+	APIMsGraphProvider           *APIMsGraphProvider           `queryParam:"inline,name=GenericProvider"`
+	APIOktaProvider              *APIOktaProvider              `queryParam:"inline,name=GenericProvider"`
+	APITailscaleProvider         *APITailscaleProvider         `queryParam:"inline,name=GenericProvider"`
+	APIZoomProvider              *APIZoomProvider              `queryParam:"inline,name=GenericProvider"`
+	APIAzureDataExplorerProvider *APIAzureDataExplorerProvider `queryParam:"inline,name=GenericProvider"`
+	SnowflakeProvider            *SnowflakeProvider            `queryParam:"inline,name=GenericProvider"`
+	ClickHouseProvider           *ClickHouseProvider           `queryParam:"inline,name=GenericProvider"`
+	PrometheusProvider           *PrometheusProvider           `queryParam:"inline,name=GenericProvider"`
+	APIOpenSearchProvider        *APIOpenSearchProvider        `queryParam:"inline,name=GenericProvider"`
+	APIElasticSearchProvider     *APIElasticSearchProvider     `queryParam:"inline,name=GenericProvider"`
+	AwsSecurityLakeProvider      *AwsSecurityLakeProvider      `queryParam:"inline,name=GenericProvider"`
+	S3Provider                   *S3Provider                   `queryParam:"inline,name=GenericProvider"`
+	CriblLeaderProvider          *CriblLeaderProvider          `queryParam:"inline,name=GenericProvider"`
+	MetaProvider                 *MetaProvider                 `queryParam:"inline,name=GenericProvider"`
+	EdgeProvider                 *EdgeProvider                 `queryParam:"inline,name=GenericProvider"`
+	AzureBlobProvider            *AzureBlobProvider            `queryParam:"inline,name=GenericProvider"`
+	GcsProvider                  *GcsProvider                  `queryParam:"inline,name=GenericProvider"`
 
 	Type GenericProviderType
 }

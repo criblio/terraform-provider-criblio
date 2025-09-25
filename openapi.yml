@@ -67530,10 +67530,10 @@ paths:
           type: string
         description: Group ID
 servers:
-- url: https://{workspaceName}-{organizationId}.{cloudDomain}
+- url: https://{workspaceId}-{organizationId}.{cloudDomain}
   x-speakeasy-server-id: cloud
   variables:
-    workspaceName:
+    workspaceId:
       default: main
       description: The Workspace name
     organizationId:

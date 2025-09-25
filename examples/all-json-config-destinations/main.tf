@@ -102,6 +102,14 @@ module "prometheus_destination" {
   json_file_path = "./configs/prometheus_destination.json"
 }
 
+# Example 14: Router Destination from JSON file
+module "router_destination" {
+  source = "../../modules/json-config-destination-router"
+
+  group_id       = "default"
+  json_file_path = "./configs/router_destination.json"
+}
+
 # Outputs showing all created destinations
 output "all_destinations_created" {
   value = {
@@ -158,6 +166,10 @@ output "all_destinations_created" {
       {
         id   = module.prometheus_destination.destination_id
         type = module.prometheus_destination.destination_type
+      },
+      {
+        id   = module.router_destination.destination_id
+        type = module.router_destination.destination_type
       }
     ]
   }

@@ -275,8 +275,8 @@ const (
 )
 
 type ElementUnion struct {
-	Element         *Element         `queryParam:"inline" name:"element"`
-	ElementMarkdown *ElementMarkdown `queryParam:"inline" name:"element"`
+	Element         *Element         `queryParam:"inline,name=element"`
+	ElementMarkdown *ElementMarkdown `queryParam:"inline,name=element"`
 
 	Type ElementUnionType
 }
