@@ -1,0 +1,94 @@
+{
+  "id": "Crowdstrike",
+  "minRawLength": 256,
+  "lib": "custom",
+  "rules": [
+    {
+      "condition": "/\"ContextTimeStamp\":/.test(_raw)",
+      "type": "regex",
+      "timestampAnchorRegex": "/\"ContextTimeStamp\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 50,
+        "format": "%s.%L"
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 768000,
+      "disabled": false,
+      "eventBreakerRegex": "/[\\r\\n]+(?=\\{\\\")/",
+      "jsonExtractAll": false,
+      "name": "ContextTimeStamp Breaker"
+    },
+    {
+      "condition": "/\"timestamp\":\"\\d{4}-/.test(_raw) && !/\"ContextTimeStamp\":/.test(_raw)",
+      "type": "regex",
+      "timestampAnchorRegex": "/\"timestamp\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 50,
+        "format": "%Y-%m-%dT%H:%M:%SZ"
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 768000,
+      "disabled": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?=\\{\\\")/",
+      "name": "timestamp human readable breaker"
+    },
+    {
+      "condition": "/\"timestamp\":\"\\d{10}/.test(_raw) && !_raw.includes('ContextTimeStamp')",
+      "type": "regex",
+      "timestampAnchorRegex": "/\"timestamp\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 50,
+        "format": "%Q"
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 768000,
+      "disabled": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?=\\{\\\")/",
+      "name": "timestamp field epoch"
+    },
+    {
+      "condition": "(/\"_time\":/.test(_raw) || /\"Time\":/.test(_raw) ) && !_raw.includes('ContextTimeStamp') && !/\"timestamp\":/.test(_raw)",
+      "type": "regex",
+      "timestampAnchorRegex": "/(\"_time\":\")|(\"Time\":\")/",
+      "timestamp": {
+        "type": "format",
+        "length": 50,
+        "format": "%s.%L|%s.%f"
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 768000,
+      "disabled": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?=\\{\\\")/",
+      "name": "_time or Time fields"
+    },
+    {
+      "condition": "true",
+      "type": "regex",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "current",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 768000,
+      "disabled": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "crowdstrike fallback"
+    }
+  ],
+  "description": "Crowdstrike Event Breaker & Timestamp Processing",
+  "tags": "Crowdstrike,Security,fdr"
+}
