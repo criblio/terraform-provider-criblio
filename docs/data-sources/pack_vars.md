@@ -34,6 +34,13 @@ data "criblio_pack_vars" "my_packvars" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `description` (String) Brief description of this variable. Optional.
 - `id` (String) Global variable name.
 - `lib` (String)

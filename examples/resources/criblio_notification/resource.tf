@@ -9,7 +9,7 @@ resource "criblio_notification" "my_notification" {
   }
   disabled = false
   group    = "...my_group..."
-  id       = "...my_id..."
+  id       = "myNotificationIdToCRUD"
   target_configs = [
     {
       conf = {

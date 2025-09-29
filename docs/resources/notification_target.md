@@ -14,7 +14,7 @@ NotificationTarget Resource
 
 ```terraform
 resource "criblio_notification_target" "my_notificationtarget" {
-  id = "...my_id..."
+  id = "NotificationIdToCRUD"
   pager_duty_target = {
     class       = "...my_class..."
     component   = "...my_component..."

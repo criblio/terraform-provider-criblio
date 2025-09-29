@@ -15,7 +15,7 @@ CriblLakeHouse Resource
 ```terraform
 resource "criblio_cribl_lake_house" "my_cribllakehouse" {
   description = "...my_description..."
-  id          = "...my_id..."
+  id          = "myUniqueLakehouseIdToCRUD"
   status      = "...my_status..."
   tier_size   = "3xlarge"
 }
@@ -43,12 +43,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_cribl_lake_house.my_criblio_cribl_lake_house
-  id = "..."
+  id = "myUniqueLakehouseIdToCRUD"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_cribl_lake_house.my_criblio_cribl_lake_house "..."
+terraform import criblio_cribl_lake_house.my_criblio_cribl_lake_house "myUniqueLakehouseIdToCRUD"
 ```

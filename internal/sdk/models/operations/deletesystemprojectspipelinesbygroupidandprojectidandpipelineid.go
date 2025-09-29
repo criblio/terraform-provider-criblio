@@ -12,7 +12,7 @@ type DeleteSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest stru
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Project Id
 	ProjectID string `pathParam:"style=simple,explode=false,name=projectId"`
-	// Pipeline Id
+	// Pipeline ID
 	PipelineID string `pathParam:"style=simple,explode=false,name=pipelineId"`
 }
 

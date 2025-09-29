@@ -30,18 +30,24 @@ components:
       properties:
         displayName:
           type: string
+          example: "myPackDisplayName"
         id:
           type: string
+          example: "myUniquePackId"
         description:
           type: string
+          example: "My description of my new pack"
         version:
           type: string
+          example: "212b3cc"
         source:
           type: string
           x-speakeasy-xor-with:
             - filename
+          example: "mySourcePackName"
         disabled:
           type: boolean
+          example: true
       required:
         - id
     Error:
@@ -50,6 +56,7 @@ components:
         message:
           type: string
           description: Error message
+          example: "This is my error message string"
     BannerMessage:
       type: object
       additionalProperties: false
@@ -62,27 +69,33 @@ components:
         id:
           type: string
           title: Banner ID
+          example: "myUniqueBannerMessageId"
         enabled:
           type: boolean
           title: Enable banner
           description: Show a banner on top of all pages
+          example: true
         type:
           enum:
             - custom
             - system
           type: string
           title: Banner type
+          example: custom
         created:
           type: number
           title: Time
           description: Time created
+          example: "2025-09-29T14:15:00Z"
         theme:
           type: string
           title: Background color
           pattern: ^((#?[0-9a-fA-F]{6})|(orange)|(yellow)|(green)|(blue)|(purple)|(magenta)|(red)){1}$
+          example: purple
         invertFontColor:
           type: boolean
           title: Invert font color
+          example: false
         message:
           type: string
           title: Banner message
@@ -90,21 +103,25 @@ components:
           description: Enter a message to display to all your Organization's users, across
             all Cribl products. Limited to one line and 100 characters; will be
             truncated as needed.
+          example: "This is the banner message to be displayed"
         link:
           type: string
           title: Link URL
           description: Optionally, provide a URL to append to the message
           pattern: ^https?://
+          example: "https://thisisarealwebsite.com"
         linkDisplay:
           type: string
           title: Link display
           maxLength: 100
           description: Optionally, display your link with a short text label instead of
             the raw URL (100-character limit)
+          example: "This flavor text redirects to link"
         customThemes:
           type: array
           items:
             type: string
+          example: [ "themes" ]
     Certificate:
       type: object
       required:
@@ -116,39 +133,48 @@ components:
           type: string
           title: Name
           pattern: ^[a-zA-Z0-9_-]+$
+          example: "myUniqueCertId"
         description:
           type: string
           title: Description
+          example: "Short description of x509 certificate"
         cert:
           type: string
           title: Certificate
           description: Drag/drop or upload host certificate in PEM/Base64 format, or paste
             its contents here
+          example: "LS0tLS1CR...FLS0tLS0K"
         privKey:
           type: string
           title: Private key
+          example: "dont-share-this-key"
         passphrase:
           type: string
           title: Passphrase
+          example: "Security.jpg"
         ca:
           type: string
           title: CA certificate
           description: Optionally, drag/drop or upload all CA certificates in PEM/Base64
             format. Or, paste certificate contents here. Certificates can be
             used for client and/or server authentication.
+          example: "LS0tLS1CR...FLS0tLS0K"
         inUse:
           type: array
           title: Referenced
           description: List of configurations that reference this certificate
           items:
             type: string
+          example: [ "list", "of", "configurations" ]
     FeaturesEntry:
       type: object
       properties:
         disabled:
           type: boolean
+          example: true
         id:
           type: string
+          example: "myUniqueFeatureEntry"
       required:
         - disabled
         - id
@@ -162,9 +188,11 @@ components:
           title: Job ID
           pattern: ^[a-zA-Z0-9_-]+$
           description: Unique ID for this Job
+          example: "myUniqueJobCollectionId"
         description:
           type: string
           title: Description
+          example: "my job collection description"
         type:
           type: string
           title: Job type
@@ -172,6 +200,7 @@ components:
             - collection
             - executor
             - scheduledSearch
+          example: "collection"
         ttl:
           type: string
           title: Time to live
@@ -179,6 +208,7 @@ components:
             also affects how long a job is listed in the Job Inspector.
           pattern: \d+[smh]$
           default: 4h
+          example: "1h"
         ignoreGroupJobsLimit:
           type: boolean
           title: Ignore Group job limits
@@ -186,6 +216,7 @@ components:
             Worker Group's finished job artifacts limit. Artifacts will be
             removed only after the Collector's configured time to live.
           default: false
+          example: false
         removeFields:
           type: array
           title: Remove Discover fields
@@ -199,17 +230,20 @@ components:
             type: string
             title: Items
             description: List of fields to remove from Discover results
+          example: ["fields", "to", "remove"]
         resumeOnBoot:
           type: boolean
           title: Resume job on boot
           description: Resume the ad hoc job if a failure condition causes Stream to
             restart during job execution
           default: false
+          example: true
         environment:
           type: string
           title: Environment
           description: Optionally, enable this config only on a specified Git branch. If
             empty, will be enabled everywhere.
+          example: "dev"
         schedule:
           type: object
           title: Schedule
@@ -219,11 +253,13 @@ components:
               type: boolean
               title: Enabled
               description: Enable to configure scheduling for this Collector
+              example: true
             cronSchedule:
               type: string
               title: Cron schedule
               description: A cron schedule on which to run this job
               default: "*/5 * * * *"
+              example: "*/15 * * * *"
             maxConcurrentRuns:
               type: number
               title: Concurrent run limit
@@ -231,12 +267,14 @@ components:
                 running at any time
               default: 1
               minimum: 1
+              example: 3
             skippable:
               type: boolean
               title: Skippable
               description: Skippable jobs can be delayed, up to their next run time, if the
                 system is hitting concurrency limits
               default: true
+              example: false
             resumeMissed: {}
             run:
               type: object
@@ -250,12 +288,14 @@ components:
                   title: Reschedule tasks
                   description: Reschedule tasks that failed with non-fatal errors
                   default: true
+                  example: true
                 maxTaskReschedule:
                   type: number
                   title: Task reschedule limit
                   description: Maximum number of times a task can be rescheduled
                   default: 1
                   minimum: 1
+                  example: 3
                 logLevel:
                   type: string
                   title: Log level
@@ -267,6 +307,7 @@ components:
                     - debug
                     - silly
                   default: info
+                  example: "warn"
                 jobTimeout:
                   title: Job timeout
                   type: string
@@ -275,6 +316,7 @@ components:
                     for unlimited time."
                   pattern: \d+[sm]?$
                   default: "0"
+                  example: "60s"
                 mode:
                   type: string
                   title: Mode
@@ -284,18 +326,22 @@ components:
                     tasks, without running the data collection job. Full Run
                     will run the collection job.
                   default: list
+                  example: "list"
                 timeRangeType:
                   type: string
                   title: Time range
                   default: relative
+                  example: "60m"
                 earliest:
                   type: number
                   title: Earliest
                   description: Earliest time to collect data for the selected timezone
+                  example: 1
                 latest:
                   type: number
                   title: Latest
                   description: Latest time to collect data for the selected timezone
+                  example: 5
                 timestampTimezone: {}
                 timeWarning:
                   type: object
@@ -306,6 +352,7 @@ components:
                   description: A filter for tokens in the provided collect path and/or the events
                     being collected
                   default: "true"
+                  example: "true"
                 minTaskSize:
                   type: string
                   title: Lower task bundle size
@@ -314,6 +361,7 @@ components:
                             if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
                   default: 1MB
                   pattern: ^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$
+                  example: "1GB"
                 maxTaskSize:
                   type: string
                   title: Upper task bundle size
@@ -324,6 +372,7 @@ components:
                             you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
                   default: 10MB
                   pattern: ^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$
+                  example: "5GB"
         streamtags:
           type: array
           title: Tags
@@ -331,11 +380,13 @@ components:
           default: []
           items:
             type: string
+          example: ["list", "of", "strings"]
         workerAffinity:
           type: boolean
           title: Worker affinity
           description: If enabled, tasks are created and run by the same Worker Node
           default: false
+          example: false
         collector:
           type: object
           required:
@@ -346,6 +397,7 @@ components:
               type: string
               title: Collector type
               description: The type of collector to run
+              example: "Azure Blob"
             conf:
               type: object
               title: Collector-specific settings
@@ -355,12 +407,14 @@ components:
               title: Destructive
               description: Delete any files collected (where applicable)
               default: false
+              example: true
             encoding:
               type: string
               title: Encoding
               description: Character encoding to use when parsing ingested data. When not set,
                 @{product} will default to UTF-8 but may incorrectly interpret
                 multi-byte characters.
+              example: "UTF-8"
         input:
           type: object
           properties:
@@ -369,6 +423,7 @@ components:
               enum:
                 - collection
               default: collection
+              example: "collection"
             breakerRulesets:
               type: array
               title: Event Breaker rulesets
@@ -376,6 +431,7 @@ components:
                 to the input data stream
               items:
                 type: string
+              example: [" list", "of", "rulesets", "in", "order" ]
             staleChannelFlushMs:
               type: number
               title: Event Breaker buffer timeout (ms)
@@ -385,12 +441,14 @@ components:
               default: 10000
               minimum: 10
               maximum: 43200000
+              example: 20000000
             sendToRoutes:
               type: boolean
               title: Send to Routes
               description: Send events to normal routing and event processing. Disable to
                 select a specific Pipeline/Destination combination.
               default: true
+              example: true
             preprocess:
               type: object
               required:
@@ -400,17 +458,20 @@ components:
                   type: boolean
                   title: Disabled
                   default: true
+                  example: true
                 command:
                   type: string
                   title: Command
                   description: Command to feed the data through (via stdin) and process its output
                     (stdout)
+                  example: "echo"
                 args:
                   type: array
                   title: Arguments
                   description: Arguments to be added to the custom command
                   items:
                     type: string
+                  example: [ "args", "to", "echo" ]
             throttleRatePerSec:
               type: string
               title: Throttling
@@ -419,6 +480,7 @@ components:
                 (Example: 42 MB) Default value of 0 specifies no throttling."
               pattern: ^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$
               default: "0"
+              example: "53 MB"
             metadata:
               type: array
               title: Fields
@@ -432,19 +494,23 @@ components:
                   name:
                     type: string
                     title: Field Name
+                    example: "myFieldName"
                   value:
                     type: string
                     title: Value
                     description: JavaScript expression to compute field's value, enclosed in quotes
                       or backticks. (Can evaluate to a constant.)
+                    example: "`${my_field_name}_extended`"
             pipeline:
               type: string
               title: Pipeline
               description: Pipeline to process results
+              example: "myTargetProcessingPipeline"
             output:
               type: string
               title: Destination
               description: Destination to send results to
+              example: "myOutputDestination"
       type: object
     SavedJobExecutor:
       required:
@@ -832,8 +898,6 @@ components:
         - $ref: "#/components/schemas/SavedJobCollection"
         - $ref: "#/components/schemas/SavedJobExecutor"
         - $ref: "#/components/schemas/SavedJobScheduledSearch"
-
-    
     InputCollectorBase:
       type: object
       required:
@@ -1002,7 +1066,6 @@ components:
           title: Worker affinity
           description: If enabled, tasks are created and run by the same Worker Node
           default: false
-        
         # Input Configuration
         input:
           type: object
@@ -52392,12 +52455,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/m/{groupId}/system/projects/{projectId}/version/count":
     get:
       operationId: getSystemProjectsVersionCountByGroupIdAndProjectId
@@ -52440,12 +52505,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/m/{groupId}/system/projects/{projectId}/version/diff":
     get:
       operationId: getSystemProjectsVersionDiffByGroupIdAndProjectId
@@ -52488,17 +52555,20 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
         - name: commit
           in: query
           required: false
           schema:
             type: string
+          example: "212b3cc"
   "/m/{groupId}/system/projects/{projectId}/version/files":
     get:
       operationId: getSystemProjectsVersionFilesByGroupIdAndProjectId
@@ -52540,12 +52610,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/m/{groupId}/system/projects/{projectId}/version/commit":
     post:
       operationId: createSystemProjectsVersionCommitByGroupIdAndProjectId
@@ -52594,12 +52666,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/m/{groupId}/system/projects/{projectId}/subscriptions/{subscriptionId}/capture":
     post:
       operationId: createSystemProjectsSubscriptionsCaptureByGroupIdAndSubscriptionId
@@ -52651,18 +52725,21 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
         - name: subscriptionId
           in: path
           required: true
           schema:
             type: string
           description: Subscription Id
+          example: "myExistingSubscriptionId"
   "/m/{groupId}/system/projects/{projectId}/capture":
     post:
       operationId: createSystemProjectsCaptureByGroupIdAndProjectId
@@ -52714,12 +52791,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/m/{groupId}/system/projects/{projectId}/preview":
     post:
       operationId: createSystemProjectsPreviewByGroupIdAndProjectId
@@ -52771,12 +52850,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/m/{groupId}/system/projects/{projectId}/pipelines":
     get:
       operationId: getSystemProjectsPipelinesByGroupIdAndProjectId
@@ -52816,12 +52897,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
     post:
       operationId: createSystemProjectsPipelinesByGroupIdAndProjectId
       tags:
@@ -52867,12 +52950,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/m/{groupId}/system/projects/{projectId}/pipelines/{pipelineId}":
     get:
       operationId: getSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId
@@ -52912,18 +52997,21 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
         - name: pipelineId
           in: path
           required: true
           schema:
             type: string
           description: Pipeline Id
+          example: "myNewPipelineIdToCreate"
     patch:
       operationId: updateSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId
       tags:
@@ -52969,18 +53057,21 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
         - name: pipelineId
           in: path
           required: true
           schema:
             type: string
-          description: Pipeline iD
+          description: Pipeline ID
+          example: "myExistingPipelineIdToUpdate"
     delete:
       operationId: deleteSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId
       tags:
@@ -53019,18 +53110,21 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
         - name: pipelineId
           in: path
           required: true
           schema:
             type: string
-          description: Pipeline Id
+          description: Pipeline ID
+          example: "myExistingPipelineIdToDelete"
   /system/instance/:
     get:
       operationId: listInstanceSettingsSchema
@@ -53123,6 +53217,7 @@ paths:
             &a3
             type: string
           description: Unique ID to GET
+          example: "myExistingId"
       responses: *a2
     patch:
       operationId: updateBannerMessageById
@@ -53135,6 +53230,7 @@ paths:
           required: true
           schema: *a3
           description: Unique ID to PATCH
+          example: "myExistingIdtoUpdate"
       requestBody:
         description: BannerMessage object to be updated
         required: true
@@ -53154,6 +53250,7 @@ paths:
           required: true
           schema: *a3
           description: Unique ID to DELETE
+          example: "myExistingIdToDelete"
       responses: *a2
   /system/certificates:
     get:
@@ -53215,6 +53312,7 @@ paths:
             &a6
             type: string
           description: Unique ID to GET
+          example: "myExistingId"
       responses: *a5
     patch:
       operationId: updateCertificateById
@@ -53227,6 +53325,7 @@ paths:
           required: true
           schema: *a6
           description: Unique ID to PATCH
+          example: "myIdToUpdate"
       requestBody:
         description: Certificate object to be updated
         required: true
@@ -53246,6 +53345,7 @@ paths:
           required: true
           schema: *a6
           description: Unique ID to DELETE
+          example: "myExistingIdToDelete"
       responses: *a5
   "/settings/features/{id}":
     get:
@@ -53286,6 +53386,7 @@ paths:
           schema:
             type: string
           description: Feature id
+          example: "myExistingFeatureId"
   /settings/features:
     get:
       operationId: getFeaturesEntry
@@ -53334,7 +53435,7 @@ paths:
             type: string
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           default: default
-          example: default
+          example: "myExistingGroupId"
       responses:
         &a8
         "200":
@@ -53375,13 +53476,14 @@ paths:
             type: string
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           default: default
-          example: default
+          example: "myExistingGroupId"
         - name: id
           in: query
           required: true
           description: The id of this collector instance
           schema:
             type: string
+          example: "myJobIdToQuery"
       requestBody:
         description: New Collector object
         required: true
@@ -53405,6 +53507,7 @@ paths:
             &a9
             type: string
           description: Unique ID to GET
+          example: "myExistingJobId"
         - name: groupId
           in: path
           required: true
@@ -53412,7 +53515,7 @@ paths:
             type: string
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           default: default
-          example: default
+          example: "myExistingGroupId"
       responses: *a8
     patch:
       operationId: updateCollectorById
@@ -53426,6 +53529,7 @@ paths:
           required: true
           schema: *a9
           description: Unique ID to PATCH
+          example: "myJobIdToCRUD"
         - name: groupId
           in: path
           required: true
@@ -53433,7 +53537,7 @@ paths:
             type: string
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           default: default
-          example: default
+          example: "myExistingGroupId"
       requestBody:
         description: Collector object to be updated
         required: true
@@ -53454,6 +53558,7 @@ paths:
           required: true
           schema: *a9
           description: Unique ID to DELETE
+          example: "myJobIdToCRUD"
         - name: groupId
           in: path
           required: true
@@ -53461,7 +53566,7 @@ paths:
             type: string
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           default: default
-          example: default
+          example: "myExistingGroupId"
       responses: *a8
   /system/keys:
     get:
@@ -53523,6 +53628,7 @@ paths:
             &a12
             type: string
           description: Unique ID to GET
+          example: "myExistingKeyId"
       responses: *a11
     patch:
       operationId: updateKeyMetadataEntityById
@@ -53535,6 +53641,7 @@ paths:
           required: true
           schema: *a12
           description: Unique ID to PATCH
+          example: "keyIdToCRUD"
       requestBody:
         description: KeyMetadataEntity object to be updated
         required: true
@@ -53554,6 +53661,7 @@ paths:
           required: true
           schema: *a12
           description: Unique ID to DELETE
+          example: "keyIdToCRUD"
       responses: *a11
   /system/messages:
     get:
@@ -53615,6 +53723,7 @@ paths:
             &a15
             type: string
           description: Unique ID to GET
+          example: "myUniqueMessageId"
       responses: *a14
     delete:
       operationId: deleteBulletinMessageById
@@ -53627,6 +53736,7 @@ paths:
           required: true
           schema: *a15
           description: Unique ID to DELETE
+          example: "myMessageIdToCRUD"
       responses: *a14
   /notification-targets:
     get:
@@ -53691,6 +53801,7 @@ paths:
             &a18
             type: string
           description: Unique ID to GET
+          example: "uniqueNotificationIdToGet"
       responses: *a17
     patch:
       operationId: updateNotificationTargetById
@@ -53704,6 +53815,7 @@ paths:
           required: true
           schema: *a18
           description: Unique ID to PATCH
+          example: "uniqueNotificationIdToCRUD"
       requestBody:
         description: NotificationTarget object to be updated
         required: true
@@ -53724,6 +53836,7 @@ paths:
           required: true
           schema: *a18
           description: Unique ID to DELETE
+          example: "NotificationIdToCRUD"
       responses: *a17
   /notifications:
     get:
@@ -53787,6 +53900,7 @@ paths:
             &a21
             type: string
           description: Unique ID to GET
+          example: "myNotificationIdToCRUD"
       responses: *a20
     patch:
       operationId: updateNotificationById
@@ -53800,6 +53914,7 @@ paths:
           required: true
           schema: *a21
           description: Unique ID to PATCH
+          example: "myNotificationIdToCRUD"
       requestBody:
         description: Notification object to be updated
         required: true
@@ -53820,6 +53935,7 @@ paths:
           required: true
           schema: *a21
           description: Unique ID to DELETE
+          example: "myNotificationIdToCRUD"
       responses: *a20
   /system/policies:
     get:
@@ -53881,6 +53997,7 @@ paths:
             &a24
             type: string
           description: Unique ID to GET
+          example: "myUniqueSystemPolicyIdToCRUD"
       responses: *a23
     patch:
       operationId: updatePolicyRuleById
@@ -53893,6 +54010,7 @@ paths:
           required: true
           schema: *a24
           description: Unique ID to PATCH
+          example: "myUniqueSystemPolicyIdToCRUD"
       requestBody:
         description: PolicyRule object to be updated
         required: true
@@ -53912,6 +54030,7 @@ paths:
           required: true
           schema: *a24
           description: Unique ID to DELETE
+          example: "myUniqueSystemPolicyIdToCRUD"
       responses: *a23
   /system/roles:
     get:
@@ -53973,6 +54092,7 @@ paths:
             &a27
             type: string
           description: Unique ID to GET
+          example: "myUniqueRoleIdToCRUD"
       responses: *a26
     patch:
       operationId: updateRoleById
@@ -53985,6 +54105,7 @@ paths:
           required: true
           schema: *a27
           description: Unique ID to PATCH
+          example: "myUniqueRoleIdToCRUD"
       requestBody:
         description: Role object to be updated
         required: true
@@ -54004,6 +54125,7 @@ paths:
           required: true
           schema: *a27
           description: Unique ID to DELETE
+          example: "myUniqueRoleIdToCRUD"
       responses: *a26
   /system/scripts:
     get:
@@ -54065,6 +54187,7 @@ paths:
             &a30
             type: string
           description: Unique ID to GET
+          example: "myUniqueScriptIdToCRUD"
       responses: *a29
     patch:
       operationId: updateScriptById
@@ -54077,6 +54200,7 @@ paths:
           required: true
           schema: *a30
           description: Unique ID to PATCH
+          example: "myUniqueScriptIdToCRUD"
       requestBody:
         description: Script object to be updated
         required: true
@@ -54096,6 +54220,7 @@ paths:
           required: true
           schema: *a30
           description: Unique ID to DELETE
+          example: "myUniqueScriptIdToCRUD"
       responses: *a29
   /system/teams:
     post:
@@ -54179,6 +54304,7 @@ paths:
               - edge
               - search
           description: filter teams by product
+          example: "stream"
   "/system/teams/{id}":
     get:
       operationId: getTeamById
@@ -54193,6 +54319,7 @@ paths:
             &a33
             type: string
           description: Unique ID to GET
+          example: "myUniqueTeamIdToCRUD"
       responses: *a32
     patch:
       operationId: updateTeamById
@@ -54205,6 +54332,7 @@ paths:
           required: true
           schema: *a33
           description: Unique ID to PATCH
+          example: "myUniqueTeamIdToCRUD"
       requestBody:
         description: Team object to be updated
         required: true
@@ -54224,6 +54352,7 @@ paths:
           required: true
           schema: *a33
           description: Unique ID to DELETE
+          example: "myUniqueTeamIdToCRUD"
       responses: *a32
   "/system/teams/{id}/acl":
     get:
@@ -54264,6 +54393,7 @@ paths:
           schema:
             type: string
           description: Team name
+          example: "myExistingUniqueTeamId"
         - name: type
           in: query
           required: false
@@ -54277,6 +54407,7 @@ paths:
               - dashboards
               - macros
           description: resource type by which to filter access levels
+          example: "projects"
   "/system/teams/users/{id}/roles":
     get:
       operationId: getTeamRolesById
@@ -54316,6 +54447,7 @@ paths:
           schema:
             type: string
           description: user id
+          example: "myExistingUserIdToRead"
   "/system/teams/{id}/users":
     get:
       operationId: getTeamUsersById
@@ -54355,6 +54487,7 @@ paths:
           schema:
             type: string
           description: Team Name
+          example: "myExistingTeamToReadUsersFrom"
     post:
       operationId: createTeamUsersById
       tags:
@@ -54400,6 +54533,7 @@ paths:
           schema:
             type: string
           description: Team name
+          example: "myExistingTeamToUpdate"
   /system/users:
     get:
       operationId: listUser
@@ -54461,6 +54595,7 @@ paths:
             &a36
             type: string
           description: Unique ID to GET
+          example: "myUniqueUserIdToCRUD"
       responses: *a35
     patch:
       operationId: updateUserById
@@ -54508,6 +54643,7 @@ paths:
           schema:
             type: string
           description: User Id
+          example: "myUniqueUserIdToCRUD"
     delete:
       operationId: deleteUserById
       tags: *a34
@@ -54519,6 +54655,7 @@ paths:
           required: true
           schema: *a36
           description: Unique ID to DELETE
+          example: "myUniqueUserIdToCRUD"
       responses: *a35
   "/system/users/{id}/info":
     patch:
@@ -54567,7 +54704,7 @@ paths:
           schema:
             type: string
           description: User Id
-
+          example: "myUniqueUserIdToCRUD"
   "/products/lake/lakes/default/lakehouses":
     get:
       tags:
@@ -54643,6 +54780,7 @@ paths:
           schema:
             type: string
           description: The ID of the lakehouse to retrieve
+          example: "myUniqueLakehouseIdToCRUD"
       responses:
         "200":
           description: a list of Lakehouse objects
@@ -54681,6 +54819,7 @@ paths:
           schema:
             type: string
           description: The ID of the lakehouse to update
+          example: "myUniqueLakehouseIdToCRUD"
       requestBody:
         required: true
         content:
@@ -54725,6 +54864,7 @@ paths:
           schema:
             type: string
           description: The ID of the lakehouse to delete
+          example: "myUniqueLakehouseIdToCRUD"
       responses:
         "200":
           description: a list of Lakehouse objects
@@ -54799,7 +54939,7 @@ paths:
             enum:
               - default
           description: lake id that contains the Datasets
-          example: default
+          example: "myUniqueLakeIdToCRUD"
     get:
       operationId: getCriblLakeDatasetByLakeId
       tags:
@@ -54840,7 +54980,7 @@ paths:
             type: string
             enum:
               - default
-          example: default
+          example: "myUniqueLakeIdToCRUD"
           description: lake id that contains the Datasets
   "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections":
     post:
@@ -54857,12 +54997,14 @@ paths:
           schema:
             type: string
           description: The ID of the lakehouse
+          example: "myExistingLakehouseId"
         - name: lake_dataset_id
           in: path
           required: true
           schema:
             type: string
           description: The ID of the dataset within the lakehouse
+          example: "myExistingLakeDatasetIdToCRUD"
       requestBody:
         required: false
         content:
@@ -54908,12 +55050,14 @@ paths:
           schema:
             type: string
           description: The ID of the lakehouse
+          example: "myExistingLakehouseId"
         - name: lake_dataset_id
           in: path
           required: true
           schema:
             type: string
           description: The ID of the dataset within the lakehouse
+          example: "myExistingLakeDatasetIdToCRUD"
       requestBody:
         required: false
         content:
@@ -54948,12 +55092,14 @@ paths:
           schema:
             type: string
           description: The ID of the lakehouse
+          example: "myExistingLakehouseId"
         - name: lake_dataset_id
           in: path
           required: true
           schema:
             type: string
           description: The ID of the dataset within the lakehouse
+          example: "myExistingLakeDatasetIdToCRUD"
       responses:
         "200":
           description: a list of Connection objects
@@ -55013,14 +55159,14 @@ paths:
             enum:
               - default
           description: lake id that contains the Datasets
-          example: default
+          example: "myExistingLakeId"
         - name: id
           in: path
           required: true
           schema:
             type: string
           description: dataset id to delete
-          example: test_lake_dataset
+          example: "myLakeDatasetToCRUD"
     get:
       operationId: getCriblLakeDatasetByLakeIdAndId
       tags:
@@ -55064,13 +55210,14 @@ paths:
               - default
           example: default
           description: lake id that contains the Datasets
+          example: "myExistingLakeId"
         - name: id
           in: path
           required: true
           schema:
             type: string
           description: dataset id to get
-          example: test_lake_dataset
+          example: "myLakeDatasetToCRUD"
     patch:
       operationId: updateCriblLakeDatasetByLakeIdAndId
       tags:
@@ -55121,13 +55268,14 @@ paths:
               - default
           example: default
           description: lake id that contains the Datasets
+          example: "myExistingLakeId"
         - name: id
           in: path
           required: true
           schema:
             type: string
           description: dataset id to update
-          example: test_lake_dataset
+          example: "myLakeDatasetToCRUD"
   /m/default_search/search/dashboard-categories:
     get:
       operationId: listDashboardCategory
@@ -55203,6 +55351,7 @@ paths:
           required: true
           schema: *a39
           description: Unique ID to PATCH
+          example: "myUniqueDashboardCategoryToCRUD"
       requestBody:
         description: DashboardCategory object to be updated
         required: true
@@ -55223,6 +55372,7 @@ paths:
           required: true
           schema: *a39
           description: Unique ID to DELETE
+          example: "myUniqueDashboardCategoryToCRUD"
       responses: *a38
   /m/default_search/search/usage-groups:
     get:
@@ -55286,6 +55436,7 @@ paths:
             &a42
             type: string
           description: Unique ID to GET
+          example: "myUniqueUsageGroupToCRUD"
       responses: *a41
     patch:
       operationId: updateUsageGroupById
@@ -55299,6 +55450,7 @@ paths:
           required: true
           schema: *a42
           description: Unique ID to PATCH
+          example: "myUniqueUsageGroupToCRUD"
       requestBody:
         description: UsageGroup object to be updated
         required: true
@@ -55319,6 +55471,7 @@ paths:
           required: true
           schema: *a42
           description: Unique ID to DELETE
+          example: "myUniqueUsageGroupToCRUD"
       responses: *a41
   /search/dataset-provider-types:
     get:
@@ -55380,6 +55533,7 @@ paths:
             &a45
             type: string
           description: Unique ID to GET
+          example: "myUniqueDatasetProviderTypeIdToCRUD"
       responses: *a44
     patch:
       operationId: updateDatasetProviderTypeById
@@ -55392,6 +55546,7 @@ paths:
           required: true
           schema: *a45
           description: Unique ID to PATCH
+          example: "myUniqueDatasetProviderTypeIdToCRUD"
       requestBody:
         description: DatasetProviderType object to be updated
         required: true
@@ -55411,6 +55566,7 @@ paths:
           required: true
           schema: *a45
           description: Unique ID to DELETE
+          example: "myUniqueDatasetProviderTypeIdToCRUD"
       responses: *a44
   /m/default_search/search/dataset-providers:
     get:
@@ -55474,6 +55630,7 @@ paths:
             &a48
             type: string
           description: Unique ID to GET
+          example: "myUniqueDatasetProviderIdToCRUD"
       responses: *a47
     patch:
       operationId: updateDatasetProviderById
@@ -55487,6 +55644,7 @@ paths:
           required: true
           schema: *a48
           description: Unique ID to PATCH
+          example: "myUniqueDatasetProviderIdToCRUD"
       requestBody:
         description: DatasetProvider object to be updated
         required: true
@@ -55507,6 +55665,7 @@ paths:
           required: true
           schema: *a48
           description: Unique ID to DELETE
+          example: "myUniqueDatasetProviderIdToCRUD"
       responses: *a47
   /m/default_search/search/datasets:
     get:
@@ -55570,6 +55729,7 @@ paths:
             &a51
             type: string
           description: Unique ID to GET
+          example: "myUniqueDatasetIdToCRUD"
       responses: *a50
     patch:
       operationId: updateDatasetById
@@ -55583,6 +55743,7 @@ paths:
           required: true
           schema: *a51
           description: Unique ID to PATCH
+          example: "myUniqueDatasetIdToCRUD"
       requestBody:
         description: Dataset object to be updated
         required: true
@@ -55603,6 +55764,7 @@ paths:
           required: true
           schema: *a51
           description: Unique ID to DELETE
+          example: "myUniqueDatasetIdToCRUD"
       responses: *a50
   "/search/datasets/{id}/acl":
     get:
@@ -55640,6 +55802,7 @@ paths:
           required: true
           schema: *a51
           description: Unique ID for ACL Get
+          example: "myExistingDatasetId"
       description: List accesses to Dataset granted to users
       summary: Get Dataset ACL
       tags:
@@ -55669,6 +55832,7 @@ paths:
           required: true
           schema: *a51
           description: Unique ID for ACL Create
+          example: "myExistingDatasetId"
       description: Add/remove accesses to Dataset for users
       summary: Modify Dataset ACL
       tags: *a54
@@ -55682,6 +55846,7 @@ paths:
           required: true
           schema: *a51
           description: Unique ID for ACL Teams Get
+          example: "myExistingDatasetId"
       description: List accesses to Dataset granted to Teams
       summary: Get Dataset Teams
       tags:
@@ -55699,6 +55864,7 @@ paths:
           required: true
           schema: *a51
           description: Unique ID for ACL Teams Create
+          example: "myExistingDatasetId"
       description: Add/remove accesses to Dataset for Teams
       summary: Modify Dataset Teams ACL
       tags: *a58
@@ -55711,6 +55877,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listAppscopeLibEntry
       tags:
         &a59
@@ -55751,6 +55918,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createAppscopeLibEntry
       tags: *a59
       summary: Create AppscopeLibEntry
@@ -55778,12 +55946,14 @@ paths:
             &a61
             type: string
           description: Unique ID to GET
+          example: "myUniqueAppscopeConfigToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a60
     patch:
       x-speakeasy-entity-operation: AppscopeConfig#update
@@ -55797,12 +55967,14 @@ paths:
           required: true
           schema: *a61
           description: Unique ID to PATCH
+          example: "myUniqueAppscopeConfigToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: AppscopeLibEntry object to be updated
         required: true
@@ -55823,12 +55995,14 @@ paths:
           required: true
           schema: *a61
           description: Unique ID to DELETE
+          example: "myUniqueAppscopeConfigToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a60
   "/m/{groupId}/lib/grok":
     get:
@@ -55839,6 +56013,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listGrokFile
       tags:
         &a62
@@ -55879,6 +56054,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createGrokFile
       tags: *a62
       summary: Create GrokFile
@@ -55906,12 +56082,14 @@ paths:
             &a64
             type: string
           description: Unique ID to GET
+          example: "myGrokIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a63
     patch:
       x-speakeasy-entity-operation: Grok#update
@@ -55925,12 +56103,14 @@ paths:
           required: true
           schema: *a64
           description: Unique ID to PATCH
+          example: "myGrokIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: GrokFile object to be updated
         required: true
@@ -55951,12 +56131,14 @@ paths:
           required: true
           schema: *a64
           description: Unique ID to DELETE
+          example: "myGrokIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a63
   "/m/{groupId}/system/lookups":
     get:
@@ -55968,6 +56150,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listLookupFile
       tags:
         &a65
@@ -56009,6 +56192,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createLookupFile
       tags: *a65
       summary: Create LookupFile
@@ -56035,12 +56219,14 @@ paths:
             &a67
             type: string
           description: Unique ID to GET
+          example: "myNewLookupIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a66
     patch:
       x-speakeasy-entity-operation: LookupFile#update
@@ -56054,12 +56240,14 @@ paths:
           required: true
           schema: *a67
           description: Unique ID to PATCH
+          example: "myNewLookupIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: LookupFile object to be updated
         required: true
@@ -56080,12 +56268,14 @@ paths:
           required: true
           schema: *a67
           description: Unique ID to DELETE
+          example: "myNewLookupIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a66
   "/m/{groupId}/lib/parsers":
     get:
@@ -56097,6 +56287,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listParser
       tags:
         &a68
@@ -56137,6 +56328,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createParser
       tags: *a68
       summary: Create Parser
@@ -56163,12 +56355,14 @@ paths:
             &a70
             type: string
           description: Unique ID to GET
+          example: "myUniqueParserIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a69
     patch:
       x-speakeasy-entity-operation: ParserLibEntry#update
@@ -56182,12 +56376,14 @@ paths:
           required: true
           schema: *a70
           description: Unique ID to PATCH
+          example: "myUniqueParserIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: Parser object to be updated
         required: true
@@ -56208,12 +56404,14 @@ paths:
           required: true
           schema: *a70
           description: Unique ID to DELETE
+          example: "myUniqueParserIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a69
   /lib/protobuf-libraries:
     get:
@@ -56254,6 +56452,7 @@ paths:
           schema:
             type: string
           description: onlyWithEncodings
+          example: "UTF-8"
   "/lib/protobuf-libraries/{id}":
     get:
       operationId: getProtobufLibraryConfigById
@@ -56293,6 +56492,7 @@ paths:
           schema:
             type: string
           description: Library Id
+          example: "myUniqueProtobufIdToCRUD"
   "/lib/protobuf-libraries/{id}/encodings/{encid}":
     get:
       operationId: getProtobufLibraryConfigEncodingsByIdAndEncId
@@ -56332,12 +56532,14 @@ paths:
           schema:
             type: string
           description: Library id
+          example: "myExistingProtobufIdToCRUD"
         - name: encid
           in: path
           required: true
           schema:
             type: string
           description: Encoding id
+          example: "myUniqueEncodingIdToCRUD"
   "/lib/protobuf-libraries/{id}/encodings":
     get:
       operationId: getProtobufLibraryConfigEncodingsById

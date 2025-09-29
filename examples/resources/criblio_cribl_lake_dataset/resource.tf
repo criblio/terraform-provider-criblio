@@ -5,8 +5,8 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
   bucket_name              = "...my_bucket_name..."
   description              = "...my_description..."
   format                   = "json"
-  id                       = "test_lake_dataset"
-  lake_id                  = "default"
+  id                       = "myLakeDatasetToCRUD"
+  lake_id                  = "myUniqueLakeIdToCRUD"
   retention_period_in_days = 3.75
   search_config = {
     datatypes = [

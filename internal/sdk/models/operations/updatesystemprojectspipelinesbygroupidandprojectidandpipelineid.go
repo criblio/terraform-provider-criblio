@@ -12,7 +12,7 @@ type UpdateSystemProjectsPipelinesByGroupIDAndProjectIDAndPipelineIDRequest stru
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Project Id
 	ProjectID string `pathParam:"style=simple,explode=false,name=projectId"`
-	// Pipeline iD
+	// Pipeline ID
 	PipelineID string `pathParam:"style=simple,explode=false,name=pipelineId"`
 	// Pipeline object to be updated in specified Project
 	Pipeline shared.Pipeline `request:"mediaType=application/json"`

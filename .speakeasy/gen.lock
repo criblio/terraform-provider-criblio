@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 6b7d0807a6abde4f4e0e179a97c420f9
+  docChecksum: 4f0bc08956df34f2d2aebc593d40ee0e
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.628.1
-  generationVersion: 2.716.1
+  speakeasyVersion: 1.631.4
+  generationVersion: 2.716.16
   releaseVersion: 1.14.5
   configChecksum: 51eec6be593eed443749b86b63c6073e
   published: true
@@ -463,10 +463,12 @@ generatedFiles:
   - internal/provider/types/config_group_lookups.go
   - internal/provider/types/consumers.go
   - internal/provider/types/create_lakehouse_dataset_connections_request_body.go
+  - internal/provider/types/cribl_lake_dataset.go
   - internal/provider/types/cribl_leader_dataset.go
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
+  - internal/provider/types/dashboard_category.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
@@ -493,8 +495,11 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
+  - internal/provider/types/generic_dataset.go
+  - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
+  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/group.go
   - internal/provider/types/host_info.go
@@ -1257,6 +1262,7 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
+  - internal/provider/types/pipeline.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1296,6 +1302,7 @@ generatedFiles:
   - internal/provider/types/snowflake_provider.go
   - internal/provider/types/sns_target.go
   - internal/provider/types/socks_proxy_opts.go
+  - internal/provider/types/subscription.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
   - internal/provider/types/tailscale_account_config.go
@@ -2588,162 +2595,163 @@ examples:
     speakeasy-default-get-system-projects-subscriptions-by-group-id-by-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionCountByGroupIdAndProjectId:
     speakeasy-default-get-system-projects-version-count-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionDiffByGroupIdAndProjectId:
     speakeasy-default-get-system-projects-version-diff-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
-        query: {}
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
+        query:
+          commit: "212b3cc"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionFilesByGroupIdAndProjectId:
     speakeasy-default-get-system-projects-version-files-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsVersionCommitByGroupIdAndProjectId:
     speakeasy-default-create-system-projects-version-commit-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
       requestBody:
         application/json: {"message": "<value>"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsSubscriptionsCaptureByGroupIdAndSubscriptionId:
     speakeasy-default-create-system-projects-subscriptions-capture-by-group-id-and-subscription-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
-          subscriptionId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
+          subscriptionId: "myExistingSubscriptionId"
       requestBody:
         application/json: {"duration": 9977.94, "filter": "<value>", "level": 7371.6, "maxEvents": 5232.64}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsCaptureByGroupIdAndProjectId:
     speakeasy-default-create-system-projects-capture-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
       requestBody:
         application/json: {"duration": 7020.88, "filter": "<value>", "level": 4494.37, "maxEvents": 7103.16}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsPreviewByGroupIdAndProjectId:
     speakeasy-default-create-system-projects-preview-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
       requestBody:
         application/json: {"mode": "route", "pipelineId": "<id>", "sampleId": "<id>"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsPipelinesByGroupIdAndProjectId:
     speakeasy-default-get-system-projects-pipelines-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsPipelinesByGroupIdAndProjectId:
     speakeasy-default-create-system-projects-pipelines-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
       requestBody:
         application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
     speakeasy-default-get-system-projects-pipelines-by-group-id-and-project-id-and-pipeline-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
-          pipelineId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
+          pipelineId: "myNewPipelineIdToCreate"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
     speakeasy-default-update-system-projects-pipelines-by-group-id-and-project-id-and-pipeline-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
-          pipelineId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
+          pipelineId: "myExistingPipelineIdToUpdate"
       requestBody:
         application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
     speakeasy-default-delete-system-projects-pipelines-by-group-id-and-project-id-and-pipeline-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
-          pipelineId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myExistingProjectId"
+          pipelineId: "myExistingPipelineIdToDelete"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsVersionCommitByProjectId:
     speakeasy-default-create-system-projects-version-commit-by-project-id:
       parameters:
@@ -2755,7 +2763,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionCountByProjectId:
     speakeasy-default-get-system-projects-version-count-by-project-id:
       parameters:
@@ -2766,7 +2774,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionDiffByProjectId:
     speakeasy-default-get-system-projects-version-diff-by-project-id:
       parameters:
@@ -2777,7 +2785,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionFilesByProjectId:
     speakeasy-default-get-system-projects-version-files-by-project-id:
       parameters:
@@ -2788,7 +2796,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsVersionRevertByProjectId:
     speakeasy-default-create-system-projects-version-revert-by-project-id:
       parameters:
@@ -2800,7 +2808,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionShowByProjectId:
     speakeasy-default-get-system-projects-version-show-by-project-id:
       parameters:
@@ -2811,7 +2819,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listProject:
     speakeasy-default-list-project:
       parameters:
@@ -2821,7 +2829,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createProject:
     speakeasy-default-create-project:
       parameters:
@@ -2833,7 +2841,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProjectById:
     speakeasy-default-get-project-by-id:
       parameters:
@@ -2844,7 +2852,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateProjectById:
     speakeasy-default-update-project-by-id:
       parameters:
@@ -2857,7 +2865,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteProjectById:
     speakeasy-default-delete-project-by-id:
       parameters:
@@ -2868,7 +2876,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProjectAclById:
     speakeasy-default-get-project-acl-by-id:
       parameters:
@@ -2878,7 +2886,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createProjectAclApplyById:
     speakeasy-default-create-project-acl-apply-by-id:
       parameters:
@@ -2888,7 +2896,7 @@ examples:
         application/json: {}
       responses:
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProjectAclTeamsById:
     speakeasy-default-get-project-acl-teams-by-id:
       parameters:
@@ -2898,7 +2906,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createProjectAclTeamsApplyById:
     speakeasy-default-create-project-acl-teams-apply-by-id:
       parameters:
@@ -2908,7 +2916,7 @@ examples:
         application/json: {}
       responses:
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProjectDestinationsByProjectId:
     speakeasy-default-get-project-destinations-by-project-id:
       parameters:
@@ -2918,7 +2926,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSubscriptionByProjectId:
     speakeasy-default-get-subscription-by-project-id:
       parameters:
@@ -2928,7 +2936,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listSubscription:
     speakeasy-default-list-subscription:
       parameters:
@@ -2938,7 +2946,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSubscription:
     speakeasy-default-create-subscription:
       parameters:
@@ -2953,7 +2961,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSubscriptionById:
     speakeasy-default-get-subscription-by-id:
       parameters:
@@ -2964,7 +2972,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSubscriptionById:
     speakeasy-default-update-subscription-by-id:
       parameters:
@@ -2975,7 +2983,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSubscriptionById:
     speakeasy-default-delete-subscription-by-id:
       parameters:
@@ -2986,19 +2994,19 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   undoLastCommit:
     speakeasy-default-undo-last-commit:
       responses:
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getVersionBranch:
     speakeasy-default-get-version-branch:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createVersionCommit:
     speakeasy-default-create-version-commit:
       requestBody:
@@ -3007,49 +3015,49 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getVersionCount:
     speakeasy-default-get-version-count:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getVersionCurrentBranch:
     speakeasy-default-get-version-current-branch:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getVersionDiff:
     speakeasy-default-get-version-diff:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getVersionFiles:
     speakeasy-default-get-version-files:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getVersionInfo:
     speakeasy-default-get-version-info:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createVersionPush:
     speakeasy-default-create-version-push:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createVersionRevert:
     speakeasy-default-create-version-revert:
       requestBody:
@@ -3058,42 +3066,42 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getVersionShow:
     speakeasy-default-get-version-show:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getVersionStatus:
     speakeasy-default-get-version-status:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createVersionSync:
     speakeasy-default-create-version-sync:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemSettingsGitSettings:
     speakeasy-default-get-system-settings-git-settings:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSystemSettingsGitSettings:
     speakeasy-default-update-system-settings-git-settings:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemCapture:
     speakeasy-default-create-system-capture:
       requestBody:
@@ -3102,7 +3110,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsCaptureByProjectId:
     speakeasy-default-create-system-projects-capture-by-project-id:
       parameters:
@@ -3114,7 +3122,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemProjectsSubscriptionsCaptureByProjectIdAndSubscriptionId:
     speakeasy-default-create-system-projects-subscriptions-capture-by-project-id-and-subscription-id:
       parameters:
@@ -3127,7 +3135,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createPreview:
     speakeasy-default-create-preview:
       requestBody:
@@ -3136,14 +3144,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listDataSample:
     speakeasy-default-list-data-sample:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createDataSample:
     speakeasy-default-create-data-sample:
       requestBody:
@@ -3152,7 +3160,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDataSampleById:
     speakeasy-default-get-data-sample-by-id:
       parameters:
@@ -3162,7 +3170,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateDataSampleById:
     speakeasy-default-update-data-sample-by-id:
       parameters:
@@ -3174,7 +3182,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteDataSampleById:
     speakeasy-default-delete-data-sample-by-id:
       parameters:
@@ -3184,7 +3192,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDataSampleContentById:
     speakeasy-default-get-data-sample-content-by-id:
       parameters:
@@ -3194,7 +3202,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listPipeline:
     speakeasy-default-list-pipeline:
       parameters:
@@ -3204,7 +3212,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createPipeline:
     speakeasy-default-create-pipeline:
       parameters:
@@ -3216,7 +3224,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPipelineById:
     speakeasy-default-get-pipeline-by-id:
       parameters:
@@ -3227,7 +3235,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updatePipelineById:
     speakeasy-default-update-pipeline-by-id:
       parameters:
@@ -3240,7 +3248,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deletePipelineById:
     speakeasy-default-delete-pipeline-by-id:
       parameters:
@@ -3251,7 +3259,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPipelineByPack:
     speakeasy-default-get-pipeline-by-pack:
       parameters:
@@ -3275,7 +3283,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPipelineByPackAndId:
     speakeasy-default-get-pipeline-by-pack-and-id:
       parameters:
@@ -3301,7 +3309,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deletePipelineByPackAndId:
     speakeasy-default-delete-pipeline-by-pack-and-id:
       parameters:
@@ -3318,115 +3326,115 @@ examples:
     speakeasy-default-list-banner-message:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "theme": "<value>", "message": "<value>"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createBannerMessage:
     speakeasy-default-create-banner-message:
       requestBody:
-        application/json: {"enabled": true, "type": "system", "theme": "<value>", "message": "<value>"}
+        application/json: {"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "theme": "<value>", "message": "<value>"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getBannerMessageById:
     speakeasy-default-get-banner-message-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "theme": "<value>", "message": "<value>"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateBannerMessageById:
     speakeasy-default-update-banner-message-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingIdtoUpdate"
       requestBody:
-        application/json: {"enabled": true, "type": "custom", "theme": "<value>", "message": "<value>"}
+        application/json: {"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "theme": "<value>", "message": "<value>"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteBannerMessageById:
     speakeasy-default-delete-banner-message-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingIdToDelete"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "theme": "<value>", "message": "<value>"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listCertificate:
     speakeasy-default-list-certificate:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createCertificate:
     speakeasy-default-create-certificate:
       requestBody:
-        application/json: {"id": "<id>", "cert": "<value>", "privKey": "<value>"}
+        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getCertificateById:
     speakeasy-default-get-certificate-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateCertificateById:
     speakeasy-default-update-certificate-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myIdToUpdate"
       requestBody:
-        application/json: {"id": "<id>", "cert": "<value>", "privKey": "<value>"}
+        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteCertificateById:
     speakeasy-default-delete-certificate-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingIdToDelete"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getFeaturesEntryById:
     speakeasy-default-get-features-entry-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingFeatureId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"disabled": true, "id": "myUniqueFeatureEntry"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getFeaturesEntry:
     speakeasy-default-get-features-entry:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"disabled": true, "id": "myUniqueFeatureEntry"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listSavedJob:
     speakeasy-default-list-saved-job:
       parameters:
@@ -3441,27 +3449,27 @@ examples:
     speakeasy-default-create-saved-job:
       parameters:
         path:
-          groupId: "default"
+          groupId: "myExistingGroupId"
         query:
-          id: "<id>"
+          id: "myJobIdToQuery"
       requestBody:
         application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "splunk"}}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSavedJobById:
     speakeasy-default-get-saved-job-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "default"
+          id: "myExistingJobId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSavedJobById:
     speakeasy-default-update-saved-job-by-id:
       parameters:
@@ -3492,7 +3500,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createKeyMetadataEntity:
     speakeasy-default-create-key-metadata-entity:
       requestBody:
@@ -3501,46 +3509,46 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getKeyMetadataEntityById:
     speakeasy-default-get-key-metadata-entity-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingKeyId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateKeyMetadataEntityById:
     speakeasy-default-update-key-metadata-entity-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "keyIdToCRUD"
       requestBody:
         application/json: {"keyId": "<id>", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "useIV": false, "ivSize": 12}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteKeyMetadataEntityById:
     speakeasy-default-delete-key-metadata-entity-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "keyIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listBulletinMessage:
     speakeasy-default-list-bulletin-message:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createBulletinMessage:
     speakeasy-default-create-bulletin-message:
       requestBody:
@@ -3549,34 +3557,34 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getBulletinMessageById:
     speakeasy-default-get-bulletin-message-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueMessageId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteBulletinMessageById:
     speakeasy-default-delete-bulletin-message-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myMessageIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listNotificationTarget:
     speakeasy-default-list-notification-target:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createNotificationTarget:
     speakeasy-default-create-notification-target:
       requestBody:
@@ -3585,46 +3593,46 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getNotificationTargetById:
     speakeasy-default-get-notification-target-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "uniqueNotificationIdToGet"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateNotificationTargetById:
     speakeasy-default-update-notification-target-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "uniqueNotificationIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "type": "sns", "systemFields": ["cribl_host"], "region": "<value>", "allowlist": [], "destinationType": "topic", "topicType": "fifo"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteNotificationTargetById:
     speakeasy-default-delete-notification-target-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "NotificationIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listNotification:
     speakeasy-default-list-notification:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createNotification:
     speakeasy-default-create-notification:
       requestBody:
@@ -3633,46 +3641,46 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getNotificationById:
     speakeasy-default-get-notification-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myNotificationIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateNotificationById:
     speakeasy-default-update-notification-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myNotificationIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "disabled": false, "condition": "<value>", "targets": [], "group": "default_search"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteNotificationById:
     speakeasy-default-delete-notification-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myNotificationIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listPolicyRule:
     speakeasy-default-list-policy-rule:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createPolicyRule:
     speakeasy-default-create-policy-rule:
       requestBody:
@@ -3681,46 +3689,46 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPolicyRuleById:
     speakeasy-default-get-policy-rule-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSystemPolicyIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updatePolicyRuleById:
     speakeasy-default-update-policy-rule-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSystemPolicyIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "template": ["<value 1>", "<value 2>", "<value 3>"]}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deletePolicyRuleById:
     speakeasy-default-delete-policy-rule-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSystemPolicyIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listRole:
     speakeasy-default-list-role:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createRole:
     speakeasy-default-create-role:
       requestBody:
@@ -3729,46 +3737,46 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getRoleById:
     speakeasy-default-get-role-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueRoleIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateRoleById:
     speakeasy-default-update-role-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueRoleIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "policy": ["<value 1>", "<value 2>", "<value 3>"]}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteRoleById:
     speakeasy-default-delete-role-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueRoleIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listScript:
     speakeasy-default-list-script:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createScript:
     speakeasy-default-create-script:
       requestBody:
@@ -3777,39 +3785,39 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getScriptById:
     speakeasy-default-get-script-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueScriptIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateScriptById:
     speakeasy-default-update-script-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueScriptIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "command": "<value>"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteScriptById:
     speakeasy-default-delete-script-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueScriptIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createTeam:
     speakeasy-default-create-team:
       requestBody:
@@ -3818,89 +3826,93 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getTeam:
     speakeasy-default-get-team:
+      parameters:
+        query:
+          product: "stream"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getTeamById:
     speakeasy-default-get-team-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueTeamIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateTeamById:
     speakeasy-default-update-team-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueTeamIdToCRUD"
       requestBody:
         application/json: {"description": "vibration below but once whoever and", "id": "<id>", "name": "<value>", "roles": ["<value 1>", "<value 2>", "<value 3>"]}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteTeamById:
     speakeasy-default-delete-team-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueTeamIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getTeamAclById:
     speakeasy-default-get-team-acl-by-id:
       parameters:
         path:
-          id: "<id>"
-        query: {}
+          id: "myExistingUniqueTeamId"
+        query:
+          type: "projects"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getTeamRolesById:
     speakeasy-default-get-team-roles-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingUserIdToRead"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getTeamUsersById:
     speakeasy-default-get-team-users-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingTeamToReadUsersFrom"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createTeamUsersById:
     speakeasy-default-create-team-users-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingTeamToUpdate"
       requestBody:
         application/json: {}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProductsGroupsAclTeamsByProductAndId:
     speakeasy-default-get-products-groups-acl-teams-by-product-and-id:
       parameters:
@@ -3912,14 +3924,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listUser:
     speakeasy-default-list-user:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createUser:
     speakeasy-default-create-user:
       requestBody:
@@ -3928,51 +3940,51 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getUserById:
     speakeasy-default-get-user-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueUserIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateUserById:
     speakeasy-default-update-user-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueUserIdToCRUD"
       requestBody:
         application/json: {"disabled": false, "email": "Gladys_Kohler@hotmail.com", "first": "<value>", "id": "<id>", "last": "<value>", "username": "Deondre.Hilll"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteUserById:
     speakeasy-default-delete-user-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueUserIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateUserInfoById:
     speakeasy-default-update-user-info-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueUserIdToCRUD"
       requestBody:
         application/json: {"disabled": false, "email": "Devan_Aufderhar@yahoo.com", "first": "<value>", "id": "<id>", "last": "<value>", "username": "Eliane85"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProductsUsersAclByProductAndId:
     speakeasy-default-get-products-users-acl-by-product-and-id:
       parameters:
@@ -3984,7 +3996,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProductsUsersByProduct:
     speakeasy-default-get-products-users-by-product:
       parameters:
@@ -3995,7 +4007,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteProductsUsersCacheByProduct:
     speakeasy-default-delete-products-users-cache-by-product:
       parameters:
@@ -4005,7 +4017,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createCriblLakeDatasetByLakeId:
     speakeasy-default-create-cribl-lake-dataset-by-lake-id:
       parameters:
@@ -4017,7 +4029,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getCriblLakeDatasetByLakeId:
     speakeasy-default-get-cribl-lake-dataset-by-lake-id:
       parameters:
@@ -4027,49 +4039,49 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteCriblLakeDatasetByLakeIdAndId:
     speakeasy-default-delete-cribl-lake-dataset-by-lake-id-and-id:
       parameters:
         path:
           lakeId: "default"
-          id: "test_lake_dataset"
+          id: "myLakeDatasetToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getCriblLakeDatasetByLakeIdAndId:
     speakeasy-default-get-cribl-lake-dataset-by-lake-id-and-id:
       parameters:
         path:
           lakeId: "default"
-          id: "test_lake_dataset"
+          id: "myLakeDatasetToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateCriblLakeDatasetByLakeIdAndId:
     speakeasy-default-update-cribl-lake-dataset-by-lake-id-and-id:
       parameters:
         path:
           lakeId: "default"
-          id: "test_lake_dataset"
+          id: "myLakeDatasetToCRUD"
       requestBody:
         application/json: {"bucketName": "lake-${workspaceName}-${organizationId}", "id": "<id>"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listDashboardCategory:
     speakeasy-default-list-dashboard-category:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createDashboardCategory:
     speakeasy-default-create-dashboard-category:
       requestBody:
@@ -4078,7 +4090,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDashboardCategoryById:
     speakeasy-default-get-dashboard-category-by-id:
       parameters:
@@ -4088,36 +4100,36 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateDashboardCategoryById:
     speakeasy-default-update-dashboard-category-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDashboardCategoryToCRUD"
       requestBody:
         application/json: {"id": "<id>", "name": "<value>"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteDashboardCategoryById:
     speakeasy-default-delete-dashboard-category-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDashboardCategoryToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listUsageGroup:
     speakeasy-default-list-usage-group:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createUsageGroup:
     speakeasy-default-create-usage-group:
       requestBody:
@@ -4126,46 +4138,46 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getUsageGroupById:
     speakeasy-default-get-usage-group-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueUsageGroupToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateUsageGroupById:
     speakeasy-default-update-usage-group-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueUsageGroupToCRUD"
       requestBody:
         application/json: {"id": "<id>", "rules": "<value>"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteUsageGroupById:
     speakeasy-default-delete-usage-group-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueUsageGroupToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listDatasetProviderType:
     speakeasy-default-list-dataset-provider-type:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createDatasetProviderType:
     speakeasy-default-create-dataset-provider-type:
       requestBody:
@@ -4174,39 +4186,39 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDatasetProviderTypeById:
     speakeasy-default-get-dataset-provider-type-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetProviderTypeIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateDatasetProviderTypeById:
     speakeasy-default-update-dataset-provider-type-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetProviderTypeIdToCRUD"
       requestBody:
         application/json: {"id": "api_http"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteDatasetProviderTypeById:
     speakeasy-default-delete-dataset-provider-type-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetProviderTypeIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listDatasetProvider:
     speakeasy-default-list-dataset-provider:
       parameters:
@@ -4216,7 +4228,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createDatasetProvider:
     speakeasy-default-create-dataset-provider:
       parameters:
@@ -4228,23 +4240,23 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDatasetProviderById:
     speakeasy-default-get-dataset-provider-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetProviderIdToCRUD"
           groupId: "<id>"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateDatasetProviderById:
     speakeasy-default-update-dataset-provider-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetProviderIdToCRUD"
           groupId: "<id>"
       requestBody:
         application/json: {"id": "api_elasticsearch", "type": "<value>", "endpoint": "<value>", "authType": "none", "maxConcurrency": 3}
@@ -4252,18 +4264,18 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteDatasetProviderById:
     speakeasy-default-delete-dataset-provider-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetProviderIdToCRUD"
           groupId: "<id>"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listDataset:
     speakeasy-default-list-dataset:
       parameters:
@@ -4273,7 +4285,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createDataset:
     speakeasy-default-create-dataset:
       parameters:
@@ -4285,23 +4297,23 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDatasetById:
     speakeasy-default-get-dataset-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetIdToCRUD"
           groupId: "<id>"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateDatasetById:
     speakeasy-default-update-dataset-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetIdToCRUD"
           groupId: "<id>"
       requestBody:
         application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "table": "<value>"}
@@ -4309,58 +4321,58 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteDatasetById:
     speakeasy-default-delete-dataset-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDatasetIdToCRUD"
           groupId: "<id>"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDatasetAclById:
     speakeasy-default-get-dataset-acl-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingDatasetId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createDatasetAclApplyById:
     speakeasy-default-create-dataset-acl-apply-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingDatasetId"
       requestBody:
         application/json: {}
       responses:
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDatasetAclTeamsById:
     speakeasy-default-get-dataset-acl-teams-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingDatasetId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createDatasetAclTeamsApplyById:
     speakeasy-default-create-dataset-acl-teams-apply-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingDatasetId"
       requestBody:
         application/json: {}
       responses:
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchDashboardAclById:
     speakeasy-default-get-search-dashboard-acl-by-id:
       parameters:
@@ -4370,7 +4382,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSearchDashboardAclApplyById:
     speakeasy-default-create-search-dashboard-acl-apply-by-id:
       parameters:
@@ -4380,7 +4392,7 @@ examples:
         application/json: {}
       responses:
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getGroupsAclById:
     speakeasy-default-get-groups-acl-by-id:
       parameters:
@@ -4391,7 +4403,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchDashboardAclTeamsById:
     speakeasy-default-get-search-dashboard-acl-teams-by-id:
       parameters:
@@ -4401,7 +4413,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSearchDashboardAclTeamsApplyById:
     speakeasy-default-create-search-dashboard-acl-teams-apply-by-id:
       parameters:
@@ -4411,143 +4423,143 @@ examples:
         application/json: {}
       responses:
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listAppscopeLibEntry:
     speakeasy-default-list-appscope-lib-entry:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createAppscopeLibEntry:
     speakeasy-default-create-appscope-lib-entry:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"config": {}, "description": "neatly floodlight athwart fearless scamper dispose", "id": "<id>", "lib": "cribl"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getAppscopeLibEntryById:
     speakeasy-default-get-appscope-lib-entry-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueAppscopeConfigToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateAppscopeLibEntryById:
     speakeasy-default-update-appscope-lib-entry-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueAppscopeConfigToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"config": {}, "description": "blaspheme failing smug yet part diver dramatize", "id": "<id>", "lib": "cribl"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteAppscopeLibEntryById:
     speakeasy-default-delete-appscope-lib-entry-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueAppscopeConfigToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listGrokFile:
     speakeasy-default-list-grok-file:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createGrokFile:
     speakeasy-default-create-grok-file:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"content": "<value>", "id": "<id>", "size": 8001.66}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getGrokFileById:
     speakeasy-default-get-grok-file-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myGrokIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateGrokFileById:
     speakeasy-default-update-grok-file-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myGrokIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"content": "<value>", "id": "<id>", "size": 7435.13}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteGrokFileById:
     speakeasy-default-delete-grok-file-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myGrokIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listLookupFile:
     speakeasy-default-list-lookup-file:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createLookupFile:
     speakeasy-default-create-lookup-file:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "mode": "memory"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateLookupFile:
     speakeasy-default-update-lookup-file:
       parameters:
@@ -4564,125 +4576,125 @@ examples:
     speakeasy-default-get-lookup-file-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myNewLookupIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateLookupFileById:
     speakeasy-default-update-lookup-file-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myNewLookupIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "mode": "memory"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteLookupFileById:
     speakeasy-default-delete-lookup-file-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myNewLookupIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listParser:
     speakeasy-default-list-parser:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createParser:
     speakeasy-default-create-parser:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "type": "csv"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getParserById:
     speakeasy-default-get-parser-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueParserIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateParserById:
     speakeasy-default-update-parser-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueParserIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "type": "csv"}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteParserById:
     speakeasy-default-delete-parser-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueParserIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProtobufLibraryConfig:
     speakeasy-default-get-protobuf-library-config:
       parameters:
         query:
-          onlyWithEncodings: "<value>"
+          onlyWithEncodings: "UTF-8"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProtobufLibraryConfigById:
     speakeasy-default-get-protobuf-library-config-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueProtobufIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProtobufLibraryConfigEncodingsByIdAndEncId:
     speakeasy-default-get-protobuf-library-config-encodings-by-id-and-enc-id:
       parameters:
         path:
-          id: "<id>"
-          encid: "<id>"
+          id: "myExistingProtobufIdToCRUD"
+          encid: "myUniqueEncodingIdToCRUD"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProtobufLibraryConfigEncodingsById:
     speakeasy-default-get-protobuf-library-config-encodings-by-id:
       parameters:
@@ -4692,7 +4704,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listRegexLibEntry:
     speakeasy-default-list-regex-lib-entry:
       parameters:
@@ -4702,7 +4714,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createRegexLibEntry:
     speakeasy-default-create-regex-lib-entry:
       parameters:
@@ -4714,7 +4726,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getRegexLibEntryById:
     speakeasy-default-get-regex-lib-entry-by-id:
       parameters:
@@ -4725,7 +4737,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateRegexLibEntryById:
     speakeasy-default-update-regex-lib-entry-by-id:
       parameters:
@@ -4738,7 +4750,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteRegexLibEntryById:
     speakeasy-default-delete-regex-lib-entry-by-id:
       parameters:
@@ -4749,14 +4761,14 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listSearchDashboard:
     speakeasy-default-list-search-dashboard:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSearchDashboard:
     speakeasy-default-create-search-dashboard:
       requestBody:
@@ -4765,7 +4777,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchDashboardById:
     speakeasy-default-get-search-dashboard-by-id:
       parameters:
@@ -4775,7 +4787,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSearchDashboardById:
     speakeasy-default-update-search-dashboard-by-id:
       parameters:
@@ -4787,7 +4799,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSearchDashboardById:
     speakeasy-default-delete-search-dashboard-by-id:
       parameters:
@@ -4797,14 +4809,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listSearchMacro:
     speakeasy-default-list-search-macro:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSearchMacro:
     speakeasy-default-create-search-macro:
       requestBody:
@@ -4813,7 +4825,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchMacroById:
     speakeasy-default-get-search-macro-by-id:
       parameters:
@@ -4823,7 +4835,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSearchMacroById:
     speakeasy-default-update-search-macro-by-id:
       parameters:
@@ -4835,7 +4847,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSearchMacroById:
     speakeasy-default-delete-search-macro-by-id:
       parameters:
@@ -4845,14 +4857,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listSavedQuery:
     speakeasy-default-list-saved-query:
       responses:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSavedQuery:
     speakeasy-default-create-saved-query:
       requestBody:
@@ -4861,7 +4873,7 @@ examples:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSavedQueryById:
     speakeasy-default-get-saved-query-by-id:
       parameters:
@@ -4871,7 +4883,7 @@ examples:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSavedQueryById:
     speakeasy-default-update-saved-query-by-id:
       parameters:
@@ -4883,7 +4895,7 @@ examples:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSavedQueryById:
     speakeasy-default-delete-saved-query-by-id:
       parameters:
@@ -4893,14 +4905,14 @@ examples:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listSearchJob:
     speakeasy-default-list-search-job:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSearchJob:
     speakeasy-default-create-search-job:
       requestBody:
@@ -4909,7 +4921,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchJobById:
     speakeasy-default-get-search-job-by-id:
       parameters:
@@ -4919,7 +4931,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSearchJobById:
     speakeasy-default-update-search-job-by-id:
       parameters:
@@ -4931,7 +4943,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSearchJobById:
     speakeasy-default-delete-search-job-by-id:
       parameters:
@@ -4941,7 +4953,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSearchJobDispatchExecutorsById:
     speakeasy-default-create-search-job-dispatch-executors-by-id:
       parameters:
@@ -4951,7 +4963,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchJobLogsById:
     speakeasy-default-get-search-job-logs-by-id:
       parameters:
@@ -4961,7 +4973,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSearchEventBreakerPreview:
     speakeasy-default-create-search-event-breaker-preview:
       requestBody:
@@ -4970,14 +4982,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchHealthcheck:
     speakeasy-default-get-search-healthcheck:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchJobsMetricsById:
     speakeasy-default-get-search-jobs-metrics-by-id:
       parameters:
@@ -4987,14 +4999,14 @@ examples:
         "200":
           application/json: "<value>"
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchJobMetrics:
     speakeasy-default-get-search-job-metrics:
       responses:
         "200":
           application/json: "<value>"
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSearchPreview:
     speakeasy-default-create-search-preview:
       requestBody:
@@ -5003,7 +5015,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchJobsStagesResultsByIdAndStageId:
     speakeasy-default-get-search-jobs-stages-results-by-id-and-stage-id:
       parameters:
@@ -5014,7 +5026,7 @@ examples:
         "200":
           application/json: "<value>"
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSearchJobsResultsPollById:
     speakeasy-default-get-search-jobs-results-poll-by-id:
       parameters:
@@ -5025,7 +5037,7 @@ examples:
         "200":
           application/json: {"isFinished": false, "job": "Human Factors Strategist", "offset": 6995.43, "persistedEventCount": 2187.56, "totalEventCount": 7686.72}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDatabaseConnectionConfig:
     speakeasy-default-get-database-connection-config:
       parameters:
@@ -5035,7 +5047,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createDatabaseConnectionConfig:
     speakeasy-default-create-database-connection-config:
       parameters:
@@ -5047,7 +5059,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getDatabaseConnectionConfigById:
     speakeasy-default-get-database-connection-config-by-id:
       parameters:
@@ -5058,7 +5070,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateDatabaseConnectionConfigById:
     speakeasy-default-update-database-connection-config-by-id:
       parameters:
@@ -5071,7 +5083,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteDatabaseConnectionConfigById:
     speakeasy-default-delete-database-connection-config-by-id:
       parameters:
@@ -5082,7 +5094,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createLibDatabaseConnectionsTest:
     speakeasy-default-create-lib-database-connections-test:
       requestBody:
@@ -5091,7 +5103,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listEventBreakerRuleset:
     speakeasy-default-list-event-breaker-ruleset:
       parameters:
@@ -5101,7 +5113,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createEventBreakerRuleset:
     speakeasy-default-create-event-breaker-ruleset:
       parameters:
@@ -5113,7 +5125,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEventBreakerRulesetById:
     speakeasy-default-get-event-breaker-ruleset-by-id:
       parameters:
@@ -5124,7 +5136,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateEventBreakerRulesetById:
     speakeasy-default-update-event-breaker-ruleset-by-id:
       parameters:
@@ -5137,7 +5149,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteEventBreakerRulesetById:
     speakeasy-default-delete-event-breaker-ruleset-by-id:
       parameters:
@@ -5148,7 +5160,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getGlobalVariable:
     speakeasy-default-get-global-variable:
       parameters:
@@ -5158,7 +5170,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createGlobalVariable:
     speakeasy-default-create-global-variable:
       parameters:
@@ -5170,7 +5182,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getGlobalVariableById:
     speakeasy-default-get-global-variable-by-id:
       parameters:
@@ -5181,7 +5193,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateGlobalVariableById:
     speakeasy-default-update-global-variable-by-id:
       parameters:
@@ -5194,7 +5206,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteGlobalVariableById:
     speakeasy-default-delete-global-variable-by-id:
       parameters:
@@ -5205,7 +5217,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getGlobalVariableLibVarsByPack:
     speakeasy-default-get-global-variable-lib-vars-by-pack:
       parameters:
@@ -5217,7 +5229,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createGlobalVariableLibVarsByPack:
     speakeasy-default-create-global-variable-lib-vars-by-pack:
       parameters:
@@ -5230,7 +5242,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getGlobalVariableLibVarsByPackAndId:
     speakeasy-default-get-global-variable-lib-vars-by-pack-and-id:
       parameters:
@@ -5242,7 +5254,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateGlobalVariableLibVarsByPackAndId:
     speakeasy-default-update-global-variable-lib-vars-by-pack-and-id:
       parameters:
@@ -5256,7 +5268,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteGlobalVariableLibVarsByPackAndId:
     speakeasy-default-delete-global-variable-lib-vars-by-pack-and-id:
       parameters:
@@ -5268,7 +5280,7 @@ examples:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listHmacFunction:
     speakeasy-default-list-hmac-function:
       parameters:
@@ -5278,7 +5290,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createHmacFunction:
     speakeasy-default-create-hmac-function:
       parameters:
@@ -5290,7 +5302,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getHmacFunctionById:
     speakeasy-default-get-hmac-function-by-id:
       parameters:
@@ -5301,7 +5313,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateHmacFunctionById:
     speakeasy-default-update-hmac-function-by-id:
       parameters:
@@ -5314,7 +5326,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteHmacFunctionById:
     speakeasy-default-delete-hmac-function-by-id:
       parameters:
@@ -5325,7 +5337,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listInput:
     speakeasy-default-list-input:
       parameters:
@@ -5335,7 +5347,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createInput:
     speakeasy-default-create-input:
       parameters:
@@ -5349,7 +5361,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getInputById:
     speakeasy-default-get-input-by-id:
       parameters:
@@ -5360,7 +5372,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateInputById:
     speakeasy-default-update-input-by-id:
       parameters:
@@ -5373,7 +5385,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteInputById:
     speakeasy-default-delete-input-by-id:
       parameters:
@@ -5384,7 +5396,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createInputHecTokenById:
     speakeasy-default-create-input-hec-token-by-id:
       parameters:
@@ -5397,7 +5409,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateInputHecTokenByIdAndToken:
     speakeasy-default-update-input-hec-token-by-id-and-token:
       parameters:
@@ -5411,14 +5423,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listInputStatus:
     speakeasy-default-list-input-status:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getInputStatusById:
     speakeasy-default-get-input-status-by-id:
       parameters:
@@ -5428,7 +5440,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listOutput:
     speakeasy-default-list-output:
       parameters:
@@ -5438,7 +5450,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createOutput:
     speakeasy-default-create-output:
       parameters:
@@ -5452,7 +5464,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getOutputById:
     speakeasy-default-get-output-by-id:
       parameters:
@@ -5463,7 +5475,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateOutputById:
     speakeasy-default-update-output-by-id:
       parameters:
@@ -5476,7 +5488,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteOutputById:
     speakeasy-default-delete-output-by-id:
       parameters:
@@ -5487,7 +5499,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteOutputPqById:
     speakeasy-default-delete-output-pq-by-id:
       parameters:
@@ -5498,7 +5510,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getOutputPqById:
     speakeasy-default-get-output-pq-by-id:
       parameters:
@@ -5509,7 +5521,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getOutputSamplesById:
     speakeasy-default-get-output-samples-by-id:
       parameters:
@@ -5520,7 +5532,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createOutputTestById:
     speakeasy-default-create-output-test-by-id:
       parameters:
@@ -5533,14 +5545,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listOutputStatus:
     speakeasy-default-list-output-status:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getOutputStatusById:
     speakeasy-default-get-output-status-by-id:
       parameters:
@@ -5550,7 +5562,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listSchema:
     speakeasy-default-list-schema:
       parameters:
@@ -5560,7 +5572,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSchema:
     speakeasy-default-create-schema:
       parameters:
@@ -5572,7 +5584,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSchemaById:
     speakeasy-default-get-schema-by-id:
       parameters:
@@ -5583,7 +5595,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSchemaById:
     speakeasy-default-update-schema-by-id:
       parameters:
@@ -5596,7 +5608,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSchemaById:
     speakeasy-default-delete-schema-by-id:
       parameters:
@@ -5607,14 +5619,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listProfilerItem:
     speakeasy-default-list-profiler-item:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createProfilerItem:
     speakeasy-default-create-profiler-item:
       requestBody:
@@ -5623,7 +5635,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProfilerItemById:
     speakeasy-default-get-profiler-item-by-id:
       parameters:
@@ -5633,7 +5645,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateProfilerItemById:
     speakeasy-default-update-profiler-item-by-id:
       parameters:
@@ -5645,7 +5657,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteProfilerItemById:
     speakeasy-default-delete-profiler-item-by-id:
       parameters:
@@ -5655,14 +5667,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listRoutes:
     speakeasy-default-list-routes:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getRoutesById:
     speakeasy-default-get-routes-by-id:
       parameters:
@@ -5672,7 +5684,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateRoutesById:
     speakeasy-default-update-routes-by-id:
       parameters:
@@ -5684,7 +5696,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createRoutesAppendById:
     speakeasy-default-create-routes-append-by-id:
       parameters:
@@ -5696,7 +5708,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getRoutesByPack:
     speakeasy-default-get-routes-by-pack:
       parameters:
@@ -5707,7 +5719,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getRoutesByPackAndId:
     speakeasy-default-get-routes-by-pack-and-id:
       parameters:
@@ -5756,7 +5768,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createLibSchemas:
     speakeasy-default-create-lib-schemas:
       parameters:
@@ -5768,7 +5780,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getLibSchemasById:
     speakeasy-default-get-lib-schemas-by-id:
       parameters:
@@ -5779,7 +5791,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateLibSchemasById:
     speakeasy-default-update-lib-schemas-by-id:
       parameters:
@@ -5792,7 +5804,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteLibSchemasById:
     speakeasy-default-delete-lib-schemas-by-id:
       parameters:
@@ -5803,7 +5815,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSchemaLibByPack:
     speakeasy-default-get-schema-lib-by-pack:
       parameters:
@@ -5813,7 +5825,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSchemaLibByPack:
     speakeasy-default-create-schema-lib-by-pack:
       parameters:
@@ -5825,7 +5837,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSchemaLibByPackAndId:
     speakeasy-default-get-schema-lib-by-pack-and-id:
       parameters:
@@ -5836,7 +5848,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSchemaLibByPackAndId:
     speakeasy-default-update-schema-lib-by-pack-and-id:
       parameters:
@@ -5849,7 +5861,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSchemaLibByPackAndId:
     speakeasy-default-delete-schema-lib-by-pack-and-id:
       parameters:
@@ -5860,14 +5872,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listRestSecret:
     speakeasy-default-list-rest-secret:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createRestSecret:
     speakeasy-default-create-rest-secret:
       requestBody:
@@ -5876,7 +5888,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getRestSecretById:
     speakeasy-default-get-rest-secret-by-id:
       parameters:
@@ -5886,7 +5898,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateRestSecretById:
     speakeasy-default-update-rest-secret-by-id:
       parameters:
@@ -5898,7 +5910,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteRestSecretById:
     speakeasy-default-delete-rest-secret-by-id:
       parameters:
@@ -5908,7 +5920,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createEdgeAppscopeProcesses:
     speakeasy-default-create-edge-appscope-processes:
       parameters:
@@ -5918,14 +5930,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeAppscopeProcesses:
     speakeasy-default-get-edge-appscope-processes:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteEdgeAppscopeProcessesByPid:
     speakeasy-default-delete-edge-appscope-processes-by-pid:
       parameters:
@@ -5935,7 +5947,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeAppscopeProcessesByPid:
     speakeasy-default-get-edge-appscope-processes-by-pid:
       parameters:
@@ -5945,7 +5957,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateEdgeAppscopeProcessesByPid:
     speakeasy-default-update-edge-appscope-processes-by-pid:
       parameters:
@@ -5955,21 +5967,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeEventsCollectors:
     speakeasy-default-get-edge-events-collectors:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeFileinspect:
     speakeasy-default-get-edge-fileinspect:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeLsByPath:
     speakeasy-default-get-edge-ls-by-path:
       parameters:
@@ -5979,28 +5991,28 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createProductsEdgeMapQuery:
     speakeasy-default-create-products-edge-map-query:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeMetadata:
     speakeasy-default-get-edge-metadata:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createEdgeFileIngest:
     speakeasy-default-create-edge-file-ingest:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeFileSample:
     speakeasy-default-get-edge-file-sample:
       parameters:
@@ -6010,21 +6022,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createEdgeKubeLogs:
     speakeasy-default-create-edge-kube-logs:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeKubeProxy:
     speakeasy-default-get-edge-kube-proxy:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeContainersById:
     speakeasy-default-get-edge-containers-by-id:
       parameters:
@@ -6034,21 +6046,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeContainers:
     speakeasy-default-get-edge-containers:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeLogs:
     speakeasy-default-get-edge-logs:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeProcessesByPid:
     speakeasy-default-get-edge-processes-by-pid:
       parameters:
@@ -6058,21 +6070,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeProcesses:
     speakeasy-default-get-edge-processes:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getEdgeEventsQuery:
     speakeasy-default-get-edge-events-query:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getAuthAuthorizationCodeCallback: {}
   getAuthMetadata:
     speakeasy-default-get-auth-metadata:
@@ -6109,14 +6121,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getAuthMultiFactor:
     speakeasy-default-get-auth-multi-factor:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteAuthUsersTokenById:
     speakeasy-default-delete-auth-users-token-by-id:
       parameters:
@@ -6126,35 +6138,35 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getAuthorizePolicy:
     speakeasy-default-get-authorize-policy:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getAuthorizeRoles:
     speakeasy-default-get-authorize-roles:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getChangelogViewed:
     speakeasy-default-get-changelog-viewed:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateChangelogViewed:
     speakeasy-default-update-changelog-viewed:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemDistributedUpgradeCancelByGroup:
     speakeasy-default-create-system-distributed-upgrade-cancel-by-group:
       parameters:
@@ -6164,7 +6176,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemDistributedUpgradeStageByGroup:
     speakeasy-default-create-system-distributed-upgrade-stage-by-group:
       parameters:
@@ -6175,7 +6187,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemDistributedUpgradeByGroup:
     speakeasy-default-create-system-distributed-upgrade-by-group:
       parameters:
@@ -6187,7 +6199,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemDistributedUpgradeDownloadByFile:
     speakeasy-default-get-system-distributed-upgrade-download-by-file:
       parameters:
@@ -6197,7 +6209,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   reloadSettings: {}
   triggerRestart: {}
   getSystemSettingsAuth:
@@ -6206,21 +6218,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSystemSettingsAuth:
     speakeasy-default-update-system-settings-auth:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemSettingsConf:
     speakeasy-default-get-system-settings-conf:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSystemSettingsConf:
     speakeasy-default-update-system-settings-conf:
       requestBody:
@@ -6229,42 +6241,42 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemSettingsSearchLimits:
     speakeasy-default-get-system-settings-search-limits:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemSettings:
     speakeasy-default-get-system-settings:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSystemSettings:
     speakeasy-default-update-system-settings:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemSettingsCribl:
     speakeasy-default-get-system-settings-cribl:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemSettingsUpgrade:
     speakeasy-default-get-system-settings-upgrade:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemSettingsUpgradeByVersion:
     speakeasy-default-create-system-settings-upgrade-by-version:
       parameters:
@@ -6274,7 +6286,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemSettingsUpgradeFromPackage:
     speakeasy-default-create-system-settings-upgrade-from-package:
       requestBody:
@@ -6283,7 +6295,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createOutputClickHouseDescribeTable:
     speakeasy-default-create-output-click-house-describe-table:
       requestBody:
@@ -6292,7 +6304,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getClui:
     speakeasy-default-get-clui:
       parameters:
@@ -6302,28 +6314,28 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSummaryWorkers:
     speakeasy-default-get-summary-workers:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getWorkers:
     speakeasy-default-get-workers:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateWorkersRestart:
     speakeasy-default-update-workers-restart:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getConfigBundlesByGroupAndVersion:
     speakeasy-default-get-config-bundles-by-group-and-version:
       parameters:
@@ -6339,21 +6351,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createLibExpression:
     speakeasy-default-create-lib-expression:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listCondition:
     speakeasy-default-list-condition:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getConditionById:
     speakeasy-default-get-condition-by-id:
       parameters:
@@ -6363,7 +6375,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getHealthInfo:
     speakeasy-default-get-health-info:
       responses:
@@ -6382,14 +6394,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemDiag:
     speakeasy-default-get-system-diag:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSystemDiag:
     speakeasy-default-delete-system-diag:
       parameters:
@@ -6399,7 +6411,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemDiagSend:
     speakeasy-default-create-system-diag-send:
       requestBody:
@@ -6408,7 +6420,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getJobResultsById:
     speakeasy-default-get-job-results-by-id:
       parameters:
@@ -6426,7 +6438,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createJobs:
     speakeasy-default-create-jobs:
       requestBody:
@@ -6435,14 +6447,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getJobs:
     speakeasy-default-get-jobs:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteJobsById:
     speakeasy-default-delete-jobs-by-id:
       parameters:
@@ -6452,7 +6464,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getJobsById:
     speakeasy-default-get-jobs-by-id:
       parameters:
@@ -6462,7 +6474,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateJobsKeepById:
     speakeasy-default-update-jobs-keep-by-id:
       parameters:
@@ -6472,7 +6484,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateJobsPauseById:
     speakeasy-default-update-jobs-pause-by-id:
       parameters:
@@ -6482,7 +6494,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateJobsResumeById:
     speakeasy-default-update-jobs-resume-by-id:
       parameters:
@@ -6492,7 +6504,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getJobsResultsByIdAndGroup:
     speakeasy-default-get-jobs-results-by-id-and-group:
       parameters:
@@ -6504,7 +6516,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getJobsErrorsByIdAndGroup:
     speakeasy-default-get-jobs-errors-by-id-and-group:
       parameters:
@@ -6515,7 +6527,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getJobsErrorsById:
     speakeasy-default-get-jobs-errors-by-id:
       parameters:
@@ -6525,14 +6537,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSecurityKmsConfig:
     speakeasy-default-get-security-kms-config:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSecurityKmsConfig:
     speakeasy-default-update-security-kms-config:
       requestBody:
@@ -6541,21 +6553,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSecurityKmsHealth:
     speakeasy-default-get-security-kms-health:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listLicense:
     speakeasy-default-list-license:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createLicense:
     speakeasy-default-create-license:
       requestBody:
@@ -6564,7 +6576,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getLicenseById:
     speakeasy-default-get-license-by-id:
       parameters:
@@ -6574,7 +6586,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteLicenseById:
     speakeasy-default-delete-license-by-id:
       parameters:
@@ -6584,21 +6596,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getLicense:
     speakeasy-default-get-license:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listLoggerConfig:
     speakeasy-default-list-logger-config:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getLoggerConfigById:
     speakeasy-default-get-logger-config-by-id:
       parameters:
@@ -6608,7 +6620,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateLoggerConfigById:
     speakeasy-default-update-logger-config-by-id:
       parameters:
@@ -6620,7 +6632,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteLoggerConfigById:
     speakeasy-default-delete-logger-config-by-id:
       parameters:
@@ -6630,7 +6642,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemJobsLogsByIdAndGroupId:
     speakeasy-default-get-system-jobs-logs-by-id-and-group-id:
       parameters:
@@ -6642,7 +6654,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemLogsById:
     speakeasy-default-get-system-logs-by-id:
       parameters:
@@ -6653,14 +6665,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemLogs:
     speakeasy-default-get-system-logs:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemLogsSearch:
     speakeasy-default-get-system-logs-search:
       parameters:
@@ -6670,7 +6682,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createPacks:
     speakeasy-default-create-packs:
       parameters:
@@ -6683,7 +6695,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPacks:
     speakeasy-default-get-packs:
       parameters:
@@ -6693,7 +6705,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deletePacksById:
     speakeasy-default-delete-packs-by-id:
       parameters:
@@ -6704,7 +6716,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updatePacksById:
     speakeasy-default-update-packs-by-id:
       parameters:
@@ -6716,7 +6728,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createPacksClone:
     speakeasy-default-create-packs-clone:
       parameters:
@@ -6728,7 +6740,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPacksExportById:
     speakeasy-default-get-packs-export-by-id:
       parameters:
@@ -6741,14 +6753,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemProcesses:
     speakeasy-default-get-system-processes:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemMetricsEnum:
     speakeasy-default-create-system-metrics-enum:
       requestBody:
@@ -6757,14 +6769,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemMetrics:
     speakeasy-default-get-system-metrics:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemMetricsQuery:
     speakeasy-default-create-system-metrics-query:
       requestBody:
@@ -6773,7 +6785,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getUiByKey:
     speakeasy-default-get-ui-by-key:
       parameters:
@@ -6783,7 +6795,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateUiByKey:
     speakeasy-default-update-ui-by-key:
       parameters:
@@ -6795,35 +6807,35 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getAiConsent:
     speakeasy-default-get-ai-consent:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createAiConsent:
     speakeasy-default-create-ai-consent:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listTrustPolicy:
     speakeasy-default-list-trust-policy:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listFunction:
     speakeasy-default-list-function:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getFunctionById:
     speakeasy-default-get-function-by-id:
       parameters:
@@ -6833,7 +6845,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getFunctionByPack:
     speakeasy-default-get-function-by-pack:
       parameters:
@@ -6843,7 +6855,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getFunctionByPackAndId:
     speakeasy-default-get-function-by-pack-and-id:
       parameters:
@@ -6854,14 +6866,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listCollector:
     speakeasy-default-list-collector:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getCollectorById:
     speakeasy-default-get-collector-by-id:
       parameters:
@@ -6871,14 +6883,14 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listExecutor:
     speakeasy-default-list-executor:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getExecutorById:
     speakeasy-default-get-executor-by-id:
       parameters:
@@ -6888,7 +6900,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getGroupsConfigVersionById:
     speakeasy-default-get-groups-config-version-by-id:
       parameters:
@@ -6898,7 +6910,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createProductsGroupsByProduct:
     speakeasy-default-create-products-groups-by-product:
       parameters:
@@ -6910,7 +6922,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getProductsGroupsByProduct:
     speakeasy-default-get-products-groups-by-product:
       parameters:
@@ -6921,7 +6933,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateGroupsDeployById:
     speakeasy-default-update-groups-deploy-by-id:
       parameters:
@@ -6933,7 +6945,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getGroupsById:
     speakeasy-default-get-groups-by-id:
       parameters:
@@ -6944,7 +6956,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteGroupsById:
     speakeasy-default-delete-groups-by-id:
       parameters:
@@ -6974,14 +6986,14 @@ examples:
         "200":
           application/json: {"isFinished": false, "job": "Principal Web Liaison", "offset": 7247.69, "persistedEventCount": 1801.66, "totalEventCount": 6653.39}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listIoMetricsEntry:
     speakeasy-default-list-io-metrics-entry:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getIoMetricsEntryById:
     speakeasy-default-get-io-metrics-entry-by-id:
       parameters:
@@ -6991,7 +7003,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateIoMetricsEntryById:
     speakeasy-default-update-io-metrics-entry-by-id:
       parameters:
@@ -7003,7 +7015,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteIoMetricsEntryById:
     speakeasy-default-delete-io-metrics-entry-by-id:
       parameters:
@@ -7013,7 +7025,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteAuthUsersInvalidationById:
     speakeasy-default-delete-auth-users-invalidation-by-id:
       parameters:
@@ -7023,7 +7035,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updatePacks:
     speakeasy-default-update-packs:
       parameters:
@@ -7033,7 +7045,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPacksRefsById:
     speakeasy-default-get-packs-refs-by-id:
       parameters:
@@ -7043,7 +7055,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createPacksPublishById:
     speakeasy-default-create-packs-publish-by-id:
       parameters:
@@ -7053,7 +7065,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getAiSettingsFeaturesByFeature:
     speakeasy-default-get-ai-settings-features-by-feature:
       parameters:
@@ -7063,7 +7075,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createAiSettingsFeaturesByFeature:
     speakeasy-default-create-ai-settings-features-by-feature:
       parameters:
@@ -7073,21 +7085,21 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getAiSettingsFeatures:
     speakeasy-default-get-ai-settings-features:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createAiSettingsFeatures:
     speakeasy-default-create-ai-settings-features:
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemInputsByPack:
     speakeasy-default-create-system-inputs-by-pack:
       parameters:
@@ -7102,7 +7114,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateSystemInputsByPack:
     speakeasy-default-update-system-inputs-by-pack:
       parameters:
@@ -7116,7 +7128,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSystemInputsByPack:
     speakeasy-default-delete-system-inputs-by-pack:
       parameters:
@@ -7130,7 +7142,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemOutputsByPack:
     speakeasy-default-create-system-outputs-by-pack:
       parameters:
@@ -7185,7 +7197,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteSystemLookupsByPackAndId:
     speakeasy-default-delete-system-lookups-by-pack-and-id:
       parameters:
@@ -7197,7 +7209,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteBreakersByPackAndId:
     speakeasy-default-delete-breakers-by-pack-and-id:
       parameters:
@@ -7209,7 +7221,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createRoutesByPack:
     speakeasy-default-create-routes-by-pack:
       parameters:
@@ -7222,7 +7234,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteRoutesByPackAndId:
     speakeasy-default-delete-routes-by-pack-and-id:
       parameters:
@@ -7245,7 +7257,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPipelinesByPackWithId:
     speakeasy-default-get-pipelines-by-pack-with-id:
       parameters:
@@ -7257,7 +7269,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemInputsByPack:
     speakeasy-default-get-system-inputs-by-pack:
       parameters:
@@ -7268,7 +7280,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemOutputsByPack:
     speakeasy-default-get-system-outputs-by-pack:
       parameters:
@@ -7292,7 +7304,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createSystemLookupsByPack:
     speakeasy-default-create-system-lookups-by-pack:
       parameters:
@@ -7305,7 +7317,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemLookupsByPackAndId:
     speakeasy-default-get-system-lookups-by-pack-and-id:
       parameters:
@@ -7317,7 +7329,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getBreakersByPack:
     speakeasy-default-get-breakers-by-pack:
       parameters:
@@ -7328,7 +7340,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createBreakersByPack:
     speakeasy-default-create-breakers-by-pack:
       parameters:
@@ -7341,7 +7353,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getBreakersByPackAndId:
     speakeasy-default-get-breakers-by-pack-and-id:
       parameters:
@@ -7353,7 +7365,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateBreakersByPackAndId:
     speakeasy-default-update-breakers-by-pack-and-id:
       parameters:
@@ -7367,7 +7379,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   readRoutesByPackAndId:
     speakeasy-default-read-routes-by-pack-and-id:
       parameters:
@@ -7389,7 +7401,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemInputsByPackAndId:
     speakeasy-default-get-system-inputs-by-pack-and-id:
       parameters:
@@ -7401,7 +7413,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getSystemOutputsByPackAndId:
     speakeasy-default-get-system-outputs-by-pack-and-id:
       parameters:
@@ -7424,7 +7436,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createPackOutput:
     speakeasy-default-create-pack-output:
       parameters:
@@ -7439,7 +7451,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPackOutputById:
     speakeasy-default-get-pack-output-by-id:
       parameters:
@@ -7451,7 +7463,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updatePackOutputById:
     speakeasy-default-update-pack-output-by-id:
       parameters:
@@ -7465,7 +7477,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deletePackOutputById:
     speakeasy-default-delete-pack-output-by-id:
       parameters:
@@ -7477,7 +7489,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getPacksByID:
     speakeasy-default-get-packs-by-ID:
       parameters:
@@ -7488,7 +7500,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listDefaultLakeLakehouses:
     speakeasy-default-list-default-lake-lakehouses:
       responses:
@@ -7497,7 +7509,7 @@ examples:
         "400":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
         "201":
           application/json: {"id": "<id>", "tierSize": "small"}
   createDefaultLakeLakehouse:
@@ -7517,21 +7529,21 @@ examples:
     speakeasy-default-get-default-lake-lakehouse-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueLakehouseIdToCRUD"
       responses:
         "200":
           application/json: {}
         "400":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
         "201":
           application/json: {"id": "<id>", "tierSize": "small"}
   updateDefaultLakeLakehouseById:
     speakeasy-default-update-default-lake-lakehouse-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueLakehouseIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "tierSize": "small"}
       responses:
@@ -7540,17 +7552,17 @@ examples:
         "400":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteDefaultLakeLakehouseById:
     speakeasy-default-delete-default-lake-lakehouse-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueLakehouseIdToCRUD"
       responses:
         "400":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
         "200":
           application/json: {}
   getLakehouseDatasetConnections:
@@ -7566,8 +7578,8 @@ examples:
     speakeasy-default-create-lakehouse-dataset-connections:
       parameters:
         path:
-          lakehouse_id: "<id>"
-          lake_dataset_id: "<id>"
+          lakehouse_id: "myExistingLakehouseId"
+          lake_dataset_id: "myExistingLakeDatasetIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -7575,8 +7587,8 @@ examples:
     speakeasy-default-update-lakehouse-dataset-connections:
       parameters:
         path:
-          lakehouse_id: "<id>"
-          lake_dataset_id: "<id>"
+          lakehouse_id: "myExistingLakehouseId"
+          lake_dataset_id: "myExistingLakeDatasetIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -7584,8 +7596,8 @@ examples:
     speakeasy-default-delete-lakehouse-dataset-connections:
       parameters:
         path:
-          lakehouse_id: "<id>"
-          lake_dataset_id: "<id>"
+          lakehouse_id: "myExistingLakehouseId"
+          lake_dataset_id: "myExistingLakeDatasetIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -7593,36 +7605,36 @@ examples:
     speakeasy-default-list-collectors:
       parameters:
         path:
-          groupId: "default"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   updateCollectorById:
     speakeasy-default-update-collector-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "default"
+          id: "myJobIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "database"}}
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   deleteCollectorById:
     speakeasy-default-delete-collector-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "default"
+          id: "myJobIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getRoutesByGroupId:
     speakeasy-default-get-routes-by-group-id:
       parameters:
@@ -7632,7 +7644,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   createRoutesByGroupId:
     speakeasy-default-create-routes-by-group-id:
       parameters:
@@ -7644,7 +7656,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   listInstanceSettingsSchema:
     speakeasy-default-list-instance-settings-schema:
       parameters:
@@ -7655,7 +7667,7 @@ examples:
         "200":
           application/json: {}
         "500":
-          application/json: {}
+          application/json: {"message": "This is my error message string"}
   getHealthStatus:
     speakeasy-default-get-health-status:
       responses:

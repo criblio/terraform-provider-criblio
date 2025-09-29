@@ -15,8 +15,8 @@ ParserLibEntry Resource
 ```terraform
 resource "criblio_parser_lib_entry" "my_parserlibentry" {
   description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
+  group_id    = "myExistingGroupId"
+  id          = "myUniqueParserIdToCRUD"
   lib         = "...my_lib..."
   tags        = "...my_tags..."
   type        = "delim"
@@ -47,12 +47,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_parser_lib_entry.my_criblio_parser_lib_entry
-  id = "..."
+  id = "myExistingGroupId"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_parser_lib_entry.my_criblio_parser_lib_entry "..."
+terraform import criblio_parser_lib_entry.my_criblio_parser_lib_entry "myExistingGroupId"
 ```

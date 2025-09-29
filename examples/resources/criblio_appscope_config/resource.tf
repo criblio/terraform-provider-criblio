@@ -246,8 +246,8 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
     ]
   }
   description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
+  group_id    = "myExistingGroupId"
+  id          = "myUniqueAppscopeConfigToCRUD"
   lib         = "cribl"
   tags        = "...my_tags..."
 }

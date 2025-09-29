@@ -14,8 +14,8 @@ AppscopeConfig DataSource
 
 ```terraform
 data "criblio_appscope_config" "my_appscopeconfig" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniqueAppscopeConfigToCRUD"
 }
 ```
 

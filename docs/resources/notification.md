@@ -24,7 +24,7 @@ resource "criblio_notification" "my_notification" {
   }
   disabled = false
   group    = "...my_group..."
-  id       = "...my_id..."
+  id       = "myNotificationIdToCRUD"
   target_configs = [
     {
       conf = {
@@ -93,12 +93,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_notification.my_criblio_notification
-  id = "..."
+  id = "myNotificationIdToCRUD"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_notification.my_criblio_notification "..."
+terraform import criblio_notification.my_criblio_notification "myNotificationIdToCRUD"
 ```

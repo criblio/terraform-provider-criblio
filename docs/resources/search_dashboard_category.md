@@ -15,7 +15,7 @@ SearchDashboardCategory Resource
 ```terraform
 resource "criblio_search_dashboard_category" "my_searchdashboardcategory" {
   description = "...my_description..."
-  id          = "...my_id..."
+  id          = "myUniqueDashboardCategoryToCRUD"
   is_pack     = true
   name        = "...my_name..."
 }
@@ -33,3 +33,17 @@ resource "criblio_search_dashboard_category" "my_searchdashboardcategory" {
 
 - `description` (String)
 - `is_pack` (Boolean)
+
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `description` (String)
+- `id` (String)
+- `is_pack` (Boolean)
+- `name` (String)
