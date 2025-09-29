@@ -29,37 +29,45 @@ data "criblio_appscope_config" "my_appscopeconfig" {
 
 ### Read-Only
 
-- `config` (Attributes) (see [below for nested schema](#nestedatt--config))
-- `description` (String)
-- `lib` (String)
-- `tags` (String)
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
 
-<a id="nestedatt--config"></a>
-### Nested Schema for `config`
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
 
 Read-Only:
 
-- `cribl` (Attributes) (see [below for nested schema](#nestedatt--config--cribl))
-- `custom` (Attributes List) (see [below for nested schema](#nestedatt--config--custom))
-- `event` (Attributes) (see [below for nested schema](#nestedatt--config--event))
-- `libscope` (Attributes) (see [below for nested schema](#nestedatt--config--libscope))
-- `metric` (Attributes) (see [below for nested schema](#nestedatt--config--metric))
-- `payload` (Attributes) (see [below for nested schema](#nestedatt--config--payload))
-- `protocol` (Attributes List) (see [below for nested schema](#nestedatt--config--protocol))
-- `tags` (Attributes List) (see [below for nested schema](#nestedatt--config--tags))
+- `config` (Attributes) (see [below for nested schema](#nestedatt--items--config))
+- `description` (String)
+- `id` (String)
+- `lib` (String)
+- `tags` (String)
 
-<a id="nestedatt--config--cribl"></a>
-### Nested Schema for `config.cribl`
+<a id="nestedatt--items--config"></a>
+### Nested Schema for `items.config`
+
+Read-Only:
+
+- `cribl` (Attributes) (see [below for nested schema](#nestedatt--items--config--cribl))
+- `custom` (Attributes List) (see [below for nested schema](#nestedatt--items--config--custom))
+- `event` (Attributes) (see [below for nested schema](#nestedatt--items--config--event))
+- `libscope` (Attributes) (see [below for nested schema](#nestedatt--items--config--libscope))
+- `metric` (Attributes) (see [below for nested schema](#nestedatt--items--config--metric))
+- `payload` (Attributes) (see [below for nested schema](#nestedatt--items--config--payload))
+- `protocol` (Attributes List) (see [below for nested schema](#nestedatt--items--config--protocol))
+- `tags` (Attributes List) (see [below for nested schema](#nestedatt--items--config--tags))
+
+<a id="nestedatt--items--config--cribl"></a>
+### Nested Schema for `items.config.cribl`
 
 Read-Only:
 
 - `authtoken` (String)
 - `enable` (Boolean)
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--cribl--transport))
+- `transport` (Attributes) (see [below for nested schema](#nestedatt--items--config--cribl--transport))
 - `use_scope_source_transport` (Boolean)
 
-<a id="nestedatt--config--cribl--transport"></a>
-### Nested Schema for `config.cribl.transport`
+<a id="nestedatt--items--config--cribl--transport"></a>
+### Nested Schema for `items.config.cribl.transport`
 
 Read-Only:
 
@@ -67,11 +75,11 @@ Read-Only:
 - `host` (String)
 - `path` (String)
 - `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--cribl--transport--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--config--cribl--transport--tls))
 - `type` (String)
 
-<a id="nestedatt--config--cribl--transport--tls"></a>
-### Nested Schema for `config.cribl.transport.tls`
+<a id="nestedatt--items--config--cribl--transport--tls"></a>
+### Nested Schema for `items.config.cribl.transport.tls`
 
 Read-Only:
 
@@ -82,44 +90,44 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--custom"></a>
-### Nested Schema for `config.custom`
+<a id="nestedatt--items--config--custom"></a>
+### Nested Schema for `items.config.custom`
 
 Read-Only:
 
 - `ancestor` (String)
 - `arg` (String)
-- `config` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config))
+- `config` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config))
 - `env` (String)
 - `hostname` (String)
 - `procname` (String)
 - `username` (String)
 
-<a id="nestedatt--config--custom--config"></a>
-### Nested Schema for `config.custom.config`
+<a id="nestedatt--items--config--custom--config"></a>
+### Nested Schema for `items.config.custom.config`
 
 Read-Only:
 
-- `cribl` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--cribl))
-- `event` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event))
-- `libscope` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope))
-- `metric` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric))
-- `payload` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--payload))
-- `protocol` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--protocol))
-- `tags` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--tags))
+- `cribl` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--cribl))
+- `event` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--event))
+- `libscope` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--libscope))
+- `metric` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--metric))
+- `payload` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--payload))
+- `protocol` (Attributes List) (see [below for nested schema](#nestedatt--items--config--custom--config--protocol))
+- `tags` (Attributes List) (see [below for nested schema](#nestedatt--items--config--custom--config--tags))
 
-<a id="nestedatt--config--custom--config--cribl"></a>
-### Nested Schema for `config.custom.config.cribl`
+<a id="nestedatt--items--config--custom--config--cribl"></a>
+### Nested Schema for `items.config.custom.config.cribl`
 
 Read-Only:
 
 - `authtoken` (String)
 - `enable` (Boolean)
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--cribl--transport))
+- `transport` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--cribl--transport))
 - `use_scope_source_transport` (Boolean)
 
-<a id="nestedatt--config--custom--config--cribl--transport"></a>
-### Nested Schema for `config.custom.config.cribl.transport`
+<a id="nestedatt--items--config--custom--config--cribl--transport"></a>
+### Nested Schema for `items.config.custom.config.cribl.transport`
 
 Read-Only:
 
@@ -127,11 +135,11 @@ Read-Only:
 - `host` (String)
 - `path` (String)
 - `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--cribl--transport--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--cribl--transport--tls))
 - `type` (String)
 
-<a id="nestedatt--config--custom--config--cribl--transport--tls"></a>
-### Nested Schema for `config.custom.config.cribl.transport.tls`
+<a id="nestedatt--items--config--custom--config--cribl--transport--tls"></a>
+### Nested Schema for `items.config.custom.config.cribl.transport.tls`
 
 Read-Only:
 
@@ -142,19 +150,19 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--custom--config--event"></a>
-### Nested Schema for `config.custom.config.event`
+<a id="nestedatt--items--config--custom--config--event"></a>
+### Nested Schema for `items.config.custom.config.event`
 
 Read-Only:
 
 - `enable` (Boolean)
-- `format` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event--format))
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event--transport))
+- `format` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--event--format))
+- `transport` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--event--transport))
 - `type` (String)
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--event--watch))
+- `watch` (Attributes List) (see [below for nested schema](#nestedatt--items--config--custom--config--event--watch))
 
-<a id="nestedatt--config--custom--config--event--format"></a>
-### Nested Schema for `config.custom.config.event.format`
+<a id="nestedatt--items--config--custom--config--event--format"></a>
+### Nested Schema for `items.config.custom.config.event.format`
 
 Read-Only:
 
@@ -162,8 +170,8 @@ Read-Only:
 - `maxeventpersec` (Number)
 
 
-<a id="nestedatt--config--custom--config--event--transport"></a>
-### Nested Schema for `config.custom.config.event.transport`
+<a id="nestedatt--items--config--custom--config--event--transport"></a>
+### Nested Schema for `items.config.custom.config.event.transport`
 
 Read-Only:
 
@@ -171,11 +179,11 @@ Read-Only:
 - `host` (String)
 - `path` (String)
 - `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event--transport--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--event--transport--tls))
 - `type` (String)
 
-<a id="nestedatt--config--custom--config--event--transport--tls"></a>
-### Nested Schema for `config.custom.config.event.transport.tls`
+<a id="nestedatt--items--config--custom--config--event--transport--tls"></a>
+### Nested Schema for `items.config.custom.config.event.transport.tls`
 
 Read-Only:
 
@@ -185,8 +193,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--custom--config--event--watch"></a>
-### Nested Schema for `config.custom.config.event.watch`
+<a id="nestedatt--items--config--custom--config--event--watch"></a>
+### Nested Schema for `items.config.custom.config.event.watch`
 
 Read-Only:
 
@@ -200,26 +208,26 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--custom--config--libscope"></a>
-### Nested Schema for `config.custom.config.libscope`
+<a id="nestedatt--items--config--custom--config--libscope"></a>
+### Nested Schema for `items.config.custom.config.libscope`
 
 Read-Only:
 
 - `commanddir` (String)
 - `configevent` (Boolean)
-- `log` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope--log))
+- `log` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--libscope--log))
 - `summaryperiod` (Number)
 
-<a id="nestedatt--config--custom--config--libscope--log"></a>
-### Nested Schema for `config.custom.config.libscope.log`
+<a id="nestedatt--items--config--custom--config--libscope--log"></a>
+### Nested Schema for `items.config.custom.config.libscope.log`
 
 Read-Only:
 
 - `level` (String)
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope--log--transport))
+- `transport` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--libscope--log--transport))
 
-<a id="nestedatt--config--custom--config--libscope--log--transport"></a>
-### Nested Schema for `config.custom.config.libscope.log.transport`
+<a id="nestedatt--items--config--custom--config--libscope--log--transport"></a>
+### Nested Schema for `items.config.custom.config.libscope.log.transport`
 
 Read-Only:
 
@@ -227,11 +235,11 @@ Read-Only:
 - `host` (String)
 - `path` (String)
 - `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--libscope--log--transport--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--libscope--log--transport--tls))
 - `type` (String)
 
-<a id="nestedatt--config--custom--config--libscope--log--transport--tls"></a>
-### Nested Schema for `config.custom.config.libscope.log.transport.tls`
+<a id="nestedatt--items--config--custom--config--libscope--log--transport--tls"></a>
+### Nested Schema for `items.config.custom.config.libscope.log.transport.tls`
 
 Read-Only:
 
@@ -243,18 +251,18 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--custom--config--metric"></a>
-### Nested Schema for `config.custom.config.metric`
+<a id="nestedatt--items--config--custom--config--metric"></a>
+### Nested Schema for `items.config.custom.config.metric`
 
 Read-Only:
 
 - `enable` (Boolean)
-- `format` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--format))
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--transport))
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--metric--watch))
+- `format` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--metric--format))
+- `transport` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--metric--transport))
+- `watch` (Attributes List) (see [below for nested schema](#nestedatt--items--config--custom--config--metric--watch))
 
-<a id="nestedatt--config--custom--config--metric--format"></a>
-### Nested Schema for `config.custom.config.metric.format`
+<a id="nestedatt--items--config--custom--config--metric--format"></a>
+### Nested Schema for `items.config.custom.config.metric.format`
 
 Read-Only:
 
@@ -264,8 +272,8 @@ Read-Only:
 - `verbosity` (Number)
 
 
-<a id="nestedatt--config--custom--config--metric--transport"></a>
-### Nested Schema for `config.custom.config.metric.transport`
+<a id="nestedatt--items--config--custom--config--metric--transport"></a>
+### Nested Schema for `items.config.custom.config.metric.transport`
 
 Read-Only:
 
@@ -273,11 +281,11 @@ Read-Only:
 - `host` (String)
 - `path` (String)
 - `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--metric--transport--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--config--custom--config--metric--transport--tls))
 - `type` (String)
 
-<a id="nestedatt--config--custom--config--metric--transport--tls"></a>
-### Nested Schema for `config.custom.config.metric.transport.tls`
+<a id="nestedatt--items--config--custom--config--metric--transport--tls"></a>
+### Nested Schema for `items.config.custom.config.metric.transport.tls`
 
 Read-Only:
 
@@ -287,13 +295,13 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--custom--config--metric--watch"></a>
-### Nested Schema for `config.custom.config.metric.watch`
+<a id="nestedatt--items--config--custom--config--metric--watch"></a>
+### Nested Schema for `items.config.custom.config.metric.watch`
 
 
 
-<a id="nestedatt--config--custom--config--payload"></a>
-### Nested Schema for `config.custom.config.payload`
+<a id="nestedatt--items--config--custom--config--payload"></a>
+### Nested Schema for `items.config.custom.config.payload`
 
 Read-Only:
 
@@ -301,8 +309,8 @@ Read-Only:
 - `enable` (Boolean)
 
 
-<a id="nestedatt--config--custom--config--protocol"></a>
-### Nested Schema for `config.custom.config.protocol`
+<a id="nestedatt--items--config--custom--config--protocol"></a>
+### Nested Schema for `items.config.custom.config.protocol`
 
 Read-Only:
 
@@ -314,8 +322,8 @@ Read-Only:
 - `regex` (String)
 
 
-<a id="nestedatt--config--custom--config--tags"></a>
-### Nested Schema for `config.custom.config.tags`
+<a id="nestedatt--items--config--custom--config--tags"></a>
+### Nested Schema for `items.config.custom.config.tags`
 
 Read-Only:
 
@@ -325,19 +333,19 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--event"></a>
-### Nested Schema for `config.event`
+<a id="nestedatt--items--config--event"></a>
+### Nested Schema for `items.config.event`
 
 Read-Only:
 
 - `enable` (Boolean)
-- `format` (Attributes) (see [below for nested schema](#nestedatt--config--event--format))
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--event--transport))
+- `format` (Attributes) (see [below for nested schema](#nestedatt--items--config--event--format))
+- `transport` (Attributes) (see [below for nested schema](#nestedatt--items--config--event--transport))
 - `type` (String)
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--event--watch))
+- `watch` (Attributes List) (see [below for nested schema](#nestedatt--items--config--event--watch))
 
-<a id="nestedatt--config--event--format"></a>
-### Nested Schema for `config.event.format`
+<a id="nestedatt--items--config--event--format"></a>
+### Nested Schema for `items.config.event.format`
 
 Read-Only:
 
@@ -345,8 +353,8 @@ Read-Only:
 - `maxeventpersec` (Number)
 
 
-<a id="nestedatt--config--event--transport"></a>
-### Nested Schema for `config.event.transport`
+<a id="nestedatt--items--config--event--transport"></a>
+### Nested Schema for `items.config.event.transport`
 
 Read-Only:
 
@@ -354,11 +362,11 @@ Read-Only:
 - `host` (String)
 - `path` (String)
 - `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--event--transport--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--config--event--transport--tls))
 - `type` (String)
 
-<a id="nestedatt--config--event--transport--tls"></a>
-### Nested Schema for `config.event.transport.tls`
+<a id="nestedatt--items--config--event--transport--tls"></a>
+### Nested Schema for `items.config.event.transport.tls`
 
 Read-Only:
 
@@ -368,8 +376,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--event--watch"></a>
-### Nested Schema for `config.event.watch`
+<a id="nestedatt--items--config--event--watch"></a>
+### Nested Schema for `items.config.event.watch`
 
 Read-Only:
 
@@ -383,26 +391,26 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--libscope"></a>
-### Nested Schema for `config.libscope`
+<a id="nestedatt--items--config--libscope"></a>
+### Nested Schema for `items.config.libscope`
 
 Read-Only:
 
 - `commanddir` (String)
 - `configevent` (Boolean)
-- `log` (Attributes) (see [below for nested schema](#nestedatt--config--libscope--log))
+- `log` (Attributes) (see [below for nested schema](#nestedatt--items--config--libscope--log))
 - `summaryperiod` (Number)
 
-<a id="nestedatt--config--libscope--log"></a>
-### Nested Schema for `config.libscope.log`
+<a id="nestedatt--items--config--libscope--log"></a>
+### Nested Schema for `items.config.libscope.log`
 
 Read-Only:
 
 - `level` (String)
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--libscope--log--transport))
+- `transport` (Attributes) (see [below for nested schema](#nestedatt--items--config--libscope--log--transport))
 
-<a id="nestedatt--config--libscope--log--transport"></a>
-### Nested Schema for `config.libscope.log.transport`
+<a id="nestedatt--items--config--libscope--log--transport"></a>
+### Nested Schema for `items.config.libscope.log.transport`
 
 Read-Only:
 
@@ -410,11 +418,11 @@ Read-Only:
 - `host` (String)
 - `path` (String)
 - `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--libscope--log--transport--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--config--libscope--log--transport--tls))
 - `type` (String)
 
-<a id="nestedatt--config--libscope--log--transport--tls"></a>
-### Nested Schema for `config.libscope.log.transport.tls`
+<a id="nestedatt--items--config--libscope--log--transport--tls"></a>
+### Nested Schema for `items.config.libscope.log.transport.tls`
 
 Read-Only:
 
@@ -426,18 +434,18 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--metric"></a>
-### Nested Schema for `config.metric`
+<a id="nestedatt--items--config--metric"></a>
+### Nested Schema for `items.config.metric`
 
 Read-Only:
 
 - `enable` (Boolean)
-- `format` (Attributes) (see [below for nested schema](#nestedatt--config--metric--format))
-- `transport` (Attributes) (see [below for nested schema](#nestedatt--config--metric--transport))
-- `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--metric--watch))
+- `format` (Attributes) (see [below for nested schema](#nestedatt--items--config--metric--format))
+- `transport` (Attributes) (see [below for nested schema](#nestedatt--items--config--metric--transport))
+- `watch` (Attributes List) (see [below for nested schema](#nestedatt--items--config--metric--watch))
 
-<a id="nestedatt--config--metric--format"></a>
-### Nested Schema for `config.metric.format`
+<a id="nestedatt--items--config--metric--format"></a>
+### Nested Schema for `items.config.metric.format`
 
 Read-Only:
 
@@ -447,8 +455,8 @@ Read-Only:
 - `verbosity` (Number)
 
 
-<a id="nestedatt--config--metric--transport"></a>
-### Nested Schema for `config.metric.transport`
+<a id="nestedatt--items--config--metric--transport"></a>
+### Nested Schema for `items.config.metric.transport`
 
 Read-Only:
 
@@ -456,11 +464,11 @@ Read-Only:
 - `host` (String)
 - `path` (String)
 - `port` (Number)
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--config--metric--transport--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--config--metric--transport--tls))
 - `type` (String)
 
-<a id="nestedatt--config--metric--transport--tls"></a>
-### Nested Schema for `config.metric.transport.tls`
+<a id="nestedatt--items--config--metric--transport--tls"></a>
+### Nested Schema for `items.config.metric.transport.tls`
 
 Read-Only:
 
@@ -470,13 +478,13 @@ Read-Only:
 
 
 
-<a id="nestedatt--config--metric--watch"></a>
-### Nested Schema for `config.metric.watch`
+<a id="nestedatt--items--config--metric--watch"></a>
+### Nested Schema for `items.config.metric.watch`
 
 
 
-<a id="nestedatt--config--payload"></a>
-### Nested Schema for `config.payload`
+<a id="nestedatt--items--config--payload"></a>
+### Nested Schema for `items.config.payload`
 
 Read-Only:
 
@@ -484,8 +492,8 @@ Read-Only:
 - `enable` (Boolean)
 
 
-<a id="nestedatt--config--protocol"></a>
-### Nested Schema for `config.protocol`
+<a id="nestedatt--items--config--protocol"></a>
+### Nested Schema for `items.config.protocol`
 
 Read-Only:
 
@@ -497,8 +505,8 @@ Read-Only:
 - `regex` (String)
 
 
-<a id="nestedatt--config--tags"></a>
-### Nested Schema for `config.tags`
+<a id="nestedatt--items--config--tags"></a>
+### Nested Schema for `items.config.tags`
 
 Read-Only:
 

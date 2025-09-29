@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 6b7d0807a6abde4f4e0e179a97c420f9
+  docChecksum: 1387a950687ca3544f74ea96d7ea87a0
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.628.1
-  generationVersion: 2.716.1
+  speakeasyVersion: 1.631.4
+  generationVersion: 2.716.16
   releaseVersion: 1.14.5
   configChecksum: 51eec6be593eed443749b86b63c6073e
   published: true
@@ -431,6 +431,7 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_tag.go
   - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
   - internal/provider/types/appscope_custom.go
+  - internal/provider/types/appscope_lib_entry.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/auth_request_header.go
@@ -463,10 +464,12 @@ generatedFiles:
   - internal/provider/types/config_group_lookups.go
   - internal/provider/types/consumers.go
   - internal/provider/types/create_lakehouse_dataset_connections_request_body.go
+  - internal/provider/types/cribl_lake_dataset.go
   - internal/provider/types/cribl_leader_dataset.go
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
+  - internal/provider/types/dashboard_category.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
@@ -493,6 +496,7 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
+  - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/google_workspace_account_config.go
@@ -1257,6 +1261,7 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
+  - internal/provider/types/parser_lib_entry.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1267,6 +1272,7 @@ generatedFiles:
   - internal/provider/types/prometheus_auth_oauth_param2.go
   - internal/provider/types/prometheus_dataset.go
   - internal/provider/types/prometheus_provider.go
+  - internal/provider/types/regex_lib_entry.go
   - internal/provider/types/resource_type_label.go
   - internal/provider/types/retry_rules_configuration.go
   - internal/provider/types/routes.go
@@ -1282,6 +1288,7 @@ generatedFiles:
   - internal/provider/types/sas_config.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
+  - internal/provider/types/search_dashboard.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1303,6 +1310,7 @@ generatedFiles:
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
   - internal/provider/types/tls_configuration.go
+  - internal/provider/types/usage_group.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/webhook_target.go
@@ -2588,8 +2596,8 @@ examples:
     speakeasy-default-get-system-projects-subscriptions-by-group-id-by-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myGroupId"
+          projectId: "mySubGroupProjectId"
       responses:
         "200":
           application/json: {}
@@ -2599,8 +2607,8 @@ examples:
     speakeasy-default-get-system-projects-version-count-by-group-id-and-project-id:
       parameters:
         path:
-          groupId: "<id>"
-          projectId: "<id>"
+          groupId: "myExistingGroupId"
+          projectId: "myNewProjectId"
       responses:
         "200":
           application/json: {}

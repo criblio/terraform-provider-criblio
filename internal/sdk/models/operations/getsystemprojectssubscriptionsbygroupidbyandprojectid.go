@@ -30,7 +30,8 @@ func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDRequest) GetProjec
 
 // GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody - A list of Subscription objects
 type GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody struct {
-	Items []shared.Subscription `json:"items,omitempty"`
+	Items   []shared.Subscription `json:"items,omitempty"`
+	Example any                   `json:"example,omitempty"`
 }
 
 func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody) GetItems() []shared.Subscription {
@@ -38,6 +39,13 @@ func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody) GetI
 		return nil
 	}
 	return g.Items
+}
+
+func (g *GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponseBody) GetExample() any {
+	if g == nil {
+		return nil
+	}
+	return g.Example
 }
 
 type GetSystemProjectsSubscriptionsByGroupIDByAndProjectIDResponse struct {

@@ -7,46 +7,55 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/provider/typeconvert"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *CriblLakeDatasetDataSourceModel) RefreshFromSharedCriblLakeDataset(ctx context.Context, resp *shared.CriblLakeDataset) diag.Diagnostics {
+func (r *CriblLakeDatasetDataSourceModel) RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx context.Context, resp *operations.GetCriblLakeDatasetByLakeIDAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.AcceleratedFields = make([]types.String, 0, len(resp.AcceleratedFields))
-	for _, v := range resp.AcceleratedFields {
-		r.AcceleratedFields = append(r.AcceleratedFields, types.StringValue(v))
-	}
-	r.BucketName = types.StringPointerValue(resp.BucketName)
-	r.Description = types.StringPointerValue(resp.Description)
-	if resp.Format != nil {
-		r.Format = types.StringValue(string(*resp.Format))
-	} else {
-		r.Format = types.StringNull()
-	}
-	r.ID = types.StringValue(resp.ID)
-	r.RetentionPeriodInDays = types.Float64PointerValue(resp.RetentionPeriodInDays)
-	if resp.SearchConfig == nil {
-		r.SearchConfig = nil
-	} else {
-		r.SearchConfig = &tfTypes.LakeDatasetSearchConfig{}
-		r.SearchConfig.Datatypes = make([]types.String, 0, len(resp.SearchConfig.Datatypes))
-		for _, v := range resp.SearchConfig.Datatypes {
-			r.SearchConfig.Datatypes = append(r.SearchConfig.Datatypes, types.StringValue(v))
-		}
-		if resp.SearchConfig.Metadata == nil {
-			r.SearchConfig.Metadata = nil
-		} else {
-			r.SearchConfig.Metadata = &tfTypes.DatasetMetadata{}
-			r.SearchConfig.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.SearchConfig.Metadata.Created))
-			r.SearchConfig.Metadata.EnableAcceleration = types.BoolPointerValue(resp.SearchConfig.Metadata.EnableAcceleration)
-			r.SearchConfig.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.SearchConfig.Metadata.Modified))
-			r.SearchConfig.Metadata.Tags = make([]types.String, 0, len(resp.SearchConfig.Metadata.Tags))
-			for _, v := range resp.SearchConfig.Metadata.Tags {
-				r.SearchConfig.Metadata.Tags = append(r.SearchConfig.Metadata.Tags, types.StringValue(v))
+	if resp != nil {
+		r.Items = []tfTypes.CriblLakeDataset{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.CriblLakeDataset
+
+			items.AcceleratedFields = make([]types.String, 0, len(itemsItem.AcceleratedFields))
+			for _, v := range itemsItem.AcceleratedFields {
+				items.AcceleratedFields = append(items.AcceleratedFields, types.StringValue(v))
 			}
+			items.BucketName = types.StringPointerValue(itemsItem.BucketName)
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			if itemsItem.Format != nil {
+				items.Format = types.StringValue(string(*itemsItem.Format))
+			} else {
+				items.Format = types.StringNull()
+			}
+			items.ID = types.StringValue(itemsItem.ID)
+			items.RetentionPeriodInDays = types.Float64PointerValue(itemsItem.RetentionPeriodInDays)
+			if itemsItem.SearchConfig == nil {
+				items.SearchConfig = nil
+			} else {
+				items.SearchConfig = &tfTypes.LakeDatasetSearchConfig{}
+				items.SearchConfig.Datatypes = make([]types.String, 0, len(itemsItem.SearchConfig.Datatypes))
+				for _, v := range itemsItem.SearchConfig.Datatypes {
+					items.SearchConfig.Datatypes = append(items.SearchConfig.Datatypes, types.StringValue(v))
+				}
+				if itemsItem.SearchConfig.Metadata == nil {
+					items.SearchConfig.Metadata = nil
+				} else {
+					items.SearchConfig.Metadata = &tfTypes.DatasetMetadata{}
+					items.SearchConfig.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.SearchConfig.Metadata.Created))
+					items.SearchConfig.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.SearchConfig.Metadata.EnableAcceleration)
+					items.SearchConfig.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.SearchConfig.Metadata.Modified))
+					items.SearchConfig.Metadata.Tags = make([]types.String, 0, len(itemsItem.SearchConfig.Metadata.Tags))
+					for _, v := range itemsItem.SearchConfig.Metadata.Tags {
+						items.SearchConfig.Metadata.Tags = append(items.SearchConfig.Metadata.Tags, types.StringValue(v))
+					}
+				}
+			}
+
+			r.Items = append(r.Items, items)
 		}
 	}
 

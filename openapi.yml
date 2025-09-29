@@ -52377,6 +52377,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Subscription"
+                  example:
+                    value:
+                      description: "Description for my new subcription"
+                      disabled: false
+                      filter: ".*"
+                      id: "newSubscriptionId"
+                      pipeline: "existingPipelineId"
         "401":
           description: Unauthorized
         "500":
@@ -52385,6 +52392,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples: 
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -52392,12 +52402,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "mySubGroupProjectId"
   "/m/{groupId}/system/projects/{projectId}/version/count":
     get:
       operationId: getSystemProjectsVersionCountByGroupIdAndProjectId
@@ -52433,6 +52445,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples: 
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -52440,12 +52455,14 @@ paths:
           schema:
             type: string
           description: Group Id
+          example: "myExistingGroupId"
         - name: projectId
           in: path
           required: true
           schema:
             type: string
           description: Project Id
+          example: "myNewProjectId"
   "/m/{groupId}/system/projects/{projectId}/version/diff":
     get:
       operationId: getSystemProjectsVersionDiffByGroupIdAndProjectId
@@ -52481,6 +52498,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples: 
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -52533,6 +52553,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples: 
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -52580,6 +52603,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples: 
+                items:
+                  message: "Example Error String"
       requestBody:
         description: ProjectGitCommitParams object
         required: true
@@ -52637,6 +52663,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples: 
+                items:
+                  message: "Example Error String"
       requestBody:
         description: CaptureParams object
         required: true
@@ -52700,6 +52729,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples: 
+                items:
+                  message: "Example Error String"
       requestBody:
         description: CaptureParams object
         required: true
@@ -52757,6 +52789,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: PreviewDataParams object
         required: true
@@ -52809,6 +52844,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -52860,6 +52898,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -52905,6 +52946,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -52962,6 +53006,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -53012,6 +53059,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: groupId
           in: path
@@ -53063,6 +53113,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/banners:
     get:
       operationId: listBannerMessage
@@ -53096,6 +53149,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createBannerMessage
       tags: *a1
@@ -53188,6 +53244,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createCertificate
       tags: *a4
@@ -53279,6 +53338,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -53318,6 +53380,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /m/{groupId}/lib/jobs:
     get:
       operationId: listCollectors
@@ -53361,6 +53426,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createSavedJob
       tags: *a7
@@ -53496,6 +53564,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createKeyMetadataEntity
       tags: *a10
@@ -53588,6 +53659,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createBulletinMessage
       tags: *a13
@@ -53663,6 +53737,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createNotificationTarget
       tags: *a16
@@ -53758,6 +53835,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createNotification
       tags: *a19
@@ -53854,6 +53934,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createPolicyRule
       tags: *a22
@@ -53946,6 +54029,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createRole
       tags: *a25
@@ -54038,6 +54124,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createScript
       tags: *a28
@@ -54137,6 +54226,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     get:
       operationId: getTeam
       tags:
@@ -54168,6 +54260,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: product
           in: query
@@ -54257,6 +54352,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -54309,6 +54407,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -54348,6 +54449,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -54386,6 +54490,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: MembershipSchema object
         required: true
@@ -54434,6 +54541,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createUser
       tags: *a34
@@ -54494,6 +54604,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: UserProfile object
         required: true
@@ -54553,6 +54666,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: UserInfo object
         required: true
@@ -54599,6 +54715,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       tags:
         - LakeHouse
@@ -54667,6 +54786,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     patch:
       tags:
         - LakeHouse
@@ -54711,6 +54833,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     delete:
       tags:
         - LakeHouse
@@ -54749,6 +54874,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/products/lake/lakes/{lakeId}/datasets":
     post:
       operationId: createCriblLakeDatasetByLakeId
@@ -54782,6 +54910,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: CriblLakeDataset object
         required: true
@@ -54831,6 +54962,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: lakeId
           in: path
@@ -55003,6 +55137,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: lakeId
           in: path
@@ -55053,6 +55190,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: lakeId
           in: path
@@ -55103,6 +55243,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: CriblLakeDataset object
         required: true
@@ -55162,6 +55305,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createDashboardCategory
       tags: *a37
@@ -55258,6 +55404,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createUsageGroup
       tags: *a40
@@ -55353,6 +55502,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createDatasetProviderType
       tags: *a43
@@ -55445,6 +55597,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createDatasetProvider
       tags: *a46
@@ -55541,6 +55696,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createDataset
       tags: *a49
@@ -55634,6 +55792,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -55742,6 +55903,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: AppscopeConfig#create
       parameters:
@@ -55870,6 +56034,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: Grok#create
       parameters:
@@ -56000,6 +56167,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: LookupFile#create
       parameters:
@@ -56128,6 +56298,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: ParserLibEntry#create
       parameters:
@@ -56247,6 +56420,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: onlyWithEncodings
           in: query
@@ -56286,6 +56462,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -56325,6 +56504,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -56370,6 +56552,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -56417,6 +56602,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: Regex#create
       parameters:
@@ -56540,6 +56728,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createDataSample
       tags: *a74
@@ -56631,6 +56822,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -56672,6 +56866,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createSearchDashboard
       tags: *a77
@@ -56764,6 +56961,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -56866,6 +57066,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createSearchMacro
       tags: *a87
@@ -56961,6 +57164,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createSavedQuery
       tags: *a90
@@ -57057,6 +57263,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createSearchJob
       tags: *a93
@@ -57151,6 +57360,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -57190,6 +57402,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -57229,6 +57444,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: databaseType
           in: query
@@ -57289,6 +57507,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/m/{groupId}/lib/database-connections/{id}":
     get:
       x-speakeasy-entity-operation: DatabaseConnection#read
@@ -57388,6 +57609,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: DatabaseConnectionTest object
         required: true
@@ -57436,6 +57660,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: EventBreakerRuleset#create
       parameters:
@@ -57558,6 +57785,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: with
           in: query
@@ -57622,6 +57852,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/m/{groupId}/lib/vars/{id}":
     get:
       x-speakeasy-entity-operation: GlobalVar#read
@@ -57854,6 +58087,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: HmacFunction#create
       parameters:
@@ -57983,6 +58219,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: Source#create
       parameters:
@@ -58110,6 +58349,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: AddHecTokenRequest object
         required: true
@@ -58163,6 +58405,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: UpdateHecTokenRequest object
         required: true
@@ -58222,6 +58467,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/system/iometrics/{id}":
     get:
       operationId: getIoMetricsEntryById
@@ -58309,6 +58557,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: Destination#create
       parameters:
@@ -58436,6 +58687,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -58481,6 +58735,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -58528,6 +58785,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -58575,6 +58835,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: OutputTestRequest object
         required: true
@@ -58635,6 +58898,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: ParquetSchema#create
       operationId: createSchema
@@ -58763,6 +59029,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: Pipeline#create
       parameters:
@@ -58886,6 +59155,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createProfilerItem
       tags: *a132
@@ -58978,6 +59250,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/routes/{id}":
     get:
       operationId: getRoutesById
@@ -59090,6 +59365,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         &a142
         description: RouteDefinitions object
@@ -59418,6 +59696,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: PackDestination#create
       parameters:
@@ -59903,6 +60184,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: Schema#create
       parameters:
@@ -60107,6 +60391,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createRestSecret
       tags: *a150
@@ -60199,6 +60486,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/system/status/inputs/{id}":
     get:
       operationId: getInputStatusById
@@ -60246,6 +60536,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/system/status/outputs/{id}":
     get:
       operationId: getOutputStatusById
@@ -60293,6 +60586,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: pid
           in: query
@@ -60332,6 +60628,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/edge/appscope/processes/{pid}":
     delete:
       operationId: deleteEdgeAppscopeProcessesByPid
@@ -60365,6 +60664,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: pid
           in: path
@@ -60404,6 +60706,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: pid
           in: path
@@ -60443,6 +60748,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: pid
           in: path
@@ -60484,6 +60792,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /edge/events/query:
     get:
       operationId: getEdgeEventsQuery
@@ -60517,6 +60828,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: Files
           in: query
@@ -60591,6 +60905,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/edge/ls{path}":
     get:
       operationId: getEdgeLsByPath
@@ -60624,6 +60941,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: path
           in: path
@@ -60663,6 +60983,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /edge/metadata:
     get:
       operationId: getEdgeMetadata
@@ -60695,6 +61018,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /edge/file/ingest:
     post:
       operationId: createEdgeFileIngest
@@ -60732,6 +61058,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: filePath
           in: query
@@ -60802,6 +61131,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: path
           in: query
@@ -60849,6 +61181,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /edge/kube-proxy:
     get:
       operationId: getEdgeKubeProxy
@@ -60882,6 +61217,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: path
           in: query
@@ -61132,6 +61470,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /auth/multi-factor:
     get:
       operationId: getAuthMultiFactor
@@ -61164,6 +61505,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/auth/users/{id}/token":
     delete:
       operationId: deleteAuthUsersTokenById
@@ -61197,6 +61541,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -61243,6 +61590,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -61282,6 +61632,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /authorize/roles:
     get:
       operationId: getAuthorizeRoles
@@ -61314,6 +61667,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/capture:
     post:
       operationId: createSystemCapture
@@ -61348,6 +61704,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: CaptureParams object
         required: true
@@ -61391,6 +61750,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: CaptureParams object
         required: true
@@ -61441,6 +61803,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: CaptureParams object
         required: true
@@ -61493,6 +61858,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     patch:
       operationId: updateChangelogViewed
       tags:
@@ -61524,6 +61892,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /output/click-house/describe-table:
     post:
       operationId: createOutputClickHouseDescribeTable
@@ -61556,6 +61927,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: CHOutConfig object
         required: true
@@ -61595,6 +61969,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: query
           in: query
@@ -61644,6 +62021,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: filterExp
           in: query
@@ -61684,6 +62064,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: filterExp
           in: query
@@ -61754,6 +62137,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/master/bundles/{group}/{version}":
     get:
       operationId: getConfigBundlesByGroupAndVersion
@@ -61815,6 +62201,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: mode
           in: query
@@ -61858,6 +62247,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: group
           in: path
@@ -61898,6 +62290,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: group
           in: path
@@ -61943,6 +62338,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: distributedUpgrade object
         required: true
@@ -61990,6 +62388,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: file
           in: path
@@ -62029,6 +62430,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /conditions:
     get:
       operationId: listCondition
@@ -62062,6 +62466,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/conditions/{id}":
     get:
       operationId: getConditionById
@@ -62155,6 +62562,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62194,6 +62604,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: SavedJob object
         required: true
@@ -62235,6 +62648,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: offset
           in: query
@@ -62315,6 +62731,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62353,6 +62772,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62392,6 +62814,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62437,6 +62862,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62476,6 +62904,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62516,6 +62947,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62568,6 +63002,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62614,6 +63051,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -62653,6 +63093,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     patch:
       operationId: updateSecurityKmsConfig
       tags:
@@ -62684,6 +63127,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: KMSProviderConfig object
         required: true
@@ -62723,6 +63169,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/licenses:
     get:
       operationId: listLicense
@@ -62756,6 +63205,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createLicense
       tags:
@@ -62787,6 +63239,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: LicenseRequest object
         required: true
@@ -62853,6 +63308,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/logger:
     get:
       operationId: listLoggerConfig
@@ -62886,6 +63344,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/system/logger/{id}":
     get:
       operationId: getLoggerConfigById
@@ -62965,6 +63426,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -63049,6 +63513,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -63120,6 +63587,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/logs/search:
     get:
       operationId: getSystemLogsSearch
@@ -63153,6 +63623,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: type
           in: query
@@ -63249,6 +63722,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: PackRequestBody object
         required: true
@@ -63287,6 +63763,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: with
           in: query
@@ -63337,6 +63816,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: filename
           in: query
@@ -63383,6 +63865,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: with
           in: query
@@ -63466,6 +63951,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -63542,6 +64030,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: PackClone object
         required: true
@@ -63581,6 +64072,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -63621,6 +64115,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -63683,6 +64180,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -63724,6 +64224,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: PreviewDataParams object
         required: true
@@ -63763,6 +64266,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/products/{product}/users/{id}/acl":
     get:
       operationId: getProductsUsersAclByProductAndId
@@ -63795,6 +64301,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: product
           in: path
@@ -63858,6 +64367,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: product
           in: path
@@ -63909,6 +64421,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: product
           in: path
@@ -63955,6 +64470,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: ProjectGitCommitParams object
         required: true
@@ -64004,6 +64522,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: projectId
           in: path
@@ -64052,6 +64573,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: projectId
           in: path
@@ -64111,6 +64635,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: projectId
           in: path
@@ -64158,6 +64685,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: ProjectGitCommitParams object
         required: true
@@ -64207,6 +64737,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: projectId
           in: path
@@ -64280,6 +64813,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/diag:
     get:
       operationId: getSystemDiag
@@ -64312,6 +64848,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     delete:
       operationId: deleteSystemDiag
       tags:
@@ -64344,6 +64883,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: path
           in: query
@@ -64384,6 +64926,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: SendDiagBundle object
         required: true
@@ -64423,6 +64968,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: SystemMetricsEnum object
         required: true
@@ -64463,6 +65011,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: wp
           in: query
@@ -64534,6 +65085,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: MetricsAggOpts object
         required: true
@@ -64595,6 +65149,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     patch:
       operationId: updateSystemSettingsAuth
       tags:
@@ -64626,6 +65183,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/settings/conf:
     get:
       operationId: getSystemSettingsConf
@@ -64658,6 +65218,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     patch:
       operationId: updateSystemSettingsConf
       tags:
@@ -64689,6 +65252,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: SystemSettingsConf object
         required: true
@@ -64729,6 +65295,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     patch:
       operationId: updateSystemSettingsGitSettings
       tags:
@@ -64761,6 +65330,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/settings/search-limits:
     get:
       operationId: getSystemSettingsSearchLimits
@@ -64793,6 +65365,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/settings:
     get:
       operationId: getSystemSettings
@@ -64831,6 +65406,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     patch:
       operationId: updateSystemSettings
       tags:
@@ -64866,6 +65444,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/settings/cribl:
     get:
       operationId: getSystemSettingsCribl
@@ -64898,6 +65479,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /system/settings/upgrade:
     get:
       operationId: getSystemSettingsUpgrade
@@ -64930,6 +65514,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/system/settings/upgrade/{version}":
     post:
       operationId: createSystemSettingsUpgradeByVersion
@@ -64962,6 +65549,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: version
           in: path
@@ -65001,6 +65591,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: upgradeMaster object
         required: true
@@ -65041,6 +65634,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: key
           in: path
@@ -65080,6 +65676,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: UI State Patch object
         required: true
@@ -65113,6 +65712,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: group
           in: query
@@ -65154,6 +65756,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /version/commit:
     post:
       x-speakeasy-entity-operation: Commit#create
@@ -65190,6 +65795,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: GitCommitParams object
         required: true
@@ -65231,6 +65839,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: group
           in: query
@@ -65278,6 +65889,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /version/diff:
     get:
       operationId: getVersionDiff
@@ -65312,6 +65926,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: commit
           in: query
@@ -65370,6 +65987,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: group
           in: query
@@ -65416,6 +66036,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /version/push:
     post:
       operationId: createVersionPush
@@ -65450,6 +66073,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /version/revert:
     post:
       operationId: createVersionRevert
@@ -65483,6 +66109,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: GitRevertParams object
         required: true
@@ -65531,6 +66160,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: commit
           in: query
@@ -65589,6 +66221,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: group
           in: query
@@ -65630,6 +66265,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/ai/settings/features/{feature}":
     get:
       operationId: getAiSettingsFeaturesByFeature
@@ -65663,6 +66301,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: feature
           in: path
@@ -65702,6 +66343,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: feature
           in: path
@@ -65742,6 +66386,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createAiSettingsFeatures
       tags:
@@ -65774,6 +66421,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /ai/consent:
     get:
       operationId: getAiConsent
@@ -65809,6 +66459,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       operationId: createAiConsent
       tags:
@@ -65843,6 +66496,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /search/event-breaker-preview:
     post:
       operationId: createSearchEventBreakerPreview
@@ -65875,6 +66531,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: DatatypePreviewRequestBody object
         required: true
@@ -65914,6 +66573,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/search/jobs/{id}/metrics":
     get:
       operationId: getSearchJobsMetricsById
@@ -65937,6 +66599,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -65967,6 +66632,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /search/preview:
     post:
       operationId: createSearchPreview
@@ -65999,6 +66667,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: PreviewRequestBody object
         required: true
@@ -66037,6 +66708,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/search/trust-policies/{id}": {}
   "/search/jobs/{id}/stages/{stageId}/results":
     get:
@@ -66063,6 +66737,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -66102,6 +66779,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -66157,6 +66837,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -66230,6 +66913,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -66270,6 +66956,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /edge/logs:
     get:
       operationId: getEdgeLogs
@@ -66302,6 +66991,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: mode
           in: query
@@ -66361,6 +67053,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: pid
           in: path
@@ -66401,6 +67096,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   /functions:
     get:
       operationId: listFunction
@@ -66434,6 +67132,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/functions/{id}":
     get:
       operationId: getFunctionById
@@ -66515,6 +67216,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/collectors/{id}":
     get:
       operationId: getCollectorById
@@ -66562,6 +67266,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
   "/executors/{id}":
     get:
       operationId: getExecutorById
@@ -66616,6 +67323,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: Project#create
       parameters:
@@ -66734,6 +67444,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -66834,6 +67547,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: projectId
           in: path
@@ -66905,6 +67621,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
     post:
       x-speakeasy-entity-operation: Subscription#create
       parameters:
@@ -66974,6 +67693,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: Subscription object
         required: true
@@ -67034,6 +67756,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -67079,6 +67804,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -67125,6 +67853,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: projectId
           in: path
@@ -67165,6 +67896,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -67205,6 +67939,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: ConfigGroup object
         required: true
@@ -67253,6 +67990,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: product
           in: path
@@ -67296,6 +68036,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -67401,6 +68144,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: product
           in: path
@@ -67463,6 +68209,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              examples:
+                items:
+                  message: "Example Error String"
       parameters:
         - name: id
           in: path
@@ -67515,6 +68264,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+              examples:
+                items:
+                  message: "Example Error String"
       requestBody:
         description: DeployRequest object
         required: true

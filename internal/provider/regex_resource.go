@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -33,13 +34,14 @@ type RegexResource struct {
 
 // RegexResourceModel describes the resource data model.
 type RegexResourceModel struct {
-	Description types.String `tfsdk:"description"`
-	GroupID     types.String `tfsdk:"group_id"`
-	ID          types.String `tfsdk:"id"`
-	Lib         types.String `tfsdk:"lib"`
-	Regex       types.String `tfsdk:"regex"`
-	SampleData  types.String `tfsdk:"sample_data"`
-	Tags        types.String `tfsdk:"tags"`
+	Description types.String            `tfsdk:"description"`
+	GroupID     types.String            `tfsdk:"group_id"`
+	ID          types.String            `tfsdk:"id"`
+	Items       []tfTypes.RegexLibEntry `tfsdk:"items"`
+	Lib         types.String            `tfsdk:"lib"`
+	Regex       types.String            `tfsdk:"regex"`
+	SampleData  types.String            `tfsdk:"sample_data"`
+	Tags        types.String            `tfsdk:"tags"`
 }
 
 func (r *RegexResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -61,6 +63,35 @@ func (r *RegexResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to PATCH`,
+			},
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"lib": schema.StringAttribute{
+							Computed: true,
+						},
+						"regex": schema.StringAttribute{
+							Computed: true,
+						},
+						"sample_data": schema.StringAttribute{
+							Computed:    true,
+							Description: `Optionally, paste in sample data to match against this regex`,
+							Validators: []validator.String{
+								stringvalidator.UTF8LengthAtMost(4096),
+							},
+						},
+						"tags": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
 			},
 			"lib": schema.StringAttribute{
 				Computed: true,
@@ -160,6 +191,43 @@ func (r *RegexResource) Create(ctx context.Context, req resource.CreateRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetRegexLibEntryByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Regexes.GetRegexLibEntryByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRegexLibEntryByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -209,11 +277,11 @@ func (r *RegexResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedRegexLibEntry(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRegexLibEntryByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -264,6 +332,43 @@ func (r *RegexResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedRegexLibEntry(ctx, &res.Object.Items[0])...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetRegexLibEntryByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Regexes.GetRegexLibEntryByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRegexLibEntryByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

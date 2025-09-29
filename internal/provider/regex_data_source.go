@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -28,13 +29,9 @@ type RegexDataSource struct {
 
 // RegexDataSourceModel describes the data model.
 type RegexDataSourceModel struct {
-	Description types.String `tfsdk:"description"`
-	GroupID     types.String `tfsdk:"group_id"`
-	ID          types.String `tfsdk:"id"`
-	Lib         types.String `tfsdk:"lib"`
-	Regex       types.String `tfsdk:"regex"`
-	SampleData  types.String `tfsdk:"sample_data"`
-	Tags        types.String `tfsdk:"tags"`
+	GroupID types.String            `tfsdk:"group_id"`
+	ID      types.String            `tfsdk:"id"`
+	Items   []tfTypes.RegexLibEntry `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -48,9 +45,6 @@ func (r *RegexDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 		MarkdownDescription: "Regex DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
-				Computed: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -59,18 +53,31 @@ func (r *RegexDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"lib": schema.StringAttribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
-			},
-			"regex": schema.StringAttribute{
-				Computed: true,
-			},
-			"sample_data": schema.StringAttribute{
-				Computed:    true,
-				Description: `Optionally, paste in sample data to match against this regex`,
-			},
-			"tags": schema.StringAttribute{
-				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"lib": schema.StringAttribute{
+							Computed: true,
+						},
+						"regex": schema.StringAttribute{
+							Computed: true,
+						},
+						"sample_data": schema.StringAttribute{
+							Computed:    true,
+							Description: `Optionally, paste in sample data to match against this regex`,
+						},
+						"tags": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -136,11 +143,11 @@ func (r *RegexDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedRegexLibEntry(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRegexLibEntryByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
