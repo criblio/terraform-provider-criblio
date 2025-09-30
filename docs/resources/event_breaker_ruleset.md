@@ -15,8 +15,8 @@ EventBreakerRuleset Resource
 ```terraform
 resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   description    = "...my_description..."
-  group_id       = "...my_group_id..."
-  id             = "...my_id..."
+  group_id       = "myExistingGroupId"
+  id             = "myUniqueBreakerIdToCRUD"
   lib            = "custom"
   min_raw_length = 75773.87
   rules = [
@@ -120,8 +120,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_event_breaker_ruleset.my_criblio_event_breaker_ruleset
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueBreakerIdToCRUD"
   })
 }
 ```
@@ -129,5 +129,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_event_breaker_ruleset.my_criblio_event_breaker_ruleset '{"group_id": "...", "id": "..."}'
+terraform import criblio_event_breaker_ruleset.my_criblio_event_breaker_ruleset '{"group_id": "myExistingGroupId", "id": "myUniqueBreakerIdToCRUD"}'
 ```

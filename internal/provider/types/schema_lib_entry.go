@@ -6,9 +6,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type DashboardCategory struct {
+type SchemaLibEntry struct {
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
-	IsPack      types.Bool   `tfsdk:"is_pack"`
-	Name        types.String `tfsdk:"name"`
+	Schema      types.String `tfsdk:"schema"`
 }

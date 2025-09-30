@@ -15,8 +15,8 @@ ParquetSchema Resource
 ```terraform
 resource "criblio_parquet_schema" "my_parquetschema" {
   description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
+  group_id    = "myExistingGroupId"
+  id          = "myUniqueParquetSchemaIdToCRUD"
   schema      = "...my_schema..."
 }
 ```
@@ -34,6 +34,19 @@ resource "criblio_parquet_schema" "my_parquetschema" {
 
 - `description` (String)
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `description` (String)
+- `id` (String)
+- `schema` (String) JSON schema matching standards of draft version 2019-09
+
 ## Import
 
 Import is supported using the following syntax:
@@ -44,8 +57,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_parquet_schema.my_criblio_parquet_schema
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueParquetSchemaIdToCRUD"
   })
 }
 ```
@@ -53,5 +66,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_parquet_schema.my_criblio_parquet_schema '{"group_id": "...", "id": "..."}'
+terraform import criblio_parquet_schema.my_criblio_parquet_schema '{"group_id": "myExistingGroupId", "id": "myUniqueParquetSchemaIdToCRUD"}'
 ```

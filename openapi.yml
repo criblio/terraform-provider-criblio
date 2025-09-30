@@ -56579,6 +56579,7 @@ paths:
           schema:
             type: string
           description: Library id
+          example: "myExistingProtobufId"
   "/m/{groupId}/lib/regex":
     get:
       parameters:
@@ -56588,6 +56589,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listRegexLibEntry
       tags:
         &a71
@@ -56630,6 +56632,7 @@ paths:
           example: "default"
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createRegexLibEntry
       tags: *a71
       summary: Create RegexLibEntry
@@ -56657,12 +56660,14 @@ paths:
             &a73
             type: string
           description: Unique ID to GET
+          example: "myUniqueRegexIdToCrud"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a72
     patch:
       x-speakeasy-entity-operation: Regex#update
@@ -56676,12 +56681,14 @@ paths:
           required: true
           schema: *a73
           description: Unique ID to PATCH
+          example: "myUniqueRegexToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: RegexLibEntry object to be updated
         required: true
@@ -56702,12 +56709,14 @@ paths:
           required: true
           schema: *a73
           description: Unique ID to DELETE
+          example: "myUniqueRegexToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a72
   /system/samples:
     get:
@@ -56769,6 +56778,7 @@ paths:
             &a76
             type: string
           description: Unique ID to GET
+          example: "myUniqueSampleIdToCRUD"
       responses: *a75
     patch:
       operationId: updateDataSampleById
@@ -56781,6 +56791,7 @@ paths:
           required: true
           schema: *a76
           description: Unique ID to PATCH
+          example: "myUniqueSampleIdToCRUD"
       requestBody:
         description: DataSample object to be updated
         required: true
@@ -56800,6 +56811,7 @@ paths:
           required: true
           schema: *a76
           description: Unique ID to DELETE
+          example: "myUniqueSampleIdToCRUD"
       responses: *a75
   "/system/samples/{id}/content":
     get:
@@ -56840,6 +56852,7 @@ paths:
           schema:
             type: string
           description: Sample ID
+          example: "myExistingSampleId"
   /m/default_search/search/dashboards:
     get:
       operationId: listSearchDashboard
@@ -56902,6 +56915,7 @@ paths:
             &a79
             type: string
           description: Unique ID to GET
+          example: "myUniqueDashboardIdToCRUD"
       responses: *a78
     patch:
       operationId: updateSearchDashboardById
@@ -56915,6 +56929,7 @@ paths:
           required: true
           schema: *a79
           description: Unique ID to PATCH
+          example: "myUniqueDashboardIdToCRUD"
       requestBody:
         description: SearchDashboard object to be updated
         required: true
@@ -56935,6 +56950,7 @@ paths:
           required: true
           schema: *a79
           description: Unique ID to DELETE
+          example: "myUniqueDashboardIdToCRUD"
       responses: *a78
   "/search/dashboards/{id}/acl":
     get:
@@ -56972,6 +56988,7 @@ paths:
           required: true
           schema: *a79
           description: Unique ID for ACL Get
+          example: "myExistingDashboardId"
       description: List accesses to SearchDashboard granted to users
       summary: Get SearchDashboard ACL
       tags:
@@ -57001,6 +57018,7 @@ paths:
           required: true
           schema: *a79
           description: Unique ID for ACL Create
+          example: "myExistingDashboardId"
       description: Add/remove accesses to SearchDashboard for users
       summary: Modify SearchDashboard ACL
       tags: *a82
@@ -57014,6 +57032,7 @@ paths:
           required: true
           schema: *a79
           description: Unique ID for ACL Teams Get
+          example: "myExistingDashboardId"
       description: List accesses to SearchDashboard granted to Teams
       summary: Get SearchDashboard Teams
       tags:
@@ -57031,6 +57050,7 @@ paths:
           required: true
           schema: *a79
           description: Unique ID for ACL Teams Create
+          example: "myExistingDashboardId"
       description: Add/remove accesses to SearchDashboard for Teams
       summary: Modify SearchDashboard Teams ACL
       tags: *a86
@@ -57096,6 +57116,7 @@ paths:
             &a89
             type: string
           description: Unique ID to GET
+          example: "myUniqueMacroIdToCRUD"
       responses: *a88
     patch:
       operationId: updateSearchMacroById
@@ -57109,6 +57130,7 @@ paths:
           required: true
           schema: *a89
           description: Unique ID to PATCH
+          example: "myUniqueMacroIdToCRUD"
       requestBody:
         description: SearchMacro object to be updated
         required: true
@@ -57129,6 +57151,7 @@ paths:
           required: true
           schema: *a89
           description: Unique ID to DELETE
+          example: "myUniqueMacroIdToCRUD"
       responses: *a88
   /m/default_search/search/saved:
     get:
@@ -57192,6 +57215,7 @@ paths:
             &a92
             type: string
           description: Unique ID to GET
+          example: "myUniqueSavedSearchIdToCRUD"
       responses: *a91
     patch:
       operationId: updateSavedQueryById
@@ -57205,6 +57229,7 @@ paths:
           required: true
           schema: *a92
           description: Unique ID to PATCH
+          example: "myUniqueSavedSearchIdToCRUD"
       requestBody:
         description: SavedQuery object to be updated
         required: true
@@ -57225,6 +57250,7 @@ paths:
           required: true
           schema: *a92
           description: Unique ID to DELETE
+          example: "myUniqueSavedSearchIdToCRUD"
       responses: *a91
   /search/jobs:
     get:
@@ -57286,6 +57312,7 @@ paths:
             &a95
             type: string
           description: Unique ID to GET
+          example: "myUniqueJobIdToCRUD"
       responses: *a94
     patch:
       operationId: updateSearchJobById
@@ -57298,6 +57325,7 @@ paths:
           required: true
           schema: *a95
           description: Unique ID to PATCH
+          example: "myUniqueJobIdToCRUD"
       requestBody:
         description: SearchJob object to be updated
         required: true
@@ -57317,6 +57345,7 @@ paths:
           required: true
           schema: *a95
           description: Unique ID to DELETE
+          example: "myUniqueJobIdToCRUD"
       responses: *a94
   "/search/jobs/{id}/dispatch-executors":
     post:
@@ -57360,6 +57389,7 @@ paths:
           schema:
             type: string
           description: search job id
+          example: "myExistingSearchJobId"
   "/search/jobs/{id}/logs":
     get:
       operationId: getSearchJobLogsById
@@ -57399,6 +57429,7 @@ paths:
           schema:
             type: string
           description: search job id
+          example: "myExistingSearchJobId"
   "/m/{groupId}/lib/database-connections":
     get:
       operationId: getDatabaseConnectionConfig
@@ -57438,12 +57469,14 @@ paths:
           schema:
             type: string
           description: type of database connection
+          example: "SQL Server"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
     post:
       x-speakeasy-entity-operation: DatabaseConnection#create
       parameters:
@@ -57453,6 +57486,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createDatabaseConnectionConfig
       tags:
         &a96
@@ -57505,6 +57539,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: id
           in: path
           required: true
@@ -57512,6 +57547,7 @@ paths:
             &a98
             type: string
           description: Unique ID to GET
+          example: "myUniqueDatabaseConnIdToCRUD"
       responses: *a97
     patch:
       x-speakeasy-entity-operation: DatabaseConnection#update
@@ -57525,12 +57561,14 @@ paths:
           required: true
           schema: *a98
           description: Unique ID to PATCH
+          example: "myUniqueDatabaseConnIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: DatabaseConnectionConfig object to be updated
         required: true
@@ -57551,12 +57589,14 @@ paths:
           required: true
           schema: *a98
           description: Unique ID to DELETE
+          example: "myUniqueDatabaseConnIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a97
   /lib/database-connections/test:
     post:
@@ -57606,6 +57646,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listEventBreakerRuleset
       tags:
         &a99
@@ -57647,6 +57688,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createEventBreakerRuleset
       tags: *a99
       summary: Create Event Breaker Ruleset
@@ -57674,12 +57716,14 @@ paths:
             &a101
             type: string
           description: Unique ID to GET
+          example: "myUniqueBreakerIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a100
     patch:
       x-speakeasy-entity-operation: EventBreakerRuleset#update
@@ -57693,12 +57737,14 @@ paths:
           required: true
           schema: *a101
           description: Unique ID to PATCH
+          example: "myUniqueBreakerIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: Event Breaker Ruleset object to be updated
         required: true
@@ -57720,11 +57766,13 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: id
           in: path
           required: true
           schema: *a101
           description: Unique ID to DELETE
+          example: "myUniqueBreakerIdToCRUD"
       responses: *a100
   "/m/{groupId}/lib/vars":
     get:
@@ -57768,12 +57816,14 @@ paths:
             &a107
             type: string
           description: Pass "refs" to include references to fields the variable is used in
+          example: "{ '$ref': '#/components/schemas/ComplexModel' }"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
     post:
       x-speakeasy-entity-operation: GlobalVar#create
       parameters:
@@ -57783,8 +57833,8 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "default"
           default: "default"
+          example: "myExistingGroupId"
       operationId: createGlobalVariable
       tags:
         &a102
@@ -57839,14 +57889,15 @@ paths:
             &a104
             type: string
           description: Unique ID to GET
+          example: "myUniqueVarIdToCrud"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "default"
           default: "default"
+          example: "myExistingGroupId"
       responses: *a103
     patch:
       x-speakeasy-entity-operation: GlobalVar#update
@@ -57860,12 +57911,14 @@ paths:
           required: true
           schema: *a104
           description: Unique ID to PATCH
+          example: "myUniqueVarIdToCrud"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         &a110
         description: Global Variable object to be updated
@@ -57887,12 +57940,14 @@ paths:
           required: true
           schema: *a104
           description: Unique ID to DELETE
+          example: "myUniqueVarIdToCrud"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a103
   "/m/{groupId}/p/{pack}/lib/vars":
     get:
@@ -57910,6 +57965,7 @@ paths:
           schema: *a107
           description: Pass "refs" to include references to fields the variable is used in
             for pack
+          example: "{ '$ref': '#/components/schemas/ComplexModel' }"
         - name: pack
           in: path
           required: true
@@ -57917,12 +57973,14 @@ paths:
             &a109
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
     post:
       x-speakeasy-entity-operation: PackVars#create
       operationId: createGlobalVariableLibVarsByPack
@@ -57937,12 +57995,14 @@ paths:
           required: true
           schema: *a109
           description: pack ID to POST
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/m/{groupId}/p/{pack}/lib/vars/{id}":
     get:
       operationId: getGlobalVariableLibVarsByPackAndId
@@ -57956,17 +58016,20 @@ paths:
           required: true
           schema: *a104
           description: Unique ID to GET for pack
+          example: "myUniquePackVarIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a109
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
     patch:
       x-speakeasy-entity-operation: PackVars#update
       operationId: updateGlobalVariableLibVarsByPackAndId
@@ -57981,17 +58044,20 @@ paths:
           required: true
           schema: *a104
           description: Unique ID to PATCH for pack
+          example: "myUniquePackVarIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a109
           description: pack ID to PATCH
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
     delete:
       x-speakeasy-entity-operation: PackVars#delete
       operationId: deleteGlobalVariableLibVarsByPackAndId
@@ -58005,17 +58071,20 @@ paths:
           required: true
           schema: *a104
           description: Unique ID to DELETE for pack
+          example: "myUniquePackVarIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a109
           description: pack ID to DELETE
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/m/{groupId}/lib/hmac-functions":
     get:
       parameters:
@@ -58025,6 +58094,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listHmacFunction
       tags:
         &a111
@@ -58065,6 +58135,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createHmacFunction
       tags: *a111
       summary: Create HmacFunction
@@ -58092,12 +58163,14 @@ paths:
             &a113
             type: string
           description: Unique ID to GET
+          example: "myUniqueHMACFuntionIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a112
     patch:
       x-speakeasy-entity-operation: HmacFunction#update
@@ -58111,12 +58184,14 @@ paths:
           required: true
           schema: *a113
           description: Unique ID to PATCH
+          example: "myUniqueHMACFuntionIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: HmacFunction object to be updated
         required: true
@@ -58137,12 +58212,14 @@ paths:
           required: true
           schema: *a113
           description: Unique ID to DELETE
+          example: "myUniqueHMACFuntionIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a112
   "/m/{groupId}/system/inputs":
     get:
@@ -58153,6 +58230,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listInput
       tags:
         &a114
@@ -58194,12 +58272,14 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId" 
         - name: id
           in: query
           required: true
           description: The id of this source instance
           schema:
             type: string
+          example: "myUniqueInputIdToCRUD"
       operationId: createInput
       tags: *a114
       summary: Create Input
@@ -58227,12 +58307,14 @@ paths:
             &a116
             type: string
           description: Unique ID to GET
+          example: "myUniqueInputIdToCRUD" 
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId" 
       responses: *a115
     patch:
       x-speakeasy-entity-operation: Source#update
@@ -58246,12 +58328,14 @@ paths:
           required: true
           schema: *a116
           description: Unique ID to PATCH
+          example: "myUniqueInputIdToCRUD" 
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId" 
       requestBody:
         description: Input object to be updated
         required: true
@@ -58272,12 +58356,14 @@ paths:
           required: true
           schema: *a116
           description: Unique ID to DELETE
+          example: "myUniqueInputIdToCRUD" 
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId" 
       responses: *a115
   "/m/{groupId}/system/inputs/{id}/hectoken":
     post:
@@ -58326,12 +58412,14 @@ paths:
           schema:
             type: string
           description: hec input id
+          example: "myUniqueHECInputIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/m/{groupId}/system/inputs/{id}/hectoken/{token}":
     patch:
       operationId: updateInputHecTokenByIdAndToken
@@ -58379,18 +58467,21 @@ paths:
           schema:
             type: string
           description: hec input id
+          example: "myExistingHECInputId"
         - name: token
           in: path
           required: true
           schema:
             type: string
           description: token to update
+          example: "myUniqueHECInputTokenIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   /system/iometrics:
     get:
       operationId: listIoMetricsEntry
@@ -58438,6 +58529,7 @@ paths:
             &a119
             type: string
           description: Unique ID to GET
+          example: "myUniqueIOMetricsIdToCRUD"
       responses: *a118
     patch:
       operationId: updateIoMetricsEntryById
@@ -58450,6 +58542,7 @@ paths:
           required: true
           schema: *a119
           description: Unique ID to PATCH
+          example: "myUniqueIOMetricsIdToCRUD"
       requestBody:
         description: IoMetricsEntry object to be updated
         required: true
@@ -58469,6 +58562,7 @@ paths:
           required: true
           schema: *a119
           description: Unique ID to DELETE
+          example: "myUniqueIOMetricsIdToCRUD"
       responses: *a118
   "/m/{groupId}/system/outputs":
     get:
@@ -58479,6 +58573,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listOutput
       tags:
         &a120
@@ -58520,12 +58615,14 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: id
           in: query
           required: true
           description: The consumer group id to create
           schema:
             type: string
+          example: "myUniqueOutputIdToCRUD"
       operationId: createOutput
       tags: *a120
       summary: Create Output
@@ -58553,12 +58650,14 @@ paths:
             &a122
             type: string
           description: Unique ID to GET
+          example: "myUniqueSystemOutputIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a121
     patch:
       x-speakeasy-entity-operation: Destination#update
@@ -58572,12 +58671,14 @@ paths:
           required: true
           schema: *a122
           description: Unique ID to PATCH
+          example: "myUniqueSystemOutputIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: Output object to be updated
         required: true
@@ -58598,12 +58699,14 @@ paths:
           required: true
           schema: *a122
           description: Unique ID to DELETE
+          example: "myUniqueSystemOutputIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a121
   "/m/{groupId}/system/outputs/{id}/pq":
     delete:
@@ -58645,12 +58748,14 @@ paths:
           schema:
             type: string
           description: Output Id
+          example: "myExistingOutputId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
     get:
       operationId: getOutputPqById
       tags:
@@ -58690,12 +58795,14 @@ paths:
           schema:
             type: string
           description: Output Id
+          example: "myExistingOutputId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/m/{groupId}/system/outputs/{id}/samples":
     get:
       operationId: getOutputSamplesById
@@ -58737,12 +58844,14 @@ paths:
           schema:
             type: string
           description: Output Id
+          example: "myExistingOutputId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/m/{groupId}/system/outputs/{id}/test":
     post:
       operationId: createOutputTestById
@@ -58791,12 +58900,14 @@ paths:
           schema:
             type: string
           description: Output Id
+          example: "myExistingOutputId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/m/{groupId}/lib/parquet-schemas":
     get:
       parameters:
@@ -58806,6 +58917,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listSchema
       tags:
         &a123
@@ -58858,6 +58970,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/m/{groupId}/lib/parquet-schemas/{id}":
     get:
       x-speakeasy-entity-operation: ParquetSchema#read
@@ -58873,12 +58986,14 @@ paths:
             &a125
             type: string
           description: Unique ID to GET
+          example: "myUniqueParquetSchemaIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a124
     patch:
       x-speakeasy-entity-operation: ParquetSchema#update
@@ -58892,12 +59007,14 @@ paths:
           required: true
           schema: *a125
           description: Unique ID to PATCH
+          example: "myUniqueParquetSchemaIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: Schema object to be updated
         required: true
@@ -58918,12 +59035,14 @@ paths:
           required: true
           schema: *a125
           description: Unique ID to DELETE
+          example: "myUniqueParquetSchemaIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a124
   "/m/{groupId}/pipelines":
     get:
@@ -58934,6 +59053,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listPipeline
       tags:
         &a126
@@ -58974,6 +59094,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createPipeline
       tags: *a126
       summary: Create Pipeline
@@ -59002,12 +59123,14 @@ paths:
             &a128
             type: string
           description: Unique ID to GET
+          example: "myUniquePipelineIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a127
     patch:
       x-speakeasy-entity-operation: Pipeline#update
@@ -59021,12 +59144,14 @@ paths:
           required: true
           schema: *a128
           description: Unique ID to PATCH
+          example: "myUniquePipelineIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         &a131
         description: Pipeline object to be updated
@@ -59048,12 +59173,14 @@ paths:
           required: true
           schema: *a128
           description: Unique ID to DELETE
+          example: "myUniquePipelineIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a127
   /system/profiler:
     get:
@@ -59115,6 +59242,7 @@ paths:
             &a134
             type: string
           description: Unique ID to GET
+          example: "myUniqueProfilerId"
       responses: *a133
     patch:
       operationId: updateProfilerItemById
@@ -59127,6 +59255,7 @@ paths:
           required: true
           schema: *a134
           description: Unique ID to PATCH
+          example: "myUniqueProfilerId"
       requestBody:
         description: ProfilerItem object to be updated
         required: true
@@ -59146,6 +59275,7 @@ paths:
           required: true
           schema: *a134
           description: Unique ID to DELETE
+          example: "myUniqueProfilerId"
       responses: *a133
   /routes:
     get:
@@ -59194,6 +59324,7 @@ paths:
             &a137
             type: string
           description: Unique ID to GET
+          example: "myRoutesIdToCRUD"
       responses: *a136
     patch:
       operationId: updateRoutesById
@@ -59206,6 +59337,7 @@ paths:
           required: true
           schema: *a137
           description: Unique ID to PATCH
+          example: "myRoutesIdToCRUD"
       requestBody:
         &a139
         description: Routes object to be updated
@@ -59232,7 +59364,7 @@ paths:
             type: string
           description: group Id
           default: default
-          example: default
+          example: "myExistingGroupId"
     patch:
       x-speakeasy-entity-operation: Routes#create,update,delete
       operationId: createRoutesByGroupId
@@ -59256,7 +59388,7 @@ paths:
             type: string
           description: group Id
           default: default
-          example: default
+          example: "myExistingGroupId"
   "/routes/{id}/append":
     post:
       operationId: createRoutesAppendById
@@ -59309,6 +59441,7 @@ paths:
             type: string
           description: the route table to be appended to - currently default is the only
             supported value
+          example: "myExistingRouteId"
   "/packs":
     get:
       operationId: getPacks
@@ -59331,6 +59464,7 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59338,6 +59472,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     post:
       x-speakeasy-entity-operation: PackPipeline#create
       operationId: createPipelineByPack
@@ -59359,6 +59494,7 @@ paths:
           required: true
           schema: *a138
           description: pack ID to POST
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59366,6 +59502,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
   "/m/{groupId}/p/{pack}/pipelines/{id}":
     get:
       operationId: getPipelinesByPackWithId
@@ -59382,11 +59519,13 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: id
           in: path
           required: true
           schema: *a137
           description: Unique ID to GET for pack
+          example: "myUniquePipelineIdToCRUD"
         - name: groupId
           in: path
           required: true
@@ -59394,6 +59533,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     patch:
       x-speakeasy-entity-operation: PackPipeline#update
       operationId: updatePipelineByPackAndId
@@ -59415,16 +59555,19 @@ paths:
           required: true
           schema: *a128
           description: Unique ID to PATCH for pack
+          example: "myUniquePipelineIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a138
           description: pack ID to PATCH
+          example: "myExistingPackId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
+          example: false
         - name: groupId
           in: path
           required: true
@@ -59432,6 +59575,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
   "/m/{groupId}/p/{pack}/system/inputs":
     get:
       operationId: getSystemInputsByPack
@@ -59447,6 +59591,7 @@ paths:
             &a138
             type: string
           description: pack inputs to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59454,6 +59599,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     post:
       x-speakeasy-entity-operation: PackSource#create
       operationId: createSystemInputsByPack
@@ -59474,6 +59620,7 @@ paths:
           required: true
           schema: *a138
           description: pack inputs to POST
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59481,11 +59628,13 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
         - name: id
           in: query
           required: true
           schema: *a137
           description: Unique ID to create pack source
+          example: "myUniquePackIdToCRUD"
   "/m/{groupId}/p/{pack}/system/inputs/{id}":
     get:
       x-speakeasy-entity-operation: PackSource#read
@@ -59500,11 +59649,13 @@ paths:
           required: true
           schema: *a137
           description: Unique ID to GET for pack source
+          example: "myUniqueInputIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a138
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59512,6 +59663,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     patch:
       x-speakeasy-entity-operation: PackSource#update
       operationId: updateSystemInputsByPack
@@ -59532,11 +59684,13 @@ paths:
           required: true
           schema: *a138
           description: pack ID to PATCH
+          example: "myExistingPackId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
+          example: true
         - name: groupId
           in: path
           required: true
@@ -59544,11 +59698,13 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
         - name: id
           in: path
           required: true
           schema: *a137
           description: Unique ID to PATCH for pack source
+          example: "myUniqueInputIdToCRUD"
     delete:
       x-speakeasy-entity-operation: PackSource#delete
       operationId: deleteSystemInputsByPack
@@ -59562,6 +59718,7 @@ paths:
           required: true
           schema: *a138
           description: pack ID to DELETE
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59569,11 +59726,13 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
         - name: id
           in: path
           required: true
           schema: *a137
           description: Unique ID to DELETE for pack source
+          example: "myUniqueInputIdToCRUD"
   "/m/{groupId}/p/{pack}/system/outputs":
     get:
       parameters:
@@ -59583,11 +59742,13 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: pack
           in: path
           required: true
           schema:
             type: string
+          example: "myExistingPackId"
       operationId: listPackOutput
       tags:
         &a120
@@ -59629,16 +59790,19 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: pack
           in: path
           required: true
           schema:
             type: string
+          example: "myExistingPackId"
         - name: id
           in: query
           required: true
           schema:
             type: string
+          example: "myUniquePackDestinationIdToCRUD"
       operationId: createPackOutput
       tags: *a120
       summary: Create Output
@@ -59666,17 +59830,20 @@ paths:
             &a122
             type: string
           description: Unique ID to GET
+          example: "myUniqueOutputIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: pack
           in: path
           required: true
           schema:
             type: string
+          example: "myExistingPackId"
       responses: *a121
     patch:
       x-speakeasy-entity-operation: PackDestination#update
@@ -59690,17 +59857,20 @@ paths:
           required: true
           schema: *a122
           description: Unique ID to PATCH
+          example: "myUniqueOutputIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: pack
           in: path
           required: true
           schema:
             type: string
+          example: "myExistingPackId"
       requestBody:
         description: Output object to be updated
         required: true
@@ -59721,17 +59891,20 @@ paths:
           required: true
           schema: *a122
           description: Unique ID to DELETE
+          example: "myUniqueOutputIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: pack
           in: path
           required: true
           schema:
             type: string
+          example: "myExistingPackId"
       responses: *a121
   "/m/{groupId}/p/{pack}/system/lookups":
     get:
@@ -59748,6 +59921,7 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59755,6 +59929,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     post:
       x-speakeasy-entity-operation: PackLookups#create
       operationId: createSystemLookupsByPack
@@ -59777,6 +59952,7 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59784,6 +59960,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
   "/m/{groupId}/p/{pack}/system/lookups/{id}":
     get:
       x-speakeasy-entity-operation: PackLookups#read
@@ -59798,11 +59975,13 @@ paths:
           required: true
           schema: *a137
           description: Unique ID to GET for pack
+          example: "myUniqueLookupIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a138
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59810,6 +59989,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     patch:
       x-speakeasy-entity-operation: PackLookups#update
       operationId: createSystemLookupsByPackAndId
@@ -59830,16 +60010,19 @@ paths:
           required: true
           schema: *a128
           description: Unique ID to PATCH for pack
+          example: "myUniqueLookupIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a138
           description: pack ID to PATCH
+          example: "myExistingPackId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
+          example: false
         - name: groupId
           in: path
           required: true
@@ -59847,6 +60030,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     delete:
       x-speakeasy-entity-operation: PackLookups#delete
       operationId: deleteSystemLookupsByPackAndId
@@ -59860,11 +60044,13 @@ paths:
           required: true
           schema: *a128
           description: Unique ID to DELETE for pack
+          example: "myUniqueLookupIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a138
           description: pack ID to DELETE
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59872,6 +60058,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
   "/m/{groupId}/p/{pack}/lib/breakers":
     get:
       operationId: getBreakersByPack
@@ -59892,6 +60079,7 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59899,6 +60087,7 @@ paths:
             &a138
             type: string
           description: group ID to GET
+          example: "myExistingGroupId"
     post:
       x-speakeasy-entity-operation: PackBreakers#create
       operationId: createBreakersByPack
@@ -59921,6 +60110,7 @@ paths:
             &a138
             type: string
           description: pack ID to POST
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59928,6 +60118,7 @@ paths:
             &a138
             type: string
           description: group ID to GET
+          example: "myExistingGroupId"
   "/m/{groupId}/p/{pack}/lib/breakers/{id}":
     get:
       operationId: getBreakersByPackAndId
@@ -59942,6 +60133,7 @@ paths:
           required: true
           schema: *a137
           description: Unique ID to GET for pack
+          example: "myUniquePackBreakersIdToCRUD"
         - name: pack
           in: path
           required: true
@@ -59949,6 +60141,7 @@ paths:
             &a138
             type: string
           description: pack ID to POST
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59956,6 +60149,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     patch:
       x-speakeasy-entity-operation: PackBreakers#update
       operationId: updateBreakersByPackAndId
@@ -59976,11 +60170,13 @@ paths:
           required: true
           schema: *a128
           description: Unique ID to PATCH for pack
+          example: "myUniquePackBreakersIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a138
           description: pack ID to POST
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -59988,6 +60184,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     delete:
       x-speakeasy-entity-operation: PackBreakers#delete
       operationId: deleteBreakersByPackAndId
@@ -60001,11 +60198,13 @@ paths:
           required: true
           schema: *a128
           description: Unique ID to DELETE for pack
+          example: "myUniquePackBreakersIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a138
           description: pack ID to DELETE
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -60013,6 +60212,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
   "/m/{groupId}/p/{pack}/routes/default":
     get:
       x-speakeasy-entity-operation: PackRoutes#get
@@ -60029,6 +60229,7 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -60036,6 +60237,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
     patch:
       x-speakeasy-entity-operation: PackRoutes#create,update,delete
       operationId: createRoutesByPack
@@ -60058,6 +60260,7 @@ paths:
             &a138
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
         - name: groupId
           in: path
           required: true
@@ -60065,6 +60268,7 @@ paths:
             &a138
             type: string
           description: group Id
+          example: "myExistingGroupId"
   "/m/{groupId}/lib/schemas":
     get:
       parameters:
@@ -60074,6 +60278,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listLibSchemas
       tags:
         &a144
@@ -60114,6 +60319,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createLibSchemas
       tags: *a144
       summary: Create Schema
@@ -60142,12 +60348,14 @@ paths:
             &a146
             type: string
           description: Unique ID to GET
+          example: "myUniqueSchemaIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a145
     patch:
       x-speakeasy-entity-operation: Schema#update
@@ -60161,12 +60369,14 @@ paths:
           required: true
           schema: *a146
           description: Unique ID to PATCH
+          example: "myUniqueSchemaIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         &a149
         description: Schema object to be updated
@@ -60188,12 +60398,14 @@ paths:
           required: true
           schema: *a146
           description: Unique ID to DELETE
+          example: "myUniqueSchemaIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a145
   "/p/{pack}/lib/schemas":
     get:
@@ -60210,6 +60422,7 @@ paths:
             &a148
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
     post:
       operationId: createSchemaLibByPack
       tags: *a144
@@ -60223,6 +60436,7 @@ paths:
           required: true
           schema: *a148
           description: pack ID to POST
+          example: "myExistingPackId"
   "/p/{pack}/lib/schemas/{id}":
     get:
       operationId: getSchemaLibByPackAndId
@@ -60235,11 +60449,13 @@ paths:
           required: true
           schema: *a146
           description: Unique ID to GET for pack
+          example: "myUniqueSchemaIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a148
           description: pack ID to GET
+          example: "myExistingPackId"
       responses: *a145
     patch:
       operationId: updateSchemaLibByPackAndId
@@ -60252,11 +60468,13 @@ paths:
           required: true
           schema: *a146
           description: Unique ID to PATCH for pack
+          example: "myUniqueSchemaIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a148
           description: pack ID to PATCH
+          example: "myExistingPackId"
       requestBody: *a149
       responses: *a145
     delete:
@@ -60270,11 +60488,13 @@ paths:
           required: true
           schema: *a146
           description: Unique ID to DELETE for pack
+          example: "myUniqueSchemaIdToCRUD"
         - name: pack
           in: path
           required: true
           schema: *a148
           description: pack ID to DELETE
+          example: "myExistingGroupId"
       responses: *a145
   /system/secrets:
     get:
@@ -60336,6 +60556,7 @@ paths:
             &a152
             type: string
           description: Unique ID to GET
+          example: "myUniqueSecretsIdToCRUD"
       responses: *a151
     patch:
       operationId: updateRestSecretById
@@ -60348,6 +60569,7 @@ paths:
           required: true
           schema: *a152
           description: Unique ID to PATCH
+          example: "myUniqueSecretsIdToCRUD"
       requestBody:
         description: RestSecret object to be updated
         required: true
@@ -60367,6 +60589,7 @@ paths:
           required: true
           schema: *a152
           description: Unique ID to DELETE
+          example: "myUniqueSecretsIdToCRUD"
       responses: *a151
   /system/status/inputs:
     get:
@@ -60414,6 +60637,7 @@ paths:
           schema:
             type: string
           description: Unique ID to GET
+          example: "myUniqueStatusInputIdToCRUD"
       responses: *a154
   /system/status/outputs:
     get:
@@ -60461,6 +60685,7 @@ paths:
           schema:
             type: string
           description: Unique ID to GET
+          example: "myUniqueStatusOutputIdToCRUD"
       responses: *a156
   /edge/appscope/processes:
     post:
@@ -60501,7 +60726,8 @@ paths:
           required: true
           schema:
             type: string
-          description: config string required
+          description: Process ID number to target
+          example: "8675309"
     get:
       operationId: getEdgeAppscopeProcesses
       tags:
@@ -60573,7 +60799,8 @@ paths:
           required: true
           schema:
             type: string
-          description: config string required
+          description: Process ID number to target
+          example: "8675309"
     get:
       operationId: getEdgeAppscopeProcessesByPid
       tags:
@@ -60612,7 +60839,8 @@ paths:
           required: true
           schema:
             type: string
-          description: pid
+          description: Process ID number to target
+          example: "8675309"
     put:
       operationId: updateEdgeAppscopeProcessesByPid
       tags:
@@ -60651,7 +60879,8 @@ paths:
           required: true
           schema:
             type: string
-          description: config string required
+          description: Process ID number to target
+          example: "8675309"
   /edge/events/collectors:
     get:
       operationId: getEdgeEventsCollectors
@@ -60727,6 +60956,7 @@ paths:
             type: string
           description: Optional parameter, when provided the files and provided offsets
             are used to look for events.
+          example: "/var/log/http.log"
         - name: source
           in: query
           required: false
@@ -60734,12 +60964,14 @@ paths:
             type: string
           description: The type of source events to search in the format {type}/{subtype}
             i.e system_state/hostsfile, system_state/routes, etc...
+          example: "system_state/hostsfile"
         - name: limit
           in: query
           required: false
           schema:
             type: integer
           description: Maximum number of log lines to retrieve starting from offset.
+          example: 1000
         - name: et
           in: query
           required: false
@@ -60747,6 +60979,7 @@ paths:
             type: integer
           description: Epoch timestamp of the earliest event (includes rolled files
             present on disk)
+          example: 1759240142
         - name: lt
           in: query
           required: false
@@ -60754,12 +60987,14 @@ paths:
             type: integer
           description: Epoch timestamp of the latest event (includes rolled files present
             on disk)
+          example: 1759240162
         - name: filter
           in: query
           required: false
           schema:
             type: string
           description: Filter
+          example: "true"
   /edge/fileinspect:
     get:
       operationId: getEdgeFileinspect
@@ -60833,6 +61068,7 @@ paths:
           schema:
             type: string
           description: Defaults to empty for the root directory
+          example: "/var/log"
   /products/edge/map/query:
     post:
       operationId: createProductsEdgeMapQuery
@@ -60941,36 +61177,42 @@ paths:
           schema:
             type: string
           description: Absolute path to file to ingest.
+          example: "/var/log/http.log"
         - name: pipelineId
           in: query
           required: false
           schema:
             type: string
           description: Id of the pipeline to use.
+          example: "myPipelineId"
         - name: outputId
           in: query
           required: false
           schema:
             type: string
           description: Destination to send events to.
+          example: "myOutputId"
         - name: preProcessingPipelineId
           in: query
           required: false
           schema:
             type: string
           description: Id to the pre-processing pipeline to use for routes.
+          example: "myPreProcessingPipelineId"
         - name: sendToRoutes
           in: query
           required: false
           schema:
             type: string
           description: boolean condition required on whether to send events to routes.
+          example: "myRoutesId"
         - name: breakerRuleSet
           in: query
           required: false
           schema:
             type: string
           description: Breaker rules to use on the file.
+          example: "myBreakerRuleId"
   /edge/file/sample:
     get:
       operationId: getEdgeFileSample
@@ -61011,6 +61253,7 @@ paths:
           schema:
             type: string
           description: The path to the file to sample
+          example: "/var/log/http.log"
         - name: bytesRequested
           in: query
           required: false
@@ -61018,6 +61261,7 @@ paths:
             type: number
           description: The number of bytes to return;   this value could be constrained by
             system limits.
+          example: 2048
   /edge/kube-logs:
     post:
       operationId: createEdgeKubeLogs
@@ -61091,6 +61335,7 @@ paths:
           schema:
             type: string
           description: string optional
+          example: "api/v1"
   /auth/authorization-code/callback:
     get:
       operationId: getAuthAuthorizationCodeCallback
@@ -61103,10 +61348,12 @@ paths:
           name: code
           schema:
             type: string
+          example: "myCryptographicallySecureAuthorizationCode"
         - in: query
           name: state
           schema:
             type: string
+          example: "Unauthenticated"
       responses:
         "200":
           description: Authorization success
@@ -61207,10 +61454,12 @@ paths:
           name: SAMLResponse
           schema:
             type: string
+          example: "{ 'logout': { 'callback': 'https://myapp.exampleco.com/saml/logout', 'slo_enabled': true } }"
         - in: query
           name: RelayState
           schema:
             type: string
+          example: "HTTP-Redirect"
       responses:
         "200":
           description: Logout success
@@ -61272,10 +61521,12 @@ paths:
           name: SAMLResponse
           schema:
             type: string
+          example: "{ 'logout': { 'callback': 'https://myapp.exampleco.com/saml/logout', 'slo_enabled': true } }"
         - in: query
           name: RelayState
           schema:
             type: string
+          example: "HTTP-Redirect"
       responses:
         "200":
           description: Authentication success
@@ -61406,12 +61657,14 @@ paths:
           schema:
             type: string
           description: ID of user to invalidate
+          example: "myExistingUserId"
         - name: ttl
           in: query
           required: false
           schema:
             type: string
           description: TTL of the token being invalidated
+          example: "300"
   "/auth/users/{id}/invalidation":
     delete:
       operationId: deleteAuthUsersInvalidationById
@@ -61452,6 +61705,7 @@ paths:
           schema:
             type: string
           description: ID of user to reenable
+          example: "myExistingUserId"
   /authorize/policy:
     get:
       operationId: getAuthorizePolicy
@@ -61607,6 +61861,7 @@ paths:
           schema:
             type: string
           description: Project ID
+          example: "myExistingProjectId"
   "/system/projects/{projectId}/subscriptions/{subscriptionId}/capture":
     post:
       operationId: createSystemProjectsSubscriptionsCaptureByProjectIdAndSubscriptionId
@@ -61657,12 +61912,14 @@ paths:
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
         - name: subscriptionId
           in: path
           required: true
           schema:
             type: string
           description: SubscriptionId Id
+          example: "myExistingSubscriptionId"
   /changelog/viewed:
     get:
       operationId: getChangelogViewed
@@ -61804,6 +62061,7 @@ paths:
           schema:
             type: string
           description: Search query
+          example: "dataset=\"cribl_search_sample\" | take 5"
         - name: context
           in: query
           required: false
@@ -61813,6 +62071,7 @@ paths:
               - stream
               - edge
           description: Search query context
+          example: "stream"
   /master/summary/workers:
     get:
       operationId: getSummaryWorkers
@@ -61853,6 +62112,7 @@ paths:
           schema:
             type: string
           description: Filter expression evaluated against nodes
+          example: "truthy"
   /master/workers:
     get:
       operationId: getWorkers
@@ -61893,36 +62153,42 @@ paths:
           schema:
             type: string
           description: Filter expression evaluated against nodes
+          example: "truthy"
         - name: sort
           in: query
           required: false
           schema:
             type: string
           description: Sorting object (JSON stringified) expression evaluated against nodes
+          example: "group === 'default'" 
         - name: sortExp
           in: query
           required: false
           schema:
             type: string
           description: Sorting expression evaluated against nodes
+          example: "group=='default'"
         - name: limit
           in: query
           required: false
           schema:
             type: integer
           description: Maximum number of nodes to return
+          example: 10
         - name: offset
           in: query
           required: false
           schema:
             type: integer
           description: Pagination offset
+          example: 0 
         - name: filter
           in: query
           required: false
           schema:
             type: string
           description: Filter object (JSON stringified) to select nodes
+          example: '{"info": {"aws": {"type": "t2.medium"}}}'
   /master/workers/restart:
     patch:
       operationId: updateWorkersRestart
@@ -61968,11 +62234,13 @@ paths:
           required: true
           schema:
             type: string
+          example: "myExistingBundleGroupId"
         - name: version
           in: path
           required: true
           schema:
             type: string
+          example: "myUniqueVersionIdToCRUD"
       responses:
         "200":
           description: Get contents of a config bundle
@@ -62027,6 +62295,7 @@ paths:
               - worker
               - managed-edge
           description: product filter
+          example: "managed-edge"
   "/system/distributed/upgrade/cancel/{group}":
     post:
       operationId: createSystemDistributedUpgradeCancelByGroup
@@ -62067,6 +62336,7 @@ paths:
           schema:
             type: string
           description: id of the group
+          example: "myUniqueUpgradeCancelGroupIdToCRUD"
   "/system/distributed/upgrade/stage/{group}":
     post:
       operationId: createSystemDistributedUpgradeStageByGroup
@@ -62107,12 +62377,14 @@ paths:
           schema:
             type: string
           description: Group to upgrade
+          example: "myUniqueUpgradeStageGroupIdToCRUD"
         - name: upgradePercentage
           in: query
           required: false
           schema:
             type: string
           description: body number percentage of nodes on the worker group to upgrade
+          example: "25"
   "/system/distributed/upgrade/{group}":
     post:
       operationId: createSystemDistributedUpgradeByGroup
@@ -62159,6 +62431,7 @@ paths:
           schema:
             type: string
           description: Group to upgrade
+          example: "myUniqueDistributedUpgradeGroupIdToCRUD"
   "/system/distributed/upgrade/download/{file}":
     get:
       operationId: getSystemDistributedUpgradeDownloadByFile
@@ -62199,6 +62472,7 @@ paths:
           schema:
             type: string
           description: Name of the file to be downloaded
+          example: "myDistributedUpgradeFile.txt"
   /lib/expression:
     post:
       operationId: createLibExpression
@@ -62277,6 +62551,7 @@ paths:
           schema:
             type: string
           description: Unique ID to GET
+          example: "myExistingConditionId"
       responses: *a158
   /health:
     get:
@@ -62325,6 +62600,7 @@ paths:
           schema:
             type: string
           description: Job instance id
+          example: "myExistingJobInstanceId"
   "/jobs/{id}/cancel":
     patch:
       operationId: updateJobsCancelById
@@ -62364,6 +62640,7 @@ paths:
           schema:
             type: string
           description: Job instance id
+          example: "myExistingJobInstanceId"
   /jobs:
     post:
       operationId: createJobs
@@ -62444,12 +62721,14 @@ paths:
           schema:
             type: integer
           description: Pagination offset
+          example: 0
         - name: limit
           in: query
           required: false
           schema:
             type: integer
           description: Maximum number of items to return
+          example: 100
         - name: runType
           in: query
           required: false
@@ -62460,30 +62739,35 @@ paths:
               - scheduled
               - system
           description: Filter by job run type
+          example: "adhoc"
         - name: state
           in: query
           required: false
           schema:
             type: string
           description: Filter by current job state, e.g. "running"
+          example: "running"
         - name: id
           in: query
           required: false
           schema:
             type: string
           description: Filter by job id, e.g. "id=1608713335.3&id=1608713326.1"
+          example: "id=1608713335.3&id=1608713326.1"
         - name: collectorId
           in: query
           required: false
           schema:
             type: string
           description: Filter by collector id, e.g. "collectorId=Prometheus-in"
+          example: "collectorId=Prometheus-in"
         - name: groupId
           in: query
           required: false
           schema:
             type: string
           description: Filter by worker group id, e.g. "defaultHybrid"
+          example: "default"
   "/jobs/{id}":
     delete:
       operationId: deleteJobsById
@@ -62524,6 +62808,7 @@ paths:
           schema:
             type: string
           description: Job instance id
+          example: "myExistingJobIdToCRUD"
     get:
       operationId: getJobsById
       tags:
@@ -62562,6 +62847,7 @@ paths:
           schema:
             type: string
           description: Job instance id
+          example: "myExistingJobIdToCRUD"
   "/jobs/{id}/keep":
     patch:
       operationId: updateJobsKeepById
@@ -62601,12 +62887,14 @@ paths:
           schema:
             type: string
           description: Job Instance id
+          example: "myExistingJobIdToCRUD"
         - name: groupId
           in: query
           required: false
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
   "/jobs/{id}/pause":
     patch:
       operationId: updateJobsPauseById
@@ -62646,6 +62934,7 @@ paths:
           schema:
             type: string
           description: Job instance id
+          example: "myExistingGroupId"
   "/jobs/{id}/resume":
     patch:
       operationId: updateJobsResumeById
@@ -62685,6 +62974,7 @@ paths:
           schema:
             type: string
           description: Job instance id
+          example: "myExistingJobId"
   "/jobs/{id}/results/{group}":
     get:
       operationId: getJobsResultsByIdAndGroup
@@ -62725,18 +63015,21 @@ paths:
           schema:
             type: string
           description: Instance id of the job to get results for
+          example: "myExistingJobId"
         - name: maxFiles
           in: query
           required: false
           schema:
             type: number
           description: Maximum files to get job results
+          example: 10
         - name: group
           in: path
           required: true
           schema:
             type: string
           description: Group the job belongs to
+          example: "myExistingJobGroup"
   "/jobs/{id}/errors/{group}":
     get:
       operationId: getJobsErrorsByIdAndGroup
@@ -62777,12 +63070,14 @@ paths:
           schema:
             type: string
           description: Instance id of the job to get results for
+          example: "myExistingJobId"
         - name: group
           in: path
           required: true
           schema:
             type: string
           description: Group the job belongs to
+          example: "myExistingJobGroup"
   "/jobs/{id}/errors":
     get:
       operationId: getJobsErrorsById
@@ -62823,6 +63118,7 @@ paths:
           schema:
             type: string
           description: Instance id of the job to get results for
+          example: "myExistingJobId"
   /security/kms/config:
     get:
       operationId: getSecurityKmsConfig
@@ -63010,6 +63306,7 @@ paths:
             &a161
             type: string
           description: Unique ID to GET
+          example: "myExistingLicenseId"
       responses: *a160
     delete:
       operationId: deleteLicenseById
@@ -63022,6 +63319,7 @@ paths:
           required: true
           schema: *a161
           description: Unique ID to DELETE
+          example: "myExistingLicenseId"
       responses: *a160
   /system/licenses/usage:
     get:
@@ -63102,6 +63400,7 @@ paths:
             &a164
             type: string
           description: Unique ID to GET
+          example: "myLoggerConfigIdToCRUD"
       responses: *a163
     patch:
       operationId: updateLoggerConfigById
@@ -63114,6 +63413,7 @@ paths:
           required: true
           schema: *a164
           description: Unique ID to PATCH
+          example: "myLoggerConfigIdToCRUD"
       requestBody:
         description: LoggerConfig object to be updated
         required: true
@@ -63133,6 +63433,7 @@ paths:
           required: true
           schema: *a164
           description: Unique ID to DELETE
+          example: "myLoggerConfigIdToCRUD"
       responses: *a163
   "/system/jobs/logs/{id}/{groupId}":
     get:
@@ -63174,24 +63475,28 @@ paths:
           schema:
             type: string
           description: Job id
+          example: "myExistingJobId"
         - name: limit
           in: query
           required: false
           schema:
             type: integer
           description: Maximum number of log lines to retrieve starting from offset.
+          example: 1000
         - name: offset
           in: query
           required: false
           schema:
             type: integer
           description: Offset in the current log file to fetch the log events from.
+          example: 1
         - name: endOffset
           in: query
           required: false
           schema:
             type: integer
           description: in the current log file to fetch the log events upto.
+          example: 10000
         - name: et
           in: query
           required: false
@@ -63199,6 +63504,7 @@ paths:
             type: integer
           description: Epoch timestamp of the earliest event (includes rolled files
             present on disk)
+          example: 1759218069
         - name: lt
           in: query
           required: false
@@ -63206,18 +63512,21 @@ paths:
             type: integer
           description: Epoch timestamp of the latest event (includes rolled files present
             on disk)
+          example: 1759219069
         - name: filter
           in: query
           required: false
           schema:
             type: string
           description: Filter
+          example: "truthy"
         - name: groupId
           in: path
           required: true
           schema:
             type: string
           description: Group ID (optional)
+          example: "myExistingGroupId"
   "/system/logs/{id}":
     get:
       operationId: getSystemLogsById
@@ -63258,18 +63567,21 @@ paths:
           schema:
             type: string
           description: Log ID
+          example: "myExistingSystemLogById"
         - name: limit
           in: query
           required: false
           schema:
             type: integer
           description: Maximum number of log lines to retrieve starting from offset.
+          example: 10000
         - name: endOffset
           in: query
           required: false
           schema:
             type: integer
           description: in the current log file to fetch the log events upto.
+          example: 20000
         - name: et
           in: query
           required: false
@@ -63277,6 +63589,7 @@ paths:
             type: integer
           description: Epoch timestamp of the earliest event (includes rolled files
             present on disk)
+          example: 1759218069
         - name: lt
           in: query
           required: false
@@ -63284,12 +63597,14 @@ paths:
             type: integer
           description: Epoch timestamp of the latest event (includes rolled files present
             on disk)
+          example: 1759219069
         - name: filter
           in: query
           required: false
           schema:
             type: string
           description: Filter
+          example: "truthy"
   /system/logs:
     get:
       operationId: getSystemLogs
@@ -63362,24 +63677,28 @@ paths:
           schema:
             type: string
           description: type of logs request single multi group
+          example: "single"
         - name: groupId
           in: query
           required: false
           schema:
             type: string
           description: id of the group to query
+          example: "myExsitingGroupId"
         - name: files
           in: query
           required: false
           schema:
             type: string
           description: query string[] optional file or files to query
+          example: "/var/log/httpd.log"
         - name: limit
           in: query
           required: false
           schema:
             type: integer
           description: Maximum number of log lines to retrieve starting from offset.
+          example: 100
         - name: et
           in: query
           required: false
@@ -63387,6 +63706,7 @@ paths:
             type: integer
           description: Epoch timestamp of the earliest event (includes rolled files
             present on disk)
+          example: 1759219069
         - name: lt
           in: query
           required: false
@@ -63394,12 +63714,14 @@ paths:
             type: integer
           description: Epoch timestamp of the latest event (includes rolled files present
             on disk)
+          example: 1759212069
         - name: filter
           in: query
           required: false
           schema:
             type: string
           description: Filter
+          example: "truthy"
   "/m/{groupId}/packs":
     post:
       x-speakeasy-entity-operation: Pack#create
@@ -63410,17 +63732,20 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: filename
           in: query
           required: false
           schema:
             type: string
           description: the file to upload
+          example: "./myfile.json"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
+          example: false
       operationId: createPacks
       tags:
         - packs
@@ -63496,17 +63821,20 @@ paths:
           schema:
             type: string
           description: Comma separated list of entities, "outputs", "inputs"
+          example: "input1, input2, input3"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
+          example: true
     put:
       operationId: updatePacks
       tags:
@@ -63546,12 +63874,14 @@ paths:
           schema:
             type: string
           description: the file to upload
+          example: "./myLocalFile.json"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/m/{groupId}/packs/{id}":
     get:
       x-speakeasy-entity-operation: Pack#read
@@ -63592,23 +63922,27 @@ paths:
           schema:
             type: string
           description: Comma separated list of entities, "outputs", "inputs"
+          example: "input1, input2, input3"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
+          example: true
         - name: id
           in: path
           required: true
           schema:
             type: string
           description: Pack name
+          example: "myUniquePackIdToCRUD"
     delete:
       x-speakeasy-entity-operation: Pack#delete
       operationId: deletePacksById
@@ -63625,17 +63959,20 @@ paths:
           schema:
             type: string
           description: Pack name
+          example: "myUniquePackIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
+          example: true
     patch:
       x-speakeasy-entity-operation: Pack#update
       operationId: updatePacksById
@@ -63675,35 +64012,41 @@ paths:
           schema:
             type: string
           description: Pack name
+          example: "myExistingGroupId"
         - name: source
           in: query
           required: false
           schema:
             type: string
           description: body string required Pack source
+          example: "myExistingSourceId"
         - name: minor
           in: query
           required: false
           schema:
             type: string
           description: body boolean optional Only upgrade to minor/patch versions
+          example: true
         - name: spec
           in: query
           required: false
           schema:
             type: string
-          description: body string optional Specify a branch, tag or a semver spec
+          description: (optional) body string. Specify a branch, tag or a semver spec
+          example: "main" 
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
+          example: true
   "/m/{groupId}/packs/__clone__":
     post:
       parameters:
@@ -63713,6 +64056,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createPacksClone
       tags:
         - packs
@@ -63790,6 +64134,7 @@ paths:
           schema:
             type: string
           description: Pack name
+          example: "myExistingPackId"
   "/m/{groupId}/packs/{id}/export":
     get:
       operationId: getPacksExportById
@@ -63830,6 +64175,7 @@ paths:
           schema:
             type: string
           description: Pack name
+          example: "myExistingPackId"
         - name: mode
           in: query
           required: true
@@ -63841,18 +64187,21 @@ paths:
               - merge_safe
           description: 'Export mode. Note: "merge_safe" is deprecated and will be removed
             in v5.0.0. Use "merge" instead.'
+          example: "default_only"
         - name: filename
           in: query
           required: false
           schema:
             type: string
           description: Filename of the exported Pack
+          example: "localOutputFile.json"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/packs/{id}/publish":
     post:
       operationId: createPacksPublishById
@@ -63892,6 +64241,7 @@ paths:
           schema:
             type: string
           description: Pack name
+          example: "myExistingPackId"
   /preview:
     post:
       operationId: createPreview
@@ -64009,12 +64359,14 @@ paths:
               - search
               - lake
           description: product by which to filter members
+          example: "stream"
         - name: id
           in: path
           required: true
           schema:
             type: string
           description: user id
+          example: "myExistingGroupId"
         - name: type
           in: query
           required: false
@@ -64028,6 +64380,7 @@ paths:
               - dashboards
               - macros
           description: resource type by which to filter access levels
+          example: "groups"
   "/products/{product}/users":
     get:
       operationId: getProductsUsersByProduct
@@ -64072,12 +64425,14 @@ paths:
               - search
               - lake
           description: product by which to filter members
+          example: "stream"
         - name: groupId
           in: query
           required: false
           schema:
             type: string
           description: filter to specific group by groupId
+          example: "myExistingGroupId"
   "/products/{product}/users/__cache__":
     delete:
       operationId: deleteProductsUsersCacheByProduct
@@ -64123,6 +64478,7 @@ paths:
               - search
               - lake
           description: product by which to filter members
+          example: "search"
   "/system/projects/{projectId}/version/commit":
     post:
       operationId: createSystemProjectsVersionCommitByProjectId
@@ -64171,6 +64527,7 @@ paths:
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/system/projects/{projectId}/version/count":
     get:
       operationId: getSystemProjectsVersionCountByProjectId
@@ -64213,12 +64570,14 @@ paths:
           schema:
             type: string
           description: Project ID
+          example: "myExistingProjectId"
         - name: ID
           in: query
           required: false
           schema:
             type: string
           description: Commit ID
+          example: "fa07060"
   "/system/projects/{projectId}/version/diff":
     get:
       operationId: getSystemProjectsVersionDiffByProjectId
@@ -64261,24 +64620,28 @@ paths:
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
         - name: commit
           in: query
           required: false
           schema:
             type: string
           description: Commit hash (default is HEAD)
+          example: "fa07060"
         - name: filename
           in: query
           required: false
           schema:
             type: string
           description: Filename
+          example: "localOutputFile.txt"
         - name: diffLineLimit
           in: query
           required: false
           schema:
             type: number
           description: Limit maximum lines in the diff
+          example: 1000
   "/system/projects/{projectId}/version/files":
     get:
       operationId: getSystemProjectsVersionFilesByProjectId
@@ -64320,12 +64683,14 @@ paths:
           schema:
             type: string
           description: Project ID
+          example: "myExistingProjectId"
         - name: ID
           in: query
           required: false
           schema:
             type: string
           description: Commit ID
+          example: "fa07060"
   "/system/projects/{projectId}/version/revert":
     post:
       operationId: createSystemProjectsVersionRevertByProjectId
@@ -64374,6 +64739,7 @@ paths:
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/system/projects/{projectId}/version/show":
     get:
       operationId: getSystemProjectsVersionShowByProjectId
@@ -64416,24 +64782,28 @@ paths:
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
         - name: ID
           in: query
           required: false
           schema:
             type: string
           description: Commit ID
+          example: "fa07060"
         - name: filename
           in: query
           required: false
           schema:
             type: string
           description: Filename
+          example: "myLocalOutputFile.txt"
         - name: diffLineLimit
           in: query
           required: false
           schema:
             type: number
           description: Limit maximum lines in the diff
+          example: 1000
   /system/diag/download:
     get:
       operationId: getDiagBundle
@@ -64553,6 +64923,7 @@ paths:
           schema:
             type: string
           description: Diag bundle path
+          example: "my/Diag/Bundle/Path"
   /system/diag/send:
     post:
       operationId: createSystemDiagSend
@@ -64672,30 +65043,35 @@ paths:
           schema:
             type: string
           description: worker process to query, this would work only on a worker node
+          example: "43245"
         - name: numBuckets
           in: query
           required: false
           schema:
             type: number
           description: buckets in the past to include in the query results
+          example: 1
         - name: earliest
           in: query
           required: false
           schema:
             type: string
           description: earliest time to query against
+          example: "2025-09-30 13:41:44.056636"
         - name: latest
           in: query
           required: false
           schema:
             type: string
           description: latest time to query against
+          example: "2025-09-30 13:59:44.056636"
         - name: metricNameFilter
           in: query
           required: false
           schema:
             type: string
           description: can be a regex or an array of metric names
+          example: ".*"
         - name: filterExpr
           in: query
           required: false
@@ -64703,6 +65079,7 @@ paths:
             type: string
           description: a js expression to apply against the metrics returned (can filter
             dimensions)
+          example: "truthy"
   /system/metrics/query:
     post:
       operationId: createSystemMetricsQuery
@@ -65171,6 +65548,7 @@ paths:
           schema:
             type: string
           description: Version number
+          example: "1.0.0"
   /system/settings/upgrade-from-package:
     post:
       operationId: createSystemSettingsUpgradeFromPackage
@@ -65250,6 +65628,7 @@ paths:
           schema:
             type: string
           description: UI state key
+          example: "myUIStateKey"
     patch:
       operationId: updateUiByKey
       tags:
@@ -65296,6 +65675,7 @@ paths:
           schema:
             type: string
           description: UI state key
+          example: "myUIStateKey"
   /version/undo:
     post:
       operationId: undoLastCommit
@@ -65322,6 +65702,7 @@ paths:
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
   /version/branch:
     get:
       operationId: getVersionBranch
@@ -65440,12 +65821,14 @@ paths:
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
         - name: ID
           in: query
           required: false
           schema:
             type: string
           description: Commit ID
+          example: "fa07060"
   /version/current-branch:
     get:
       operationId: getVersionCurrentBranch
@@ -65521,24 +65904,28 @@ paths:
           schema:
             type: string
           description: Commit hash (default is HEAD)
+          example: "fa07060"
         - name: group
           in: query
           required: false
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
         - name: filename
           in: query
           required: false
           schema:
             type: string
           description: Filename
+          example: "myLocalFile.txt"
         - name: diffLineLimit
           in: query
           required: false
           schema:
             type: number
           description: Limit maximum lines in the diff
+          example: 1000
   /version/files:
     get:
       operationId: getVersionFiles
@@ -65579,12 +65966,14 @@ paths:
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
         - name: ID
           in: query
           required: false
           schema:
             type: string
           description: Commit ID
+          example: "fa07060"
   /version/info:
     get:
       operationId: getVersionInfo
@@ -65699,6 +66088,7 @@ paths:
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
   /version/show:
     get:
       operationId: getVersionShow
@@ -65740,24 +66130,28 @@ paths:
           schema:
             type: string
           description: Commit hash (default is HEAD)
+          example: "HEAD"
         - name: group
           in: query
           required: false
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
         - name: filename
           in: query
           required: false
           schema:
             type: string
           description: Filename
+          example: "myLocalFile.txt"
         - name: diffLineLimit
           in: query
           required: false
           schema:
             type: number
           description: Limit maximum lines in the diff
+          example: 1000
   /version/status:
     get:
       operationId: getVersionStatus
@@ -65798,6 +66192,7 @@ paths:
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
   /version/sync:
     post:
       operationId: createVersionSync
@@ -65872,6 +66267,7 @@ paths:
           schema:
             type: string
           description: Feature name to get settings for
+          example: "ai-settings"
     post:
       operationId: createAiSettingsFeaturesByFeature
       tags:
@@ -65911,6 +66307,7 @@ paths:
           schema:
             type: string
           description: Feature name to update settings for
+          example: "ai-settings"
   /ai/settings/features:
     get:
       operationId: getAiSettingsFeatures
@@ -66146,6 +66543,7 @@ paths:
           schema:
             type: string
           description: search job id
+          example: "myExistingSearchJobId"
   /search/job-metrics:
     get:
       operationId: getSearchJobMetrics
@@ -66272,12 +66670,14 @@ paths:
           schema:
             type: string
           description: search job ID
+          example: "myExistingSearchJobId"
         - name: stageId
           in: path
           required: true
           schema:
             type: string
           description: id of the search job stage
+          example: "myExistingStageId"
   "/search/jobs/{id}/results":
     get:
       operationId: getSearchJobsResultsById
@@ -66311,30 +66711,35 @@ paths:
           schema:
             type: string
           description: search job id
+          example: "myExistingSearchJobId"
         - name: limit
           in: query
           required: false
           schema:
             type: number
           description: maximum number of events returned
+          example: 1000
         - name: offset
           in: query
           required: false
           schema:
             type: number
           description: starting offset of the events
+          example: 100
         - name: lowerBound
           in: query
           required: false
           schema:
             type: number
           description: lower bound of the time range, inclusive
+          example: 1759255372
         - name: upperBound
           in: query
           required: false
           schema:
             type: number
           description: upper bound of the time range, exclusive
+          example: 1759258372
   "/search/jobs/{id}/results-poll":
     get:
       operationId: getSearchJobsResultsPollById
@@ -66366,30 +66771,35 @@ paths:
           schema:
             type: string
           description: search job id
+          example: "myExistingSearchJobId"
         - name: limit
           in: query
           required: false
           schema:
             type: number
           description: maximum number of events returned
+          example: 1000
         - name: offset
           in: query
           required: false
           schema:
             type: number
           description: starting offset of the events
+          example: 100
         - name: lowerBound
           in: query
           required: false
           schema:
             type: number
           description: lower bound of the time range, inclusive
+          example: 1759255372
         - name: upperBound
           in: query
           required: false
           schema:
             type: number
           description: upper bound of the time range, exclusive
+          example: 1759258372
         - name: lastJobStatus
           in: query
           required: false
@@ -66397,6 +66807,7 @@ paths:
             type: string
           description: last known status of the Search Job. Used to return immediatelyupon
             status change if the status was queued.
+          example: "failed"
   "/edge/containers/{id}":
     get:
       operationId: getEdgeContainersById
@@ -66439,6 +66850,7 @@ paths:
           schema:
             type: string
           description: ID
+          example: "myExistingEdgeContainerId"
   /edge/containers:
     get:
       operationId: getEdgeContainers
@@ -66511,6 +66923,7 @@ paths:
           schema:
             type: string
           description: Discovery Mode (default is "auto")
+          example: "auto"
         - name: allow
           in: query
           required: false
@@ -66518,18 +66931,21 @@ paths:
             type: string
           description: query array[string] optional List of allowed-filename wildcard
             patterns
+          example: "*.log"
         - name: path
           in: query
           required: false
           schema:
             type: string
           description: Search directory for "manual" mode
+          example: "/path/to/files"
         - name: depth
           in: query
           required: false
           schema:
             type: number
           description: Search depth for "manual" mode
+          example: 2
   "/edge/processes/{pid}":
     get:
       operationId: getEdgeProcessesByPid
@@ -66570,6 +66986,7 @@ paths:
           schema:
             type: string
           description: PID of the process
+          example: "12345"
   /edge/processes:
     get:
       operationId: getEdgeProcesses
@@ -66650,6 +67067,7 @@ paths:
             &a167
             type: string
           description: Unique ID to GET
+          example: "myExistingFunctionId"
       responses: *a166
   "/p/{pack}/functions":
     get:
@@ -66666,6 +67084,7 @@ paths:
             &a168
             type: string
           description: pack ID to GET
+          example: "myExistingPackId"
   "/p/{pack}/functions/{id}":
     get:
       operationId: getFunctionByPackAndId
@@ -66678,11 +67097,13 @@ paths:
           required: true
           schema: *a167
           description: Unique ID to GET for pack
+          example: "myExistingFunctionId"
         - name: pack
           in: path
           required: true
           schema: *a168
           description: pack ID to GET
+          example: "myExistingPackId"
       responses: *a166
   /collectors:
     get:
@@ -66730,6 +67151,7 @@ paths:
           schema:
             type: string
           description: Unique ID to GET
+          example: "myExistingCollectorId"
       responses: *a170
   /executors:
     get:
@@ -66777,6 +67199,7 @@ paths:
           schema:
             type: string
           description: Unique ID to GET
+          example: "myExistingExecutorId"
       responses: *a172
   "/m/{groupId}/system/projects":
     get:
@@ -66787,6 +67210,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: listProject
       tags:
         &a173
@@ -66827,6 +67251,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       operationId: createProject
       tags: *a173
       summary: Create Project
@@ -66854,12 +67279,14 @@ paths:
             &a175
             type: string
           description: Unique ID to GET
+          example: "myExistingProjectId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a174
     patch:
       x-speakeasy-entity-operation: Project#update
@@ -66873,12 +67300,14 @@ paths:
           required: true
           schema: *a175
           description: Unique ID to PATCH
+          example: "myUniqueProjectIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       requestBody:
         description: Project object to be updated
         required: true
@@ -66899,12 +67328,14 @@ paths:
           required: true
           schema: *a175
           description: Unique ID to DELETE
+          example: "myUniqueProjectIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a174
   "/system/projects/{id}/acl":
     get:
@@ -66942,6 +67373,7 @@ paths:
           required: true
           schema: *a175
           description: Unique ID for ACL Get
+          example: "myExistingProjectId"
       description: List accesses to Project granted to users
       summary: Get Project ACL
       tags:
@@ -66971,6 +67403,7 @@ paths:
           required: true
           schema: *a175
           description: Unique ID for ACL Create
+          example: "myExistingProjectId"
       description: Add/remove accesses to Project for users
       summary: Modify Project ACL
       tags: *a178
@@ -66984,6 +67417,7 @@ paths:
           required: true
           schema: *a175
           description: Unique ID for ACL Teams Get
+          example: "myExistingProjectId"
       description: List accesses to Project granted to Teams
       summary: Get Project Teams
       tags:
@@ -67001,6 +67435,7 @@ paths:
           required: true
           schema: *a175
           description: Unique ID for ACL Teams Create
+          example: "myExistingProjectId"
       description: Add/remove accesses to Project for Teams
       summary: Modify Project Teams ACL
       tags: *a182
@@ -67043,6 +67478,7 @@ paths:
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/m/{groupId}/system/subscriptions":
     get:
       parameters:
@@ -67052,30 +67488,35 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
           description: Project enabled
+          example: true
         - name: description
           in: query
           required: false
           schema:
             type: string
           description: Project description
+          example: "This is how you describe a project with runes that form words"
         - name: filter
           in: query
           required: false
           schema:
             type: string
           description: filter
+          example: "truthy"
         - name: pipeline
           in: query
           required: false
           schema:
             type: string
           description: pipeline to be used
+          example: "myExistingPipelineId"
       operationId: listSubscription
       tags:
         &a183
@@ -67116,36 +67557,42 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
         - name: disabled
           in: query
           required: false
           schema:
             type: boolean
           description: Project Id
+          example: false
         - name: description
           in: query
           required: false
           schema:
             type: string
           description: Project description
+          example: "Words describe things"
         - name: filter
           in: query
           required: false
           schema:
             type: string
           description: filter
+          example: "truthy"
         - name: pipeline
           in: query
           required: true
           schema:
             type: string
           description: pipeline to be used
+          example: "myExistingPipelineId"
         - name: id
           in: query
           required: true
           schema:
             type: string
-          description: pipeline to be used
+          description: new Id to be used for subscription to be created
+          example: "myUniqueSubscriptionId"
       operationId: createSubscription
       tags:
         - subscriptions
@@ -67197,12 +67644,14 @@ paths:
           schema:
             type: string
           description: Unique ID to GET
+          example: "myExistingSubscriptionId"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
       responses: *a184
     patch:
       x-speakeasy-entity-operation: Subscription#update
@@ -67243,12 +67692,14 @@ paths:
           schema:
             type: string
           description: Subscription ID
+          example: "myUniqueSubscriptionIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
     delete:
       x-speakeasy-entity-operation: Subscription#delete
       operationId: deleteSubscriptionById
@@ -67288,12 +67739,14 @@ paths:
           schema:
             type: string
           description: Subscription ID
+          example: "myUniqueSubscriptionIdToCRUD"
         - name: groupId
           in: path
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
+          example: "myExistingGroupId"
   "/system/projects/{projectId}/subscriptions":
     get:
       operationId: getSubscriptionByProjectId
@@ -67334,6 +67787,7 @@ paths:
           schema:
             type: string
           description: Project Id
+          example: "myExistingProjectId"
   "/master/groups/{id}/configVersion":
     get:
       x-speakeasy-entity-operation: ConfigVersion#read
@@ -67374,6 +67828,7 @@ paths:
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
   "/products/{product}/groups":
     post:
       x-speakeasy-entity-operation: Group#create
@@ -67424,6 +67879,7 @@ paths:
               - stream
               - edge
           description: Cribl Product
+          example: "edge"
     get:
       operationId: getProductsGroupsByProduct
       tags:
@@ -67465,6 +67921,7 @@ paths:
               - stream
               - edge
           description: Cribl Product
+          example: "stream"
   "/master/groups/{id}":
     get:
       x-speakeasy-entity-operation: Group#get
@@ -67505,12 +67962,14 @@ paths:
           schema:
             type: string
           description: Group id
+          example: "myExistingGroupId"
         - name: fields
           in: query
           required: false
           schema:
             type: string
           description: "fields to add to results: git.commit, git.localChanges, git.log"
+          example: "git.commit"
     patch:
       operationId: updateGroupsById
       tags:
@@ -67525,6 +67984,7 @@ paths:
           schema:
             type: string
           description: Group id
+          example: "myUniqueGroupIdToCRUD"
       responses:
         '200':
           description: a list of ConfigGroup objects
@@ -67555,6 +68015,7 @@ paths:
           schema:
             type: string
           description: Group id
+          example: "myUniqueGroupIdToCRUD"
       responses:
         "200":
           description: a list of ConfigGroup objects
@@ -67613,12 +68074,14 @@ paths:
               - stream
               - edge
           description: Cribl Product
+          example: "stream"
         - name: id
           in: path
           required: true
           schema:
             type: string
           description: Group ID
+          example: "myExistingGroupId"
         - name: type
           in: query
           required: false
@@ -67632,6 +68095,7 @@ paths:
               - dashboards
               - macros
           description: resource type by which to filter access levels
+          example: "groups"
   "/master/groups/{id}/acl":
     get:
       operationId: getGroupsAclById
@@ -67672,6 +68136,7 @@ paths:
           schema:
             type: string
           description: Group id
+          example: "myExistingGroupId"
         - name: type
           in: query
           required: false
@@ -67685,6 +68150,7 @@ paths:
               - dashboards
               - macros
           description: resource type by which to filter access levels
+          example: "groups"
   /master/groups/{id}/deploy:
     patch:
       operationId: updateGroupsDeployById
@@ -67731,6 +68197,7 @@ paths:
         schema:
           type: string
         description: Group ID
+        example: "myExistingGroupId"
 servers:
 - url: https://{workspaceId}-{organizationId}.{cloudDomain}
   x-speakeasy-server-id: cloud

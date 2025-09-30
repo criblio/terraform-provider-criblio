@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 4f0bc08956df34f2d2aebc593d40ee0e
+  docChecksum: 1296afe15499bdd1082c1de8cf97b815
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.631.4
+  speakeasyVersion: 1.631.5
   generationVersion: 2.716.16
   releaseVersion: 1.14.5
   configChecksum: 51eec6be593eed443749b86b63c6073e
@@ -463,12 +463,10 @@ generatedFiles:
   - internal/provider/types/config_group_lookups.go
   - internal/provider/types/consumers.go
   - internal/provider/types/create_lakehouse_dataset_connections_request_body.go
-  - internal/provider/types/cribl_lake_dataset.go
   - internal/provider/types/cribl_leader_dataset.go
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
-  - internal/provider/types/dashboard_category.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
@@ -495,12 +493,12 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
-  - internal/provider/types/generic_dataset.go
   - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
+  - internal/provider/types/grok_file.go
   - internal/provider/types/group.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
@@ -1262,7 +1260,7 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
-  - internal/provider/types/pipeline.go
+  - internal/provider/types/parser_lib_entry.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1288,6 +1286,8 @@ generatedFiles:
   - internal/provider/types/sas_config.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
+  - internal/provider/types/schema_lib_entry.go
+  - internal/provider/types/search_dashboard.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1310,6 +1310,7 @@ generatedFiles:
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
   - internal/provider/types/tls_configuration.go
+  - internal/provider/types/usage_group.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/webhook_target.go
@@ -2756,7 +2757,7 @@ examples:
     speakeasy-default-create-system-projects-version-commit-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
+          projectId: "myExistingProjectId"
       requestBody:
         application/json: {"message": "<value>"}
       responses:
@@ -2768,8 +2769,9 @@ examples:
     speakeasy-default-get-system-projects-version-count-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
-        query: {}
+          projectId: "myExistingProjectId"
+        query:
+          ID: "fa07060"
       responses:
         "200":
           application/json: {}
@@ -2779,8 +2781,11 @@ examples:
     speakeasy-default-get-system-projects-version-diff-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
-        query: {}
+          projectId: "myExistingProjectId"
+        query:
+          commit: "fa07060"
+          filename: "localOutputFile.txt"
+          diffLineLimit: 1000
       responses:
         "200":
           application/json: {}
@@ -2790,8 +2795,9 @@ examples:
     speakeasy-default-get-system-projects-version-files-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
-        query: {}
+          projectId: "myExistingProjectId"
+        query:
+          ID: "fa07060"
       responses:
         "200":
           application/json: {}
@@ -2801,7 +2807,7 @@ examples:
     speakeasy-default-create-system-projects-version-revert-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
+          projectId: "myExistingProjectId"
       requestBody:
         application/json: {"message": "<value>"}
       responses:
@@ -2813,8 +2819,11 @@ examples:
     speakeasy-default-get-system-projects-version-show-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
-        query: {}
+          projectId: "myExistingProjectId"
+        query:
+          ID: "fa07060"
+          filename: "myLocalOutputFile.txt"
+          diffLineLimit: 1000
       responses:
         "200":
           application/json: {}
@@ -2824,7 +2833,7 @@ examples:
     speakeasy-default-list-project:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -2834,7 +2843,7 @@ examples:
     speakeasy-default-create-project:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"destinations": ["<value 1>", "<value 2>", "<value 3>"], "id": "<id>", "subscriptions": ["<value 1>"]}
       responses:
@@ -2846,8 +2855,8 @@ examples:
     speakeasy-default-get-project-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myExistingProjectId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -2857,8 +2866,8 @@ examples:
     speakeasy-default-update-project-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueProjectIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"destinations": ["<value 1>", "<value 2>"], "id": "<id>", "subscriptions": ["<value 1>"]}
       responses:
@@ -2870,8 +2879,8 @@ examples:
     speakeasy-default-delete-project-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueProjectIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -2881,7 +2890,7 @@ examples:
     speakeasy-default-get-project-acl-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingProjectId"
       responses:
         "200":
           application/json: {}
@@ -2891,7 +2900,7 @@ examples:
     speakeasy-default-create-project-acl-apply-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingProjectId"
       requestBody:
         application/json: {}
       responses:
@@ -2901,7 +2910,7 @@ examples:
     speakeasy-default-get-project-acl-teams-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingProjectId"
       responses:
         "200":
           application/json: {}
@@ -2911,7 +2920,7 @@ examples:
     speakeasy-default-create-project-acl-teams-apply-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingProjectId"
       requestBody:
         application/json: {}
       responses:
@@ -2921,7 +2930,7 @@ examples:
     speakeasy-default-get-project-destinations-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
+          projectId: "myExistingProjectId"
       responses:
         "200":
           application/json: {}
@@ -2931,7 +2940,7 @@ examples:
     speakeasy-default-get-subscription-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
+          projectId: "myExistingProjectId"
       responses:
         "200":
           application/json: {}
@@ -2941,7 +2950,12 @@ examples:
     speakeasy-default-list-subscription:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
+        query:
+          disabled: true
+          description: "This is how you describe a project with runes that form words"
+          filter: "truthy"
+          pipeline: "myExistingPipelineId"
       responses:
         "200":
           application/json: {}
@@ -2951,10 +2965,13 @@ examples:
     speakeasy-default-create-subscription:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
         query:
-          pipeline: "<value>"
-          id: "<id>"
+          pipeline: "myExistingPipelineId"
+          id: "myUniqueSubscriptionId"
+          disabled: false
+          description: "Words describe things"
+          filter: "truthy"
       requestBody:
         application/json: {"id": "<id>", "pipeline": "<value>"}
       responses:
@@ -2966,8 +2983,8 @@ examples:
     speakeasy-default-get-subscription-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myExistingSubscriptionId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -2977,8 +2994,8 @@ examples:
     speakeasy-default-update-subscription-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueSubscriptionIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -2988,8 +3005,8 @@ examples:
     speakeasy-default-delete-subscription-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueSubscriptionIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -2997,6 +3014,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   undoLastCommit:
     speakeasy-default-undo-last-commit:
+      parameters:
+        query:
+          group: "myExistingGroupId"
       responses:
         "500":
           application/json: {"message": "This is my error message string"}
@@ -3018,6 +3038,10 @@ examples:
           application/json: {"message": "This is my error message string"}
   getVersionCount:
     speakeasy-default-get-version-count:
+      parameters:
+        query:
+          group: "myExistingGroupId"
+          ID: "fa07060"
       responses:
         "200":
           application/json: {}
@@ -3032,6 +3056,12 @@ examples:
           application/json: {"message": "This is my error message string"}
   getVersionDiff:
     speakeasy-default-get-version-diff:
+      parameters:
+        query:
+          commit: "fa07060"
+          group: "myExistingGroupId"
+          filename: "myLocalFile.txt"
+          diffLineLimit: 1000
       responses:
         "200":
           application/json: {}
@@ -3039,6 +3069,10 @@ examples:
           application/json: {"message": "This is my error message string"}
   getVersionFiles:
     speakeasy-default-get-version-files:
+      parameters:
+        query:
+          group: "myExistingGroupId"
+          ID: "fa07060"
       responses:
         "200":
           application/json: {}
@@ -3060,6 +3094,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   createVersionRevert:
     speakeasy-default-create-version-revert:
+      parameters:
+        query:
+          group: "myExistingGroupId"
       requestBody:
         application/json: {"commit": "<value>", "message": "<value>"}
       responses:
@@ -3069,6 +3106,12 @@ examples:
           application/json: {"message": "This is my error message string"}
   getVersionShow:
     speakeasy-default-get-version-show:
+      parameters:
+        query:
+          commit: "HEAD"
+          group: "myExistingGroupId"
+          filename: "myLocalFile.txt"
+          diffLineLimit: 1000
       responses:
         "200":
           application/json: {}
@@ -3076,6 +3119,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   getVersionStatus:
     speakeasy-default-get-version-status:
+      parameters:
+        query:
+          group: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -3115,7 +3161,7 @@ examples:
     speakeasy-default-create-system-projects-capture-by-project-id:
       parameters:
         path:
-          projectId: "<id>"
+          projectId: "myExistingProjectId"
       requestBody:
         application/json: {"duration": 4855.02, "filter": "<value>", "level": 8634.29, "maxEvents": 5475.12}
       responses:
@@ -3127,8 +3173,8 @@ examples:
     speakeasy-default-create-system-projects-subscriptions-capture-by-project-id-and-subscription-id:
       parameters:
         path:
-          projectId: "<id>"
-          subscriptionId: "<id>"
+          projectId: "myExistingProjectId"
+          subscriptionId: "myExistingSubscriptionId"
       requestBody:
         application/json: {"duration": 9984.14, "filter": "<value>", "level": 8613.29, "maxEvents": 502.1}
       responses:
@@ -3165,7 +3211,7 @@ examples:
     speakeasy-default-get-data-sample-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSampleIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -3175,7 +3221,7 @@ examples:
     speakeasy-default-update-data-sample-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSampleIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "sampleName": "<value>"}
       responses:
@@ -3187,7 +3233,7 @@ examples:
     speakeasy-default-delete-data-sample-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSampleIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -3197,7 +3243,7 @@ examples:
     speakeasy-default-get-data-sample-content-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingSampleId"
       responses:
         "200":
           application/json: {}
@@ -3207,7 +3253,7 @@ examples:
     speakeasy-default-list-pipeline:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -3217,7 +3263,7 @@ examples:
     speakeasy-default-create-pipeline:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
       responses:
@@ -3229,8 +3275,8 @@ examples:
     speakeasy-default-get-pipeline-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniquePipelineIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -3240,8 +3286,8 @@ examples:
     speakeasy-default-update-pipeline-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniquePipelineIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
       responses:
@@ -3253,8 +3299,8 @@ examples:
     speakeasy-default-delete-pipeline-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniquePipelineIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -3275,8 +3321,8 @@ examples:
     speakeasy-default-create-pipeline-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
       responses:
@@ -3300,9 +3346,11 @@ examples:
     speakeasy-default-update-pipeline-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniquePipelineIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
+        query:
+          disabled: false
       requestBody:
         application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
       responses:
@@ -3918,8 +3966,9 @@ examples:
       parameters:
         path:
           product: "stream"
-          id: "<id>"
-        query: {}
+          id: "myExistingGroupId"
+        query:
+          type: "groups"
       responses:
         "200":
           application/json: {}
@@ -3989,9 +4038,10 @@ examples:
     speakeasy-default-get-products-users-acl-by-product-and-id:
       parameters:
         path:
-          product: "edge"
-          id: "<id>"
-        query: {}
+          product: "stream"
+          id: "myExistingGroupId"
+        query:
+          type: "groups"
       responses:
         "200":
           application/json: {}
@@ -4002,7 +4052,8 @@ examples:
       parameters:
         path:
           product: "stream"
-        query: {}
+        query:
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -4012,7 +4063,7 @@ examples:
     speakeasy-default-delete-products-users-cache-by-product:
       parameters:
         path:
-          product: "lake"
+          product: "search"
       responses:
         "200":
           application/json: {}
@@ -4377,7 +4428,7 @@ examples:
     speakeasy-default-get-search-dashboard-acl-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingDashboardId"
       responses:
         "200":
           application/json: {}
@@ -4387,7 +4438,7 @@ examples:
     speakeasy-default-create-search-dashboard-acl-apply-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingDashboardId"
       requestBody:
         application/json: {}
       responses:
@@ -4397,8 +4448,9 @@ examples:
     speakeasy-default-get-groups-acl-by-id:
       parameters:
         path:
-          id: "<id>"
-        query: {}
+          id: "myExistingGroupId"
+        query:
+          type: "groups"
       responses:
         "200":
           application/json: {}
@@ -4408,7 +4460,7 @@ examples:
     speakeasy-default-get-search-dashboard-acl-teams-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingDashboardId"
       responses:
         "200":
           application/json: {}
@@ -4418,7 +4470,7 @@ examples:
     speakeasy-default-create-search-dashboard-acl-teams-apply-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingDashboardId"
       requestBody:
         application/json: {}
       responses:
@@ -4699,7 +4751,7 @@ examples:
     speakeasy-default-get-protobuf-library-config-encodings-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingProtobufId"
       responses:
         "200":
           application/json: {}
@@ -4709,7 +4761,7 @@ examples:
     speakeasy-default-list-regex-lib-entry:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
@@ -4731,8 +4783,8 @@ examples:
     speakeasy-default-get-regex-lib-entry-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueRegexIdToCrud"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
@@ -4742,8 +4794,8 @@ examples:
     speakeasy-default-update-regex-lib-entry-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueRegexToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}
       responses:
@@ -4755,8 +4807,8 @@ examples:
     speakeasy-default-delete-regex-lib-entry-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueRegexToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {"items": [{"id": "test_id", "lib": "custom", "description": "A sample regex", "regex": "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/", "sampleData": "192.168.1.1, 10.0.0.1, 172.16.0.1", "tags": "test"}]}
@@ -4782,7 +4834,7 @@ examples:
     speakeasy-default-get-search-dashboard-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDashboardIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -4792,7 +4844,7 @@ examples:
     speakeasy-default-update-search-dashboard-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDashboardIdToCRUD"
       requestBody:
         application/json: {"created": 9322.04, "createdBy": "<value>", "elements": [{"id": "<id>", "layout": {"h": 639.57, "w": 6274.13, "x": 2916.93, "y": 2991.89}, "search": {"earliest": "<value>", "latest": "<value>", "query": "<value>", "type": "inline"}, "type": "chart.funnel"}, {"id": "<id>", "layout": {"h": 639.57, "w": 6274.13, "x": 2916.93, "y": 2991.89}, "search": {"earliest": "<value>", "latest": "<value>", "query": "<value>", "type": "inline"}, "type": "chart.funnel"}], "id": "<id>", "modified": 6157.19, "name": "<value>"}
       responses:
@@ -4804,7 +4856,7 @@ examples:
     speakeasy-default-delete-search-dashboard-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueDashboardIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -4830,7 +4882,7 @@ examples:
     speakeasy-default-get-search-macro-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueMacroIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -4840,7 +4892,7 @@ examples:
     speakeasy-default-update-search-macro-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueMacroIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "replacement": "<value>"}
       responses:
@@ -4852,7 +4904,7 @@ examples:
     speakeasy-default-delete-search-macro-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueMacroIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -4878,7 +4930,7 @@ examples:
     speakeasy-default-get-saved-query-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSavedSearchIdToCRUD"
       responses:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
@@ -4888,7 +4940,7 @@ examples:
     speakeasy-default-update-saved-query-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSavedSearchIdToCRUD"
       requestBody:
         application/json: {"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "description": "test saved query", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}
       responses:
@@ -4900,7 +4952,7 @@ examples:
     speakeasy-default-delete-saved-query-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSavedSearchIdToCRUD"
       responses:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
@@ -4926,7 +4978,7 @@ examples:
     speakeasy-default-get-search-job-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueJobIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -4936,7 +4988,7 @@ examples:
     speakeasy-default-update-search-job-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueJobIdToCRUD"
       requestBody:
         application/json: {"displayUsername": "<value>", "group": "<value>", "id": "<id>", "query": "<value>", "status": "running", "timeCreated": 6068.64, "timeStarted": 6166.23, "user": "Karlee.Blick60"}
       responses:
@@ -4948,7 +5000,7 @@ examples:
     speakeasy-default-delete-search-job-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueJobIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -4958,7 +5010,7 @@ examples:
     speakeasy-default-create-search-job-dispatch-executors-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingSearchJobId"
       responses:
         "200":
           application/json: {}
@@ -4968,7 +5020,7 @@ examples:
     speakeasy-default-get-search-job-logs-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingSearchJobId"
       responses:
         "200":
           application/json: {}
@@ -4994,7 +5046,7 @@ examples:
     speakeasy-default-get-search-jobs-metrics-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingSearchJobId"
       responses:
         "200":
           application/json: "<value>"
@@ -5020,8 +5072,8 @@ examples:
     speakeasy-default-get-search-jobs-stages-results-by-id-and-stage-id:
       parameters:
         path:
-          id: "<id>"
-          stageId: "<id>"
+          id: "myExistingSearchJobId"
+          stageId: "myExistingStageId"
       responses:
         "200":
           application/json: "<value>"
@@ -5031,8 +5083,13 @@ examples:
     speakeasy-default-get-search-jobs-results-poll-by-id:
       parameters:
         path:
-          id: "<id>"
-        query: {}
+          id: "myExistingSearchJobId"
+        query:
+          limit: 1000
+          offset: 100
+          lowerBound: 1759255372
+          upperBound: 1759258372
+          lastJobStatus: "failed"
       responses:
         "200":
           application/json: {"isFinished": false, "job": "Human Factors Strategist", "offset": 6995.43, "persistedEventCount": 2187.56, "totalEventCount": 7686.72}
@@ -5042,7 +5099,9 @@ examples:
     speakeasy-default-get-database-connection-config:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
+        query:
+          databaseType: "SQL Server"
       responses:
         "200":
           application/json: {}
@@ -5052,7 +5111,7 @@ examples:
     speakeasy-default-create-database-connection-config:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"authType": "<value>", "databaseType": "postgres", "description": "besides investigate yowza skyline promptly daintily afore contravene meanwhile", "id": "<id>"}
       responses:
@@ -5064,8 +5123,8 @@ examples:
     speakeasy-default-get-database-connection-config-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueDatabaseConnIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5075,8 +5134,8 @@ examples:
     speakeasy-default-update-database-connection-config-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueDatabaseConnIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"authType": "<value>", "databaseType": "oracle", "description": "developmental oof hourly", "id": "<id>"}
       responses:
@@ -5088,8 +5147,8 @@ examples:
     speakeasy-default-delete-database-connection-config-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueDatabaseConnIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5108,7 +5167,7 @@ examples:
     speakeasy-default-list-event-breaker-ruleset:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5118,7 +5177,7 @@ examples:
     speakeasy-default-create-event-breaker-ruleset:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
@@ -5130,8 +5189,8 @@ examples:
     speakeasy-default-get-event-breaker-ruleset-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueBreakerIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5141,8 +5200,8 @@ examples:
     speakeasy-default-update-event-breaker-ruleset-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueBreakerIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
@@ -5154,8 +5213,8 @@ examples:
     speakeasy-default-delete-event-breaker-ruleset-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueBreakerIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5165,7 +5224,9 @@ examples:
     speakeasy-default-get-global-variable:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
+        query:
+          with: "{ '$ref': '#/components/schemas/ComplexModel' }"
       responses:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
@@ -5175,7 +5236,7 @@ examples:
     speakeasy-default-create-global-variable:
       parameters:
         path:
-          groupId: "default"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
@@ -5187,8 +5248,8 @@ examples:
     speakeasy-default-get-global-variable-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "default"
+          id: "myUniqueVarIdToCrud"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
@@ -5198,8 +5259,8 @@ examples:
     speakeasy-default-update-global-variable-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueVarIdToCrud"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
@@ -5211,8 +5272,8 @@ examples:
     speakeasy-default-delete-global-variable-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueVarIdToCrud"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
@@ -5222,9 +5283,10 @@ examples:
     speakeasy-default-get-global-variable-lib-vars-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
-        query: {}
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
+        query:
+          with: "{ '$ref': '#/components/schemas/ComplexModel' }"
       responses:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
@@ -5234,8 +5296,8 @@ examples:
     speakeasy-default-create-global-variable-lib-vars-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
@@ -5247,9 +5309,9 @@ examples:
     speakeasy-default-get-global-variable-lib-vars-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniquePackVarIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
@@ -5259,9 +5321,9 @@ examples:
     speakeasy-default-update-global-variable-lib-vars-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniquePackVarIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
@@ -5273,9 +5335,9 @@ examples:
     speakeasy-default-delete-global-variable-lib-vars-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniquePackVarIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
@@ -5285,7 +5347,7 @@ examples:
     speakeasy-default-list-hmac-function:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5295,7 +5357,7 @@ examples:
     speakeasy-default-create-hmac-function:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"headerExpression": "<value>", "headerName": "<value>", "id": "<id>", "lib": "custom", "stringBuilders": ["<value 1>"]}
       responses:
@@ -5307,8 +5369,8 @@ examples:
     speakeasy-default-get-hmac-function-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueHMACFuntionIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5318,8 +5380,8 @@ examples:
     speakeasy-default-update-hmac-function-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueHMACFuntionIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"headerExpression": "<value>", "headerName": "<value>", "id": "<id>", "lib": "cribl", "stringBuilders": ["<value 1>"]}
       responses:
@@ -5331,8 +5393,8 @@ examples:
     speakeasy-default-delete-hmac-function-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueHMACFuntionIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5342,7 +5404,7 @@ examples:
     speakeasy-default-list-input:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5352,9 +5414,9 @@ examples:
     speakeasy-default-create-input:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
         query:
-          id: "<id>"
+          id: "myUniqueInputIdToCRUD"
       requestBody:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 301.76, "ipWhitelistRegex": "/.*/", "maxActiveCxn": 1000, "socketIdleTimeout": 0, "socketEndingMaxWait": 30, "socketMaxLifespan": 0, "enableProxyHeader": false, "staleChannelFlushMs": 10000, "enableHeader": false, "authType": "manual"}
       responses:
@@ -5366,8 +5428,8 @@ examples:
     speakeasy-default-get-input-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueInputIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5377,8 +5439,8 @@ examples:
     speakeasy-default-update-input-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueInputIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "type": "kube_events", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "rules": []}
       responses:
@@ -5390,8 +5452,8 @@ examples:
     speakeasy-default-delete-input-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueInputIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5401,8 +5463,8 @@ examples:
     speakeasy-default-create-input-hec-token-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueHECInputIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"token": "<value>"}
       responses:
@@ -5414,9 +5476,9 @@ examples:
     speakeasy-default-update-input-hec-token-by-id-and-token:
       parameters:
         path:
-          id: "<id>"
-          token: "<value>"
-          groupId: "<id>"
+          id: "myExistingHECInputId"
+          token: "myUniqueHECInputTokenIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {}
       responses:
@@ -5435,7 +5497,7 @@ examples:
     speakeasy-default-get-input-status-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueStatusInputIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -5445,7 +5507,7 @@ examples:
     speakeasy-default-list-output:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5455,9 +5517,9 @@ examples:
     speakeasy-default-create-output:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
         query:
-          id: "<id>"
+          id: "myUniqueOutputIdToCRUD"
       requestBody:
         application/json: {"type": "elastic", "systemFields": ["cribl_pipe"], "streamtags": [], "loadBalanced": true, "index": "<value>", "concurrency": 5, "maxPayloadSizeKB": 4096, "maxPayloadEvents": 0, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 1, "failedRequestLoggingMode": "none", "safeHeaders": [], "responseRetrySettings": [], "responseHonorRetryAfterHeader": false, "extraParams": [{"name": "filter_path", "value": "errors,items.*.error,items.*._index,items.*.status"}], "elasticVersion": "auto", "includeDocId": false, "writeAction": "create", "retryPartialErrors": false, "onBackpressure": "block", "useRoundRobinDns": false, "excludeSelf": false, "dnsResolvePeriodSec": 600, "loadBalanceStatsPeriodSec": 300, "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
@@ -5469,8 +5531,8 @@ examples:
     speakeasy-default-get-output-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueSystemOutputIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5480,8 +5542,8 @@ examples:
     speakeasy-default-update-output-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueSystemOutputIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"type": "signalfx", "systemFields": ["cribl_pipe"], "streamtags": [], "authType": "manual", "realm": "us0", "concurrency": 5, "maxPayloadSizeKB": 4096, "maxPayloadEvents": 0, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 1, "useRoundRobinDns": false, "failedRequestLoggingMode": "none", "safeHeaders": [], "responseRetrySettings": [], "responseHonorRetryAfterHeader": false, "onBackpressure": "block", "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
@@ -5493,8 +5555,8 @@ examples:
     speakeasy-default-delete-output-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueSystemOutputIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5504,8 +5566,8 @@ examples:
     speakeasy-default-delete-output-pq-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myExistingOutputId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5515,8 +5577,8 @@ examples:
     speakeasy-default-get-output-pq-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myExistingOutputId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5526,8 +5588,8 @@ examples:
     speakeasy-default-get-output-samples-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myExistingOutputId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5537,8 +5599,8 @@ examples:
     speakeasy-default-create-output-test-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myExistingOutputId"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"events": [{"_raw": "<value>"}, {"_raw": "<value>"}]}
       responses:
@@ -5557,7 +5619,7 @@ examples:
     speakeasy-default-get-output-status-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueStatusOutputIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -5567,7 +5629,7 @@ examples:
     speakeasy-default-list-schema:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5577,7 +5639,7 @@ examples:
     speakeasy-default-create-schema:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "schema": "<value>"}
       responses:
@@ -5589,8 +5651,8 @@ examples:
     speakeasy-default-get-schema-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueParquetSchemaIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5600,8 +5662,8 @@ examples:
     speakeasy-default-update-schema-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueParquetSchemaIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "schema": "<value>"}
       responses:
@@ -5613,8 +5675,8 @@ examples:
     speakeasy-default-delete-schema-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueParquetSchemaIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5640,7 +5702,7 @@ examples:
     speakeasy-default-get-profiler-item-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueProfilerId"
       responses:
         "200":
           application/json: {}
@@ -5650,7 +5712,7 @@ examples:
     speakeasy-default-update-profiler-item-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueProfilerId"
       requestBody:
         application/json: {"id": "<id>"}
       responses:
@@ -5662,7 +5724,7 @@ examples:
     speakeasy-default-delete-profiler-item-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueProfilerId"
       responses:
         "200":
           application/json: {}
@@ -5679,7 +5741,7 @@ examples:
     speakeasy-default-get-routes-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myRoutesIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -5689,7 +5751,7 @@ examples:
     speakeasy-default-update-routes-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myRoutesIdToCRUD"
       requestBody:
         application/json: {"routes": [{"name": "<value>", "filter": "true", "pipeline": "<value>", "enableOutputExpression": false, "final": true}]}
       responses:
@@ -5701,7 +5763,7 @@ examples:
     speakeasy-default-create-routes-append-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingRouteId"
       requestBody:
         application/json: [{"final": true, "id": "<id>", "name": "<value>", "pipeline": "<value>"}]
       responses:
@@ -5713,8 +5775,8 @@ examples:
     speakeasy-default-get-routes-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5763,7 +5825,7 @@ examples:
     speakeasy-default-list-lib-schemas:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5773,7 +5835,7 @@ examples:
     speakeasy-default-create-lib-schemas:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "schema": "<value>"}
       responses:
@@ -5785,8 +5847,8 @@ examples:
     speakeasy-default-get-lib-schemas-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueSchemaIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5796,8 +5858,8 @@ examples:
     speakeasy-default-update-lib-schemas-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueSchemaIdToCRUD"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "schema": "<value>"}
       responses:
@@ -5809,8 +5871,8 @@ examples:
     speakeasy-default-delete-lib-schemas-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniqueSchemaIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5820,7 +5882,7 @@ examples:
     speakeasy-default-get-schema-lib-by-pack:
       parameters:
         path:
-          pack: "<value>"
+          pack: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -5830,7 +5892,7 @@ examples:
     speakeasy-default-create-schema-lib-by-pack:
       parameters:
         path:
-          pack: "<value>"
+          pack: "myExistingPackId"
       requestBody:
         application/json: {"id": "<id>", "schema": "<value>"}
       responses:
@@ -5842,8 +5904,8 @@ examples:
     speakeasy-default-get-schema-lib-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
+          id: "myUniqueSchemaIdToCRUD"
+          pack: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -5853,8 +5915,8 @@ examples:
     speakeasy-default-update-schema-lib-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
+          id: "myUniqueSchemaIdToCRUD"
+          pack: "myExistingPackId"
       requestBody:
         application/json: {"id": "<id>", "schema": "<value>"}
       responses:
@@ -5866,8 +5928,8 @@ examples:
     speakeasy-default-delete-schema-lib-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
+          id: "myUniqueSchemaIdToCRUD"
+          pack: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -5893,7 +5955,7 @@ examples:
     speakeasy-default-get-rest-secret-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSecretsIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -5903,7 +5965,7 @@ examples:
     speakeasy-default-update-rest-secret-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSecretsIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "secretType": "credentials"}
       responses:
@@ -5915,7 +5977,7 @@ examples:
     speakeasy-default-delete-rest-secret-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueSecretsIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -5925,7 +5987,7 @@ examples:
     speakeasy-default-create-edge-appscope-processes:
       parameters:
         query:
-          pid: "<id>"
+          pid: "8675309"
       responses:
         "200":
           application/json: {}
@@ -5942,7 +6004,7 @@ examples:
     speakeasy-default-delete-edge-appscope-processes-by-pid:
       parameters:
         path:
-          pid: "<id>"
+          pid: "8675309"
       responses:
         "200":
           application/json: {}
@@ -5952,7 +6014,7 @@ examples:
     speakeasy-default-get-edge-appscope-processes-by-pid:
       parameters:
         path:
-          pid: "<id>"
+          pid: "8675309"
       responses:
         "200":
           application/json: {}
@@ -5962,7 +6024,7 @@ examples:
     speakeasy-default-update-edge-appscope-processes-by-pid:
       parameters:
         path:
-          pid: "<id>"
+          pid: "8675309"
       responses:
         "200":
           application/json: {}
@@ -5986,7 +6048,7 @@ examples:
     speakeasy-default-get-edge-ls-by-path:
       parameters:
         path:
-          path: "/usr/lib"
+          path: "/var/log"
       responses:
         "200":
           application/json: {}
@@ -6008,6 +6070,14 @@ examples:
           application/json: {"message": "This is my error message string"}
   createEdgeFileIngest:
     speakeasy-default-create-edge-file-ingest:
+      parameters:
+        query:
+          filePath: "/var/log/http.log"
+          pipelineId: "myPipelineId"
+          outputId: "myOutputId"
+          preProcessingPipelineId: "myPreProcessingPipelineId"
+          sendToRoutes: "myRoutesId"
+          breakerRuleSet: "myBreakerRuleId"
       responses:
         "200":
           application/json: {}
@@ -6017,7 +6087,8 @@ examples:
     speakeasy-default-get-edge-file-sample:
       parameters:
         query:
-          path: "/usr/ports"
+          path: "/var/log/http.log"
+          bytesRequested: 2048
       responses:
         "200":
           application/json: {}
@@ -6032,6 +6103,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   getEdgeKubeProxy:
     speakeasy-default-get-edge-kube-proxy:
+      parameters:
+        query:
+          path: "api/v1"
       responses:
         "200":
           application/json: {}
@@ -6041,7 +6115,7 @@ examples:
     speakeasy-default-get-edge-containers-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingEdgeContainerId"
       responses:
         "200":
           application/json: {}
@@ -6056,6 +6130,12 @@ examples:
           application/json: {"message": "This is my error message string"}
   getEdgeLogs:
     speakeasy-default-get-edge-logs:
+      parameters:
+        query:
+          mode: "auto"
+          allow: "*.log"
+          path: "/path/to/files"
+          depth: 2
       responses:
         "200":
           application/json: {}
@@ -6065,7 +6145,7 @@ examples:
     speakeasy-default-get-edge-processes-by-pid:
       parameters:
         path:
-          pid: "<id>"
+          pid: "12345"
       responses:
         "200":
           application/json: {}
@@ -6080,12 +6160,25 @@ examples:
           application/json: {"message": "This is my error message string"}
   getEdgeEventsQuery:
     speakeasy-default-get-edge-events-query:
+      parameters:
+        query:
+          Files: "/var/log/http.log"
+          source: "system_state/hostsfile"
+          limit: 1000
+          et: 1759240142
+          lt: 1759240162
+          filter: "true"
       responses:
         "200":
           application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
-  getAuthAuthorizationCodeCallback: {}
+  getAuthAuthorizationCodeCallback:
+    speakeasy-default-get-auth-authorization-code-callback:
+      parameters:
+        query:
+          code: "myCryptographicallySecureAuthorizationCode"
+          state: "Unauthenticated"
   getAuthMetadata:
     speakeasy-default-get-auth-metadata:
       responses:
@@ -6103,13 +6196,23 @@ examples:
     speakeasy-default-create-auth-slo-callback:
       requestBody:
         application/x-www-form-urlencoded: {}
-  getAuthSloCallback: {}
+  getAuthSloCallback:
+    speakeasy-default-get-auth-slo-callback:
+      parameters:
+        query:
+          SAMLResponse: "{ 'logout': { 'callback': 'https://myapp.exampleco.com/saml/logout', 'slo_enabled': true } }"
+          RelayState: "HTTP-Redirect"
   getAuthSlo: {}
   createAuthSsoCallback:
     speakeasy-default-create-auth-sso-callback:
       requestBody:
         application/x-www-form-urlencoded: {}
-  getAuthSsoCallback: {}
+  getAuthSsoCallback:
+    speakeasy-default-get-auth-sso-callback:
+      parameters:
+        query:
+          SAMLResponse: "{ 'logout': { 'callback': 'https://myapp.exampleco.com/saml/logout', 'slo_enabled': true } }"
+          RelayState: "HTTP-Redirect"
   getAuthSso:
     speakeasy-default-get-auth-sso:
       responses:
@@ -6133,7 +6236,9 @@ examples:
     speakeasy-default-delete-auth-users-token-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingUserId"
+        query:
+          ttl: "300"
       responses:
         "200":
           application/json: {}
@@ -6171,7 +6276,7 @@ examples:
     speakeasy-default-create-system-distributed-upgrade-cancel-by-group:
       parameters:
         path:
-          group: "<value>"
+          group: "myUniqueUpgradeCancelGroupIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -6181,8 +6286,9 @@ examples:
     speakeasy-default-create-system-distributed-upgrade-stage-by-group:
       parameters:
         path:
-          group: "<value>"
-        query: {}
+          group: "myUniqueUpgradeStageGroupIdToCRUD"
+        query:
+          upgradePercentage: "25"
       responses:
         "200":
           application/json: {}
@@ -6192,7 +6298,7 @@ examples:
     speakeasy-default-create-system-distributed-upgrade-by-group:
       parameters:
         path:
-          group: "<value>"
+          group: "myUniqueDistributedUpgradeGroupIdToCRUD"
       requestBody:
         application/json: {"upgradePercentage": 1, "workerRetries": 5, "workerRetryDelay": 1000}
       responses:
@@ -6204,7 +6310,7 @@ examples:
     speakeasy-default-get-system-distributed-upgrade-download-by-file:
       parameters:
         path:
-          file: "<value>"
+          file: "myDistributedUpgradeFile.txt"
       responses:
         "200":
           application/json: {}
@@ -6281,7 +6387,7 @@ examples:
     speakeasy-default-create-system-settings-upgrade-by-version:
       parameters:
         path:
-          version: "<value>"
+          version: "1.0.0"
       responses:
         "200":
           application/json: {}
@@ -6309,7 +6415,8 @@ examples:
     speakeasy-default-get-clui:
       parameters:
         query:
-          query: "<value>"
+          query: "dataset=\"cribl_search_sample\" | take 5"
+          context: "stream"
       responses:
         "200":
           application/json: {}
@@ -6317,6 +6424,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   getSummaryWorkers:
     speakeasy-default-get-summary-workers:
+      parameters:
+        query:
+          filterExp: "truthy"
       responses:
         "200":
           application/json: {}
@@ -6324,6 +6434,14 @@ examples:
           application/json: {"message": "This is my error message string"}
   getWorkers:
     speakeasy-default-get-workers:
+      parameters:
+        query:
+          filterExp: "truthy"
+          sort: "group === 'default'"
+          sortExp: "group=='default'"
+          limit: 10
+          offset: 0
+          filter: "{\"info\": {\"aws\": {\"type\": \"t2.medium\"}}}"
       responses:
         "200":
           application/json: {}
@@ -6340,13 +6458,16 @@ examples:
     speakeasy-default-get-config-bundles-by-group-and-version:
       parameters:
         path:
-          group: "<value>"
-          version: "<value>"
+          group: "myExistingBundleGroupId"
+          version: "myUniqueVersionIdToCRUD"
       responses:
         "200":
           application/tar+gzip: "0xaB2AD6a98F"
   getSummary:
     speakeasy-default-get-summary:
+      parameters:
+        query:
+          mode: "managed-edge"
       responses:
         "200":
           application/json: {}
@@ -6370,7 +6491,7 @@ examples:
     speakeasy-default-get-condition-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingConditionId"
       responses:
         "200":
           application/json: {}
@@ -6406,7 +6527,7 @@ examples:
     speakeasy-default-delete-system-diag:
       parameters:
         query:
-          path: "/opt/lib"
+          path: "my/Diag/Bundle/Path"
       responses:
         "200":
           application/json: {}
@@ -6425,7 +6546,7 @@ examples:
     speakeasy-default-get-job-results-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingJobInstanceId"
       responses:
         "200":
           application/x-ndjson: "0xcE7D58fC8b"
@@ -6433,7 +6554,7 @@ examples:
     speakeasy-default-update-jobs-cancel-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingJobInstanceId"
       responses:
         "200":
           application/json: {}
@@ -6450,6 +6571,15 @@ examples:
           application/json: {"message": "This is my error message string"}
   getJobs:
     speakeasy-default-get-jobs:
+      parameters:
+        query:
+          offset: 0
+          limit: 100
+          runType: "adhoc"
+          state: "running"
+          id: "id=1608713335.3&id=1608713326.1"
+          collectorId: "collectorId=Prometheus-in"
+          groupId: "default"
       responses:
         "200":
           application/json: {}
@@ -6459,7 +6589,7 @@ examples:
     speakeasy-default-delete-jobs-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingJobIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -6469,7 +6599,7 @@ examples:
     speakeasy-default-get-jobs-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingJobIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -6479,7 +6609,9 @@ examples:
     speakeasy-default-update-jobs-keep-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingJobIdToCRUD"
+        query:
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -6489,7 +6621,7 @@ examples:
     speakeasy-default-update-jobs-pause-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -6499,7 +6631,7 @@ examples:
     speakeasy-default-update-jobs-resume-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingJobId"
       responses:
         "200":
           application/json: {}
@@ -6509,9 +6641,10 @@ examples:
     speakeasy-default-get-jobs-results-by-id-and-group:
       parameters:
         path:
-          id: "<id>"
-          group: "<value>"
-        query: {}
+          id: "myExistingJobId"
+          group: "myExistingJobGroup"
+        query:
+          maxFiles: 10
       responses:
         "200":
           application/json: {}
@@ -6521,8 +6654,8 @@ examples:
     speakeasy-default-get-jobs-errors-by-id-and-group:
       parameters:
         path:
-          id: "<id>"
-          group: "<value>"
+          id: "myExistingJobId"
+          group: "myExistingJobGroup"
       responses:
         "200":
           application/json: {}
@@ -6532,7 +6665,7 @@ examples:
     speakeasy-default-get-jobs-errors-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingJobId"
       responses:
         "200":
           application/json: {}
@@ -6581,7 +6714,7 @@ examples:
     speakeasy-default-get-license-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingLicenseId"
       responses:
         "200":
           application/json: {}
@@ -6591,7 +6724,7 @@ examples:
     speakeasy-default-delete-license-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingLicenseId"
       responses:
         "200":
           application/json: {}
@@ -6615,7 +6748,7 @@ examples:
     speakeasy-default-get-logger-config-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myLoggerConfigIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -6625,7 +6758,7 @@ examples:
     speakeasy-default-update-logger-config-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myLoggerConfigIdToCRUD"
       requestBody:
         application/json: {"channels": [{"id": "<id>", "level": "<value>"}, {"id": "<id>", "level": "<value>"}], "id": "<id>", "limitRate": 1569.58, "maxSizeBytes": 3692.39, "redactFields": ["<value 1>", "<value 2>"], "redactLabel": "<value>"}
       responses:
@@ -6637,7 +6770,7 @@ examples:
     speakeasy-default-delete-logger-config-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myLoggerConfigIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -6647,9 +6780,15 @@ examples:
     speakeasy-default-get-system-jobs-logs-by-id-and-group-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
-        query: {}
+          id: "myExistingJobId"
+          groupId: "myExistingGroupId"
+        query:
+          limit: 1000
+          offset: 1
+          endOffset: 10000
+          et: 1759218069
+          lt: 1759219069
+          filter: "truthy"
       responses:
         "200":
           application/json: {}
@@ -6659,8 +6798,13 @@ examples:
     speakeasy-default-get-system-logs-by-id:
       parameters:
         path:
-          id: "<id>"
-        query: {}
+          id: "myExistingSystemLogById"
+        query:
+          limit: 10000
+          endOffset: 20000
+          et: 1759218069
+          lt: 1759219069
+          filter: "truthy"
       responses:
         "200":
           application/json: {}
@@ -6677,7 +6821,13 @@ examples:
     speakeasy-default-get-system-logs-search:
       parameters:
         query:
-          type: "<value>"
+          type: "single"
+          groupId: "myExsitingGroupId"
+          files: "/var/log/httpd.log"
+          limit: 100
+          et: 1759219069
+          lt: 1759212069
+          filter: "truthy"
       responses:
         "200":
           application/json: {}
@@ -6687,8 +6837,10 @@ examples:
     speakeasy-default-create-packs:
       parameters:
         path:
-          groupId: "<id>"
-        query: {}
+          groupId: "myExistingGroupId"
+        query:
+          filename: "./myfile.json"
+          disabled: false
       requestBody:
         application/json: {"id": "<id>"}
       responses:
@@ -6710,8 +6862,10 @@ examples:
     speakeasy-default-delete-packs-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
+          id: "myUniquePackIdToCRUD"
+          groupId: "myExistingGroupId"
+        query:
+          disabled: true
       responses:
         "200":
           application/json: {}
@@ -6721,9 +6875,13 @@ examples:
     speakeasy-default-update-packs-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
-        query: {}
+          id: "myExistingGroupId"
+          groupId: "myExistingGroupId"
+        query:
+          source: "myExistingSourceId"
+          minor: "true"
+          spec: "main"
+          disabled: true
       responses:
         "200":
           application/json: {}
@@ -6733,7 +6891,7 @@ examples:
     speakeasy-default-create-packs-clone:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"dstGroups": ["<value 1>", "<value 2>"], "packs": ["<value 1>", "<value 2>"], "srcGroup": "<value>"}
       responses:
@@ -6745,10 +6903,11 @@ examples:
     speakeasy-default-get-packs-export-by-id:
       parameters:
         path:
-          groupId: "<id>"
-          id: "<id>"
+          groupId: "myExistingGroupId"
+          id: "myExistingPackId"
         query:
           mode: "default_only"
+          filename: "localOutputFile.json"
       responses:
         "200":
           application/json: {}
@@ -6772,6 +6931,14 @@ examples:
           application/json: {"message": "This is my error message string"}
   getSystemMetrics:
     speakeasy-default-get-system-metrics:
+      parameters:
+        query:
+          wp: "43245"
+          numBuckets: 1
+          earliest: "2025-09-30 13:41:44.056636"
+          latest: "2025-09-30 13:59:44.056636"
+          metricNameFilter: ".*"
+          filterExpr: "truthy"
       responses:
         "200":
           application/json: {}
@@ -6790,7 +6957,7 @@ examples:
     speakeasy-default-get-ui-by-key:
       parameters:
         path:
-          key: "<key>"
+          key: "myUIStateKey"
       responses:
         "200":
           application/json: {}
@@ -6800,7 +6967,7 @@ examples:
     speakeasy-default-update-ui-by-key:
       parameters:
         path:
-          key: "<key>"
+          key: "myUIStateKey"
       requestBody:
         application/json: {"op": "push-recent", "value": "<value>"}
       responses:
@@ -6840,7 +7007,7 @@ examples:
     speakeasy-default-get-function-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingFunctionId"
       responses:
         "200":
           application/json: {}
@@ -6850,7 +7017,7 @@ examples:
     speakeasy-default-get-function-by-pack:
       parameters:
         path:
-          pack: "<value>"
+          pack: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -6860,8 +7027,8 @@ examples:
     speakeasy-default-get-function-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
+          id: "myExistingFunctionId"
+          pack: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -6878,7 +7045,7 @@ examples:
     speakeasy-default-get-collector-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingCollectorId"
       responses:
         "200":
           application/json: {}
@@ -6895,7 +7062,7 @@ examples:
     speakeasy-default-get-executor-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingExecutorId"
       responses:
         "200":
           application/json: {}
@@ -6905,7 +7072,7 @@ examples:
     speakeasy-default-get-groups-config-version-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -6915,7 +7082,7 @@ examples:
     speakeasy-default-create-products-groups-by-product:
       parameters:
         path:
-          product: "stream"
+          product: "edge"
       requestBody:
         application/json: {"id": "<id>"}
       responses:
@@ -6938,7 +7105,7 @@ examples:
     speakeasy-default-update-groups-deploy-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingGroupId"
       requestBody:
         application/json: {"version": "<value>"}
       responses:
@@ -6950,8 +7117,9 @@ examples:
     speakeasy-default-get-groups-by-id:
       parameters:
         path:
-          id: "<id>"
-        query: {}
+          id: "myExistingGroupId"
+        query:
+          fields: "git.commit"
       responses:
         "200":
           application/json: {}
@@ -6961,7 +7129,7 @@ examples:
     speakeasy-default-delete-groups-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueGroupIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -6971,7 +7139,7 @@ examples:
     speakeasy-default-update-groups-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueGroupIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -6981,7 +7149,12 @@ examples:
     speakeasy-default-get-search-jobs-results-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingSearchJobId"
+        query:
+          limit: 1000
+          offset: 100
+          lowerBound: 1759255372
+          upperBound: 1759258372
       responses:
         "200":
           application/json: {"isFinished": false, "job": "Principal Web Liaison", "offset": 7247.69, "persistedEventCount": 1801.66, "totalEventCount": 6653.39}
@@ -6998,7 +7171,7 @@ examples:
     speakeasy-default-get-io-metrics-entry-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueIOMetricsIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -7008,7 +7181,7 @@ examples:
     speakeasy-default-update-io-metrics-entry-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueIOMetricsIdToCRUD"
       requestBody:
         application/json: {"id": "<id>", "level": "minimal"}
       responses:
@@ -7020,7 +7193,7 @@ examples:
     speakeasy-default-delete-io-metrics-entry-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myUniqueIOMetricsIdToCRUD"
       responses:
         "200":
           application/json: {}
@@ -7030,7 +7203,7 @@ examples:
     speakeasy-default-delete-auth-users-invalidation-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingUserId"
       responses:
         "200":
           application/json: {}
@@ -7040,7 +7213,9 @@ examples:
     speakeasy-default-update-packs:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
+        query:
+          filename: "./myLocalFile.json"
       responses:
         "200":
           application/json: {}
@@ -7050,7 +7225,7 @@ examples:
     speakeasy-default-get-packs-refs-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -7060,7 +7235,7 @@ examples:
     speakeasy-default-create-packs-publish-by-id:
       parameters:
         path:
-          id: "<id>"
+          id: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -7070,7 +7245,7 @@ examples:
     speakeasy-default-get-ai-settings-features-by-feature:
       parameters:
         path:
-          feature: "<value>"
+          feature: "ai-settings"
       responses:
         "200":
           application/json: {}
@@ -7080,7 +7255,7 @@ examples:
     speakeasy-default-create-ai-settings-features-by-feature:
       parameters:
         path:
-          feature: "<value>"
+          feature: "ai-settings"
       responses:
         "200":
           application/json: {}
@@ -7104,10 +7279,10 @@ examples:
     speakeasy-default-create-system-inputs-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
         query:
-          id: "<id>"
+          id: "myUniquePackIdToCRUD"
       requestBody:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 4317, "maxActiveReq": 256, "maxRequestsPerSocket": 0, "requestTimeout": 0, "socketTimeout": 0, "keepAliveTimeout": 15, "enableHealthCheck": false, "ipAllowlistRegex": "/.*/", "ipDenylistRegex": "/^$/", "protocol": "grpc", "extractSpans": false, "extractMetrics": false, "otlpVersion": "0.10.0", "authType": "none", "maxActiveCxn": 1000, "authHeaderExpr": "`Bearer ${token}`", "tokenTimeoutSecs": 3600, "extractLogs": false}
       responses:
@@ -7119,9 +7294,11 @@ examples:
     speakeasy-default-update-system-inputs-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
-          id: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
+          id: "myUniqueInputIdToCRUD"
+        query:
+          disabled: true
       requestBody:
         application/json: {"id": "<id>", "type": "collection", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "staleChannelFlushMs": 10000, "throttleRatePerSec": "0"}
       responses:
@@ -7133,9 +7310,9 @@ examples:
     speakeasy-default-delete-system-inputs-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
-          id: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
+          id: "myUniqueInputIdToCRUD"
       requestBody:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "queueName": "<value>", "queueType": "standard", "createQueue": false, "awsAuthenticationMethod": "auto", "signatureVersion": "v4", "reuseConnections": true, "rejectUnauthorized": true, "enableAssumeRole": false, "durationSeconds": 3600, "maxMessages": 10, "visibilityTimeout": 600, "pollTimeout": 10, "numReceivers": 3}
       responses:
@@ -7188,9 +7365,11 @@ examples:
     speakeasy-default-create-system-lookups-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniqueLookupIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
+        query:
+          disabled: false
       requestBody:
         application/json: {"id": "<id>", "mode": "memory"}
       responses:
@@ -7202,9 +7381,9 @@ examples:
     speakeasy-default-delete-system-lookups-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniqueLookupIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7214,9 +7393,9 @@ examples:
     speakeasy-default-delete-breakers-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniquePackBreakersIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7226,8 +7405,8 @@ examples:
     speakeasy-default-create-routes-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"routes": []}
       responses:
@@ -7251,8 +7430,8 @@ examples:
     speakeasy-default-get-pipelines-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7262,9 +7441,9 @@ examples:
     speakeasy-default-get-pipelines-by-pack-with-id:
       parameters:
         path:
-          pack: "<value>"
-          id: "<id>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          id: "myUniquePipelineIdToCRUD"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7274,8 +7453,8 @@ examples:
     speakeasy-default-get-system-inputs-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7298,8 +7477,8 @@ examples:
     speakeasy-default-get-system-lookups-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7309,8 +7488,8 @@ examples:
     speakeasy-default-create-system-lookups-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "mode": "memory"}
       responses:
@@ -7322,9 +7501,9 @@ examples:
     speakeasy-default-get-system-lookups-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniqueLookupIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7334,8 +7513,8 @@ examples:
     speakeasy-default-get-breakers-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7345,8 +7524,8 @@ examples:
     speakeasy-default-create-breakers-by-pack:
       parameters:
         path:
-          pack: "<value>"
-          groupId: "<id>"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
@@ -7358,9 +7537,9 @@ examples:
     speakeasy-default-get-breakers-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniquePackBreakersIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7370,9 +7549,9 @@ examples:
     speakeasy-default-update-breakers-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniquePackBreakersIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"id": "<id>", "lib": "custom", "minRawLength": 256}
       responses:
@@ -7396,7 +7575,10 @@ examples:
     speakeasy-default-get-packs-by-group:
       parameters:
         path:
-          groupId: "<id>"
+          groupId: "myExistingGroupId"
+        query:
+          with: "input1, input2, input3"
+          disabled: true
       responses:
         "200":
           application/json: {}
@@ -7406,9 +7588,9 @@ examples:
     speakeasy-default-get-system-inputs-by-pack-and-id:
       parameters:
         path:
-          id: "<id>"
-          pack: "<value>"
-          groupId: "<id>"
+          id: "myUniqueInputIdToCRUD"
+          pack: "myExistingPackId"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7430,8 +7612,8 @@ examples:
     speakeasy-default-list-pack-output:
       parameters:
         path:
-          groupId: "<id>"
-          pack: "<value>"
+          groupId: "myExistingGroupId"
+          pack: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -7441,10 +7623,10 @@ examples:
     speakeasy-default-create-pack-output:
       parameters:
         path:
-          groupId: "<id>"
-          pack: "<value>"
+          groupId: "myExistingGroupId"
+          pack: "myExistingPackId"
         query:
-          id: "<id>"
+          id: "myUniquePackDestinationIdToCRUD"
       requestBody:
         application/json: {"systemFields": ["cribl_pipe"], "streamtags": [], "brokers": ["<value 1>", "<value 2>", "<value 3>"], "topic": "<value>", "ack": 1, "format": "json", "compression": "gzip", "maxRecordSizeKB": 768, "flushEventCount": 1000, "flushPeriodSec": 1, "connectionTimeout": 10000, "requestTimeout": 60000, "maxRetries": 5, "maxBackOff": 30000, "initialBackoff": 300, "backoffRate": 2, "authenticationTimeout": 10000, "reauthenticationThreshold": 10000, "onBackpressure": "block", "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
@@ -7456,9 +7638,9 @@ examples:
     speakeasy-default-get-pack-output-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
-          pack: "<value>"
+          id: "myUniqueOutputIdToCRUD"
+          groupId: "myExistingGroupId"
+          pack: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -7468,9 +7650,9 @@ examples:
     speakeasy-default-update-pack-output-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
-          pack: "<value>"
+          id: "myUniqueOutputIdToCRUD"
+          groupId: "myExistingGroupId"
+          pack: "myExistingPackId"
       requestBody:
         application/json: {"id": "<id>", "type": "tcpjson", "systemFields": ["cribl_pipe"], "streamtags": [], "loadBalanced": true, "compression": "gzip", "logFailedRequests": false, "throttleRatePerSec": "0", "connectionTimeout": 10000, "writeTimeout": 60000, "tokenTTLMinutes": 60, "sendHeader": true, "onBackpressure": "block", "authType": "manual", "excludeSelf": false, "dnsResolvePeriodSec": 600, "loadBalanceStatsPeriodSec": 300, "maxConcurrentSenders": 0, "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error", "authToken": ""}
       responses:
@@ -7482,9 +7664,9 @@ examples:
     speakeasy-default-delete-pack-output-by-id:
       parameters:
         path:
-          id: "<id>"
-          groupId: "<id>"
-          pack: "<value>"
+          id: "myUniqueOutputIdToCRUD"
+          groupId: "myExistingGroupId"
+          pack: "myExistingPackId"
       responses:
         "200":
           application/json: {}
@@ -7494,8 +7676,11 @@ examples:
     speakeasy-default-get-packs-by-ID:
       parameters:
         path:
-          groupId: "<id>"
-          id: "<id>"
+          groupId: "myExistingGroupId"
+          id: "myUniquePackIdToCRUD"
+        query:
+          with: "input1, input2, input3"
+          disabled: true
       responses:
         "200":
           application/json: {}
@@ -7639,7 +7824,7 @@ examples:
     speakeasy-default-get-routes-by-group-id:
       parameters:
         path:
-          groupId: "default"
+          groupId: "myExistingGroupId"
       responses:
         "200":
           application/json: {}
@@ -7649,7 +7834,7 @@ examples:
     speakeasy-default-create-routes-by-group-id:
       parameters:
         path:
-          groupId: "default"
+          groupId: "myExistingGroupId"
       requestBody:
         application/json: {"routes": [{"name": "<value>", "filter": "true", "pipeline": "<value>", "enableOutputExpression": false, "final": true}]}
       responses:

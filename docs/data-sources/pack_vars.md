@@ -14,9 +14,9 @@ PackVars DataSource
 
 ```terraform
 data "criblio_pack_vars" "my_packvars" {
-  group_id = "...my_group_id..."
-  pack     = "...my_pack..."
-  with     = "...my_with..."
+  group_id = "myExistingGroupId"
+  pack     = "myExistingPackId"
+  with     = "{ '$ref': '#/components/schemas/ComplexModel' }"
 }
 ```
 
@@ -33,13 +33,6 @@ data "criblio_pack_vars" "my_packvars" {
 - `with` (String) Pass "refs" to include references to fields the variable is used in for pack
 
 ### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
 
 - `description` (String) Brief description of this variable. Optional.
 - `id` (String) Global variable name.

@@ -15,8 +15,8 @@ Schema Resource
 ```terraform
 resource "criblio_schema" "my_schema" {
   description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
+  group_id    = "myExistingGroupId"
+  id          = "myUniqueSchemaIdToCRUD"
   schema      = "...my_schema..."
 }
 ```
@@ -44,8 +44,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_schema.my_criblio_schema
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueSchemaIdToCRUD"
   })
 }
 ```
@@ -53,5 +53,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_schema.my_criblio_schema '{"group_id": "...", "id": "..."}'
+terraform import criblio_schema.my_criblio_schema '{"group_id": "myExistingGroupId", "id": "myUniqueSchemaIdToCRUD"}'
 ```

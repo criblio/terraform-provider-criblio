@@ -15,10 +15,10 @@ PackVars Resource
 ```terraform
 resource "criblio_pack_vars" "my_packvars" {
   description = "This is a test var."
-  group_id    = "...my_group_id..."
+  group_id    = "myExistingGroupId"
   id          = "test_var"
   lib         = "custom"
-  pack        = "...my_pack..."
+  pack        = "myExistingPackId"
   tags        = "test"
   type        = "number"
   value       = 100
@@ -42,22 +42,6 @@ resource "criblio_pack_vars" "my_packvars" {
 - `type` (String) Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]
 - `value` (String) Value of variable
 
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `description` (String) Brief description of this variable. Optional.
-- `id` (String) Global variable name.
-- `lib` (String)
-- `tags` (String) One or more tags related to this variable. Optional.
-- `type` (String) Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]
-- `value` (String) Value of variable
-
 ## Import
 
 Import is supported using the following syntax:
@@ -68,8 +52,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_vars.my_criblio_pack_vars
   id = jsonencode({
-    group_id = "..."
-    pack = "..."
+    group_id = "myExistingGroupId"
+    pack = "myExistingPackId"
   })
 }
 ```
@@ -77,5 +61,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_vars.my_criblio_pack_vars '{"group_id": "...", "pack": "..."}'
+terraform import criblio_pack_vars.my_criblio_pack_vars '{"group_id": "myExistingGroupId", "pack": "myExistingPackId"}'
 ```

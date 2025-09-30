@@ -4,33 +4,11 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
-
-func (r *SearchDashboardCategoryResourceModel) RefreshFromOperationsListDashboardCategoryResponseBody(ctx context.Context, resp *operations.ListDashboardCategoryResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.DashboardCategory{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.DashboardCategory
-
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.IsPack = types.BoolPointerValue(itemsItem.IsPack)
-			items.Name = types.StringValue(itemsItem.Name)
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
 
 func (r *SearchDashboardCategoryResourceModel) RefreshFromSharedDashboardCategory(ctx context.Context, resp *shared.DashboardCategory) diag.Diagnostics {
 	var diags diag.Diagnostics

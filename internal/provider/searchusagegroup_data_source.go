@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -29,12 +30,7 @@ type SearchUsageGroupDataSource struct {
 
 // SearchUsageGroupDataSourceModel describes the data model.
 type SearchUsageGroupDataSourceModel struct {
-	CoordinatorHeapMemoryLimit types.Float64        `tfsdk:"coordinator_heap_memory_limit"`
-	Description                types.String         `tfsdk:"description"`
-	Enabled                    types.Bool           `tfsdk:"enabled"`
-	ID                         types.String         `tfsdk:"id"`
-	Rules                      jsontypes.Normalized `tfsdk:"rules"`
-	UsersCount                 types.Float64        `tfsdk:"users_count"`
+	Items []tfTypes.UsageGroup `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -48,25 +44,32 @@ func (r *SearchUsageGroupDataSource) Schema(ctx context.Context, req datasource.
 		MarkdownDescription: "SearchUsageGroup DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"coordinator_heap_memory_limit": schema.Float64Attribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
-			},
-			"description": schema.StringAttribute{
-				Computed: true,
-			},
-			"enabled": schema.BoolAttribute{
-				Computed: true,
-			},
-			"id": schema.StringAttribute{
-				Computed: true,
-			},
-			"rules": schema.StringAttribute{
-				CustomType:  jsontypes.NormalizedType{},
-				Computed:    true,
-				Description: `Parsed as JSON.`,
-			},
-			"users_count": schema.Float64Attribute{
-				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"coordinator_heap_memory_limit": schema.Float64Attribute{
+							Computed: true,
+						},
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"enabled": schema.BoolAttribute{
+							Computed: true,
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"rules": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Description: `Parsed as JSON.`,
+						},
+						"users_count": schema.Float64Attribute{
+							Computed: true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -126,11 +129,11 @@ func (r *SearchUsageGroupDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedUsageGroup(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListUsageGroupResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

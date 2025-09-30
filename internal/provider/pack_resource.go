@@ -243,7 +243,7 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"spec": schema.StringAttribute{
 				Optional:    true,
-				Description: `body string optional Specify a branch, tag or a semver spec`,
+				Description: `(optional) body string. Specify a branch, tag or a semver spec`,
 			},
 			"tags": schema.SingleNestedAttribute{
 				Optional: true,
@@ -617,17 +617,17 @@ func (r *PackResource) ImportState(ctx context.Context, req resource.ImportState
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "...", "id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "myExistingGroupId", "id": "myUniquePackIdToCRUD"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingGroupId"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"myUniquePackIdToCRUD"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

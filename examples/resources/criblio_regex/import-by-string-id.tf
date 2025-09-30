@@ -1,7 +1,7 @@
 import {
   to = criblio_regex.my_criblio_regex
   id = jsonencode({
-    group_id = "..."
-    id       = "..."
+    group_id = "myExistingGroupId"
+    id       = "myUniqueRegexIdToCrud"
   })
 }

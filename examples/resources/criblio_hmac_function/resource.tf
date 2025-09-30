@@ -1,9 +1,9 @@
 resource "criblio_hmac_function" "my_hmacfunction" {
   description       = "...my_description..."
-  group_id          = "...my_group_id..."
+  group_id          = "myExistingGroupId"
   header_expression = "...my_header_expression..."
   header_name       = "...my_header_name..."
-  id                = "...my_id..."
+  id                = "myUniqueHMACFuntionIdToCRUD"
   lib               = "cribl"
   string_builders = [
     "..."

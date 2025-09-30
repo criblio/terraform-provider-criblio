@@ -15,11 +15,11 @@ PackBreakers Resource
 ```terraform
 resource "criblio_pack_breakers" "my_packbreakers" {
   description    = "...my_description..."
-  group_id       = "...my_group_id..."
-  id             = "...my_id..."
+  group_id       = "myExistingGroupId"
+  id             = "myUniquePackBreakersIdToCRUD"
   lib            = "custom"
   min_raw_length = 94618.96
-  pack           = "...my_pack..."
+  pack           = "myExistingPackId"
   rules = [
     {
       condition           = "...my_condition..."
@@ -174,9 +174,9 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_breakers.my_criblio_pack_breakers
   id = jsonencode({
-    group_id = "..."
-    id = "..."
-    pack = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniquePackBreakersIdToCRUD"
+    pack = "myExistingPackId"
   })
 }
 ```
@@ -184,5 +184,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_breakers.my_criblio_pack_breakers '{"group_id": "...", "id": "...", "pack": "..."}'
+terraform import criblio_pack_breakers.my_criblio_pack_breakers '{"group_id": "myExistingGroupId", "id": "myUniquePackBreakersIdToCRUD", "pack": "myExistingPackId"}'
 ```

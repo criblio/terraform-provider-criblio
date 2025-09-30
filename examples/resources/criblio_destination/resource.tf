@@ -1,6 +1,6 @@
 resource "criblio_destination" "my_destination" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniqueOutputIdToCRUD"
   output_azure_blob = {
     add_id_to_stage_path = false
     auth_type            = "manual"

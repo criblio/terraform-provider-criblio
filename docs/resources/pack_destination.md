@@ -14,8 +14,8 @@ PackDestination Resource
 
 ```terraform
 resource "criblio_pack_destination" "my_packdestination" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniquePackDestinationIdToCRUD"
   output_azure_blob = {
     add_id_to_stage_path = true
     auth_type            = "manual"
@@ -3852,7 +3852,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     ]
     use_round_robin_dns = true
   }
-  pack = "...my_pack..."
+  pack = "myExistingPackId"
 }
 ```
 
@@ -9324,9 +9324,9 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_destination.my_criblio_pack_destination
   id = jsonencode({
-    group_id = "..."
-    id = "..."
-    pack = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueOutputIdToCRUD"
+    pack = "myExistingPackId"
   })
 }
 ```
@@ -9334,5 +9334,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_destination.my_criblio_pack_destination '{"group_id": "...", "id": "...", "pack": "..."}'
+terraform import criblio_pack_destination.my_criblio_pack_destination '{"group_id": "myExistingGroupId", "id": "myUniqueOutputIdToCRUD", "pack": "myExistingPackId"}'
 ```

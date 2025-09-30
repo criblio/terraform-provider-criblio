@@ -1,6 +1,6 @@
 resource "criblio_pack_destination" "my_packdestination" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniquePackDestinationIdToCRUD"
   output_azure_blob = {
     add_id_to_stage_path = true
     auth_type            = "manual"
@@ -3837,5 +3837,5 @@ resource "criblio_pack_destination" "my_packdestination" {
     ]
     use_round_robin_dns = true
   }
-  pack = "...my_pack..."
+  pack = "myExistingPackId"
 }

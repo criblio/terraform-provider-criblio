@@ -20,8 +20,8 @@ resource "criblio_database_connection" "my_databaseconnection" {
   connection_timeout = 9.28
   database_type      = "oracle"
   description        = "...my_description..."
-  group_id           = "...my_group_id..."
-  id                 = "...my_id..."
+  group_id           = "myExistingGroupId"
+  id                 = "myUniqueDatabaseConnIdToCRUD"
   password           = "...my_password..."
   request_timeout    = 0.19
   tags               = "...my_tags..."
@@ -60,8 +60,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_database_connection.my_criblio_database_connection
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueDatabaseConnIdToCRUD"
   })
 }
 ```
@@ -69,5 +69,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_database_connection.my_criblio_database_connection '{"group_id": "...", "id": "..."}'
+terraform import criblio_database_connection.my_criblio_database_connection '{"group_id": "myExistingGroupId", "id": "myUniqueDatabaseConnIdToCRUD"}'
 ```

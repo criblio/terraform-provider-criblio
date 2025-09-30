@@ -46,7 +46,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
       }
     }
   ]
-  id           = "...my_id..."
+  id           = "myUniqueDashboardIdToCRUD"
   modified     = 3.77
   modified_by  = "...my_modified_by..."
   name         = "...my_name..."

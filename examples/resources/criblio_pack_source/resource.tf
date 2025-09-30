@@ -1,6 +1,6 @@
 resource "criblio_pack_source" "my_packsource" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniquePackIdToCRUD"
   input_appscope = {
     auth_token = "...my_auth_token..."
     auth_type  = "secret"
@@ -4133,5 +4133,5 @@ resource "criblio_pack_source" "my_packsource" {
     }
     type = "zscaler_hec"
   }
-  pack = "...my_pack..."
+  pack = "myExistingPackId"
 }

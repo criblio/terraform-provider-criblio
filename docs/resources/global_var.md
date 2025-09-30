@@ -15,7 +15,7 @@ GlobalVar Resource
 ```terraform
 resource "criblio_global_var" "my_globalvar" {
   description = "This is a test var."
-  group_id    = "default"
+  group_id    = "myExistingGroupId"
   id          = "test_var"
   lib         = "custom"
   tags        = "test"
@@ -40,6 +40,22 @@ resource "criblio_global_var" "my_globalvar" {
 - `type` (String) Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]
 - `value` (String) Value of variable
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `description` (String) Brief description of this variable. Optional.
+- `id` (String) Global variable name.
+- `lib` (String)
+- `tags` (String) One or more tags related to this variable. Optional.
+- `type` (String) Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]
+- `value` (String) Value of variable
+
 ## Import
 
 Import is supported using the following syntax:
@@ -50,8 +66,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_global_var.my_criblio_global_var
   id = jsonencode({
-    group_id = "default"
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueVarIdToCrud"
   })
 }
 ```
@@ -59,5 +75,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_global_var.my_criblio_global_var '{"group_id": "default", "id": "..."}'
+terraform import criblio_global_var.my_criblio_global_var '{"group_id": "myExistingGroupId", "id": "myUniqueVarIdToCrud"}'
 ```

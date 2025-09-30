@@ -1,9 +1,9 @@
 resource "criblio_pack_vars" "my_packvars" {
   description = "This is a test var."
-  group_id    = "...my_group_id..."
+  group_id    = "myExistingGroupId"
   id          = "test_var"
   lib         = "custom"
-  pack        = "...my_pack..."
+  pack        = "myExistingPackId"
   tags        = "test"
   type        = "number"
   value       = 100

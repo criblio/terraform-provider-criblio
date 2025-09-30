@@ -6,8 +6,8 @@ resource "criblio_project" "my_project" {
   destinations = [
     "..."
   ]
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniqueProjectIdToCRUD"
   subscriptions = [
     "..."
   ]

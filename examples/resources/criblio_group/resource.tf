@@ -21,7 +21,7 @@ resource "criblio_group" "my_group" {
       }
     ]
   }
-  id                        = "...my_id..."
+  id                        = "myUniqueGroupIdToCRUD"
   incompatible_worker_count = 0.87
   inherits                  = "...my_inherits..."
   is_fleet                  = false
@@ -40,7 +40,7 @@ resource "criblio_group" "my_group" {
   ]
   name        = "...my_name..."
   on_prem     = false
-  product     = "stream"
+  product     = "edge"
   provisioned = true
   streamtags = [
     "..."
