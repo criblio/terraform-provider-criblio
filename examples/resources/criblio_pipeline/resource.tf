@@ -1,32 +1,33 @@
 resource "criblio_pipeline" "my_pipeline" {
   conf = {
-    async_func_timeout = 9527
-    description        = "...my_description..."
+    async_func_timeout = 300
+    description        = "myPipelineDescription"
     functions = [
       {
         conf = {
           key = jsonencode("value")
         }
-        description = "...my_description..."
+        description = "My pipeline fuction configuration description"
         disabled    = true
-        filter      = "...my_filter..."
+        filter      = "truthy"
         final       = true
-        group_id    = "...my_group_id..."
-        id          = "...my_id..."
+        group_id    = "myUniqueGroupId"
+        id          = "myPipelineFunctionConf"
       }
     ]
     groups = {
       key = {
-        description = "...my_description..."
-        disabled    = false
-        name        = "...my_name..."
+        description = "My short description for this pipeline group"
+        disabled    = true
+        name        = "myGroupName"
       }
     }
-    output = "...my_output..."
+    output = "myOutputDestination"
     streamtags = [
-      "..."
+      "my",
+      "tags",
     ]
   }
   group_id = "myExistingGroupId"
-  id       = "myUniquePipelineIdToCRUD"
+  id       = "myPipelineId"
 }

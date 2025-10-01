@@ -1811,9 +1811,11 @@ components:
         keyId:
           type: string
           title: Key ID
+          example: "myKeyId"
         description:
           type: string
           title: Description
+          example: "My Key Metadata"
         algorithm:
           type: string
           title: Encryption algorithm
@@ -1821,29 +1823,36 @@ components:
           enum:
             - aes-256-cbc
             - aes-256-gcm
+          example: "aws-256-cbc"
         kms:
           type: string
           title: KMS for this key
           default: local
           enum:
             - local
+          example: "local"
         keyclass:
           type: number
           title: Key class
           default: 0
           minimum: 0
+          example: 0
         created:
           type: number
           title: Creation time
+          example: 1759324416
         expires:
           type: number
           title: Expiration time
+          example: 1759325416
         plainKey:
           type: string
           title: Plain text key
+          example: "thisismyplaintextkeystring"
         cipherKey:
           type: string
           title: Encrypted key
+          example: "encryptedkeystring"
         useIV:
           type: boolean
           title: Use initialization vector
@@ -1852,6 +1861,7 @@ components:
             the key more random and unique. Must be enabled with the aes-256-gcm
             algorithm.
           default: false
+          example: true
         ivSize:
           type: integer
           title: Initialization vector size
@@ -1863,10 +1873,12 @@ components:
             - 16
           default: 12
           description: Length of the initialization vector, in bytes
+          example: 12
         group:
           type: string
           title: Group/Fleet
           description: Name of the Group/Fleet that created this key
+          example: "myKeyGroup"
     BulletinMessage:
       type: object
       additionalProperties: false
@@ -1877,6 +1889,7 @@ components:
         id:
           type: string
           title: Message ID
+          example: "myMessageId"
         severity:
           type: string
           title: Severity
@@ -1885,18 +1898,23 @@ components:
             - warn
             - error
             - fatal
+          example: "info"
         title:
           type: string
           title: Title
+          example: "My Message Title"
         text:
           type: string
           title: Text
+          example: "My message text"
         time:
           type: number
           title: Occurrence Time
+          example: 1759324416
         group:
           type: string
           title: Group
+          example: "myMessageGroup"
         metadata:
           type: array
           items:
@@ -1922,15 +1940,18 @@ components:
           description: "Unique identifier for the notification"
           pattern: '^[a-zA-Z0-9_-]+$'
           maxLength: 512
+          example: "myUniqueNotificationId"
         disabled:
           type: boolean
           title: "Disabled"
           description: "Whether the notification is disabled"
           default: false
+          example: false
         condition:
           type: string
           title: "Condition"
           description: "The condition that triggers this notification"
+          example: "true"
         targets:
           type: array
           title: "Notification targets"
@@ -1938,6 +1959,7 @@ components:
           items:
             type: string
           default: []
+          example: ["target1", "target2"]
         targetConfigs:
           type: array
           title: "Target configuration"
@@ -1952,18 +1974,23 @@ components:
             savedQueryId:
               type: string
               description: "ID of the saved query this notification is associated with"
+              example: "savedQueryId"
             message:
               type: string
               description: "Message template for the notification"
+              example: "Message for notification"
             triggerType:
               type: string
               description: "Type of trigger (e.g., resultsCount)"
+              example: "resultsCount"
             triggerComparator:
               type: string
               description: "Comparison operator (e.g., >, <, =)"
+              example: ">"
             triggerCount:
               type: number
               description: "Threshold count for the trigger"
+              example: 0
           required:
             - savedQueryId
             - message
@@ -1979,6 +2006,7 @@ components:
           title: "Group"
           description: "Group identifier for the notification"
           default: "default_search"
+          example: "myNotificationGroup"
 
     # Notification Target Types
     WebhookTarget:
@@ -2375,16 +2403,21 @@ components:
           type: array
           items:
             type: string
+          example: ["arg1", "arg2"]
         description:
           type: string
+          example: "My policy rule description"
         id:
           type: string
+          example: "myPolicyRuleId"
         template:
           type: array
           items:
             type: string
+          example: ["my", "template"]
         title:
           type: string
+          example: "My Policy Rule Title"
       required:
         - id
         - template
@@ -2393,18 +2426,23 @@ components:
       properties:
         description:
           type: string
+          example: "My role description"
         id:
           type: string
+          example: "myRoleId"
         policy:
           type: array
           items:
             type: string
+          example: ["policies", "attached", "to", "role"]
         tags:
           type: array
           items:
             type: string
+          example: ["list", "of", "tags"]
         title:
           type: string
+          example: "My Role Title"
       required:
         - id
         - policy
@@ -2418,19 +2456,23 @@ components:
         id:
           type: string
           title: ID
+          example: "myScriptLibEntryId"
         command:
           type: string
           title: Command
           description: Command to execute for this script
+          example: "echo hello"
         description:
           type: string
           title: Description
+          example: "My script lib entry description"
         args:
           type: array
           items:
             type: string
           title: Arguments
           description: Arguments to pass when executing this script
+          example: ["my", "list", "of", "args"]
         env:
           type: object
           title: Env variables
@@ -2443,18 +2485,23 @@ components:
       properties:
         description:
           type: string
+          example: "My team description"
         id:
           type: string
+          example: "myUniqueTeamId"
         name:
           type: string
+          example: "MyTeamName"
         roles:
           type: array
           items:
             type: string
+          example: ["roles", "attached", "to", "team"]
         ssoGroupIds:
           type: array
           items:
             type: string
+          example: ["SSO", "Group", "Ids"]
       required:
         - description
         - id
@@ -2474,10 +2521,13 @@ components:
       properties:
         gid:
           type: string
+          example: "uniqueGID"
         id:
           type: string
+          example: "myResourcePolicyId"
         policy:
           type: string
+          example: "samplePolicy"
         type:
           $ref: "#/components/schemas/RbacResource"
       required:
@@ -2491,37 +2541,49 @@ components:
           type: array
           items:
             type: string
+          example: ["array", "of", "added", "properties"]
         rm:
           type: array
           items:
             type: string
+          example: ["array", "of", "removed", "properties"]
     User:
       type: object
       properties:
         currentPassword:
           type: string
+          example: "currentHashedPassword"
         disabled:
           type: boolean
+          example: false
         email:
           type: string
+          example: "foo.bar@cribl.com"
         first:
           type: string
+          example: "foo"
         id:
           type: string
+          example: "myUserId"
         last:
           type: string
+          example: "bar"
         password:
           type: string
+          example: "hashedPassword"
         roles:
           type: array
           items:
             type: string
+          example: ["roles", "attached"]
         teams:
           type: array
           items:
             type: string
+          example: ["teams", "attached"]
         username:
           type: string
+          example: "username"
       required:
         - disabled
         - email
@@ -2534,22 +2596,30 @@ components:
       properties:
         disabled:
           type: boolean
+          example: false
         email:
           type: string
+          example: "foo.bar@cribl.com"
         first:
           type: string
+          example: "foo"
         id:
           type: string
+          example: "myUserId"
         last:
           type: string
+          example: "bar"
         password:
           type: string
+          example: "myStrongPassword"
         roles:
           type: array
           items:
             type: string
+          example: ["my", "attached", "roles"]
         username:
           type: string
+          example: "myUsername"
       required:
         - disabled
         - email
@@ -2562,24 +2632,33 @@ components:
       properties:
         currentPassword:
           type: string
+          example: "myCurrentPassword"
         disabled:
           type: boolean
+          example: false
         email:
           type: string
+          example: "foo.bar@cribl.com"
         first:
           type: string
+          example: "foo"
         id:
           type: string
+          example: "myUserInfoId"
         last:
           type: string
+          example: "bar"
         password:
           type: string
+          example: "myPassword"
         roles:
           type: array
           items:
             type: string
+          example: ["my", "attached", "roles"]
         username:
           type: string
+          example: "myUsername"
       required:
         - disabled
         - email
@@ -2656,21 +2735,27 @@ components:
           type: array
           items:
             type: string
+          example: ["fields", "to", "accelerate"]
         bucketName:
           type: string
           default: "lake-${workspaceName}-${organizationId}"
+          example: "my-Lake-bucket-name"
         description:
           type: string
+          example: "My description for this beautiful lake dataset"
         format:
           type: string
           enum:
             - json
             - ddss
             - parquet
+          example: "json"
         id:
           type: string
+          exmaple: "myLakeDatasetId"
         retentionPeriodInDays:
           type: number
+          example: 30
         searchConfig:
           $ref: "#/components/schemas/LakeDatasetSearchConfig"
       required:
@@ -2681,12 +2766,16 @@ components:
       properties:
         description:
           type: string
+          example: "My dashboard category description"
         id:
           type: string
+          example: "myDashboardCategoryId"
         isPack:
           type: boolean
+          example: false
         name:
           type: string
+          example: "MyDashboardCategoryName"
       required:
         - id
         - name
@@ -2696,16 +2785,21 @@ components:
       properties:
         coordinatorHeapMemoryLimit:
           type: number
+          example: 2048
         description:
           type: string
+          example: "My Usage Group Description"
         enabled:
           type: boolean
+          example: false
         id:
           type: string
+          example: "myUsageGroupId"
         rules:
           $ref: "#/components/schemas/LimitRuleDefinitions"
         usersCount:
           type: number
+          example: 1
       required:
         - id
         - rules
@@ -2729,6 +2823,7 @@ components:
       properties:
         description:
           type: string
+          example: "My dataset provider type description"
         id:
           type: string
           enum:
@@ -2755,6 +2850,7 @@ components:
             - snowflake
             - clickhouse
             - cribl_meta
+          example: "cribl_meta"
         locality:
           $ref: "#/components/schemas/OriginConfig"
       required:
@@ -2816,12 +2912,15 @@ components:
         id:
           type: string
           description: Unique identifier for the provider
+          example: "myUniqueGenericProviderId"
         type:
           type: string
           description: Type of the provider
+          example: "generic"
         description:
           type: string
           description: Description of the provider
+          example: "my generic provider description"
       oneOf:
         - $ref: '#/components/schemas/ApiHttpProvider'
         - $ref: '#/components/schemas/ApiAwsProvider'
@@ -4564,12 +4663,15 @@ components:
         id:
           type: string
           description: Unique identifier for the lakehouse
+          example: "MyLakehouseId"
         description:
           type: string
           description: Description of the lakehouse
+          example: "My Lakehouse description"
         status:
           type: string
           description: Status of the lakehouse
+          example: "operational"
         tierSize:
           type: string
           description: Size of the lakehouse tier
@@ -4582,6 +4684,7 @@ components:
             - 2xlarge
             - 3xlarge
             - 6xlarge
+          example: "small"
       required:
         - id
         - tierSize
@@ -4595,6 +4698,7 @@ components:
             $ref: "#/components/schemas/ResourcePolicy"
         user:
           type: string
+          example: "myTestUser"
       required:
         - perms
         - user
@@ -4986,12 +5090,15 @@ components:
           $ref: "#/components/schemas/AppscopeConfigWithCustom"
         description:
           type: string
+          example: "My Appscope Lib Entry description"
         id:
           type: string
+          example: "myAppscopeId"
         lib:
           $ref: "#/components/schemas/CriblLib"
         tags:
           type: string
+          example: "myTags"
       required:
         - config
         - description
@@ -46511,23 +46618,28 @@ components:
           description: Filter that selects data to be fed through this Function
           type: string
           default: "true"
+          example: "truthy"
         id:
           title: ID
           description: Function ID
           type: string
+          example: "myPipelineFunctionConf"
         description:
           title: Description
           description: Simple description of this step
           type: string
+          example: "My pipeline fuction configuration description"
         disabled:
           title: Disabled
           description: If true, data will not be pushed through this function
           type: boolean
+          example: true
         final:
           title: Final
           description: If enabled, stops the results of this Function from being passed to
             the downstream Functions
           type: boolean
+          example: true
         conf:
           type: object
           title: Function-specific configs
@@ -46536,6 +46648,7 @@ components:
           title: Group ID
           description: Group ID
           type: string
+          example: "myUniqueGroupId"
     Pipeline:
       title: Pipeline Settings
       type: object
@@ -46546,6 +46659,7 @@ components:
         id:
           title: ID
           type: string
+          example: "myPipelineId"
         conf:
           type: object
           additionalProperties: false
@@ -46557,14 +46671,17 @@ components:
                 of a data item
               minimum: 0
               maximum: 10000
+              example: 300
             output:
               type: string
               title: Output event destination
               description: The output destination for events processed by this Pipeline
               default: default
+              example: "myOutputDestination"
             description:
               title: Description
               type: string
+              example: "myPipelineDescription"
             streamtags:
               type: array
               title: Tags
@@ -46572,6 +46689,7 @@ components:
               default: []
               items:
                 type: string
+              example: ["my", "tags"]
             functions:
               title: Functions
               description: List of Functions to pass data through
@@ -46588,14 +46706,17 @@ components:
                   name:
                     type: string
                     title: Group Name
+                    example: "myGroupName"
                   description:
                     type: string
                     title: Description
                     description: Short description of this group
+                    example: "My short description for this pipeline group"
                   disabled:
                     type: boolean
                     title: Disabled
                     description: Whether this group is disabled
+                    example: true
     ProfilerItem:
       type: object
       properties:
@@ -47184,18 +47305,25 @@ components:
       properties:
         duration:
           type: number
+          example: 300
         filter:
           type: string
+          example: "truthy"
         level:
           type: number
+          example: 0
         maxEvents:
           type: number
+          example: 100
         stepDuration:
           type: number
+          example: 10
         workerId:
           type: string
+          example: "myWorker"
         workerThreshold:
           type: number
+          example: 1
       required:
         - duration
         - filter
@@ -47716,20 +47844,25 @@ components:
               $ref: "#/components/schemas/CloudWorkspaceSchema"
             envRegex:
               type: string
+              example: ".*"
             group:
               type: string
+              example: "mySchemaGroup"
             id:
               type: string
+              example: "mySchemaId"
             master:
               $ref: "#/components/schemas/MasterSchema"
             mode:
               $ref: "#/components/schemas/AppMode"
             reportedDeploymentId:
               type: string
+              example: "newDeploymentId"
             tags:
               type: array
               items:
                 type: string
+              example: ["my", "tags"]
           required:
             - id
             - mode
@@ -47737,8 +47870,10 @@ components:
           properties:
             bootstrapHost:
               type: string
+              example: "myBootstrapHost"
             id:
               type: string
+              example: "myHostId"
     LookupVersions:
       type: object
     HBLeaderInfo:
@@ -49722,10 +49857,13 @@ components:
       properties:
         cpuProfile:
           type: boolean
+          example: true
         dropped:
           type: boolean
+          example: false
         enhanceMetricsOutput:
           type: boolean
+          example: true
         events:
           type: array
           items:
@@ -49733,24 +49871,32 @@ components:
             additionalProperties: true
         inputId:
           type: string
+          example: "myInputId"
         level:
           type: number
+          example: 0
         memory:
           type: number
+          example: 2048
         mode:
           type: string
           enum:
             - pipe
             - route
             - routeAndSend
+          example: "pipe"
         pipelineId:
           type: string
+          example: "existingPipelineId"
         sampleId:
           type: string
+          example: "mySampleUUID"
         samplePipelineId:
           type: string
+          example: "existingSamplePipelineId"
         timeout:
           type: number
+          example: 60
       required:
         - mode
         - pipelineId
@@ -49787,15 +49933,19 @@ components:
           properties:
             email:
               type: string
+              example: "New.Dev@teal.com"
             name:
               type: string
+              example: "New Dev"
           required:
             - email
             - name
         branch:
           type: string
+          example: "main"
         commit:
           type: string
+          example: "8e5f55f"
         files:
           type: object
           properties:
@@ -49803,27 +49953,34 @@ components:
               type: array
               items:
                 type: string
+              example: ["foo"]
             deleted:
               type: array
               items:
                 type: string
+              example: ["bar"]
             modified:
               type: array
               items:
                 type: string
+              example: ["biz"]
             renamed:
               type: array
               items:
                 type: string
+              example: ["bang"]
         summary:
           type: object
           properties:
             changes:
               type: number
+              example: 0
             deletions:
               type: number
+              example: 1
             insertions:
               type: number
+              example: 2
           required:
             - changes
             - deletions
@@ -49839,8 +49996,10 @@ components:
       properties:
         effective:
           type: boolean
+          example: true
         message:
           type: string
+          example: "Git commit message example"
       required:
         - message
     GitFile:
@@ -49862,12 +50021,17 @@ components:
         commitMessage:
           type: object
           additionalProperties: true
+          example: "sample commit message"
         count:
           type: number
+          example: 1
         items:
           type: array
           items:
             $ref: "#/components/schemas/GitFile"
+            example:
+              name: "example commit"
+              state: "commited"
       required:
         - commitMessage
         - count
@@ -52035,14 +52199,19 @@ components:
       properties:
         description:
           type: string
+          example: "The string to describe the resource"
         disabled:
           type: boolean
+          example: false
         filter:
           type: string
+          example: "truthy"
         id:
           type: string
+          example: "myUniqueSubscriptionId"
         pipeline:
           type: string
+          example: "myExistingPipelineId"
       required:
         - id
         - pipeline
@@ -68205,9 +68374,12 @@ servers:
     workspaceId:
       default: main
       description: The Workspace name
+      example: main
     organizationId:
       default: ian
       description: The Organization ID
+      example: learning-developer-fd7u8
     cloudDomain:
       default: cribl.cloud
       description: Cribl Cloud domain name
+      example: cribl.cloud

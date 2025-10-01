@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 1296afe15499bdd1082c1de8cf97b815
+  docChecksum: c0aa8fe0fe38b9c4ac6a78a2a840f6bd
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.631.5
   generationVersion: 2.716.16
@@ -431,6 +431,7 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_tag.go
   - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
   - internal/provider/types/appscope_custom.go
+  - internal/provider/types/appscope_lib_entry.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/auth_request_header.go
@@ -468,6 +469,7 @@ generatedFiles:
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
   - internal/provider/types/dashboard_layout.go
+  - internal/provider/types/database_connection_config.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
   - internal/provider/types/discover_request_param.go
@@ -493,12 +495,10 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
-  - internal/provider/types/generic_provider.go
+  - internal/provider/types/generic_dataset.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
-  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
-  - internal/provider/types/grok_file.go
   - internal/provider/types/group.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
@@ -963,6 +963,7 @@ generatedFiles:
   - internal/provider/types/interfaces.go
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/lake_dataset_search_config.go
+  - internal/provider/types/lakehouse.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -1260,11 +1261,12 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
-  - internal/provider/types/parser_lib_entry.go
+  - internal/provider/types/pipeline.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
+  - internal/provider/types/project_config.go
   - internal/provider/types/prometheus_auth_oauth_header1.go
   - internal/provider/types/prometheus_auth_oauth_header2.go
   - internal/provider/types/prometheus_auth_oauth_param1.go
@@ -1287,7 +1289,6 @@ generatedFiles:
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
   - internal/provider/types/schema_lib_entry.go
-  - internal/provider/types/search_dashboard.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -2600,7 +2601,7 @@ examples:
           projectId: "myExistingProjectId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "The string to describe the resource", "disabled": false, "filter": "truthy", "id": "myUniqueSubscriptionId", "pipeline": "myExistingPipelineId"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionCountByGroupIdAndProjectId:
@@ -2635,7 +2636,7 @@ examples:
           projectId: "myExistingProjectId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"commitMessage": {"key": "<value>"}, "count": 1, "items": [{"name": "<value>"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemProjectsVersionCommitByGroupIdAndProjectId:
@@ -2645,10 +2646,10 @@ examples:
           groupId: "myExistingGroupId"
           projectId: "myExistingProjectId"
       requestBody:
-        application/json: {"message": "<value>"}
+        application/json: {"effective": true, "message": "Git commit message example"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"author": {"email": "New.Dev@teal.com", "name": "New Dev"}, "branch": "main", "commit": "8e5f55f", "files": {"created": ["foo"], "deleted": ["bar"], "modified": ["biz"], "renamed": ["bang"]}, "summary": {"changes": 0, "deletions": 1, "insertions": 2}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemProjectsSubscriptionsCaptureByGroupIdAndSubscriptionId:
@@ -2659,7 +2660,7 @@ examples:
           projectId: "myExistingProjectId"
           subscriptionId: "myExistingSubscriptionId"
       requestBody:
-        application/json: {"duration": 9977.94, "filter": "<value>", "level": 7371.6, "maxEvents": 5232.64}
+        application/json: {"duration": 300, "filter": "truthy", "level": 0, "maxEvents": 100, "stepDuration": 10, "workerId": "myWorker", "workerThreshold": 1}
       responses:
         "200":
           application/json: {}
@@ -2672,7 +2673,7 @@ examples:
           groupId: "myExistingGroupId"
           projectId: "myExistingProjectId"
       requestBody:
-        application/json: {"duration": 7020.88, "filter": "<value>", "level": 4494.37, "maxEvents": 7103.16}
+        application/json: {"duration": 300, "filter": "truthy", "level": 0, "maxEvents": 100, "stepDuration": 10, "workerId": "myWorker", "workerThreshold": 1}
       responses:
         "200":
           application/json: {}
@@ -2685,7 +2686,7 @@ examples:
           groupId: "myExistingGroupId"
           projectId: "myExistingProjectId"
       requestBody:
-        application/json: {"mode": "route", "pipelineId": "<id>", "sampleId": "<id>"}
+        application/json: {"cpuProfile": true, "dropped": false, "enhanceMetricsOutput": true, "inputId": "myInputId", "level": 0, "memory": 2048, "mode": "pipe", "pipelineId": "existingPipelineId", "sampleId": "mySampleUUID", "samplePipelineId": "existingSamplePipelineId", "timeout": 60}
       responses:
         "200":
           application/json: {}
@@ -2699,7 +2700,7 @@ examples:
           projectId: "myExistingProjectId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemProjectsPipelinesByGroupIdAndProjectId:
@@ -2709,10 +2710,10 @@ examples:
           groupId: "myExistingGroupId"
           projectId: "myExistingProjectId"
       requestBody:
-        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+        application/json: {"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
@@ -2724,7 +2725,7 @@ examples:
           pipelineId: "myNewPipelineIdToCreate"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
@@ -2735,10 +2736,10 @@ examples:
           projectId: "myExistingProjectId"
           pipelineId: "myExistingPipelineIdToUpdate"
       requestBody:
-        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+        application/json: {"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
@@ -2750,7 +2751,7 @@ examples:
           pipelineId: "myExistingPipelineIdToDelete"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemProjectsVersionCommitByProjectId:
@@ -2759,10 +2760,10 @@ examples:
         path:
           projectId: "myExistingProjectId"
       requestBody:
-        application/json: {"message": "<value>"}
+        application/json: {"effective": true, "message": "Git commit message example"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"author": {"email": "New.Dev@teal.com", "name": "New Dev"}, "branch": "main", "commit": "8e5f55f", "files": {"created": ["foo"], "deleted": ["bar"], "modified": ["biz"], "renamed": ["bang"]}, "summary": {"changes": 0, "deletions": 1, "insertions": 2}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemProjectsVersionCountByProjectId:
@@ -2800,7 +2801,7 @@ examples:
           ID: "fa07060"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"commitMessage": {"key": "<value>"}, "count": 1, "items": []}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemProjectsVersionRevertByProjectId:
@@ -2809,7 +2810,7 @@ examples:
         path:
           projectId: "myExistingProjectId"
       requestBody:
-        application/json: {"message": "<value>"}
+        application/json: {"effective": true, "message": "Git commit message example"}
       responses:
         "200":
           application/json: {}
@@ -2893,7 +2894,7 @@ examples:
           id: "myExistingProjectId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"perms": [], "user": "myTestUser"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createProjectAclApplyById:
@@ -2913,7 +2914,7 @@ examples:
           id: "myExistingProjectId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"perms": [{"gid": "uniqueGID", "id": "myResourcePolicyId", "policy": "samplePolicy", "type": "groups"}], "user": "myTestUser"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createProjectAclTeamsApplyById:
@@ -2943,7 +2944,7 @@ examples:
           projectId: "myExistingProjectId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "The string to describe the resource", "disabled": false, "filter": "truthy", "id": "myUniqueSubscriptionId", "pipeline": "myExistingPipelineId"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listSubscription:
@@ -2958,7 +2959,7 @@ examples:
           pipeline: "myExistingPipelineId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "The string to describe the resource", "disabled": false, "filter": "truthy", "id": "myUniqueSubscriptionId", "pipeline": "myExistingPipelineId"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSubscription:
@@ -2973,10 +2974,10 @@ examples:
           description: "Words describe things"
           filter: "truthy"
       requestBody:
-        application/json: {"id": "<id>", "pipeline": "<value>"}
+        application/json: {"description": "The string to describe the resource", "disabled": false, "filter": "truthy", "id": "myUniqueSubscriptionId", "pipeline": "myExistingPipelineId"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "The string to describe the resource", "disabled": false, "filter": "truthy", "id": "myUniqueSubscriptionId", "pipeline": "myExistingPipelineId"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSubscriptionById:
@@ -2987,7 +2988,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "The string to describe the resource", "disabled": false, "filter": "truthy", "id": "myUniqueSubscriptionId", "pipeline": "myExistingPipelineId"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSubscriptionById:
@@ -2998,7 +2999,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "The string to describe the resource", "disabled": false, "filter": "truthy", "id": "myUniqueSubscriptionId", "pipeline": "myExistingPipelineId"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSubscriptionById:
@@ -3009,7 +3010,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "The string to describe the resource", "disabled": false, "filter": "truthy", "id": "myUniqueSubscriptionId", "pipeline": "myExistingPipelineId"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   undoLastCommit:
@@ -3033,7 +3034,7 @@ examples:
         application/json: {"message": "<value>"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"author": {"email": "New.Dev@teal.com", "name": "New Dev"}, "branch": "main", "commit": "8e5f55f", "files": {"created": ["foo"], "deleted": ["bar"], "modified": ["biz"], "renamed": ["bang"]}, "summary": {"changes": 0, "deletions": 1, "insertions": 2}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getVersionCount:
@@ -3075,7 +3076,7 @@ examples:
           ID: "fa07060"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"commitMessage": {"key": "<value>", "key1": "<value>"}, "count": 1, "items": []}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getVersionInfo:
@@ -3151,7 +3152,7 @@ examples:
   createSystemCapture:
     speakeasy-default-create-system-capture:
       requestBody:
-        application/json: {"duration": 5717.32, "filter": "<value>", "level": 6094.12, "maxEvents": 9941.84}
+        application/json: {"duration": 300, "filter": "truthy", "level": 0, "maxEvents": 100, "stepDuration": 10, "workerId": "myWorker", "workerThreshold": 1}
       responses:
         "200":
           application/json: {}
@@ -3163,7 +3164,7 @@ examples:
         path:
           projectId: "myExistingProjectId"
       requestBody:
-        application/json: {"duration": 4855.02, "filter": "<value>", "level": 8634.29, "maxEvents": 5475.12}
+        application/json: {"duration": 300, "filter": "truthy", "level": 0, "maxEvents": 100, "stepDuration": 10, "workerId": "myWorker", "workerThreshold": 1}
       responses:
         "200":
           application/json: {}
@@ -3176,7 +3177,7 @@ examples:
           projectId: "myExistingProjectId"
           subscriptionId: "myExistingSubscriptionId"
       requestBody:
-        application/json: {"duration": 9984.14, "filter": "<value>", "level": 8613.29, "maxEvents": 502.1}
+        application/json: {"duration": 300, "filter": "truthy", "level": 0, "maxEvents": 100, "stepDuration": 10, "workerId": "myWorker", "workerThreshold": 1}
       responses:
         "200":
           application/json: {}
@@ -3185,7 +3186,7 @@ examples:
   createPreview:
     speakeasy-default-create-preview:
       requestBody:
-        application/json: {"mode": "pipe", "pipelineId": "<id>", "sampleId": "<id>"}
+        application/json: {"cpuProfile": true, "dropped": false, "enhanceMetricsOutput": true, "inputId": "myInputId", "level": 0, "memory": 2048, "mode": "pipe", "pipelineId": "existingPipelineId", "sampleId": "mySampleUUID", "samplePipelineId": "existingSamplePipelineId", "timeout": 60}
       responses:
         "200":
           application/json: {}
@@ -3256,7 +3257,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createPipeline:
@@ -3265,10 +3266,10 @@ examples:
         path:
           groupId: "myExistingGroupId"
       requestBody:
-        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+        application/json: {"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getPipelineById:
@@ -3279,7 +3280,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updatePipelineById:
@@ -3289,10 +3290,10 @@ examples:
           id: "myUniquePipelineIdToCRUD"
           groupId: "myExistingGroupId"
       requestBody:
-        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+        application/json: {"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deletePipelineById:
@@ -3303,7 +3304,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getPipelineByPack:
@@ -3324,7 +3325,7 @@ examples:
           pack: "myExistingPackId"
           groupId: "myExistingGroupId"
       requestBody:
-        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+        application/json: {"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}
       responses:
         "200":
           application/json: {}
@@ -3352,10 +3353,10 @@ examples:
         query:
           disabled: false
       requestBody:
-        application/json: {"id": "<id>", "conf": {"output": "default", "streamtags": []}}
+        application/json: {"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deletePipelineByPackAndId:
@@ -3546,16 +3547,16 @@ examples:
     speakeasy-default-list-key-metadata-entity:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createKeyMetadataEntity:
     speakeasy-default-create-key-metadata-entity:
       requestBody:
-        application/json: {"keyId": "<id>", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "useIV": false, "ivSize": 12}
+        application/json: {"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-gcm", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getKeyMetadataEntityById:
@@ -3565,7 +3566,7 @@ examples:
           id: "myExistingKeyId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-gcm", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateKeyMetadataEntityById:
@@ -3574,10 +3575,10 @@ examples:
         path:
           id: "keyIdToCRUD"
       requestBody:
-        application/json: {"keyId": "<id>", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "useIV": false, "ivSize": 12}
+        application/json: {"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-gcm", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteKeyMetadataEntityById:
@@ -3587,23 +3588,23 @@ examples:
           id: "keyIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listBulletinMessage:
     speakeasy-default-list-bulletin-message:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myMessageId", "severity": "info", "title": "My Message Title", "text": "My message text", "time": 1759324416, "group": "myMessageGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createBulletinMessage:
     speakeasy-default-create-bulletin-message:
       requestBody:
-        application/json: {"id": "<id>", "text": "<value>"}
+        application/json: {"id": "myMessageId", "severity": "info", "title": "My Message Title", "text": "My message text", "time": 1759324416, "group": "myMessageGroup"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myMessageId", "severity": "info", "title": "My Message Title", "text": "My message text", "time": 1759324416, "group": "myMessageGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getBulletinMessageById:
@@ -3613,7 +3614,7 @@ examples:
           id: "myUniqueMessageId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myMessageId", "severity": "info", "title": "My Message Title", "text": "My message text", "time": 1759324416, "group": "myMessageGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteBulletinMessageById:
@@ -3623,7 +3624,7 @@ examples:
           id: "myMessageIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myMessageId", "severity": "info", "title": "My Message Title", "text": "My message text", "time": 1759324416, "group": "myMessageGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listNotificationTarget:
@@ -3678,16 +3679,16 @@ examples:
     speakeasy-default-list-notification:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createNotification:
     speakeasy-default-create-notification:
       requestBody:
-        application/json: {"id": "<id>", "disabled": false, "condition": "<value>", "targets": [], "group": "default_search"}
+        application/json: {"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getNotificationById:
@@ -3697,7 +3698,7 @@ examples:
           id: "myNotificationIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateNotificationById:
@@ -3706,10 +3707,10 @@ examples:
         path:
           id: "myNotificationIdToCRUD"
       requestBody:
-        application/json: {"id": "<id>", "disabled": false, "condition": "<value>", "targets": [], "group": "default_search"}
+        application/json: {"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteNotificationById:
@@ -3719,23 +3720,23 @@ examples:
           id: "myNotificationIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listPolicyRule:
     speakeasy-default-list-policy-rule:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"args": ["arg1", "arg2"], "description": "My policy rule description", "id": "myPolicyRuleId", "template": ["my", "template"], "title": "My Policy Rule Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createPolicyRule:
     speakeasy-default-create-policy-rule:
       requestBody:
-        application/json: {"id": "<id>", "template": []}
+        application/json: {"args": ["arg1", "arg2"], "description": "My policy rule description", "id": "myPolicyRuleId", "template": ["my", "template"], "title": "My Policy Rule Title"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"args": ["arg1", "arg2"], "description": "My policy rule description", "id": "myPolicyRuleId", "template": ["my", "template"], "title": "My Policy Rule Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getPolicyRuleById:
@@ -3745,7 +3746,7 @@ examples:
           id: "myUniqueSystemPolicyIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"args": ["arg1", "arg2"], "description": "My policy rule description", "id": "myPolicyRuleId", "template": ["my", "template"], "title": "My Policy Rule Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updatePolicyRuleById:
@@ -3754,10 +3755,10 @@ examples:
         path:
           id: "myUniqueSystemPolicyIdToCRUD"
       requestBody:
-        application/json: {"id": "<id>", "template": ["<value 1>", "<value 2>", "<value 3>"]}
+        application/json: {"args": ["arg1", "arg2"], "description": "My policy rule description", "id": "myPolicyRuleId", "template": ["my", "template"], "title": "My Policy Rule Title"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"args": ["arg1", "arg2"], "description": "My policy rule description", "id": "myPolicyRuleId", "template": ["my", "template"], "title": "My Policy Rule Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deletePolicyRuleById:
@@ -3767,23 +3768,23 @@ examples:
           id: "myUniqueSystemPolicyIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"args": ["arg1", "arg2"], "description": "My policy rule description", "id": "myPolicyRuleId", "template": ["my", "template"], "title": "My Policy Rule Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listRole:
     speakeasy-default-list-role:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My role description", "id": "myRoleId", "policy": ["policies", "attached", "to", "role"], "tags": ["list", "of", "tags"], "title": "My Role Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createRole:
     speakeasy-default-create-role:
       requestBody:
-        application/json: {"id": "<id>", "policy": []}
+        application/json: {"description": "My role description", "id": "myRoleId", "policy": ["policies", "attached", "to", "role"], "tags": ["list", "of", "tags"], "title": "My Role Title"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My role description", "id": "myRoleId", "policy": ["policies", "attached", "to", "role"], "tags": ["list", "of", "tags"], "title": "My Role Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getRoleById:
@@ -3793,7 +3794,7 @@ examples:
           id: "myUniqueRoleIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My role description", "id": "myRoleId", "policy": ["policies", "attached", "to", "role"], "tags": ["list", "of", "tags"], "title": "My Role Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateRoleById:
@@ -3802,10 +3803,10 @@ examples:
         path:
           id: "myUniqueRoleIdToCRUD"
       requestBody:
-        application/json: {"id": "<id>", "policy": ["<value 1>", "<value 2>", "<value 3>"]}
+        application/json: {"description": "My role description", "id": "myRoleId", "policy": ["policies", "attached", "to", "role"], "tags": ["list", "of", "tags"], "title": "My Role Title"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My role description", "id": "myRoleId", "policy": ["policies", "attached", "to", "role"], "tags": ["list", "of", "tags"], "title": "My Role Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteRoleById:
@@ -3815,23 +3816,23 @@ examples:
           id: "myUniqueRoleIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My role description", "id": "myRoleId", "policy": ["policies", "attached", "to", "role"], "tags": ["list", "of", "tags"], "title": "My Role Title"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listScript:
     speakeasy-default-list-script:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myScriptLibEntryId", "command": "echo hello", "description": "My script lib entry description", "args": ["my", "list", "of", "args"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createScript:
     speakeasy-default-create-script:
       requestBody:
-        application/json: {"id": "<id>", "command": "<value>"}
+        application/json: {"id": "myScriptLibEntryId", "command": "echo hello", "description": "My script lib entry description", "args": ["my", "list", "of", "args"]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myScriptLibEntryId", "command": "echo hello", "description": "My script lib entry description", "args": ["my", "list", "of", "args"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getScriptById:
@@ -3841,7 +3842,7 @@ examples:
           id: "myUniqueScriptIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myScriptLibEntryId", "command": "echo hello", "description": "My script lib entry description", "args": ["my", "list", "of", "args"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateScriptById:
@@ -3850,10 +3851,10 @@ examples:
         path:
           id: "myUniqueScriptIdToCRUD"
       requestBody:
-        application/json: {"id": "<id>", "command": "<value>"}
+        application/json: {"id": "myScriptLibEntryId", "command": "echo hello", "description": "My script lib entry description", "args": ["my", "list", "of", "args"]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myScriptLibEntryId", "command": "echo hello", "description": "My script lib entry description", "args": ["my", "list", "of", "args"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteScriptById:
@@ -3863,16 +3864,16 @@ examples:
           id: "myUniqueScriptIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myScriptLibEntryId", "command": "echo hello", "description": "My script lib entry description", "args": ["my", "list", "of", "args"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createTeam:
     speakeasy-default-create-team:
       requestBody:
-        application/json: {"description": "once well-lit rigid anti", "id": "<id>", "name": "<value>", "roles": ["<value 1>", "<value 2>", "<value 3>"]}
+        application/json: {"description": "My team description", "id": "myUniqueTeamId", "name": "MyTeamName", "roles": ["roles", "attached", "to", "team"], "ssoGroupIds": ["SSO", "Group", "Ids"]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My team description", "id": "myUniqueTeamId", "name": "MyTeamName", "roles": ["roles", "attached", "to", "team"], "ssoGroupIds": ["SSO", "Group", "Ids"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getTeam:
@@ -3882,7 +3883,7 @@ examples:
           product: "stream"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My team description", "id": "myUniqueTeamId", "name": "MyTeamName", "roles": ["roles", "attached", "to", "team"], "ssoGroupIds": ["SSO", "Group", "Ids"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getTeamById:
@@ -3892,7 +3893,7 @@ examples:
           id: "myUniqueTeamIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My team description", "id": "myUniqueTeamId", "name": "MyTeamName", "roles": ["roles", "attached", "to", "team"], "ssoGroupIds": ["SSO", "Group", "Ids"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateTeamById:
@@ -3901,10 +3902,10 @@ examples:
         path:
           id: "myUniqueTeamIdToCRUD"
       requestBody:
-        application/json: {"description": "vibration below but once whoever and", "id": "<id>", "name": "<value>", "roles": ["<value 1>", "<value 2>", "<value 3>"]}
+        application/json: {"description": "My team description", "id": "myUniqueTeamId", "name": "MyTeamName", "roles": ["roles", "attached", "to", "team"], "ssoGroupIds": ["SSO", "Group", "Ids"]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My team description", "id": "myUniqueTeamId", "name": "MyTeamName", "roles": ["roles", "attached", "to", "team"], "ssoGroupIds": ["SSO", "Group", "Ids"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteTeamById:
@@ -3914,7 +3915,7 @@ examples:
           id: "myUniqueTeamIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My team description", "id": "myUniqueTeamId", "name": "MyTeamName", "roles": ["roles", "attached", "to", "team"], "ssoGroupIds": ["SSO", "Group", "Ids"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getTeamAclById:
@@ -3926,7 +3927,7 @@ examples:
           type: "projects"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"gid": "uniqueGID", "id": "myResourcePolicyId", "policy": "samplePolicy", "type": "macros"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getTeamRolesById:
@@ -3955,7 +3956,7 @@ examples:
         path:
           id: "myExistingTeamToUpdate"
       requestBody:
-        application/json: {}
+        application/json: {"add": ["array", "of", "added", "properties"], "rm": ["array", "of", "removed", "properties"]}
       responses:
         "200":
           application/json: {}
@@ -3971,23 +3972,23 @@ examples:
           type: "groups"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"perms": [], "team": "<value>"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listUser:
     speakeasy-default-list-user:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"currentPassword": "currentHashedPassword", "disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "hashedPassword", "roles": ["roles", "attached"], "teams": ["teams", "attached"], "username": "username"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createUser:
     speakeasy-default-create-user:
       requestBody:
-        application/json: {"disabled": true, "email": "Aliya_Gorczany97@gmail.com", "first": "<value>", "id": "<id>", "last": "<value>", "username": "Virginie47"}
+        application/json: {"currentPassword": "currentHashedPassword", "disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "hashedPassword", "roles": ["roles", "attached"], "teams": ["teams", "attached"], "username": "username"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"currentPassword": "currentHashedPassword", "disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "hashedPassword", "roles": ["roles", "attached"], "teams": ["teams", "attached"], "username": "username"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getUserById:
@@ -3997,7 +3998,7 @@ examples:
           id: "myUniqueUserIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"currentPassword": "currentHashedPassword", "disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "hashedPassword", "roles": ["roles", "attached"], "teams": ["teams", "attached"], "username": "username"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateUserById:
@@ -4006,10 +4007,10 @@ examples:
         path:
           id: "myUniqueUserIdToCRUD"
       requestBody:
-        application/json: {"disabled": false, "email": "Gladys_Kohler@hotmail.com", "first": "<value>", "id": "<id>", "last": "<value>", "username": "Deondre.Hilll"}
+        application/json: {"disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "myStrongPassword", "roles": ["my", "attached", "roles"], "username": "myUsername"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "myStrongPassword", "roles": ["my", "attached", "roles"], "username": "myUsername"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteUserById:
@@ -4019,7 +4020,7 @@ examples:
           id: "myUniqueUserIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"currentPassword": "currentHashedPassword", "disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "hashedPassword", "roles": ["roles", "attached"], "teams": ["teams", "attached"], "username": "username"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateUserInfoById:
@@ -4028,10 +4029,10 @@ examples:
         path:
           id: "myUniqueUserIdToCRUD"
       requestBody:
-        application/json: {"disabled": false, "email": "Devan_Aufderhar@yahoo.com", "first": "<value>", "id": "<id>", "last": "<value>", "username": "Eliane85"}
+        application/json: {"currentPassword": "myCurrentPassword", "disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserInfoId", "last": "bar", "password": "myPassword", "roles": ["my", "attached", "roles"], "username": "myUsername"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"currentPassword": "currentHashedPassword", "disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "hashedPassword", "roles": ["roles", "attached"], "teams": ["teams", "attached"], "username": "username"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getProductsUsersAclByProductAndId:
@@ -4044,7 +4045,7 @@ examples:
           type: "groups"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"gid": "uniqueGID", "id": "myResourcePolicyId", "policy": "samplePolicy", "type": "dataset-providers"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getProductsUsersByProduct:
@@ -4056,7 +4057,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"currentPassword": "currentHashedPassword", "disabled": false, "email": "foo.bar@cribl.com", "first": "foo", "id": "myUserId", "last": "bar", "password": "hashedPassword", "roles": ["roles", "attached"], "teams": ["teams", "attached"], "username": "username"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteProductsUsersCacheByProduct:
@@ -4075,10 +4076,10 @@ examples:
         path:
           lakeId: "default"
       requestBody:
-        application/json: {"bucketName": "lake-${workspaceName}-${organizationId}", "id": "<id>"}
+        application/json: {"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "<id>", "retentionPeriodInDays": 30}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "<id>", "retentionPeriodInDays": 30}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getCriblLakeDatasetByLakeId:
@@ -4088,7 +4089,7 @@ examples:
           lakeId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "<id>", "retentionPeriodInDays": 30}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteCriblLakeDatasetByLakeIdAndId:
@@ -4099,7 +4100,7 @@ examples:
           id: "myLakeDatasetToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "<id>", "retentionPeriodInDays": 30}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getCriblLakeDatasetByLakeIdAndId:
@@ -4110,7 +4111,7 @@ examples:
           id: "myLakeDatasetToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "<id>", "retentionPeriodInDays": 30}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateCriblLakeDatasetByLakeIdAndId:
@@ -4120,26 +4121,26 @@ examples:
           lakeId: "default"
           id: "myLakeDatasetToCRUD"
       requestBody:
-        application/json: {"bucketName": "lake-${workspaceName}-${organizationId}", "id": "<id>"}
+        application/json: {"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "<id>", "retentionPeriodInDays": 30}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "<id>", "retentionPeriodInDays": 30}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listDashboardCategory:
     speakeasy-default-list-dashboard-category:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dashboard category description", "id": "myDashboardCategoryId", "isPack": false, "name": "MyDashboardCategoryName"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDashboardCategory:
     speakeasy-default-create-dashboard-category:
       requestBody:
-        application/json: {"id": "<id>", "name": "<value>"}
+        application/json: {"description": "My dashboard category description", "id": "myDashboardCategoryId", "isPack": false, "name": "MyDashboardCategoryName"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dashboard category description", "id": "myDashboardCategoryId", "isPack": false, "name": "MyDashboardCategoryName"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDashboardCategoryById:
@@ -4149,7 +4150,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dashboard category description", "id": "myDashboardCategoryId", "isPack": false, "name": "MyDashboardCategoryName"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateDashboardCategoryById:
@@ -4158,10 +4159,10 @@ examples:
         path:
           id: "myUniqueDashboardCategoryToCRUD"
       requestBody:
-        application/json: {"id": "<id>", "name": "<value>"}
+        application/json: {"description": "My dashboard category description", "id": "myDashboardCategoryId", "isPack": false, "name": "MyDashboardCategoryName"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dashboard category description", "id": "myDashboardCategoryId", "isPack": false, "name": "MyDashboardCategoryName"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteDashboardCategoryById:
@@ -4171,23 +4172,23 @@ examples:
           id: "myUniqueDashboardCategoryToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dashboard category description", "id": "myDashboardCategoryId", "isPack": false, "name": "MyDashboardCategoryName"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listUsageGroup:
     speakeasy-default-list-usage-group:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"coordinatorHeapMemoryLimit": 2048, "description": "My Usage Group Description", "enabled": false, "id": "myUsageGroupId", "rules": "<value>", "usersCount": 1}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createUsageGroup:
     speakeasy-default-create-usage-group:
       requestBody:
-        application/json: {"id": "<id>", "rules": "<value>"}
+        application/json: {"coordinatorHeapMemoryLimit": 2048, "description": "My Usage Group Description", "enabled": false, "id": "myUsageGroupId", "rules": "<value>", "usersCount": 1}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"coordinatorHeapMemoryLimit": 2048, "description": "My Usage Group Description", "enabled": false, "id": "myUsageGroupId", "rules": "<value>", "usersCount": 1}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getUsageGroupById:
@@ -4197,7 +4198,7 @@ examples:
           id: "myUniqueUsageGroupToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"coordinatorHeapMemoryLimit": 2048, "description": "My Usage Group Description", "enabled": false, "id": "myUsageGroupId", "rules": "<value>", "usersCount": 1}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateUsageGroupById:
@@ -4206,10 +4207,10 @@ examples:
         path:
           id: "myUniqueUsageGroupToCRUD"
       requestBody:
-        application/json: {"id": "<id>", "rules": "<value>"}
+        application/json: {"coordinatorHeapMemoryLimit": 2048, "description": "My Usage Group Description", "enabled": false, "id": "myUsageGroupId", "rules": "<value>", "usersCount": 1}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"coordinatorHeapMemoryLimit": 2048, "description": "My Usage Group Description", "enabled": false, "id": "myUsageGroupId", "rules": "<value>", "usersCount": 1}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteUsageGroupById:
@@ -4219,23 +4220,23 @@ examples:
           id: "myUniqueUsageGroupToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"coordinatorHeapMemoryLimit": 2048, "description": "My Usage Group Description", "enabled": false, "id": "myUsageGroupId", "rules": "<value>", "usersCount": 1}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listDatasetProviderType:
     speakeasy-default-list-dataset-provider-type:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dataset provider type description", "id": "cribl_meta"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDatasetProviderType:
     speakeasy-default-create-dataset-provider-type:
       requestBody:
-        application/json: {"id": "api_elasticsearch"}
+        application/json: {"description": "My dataset provider type description", "id": "cribl_meta"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dataset provider type description", "id": "cribl_meta"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetProviderTypeById:
@@ -4245,7 +4246,7 @@ examples:
           id: "myUniqueDatasetProviderTypeIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dataset provider type description", "id": "cribl_meta"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateDatasetProviderTypeById:
@@ -4254,10 +4255,10 @@ examples:
         path:
           id: "myUniqueDatasetProviderTypeIdToCRUD"
       requestBody:
-        application/json: {"id": "api_http"}
+        application/json: {"description": "My dataset provider type description", "id": "cribl_meta"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dataset provider type description", "id": "cribl_meta"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteDatasetProviderTypeById:
@@ -4267,7 +4268,7 @@ examples:
           id: "myUniqueDatasetProviderTypeIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"description": "My dataset provider type description", "id": "cribl_meta"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listDatasetProvider:
@@ -4277,7 +4278,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "availableEndpoints": [], "authenticationMethod": "none"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDatasetProvider:
@@ -4289,7 +4290,7 @@ examples:
         application/json: {"id": "amazon_security_lake", "type": "<value>", "accountConfigs": []}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "accountConfigs": []}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetProviderById:
@@ -4300,7 +4301,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "serviceAccountCredentials": "<value>"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateDatasetProviderById:
@@ -4313,7 +4314,7 @@ examples:
         application/json: {"id": "api_elasticsearch", "type": "<value>", "endpoint": "<value>", "authType": "none", "maxConcurrency": 3}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteDatasetProviderById:
@@ -4324,7 +4325,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "username": "Amara21", "endpoint": "<value>"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listDataset:
@@ -4391,7 +4392,7 @@ examples:
           id: "myExistingDatasetId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"perms": [{"gid": "uniqueGID", "id": "myResourcePolicyId", "policy": "samplePolicy", "type": "dashboards"}], "user": "myTestUser"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDatasetAclApplyById:
@@ -4411,7 +4412,7 @@ examples:
           id: "myExistingDatasetId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"perms": [], "user": "myTestUser"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDatasetAclTeamsApplyById:
@@ -4431,7 +4432,7 @@ examples:
           id: "myExistingDashboardId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"perms": [], "user": "myTestUser"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSearchDashboardAclApplyById:
@@ -4453,7 +4454,7 @@ examples:
           type: "groups"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"perms": [{"gid": "uniqueGID", "id": "myResourcePolicyId", "policy": "samplePolicy", "type": "macros"}], "user": "myTestUser"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSearchDashboardAclTeamsById:
@@ -4463,7 +4464,7 @@ examples:
           id: "myExistingDashboardId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"perms": [{"gid": "uniqueGID", "id": "myResourcePolicyId", "policy": "samplePolicy", "type": "datasets"}], "user": "myTestUser"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSearchDashboardAclTeamsApplyById:
@@ -4483,7 +4484,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"config": {}, "description": "My Appscope Lib Entry description", "id": "myAppscopeId", "lib": "custom", "tags": "myTags"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createAppscopeLibEntry:
@@ -4492,10 +4493,10 @@ examples:
         path:
           groupId: "myExistingGroupId"
       requestBody:
-        application/json: {"config": {}, "description": "neatly floodlight athwart fearless scamper dispose", "id": "<id>", "lib": "cribl"}
+        application/json: {"config": {}, "description": "My Appscope Lib Entry description", "id": "myAppscopeId", "lib": "cribl", "tags": "myTags"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"config": {}, "description": "My Appscope Lib Entry description", "id": "myAppscopeId", "lib": "cribl-custom", "tags": "myTags"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getAppscopeLibEntryById:
@@ -4506,7 +4507,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"config": {}, "description": "My Appscope Lib Entry description", "id": "myAppscopeId", "lib": "cribl-custom", "tags": "myTags"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateAppscopeLibEntryById:
@@ -4516,10 +4517,10 @@ examples:
           id: "myUniqueAppscopeConfigToCRUD"
           groupId: "myExistingGroupId"
       requestBody:
-        application/json: {"config": {}, "description": "blaspheme failing smug yet part diver dramatize", "id": "<id>", "lib": "cribl"}
+        application/json: {"config": {}, "description": "My Appscope Lib Entry description", "id": "myAppscopeId", "lib": "cribl", "tags": "myTags"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"config": {}, "description": "My Appscope Lib Entry description", "id": "myAppscopeId", "lib": "cribl-custom", "tags": "myTags"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteAppscopeLibEntryById:
@@ -4530,7 +4531,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"config": {}, "description": "My Appscope Lib Entry description", "id": "myAppscopeId", "lib": "cribl-custom", "tags": "myTags"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listGrokFile:
@@ -4818,16 +4819,16 @@ examples:
     speakeasy-default-list-search-dashboard:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"created": 9685.23, "createdBy": "<value>", "elements": [], "id": "<id>", "modified": 4176.79, "name": "<value>", "schedule": {"cronSchedule": "<value>", "enabled": true, "keepLastN": 2642.91, "notifications": {"disabled": true, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSearchDashboard:
     speakeasy-default-create-search-dashboard:
       requestBody:
-        application/json: {"created": 9377.15, "createdBy": "<value>", "elements": [{"id": "<id>", "layout": {"h": 5003.17, "w": 3536.4, "x": 839.93, "y": 6172.28}, "type": "markdown.default", "variant": "markdown"}, {"id": "<id>", "layout": {"h": 5003.17, "w": 3536.4, "x": 839.93, "y": 6172.28}, "type": "markdown.default", "variant": "markdown"}], "id": "<id>", "modified": 5138.81, "name": "<value>"}
+        application/json: {"created": 9377.15, "createdBy": "<value>", "elements": [{"id": "<id>", "layout": {"h": 5003.17, "w": 3536.4, "x": 839.93, "y": 6172.28}, "type": "markdown.default", "variant": "markdown"}, {"id": "<id>", "layout": {"h": 5003.17, "w": 3536.4, "x": 839.93, "y": 6172.28}, "type": "markdown.default", "variant": "markdown"}], "id": "<id>", "modified": 5138.81, "name": "<value>", "schedule": {"cronSchedule": "<value>", "enabled": false, "keepLastN": 6538.99, "notifications": {"disabled": false, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"created": 5003.17, "createdBy": "<value>", "elements": [], "id": "<id>", "modified": 839.93, "name": "<value>", "schedule": {"cronSchedule": "<value>", "enabled": false, "keepLastN": 6538.99, "notifications": {"disabled": false, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSearchDashboardById:
@@ -4837,7 +4838,7 @@ examples:
           id: "myUniqueDashboardIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"created": 6173.03, "createdBy": "<value>", "elements": [], "id": "<id>", "modified": 9389.11, "name": "<value>", "schedule": {"cronSchedule": "<value>", "enabled": true, "keepLastN": 1108.93, "notifications": {"disabled": true, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSearchDashboardById:
@@ -4846,10 +4847,10 @@ examples:
         path:
           id: "myUniqueDashboardIdToCRUD"
       requestBody:
-        application/json: {"created": 9322.04, "createdBy": "<value>", "elements": [{"id": "<id>", "layout": {"h": 639.57, "w": 6274.13, "x": 2916.93, "y": 2991.89}, "search": {"earliest": "<value>", "latest": "<value>", "query": "<value>", "type": "inline"}, "type": "chart.funnel"}, {"id": "<id>", "layout": {"h": 639.57, "w": 6274.13, "x": 2916.93, "y": 2991.89}, "search": {"earliest": "<value>", "latest": "<value>", "query": "<value>", "type": "inline"}, "type": "chart.funnel"}], "id": "<id>", "modified": 6157.19, "name": "<value>"}
+        application/json: {"created": 9322.04, "createdBy": "<value>", "elements": [{"id": "<id>", "layout": {"h": 639.57, "w": 6274.13, "x": 2916.93, "y": 2991.89}, "search": {"earliest": "<value>", "latest": "<value>", "query": "<value>", "type": "inline"}, "type": "chart.funnel"}, {"id": "<id>", "layout": {"h": 639.57, "w": 6274.13, "x": 2916.93, "y": 2991.89}, "search": {"earliest": "<value>", "latest": "<value>", "query": "<value>", "type": "inline"}, "type": "chart.funnel"}], "id": "<id>", "modified": 6157.19, "name": "<value>", "schedule": {"cronSchedule": "<value>", "enabled": false, "keepLastN": 6422.42, "notifications": {"disabled": true, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"created": 639.57, "createdBy": "<value>", "elements": [{"id": "<id>", "layout": {"h": 2991.89, "w": 4583.03, "x": 1291.82, "y": 4243.4}, "search": {"earliest": 7479.86, "latest": "<value>", "query": "<value>", "type": "inline"}, "type": "input.dropdown"}], "id": "<id>", "modified": 9895.26, "name": "<value>", "schedule": {"cronSchedule": "<value>", "enabled": false, "keepLastN": 6422.42, "notifications": {"disabled": true, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSearchDashboardById:
@@ -4859,7 +4860,7 @@ examples:
           id: "myUniqueDashboardIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"created": 3921.59, "createdBy": "<value>", "elements": [], "id": "<id>", "modified": 5900.35, "name": "<value>", "schedule": {"cronSchedule": "<value>", "enabled": true, "keepLastN": 400.07, "notifications": {"disabled": false, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listSearchMacro:
@@ -4920,7 +4921,7 @@ examples:
   createSavedQuery:
     speakeasy-default-create-saved-query:
       requestBody:
-        application/json: {"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "description": "test saved query", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}
+        application/json: {"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "description": "test saved query", "schedule": {"cronSchedule": "<value>", "enabled": true, "keepLastN": 3733.06, "notifications": {"disabled": true, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}, "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}
       responses:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
@@ -4942,7 +4943,7 @@ examples:
         path:
           id: "myUniqueSavedSearchIdToCRUD"
       requestBody:
-        application/json: {"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "description": "test saved query", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}
+        application/json: {"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "description": "test saved query", "schedule": {"cronSchedule": "<value>", "enabled": true, "keepLastN": 5419.57, "notifications": {"disabled": false, "items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "conf": {"savedQueryId": "savedQueryId", "message": "Message for notification", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 0}, "group": "myNotificationGroup"}]}, "tz": "<value>"}, "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}
       responses:
         "200":
           application/json: {"items": [{"name": "test_saved", "isPrivate": true, "query": "dataset=\"cribl_edge_appscope_metrics\" | limit 1000", "earliest": "-1h", "latest": "now", "user": "google-oauth2|115928590796700585084", "displayUsername": "First Last", "id": "test_saved"}]}
@@ -6513,7 +6514,7 @@ examples:
     speakeasy-default-get-system-info:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"BUILD": {}, "apiPort": 4952.63, "conf": {"inputs": 6792.36, "outputs": 795.39, "pipelines": 3635.32, "routes": 4076.51, "rules": 1607.84}, "configPath": "<value>", "cpus": [{"model": "LeBaron", "speed": 8178.3, "times": {"key": "<value>", "key1": "<value>", "key2": "<value>"}}], "diskUsage": {"bytesAvailable": 2855.73, "bytesUsed": 9030.24, "diskPath": "<value>", "totalDiskSize": 5130.5}, "distMode": "worker", "env": {}, "guid": "<id>", "hostname": "both-trench.org", "installPath": "<value>", "license": {"isRegistered": false, "limits": {"rbac": 718.8, "remote_auth": 9948.24, "remote_git": 9411.15, "worker_groups": 3407.38, "worker_procs": 8169.52}, "type": "trial"}, "limits": {"samples": {"maxSize": "<value>"}}, "loadavg": [8985.8, 3065.16, 7538.95], "memory": {"free": 3634.84, "total": 3175.97}, "messages": [], "net": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "os": {"arch": "<value>", "endianness": "<value>", "platform": "<value>", "release": "<value>", "type": "<value>"}, "systemConf": {"installType": "<value>", "restart": "<value>", "upgrade": "<value>"}, "uptime": 667.38, "version": "<value>", "workerProcesses": 8823.7}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemDiag:
@@ -6868,7 +6869,7 @@ examples:
           disabled: true
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updatePacksById:
@@ -7287,7 +7288,7 @@ examples:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 4317, "maxActiveReq": 256, "maxRequestsPerSocket": 0, "requestTimeout": 0, "socketTimeout": 0, "keepAliveTimeout": 15, "enableHealthCheck": false, "ipAllowlistRegex": "/.*/", "ipDenylistRegex": "/^$/", "protocol": "grpc", "extractSpans": false, "extractMetrics": false, "otlpVersion": "0.10.0", "authType": "none", "maxActiveCxn": 1000, "authHeaderExpr": "`Bearer ${token}`", "tokenTimeoutSecs": 3600, "extractLogs": false}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSystemInputsByPack:
@@ -7303,7 +7304,7 @@ examples:
         application/json: {"id": "<id>", "type": "collection", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "staleChannelFlushMs": 10000, "throttleRatePerSec": "0"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSystemInputsByPack:
@@ -7317,7 +7318,7 @@ examples:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "queueName": "<value>", "queueType": "standard", "createQueue": false, "awsAuthenticationMethod": "auto", "signatureVersion": "v4", "reuseConnections": true, "rejectUnauthorized": true, "enableAssumeRole": false, "durationSeconds": 3600, "maxMessages": 10, "visibilityTimeout": 600, "pollTimeout": 10, "numReceivers": 3}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemOutputsByPack:
@@ -7374,7 +7375,7 @@ examples:
         application/json: {"id": "<id>", "mode": "memory"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSystemLookupsByPackAndId:
@@ -7386,7 +7387,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteBreakersByPackAndId:
@@ -7398,7 +7399,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPipelineId", "conf": {"asyncFuncTimeout": 300, "output": "myOutputDestination", "description": "myPipelineDescription", "streamtags": ["my", "tags"], "functions": [{"filter": "truthy", "id": "myPipelineFunctionConf", "description": "My pipeline fuction configuration description", "disabled": true, "final": true, "conf": {"key": "<value>", "key1": "<value>"}, "groupId": "myUniqueGroupId"}], "groups": {"key": {"name": "myGroupName", "description": "My short description for this pipeline group", "disabled": true}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createRoutesByPack:
@@ -7690,7 +7691,7 @@ examples:
     speakeasy-default-list-default-lake-lakehouses:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "MyLakehouseId", "description": "My Lakehouse description", "status": "operational", "tierSize": "small"}]}
         "400":
           application/json: {}
         "500":
@@ -7700,7 +7701,7 @@ examples:
   createDefaultLakeLakehouse:
     speakeasy-default-create-default-lake-lakehouse:
       requestBody:
-        application/json: {"id": "<id>", "tierSize": "small"}
+        application/json: {"id": "MyLakehouseId", "description": "My Lakehouse description", "status": "operational", "tierSize": "small"}
       responses:
         "201":
           application/json: {"id": "<id>", "tierSize": "small"}
@@ -7709,7 +7710,7 @@ examples:
         "500":
           application/json: {}
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "MyLakehouseId", "description": "My Lakehouse description", "status": "operational", "tierSize": "small"}]}
   getDefaultLakeLakehouseById:
     speakeasy-default-get-default-lake-lakehouse-by-id:
       parameters:
@@ -7717,7 +7718,7 @@ examples:
           id: "myUniqueLakehouseIdToCRUD"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "MyLakehouseId", "description": "My Lakehouse description", "status": "operational", "tierSize": "small"}]}
         "400":
           application/json: {}
         "500":
@@ -7730,10 +7731,10 @@ examples:
         path:
           id: "myUniqueLakehouseIdToCRUD"
       requestBody:
-        application/json: {"id": "<id>", "tierSize": "small"}
+        application/json: {"id": "MyLakehouseId", "description": "My Lakehouse description", "status": "operational", "tierSize": "small"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "MyLakehouseId", "description": "My Lakehouse description", "status": "operational", "tierSize": "small"}]}
         "400":
           application/json: {}
         "500":
@@ -7749,7 +7750,7 @@ examples:
         "500":
           application/json: {"message": "This is my error message string"}
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "MyLakehouseId", "description": "My Lakehouse description", "status": "operational", "tierSize": "small"}]}
   getLakehouseDatasetConnections:
     speakeasy-default-get-lakehouse-dataset-connections:
       parameters:
@@ -7850,7 +7851,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"envRegex": ".*", "group": "mySchemaGroup", "id": "mySchemaId", "mode": "worker", "reportedDeploymentId": "newDeploymentId", "tags": ["my", "tags"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getHealthStatus:

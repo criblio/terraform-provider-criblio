@@ -9,17 +9,17 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         name                    = "...my_name..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   api_azure_data_explorer_provider = {
     client_id     = "...my_client_id..."
     client_secret = "...my_client_secret..."
-    description   = "...my_description..."
-    id            = "...my_id..."
+    description   = "my generic provider description"
+    id            = "myUniqueGenericProviderId"
     tenant_id     = "...my_tenant_id..."
-    type          = "...my_type..."
+    type          = "generic"
   }
   api_azure_provider = {
     account_configs = [
@@ -30,16 +30,16 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         tenant_id     = "...my_tenant_id..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   api_elastic_search_provider = {
-    description = "...my_description..."
+    description = "my generic provider description"
     endpoint    = "...my_endpoint..."
-    id          = "...my_id..."
+    id          = "myUniqueGenericProviderId"
     password    = "...my_password..."
-    type        = "...my_type..."
+    type        = "generic"
     username    = "...my_username..."
   }
   api_gcp_provider = {
@@ -49,9 +49,9 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         service_account_credentials = "...my_service_account_credentials..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   api_google_workspace_provider = {
     account_configs = [
@@ -61,9 +61,9 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         subject                     = "...my_subject..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   apihttp_provider = {
     authentication_method = "none"
@@ -81,9 +81,9 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         url    = "...my_url..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   api_ms_graph_provider = {
     account_configs = [
@@ -94,9 +94,9 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         tenant_id     = "...my_tenant_id..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   api_okta_provider = {
     account_configs = [
@@ -106,16 +106,16 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         name            = "...my_name..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   api_open_search_provider = {
-    description = "...my_description..."
+    description = "my generic provider description"
     endpoint    = "...my_endpoint..."
-    id          = "...my_id..."
+    id          = "myUniqueGenericProviderId"
     password    = "...my_password..."
-    type        = "...my_type..."
+    type        = "generic"
     username    = "...my_username..."
   }
   api_tailscale_provider = {
@@ -126,9 +126,9 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         name          = "...my_name..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   api_zoom_provider = {
     account_configs = [
@@ -139,22 +139,22 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
         name          = "...my_name..."
       }
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   aws_security_lake_provider = {
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   azure_blob_provider = {
     authentication_method = "client_secret"
     client_id             = "...my_client_id..."
     client_secret         = "...my_client_secret..."
     connection_string     = "...my_connection_string..."
-    description           = "...my_description..."
-    id                    = "...my_id..."
+    description           = "my generic provider description"
+    id                    = "myUniqueGenericProviderId"
     location              = "...my_location..."
     sas_configs = [
       {
@@ -164,47 +164,47 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
     ]
     storage_account_name = "...my_storage_account_name..."
     tenant_id            = "...my_tenant_id..."
-    type                 = "...my_type..."
+    type                 = "generic"
   }
   click_house_provider = {
-    description = "...my_description..."
+    description = "my generic provider description"
     endpoint    = "...my_endpoint..."
-    id          = "...my_id..."
+    id          = "myUniqueGenericProviderId"
     password    = "...my_password..."
-    type        = "...my_type..."
+    type        = "generic"
     username    = "...my_username..."
   }
   cribl_leader_provider = {
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   edge_provider = {
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   gcs_provider = {
-    description                 = "...my_description..."
+    description                 = "my generic provider description"
     endpoint                    = "...my_endpoint..."
-    id                          = "...my_id..."
+    id                          = "myUniqueGenericProviderId"
     service_account_credentials = "...my_service_account_credentials..."
-    type                        = "...my_type..."
+    type                        = "generic"
   }
   meta_provider = {
-    description = "...my_description..."
-    id          = "...my_id..."
-    type        = "...my_type..."
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
   }
   prometheus_provider = {
     auth_type       = "none"
-    description     = "...my_description..."
+    description     = "my generic provider description"
     endpoint        = "...my_endpoint..."
-    id              = "...my_id..."
+    id              = "myUniqueGenericProviderId"
     max_concurrency = 9.88
     password        = "...my_password..."
     token           = "...my_token..."
-    type            = "...my_type..."
+    type            = "generic"
     username        = "...my_username..."
   }
   s3_provider = {
@@ -215,27 +215,27 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
     aws_secret_key            = "...my_aws_secret_key..."
     bucket                    = "...my_bucket..."
     bucket_path_suggestion    = "...my_bucket_path_suggestion..."
-    description               = "...my_description..."
+    description               = "my generic provider description"
     enable_abac_tagging       = true
     enable_assume_role        = false
     endpoint                  = "...my_endpoint..."
-    id                        = "...my_id..."
+    id                        = "myUniqueGenericProviderId"
     region                    = "...my_region..."
     reject_unauthorized       = true
     reuse_connections         = false
     session_token             = "...my_session_token..."
     signature_version         = "v4"
-    type                      = "...my_type..."
+    type                      = "generic"
   }
   snowflake_provider = {
     account_identifier = "...my_account_identifier..."
-    description        = "...my_description..."
+    description        = "my generic provider description"
     endpoint           = "...my_endpoint..."
-    id                 = "...my_id..."
+    id                 = "myUniqueGenericProviderId"
     max_concurrency    = 5
     passphrase         = "...my_passphrase..."
     priv_key           = "...my_priv_key..."
-    type               = "...my_type..."
+    type               = "generic"
     username           = "...my_username..."
   }
 }

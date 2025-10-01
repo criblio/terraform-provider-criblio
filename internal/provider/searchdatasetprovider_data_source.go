@@ -29,8 +29,31 @@ type SearchDatasetProviderDataSource struct {
 
 // SearchDatasetProviderDataSourceModel describes the data model.
 type SearchDatasetProviderDataSourceModel struct {
-	ID    types.String              `tfsdk:"id"`
-	Items []tfTypes.GenericProvider `tfsdk:"items"`
+	APIAwsProvider               *tfTypes.APIAwsProvider               `queryParam:"inline" tfsdk:"api_aws_provider" tfPlanOnly:"true"`
+	APIAzureDataExplorerProvider *tfTypes.APIAzureDataExplorerProvider `queryParam:"inline" tfsdk:"api_azure_data_explorer_provider" tfPlanOnly:"true"`
+	APIAzureProvider             *tfTypes.APIAzureProvider             `queryParam:"inline" tfsdk:"api_azure_provider" tfPlanOnly:"true"`
+	APIElasticSearchProvider     *tfTypes.APIElasticSearchProvider     `queryParam:"inline" tfsdk:"api_elastic_search_provider" tfPlanOnly:"true"`
+	APIGcpProvider               *tfTypes.APIGcpProvider               `queryParam:"inline" tfsdk:"api_gcp_provider" tfPlanOnly:"true"`
+	APIGoogleWorkspaceProvider   *tfTypes.APIGoogleWorkspaceProvider   `queryParam:"inline" tfsdk:"api_google_workspace_provider" tfPlanOnly:"true"`
+	APIHTTPProvider              *tfTypes.APIHTTPProvider              `queryParam:"inline" tfsdk:"apihttp_provider" tfPlanOnly:"true"`
+	APIMsGraphProvider           *tfTypes.APIMsGraphProvider           `queryParam:"inline" tfsdk:"api_ms_graph_provider" tfPlanOnly:"true"`
+	APIOktaProvider              *tfTypes.APIOktaProvider              `queryParam:"inline" tfsdk:"api_okta_provider" tfPlanOnly:"true"`
+	APIOpenSearchProvider        *tfTypes.APIOpenSearchProvider        `queryParam:"inline" tfsdk:"api_open_search_provider" tfPlanOnly:"true"`
+	APITailscaleProvider         *tfTypes.APITailscaleProvider         `queryParam:"inline" tfsdk:"api_tailscale_provider" tfPlanOnly:"true"`
+	APIZoomProvider              *tfTypes.APIZoomProvider              `queryParam:"inline" tfsdk:"api_zoom_provider" tfPlanOnly:"true"`
+	AwsSecurityLakeProvider      *tfTypes.AwsSecurityLakeProvider      `queryParam:"inline" tfsdk:"aws_security_lake_provider" tfPlanOnly:"true"`
+	AzureBlobProvider            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob_provider" tfPlanOnly:"true"`
+	ClickHouseProvider           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"click_house_provider" tfPlanOnly:"true"`
+	CriblLeaderProvider          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader_provider" tfPlanOnly:"true"`
+	Description                  types.String                          `tfsdk:"description"`
+	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider" tfPlanOnly:"true"`
+	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider" tfPlanOnly:"true"`
+	ID                           types.String                          `tfsdk:"id"`
+	MetaProvider                 *tfTypes.MetaProvider                 `queryParam:"inline" tfsdk:"meta_provider" tfPlanOnly:"true"`
+	PrometheusProvider           *tfTypes.PrometheusProvider           `queryParam:"inline" tfsdk:"prometheus_provider" tfPlanOnly:"true"`
+	S3Provider                   *tfTypes.S3Provider                   `queryParam:"inline" tfsdk:"s3_provider" tfPlanOnly:"true"`
+	SnowflakeProvider            *tfTypes.SnowflakeProvider            `queryParam:"inline" tfsdk:"snowflake_provider" tfPlanOnly:"true"`
+	Type                         types.String                          `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -44,694 +67,12 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 		MarkdownDescription: "SearchDatasetProvider DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to GET`,
-			},
-			"items": schema.ListNestedAttribute{
+			"api_aws_provider": schema.SingleNestedAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"api_aws_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"assume_role_arn": schema.StringAttribute{
-												Computed:    true,
-												Description: `ARN of the role to assume`,
-											},
-											"assume_role_external_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `External ID for role assumption`,
-											},
-											"aws_api_key": schema.StringAttribute{
-												Computed:    true,
-												Description: `AWS access key`,
-											},
-											"aws_secret_key": schema.StringAttribute{
-												Computed:    true,
-												Description: `AWS secret key`,
-											},
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Account name`,
-											},
-										},
-									},
-									Description: `A list of account configurations`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"api_azure_data_explorer_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"client_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `The Client ID (also known as Secret ID) of the authorized application`,
-								},
-								"client_secret": schema.StringAttribute{
-									Computed:    true,
-									Description: `The Client Secret of the authorized application`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"tenant_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `The Tenant ID of the authorized application`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"api_azure_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"client_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `The clientId of the service principal`,
-											},
-											"client_secret": schema.StringAttribute{
-												Computed:    true,
-												Description: `The client secret of the service principal`,
-											},
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Account name`,
-											},
-											"tenant_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `The ID of your Azure tenant`,
-											},
-										},
-									},
-									Description: `A list of account configurations`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"api_elastic_search_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"endpoint": schema.StringAttribute{
-									Computed:    true,
-									Description: `Elasticsearch API endpoint URL`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"password": schema.StringAttribute{
-									Computed:    true,
-									Description: `Elasticsearch password for authentication`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-								"username": schema.StringAttribute{
-									Computed:    true,
-									Description: `Elasticsearch username for authentication`,
-								},
-							},
-						},
-						"api_gcp_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Account name`,
-											},
-											"service_account_credentials": schema.StringAttribute{
-												Computed:    true,
-												Description: `JSON blob downloaded from the Google Cloud Console, containing creds for a service account`,
-											},
-										},
-									},
-									Description: `A list of account configurations`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"api_google_workspace_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"name": schema.StringAttribute{
-												Computed: true,
-											},
-											"service_account_credentials": schema.StringAttribute{
-												Computed:    true,
-												Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
-											},
-											"subject": schema.StringAttribute{
-												Computed:    true,
-												Description: `Email matching Google service account of the authorized principal whose role this integration is assuming`,
-											},
-										},
-									},
-									Description: `A list of account configurations`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"apihttp_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"authentication_method": schema.StringAttribute{
-									Computed:    true,
-									Description: `The authentication method for API calls`,
-								},
-								"available_endpoints": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"data_field": schema.StringAttribute{
-												Computed:    true,
-												Description: `Within the response JSON, name of the field or array element to pull results from`,
-											},
-											"headers": schema.ListNestedAttribute{
-												Computed: true,
-												NestedObject: schema.NestedAttributeObject{
-													Attributes: map[string]schema.Attribute{
-														"name": schema.StringAttribute{
-															Computed:    true,
-															Description: `Header name`,
-														},
-														"value": schema.StringAttribute{
-															Computed:    true,
-															Description: `Header value`,
-														},
-													},
-												},
-												Description: `Optional headers for the endpoint`,
-											},
-											"method": schema.StringAttribute{
-												Computed:    true,
-												Description: `Method for the endpoint`,
-											},
-											"name": schema.StringAttribute{
-												Computed: true,
-											},
-											"url": schema.StringAttribute{
-												Computed:    true,
-												Description: `The URL for this endpoint`,
-											},
-										},
-									},
-									Description: `A list of the available endpoints for this provider`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"api_ms_graph_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"client_id": schema.StringAttribute{
-												Computed: true,
-											},
-											"client_secret": schema.StringAttribute{
-												Computed: true,
-											},
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Azure account name`,
-											},
-											"tenant_id": schema.StringAttribute{
-												Computed: true,
-											},
-										},
-									},
-									Description: `A list of account configurations`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"api_okta_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"api_token": schema.StringAttribute{
-												Computed:    true,
-												Description: `API token for authorizing requests`,
-											},
-											"domain_endpoint": schema.StringAttribute{
-												Computed:    true,
-												Description: `URL for the subdomain of your organization. Example: subdomain.okta.com`,
-											},
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Okta account name`,
-											},
-										},
-									},
-									Description: `A list of account configurations`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"api_open_search_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"endpoint": schema.StringAttribute{
-									Computed:    true,
-									Description: `OpenSearch API endpoint URL. Example: https://opensearch.mycompany.com`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"password": schema.StringAttribute{
-									Computed:    true,
-									Description: `OpenSearch password for authentication`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-								"username": schema.StringAttribute{
-									Computed:    true,
-									Description: `OpenSearch username for authentication`,
-								},
-							},
-						},
-						"api_tailscale_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"client_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Client ID string`,
-											},
-											"client_secret": schema.StringAttribute{
-												Computed:    true,
-												Description: `Client secret string`,
-											},
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Tailscale account name`,
-											},
-										},
-									},
-									Description: `A list of account configuration`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"api_zoom_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"account_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Zoom account ID`,
-											},
-											"client_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Client ID string`,
-											},
-											"client_secret": schema.StringAttribute{
-												Computed:    true,
-												Description: `Client secret string`,
-											},
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Zoom account name`,
-											},
-										},
-									},
-									Description: `A list of account configurations`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"aws_security_lake_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"azure_blob_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"authentication_method": schema.StringAttribute{
-									Computed:    true,
-									Description: `Azure Storage authentication method`,
-								},
-								"client_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `The service principal's client ID`,
-								},
-								"client_secret": schema.StringAttribute{
-									Computed:    true,
-									Description: `The service principal's client secret`,
-								},
-								"connection_string": schema.StringAttribute{
-									Computed:    true,
-									Description: `Storage account connection string`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"location": schema.StringAttribute{
-									Computed:    true,
-									Description: `Primary region in which the storage account is located`,
-								},
-								"sas_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"blob_sas_url": schema.StringAttribute{
-												Computed:    true,
-												Description: `Container-specific Blob SAS URL`,
-											},
-											"container_name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Name of the Azure Blob Storage container`,
-											},
-										},
-									},
-									Description: `A list of container-specific SAS configurations`,
-								},
-								"storage_account_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `The name of your Azure storage account`,
-								},
-								"tenant_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `The service principal's tenant ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"click_house_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"endpoint": schema.StringAttribute{
-									Computed:    true,
-									Description: `URL to ClickHouse server with HTTP interface enabled. Ideally should be HTTPS over port 8443.`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"password": schema.StringAttribute{
-									Computed:    true,
-									Description: `The ClickHouse user password for authentication`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-								"username": schema.StringAttribute{
-									Computed:    true,
-									Description: `The ClickHouse username for authentication`,
-								},
-							},
-						},
-						"cribl_leader_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"edge_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"gcs_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"endpoint": schema.StringAttribute{
-									Computed:    true,
-									Description: `Google Cloud Storage service endpoint`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"service_account_credentials": schema.StringAttribute{
-									Computed:    true,
-									Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"meta_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-							},
-						},
-						"prometheus_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"auth_type": schema.StringAttribute{
-									Computed: true,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"endpoint": schema.StringAttribute{
-									Computed:    true,
-									Description: `Prometheus API endpoint URL. Example: https://prometheus.goats.biz`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"max_concurrency": schema.Float64Attribute{
-									Computed:    true,
-									Description: `Maximum number of concurrent API requests`,
-								},
-								"password": schema.StringAttribute{
-									Computed:    true,
-									Description: `Basic auth password`,
-								},
-								"token": schema.StringAttribute{
-									Computed:    true,
-									Description: `Bearer token`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-								"username": schema.StringAttribute{
-									Computed:    true,
-									Description: `Basic auth username`,
-								},
-							},
-						},
-						"s3_provider": schema.SingleNestedAttribute{
-							Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"assume_role_arn": schema.StringAttribute{
 									Computed:    true,
@@ -745,111 +86,794 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 									Computed:    true,
 									Description: `AWS access key`,
 								},
-								"aws_authentication_method": schema.StringAttribute{
-									Computed:    true,
-									Description: `AWS authentication method`,
-								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
 									Description: `AWS secret key`,
 								},
-								"bucket": schema.StringAttribute{
+								"name": schema.StringAttribute{
 									Computed:    true,
-									Description: `S3 bucket name`,
-								},
-								"bucket_path_suggestion": schema.StringAttribute{
-									Computed:    true,
-									Description: `Suggested bucket path`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"enable_abac_tagging": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Whether to enable ABAC source-ip tagging`,
-								},
-								"enable_assume_role": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Whether to enable role assumption`,
-								},
-								"endpoint": schema.StringAttribute{
-									Computed:    true,
-									Description: `S3 endpoint URL`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"region": schema.StringAttribute{
-									Computed:    true,
-									Description: `AWS region`,
-								},
-								"reject_unauthorized": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Whether to reject unauthorized requests`,
-								},
-								"reuse_connections": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Whether to reuse connections`,
-								},
-								"session_token": schema.StringAttribute{
-									Computed:    true,
-									Description: `AWS session token`,
-								},
-								"signature_version": schema.StringAttribute{
-									Computed:    true,
-									Description: `AWS signature version`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
+									Description: `Account name`,
 								},
 							},
 						},
-						"snowflake_provider": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"account_identifier": schema.StringAttribute{
-									Computed:    true,
-									Description: `The Snowflake account identifier, in the format <orgname>-<account_name>`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the provider`,
-								},
-								"endpoint": schema.StringAttribute{
-									Computed:    true,
-									Description: `Optional endpoint to override default REST API endpoint`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the provider`,
-								},
-								"max_concurrency": schema.Int64Attribute{
-									Computed:    true,
-									Description: `Total number of concurrent executors for processing Snowflake partitions`,
-								},
-								"passphrase": schema.StringAttribute{
-									Computed:    true,
-									Description: `The key password for the private key`,
-								},
-								"priv_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `The private key string out of the key file, from the pair of keys generated for authentication`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the provider`,
-								},
-								"username": schema.StringAttribute{
-									Computed:    true,
-									Description: `The Snowflake user for key pair authentication`,
-								},
-							},
-						},
+						Description: `A list of account configurations`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
 					},
 				},
+			},
+			"api_azure_data_explorer_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"client_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Client ID (also known as Secret ID) of the authorized application`,
+					},
+					"client_secret": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Client Secret of the authorized application`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"tenant_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Tenant ID of the authorized application`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_azure_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The clientId of the service principal`,
+								},
+								"client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `The client secret of the service principal`,
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Account name`,
+								},
+								"tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The ID of your Azure tenant`,
+								},
+							},
+						},
+						Description: `A list of account configurations`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_elastic_search_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `Elasticsearch API endpoint URL`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"password": schema.StringAttribute{
+						Computed:    true,
+						Description: `Elasticsearch password for authentication`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+					"username": schema.StringAttribute{
+						Computed:    true,
+						Description: `Elasticsearch username for authentication`,
+					},
+				},
+			},
+			"api_gcp_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Account name`,
+								},
+								"service_account_credentials": schema.StringAttribute{
+									Computed:    true,
+									Description: `JSON blob downloaded from the Google Cloud Console, containing creds for a service account`,
+								},
+							},
+						},
+						Description: `A list of account configurations`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_google_workspace_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed: true,
+								},
+								"service_account_credentials": schema.StringAttribute{
+									Computed:    true,
+									Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
+								},
+								"subject": schema.StringAttribute{
+									Computed:    true,
+									Description: `Email matching Google service account of the authorized principal whose role this integration is assuming`,
+								},
+							},
+						},
+						Description: `A list of account configurations`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"apihttp_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"authentication_method": schema.StringAttribute{
+						Computed:    true,
+						Description: `The authentication method for API calls`,
+					},
+					"available_endpoints": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"data_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Within the response JSON, name of the field or array element to pull results from`,
+								},
+								"headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Header name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Header value`,
+											},
+										},
+									},
+									Description: `Optional headers for the endpoint`,
+								},
+								"method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Method for the endpoint`,
+								},
+								"name": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The URL for this endpoint`,
+								},
+							},
+						},
+						Description: `A list of the available endpoints for this provider`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_ms_graph_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"client_id": schema.StringAttribute{
+									Computed: true,
+								},
+								"client_secret": schema.StringAttribute{
+									Computed: true,
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Azure account name`,
+								},
+								"tenant_id": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						Description: `A list of account configurations`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_okta_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"api_token": schema.StringAttribute{
+									Computed:    true,
+									Description: `API token for authorizing requests`,
+								},
+								"domain_endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL for the subdomain of your organization. Example: subdomain.okta.com`,
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Okta account name`,
+								},
+							},
+						},
+						Description: `A list of account configurations`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_open_search_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `OpenSearch API endpoint URL. Example: https://opensearch.mycompany.com`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"password": schema.StringAttribute{
+						Computed:    true,
+						Description: `OpenSearch password for authentication`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+					"username": schema.StringAttribute{
+						Computed:    true,
+						Description: `OpenSearch username for authentication`,
+					},
+				},
+			},
+			"api_tailscale_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Client ID string`,
+								},
+								"client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Client secret string`,
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Tailscale account name`,
+								},
+							},
+						},
+						Description: `A list of account configuration`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_zoom_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Zoom account ID`,
+								},
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Client ID string`,
+								},
+								"client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Client secret string`,
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Zoom account name`,
+								},
+							},
+						},
+						Description: `A list of account configurations`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"aws_security_lake_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"azure_blob_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"authentication_method": schema.StringAttribute{
+						Computed:    true,
+						Description: `Azure Storage authentication method`,
+					},
+					"client_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `The service principal's client ID`,
+					},
+					"client_secret": schema.StringAttribute{
+						Computed:    true,
+						Description: `The service principal's client secret`,
+					},
+					"connection_string": schema.StringAttribute{
+						Computed:    true,
+						Description: `Storage account connection string`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"location": schema.StringAttribute{
+						Computed:    true,
+						Description: `Primary region in which the storage account is located`,
+					},
+					"sas_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"blob_sas_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Container-specific Blob SAS URL`,
+								},
+								"container_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the Azure Blob Storage container`,
+								},
+							},
+						},
+						Description: `A list of container-specific SAS configurations`,
+					},
+					"storage_account_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `The name of your Azure storage account`,
+					},
+					"tenant_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `The service principal's tenant ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"click_house_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `URL to ClickHouse server with HTTP interface enabled. Ideally should be HTTPS over port 8443.`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"password": schema.StringAttribute{
+						Computed:    true,
+						Description: `The ClickHouse user password for authentication`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+					"username": schema.StringAttribute{
+						Computed:    true,
+						Description: `The ClickHouse username for authentication`,
+					},
+				},
+			},
+			"cribl_leader_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"description": schema.StringAttribute{
+				Computed:    true,
+				Description: `Description of the provider`,
+			},
+			"edge_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"gcs_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `Google Cloud Storage service endpoint`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"service_account_credentials": schema.StringAttribute{
+						Computed:    true,
+						Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET`,
+			},
+			"meta_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"prometheus_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"auth_type": schema.StringAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `Prometheus API endpoint URL. Example: https://prometheus.goats.biz`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"max_concurrency": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of concurrent API requests`,
+					},
+					"password": schema.StringAttribute{
+						Computed:    true,
+						Description: `Basic auth password`,
+					},
+					"token": schema.StringAttribute{
+						Computed:    true,
+						Description: `Bearer token`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+					"username": schema.StringAttribute{
+						Computed:    true,
+						Description: `Basic auth username`,
+					},
+				},
+			},
+			"s3_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"assume_role_arn": schema.StringAttribute{
+						Computed:    true,
+						Description: `ARN of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `External ID for role assumption`,
+					},
+					"aws_api_key": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS access key`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS authentication method`,
+					},
+					"aws_secret_key": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS secret key`,
+					},
+					"bucket": schema.StringAttribute{
+						Computed:    true,
+						Description: `S3 bucket name`,
+					},
+					"bucket_path_suggestion": schema.StringAttribute{
+						Computed:    true,
+						Description: `Suggested bucket path`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"enable_abac_tagging": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to enable ABAC source-ip tagging`,
+					},
+					"enable_assume_role": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to enable role assumption`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `S3 endpoint URL`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS region`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to reject unauthorized requests`,
+					},
+					"reuse_connections": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to reuse connections`,
+					},
+					"session_token": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS session token`,
+					},
+					"signature_version": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS signature version`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"snowflake_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"account_identifier": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Snowflake account identifier, in the format <orgname>-<account_name>`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional endpoint to override default REST API endpoint`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"max_concurrency": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Total number of concurrent executors for processing Snowflake partitions`,
+					},
+					"passphrase": schema.StringAttribute{
+						Computed:    true,
+						Description: `The key password for the private key`,
+					},
+					"priv_key": schema.StringAttribute{
+						Computed:    true,
+						Description: `The private key string out of the key file, from the pair of keys generated for authentication`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+					"username": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Snowflake user for key pair authentication`,
+					},
+				},
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `Type of the provider`,
 			},
 		},
 	}
@@ -915,11 +939,11 @@ func (r *SearchDatasetProviderDataSource) Read(ctx context.Context, req datasour
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatasetProviderByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGenericProvider(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

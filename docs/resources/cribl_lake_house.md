@@ -14,10 +14,10 @@ CriblLakeHouse Resource
 
 ```terraform
 resource "criblio_cribl_lake_house" "my_cribllakehouse" {
-  description = "...my_description..."
-  id          = "myUniqueLakehouseIdToCRUD"
-  status      = "...my_status..."
-  tier_size   = "3xlarge"
+  description = "My Lakehouse description"
+  id          = "MyLakehouseId"
+  status      = "operational"
+  tier_size   = "small"
 }
 ```
 
@@ -31,6 +31,20 @@ resource "criblio_cribl_lake_house" "my_cribllakehouse" {
 ### Optional
 
 - `description` (String) Description of the lakehouse
+- `status` (String) Status of the lakehouse
+- `tier_size` (String) Size of the lakehouse tier. Default: "small"; must be one of ["small", "medium", "large", "xlarge", "2xlarge", "3xlarge", "6xlarge"]
+
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `description` (String) Description of the lakehouse
+- `id` (String) Unique identifier for the lakehouse
 - `status` (String) Status of the lakehouse
 - `tier_size` (String) Size of the lakehouse tier. Default: "small"; must be one of ["small", "medium", "large", "xlarge", "2xlarge", "3xlarge", "6xlarge"]
 

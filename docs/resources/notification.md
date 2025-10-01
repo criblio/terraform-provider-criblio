@@ -14,17 +14,17 @@ Notification Resource
 
 ```terraform
 resource "criblio_notification" "my_notification" {
-  condition = "...my_condition..."
+  condition = "true"
   conf = {
-    message            = "...my_message..."
-    saved_query_id     = "...my_saved_query_id..."
-    trigger_comparator = "...my_trigger_comparator..."
-    trigger_count      = 0.24
-    trigger_type       = "...my_trigger_type..."
+    message            = "Message for notification"
+    saved_query_id     = "savedQueryId"
+    trigger_comparator = ">"
+    trigger_count      = 0
+    trigger_type       = "resultsCount"
   }
   disabled = false
-  group    = "...my_group..."
-  id       = "myNotificationIdToCRUD"
+  group    = "myNotificationGroup"
+  id       = "myUniqueNotificationId"
   target_configs = [
     {
       conf = {
@@ -35,7 +35,8 @@ resource "criblio_notification" "my_notification" {
     }
   ]
   targets = [
-    "..."
+    "target1",
+    "target2",
   ]
 }
 ```

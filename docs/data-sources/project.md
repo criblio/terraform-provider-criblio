@@ -29,10 +29,18 @@ data "criblio_project" "my_project" {
 
 ### Read-Only
 
-- `consumers` (Attributes) (see [below for nested schema](#nestedatt--consumers))
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `consumers` (Attributes) (see [below for nested schema](#nestedatt--items--consumers))
 - `description` (String)
 - `destinations` (List of String)
+- `id` (String)
 - `subscriptions` (List of String)
 
-<a id="nestedatt--consumers"></a>
-### Nested Schema for `consumers`
+<a id="nestedatt--items--consumers"></a>
+### Nested Schema for `items.consumers`

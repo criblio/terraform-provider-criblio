@@ -1,13 +1,15 @@
 resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
   accelerated_fields = [
-    "..."
+    "fields",
+    "to",
+    "accelerate",
   ]
-  bucket_name              = "...my_bucket_name..."
-  description              = "...my_description..."
+  bucket_name              = "my-Lake-bucket-name"
+  description              = "My description for this beautiful lake dataset"
   format                   = "json"
   id                       = "myLakeDatasetToCRUD"
   lake_id                  = "myUniqueLakeIdToCRUD"
-  retention_period_in_days = 3.75
+  retention_period_in_days = 30
   search_config = {
     datatypes = [
       "..."
