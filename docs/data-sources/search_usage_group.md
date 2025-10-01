@@ -22,9 +22,16 @@ data "criblio_search_usage_group" "my_searchusagegroup" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `coordinator_heap_memory_limit` (Number)
 - `description` (String)
 - `enabled` (Boolean)
-- `id` (String) The ID of this resource.
+- `id` (String)
 - `rules` (String) Parsed as JSON.
 - `users_count` (Number)

@@ -5,7 +5,7 @@ resource "criblio_pack_routes" "my_packroutes" {
       comment               = "...my_comment..."
     }
   ]
-  group_id = "...my_group_id..."
+  group_id = "myExistingGroupId"
   groups = {
     key = {
       description = "...my_description..."
@@ -14,7 +14,7 @@ resource "criblio_pack_routes" "my_packroutes" {
     }
   }
   id   = "...my_id..."
-  pack = "...my_pack..."
+  pack = "myExistingPackId"
   routes = [
     {
       additional_properties    = "{ \"see\": \"documentation\" }"

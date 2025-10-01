@@ -1,1 +1,1 @@
-terraform import criblio_parser_lib_entry.my_criblio_parser_lib_entry "..."
+terraform import criblio_parser_lib_entry.my_criblio_parser_lib_entry "myExistingGroupId"

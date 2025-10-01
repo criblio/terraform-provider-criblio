@@ -1,3 +1,3 @@
 data "criblio_routes" "my_routes" {
-  group_id = "default"
+  group_id = "myExistingGroupId"
 }

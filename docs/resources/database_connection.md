@@ -20,8 +20,8 @@ resource "criblio_database_connection" "my_databaseconnection" {
   connection_timeout = 9.28
   database_type      = "oracle"
   description        = "...my_description..."
-  group_id           = "...my_group_id..."
-  id                 = "...my_id..."
+  group_id           = "myExistingGroupId"
+  id                 = "myUniqueDatabaseConnIdToCRUD"
   password           = "...my_password..."
   request_timeout    = 0.19
   tags               = "...my_tags..."
@@ -50,6 +50,27 @@ resource "criblio_database_connection" "my_databaseconnection" {
 - `tags` (String)
 - `user` (String)
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `auth_type` (String)
+- `config_obj` (String)
+- `connection_string` (String)
+- `connection_timeout` (Number)
+- `database_type` (String) must be one of ["mysql", "oracle", "postgres", "sqlserver"]
+- `description` (String)
+- `id` (String)
+- `password` (String)
+- `request_timeout` (Number)
+- `tags` (String)
+- `user` (String)
+
 ## Import
 
 Import is supported using the following syntax:
@@ -60,8 +81,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_database_connection.my_criblio_database_connection
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueDatabaseConnIdToCRUD"
   })
 }
 ```
@@ -69,5 +90,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_database_connection.my_criblio_database_connection '{"group_id": "...", "id": "..."}'
+terraform import criblio_database_connection.my_criblio_database_connection '{"group_id": "myExistingGroupId", "id": "myUniqueDatabaseConnIdToCRUD"}'
 ```

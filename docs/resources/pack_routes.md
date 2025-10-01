@@ -20,7 +20,7 @@ resource "criblio_pack_routes" "my_packroutes" {
       comment               = "...my_comment..."
     }
   ]
-  group_id = "...my_group_id..."
+  group_id = "myExistingGroupId"
   groups = {
     key = {
       description = "...my_description..."
@@ -29,7 +29,7 @@ resource "criblio_pack_routes" "my_packroutes" {
     }
   }
   id   = "...my_id..."
-  pack = "...my_pack..."
+  pack = "myExistingPackId"
   routes = [
     {
       additional_properties    = "{ \"see\": \"documentation\" }"
@@ -164,8 +164,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_routes.my_criblio_pack_routes
   id = jsonencode({
-    group_id = "..."
-    pack = "..."
+    group_id = "myExistingGroupId"
+    pack = "myExistingPackId"
   })
 }
 ```
@@ -173,5 +173,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_routes.my_criblio_pack_routes '{"group_id": "...", "pack": "..."}'
+terraform import criblio_pack_routes.my_criblio_pack_routes '{"group_id": "myExistingGroupId", "pack": "myExistingPackId"}'
 ```

@@ -1,1 +1,1 @@
-terraform import criblio_search_dataset.my_criblio_search_dataset "..."
+terraform import criblio_search_dataset.my_criblio_search_dataset "myUniqueDatasetIdToCRUD"

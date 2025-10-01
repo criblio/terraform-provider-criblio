@@ -1,6 +1,6 @@
 resource "criblio_collector" "my_collector" {
-  group_id = "default"
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myJobIdToQuery"
   input_collector_azure_blob = {
     collector = {
       conf = {

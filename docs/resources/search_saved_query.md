@@ -77,12 +77,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_search_saved_query.my_criblio_search_saved_query
-  id = "..."
+  id = "myUniqueSavedSearchIdToCRUD"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_search_saved_query.my_criblio_search_saved_query "..."
+terraform import criblio_search_saved_query.my_criblio_search_saved_query "myUniqueSavedSearchIdToCRUD"
 ```

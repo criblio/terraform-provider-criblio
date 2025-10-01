@@ -8,7 +8,7 @@ import (
 )
 
 type CreateEdgeAppscopeProcessesRequest struct {
-	// config string required
+	// Process ID number to target
 	Pid string `queryParam:"style=form,explode=true,name=pid"`
 }
 

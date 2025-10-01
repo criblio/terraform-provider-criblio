@@ -14,7 +14,7 @@ type UpdatePacksByIDRequest struct {
 	Source *string `queryParam:"style=form,explode=true,name=source"`
 	// body boolean optional Only upgrade to minor/patch versions
 	Minor *string `queryParam:"style=form,explode=true,name=minor"`
-	// body string optional Specify a branch, tag or a semver spec
+	// (optional) body string. Specify a branch, tag or a semver spec
 	Spec *string `queryParam:"style=form,explode=true,name=spec"`
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID  string `pathParam:"style=simple,explode=false,name=groupId"`

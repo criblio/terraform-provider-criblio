@@ -1,4 +1,4 @@
 resource "criblio_deploy" "my_deploy" {
-  id      = "...my_id..."
+  id      = "myExistingGroupId"
   version = "...my_version..."
 }

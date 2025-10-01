@@ -1001,6 +1001,13 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
+	var inputGrafana InputGrafana = InputGrafana{}
+	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
+		u.InputGrafana = &inputGrafana
+		u.Type = InputTypeInputGrafana
+		return nil
+	}
+
 	var inputPrometheus InputPrometheus = InputPrometheus{}
 	if err := utils.UnmarshalJSON(data, &inputPrometheus, "", true, nil); err == nil {
 		u.InputPrometheus = &inputPrometheus
@@ -1043,24 +1050,17 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	var inputNetflow InputNetflow = InputNetflow{}
-	if err := utils.UnmarshalJSON(data, &inputNetflow, "", true, nil); err == nil {
-		u.InputNetflow = &inputNetflow
-		u.Type = InputTypeInputNetflow
-		return nil
-	}
-
-	var inputGrafana InputGrafana = InputGrafana{}
-	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
-		u.InputGrafana = &inputGrafana
-		u.Type = InputTypeInputGrafana
-		return nil
-	}
-
 	var inputSyslog InputSyslog = InputSyslog{}
 	if err := utils.UnmarshalJSON(data, &inputSyslog, "", true, nil); err == nil {
 		u.InputSyslog = &inputSyslog
 		u.Type = InputTypeInputSyslog
+		return nil
+	}
+
+	var inputNetflow InputNetflow = InputNetflow{}
+	if err := utils.UnmarshalJSON(data, &inputNetflow, "", true, nil); err == nil {
+		u.InputNetflow = &inputNetflow
+		u.Type = InputTypeInputNetflow
 		return nil
 	}
 

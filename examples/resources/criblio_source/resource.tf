@@ -1,6 +1,6 @@
 resource "criblio_source" "my_source" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniqueInputIdToCRUD"
   input_appscope = {
     auth_token = "...my_auth_token..."
     auth_type  = "manual"

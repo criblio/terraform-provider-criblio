@@ -50,8 +50,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_regex.my_criblio_regex
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueRegexIdToCrud"
   })
 }
 ```
@@ -59,5 +59,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_regex.my_criblio_regex '{"group_id": "...", "id": "..."}'
+terraform import criblio_regex.my_criblio_regex '{"group_id": "myExistingGroupId", "id": "myUniqueRegexIdToCrud"}'
 ```

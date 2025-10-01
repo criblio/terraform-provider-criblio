@@ -14,8 +14,8 @@ Source Resource
 
 ```terraform
 resource "criblio_source" "my_source" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniqueInputIdToCRUD"
   input_appscope = {
     auth_token = "...my_auth_token..."
     auth_type  = "manual"
@@ -10353,8 +10353,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_source.my_criblio_source
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueInputIdToCRUD"
   })
 }
 ```
@@ -10362,5 +10362,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_source.my_criblio_source '{"group_id": "...", "id": "..."}'
+terraform import criblio_source.my_criblio_source '{"group_id": "myExistingGroupId", "id": "myUniqueInputIdToCRUD"}'
 ```

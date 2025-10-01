@@ -20,7 +20,7 @@ resource "criblio_routes" "my_routes" {
       comment               = "...my_comment..."
     }
   ]
-  group_id = "default"
+  group_id = "myExistingGroupId"
   groups = {
     key = {
       description = "...my_description..."
@@ -161,12 +161,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_routes.my_criblio_routes
-  id = "default"
+  id = "myExistingGroupId"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_routes.my_criblio_routes "default"
+terraform import criblio_routes.my_criblio_routes "myExistingGroupId"
 ```

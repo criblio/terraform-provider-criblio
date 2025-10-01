@@ -36,7 +36,7 @@ resource "criblio_group" "my_group" {
       }
     ]
   }
-  id                        = "...my_id..."
+  id                        = "myUniqueGroupIdToCRUD"
   incompatible_worker_count = 0.87
   inherits                  = "...my_inherits..."
   is_fleet                  = false
@@ -55,7 +55,7 @@ resource "criblio_group" "my_group" {
   ]
   name        = "...my_name..."
   on_prem     = false
-  product     = "stream"
+  product     = "edge"
   provisioned = true
   streamtags = [
     "..."
@@ -195,12 +195,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_group.my_criblio_group
-  id = "..."
+  id = "myExistingGroupId"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_group.my_criblio_group "..."
+terraform import criblio_group.my_criblio_group "myExistingGroupId"
 ```

@@ -15,8 +15,8 @@ Grok Resource
 ```terraform
 resource "criblio_grok" "my_grok" {
   content  = "...my_content..."
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myGrokIdToCRUD"
   size     = 6.73
   tags     = "...my_tags..."
 }
@@ -46,8 +46,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_grok.my_criblio_grok
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myGrokIdToCRUD"
   })
 }
 ```
@@ -55,5 +55,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_grok.my_criblio_grok '{"group_id": "...", "id": "..."}'
+terraform import criblio_grok.my_criblio_grok '{"group_id": "myExistingGroupId", "id": "myGrokIdToCRUD"}'
 ```

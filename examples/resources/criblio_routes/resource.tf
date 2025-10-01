@@ -5,7 +5,7 @@ resource "criblio_routes" "my_routes" {
       comment               = "...my_comment..."
     }
   ]
-  group_id = "default"
+  group_id = "myExistingGroupId"
   groups = {
     key = {
       description = "...my_description..."

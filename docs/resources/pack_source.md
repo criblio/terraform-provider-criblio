@@ -14,8 +14,8 @@ PackSource Resource
 
 ```terraform
 resource "criblio_pack_source" "my_packsource" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniquePackIdToCRUD"
   input_appscope = {
     auth_token = "...my_auth_token..."
     auth_type  = "secret"
@@ -4148,7 +4148,7 @@ resource "criblio_pack_source" "my_packsource" {
     }
     type = "zscaler_hec"
   }
-  pack = "...my_pack..."
+  pack = "myExistingPackId"
 }
 ```
 
@@ -10672,9 +10672,9 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_source.my_criblio_pack_source
   id = jsonencode({
-    group_id = "..."
-    id = "..."
-    pack = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueInputIdToCRUD"
+    pack = "myExistingPackId"
   })
 }
 ```
@@ -10682,5 +10682,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_source.my_criblio_pack_source '{"group_id": "...", "id": "...", "pack": "..."}'
+terraform import criblio_pack_source.my_criblio_pack_source '{"group_id": "myExistingGroupId", "id": "myUniqueInputIdToCRUD", "pack": "myExistingPackId"}'
 ```

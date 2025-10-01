@@ -15,36 +15,37 @@ PackPipeline Resource
 ```terraform
 resource "criblio_pack_pipeline" "my_packpipeline" {
   conf = {
-    async_func_timeout = 9066
-    description        = "...my_description..."
+    async_func_timeout = 300
+    description        = "myPipelineDescription"
     functions = [
       {
         conf = {
           key = jsonencode("value")
         }
-        description = "...my_description..."
-        disabled    = false
-        filter      = "...my_filter..."
+        description = "My pipeline fuction configuration description"
+        disabled    = true
+        filter      = "truthy"
         final       = true
-        group_id    = "...my_group_id..."
-        id          = "...my_id..."
+        group_id    = "myUniqueGroupId"
+        id          = "myPipelineFunctionConf"
       }
     ]
     groups = {
       key = {
-        description = "...my_description..."
+        description = "My short description for this pipeline group"
         disabled    = true
-        name        = "...my_name..."
+        name        = "myGroupName"
       }
     }
-    output = "...my_output..."
+    output = "myOutputDestination"
     streamtags = [
-      "..."
+      "my",
+      "tags",
     ]
   }
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
-  pack     = "...my_pack..."
+  group_id = "myExistingGroupId"
+  id       = "myPipelineId"
+  pack     = "myExistingPackId"
 }
 ```
 
@@ -161,9 +162,9 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_pipeline.my_criblio_pack_pipeline
   id = jsonencode({
-    group_id = "..."
-    id = "..."
-    pack = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniquePipelineIdToCRUD"
+    pack = "myExistingPackId"
   })
 }
 ```
@@ -171,5 +172,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_pipeline.my_criblio_pack_pipeline '{"group_id": "...", "id": "...", "pack": "..."}'
+terraform import criblio_pack_pipeline.my_criblio_pack_pipeline '{"group_id": "myExistingGroupId", "id": "myUniquePipelineIdToCRUD", "pack": "myExistingPackId"}'
 ```

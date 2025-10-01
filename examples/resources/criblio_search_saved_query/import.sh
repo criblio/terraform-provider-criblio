@@ -1,1 +1,1 @@
-terraform import criblio_search_saved_query.my_criblio_search_saved_query "..."
+terraform import criblio_search_saved_query.my_criblio_search_saved_query "myUniqueSavedSearchIdToCRUD"

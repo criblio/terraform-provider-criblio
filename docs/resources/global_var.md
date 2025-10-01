@@ -15,7 +15,7 @@ GlobalVar Resource
 ```terraform
 resource "criblio_global_var" "my_globalvar" {
   description = "This is a test var."
-  group_id    = "default"
+  group_id    = "myExistingGroupId"
   id          = "test_var"
   lib         = "custom"
   tags        = "test"
@@ -50,8 +50,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_global_var.my_criblio_global_var
   id = jsonencode({
-    group_id = "default"
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueVarIdToCrud"
   })
 }
 ```
@@ -59,5 +59,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_global_var.my_criblio_global_var '{"group_id": "default", "id": "..."}'
+terraform import criblio_global_var.my_criblio_global_var '{"group_id": "myExistingGroupId", "id": "myUniqueVarIdToCrud"}'
 ```

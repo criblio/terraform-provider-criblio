@@ -1,1 +1,1 @@
-terraform import criblio_appscope_config.my_criblio_appscope_config '{"group_id": "...", "id": "..."}'
+terraform import criblio_appscope_config.my_criblio_appscope_config '{"group_id": "myExistingGroupId", "id": "myUniqueAppscopeConfigToCRUD"}'

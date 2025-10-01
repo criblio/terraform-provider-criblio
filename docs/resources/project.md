@@ -21,8 +21,8 @@ resource "criblio_project" "my_project" {
   destinations = [
     "..."
   ]
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniqueProjectIdToCRUD"
   subscriptions = [
     "..."
   ]
@@ -44,8 +44,27 @@ resource "criblio_project" "my_project" {
 - `consumers` (Attributes) (see [below for nested schema](#nestedatt--consumers))
 - `description` (String)
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
 <a id="nestedatt--consumers"></a>
 ### Nested Schema for `consumers`
+
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `consumers` (Attributes) (see [below for nested schema](#nestedatt--items--consumers))
+- `description` (String)
+- `destinations` (List of String)
+- `id` (String)
+- `subscriptions` (List of String)
+
+<a id="nestedatt--items--consumers"></a>
+### Nested Schema for `items.consumers`
 
 ## Import
 
@@ -57,8 +76,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_project.my_criblio_project
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myExistingProjectId"
   })
 }
 ```
@@ -66,5 +85,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_project.my_criblio_project '{"group_id": "...", "id": "..."}'
+terraform import criblio_project.my_criblio_project '{"group_id": "myExistingGroupId", "id": "myExistingProjectId"}'
 ```

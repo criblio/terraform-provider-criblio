@@ -17,21 +17,21 @@ resource "criblio_pack" "my_pack" {
   allow_custom_functions = false
   author                 = "...my_author..."
   description            = "...my_description..."
-  disabled               = true
+  disabled               = false
   display_name           = "...my_display_name..."
   exports = [
     "..."
   ]
-  filename               = "...my_filename..."
+  filename               = "./myfile.json"
   force                  = true
-  group_id               = "...my_group_id..."
-  id                     = "...my_id..."
+  group_id               = "myExistingGroupId"
+  id                     = "myUniquePackIdToCRUD"
   inputs                 = 8.61
   is_disabled            = false
   min_log_stream_version = "...my_min_log_stream_version..."
   outputs                = 6.97
-  source                 = "...my_source..."
-  spec                   = "...my_spec..."
+  source                 = "myExistingSourceId"
+  spec                   = "main"
   tags = {
     data_type = [
       "..."
@@ -73,7 +73,7 @@ resource "criblio_pack" "my_pack" {
 - `min_log_stream_version` (String) Requires replacement if changed.
 - `outputs` (Number) Requires replacement if changed.
 - `source` (String) body string required Pack source
-- `spec` (String) body string optional Specify a branch, tag or a semver spec
+- `spec` (String) (optional) body string. Specify a branch, tag or a semver spec
 - `tags` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--tags))
 - `version` (String) Requires replacement if changed.
 
@@ -133,8 +133,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack.my_criblio_pack
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniquePackIdToCRUD"
   })
 }
 ```
@@ -142,5 +142,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack.my_criblio_pack '{"group_id": "...", "id": "..."}'
+terraform import criblio_pack.my_criblio_pack '{"group_id": "myExistingGroupId", "id": "myUniquePackIdToCRUD"}'
 ```

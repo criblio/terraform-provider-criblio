@@ -16,8 +16,8 @@ LookupFile Resource
 resource "criblio_lookup_file" "my_lookupfile" {
   content     = "...my_content..."
   description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
+  group_id    = "myExistingGroupId"
+  id          = "myNewLookupIdToCRUD"
   mode        = "disk"
   tags        = "...my_tags..."
 }
@@ -47,12 +47,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_lookup_file.my_criblio_lookup_file
-  id = "..."
+  id = "myExistingGroupId"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_lookup_file.my_criblio_lookup_file "..."
+terraform import criblio_lookup_file.my_criblio_lookup_file "myExistingGroupId"
 ```

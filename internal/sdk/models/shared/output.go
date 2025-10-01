@@ -1133,6 +1133,13 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
+	var outputGrafanaCloud OutputGrafanaCloud = OutputGrafanaCloud{}
+	if err := utils.UnmarshalJSON(data, &outputGrafanaCloud, "", true, nil); err == nil {
+		u.OutputGrafanaCloud = &outputGrafanaCloud
+		u.Type = OutputTypeOutputGrafanaCloud
+		return nil
+	}
+
 	var outputHumioHec OutputHumioHec = OutputHumioHec{}
 	if err := utils.UnmarshalJSON(data, &outputHumioHec, "", true, nil); err == nil {
 		u.OutputHumioHec = &outputHumioHec
@@ -1144,13 +1151,6 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &outputDynatraceHTTP, "", true, nil); err == nil {
 		u.OutputDynatraceHTTP = &outputDynatraceHTTP
 		u.Type = OutputTypeOutputDynatraceHTTP
-		return nil
-	}
-
-	var outputGrafanaCloud OutputGrafanaCloud = OutputGrafanaCloud{}
-	if err := utils.UnmarshalJSON(data, &outputGrafanaCloud, "", true, nil); err == nil {
-		u.OutputGrafanaCloud = &outputGrafanaCloud
-		u.Type = OutputTypeOutputGrafanaCloud
 		return nil
 	}
 

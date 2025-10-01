@@ -8,7 +8,7 @@ import (
 )
 
 type GetEdgeAppscopeProcessesByPidRequest struct {
-	// pid
+	// Process ID number to target
 	Pid string `pathParam:"style=simple,explode=false,name=pid"`
 }
 

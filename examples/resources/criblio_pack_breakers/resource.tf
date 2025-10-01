@@ -1,10 +1,10 @@
 resource "criblio_pack_breakers" "my_packbreakers" {
   description    = "...my_description..."
-  group_id       = "...my_group_id..."
-  id             = "...my_id..."
+  group_id       = "myExistingGroupId"
+  id             = "myUniquePackBreakersIdToCRUD"
   lib            = "custom"
   min_raw_length = 94618.96
-  pack           = "...my_pack..."
+  pack           = "myExistingPackId"
   rules = [
     {
       condition           = "...my_condition..."

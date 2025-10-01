@@ -5,8 +5,8 @@ resource "criblio_database_connection" "my_databaseconnection" {
   connection_timeout = 9.28
   database_type      = "oracle"
   description        = "...my_description..."
-  group_id           = "...my_group_id..."
-  id                 = "...my_id..."
+  group_id           = "myExistingGroupId"
+  id                 = "myUniqueDatabaseConnIdToCRUD"
   password           = "...my_password..."
   request_timeout    = 0.19
   tags               = "...my_tags..."

@@ -184,7 +184,7 @@ func (r *CommitResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Versioning.CreateVersionCommit(ctx, *request)
+	res, err := r.client.Git.CreateVersionCommit(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

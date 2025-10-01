@@ -14,8 +14,8 @@ Collector Resource
 
 ```terraform
 resource "criblio_collector" "my_collector" {
-  group_id = "default"
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myJobIdToQuery"
   input_collector_azure_blob = {
     collector = {
       conf = {
@@ -2072,8 +2072,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_collector.my_criblio_collector
   id = jsonencode({
-    group_id = "default"
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myExistingJobId"
   })
 }
 ```
@@ -2081,5 +2081,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_collector.my_criblio_collector '{"group_id": "default", "id": "..."}'
+terraform import criblio_collector.my_criblio_collector '{"group_id": "myExistingGroupId", "id": "myExistingJobId"}'
 ```

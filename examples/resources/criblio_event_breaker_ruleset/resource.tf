@@ -1,7 +1,7 @@
 resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   description    = "...my_description..."
-  group_id       = "...my_group_id..."
-  id             = "...my_id..."
+  group_id       = "myExistingGroupId"
+  id             = "myUniqueBreakerIdToCRUD"
   lib            = "custom"
   min_raw_length = 75773.87
   rules = [
